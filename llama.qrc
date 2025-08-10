@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/settingscategory_llama.png</file>
+        <file>images/settingscategory_llama@2x.png</file>
+        <file>images/llama.png</file>
+        <file>images/llama@2x.png</file>
+    </qresource>
+</RCC>
