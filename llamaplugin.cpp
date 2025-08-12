@@ -556,10 +556,20 @@ void LlamaPlugin::processCompletionResponse(const QString &response)
     }
 
     if (can_accept) {
-        TextEditor::TextSuggestion::Data data;
-        data.range.begin = Utils::Text::Position::fromCursor(cursor);
-        data.range.end = Utils::Text::Position::fromCursor(cursor);
-        data.position = Utils::Text::Position::fromCursor(cursor);
+        TextSuggestion::Data data;
+        Text::Position currentPos = Text::Position::fromCursor(cursor);
+
+        data.range.begin = currentPos;
+        data.range.end = currentPos;
+        data.position = currentPos;
+
+        data.range.begin.column -= pos_x;
+        int separator = content_str.indexOf("\n");
+        data.range.end.column = pos_x
+                                + (separator != -1 ? content_str.size() - separator - 1
+                                                   : content_str.size());
+
+        // Workaround for QTCREATORBUG-33303
         data.position.column -= pos_x;
         data.text = cursor.block().text() + content_str;
 
