@@ -15,16 +15,14 @@
 #include <tuple>
 
 namespace Core {
-    class IEditor;
-    class IDocument;
-}
+class IEditor;
+class IDocument;
+} // namespace Core
 
 namespace TextEditor {
-    class TextMark;
-    class TextEditorWidget;
-}
-
-class QTextDocument;
+class TextMark;
+class TextEditorWidget;
+} // namespace TextEditor
 
 namespace LlamaCpp::Internal {
 
@@ -46,28 +44,35 @@ private slots:
     void handleEditorAboutToClose(Core::IEditor *editor);
     void handleCursorPositionChanged();
     void handleDocumentSaved(Core::IDocument *document);
-    void checkForCompletion();
 
 private:
     void settingsUpdated();
 
     // Completion handling
-    void requestCompletion(int pos_x, int pos_y, bool isAuto = false);
-    void processCompletionResponse(const QString &response);
+    void fim(int pos_x, int pos_y, bool isAuto = false);
+    void fim_on_response(const QByteArray &hash, const QByteArray &response);
+    void fim_try_hint(int pos_x, int pos_y);
+    void fim_render(TextEditor::TextEditorWidget *editor,
+                    int pos_x,
+                    int pos_y,
+                    const QByteArray &response);
     void hideCompletionHint();
 
     // Context management
     using ThreeQStrings = std::tuple<QString, QString, QString>;
 
-    ThreeQStrings getLocalContext(int pos_x, int pos_y, const QString &prev = QString());
-    void pickChunk(const QStringList &text, bool noModifiedState, bool doEviction);
-    void ringUpdate();
-    void pickChunkAtCursor(const TextEditor::TextEditorWidget* editor);
+    ThreeQStrings fim_ctx_local(TextEditor::TextEditorWidget *editor,
+                                int pos_x,
+                                int pos_y,
+                                const QByteArray &prev = QByteArray());
+    void pick_chunk(const QStringList &text, bool noModifiedState, bool doEviction);
+    void ring_update();
+    void pick_chunk_at_cursor(TextEditor::TextEditorWidget *editor);
 
     ThreeQStrings getShowInfoStats(const QJsonObject &response);
-    QStringList getLines(const QTextDocument *document, int startLine, int endLine);
+    QStringList getlines(TextEditor::TextEditorWidget *editor, int startLine, int endLine);
 
-    QHash<QString, QString> m_cacheData;
+    QHash<QByteArray, QByteArray> m_cacheData;
     QHash<Utils::FilePath, int> m_lastEditLineHash;
 
     // Context chunks

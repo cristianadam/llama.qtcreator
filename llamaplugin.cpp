@@ -1,6 +1,6 @@
+#include "llamaplugin.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
-#include "llamaplugin.h"
 #include "llamaprojectpanel.h"
 #include "llamasettings.h"
 #include "llamatr.h"
@@ -48,20 +48,19 @@ LlamaPlugin::LlamaPlugin()
     : m_ringUpdateTimer(new QTimer(this))
     , m_networkManager(new QNetworkAccessManager(this))
 {
-    connect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ringUpdate);
+    connect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
 }
 
 LlamaPlugin::~LlamaPlugin()
 {
-    disconnect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ringUpdate);
+    disconnect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
 }
 
 void LlamaPlugin::initialize()
 {
-    IOptionsPage::registerCategory(
-        Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY,
-        Constants::LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY,
-        ":/images/settingscategory_llama.png");
+    IOptionsPage::registerCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY,
+                                   Constants::LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY,
+                                   ":/images/settingscategory_llama.png");
 
     ActionBuilder requestAction(this, Constants::LLAMACPP_REQUEST_SUGGESTION);
     requestAction.setText(Tr::tr("Request llama.cpp Suggestion"));
@@ -72,7 +71,7 @@ void LlamaPlugin::initialize()
             QTextCursor cursor = editor->textCursor();
             int pos_x = cursor.positionInBlock();
             int pos_y = cursor.blockNumber() + 1;
-            requestCompletion(pos_x, pos_y, true);
+            fim(pos_x, pos_y, true);
         }
     });
     requestAction.setDefaultKeySequence(Tr::tr("Ctrl+G"));
@@ -123,9 +122,8 @@ void LlamaPlugin::initialize()
     connect(qApp->clipboard(), &QClipboard::dataChanged, this, [this] {
         if (qApp->clipboard()->text().isEmpty())
             return;
-        pickChunk(qApp->clipboard()->text().split("\n"), false, true);
+        pick_chunk(qApp->clipboard()->text().split("\n"), false, true);
     });
-
 }
 
 bool LlamaPlugin::delayedInitialize()
@@ -165,7 +163,7 @@ void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
         m_lastEditLineHash[editorWidget->textDocument()->filePath()] = -9999;
     }
 
-    pickChunkAtCursor(editorWidget);
+    pick_chunk_at_cursor(editorWidget);
 
     // Connect to cursor position changes
     connect(editorWidget,
@@ -183,42 +181,48 @@ void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
     if (!editorWidget)
         return;
 
-    pickChunkAtCursor(editorWidget);
+    pick_chunk_at_cursor(editorWidget);
 
     disconnect(editorWidget,
-            &TextEditorWidget::cursorPositionChanged,
-            this,
-            &LlamaPlugin::handleCursorPositionChanged);
+               &TextEditorWidget::cursorPositionChanged,
+               this,
+               &LlamaPlugin::handleCursorPositionChanged);
 
     hideCompletionHint();
 }
 
 void LlamaPlugin::handleCursorPositionChanged()
 {
-    if (!settings().autoFim.value())
+    TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
+    if (!editor)
         return;
 
-    // Trigger completion check
-    checkForCompletion();
+    hideCompletionHint();
+
+    QTextCursor cursor = editor->textCursor();
+    int pos_x = cursor.positionInBlock();
+    int pos_y = cursor.blockNumber() + 1;
+
+    if (settings().autoFim.value()) {
+        fim(pos_x, pos_y, true);
+    }
+
+    fim_try_hint(pos_x, pos_y);
 }
 
-void LlamaPlugin::pickChunkAtCursor(const TextEditor::TextEditorWidget *editor)
+void LlamaPlugin::pick_chunk_at_cursor(TextEditorWidget *editor)
 {
     if (!editor)
         return;
 
-    QTextDocument *currentDocument = editor->document();
-    if (!currentDocument)
-        return;
-
     QTextCursor cursor = editor->textCursor();
     int pos_y = cursor.blockNumber() + 1;
-    int max_y = currentDocument->lineCount();
+    int max_y = editor->document()->lineCount();
 
-    QStringList lines = getLines(currentDocument,
+    QStringList lines = getlines(editor,
                                  qMax(1, pos_y - settings().ringChunkSize.value() / 2),
                                  qMin(pos_y + settings().ringChunkSize.value() / 2, max_y));
-    pickChunk(lines, true, true);
+    pick_chunk(lines, true, true);
 }
 
 void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
@@ -230,24 +234,7 @@ void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
     if (editor->textDocument()->filePath() != document->filePath())
         return;
 
-    pickChunkAtCursor(editor);
-}
-
-void LlamaPlugin::checkForCompletion()
-{
-    TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor)
-        return;
-
-    QTextCursor cursor = editor->textCursor();
-    int pos_x = cursor.positionInBlock();
-    int pos_y = cursor.blockNumber() + 1;
-
-    // Check if we're at the end of a line (auto completion trigger)
-    QTextBlock block = cursor.block();
-    if (pos_x >= block.length() - 1) {
-        requestCompletion(pos_x, pos_y, true);
-    }
+    pick_chunk_at_cursor(editor);
 }
 
 // compute how similar two chunks of text are
@@ -273,7 +260,7 @@ static double chunk_sim(const QStringList &c0, const QStringList &c1)
     return 2.0 * common / (c0.size() + c1.size());
 }
 
-void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
+void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
     if (!editor)
@@ -288,15 +275,14 @@ void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
         return;
 
     // Get local context
-    auto [prefix, middle, suffix] = getLocalContext(pos_x, pos_y);
+    auto [prefix, middle, suffix] = fim_ctx_local(editor, pos_x, pos_y);
 
     // Check cache first
-    const QString hash = QString::fromUtf8(
-        QCryptographicHash::hash((prefix + middle + "Î" + suffix).toUtf8(),
-                                 QCryptographicHash::Sha256)
-            .toHex());
+    const QByteArray hash = QCryptographicHash::hash((prefix + middle + "Î" + suffix).toUtf8(),
+                                                     QCryptographicHash::Sha256)
+                                .toHex();
 
-    QStringList hashes{hash};
+    QByteArrayList hashes{hash};
 
     // compute multiple hashes that can be used to generate a completion for which the first few lines
     // are missing. this happens when we have scrolled down a bit from where the original generation was done
@@ -306,15 +292,14 @@ void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
         prefix_trim = prefix_trim.replace(re, "");
         if (prefix_trim.isEmpty())
             break;
-        hashes << QString::fromUtf8(
-            QCryptographicHash::hash((prefix_trim + middle + "Î" + suffix).toUtf8(),
-                                     QCryptographicHash::Sha256)
-                .toHex());
+        hashes << QCryptographicHash::hash((prefix_trim + middle + "Î" + suffix).toUtf8(),
+                                           QCryptographicHash::Sha256)
+                      .toHex();
     }
 
-    for (const QString &h : hashes) {
+    // if we already have a cached completion for one of the hashes, don't send a request
+    for (const QByteArray &h : hashes) {
         if (m_cacheData.contains(h)) {
-            processCompletionResponse(m_cacheData[h]);
             return;
         }
     }
@@ -357,7 +342,7 @@ void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
         startLine = qMax(startLine, pos_y - settings().ringChunkSize.value() / 2);
         endLine = qMin(endLine, pos_y + settings().ringChunkSize.value() / 2);
     }
-    const QStringList lines = getLines(currentDocument, startLine, endLine);
+    const QStringList lines = getlines(editor, startLine, endLine);
     if (lines.size() < 3)
         return;
 
@@ -409,22 +394,7 @@ void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
     // Connect to response
     connect(reply, &QNetworkReply::finished, [this, reply, hash]() {
         if (reply->error() == QNetworkReply::NoError) {
-            QByteArray data = reply->readAll();
-            QString response = QString::fromUtf8(data);
-
-            // TODO: Currently the cache uses a random eviction policy. A more clever policy could be implemented (eg. LRU).
-            if (m_cacheData.size() > settings().maxCacheKeys.value()) {
-                int randomIndex = QRandomGenerator::global()->bounded(m_cacheData.size());
-                m_cacheData.removeIf([randomIndex](const auto &) {
-                    static int index = 0;
-                    return index++ == randomIndex;
-                });
-            }
-
-            // Cache the result
-            m_cacheData[hash] = response;
-
-            processCompletionResponse(response);
+            fim_on_response(hash, reply->readAll());
         } else {
             qCDebug(llamaLog) << "Error fetching completion:" << reply->errorString();
         }
@@ -437,21 +407,46 @@ void LlamaPlugin::requestCompletion(int pos_x, int pos_y, bool isAuto)
     int delta_y = qAbs(pos_y - m_lastEditLineHash[editor->textDocument()->filePath()]);
     if (delta_y > 32) {
         // expand the prefix even further
-        QStringList lines = getLines(currentDocument,
+        QStringList lines = getlines(editor,
                                      qMax(1, pos_y - settings().ringScope.value()),
                                      qMax(1, pos_y - settings().nPrefix.value()));
-        pickChunk(lines, false, false);
+        pick_chunk(lines, false, false);
 
         // pick a suffix chunk
         const int max_y = currentDocument->lineCount();
-        lines = getLines(currentDocument,
+        lines = getlines(editor,
                          qMin(max_y, pos_y + settings().nSuffix.value()),
                          qMin(max_y,
                               pos_y + settings().nSuffix.value()
                                   + settings().ringChunkSize.value()));
-        pickChunk(lines, false, false);
+        pick_chunk(lines, false, false);
 
         m_lastEditLineHash[editor->textDocument()->filePath()] = pos_y;
+    }
+}
+
+void LlamaPlugin::fim_on_response(const QByteArray &hash, const QByteArray &response)
+{
+    // TODO: Currently the cache uses a random eviction policy. A more clever policy could be implemented (eg. LRU).
+    if (m_cacheData.size() > settings().maxCacheKeys.value()) {
+        int randomIndex = QRandomGenerator::global()->bounded(m_cacheData.size());
+        m_cacheData.removeIf([randomIndex](const auto &) {
+            static int index = 0;
+            return index++ == randomIndex;
+        });
+    }
+
+    // Cache the result
+    m_cacheData[hash] = response;
+
+    // if nothing is currently displayed - show the hint directly
+    if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
+        if (!editor->suggestionVisible()) {
+            QTextCursor cursor = editor->textCursor();
+            int pos_x = cursor.positionInBlock();
+            int pos_y = cursor.blockNumber() + 1;
+            fim_try_hint(pos_x, pos_y);
+        }
     }
 }
 
@@ -475,14 +470,16 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getShowInfoStats(const QJsonObject &resp
 
     QString warningTooltip;
     if (truncated) {
-        warningTooltip = QString("llama.cpp | WARNING: the context is full: %1, increase the server "
-                                 "context size or reduce ring_n_chunks %2 value in settings.")
+        warningTooltip = QString(
+                             "llama.cpp | WARNING: the context is full: %1, increase the server "
+                             "context size or reduce ring_n_chunks %2 value in settings.")
                              .arg(n_cached)
                              .arg(settings().ringNChunks.value());
     }
 
-    QString tooltip = QString("llama.cpp | c: %1, r: %2/%3, e: %4, q: %5/16, C: %6/%7 | p: %8 (%9 ms, "
-                              "%10 t/s) | g: %11 (%12 ms, %13 t/s)")
+    QString tooltip = QString(
+                          "llama.cpp | c: %1, r: %2/%3, e: %4, q: %5/16, C: %6/%7 | p: %8 (%9 ms, "
+                          "%10 t/s) | g: %11 (%12 ms, %13 t/s)")
                           .arg(n_cached)
                           .arg(m_ringChunks.size())
                           .arg(settings().ringNChunks.value())
@@ -500,16 +497,92 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getShowInfoStats(const QJsonObject &resp
     return {label, tooltip, warningTooltip};
 }
 
-void LlamaPlugin::processCompletionResponse(const QString &response)
+// try to generate a suggestion using the data in the cache
+void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
 
     if (!editor || editor->isReadOnly() || editor->multiTextCursor().hasMultipleCursors())
         return;
 
+    auto [prefix, middle, suffix] = fim_ctx_local(editor, pos_x, pos_y, {});
+
+    QString context = prefix + middle + "Î" + suffix;
+    QByteArray hash = QCryptographicHash::hash(context.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+    QByteArray raw;
+    if (m_cacheData.contains(hash)) {
+        raw = m_cacheData[hash];
+    } else {
+        QString pm = prefix + middle;
+        int best = 0;
+        QByteArray best_raw;
+
+        for (int i = 0; i < 128; ++i) {
+            if (pm.length() <= i)
+                break;
+
+            QString removed = pm.mid(pm.length() - (1 + i)); // last i+1 chars
+            QString ctx_new = pm.left(pm.length() - (2 + i)) + "Î" + suffix;
+            QByteArray hash_new
+                = QCryptographicHash::hash(ctx_new.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+            if (m_cacheData.contains(hash_new)) {
+                QByteArray response_cached = m_cacheData[hash_new];
+                if (response_cached.isEmpty())
+                    continue;
+
+                QJsonParseError error;
+                QJsonDocument doc = QJsonDocument::fromJson(response_cached, &error);
+                if (error.error != QJsonParseError::NoError)
+                    continue;
+
+                QJsonObject obj = doc.object();
+                QString content = obj["content"].toString();
+
+                if (content.length() <= i)
+                    continue;
+                QString prefix_match = content.left(i + 1);
+
+                if (prefix_match != removed)
+                    continue;
+
+                QString remaining_content = content.mid(i + 1);
+                if (!remaining_content.isEmpty()) {
+                    if (raw.isNull() || remaining_content.length() > best) {
+                        best = remaining_content.length();
+                        best_raw = response_cached;
+                    }
+                }
+            }
+        }
+
+        raw = best_raw;
+    }
+
+    if (!raw.isNull() && !raw.isEmpty()) {
+        fim_render(editor, pos_x, pos_y, raw);
+
+        if (editor->suggestionVisible()) {
+            // Call speculative FIM
+            fim(pos_x, pos_y, true);
+        }
+    }
+}
+
+// render a suggestion at the current cursor location
+void LlamaPlugin::fim_render(TextEditorWidget *editor,
+                             int pos_x,
+                             int pos_y,
+                             const QByteArray &response)
+{
+    // do not show if there is a completion in progress
+    if (editor->suggestionVisible())
+        return;
+
     // Parse JSON response
     QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(response.toUtf8(), &error);
+    QJsonDocument doc = QJsonDocument::fromJson(response, &error);
 
     if (error.error != QJsonParseError::NoError) {
         qDebug() << "JSON parse error:" << error.errorString();
@@ -541,11 +614,10 @@ void LlamaPlugin::processCompletionResponse(const QString &response)
     }
 
     // Get cursor position for hint
-    QTextCursor cursor = editor->textCursor();
-    int pos_x = cursor.positionInBlock();
-    int pos_y = cursor.blockNumber() + 1;
 
-    QString nextText = Text::textAt(editor->document(), cursor.position(), content_str.size() * 2);
+    QString nextText = Text::textAt(editor->document(),
+                                    editor->textCursor().position(),
+                                    content_str.size() * 2);
 
     if (nextText.contains(content_str)) {
         can_accept = false;
@@ -557,7 +629,7 @@ void LlamaPlugin::processCompletionResponse(const QString &response)
 
     if (can_accept) {
         TextSuggestion::Data data;
-        Text::Position currentPos = Text::Position::fromCursor(cursor);
+        Text::Position currentPos = Text::Position::fromCursor(editor->textCursor());
 
         data.range.begin = currentPos;
         data.range.end = currentPos;
@@ -571,7 +643,7 @@ void LlamaPlugin::processCompletionResponse(const QString &response)
 
         // Workaround for QTCREATORBUG-33303
         data.position.column -= pos_x;
-        data.text = cursor.block().text() + content_str;
+        data.text = editor->textCursor().block().text() + content_str;
 
         editor->insertSuggestion(
             std::make_unique<TextEditor::TextSuggestion>(data, editor->document()));
@@ -596,20 +668,20 @@ void LlamaPlugin::processCompletionResponse(const QString &response)
 
 void LlamaPlugin::hideCompletionHint()
 {
-    m_textMark.release();
-    m_hintShown = false;
+    m_textMark.reset({});
+
+    if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget())
+        editor->clearSuggestion();
 }
 
-LlamaPlugin::ThreeQStrings LlamaPlugin::getLocalContext(int pos_x, int pos_y, const QString &prev)
+LlamaPlugin::ThreeQStrings LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
+                                                      int pos_x,
+                                                      int pos_y,
+                                                      const QByteArray &prev)
 {
-    TextEditorWidget *editorWidget = TextEditorWidget::currentTextEditorWidget();
-    if (!editorWidget)
-        return {};
-    QTextDocument *currentDocument = editorWidget->document();
-    if (!currentDocument)
-        return {};
+    QTextDocument *document = editor->document();
 
-    QTextBlock block = currentDocument->findBlockByNumber(pos_y - 1);
+    QTextBlock block = document->findBlockByNumber(pos_y - 1);
     if (!block.isValid())
         return {};
 
@@ -624,7 +696,7 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getLocalContext(int pos_x, int pos_y, co
     QStringList linesPrefix;
     int startLine = qMax(1, pos_y - settings().nPrefix.value());
     for (int i = startLine; i < pos_y; ++i) {
-        QTextBlock b = currentDocument->findBlockByNumber(i - 1);
+        QTextBlock b = document->findBlockByNumber(i - 1);
         if (b.isValid()) {
             linesPrefix.append(b.text());
         }
@@ -632,9 +704,9 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getLocalContext(int pos_x, int pos_y, co
 
     // Get suffix lines
     QStringList linesSuffix;
-    int endLine = qMin(currentDocument->lineCount(), pos_y + settings().nSuffix.value());
+    int endLine = qMin(document->lineCount(), pos_y + settings().nSuffix.value());
     for (int i = pos_y + 1; i <= endLine; ++i) {
-        QTextBlock b = currentDocument->findBlockByNumber(i - 1);
+        QTextBlock b = document->findBlockByNumber(i - 1);
         if (b.isValid()) {
             linesSuffix.append(b.text());
         }
@@ -647,18 +719,18 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getLocalContext(int pos_x, int pos_y, co
     return {prefix, middle, suffix};
 }
 
-QStringList LlamaPlugin::getLines(const QTextDocument *document, int startLine, int endLine)
+QStringList LlamaPlugin::getlines(TextEditorWidget *editor, int startLine, int endLine)
 {
     QStringList lines;
     for (int i = startLine; i <= endLine; ++i) {
-        QTextBlock block = document->findBlockByNumber(i - 1);
+        QTextBlock block = editor->document()->findBlockByNumber(i - 1);
         if (block.isValid())
             lines.append(block.text());
     }
     return lines;
 }
 
-void LlamaPlugin::pickChunk(const QStringList &text, bool noModifiedState, bool doEviction)
+void LlamaPlugin::pick_chunk(const QStringList &text, bool noModifiedState, bool doEviction)
 {
     if (settings().ringNChunks.value() <= 0)
         return;
@@ -730,7 +802,7 @@ void LlamaPlugin::pickChunk(const QStringList &text, bool noModifiedState, bool 
         m_ringQueued.removeFirst();
 }
 
-void LlamaPlugin::ringUpdate()
+void LlamaPlugin::ring_update()
 {
     if (m_ringQueued.isEmpty())
         return;
@@ -782,4 +854,4 @@ void LlamaPlugin::ringUpdate()
     m_networkManager->post(req, jsonData);
 }
 
-} // namespace Llama::Internal
+} // namespace LlamaCpp::Internal
