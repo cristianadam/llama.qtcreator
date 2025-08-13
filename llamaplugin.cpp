@@ -635,11 +635,18 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         data.range.end = currentPos;
         data.position = currentPos;
 
+        /*
+        // This works for Shift-Tab, but copies prefix when using Tab
         data.range.begin.column -= pos_x;
         int separator = content_str.indexOf("\n");
         data.range.end.column = pos_x
                                 + (separator != -1 ? content_str.size() - separator - 1
                                                    : content_str.size());
+        */
+
+        int separator = content_str.indexOf("\n");
+        data.range.end.column = separator != -1 ? content_str.size() - separator - 1
+                                                : content_str.size();
 
         // Workaround for QTCREATORBUG-33303
         data.position.column -= pos_x;
