@@ -465,10 +465,21 @@ void LlamaPlugin::fim_on_response(int pos_x,
 
     // if nothing is currently displayed - show the hint directly
     if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
-        if (!editor->suggestionVisible()) {
-            fim_try_hint(pos_x, pos_y);
+        QTextCursor cursor = editor->textCursor();
+        int cursor_pos_x = cursor.positionInBlock();
+        int cursor_pos_y = cursor.blockNumber() + 1;
+
+        if (cursor_pos_x == pos_x && cursor_pos_y == pos_y) {
+            if (!editor->suggestionVisible()) {
+                fim_try_hint(pos_x, pos_y);
+            } else {
+                qCInfo(llamaLog) << "fim_on_response:" << pos_x << pos_y
+                                 << "Suggestion is visible.";
+            }
         } else {
-            qCInfo(llamaLog) << "fim_on_response" << pos_x << pos_y << "Suggestion is visible.";
+            qCInfo(llamaLog) << "fim_on_response:" << "Received response for:" << pos_x << pos_y
+                             << "and the cursor is at" << cursor_pos_x << cursor_pos_y
+                             << "ignoring.";
         }
     }
 }
@@ -836,6 +847,9 @@ void LlamaPlugin::ring_update()
 {
     if (m_ringQueued.isEmpty())
         return;
+
+    qCInfo(llamaLog) << "ring_update: ring chunks:" << m_ringChunks.size() << "ring queued"
+                     << m_ringQueued.size();
 
     // Move first queued chunk to ring buffer
     if (m_ringChunks.size() >= settings().ringNChunks.value()) {
