@@ -71,7 +71,7 @@ void LlamaPlugin::initialize()
             QTextCursor cursor = editor->textCursor();
             int pos_x = cursor.positionInBlock();
             int pos_y = cursor.blockNumber() + 1;
-            fim(pos_x, pos_y, true);
+            fim(pos_x, pos_y, false);
         }
     });
     requestAction.setDefaultKeySequence(Tr::tr("Ctrl+G"));
@@ -274,6 +274,16 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
     if (!currentDocument)
         return;
 
+    qCInfo(llamaLog) << "fim:" << pos_x << pos_y;
+
+    // avoid sending repeated requests too fast
+    if (m_fimReply && m_fimReply->isRunning()) {
+        qCInfo(llamaLog) << "fim:" << pos_x << pos_y
+                         << "There is a fim network request is in progress, re-trying in 100ms";
+        QTimer::singleShot(100, [this, pos_x, pos_y, isAuto]() { fim(pos_x, pos_y, isAuto); });
+        return;
+    }
+
     // Get local context
     auto [prefix, middle, suffix] = fim_ctx_local(editor, pos_x, pos_y);
 
@@ -300,6 +310,9 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
     // if we already have a cached completion for one of the hashes, don't send a request
     for (const QByteArray &h : hashes) {
         if (m_cacheData.contains(h)) {
+            // On explicit Ctrl+G fim call, display the suggestion
+            if (!isAuto)
+                fim_try_hint(pos_x, pos_y);
             return;
         }
     }
@@ -389,16 +402,22 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
         req.setRawHeader("Authorization", "Bearer " + settings().apiKey.value().toUtf8());
     }
 
-    QNetworkReply *reply = m_networkManager->post(req, jsonData);
+    qCInfo(llamaLog) << "fim:" << pos_x << pos_y << "Sending network request.";
+
+    QElapsedTimer replyTimer;
+    replyTimer.start();
+    m_fimReply.reset(m_networkManager->post(req, jsonData));
 
     // Connect to response
-    connect(reply, &QNetworkReply::finished, [this, reply, hash]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            fim_on_response(hash, reply->readAll());
+    connect(m_fimReply.get(), &QNetworkReply::finished, [this, hash, pos_x, pos_y, replyTimer]() {
+        qCInfo(llamaLog) << "fim_on_response: received reply after:" << replyTimer.elapsed()
+                         << "ms";
+        if (m_fimReply->error() == QNetworkReply::NoError) {
+            fim_on_response(pos_x, pos_y, hash, m_fimReply->readAll());
         } else {
-            qCDebug(llamaLog) << "Error fetching completion:" << reply->errorString();
+            qCWarning(llamaLog) << "Error fetching fim completion:" << m_fimReply->errorString();
         }
-        reply->deleteLater();
+        m_fimReply.release()->deleteLater();
     });
 
     // gather some extra context nearby and process it in the background
@@ -425,8 +444,13 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
     }
 }
 
-void LlamaPlugin::fim_on_response(const QByteArray &hash, const QByteArray &response)
+void LlamaPlugin::fim_on_response(int pos_x,
+                                  int pos_y,
+                                  const QByteArray &hash,
+                                  const QByteArray &response)
 {
+    qCInfo(llamaLog) << "fim_on_response:" << pos_x << pos_y;
+
     // TODO: Currently the cache uses a random eviction policy. A more clever policy could be implemented (eg. LRU).
     if (m_cacheData.size() > settings().maxCacheKeys.value()) {
         int randomIndex = QRandomGenerator::global()->bounded(m_cacheData.size());
@@ -442,10 +466,9 @@ void LlamaPlugin::fim_on_response(const QByteArray &hash, const QByteArray &resp
     // if nothing is currently displayed - show the hint directly
     if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
         if (!editor->suggestionVisible()) {
-            QTextCursor cursor = editor->textCursor();
-            int pos_x = cursor.positionInBlock();
-            int pos_y = cursor.blockNumber() + 1;
             fim_try_hint(pos_x, pos_y);
+        } else {
+            qCInfo(llamaLog) << "fim_on_response" << pos_x << pos_y << "Suggestion is visible.";
         }
     }
 }
@@ -590,10 +613,11 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
     }
 
     QJsonObject obj = doc.object();
-    qCDebug(llamaLog) << Q_FUNC_INFO << obj;
 
     QString content_str = obj.value("content").toString();
     QStringList content = content_str.split("\n", Qt::SkipEmptyParts);
+
+    qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y << "Raw suggestion:" << content_str;
 
     // Remove trailing new lines
     while (!content.isEmpty() && content.last().isEmpty()) {
@@ -653,7 +677,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         editor->insertSuggestion(
             std::make_unique<TextEditor::TextSuggestion>(data, editor->document()));
 
-        m_hintShown = true;
+        qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
+                         << "Prepared suggestion:" << content_str;
     }
 
     if (settings().showInfo.value() > 0) {

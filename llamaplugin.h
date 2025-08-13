@@ -50,7 +50,7 @@ private:
 
     // Completion handling
     void fim(int pos_x, int pos_y, bool isAuto = false);
-    void fim_on_response(const QByteArray &hash, const QByteArray &response);
+    void fim_on_response(int pos_x, int pos_y, const QByteArray &hash, const QByteArray &response);
     void fim_try_hint(int pos_x, int pos_y);
     void fim_render(TextEditor::TextEditorWidget *editor,
                     int pos_x,
@@ -88,11 +88,10 @@ private:
     int m_ringNEvict = 0;
 
     // State tracking
-    bool m_hintShown = false;
     QPoint m_lastPos;
     QTimer *m_ringUpdateTimer;
     QNetworkAccessManager *m_networkManager;
-    QString m_currentRequestId;
+    std::unique_ptr<QNetworkReply> m_fimReply;
 
     // Editor tracking
     std::unique_ptr<TextEditor::TextMark> m_textMark;
