@@ -613,11 +613,9 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
             content_str = content_str.chopped(delta);
     }
 
-    // Get cursor position for hint
-
-    QString nextText = Text::textAt(editor->document(),
-                                    editor->textCursor().position(),
-                                    content_str.size() * 2);
+    // Text:positionInText has 1 based line and column values
+    int currentIntPos = Text::positionInText(editor->document(), pos_y, pos_x + 1);
+    QString nextText = Text::textAt(editor->document(), currentIntPos, content_str.size() * 2);
 
     if (nextText.contains(content_str)) {
         can_accept = false;
@@ -629,8 +627,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
 
     if (can_accept) {
         TextSuggestion::Data data;
-        Text::Position currentPos = Text::Position::fromCursor(editor->textCursor());
-
+        Text::Position currentPos = Text::Position::fromPositionInDocument(editor->document(),
+                                                                           currentIntPos);
         data.range.begin = currentPos;
         data.range.end = currentPos;
         data.position = currentPos;
@@ -650,7 +648,7 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
 
         // Workaround for QTCREATORBUG-33303
         data.position.column -= pos_x;
-        data.text = editor->textCursor().block().text() + content_str;
+        data.text = Text::textAt(editor->document(), currentIntPos - pos_x, pos_x) + content_str;
 
         editor->insertSuggestion(
             std::make_unique<TextEditor::TextSuggestion>(data, editor->document()));
