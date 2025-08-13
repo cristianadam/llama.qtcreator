@@ -274,13 +274,23 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
     if (!currentDocument)
         return;
 
+    if (pos_x < 0 && pos_y < 0) {
+        QTextCursor cursor = editor->textCursor();
+        pos_x = cursor.positionInBlock();
+        pos_y = cursor.blockNumber() + 1;
+    }
+
     qCInfo(llamaLog) << "fim:" << pos_x << pos_y;
 
     // avoid sending repeated requests too fast
     if (m_fimReply && m_fimReply->isRunning()) {
         qCInfo(llamaLog) << "fim:" << pos_x << pos_y
                          << "There is a fim network request is in progress, re-trying in 100ms";
-        QTimer::singleShot(100, [this, pos_x, pos_y, isAuto]() { fim(pos_x, pos_y, isAuto); });
+        QTimer::singleShot(100, [this, isAuto]() {
+            // If the cursor has been moved, use the the actual cursor postion
+            // for a more up to date fim call.
+            fim(-1, -1, isAuto);
+        });
         return;
     }
 
