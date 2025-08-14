@@ -10,6 +10,7 @@
 #include <coreplugin/documentmanager.h>
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/editormanager/ieditor.h>
+#include <coreplugin/messagemanager.h>
 #include <coreplugin/statusbarmanager.h>
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
@@ -429,7 +430,10 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
         if (m_fimReply->error() == QNetworkReply::NoError) {
             fim_on_response(pos_x, pos_y, hash, m_fimReply->readAll());
         } else {
-            qCWarning(llamaLog) << "Error fetching fim completion:" << m_fimReply->errorString();
+            Core::MessageManager::writeSilently(
+                Tr::tr("[llama.cpp] Error fetching fim completion from %1: %2")
+                    .arg(settings().endpoint.value())
+                    .arg(m_fimReply->errorString()));
         }
         m_fimReply.release()->deleteLater();
     });
