@@ -260,14 +260,10 @@ static double chunk_sim(const QStringList &c0, const QStringList &c1)
     return 2.0 * common / (c0.size() + c1.size());
 }
 
-void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
+void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
     if (!editor)
-        return;
-
-    MultiTextCursor cursor = editor->multiTextCursor();
-    if (cursor.hasMultipleCursors() || cursor.hasSelection() || editor->suggestionVisible())
         return;
 
     QTextDocument *currentDocument = editor->document();
@@ -280,22 +276,26 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
         pos_y = cursor.blockNumber() + 1;
     }
 
-    qCInfo(llamaLog) << "fim:" << pos_x << pos_y;
+    qCInfo(llamaLog) << "fim:" << pos_x << pos_y << (prev.isEmpty() ? "" : "previous content!");
 
     // avoid sending repeated requests too fast
     if (m_fimReply && m_fimReply->isRunning()) {
         qCInfo(llamaLog) << "fim:" << pos_x << pos_y
                          << "There is a fim network request is in progress, re-trying in 100ms";
-        QTimer::singleShot(100, [this, isAuto]() {
+        QTimer::singleShot(100, [this, isAuto, prev]() {
             // If the cursor has been moved, use the the actual cursor postion
             // for a more up to date fim call.
-            fim(-1, -1, isAuto);
+            fim(-1, -1, isAuto, prev);
         });
         return;
     }
 
     // Get local context
-    auto [prefix, middle, suffix] = fim_ctx_local(editor, pos_x, pos_y);
+    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix]
+        = fim_ctx_local(editor, pos_x, pos_y, prev);
+
+    if (isAuto && line_cur_suffix.size() > settings().maxLineSuffix.value())
+        return;
 
     // Check cache first
     const QByteArray hash = QCryptographicHash::hash((prefix + middle + "Î" + suffix).toUtf8(),
@@ -342,8 +342,8 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
     request["samplers"] = QJsonArray::fromStringList({"top_k", "top_p", "infill"});
     request["cache_prompt"] = true;
     request["t_max_prompt_ms"] = settings().tMaxPromptMs.value();
-    request["t_max_predict_ms"]
-        = isAuto ? 250 : settings().tMaxPredictMs.value(); // Faster for auto completion
+    // the first request is quick - we will launch a speculative request after this one is displayed
+    request["t_max_predict_ms"] = prev.isEmpty() ? 250 : settings().tMaxPredictMs.value();
     request["response_fields"] = QJsonArray::fromStringList({"content",
                                                              "timings/prompt_n",
                                                              "timings/prompt_ms",
@@ -390,7 +390,7 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto)
 
     // Add extra context
     QJsonArray extraContext;
-    for (const Chunk &chunk : m_ringChunks) {
+    for (const Chunk &chunk : std::as_const(m_ringChunks)) {
         QJsonObject chunkObj;
         chunkObj["text"] = chunk.str;
         chunkObj["time"] = chunk.time.toString(Qt::ISODate);
@@ -549,7 +549,8 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
     if (!editor || editor->isReadOnly() || editor->multiTextCursor().hasMultipleCursors())
         return;
 
-    auto [prefix, middle, suffix] = fim_ctx_local(editor, pos_x, pos_y, {});
+    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix]
+        = fim_ctx_local(editor, pos_x, pos_y);
 
     QString context = prefix + middle + "Î" + suffix;
     QByteArray hash = QCryptographicHash::hash(context.toUtf8(), QCryptographicHash::Sha256).toHex();
@@ -609,7 +610,7 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 
         if (editor->suggestionVisible()) {
             // Call speculative FIM
-            fim(pos_x, pos_y, true);
+            fim(pos_x, pos_y, true, m_suggestionContent);
         }
     }
 }
@@ -621,7 +622,7 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
                              const QByteArray &response)
 {
     // do not show if there is a completion in progress
-    if (editor->suggestionVisible())
+    if (editor->suggestionVisible() || !editor->selectedText().isEmpty())
         return;
 
     // Parse JSON response
@@ -671,6 +672,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
     }
 
     if (can_accept) {
+        // Text:positionInText has 1 based line and column values
+        int currentIntPos = Text::positionInText(editor->document(), pos_y, pos_x + 1);
         TextSuggestion::Data data;
         Text::Position currentPos = Text::Position::fromPositionInDocument(editor->document(),
                                                                            currentIntPos);
@@ -697,6 +700,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
 
         editor->insertSuggestion(
             std::make_unique<TextEditor::TextSuggestion>(data, editor->document()));
+
+        m_suggestionContent = content;
 
         qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
                          << "Prepared suggestion:" << content_str;
@@ -725,49 +730,74 @@ void LlamaPlugin::hideCompletionHint()
         editor->clearSuggestion();
 }
 
-LlamaPlugin::ThreeQStrings LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
-                                                      int pos_x,
-                                                      int pos_y,
-                                                      const QByteArray &prev)
+LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
+                                                   int pos_x,
+                                                   int pos_y,
+                                                   const QStringList &prev)
 {
     QTextDocument *document = editor->document();
+    int max_y = document->lineCount();
 
-    QTextBlock block = document->findBlockByNumber(pos_y - 1);
-    if (!block.isValid())
-        return {};
-
-    QString lineCur = block.text();
-    QString lineCurPrefix = lineCur.left(pos_x);
-    QString lineCurSuffix = lineCur.mid(pos_x);
-
-    if (lineCurSuffix.size() > settings().maxLineSuffix.value())
-        return {};
-
-    // Get prefix lines
+    QString lineCur;
+    QString lineCurPrefix;
+    QString lineCurSuffix;
     QStringList linesPrefix;
-    int startLine = qMax(1, pos_y - settings().nPrefix.value());
-    for (int i = startLine; i < pos_y; ++i) {
-        QTextBlock b = document->findBlockByNumber(i - 1);
-        if (b.isValid()) {
-            linesPrefix.append(b.text());
-        }
-    }
-
-    // Get suffix lines
     QStringList linesSuffix;
-    int endLine = qMin(document->lineCount(), pos_y + settings().nSuffix.value());
-    for (int i = pos_y + 1; i <= endLine; ++i) {
-        QTextBlock b = document->findBlockByNumber(i - 1);
-        if (b.isValid()) {
-            linesSuffix.append(b.text());
+
+    if (prev.isEmpty()) {
+        // No previous completion
+        lineCur = getline(editor, pos_y - 1);
+
+        lineCurPrefix = lineCur.left(pos_x);
+        lineCurSuffix = lineCur.mid(pos_x);
+
+        int startLine = qMax(1, pos_y - settings().nPrefix.value());
+        for (int i = startLine; i < pos_y; ++i)
+            linesPrefix << getline(editor, i - 1);
+
+        int endLine = qMin(max_y, pos_y + settings().nSuffix.value());
+        for (int i = pos_y + 1; i <= endLine; ++i)
+            linesSuffix << getline(editor, i - 1);
+    } else {
+        // With previous completion
+        if (prev.size() == 1)
+            lineCur = getline(editor, pos_y - 1) + prev.first();
+        else
+            lineCur = prev.last(); // Use the last item of prev as current line
+
+        lineCurPrefix = lineCur;
+        lineCurSuffix.clear();
+
+        int startLine = qMax(1, pos_y - settings().nPrefix.value() + prev.size() - 1);
+        for (int i = startLine; i < pos_y; ++i)
+            linesPrefix << getline(editor, i - 1);
+
+        // Add modified previous lines to prefix
+        if (prev.size() > 1) {
+            linesPrefix << getline(editor, pos_y - 1) + prev.first();
+            for (int i = 1; i < prev.size() - 1; ++i) {
+                linesPrefix << prev[i];
+            }
         }
+
+        int endLine = qMin(max_y, pos_y + settings().nSuffix.value());
+        for (int i = pos_y + 1; i <= endLine; ++i)
+            linesSuffix << getline(editor, i - 1);
     }
 
     const QString prefix = linesPrefix.join("\n") + "\n";
     const QString middle = lineCurPrefix;
     const QString suffix = lineCurSuffix + "\n" + linesSuffix.join("\n") + "\n";
 
-    return {prefix, middle, suffix};
+    FimContext res;
+    res.prefix = prefix;
+    res.middle = middle;
+    res.suffix = suffix;
+    res.line_cur = lineCur;
+    res.line_cur_prefix = lineCurPrefix;
+    res.line_cur_suffix = lineCurSuffix;
+
+    return res;
 }
 
 QStringList LlamaPlugin::getlines(TextEditorWidget *editor, int startLine, int endLine)
@@ -779,6 +809,12 @@ QStringList LlamaPlugin::getlines(TextEditorWidget *editor, int startLine, int e
             lines.append(block.text());
     }
     return lines;
+}
+
+QString LlamaPlugin::getline(TextEditorWidget *editor, int line)
+{
+    QTextBlock block = editor->document()->findBlockByNumber(line);
+    return block.isValid() ? block.text() : QString();
 }
 
 void LlamaPlugin::pick_chunk(const QStringList &text, bool noModifiedState, bool doEviction)

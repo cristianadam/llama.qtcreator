@@ -49,7 +49,7 @@ private:
     void settingsUpdated();
 
     // Completion handling
-    void fim(int pos_x, int pos_y, bool isAuto = false);
+    void fim(int pos_x, int pos_y, bool isAuto = false, const QStringList& prev = {});
     void fim_on_response(int pos_x, int pos_y, const QByteArray &hash, const QByteArray &response);
     void fim_try_hint(int pos_x, int pos_y);
     void fim_render(TextEditor::TextEditorWidget *editor,
@@ -59,18 +59,27 @@ private:
     void hideCompletionHint();
 
     // Context management
-    using ThreeQStrings = std::tuple<QString, QString, QString>;
-
-    ThreeQStrings fim_ctx_local(TextEditor::TextEditorWidget *editor,
-                                int pos_x,
-                                int pos_y,
-                                const QByteArray &prev = QByteArray());
+    struct FimContext
+    {
+        QString prefix;
+        QString middle;
+        QString suffix;
+        QString line_cur;
+        QString line_cur_prefix;
+        QString line_cur_suffix;
+    };
+    FimContext fim_ctx_local(TextEditor::TextEditorWidget *editor,
+                             int pos_x,
+                             int pos_y,
+                             const QStringList &prev = {});
     void pick_chunk(const QStringList &text, bool noModifiedState, bool doEviction);
     void ring_update();
     void pick_chunk_at_cursor(TextEditor::TextEditorWidget *editor);
 
+    using ThreeQStrings = std::tuple<QString, QString, QString>;
     ThreeQStrings getShowInfoStats(const QJsonObject &response);
     QStringList getlines(TextEditor::TextEditorWidget *editor, int startLine, int endLine);
+    QString getline(TextEditor::TextEditorWidget *editor, int line);
 
     QHash<QByteArray, QByteArray> m_cacheData;
     QHash<Utils::FilePath, int> m_lastEditLineHash;
@@ -95,6 +104,7 @@ private:
 
     // Editor tracking
     std::unique_ptr<TextEditor::TextMark> m_textMark;
+    QStringList m_suggestionContent;
 };
 
 } // namespace LlamaCpp::Internal
