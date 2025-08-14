@@ -242,7 +242,6 @@ void LlamaProjectSettings::save(ProjectExplorer::Project *project)
     toMap(map);
     project->setNamedSettings(Constants::LLAMACPP_PROJECT_SETTINGS_ID, variantFromStore(map));
 
-    // This triggers a restart of the Copilot language server.
     settings().apply();
 }
 

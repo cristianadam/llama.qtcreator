@@ -510,11 +510,7 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getShowInfoStats(const QJsonObject &resp
     double t_predict_ms = response["timings/predicted_ms"].toDouble(1.0);
     double s_predict = response["timings/predicted_per_second"].toDouble();
 
-    static QChar chars[4]{'|', '/', '-', '\\'};
-    static int rotation = 0;
-    QString label = QString("llama.cpp %1 %2 ms")
-                        .arg(m_ringQueued.size() == 0 ? '|' : chars[rotation++ % 4])
-                        .arg(t_prompt_ms + t_predict_ms, 0, 'f', 2);
+    QString label = QString("llama.cpp | %1 ms").arg(t_prompt_ms + t_predict_ms, 0, 'f', 2);
 
     QString warningTooltip;
     if (truncated) {
