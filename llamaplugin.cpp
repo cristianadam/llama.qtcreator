@@ -124,7 +124,7 @@ void LlamaPlugin::initialize()
             &LlamaPlugin::handleDocumentSaved);
 
     connect(qApp->clipboard(), &QClipboard::dataChanged, this, [this] {
-        if (qApp->clipboard()->text().isEmpty())
+        if (qApp->clipboard()->text().isEmpty() || !settings().enableLlamaCpp())
             return;
         pick_chunk(qApp->clipboard()->text().split("\n"), false, true);
     });
@@ -146,6 +146,18 @@ void LlamaPlugin::settingsUpdated()
     } else if (settings().ringNChunks.value() == 0 && m_ringUpdateTimer->isActive()) {
         m_ringUpdateTimer->stop();
     }
+
+    if (!settings().enableLlamaCpp()) {
+        hideCompletionHint();
+
+        if (m_fimReply && m_fimReply->isRunning())
+            m_fimReply->abort();
+
+        m_cacheData.clear();
+        m_lastEditLineHash.clear();
+        m_ringChunks.clear();
+        m_ringQueued.clear();
+    }
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag LlamaPlugin::aboutToShutdown()
@@ -155,7 +167,7 @@ ExtensionSystem::IPlugin::ShutdownFlag LlamaPlugin::aboutToShutdown()
 
 void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
 {
-    if (!editor)
+    if (!editor || !settings().enableLlamaCpp())
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
@@ -178,7 +190,7 @@ void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
 
 void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
 {
-    if (!editor)
+    if (!editor || !settings().enableLlamaCpp())
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
@@ -198,7 +210,7 @@ void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
 void LlamaPlugin::handleCursorPositionChanged()
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor)
+    if (!editor || !settings().enableLlamaCpp())
         return;
 
     hideCompletionHint();
@@ -232,7 +244,7 @@ void LlamaPlugin::pick_chunk_at_cursor(TextEditorWidget *editor)
 void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor || !document)
+    if (!editor || !document || !settings().enableLlamaCpp())
         return;
 
     if (editor->textDocument()->filePath() != document->filePath())
