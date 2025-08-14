@@ -306,9 +306,9 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
 
     // compute multiple hashes that can be used to generate a completion for which the first few lines
     // are missing. this happens when we have scrolled down a bit from where the original generation was done
+    static QRegularExpression re("^[^\n]*\n");
     QString prefix_trim = prefix;
     for (int i = 0; i < 3; ++i) {
-        QRegularExpression re("^[^\n]*\n");
         prefix_trim = prefix_trim.replace(re, "");
         if (prefix_trim.isEmpty())
             break;
@@ -318,7 +318,7 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
     }
 
     // if we already have a cached completion for one of the hashes, don't send a request
-    for (const QByteArray &h : hashes) {
+    for (const QByteArray &h : std::as_const(hashes)) {
         if (m_cacheData.contains(h)) {
             // On explicit Ctrl+G fim call, display the suggestion
             if (!isAuto)
