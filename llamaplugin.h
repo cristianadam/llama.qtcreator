@@ -105,6 +105,7 @@ private:
     // Editor tracking
     std::unique_ptr<TextEditor::TextMark> m_textMark;
     QStringList m_suggestionContent;
+    static QRegularExpression s_whitespace_regex;
 };
 
 } // namespace LlamaCpp::Internal

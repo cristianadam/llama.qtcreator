@@ -41,8 +41,11 @@ using namespace Utils;
 using namespace ProjectExplorer;
 
 Q_LOGGING_CATEGORY(llamaLog, "llama.cpp", QtWarningMsg)
+Q_LOGGING_CATEGORY(llamaNetwork, "llama.cpp.network", QtDebugMsg)
 
 namespace LlamaCpp::Internal {
+
+QRegularExpression LlamaPlugin::s_whitespace_regex("^\\s*$");
 
 LlamaPlugin::LlamaPlugin()
     : m_ringUpdateTimer(new QTimer(this))
@@ -413,6 +416,7 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
     }
 
     qCInfo(llamaLog) << "fim:" << pos_x << pos_y << "Sending network request.";
+    qCDebug(llamaNetwork).noquote() << "fim: post request:\n" << doc.toJson();
 
     QElapsedTimer replyTimer;
     replyTimer.start();
@@ -637,39 +641,94 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
     QJsonObject obj = doc.object();
 
     QString content_str = obj.value("content").toString();
-    QStringList content = content_str.split("\n", Qt::SkipEmptyParts);
+    QStringList content = content_str.split("\n");
 
     qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y << "Raw suggestion:" << content_str;
+    qDebug(llamaNetwork()).noquote() << "fim_render: response:\n" << doc.toJson();
+
+    bool can_accept = true;
 
     // Remove trailing new lines
     while (!content.isEmpty() && content.last().isEmpty()) {
         content.removeLast();
     }
-
-    bool can_accept = !content_str.isEmpty() && !content.isEmpty();
-    bool has_info = false;
-
-    if (can_accept) {
-        const int end = int(content_str.size()) - 1;
-        int delta = 0;
-        while (delta <= end && content_str[end - delta].isSpace())
-            ++delta;
-
-        if (delta > 0)
-            content_str = content_str.chopped(delta);
-    }
-
-    // Text:positionInText has 1 based line and column values
-    int currentIntPos = Text::positionInText(editor->document(), pos_y, pos_x + 1);
-    QString nextText = Text::textAt(editor->document(), currentIntPos, content_str.size() * 2);
-
-    if (nextText.contains(content_str)) {
-        can_accept = false;
-    } else if (nextText.contains(content.join("\n"))) {
-        can_accept = false;
-    } else if (content.size() > 1 && nextText.contains(content.mid(1).join("\n"))) {
+    if (content.isEmpty()) {
+        content << "";
         can_accept = false;
     }
+
+    QString line_cur = getline(editor, pos_y - 1);
+
+    // if the current has too much whitespace, more than the current indent, trim
+    // so that we don't have double indentation.
+    auto line_cur_match = s_whitespace_regex.match(line_cur);
+    if (line_cur_match.hasMatch()) {
+        int lead = qMin(line_cur_match.capturedLength(), line_cur.size());
+        if (lead > pos_x) {
+            line_cur = line_cur.left(pos_x);
+            content[0] = content[0].mid(pos_x);
+        }
+    }
+    QString line_cur_prefix = line_cur.left(pos_x);
+    QString line_cur_suffix = line_cur.mid(pos_x);
+
+    // Logic for discarding predictions that repeat existing text
+    // truncate the suggestion if the first line is empty
+    if (content.size() == 1 && content[0].isEmpty()) {
+        content = {};
+    }
+
+    // or the suggestion repeats the previous line
+    int cmp_y = pos_y - 2;
+    while (cmp_y > 1 && getline(editor, cmp_y).trimmed().isEmpty()) {
+        cmp_y--;
+    }
+    if (cmp_y > 1 && content.size() == 1
+        && (line_cur_prefix + content[0]) == getline(editor, cmp_y)) {
+        content = {};
+    }
+
+    // ... and the next lines are repeated
+    if (content.size() > 1 && content[0].isEmpty()
+        && content.mid(1) == getlines(editor, pos_y, pos_y + content.size() - 1)) {
+        content = {};
+    }
+
+    // truncate the suggestion if it repeats the suffix
+    if (content.size() == 1 && content[0] == line_cur_suffix) {
+        content = {};
+    }
+
+    // Find the first non-empty line
+    cmp_y = pos_y;
+    while (cmp_y < editor->document()->lineCount() && getline(editor, cmp_y).trimmed().isEmpty()) {
+        cmp_y++;
+    }
+
+    if (!content.isEmpty() && (line_cur_prefix + content[0]) == getline(editor, cmp_y)) {
+        // truncate the suggestion if it repeats the next line
+        if (content.size() == 1) {
+            content = {};
+        }
+
+        // ... or if the second line of the suggestion is the prefix of line cmp_y + 1
+        if (content.size() == 2
+            && content.back() == getline(editor, cmp_y + 1).left(content.back().length())) {
+            content = {};
+        }
+
+        // ... or if the middle chunk of lines of the suggestion is the same as [cmp_y + 1, cmp_y + content.size() - 1)
+        if (content.size() > 2
+            && content.mid(1).join("\n")
+                   == getlines(editor, cmp_y + 1, cmp_y + content.size() - 1).join("\n")) {
+            content = {};
+        }
+    }
+
+    // if only whitespaces - do not accept
+    QString combined_content = content.join("\n");
+    if (s_whitespace_regex.match(combined_content).hasMatch())
+        can_accept = false;
 
     if (can_accept) {
         // Text:positionInText has 1 based line and column values
@@ -681,30 +740,21 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         data.range.end = currentPos;
         data.position = currentPos;
 
-        /*
-        // This works for Shift-Tab, but copies prefix when using Tab
-        data.range.begin.column -= pos_x;
-        int separator = content_str.indexOf("\n");
-        data.range.end.column = pos_x
-                                + (separator != -1 ? content_str.size() - separator - 1
-                                                   : content_str.size());
-        */
+        int separator = combined_content.indexOf("\n");
+        data.range.end.column = separator != -1 ? combined_content.size() - separator - 1
+                                                : combined_content.size();
+        data.text = combined_content;
 
-        int separator = content_str.indexOf("\n");
-        data.range.end.column = separator != -1 ? content_str.size() - separator - 1
-                                                : content_str.size();
+        auto suggestion = std::make_unique<TextEditor::TextSuggestion>(data, editor->document());
+        suggestion->replacementDocument()->setPlainText(line_cur_prefix + combined_content
+                                                        + line_cur_suffix);
 
-        // Workaround for QTCREATORBUG-33303
-        data.position.column -= pos_x;
-        data.text = Text::textAt(editor->document(), currentIntPos - pos_x, pos_x) + content_str;
-
-        editor->insertSuggestion(
-            std::make_unique<TextEditor::TextSuggestion>(data, editor->document()));
+        editor->insertSuggestion(std::move(suggestion));
 
         m_suggestionContent = content;
 
         qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
-                         << "Prepared suggestion:" << content_str;
+                         << "Prepared suggestion:" << combined_content;
     }
 
     if (settings().showInfo.value() > 0) {
