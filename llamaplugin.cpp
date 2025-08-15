@@ -46,7 +46,7 @@ using namespace Utils;
 using namespace ProjectExplorer;
 
 Q_LOGGING_CATEGORY(llamaLog, "llama.cpp", QtWarningMsg)
-Q_LOGGING_CATEGORY(llamaNetwork, "llama.cpp.network", QtDebugMsg)
+Q_LOGGING_CATEGORY(llamaNetwork, "llama.cpp.network", QtWarningMsg)
 
 namespace LlamaCpp::Internal {
 
