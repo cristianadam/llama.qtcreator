@@ -1,12 +1,17 @@
 # llama.qtcreator
 
-Local LLM-assisted text completion.
+Local LLM-assisted text completion for Qt Creator.
+
+![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text.png)
 
 ---
 
+![Qt Creator llama.cpp Qt Widgets](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-widgets.webp)
+
+
 ## Features
 
-- Auto-suggest on cursor movement in `Insert` mode
+- Auto-suggest on cursor movement
 - Toggle the suggestion manually by pressing `Ctrl+G`
 - Accept a suggestion with `Tab`
 - Accept the first line of a suggestion with `Shift+Tab`
@@ -21,7 +26,10 @@ Local LLM-assisted text completion.
 
 ### llama.cpp setup
 
-The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server instance to be running at [`g:llama_config.endpoint`](https://github.com/ggml-org/llama.vim/blob/master/autoload/llama.vim#L37).
+The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server instance to be running at:
+
+![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings.png)
+
 
 #### Mac OS
 
@@ -61,11 +69,18 @@ Here are recommended settings, depending on the amount of VRAM that you have:
   llama-server --fim-qwen-1.5b-default
   ```
 
-Use `:help llama` for more details.
+Use `llama-server --help` for more details.
+
 
 ### Recommended LLMs
 
 The plugin requires FIM-compatible models: [HF collection](https://huggingface.co/collections/ggml-org/llamavim-6720fece33898ac10544ecf9)
+
+## Examples
+
+### A Qt Quick example on MacBook Pro M3 `Qwen2.5-Coder 3B Q8_0`:
+
+![Qt Creator llama.cpp Qt Quick](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-quick.webp)
 
 ## Implementation details
 
