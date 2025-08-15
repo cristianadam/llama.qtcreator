@@ -2,11 +2,11 @@
 
 Local LLM-assisted text completion for Qt Creator.
 
-![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text.png)
+![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text@2x.webp)
 
 ---
 
-![Qt Creator llama.cpp Qt Widgets](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-widgets.webp)
+![Qt Creator llama.cpp Qt Widgets](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-widgets@2x.webp)
 
 
 ## Features
@@ -28,7 +28,7 @@ Local LLM-assisted text completion for Qt Creator.
 
 The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server instance to be running at:
 
-![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings.png)
+![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings@2x.webp)
 
 
 #### Mac OS
@@ -80,7 +80,7 @@ The plugin requires FIM-compatible models: [HF collection](https://huggingface.c
 
 ### A Qt Quick example on MacBook Pro M3 `Qwen2.5-Coder 3B Q8_0`:
 
-![Qt Creator llama.cpp Qt Quick](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-quick.webp)
+![Qt Creator llama.cpp Qt Quick](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-quick@2x.webp)
 
 ## Implementation details
 
