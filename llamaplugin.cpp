@@ -348,7 +348,7 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
 
     QStringList stopStrings = settings().stopStrings.value().isEmpty()
                                   ? QStringList()
-                                  : settings().stopStrings.value().split(" ");
+                                  : settings().stopStrings.value().split(";");
     request["prompt"] = middle;
     request["n_predict"] = settings().nPredict.value();
     request["stop"] = QJsonArray::fromStringList(stopStrings);

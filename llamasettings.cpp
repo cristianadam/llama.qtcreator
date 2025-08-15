@@ -76,7 +76,7 @@ LlamaSettings::LlamaSettings()
     stopStrings.setLabelText(Tr::tr("Stop Strings:"));
     stopStrings.setDefaultValue("");
     stopStrings.setToolTip(Tr::tr("Return the result immediately as soon as any of these strings "
-                                  "are encountered in the generated text. Separated by space."));
+                                  "are encountered in the generated text. Separated by semicolons."));
     stopStrings.setHistoryCompleter("LlamaCpp.StopStrings.History");
 
     tMaxPromptMs.setDisplayName(Tr::tr("Max Prompt Time (ms)"));
