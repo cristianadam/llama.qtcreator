@@ -10,13 +10,16 @@
 #include <coreplugin/documentmanager.h>
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/editormanager/ieditor.h>
+#include <coreplugin/icore.h>
 #include <coreplugin/messagemanager.h>
 #include <coreplugin/statusbarmanager.h>
+#include <extensionsystem/pluginmanager.h>
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 #include <texteditor/textmark.h>
 #include <texteditor/textsuggestion.h>
 #include <utils/fileutils.h>
+#include <utils/hostosinfo.h>
 #include <utils/qtcassert.h>
 
 #include <QAction>
@@ -35,6 +38,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QToolButton>
+#include <QTranslator>
 
 using namespace Core;
 using namespace TextEditor;
@@ -60,8 +64,37 @@ LlamaPlugin::~LlamaPlugin()
     disconnect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
 }
 
+static FilePath scanForTranslation(const QString &translationFile)
+{
+    const FilePaths &pluginPaths = ExtensionSystem::PluginManager::pluginPaths();
+    for (const FilePath &plugin : pluginPaths) {
+        const FilePaths pluginFolders = plugin.dirEntries(
+            FileFilter({}, QDir::Dirs | QDir::NoDotAndDotDot));
+
+        for (const FilePath &folder : pluginFolders) {
+            FilePath translationDir = folder
+                                      / (HostOsInfo::isMacHost() ? QString("Contents/Resources")
+                                                                 : QString("share/qtcreator"))
+                                      / "translations";
+            if (!translationDir.dirEntries({{translationFile}, QDir::Files | QDir::NoDotAndDotDot})
+                     .isEmpty())
+                return translationDir.pathAppended(translationFile);
+        }
+    }
+    return FilePath();
+}
+
 void LlamaPlugin::initialize()
 {
+    // Translations
+    auto translator = new QTranslator(this);
+    QString locale = ICore::userInterfaceLanguage();
+    locale = locale.contains("zh_") ? locale : locale.left(locale.indexOf("_"));
+    const QString languageFile = "llamacpp_" + locale + ".qm";
+    const QString llamaCppTranslation = scanForTranslation(languageFile).path();
+    if (translator->load(llamaCppTranslation))
+        QCoreApplication::installTranslator(translator);
+
     IOptionsPage::registerCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY,
                                    Constants::LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY,
                                    ":/images/settingscategory_llama.png");
