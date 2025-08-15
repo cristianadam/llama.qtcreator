@@ -106,7 +106,7 @@ LlamaSettings::LlamaSettings()
     autoFim.setSettingsKey("LlamaCpp.AutoFim");
     autoFim.setLabelText(Tr::tr("Auto FIM"));
     autoFim.setDefaultValue(true);
-    autoFim.setToolTip(Tr::tr("Trigger FIM completion automatically on cursor movement."));
+    autoFim.setToolTip(Tr::tr("Trigger FIM (Fill-in-the-Middle) completion automatically on cursor movement."));
 
     maxLineSuffix.setDisplayName(Tr::tr("Max Line Suffix"));
     maxLineSuffix.setSettingsKey("LlamaCpp.MaxlineSuffix");
