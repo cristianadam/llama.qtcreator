@@ -73,8 +73,9 @@ static FilePath scanForTranslation(const QString &translationFile)
 
         for (const FilePath &folder : pluginFolders) {
             FilePath translationDir = folder
-                                      / (HostOsInfo::isMacHost() ? QString("Contents/Resources")
-                                                                 : QString("share/qtcreator"))
+                                      / (HostOsInfo::isMacHost()
+                                             ? QString("Qt Creator.app/Contents/Resources")
+                                             : QString("share/qtcreator"))
                                       / "translations";
             if (!translationDir.dirEntries({{translationFile}, QDir::Files | QDir::NoDotAndDotDot})
                      .isEmpty())
