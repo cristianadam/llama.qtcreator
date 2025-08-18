@@ -1,16 +1,16 @@
 {
-    "Id" : "llama.qtcreator",
-    "Name" : "LlamaPlugin",
+    "Id" : "llamacpp",
+    "Name" : "llama.qtcreator",
     "Version" : "${IDE_VERSION}",
     "CompatVersion" : "${IDE_VERSION_COMPAT}",
-    "Vendor" : "Cristian Adam",
-    "VendorId" : "cristianadam",
-    "Copyright" : "(C) 2025 Cristian Adam, The llama.vim Contributors, ${IDE_COPYRIGHT}",
+    "Vendor" : "ggml-org",
+    "VendorId" : "ggml",
+    "Copyright" : "(C) 2025 The llama.qtcreator Contributors, ${IDE_COPYRIGHT}",
     "License" : "MIT",
     "SoftLoadable" : true,
     "Description": "llama.cpp infill completion plugin for Qt Creator",
     "LongDescription" : ${LONG_DESCRIPTION},
-    "Url" : "https://github.com/cristianadam/llama.qtcreator",
+    "Url" : "https://github.com/ggml-org/llama.qtcreator",
     "DocumentationUrl" : "",
     ${IDE_PLUGIN_DEPENDENCIES}
 }
