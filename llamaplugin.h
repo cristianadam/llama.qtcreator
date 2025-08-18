@@ -58,6 +58,8 @@ private:
                     const QByteArray &response);
     void hideCompletionHint();
 
+    Utils::FilePath getTranslationFilePath(const QString &translationFile);
+
     // Context management
     struct FimContext
     {

@@ -64,25 +64,14 @@ LlamaPlugin::~LlamaPlugin()
     disconnect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
 }
 
-static FilePath scanForTranslation(const QString &translationFile)
+FilePath LlamaPlugin::getTranslationFilePath(const QString &translationFile)
 {
-    const FilePaths &pluginPaths = ExtensionSystem::PluginManager::pluginPaths();
-    for (const FilePath &plugin : pluginPaths) {
-        const FilePaths pluginFolders = plugin.dirEntries(
-            FileFilter({}, QDir::Dirs | QDir::NoDotAndDotDot));
-
-        for (const FilePath &folder : pluginFolders) {
-            FilePath translationDir = folder
-                                      / (HostOsInfo::isMacHost()
-                                             ? QString("Qt Creator.app/Contents/Resources")
-                                             : QString("share/qtcreator"))
-                                      / "translations";
-            if (!translationDir.dirEntries({{translationFile}, QDir::Files | QDir::NoDotAndDotDot})
-                     .isEmpty())
-                return translationDir.pathAppended(translationFile);
-        }
-    }
-    return FilePath();
+    const FilePath pluginLocation = ExtensionSystem::PluginManager::specForPlugin(this)->location();
+    const FilePath translationDir = HostOsInfo::isMacHost()
+                                        ? (pluginLocation / "../../Resources/translations")
+                                        : (pluginLocation / "../../../share/qtcreator/translations")
+                                              .cleanPath();
+    return translationDir / translationFile;
 }
 
 void LlamaPlugin::initialize()
@@ -92,7 +81,7 @@ void LlamaPlugin::initialize()
     QString locale = ICore::userInterfaceLanguage();
     locale = locale.contains("zh_") ? locale : locale.left(locale.indexOf("_"));
     const QString languageFile = "llamacpp_" + locale + ".qm";
-    const QString llamaCppTranslation = scanForTranslation(languageFile).path();
+    const QString llamaCppTranslation = getTranslationFilePath(languageFile).path();
     if (translator->load(llamaCppTranslation))
         QCoreApplication::installTranslator(translator);
 
