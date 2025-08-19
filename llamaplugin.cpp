@@ -54,14 +54,24 @@ QRegularExpression LlamaPlugin::s_whitespace_regex("^\\s*$");
 
 LlamaPlugin::LlamaPlugin()
     : m_ringUpdateTimer(new QTimer(this))
+    , m_positionChangedTimer(new QTimer(this))
     , m_networkManager(new QNetworkAccessManager(this))
 {
     connect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
+    m_positionChangedTimer->setSingleShot(true);
+    connect(m_positionChangedTimer,
+            &QTimer::timeout,
+            this,
+            &LlamaPlugin::handleCursorPositionChangedDelayed);
 }
 
 LlamaPlugin::~LlamaPlugin()
 {
     disconnect(m_ringUpdateTimer, &QTimer::timeout, this, &LlamaPlugin::ring_update);
+    disconnect(m_positionChangedTimer,
+               &QTimer::timeout,
+               this,
+               &LlamaPlugin::handleCursorPositionChangedDelayed);
 }
 
 FilePath LlamaPlugin::getTranslationFilePath(const QString &translationFile)
@@ -232,11 +242,18 @@ void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
 
 void LlamaPlugin::handleCursorPositionChanged()
 {
-    TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor || !settings().enableLlamaCpp())
+    if (!settings().enableLlamaCpp())
         return;
 
     hideCompletionHint();
+    m_positionChangedTimer->start(100);
+}
+
+void LlamaPlugin::handleCursorPositionChangedDelayed()
+{
+    TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
+    if (!editor)
+        return;
 
     QTextCursor cursor = editor->textCursor();
     int pos_x = cursor.positionInBlock();

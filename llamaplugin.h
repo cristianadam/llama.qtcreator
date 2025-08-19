@@ -43,6 +43,7 @@ private slots:
     void handleCurrentEditorChanged(Core::IEditor *editor);
     void handleEditorAboutToClose(Core::IEditor *editor);
     void handleCursorPositionChanged();
+    void handleCursorPositionChangedDelayed();
     void handleDocumentSaved(Core::IDocument *document);
 
 private:
@@ -101,6 +102,7 @@ private:
     // State tracking
     QPoint m_lastPos;
     QTimer *m_ringUpdateTimer;
+    QTimer *m_positionChangedTimer;
     QNetworkAccessManager *m_networkManager;
     std::unique_ptr<QNetworkReply> m_fimReply;
 
