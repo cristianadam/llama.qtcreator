@@ -437,12 +437,14 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
         chunk = lines;
     }
 
-    for (int i = m_ringChunks.size() - 1; i >= 0; --i) {
-        if (chunk_sim(m_ringChunks[i].data, chunk) > 0.5) {
-            m_ringChunks.removeAt(i);
-            m_ringNEvict++;
-        }
-    }
+    // evict chunks that are very similar to the current context
+    // this is needed because such chunks usually distort the completion to repeat what was already there
+    // for (int i = m_ringChunks.size() - 1; i >= 0; --i) {
+    //     if (chunk_sim(m_ringChunks[i].data, chunk) > 0.5) {
+    //         m_ringChunks.removeAt(i);
+    //         m_ringNEvict++;
+    //     }
+    // }
 
     // Add extra context
     QJsonArray extraContext;
