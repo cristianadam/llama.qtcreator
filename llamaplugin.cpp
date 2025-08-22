@@ -180,6 +180,8 @@ void LlamaPlugin::settingsUpdated()
         m_ringUpdateTimer->stop();
     }
 
+    m_cacheData.setMaxCost(settings().maxCacheKeys.value());
+
     if (!settings().enableLlamaCpp()) {
         hideCompletionHint();
 
@@ -523,17 +525,8 @@ void LlamaPlugin::fim_on_response(int pos_x,
 {
     qCInfo(llamaLog) << "fim_on_response:" << pos_x << pos_y;
 
-    // TODO: Currently the cache uses a random eviction policy. A more clever policy could be implemented (eg. LRU).
-    if (m_cacheData.size() > settings().maxCacheKeys.value()) {
-        int randomIndex = QRandomGenerator::global()->bounded(m_cacheData.size());
-        m_cacheData.removeIf([randomIndex](const auto &) {
-            static int index = 0;
-            return index++ == randomIndex;
-        });
-    }
-
     // Cache the result
-    m_cacheData[hash] = response;
+    m_cacheData.insert(hash, new QByteArray(response));
 
     // if nothing is currently displayed - show the hint directly
     if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
@@ -615,7 +608,7 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 
     QByteArray raw;
     if (m_cacheData.contains(hash)) {
-        raw = m_cacheData[hash];
+        raw = *m_cacheData[hash];
     } else {
         QString pm = prefix + middle;
         int best = 0;
@@ -631,7 +624,7 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
                 = QCryptographicHash::hash(ctx_new.toUtf8(), QCryptographicHash::Sha256).toHex();
 
             if (m_cacheData.contains(hash_new)) {
-                QByteArray response_cached = m_cacheData[hash_new];
+                QByteArray response_cached = *m_cacheData[hash_new];
                 if (response_cached.isEmpty())
                     continue;
 

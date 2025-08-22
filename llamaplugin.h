@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QCache>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QNetworkAccessManager>
@@ -84,7 +85,7 @@ private:
     QStringList getlines(TextEditor::TextEditorWidget *editor, int startLine, int endLine);
     QString getline(TextEditor::TextEditorWidget *editor, int line);
 
-    QHash<QByteArray, QByteArray> m_cacheData;
+    QCache<QByteArray, QByteArray> m_cacheData;
     QHash<Utils::FilePath, int> m_lastEditLineHash;
 
     // Context chunks
