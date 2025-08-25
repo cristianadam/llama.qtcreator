@@ -535,12 +535,7 @@ void LlamaPlugin::fim_on_response(int pos_x,
         int cursor_pos_y = cursor.blockNumber() + 1;
 
         if (cursor_pos_x == pos_x && cursor_pos_y == pos_y) {
-            if (!editor->suggestionVisible()) {
-                fim_try_hint(pos_x, pos_y);
-            } else {
-                qCInfo(llamaLog) << "fim_on_response:" << pos_x << pos_y
-                                 << "Suggestion is visible.";
-            }
+            fim_try_hint(pos_x, pos_y);
         } else {
             qCInfo(llamaLog) << "fim_on_response:" << "Received response for:" << pos_x << pos_y
                              << "and the cursor is at" << cursor_pos_x << cursor_pos_y
@@ -673,7 +668,7 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
                              const QByteArray &response)
 {
     // do not show if there is a completion in progress
-    if (editor->suggestionVisible() || !editor->selectedText().isEmpty())
+    if (!editor->selectedText().isEmpty())
         return;
 
     // Parse JSON response
@@ -792,16 +787,20 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
                                                 : combined_content.size();
         data.text = combined_content;
 
-        auto suggestion = std::make_unique<TextEditor::TextSuggestion>(data, editor->document());
-        suggestion->replacementDocument()->setPlainText(line_cur_prefix + combined_content
-                                                        + line_cur_suffix);
+        if (m_suggestionContent != content) {
+            auto suggestion = std::make_unique<TextEditor::TextSuggestion>(data, editor->document());
+            suggestion->replacementDocument()->setPlainText(line_cur_prefix + combined_content
+                                                            + line_cur_suffix);
 
-        editor->insertSuggestion(std::move(suggestion));
+            editor->insertSuggestion(std::move(suggestion));
 
-        m_suggestionContent = content;
+            qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
+                             << "Prepared suggestion:" << combined_content;
+            if (!m_suggestionContent.isEmpty())
+                qCInfo(llamaLog) << "The replaced suggestion:" << m_suggestionContent.join("\n");
 
-        qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
-                         << "Prepared suggestion:" << combined_content;
+            m_suggestionContent = content;
+        }
     }
 
     if (settings().showInfo.value() > 0) {
@@ -823,8 +822,10 @@ void LlamaPlugin::hideCompletionHint()
 {
     m_textMark.reset({});
 
-    if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget())
+    if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
         editor->clearSuggestion();
+        m_suggestionContent.clear();
+    }
 }
 
 LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
