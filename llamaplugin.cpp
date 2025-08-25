@@ -667,7 +667,7 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
                              int pos_y,
                              const QByteArray &response)
 {
-    // do not show if there is a completion in progress
+    // do not show a suggestion if we have a selection
     if (!editor->selectedText().isEmpty())
         return;
 
