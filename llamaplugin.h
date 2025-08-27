@@ -59,6 +59,7 @@ private:
                     int pos_y,
                     const QByteArray &response);
     void hideCompletionHint();
+    bool isValid(TextEditor::TextEditorWidget *editor);
 
     Utils::FilePath getTranslationFilePath(const QString &translationFile);
 

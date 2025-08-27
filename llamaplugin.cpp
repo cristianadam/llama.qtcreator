@@ -206,7 +206,7 @@ void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
-    if (!editorWidget)
+    if (!isValid(editorWidget))
         return;
 
     if (editorWidget->textDocument()
@@ -229,7 +229,7 @@ void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
-    if (!editorWidget)
+    if (!isValid(editorWidget))
         return;
 
     pick_chunk_at_cursor(editorWidget);
@@ -254,7 +254,7 @@ void LlamaPlugin::handleCursorPositionChanged()
 void LlamaPlugin::handleCursorPositionChangedDelayed()
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor)
+    if (!isValid(editor))
         return;
 
     QTextCursor cursor = editor->textCursor();
@@ -270,9 +270,6 @@ void LlamaPlugin::handleCursorPositionChangedDelayed()
 
 void LlamaPlugin::pick_chunk_at_cursor(TextEditorWidget *editor)
 {
-    if (!editor)
-        return;
-
     QTextCursor cursor = editor->textCursor();
     int pos_y = cursor.blockNumber() + 1;
     int max_y = editor->document()->lineCount();
@@ -286,7 +283,7 @@ void LlamaPlugin::pick_chunk_at_cursor(TextEditorWidget *editor)
 void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor || !document || !settings().enableLlamaCpp())
+    if (!isValid(editor) || !document || !settings().enableLlamaCpp())
         return;
 
     if (editor->textDocument()->filePath() != document->filePath())
@@ -321,7 +318,7 @@ static double chunk_sim(const QStringList &c0, const QStringList &c1)
 void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!editor)
+    if (!isValid(editor))
         return;
 
     QTextDocument *currentDocument = editor->document();
@@ -591,8 +588,7 @@ LlamaPlugin::ThreeQStrings LlamaPlugin::getShowInfoStats(const QJsonObject &resp
 void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-
-    if (!editor || editor->isReadOnly() || editor->multiTextCursor().hasMultipleCursors())
+    if (!isValid(editor))
         return;
 
     auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix]
@@ -826,6 +822,13 @@ void LlamaPlugin::hideCompletionHint()
         editor->clearSuggestion();
         m_suggestionContent.clear();
     }
+}
+
+bool LlamaPlugin::isValid(TextEditor::TextEditorWidget *editor)
+{
+    if (!editor || editor->isReadOnly() || editor->multiTextCursor().hasMultipleCursors())
+        return false;
+    return true;
 }
 
 LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
