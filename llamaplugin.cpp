@@ -123,13 +123,34 @@ void LlamaPlugin::initialize()
         settings().apply();
     });
 
+    ActionBuilder toggleAutoFimAction(this, Constants::LLAMACPP_TOGGLE_AUTOFIM);
+    toggleAutoFimAction.setText(Tr::tr("Toggle Auto FIM"));
+    toggleAutoFimAction.setCheckable(true);
+    toggleAutoFimAction.setChecked(settings().autoFim());
+    toggleAutoFimAction.addOnTriggered(this, [this](bool checked) {
+        qCInfo(llamaLog) << "Toggle Auto FIM" << checked;
+
+        settings().autoFim.setValue(checked);
+        settings().apply();
+
+        if (checked) {
+            // Show the llama.cpp text hint
+            fim(-1, -1, false);
+        } else {
+            hideCompletionHint();
+        }
+    });
+    toggleAutoFimAction.setDefaultKeySequence(Tr::tr("Ctrl+Shift+G"));
+
     QAction *toggleAct = toggleAction.contextAction();
     QAction *requestAct = requestAction.contextAction();
-    auto updateActions = [toggleAct, requestAct] {
+    QAction *toogleAutoFimAct = toggleAutoFimAction.contextAction();
+    auto updateActions = [toggleAct, requestAct, toogleAutoFimAct] {
         const bool enabled = settings().enableLlamaCpp();
         toggleAct->setToolTip(enabled ? Tr::tr("Disable llama.cpp.") : Tr::tr("Enable llama.cpp."));
         toggleAct->setChecked(enabled);
         requestAct->setEnabled(enabled);
+        toogleAutoFimAct->setEnabled(enabled);
     };
 
     settings().enableLlamaCpp.addOnChanged(this, updateActions);

@@ -6,6 +6,7 @@ namespace LlamaCpp::Internal::Constants {
     const char LLAMACPP_USE_GLOBAL_SETTINGS[] = "LlamaCpp.UseGlobalSettings";
 
     const char LLAMACPP_TOGGLE_ENABLE_DISABLE[] = "LlamaCpp.ToggleEnableDisable";
+    const char LLAMACPP_TOGGLE_AUTOFIM[] = "LlamaCpp.ToggleAutoFIM";
     const char LLAMACPP_REQUEST_SUGGESTION[] = "LlamaCpp.RequestSuggestion";
 
     const char LLAMACPP_GENERAL_OPTIONS_ID[] = "LlamaCpp.General";
