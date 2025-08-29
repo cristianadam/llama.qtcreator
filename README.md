@@ -11,8 +11,8 @@ Local LLM-assisted text completion for Qt Creator.
 
 ## Features
 
-- Auto-suggest on cursor movement
-- Toggle the suggestion manually by pressing `Ctrl+G`
+- Auto-suggest on cursor movement. Toggle enable / disable with `Ctrl+Shift+G`
+- Trigger the suggestion manually by pressing `Ctrl+G`
 - Accept a suggestion with `Tab`
 - Accept the first line of a suggestion with `Shift+Tab`
 - Control max text generation time
