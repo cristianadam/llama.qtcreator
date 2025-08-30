@@ -1,5 +1,5 @@
 #pragma once
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
     void setupLlamaCppProjectPanel();
 }

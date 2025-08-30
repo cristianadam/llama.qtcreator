@@ -12,7 +12,7 @@
 
 using namespace ProjectExplorer;
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
 
 class LlamaCppProjectSettingsWidget final : public ProjectSettingsWidget
 {
@@ -70,4 +70,4 @@ void setupLlamaCppProjectPanel()
     static LlamaCppProjectPanelFactory theLlamaCppProjectPanelFactory;
 }
 
-} // namespace LlamaCpp::Internal
+} // namespace LlamaCpp

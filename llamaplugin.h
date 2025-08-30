@@ -25,7 +25,7 @@ class TextMark;
 class TextEditorWidget;
 } // namespace TextEditor
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
 
 class LlamaPlugin : public ExtensionSystem::IPlugin
 {
@@ -114,4 +114,4 @@ private:
     static QRegularExpression s_whitespace_regex;
 };
 
-} // namespace LlamaCpp::Internal
+} // namespace LlamaCpp

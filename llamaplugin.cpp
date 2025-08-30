@@ -48,7 +48,7 @@ using namespace ProjectExplorer;
 Q_LOGGING_CATEGORY(llamaLog, "llama.cpp", QtWarningMsg)
 Q_LOGGING_CATEGORY(llamaNetwork, "llama.cpp.network", QtWarningMsg)
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
 
 QRegularExpression LlamaPlugin::s_whitespace_regex("^\\s*$");
 
@@ -1066,4 +1066,4 @@ void LlamaPlugin::ring_update()
     m_networkManager->post(req, jsonData);
 }
 
-} // namespace LlamaCpp::Internal
+} // namespace LlamaCpp

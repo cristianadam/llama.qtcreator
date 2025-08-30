@@ -10,7 +10,7 @@
 
 using namespace Utils;
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
 
 static void initEnableAspect(BoolAspect &enableLlamaCpp)
 {
@@ -259,4 +259,4 @@ public:
 
 const LlamaCppSettingsPage settingsPage;
 
-} // namespace LlamaCpp::Internal
+} // namespace LlamaCpp

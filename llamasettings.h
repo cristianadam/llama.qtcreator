@@ -6,7 +6,7 @@ namespace ProjectExplorer {
     class Project;
 }
 
-namespace LlamaCpp::Internal {
+namespace LlamaCpp {
 
 class LlamaSettings : public Utils::AspectContainer
 {
@@ -50,4 +50,4 @@ public:
     Utils::BoolAspect useGlobalSettings{this};
 };
 
-} // namespace LlamaCpp::Internal
+} // namespace LlamaCpp
