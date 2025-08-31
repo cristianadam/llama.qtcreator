@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QAction>
 #include <QCache>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -14,6 +15,7 @@
 #include <utils/filepath.h>
 
 #include <tuple>
+#include "llamatr.h"
 
 namespace Core {
 class IEditor;
@@ -112,6 +114,8 @@ private:
     std::unique_ptr<TextEditor::TextMark> m_textMark;
     QStringList m_suggestionContent;
     static QRegularExpression s_whitespace_regex;
+
+    QAction m_newConversation{Tr::tr("New Conversation")};
 };
 
 } // namespace LlamaCpp

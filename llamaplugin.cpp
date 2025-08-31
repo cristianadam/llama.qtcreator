@@ -1,10 +1,3 @@
-#include "llamaplugin.h"
-#include "llamaconstants.h"
-#include "llamaicons.h"
-#include "llamaprojectpanel.h"
-#include "llamasettings.h"
-#include "llamatr.h"
-
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <coreplugin/documentmanager.h>
@@ -39,6 +32,16 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QTranslator>
+
+#include "llamaplugin.h"
+#include "llamachateditor.h"
+#include "llamaconversationsview.h"
+#include "llamaconstants.h"
+#include "llamaicons.h"
+#include "llamaprojectpanel.h"
+#include "llamasettings.h"
+#include "llamatr.h"
+
 
 using namespace Core;
 using namespace TextEditor;
@@ -98,6 +101,20 @@ void LlamaPlugin::initialize()
     IOptionsPage::registerCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY,
                                    Constants::LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY,
                                    ":/images/settingscategory_llama.png");
+
+    MenuBuilder(Constants::LLAMACPP_MENU_ID)
+        .setTitle(Tr::tr("llama.cpp"))
+        .setIcon(LlamaCpp::LLAMACPP_ICON.icon())
+        .setOnAllDisabledBehavior(ActionContainer::Show)
+        .addToContainer(Core::Constants::M_TOOLS);
+
+    Core::Command *newConversationCmd
+        = ActionManager::registerAction(&m_newConversation, Constants::LLAMACPP_NEW_CONVERSATION);
+    connect(&m_newConversation, &QAction::triggered, this, [this] {
+        QString title("llama.cpp coversation");
+        Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID, &title);
+    });
+    ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID)->addAction(newConversationCmd);
 
     ActionBuilder requestAction(this, Constants::LLAMACPP_REQUEST_SUGGESTION);
     requestAction.setText(Tr::tr("Request llama.cpp Suggestion"));
@@ -162,6 +179,7 @@ void LlamaPlugin::initialize()
     StatusBarManager::addStatusBarWidget(toggleButton, StatusBarManager::RightCorner);
 
     setupLlamaCppProjectPanel();
+    setupConversationViewWidgetFactory();
 
     // Connect to editor manager signals
     connect(EditorManager::instance(),
@@ -182,6 +200,8 @@ void LlamaPlugin::initialize()
             return;
         pick_chunk(qApp->clipboard()->text().split("\n"), false, true);
     });
+
+    setupChatEditor();
 }
 
 bool LlamaPlugin::delayedInitialize()

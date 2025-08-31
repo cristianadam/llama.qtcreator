@@ -1,0 +1,74 @@
+#pragma once
+
+#include <QNetworkAccessManager>
+#include <QObject>
+#include <QVariantMap>
+
+#include "llamatypes.h"
+
+namespace LlamaCpp {
+
+class Storage;
+
+class ChatManager : public QObject
+{
+    Q_OBJECT
+public:
+    static ChatManager &instance(); // singleton
+
+    bool isGenerating(const QString &convId) const;
+    ViewingChat getViewingChat(const QString &convId) const;
+
+    void sendMessage(const QString &convId,
+                     qint64 leafNodeId,
+                     const QString &content,
+                     const QList<QVariantMap> &extra,
+                     std::function<void(qint64)> onChunk);
+    void stopGenerating(const QString &convId);
+    void replaceMessageAndGenerate(const QString &convId,
+                                   qint64 parentNodeId,
+                                   const QString &content,
+                                   const QList<QVariantMap> &extra,
+                                   std::function<void(qint64)> onChunk);
+
+    LlamaCppServerProps serverProps() const;
+
+    void generateMessage(const QString &convId,
+                         qint64 leafNodeId,
+                         std::function<void(qint64)> onChunk);
+
+    Conversation currentConversation();
+    void setCurrentConversation(const QString &convId);
+
+    void deleteConversation(const QString &convId);
+    void renameConversation(const QString &convId, const QString &name);
+
+    QList<Conversation> allConversations();
+
+signals:
+    // emitted when the active conversation changes – UI can react
+    void messageAppended(const LlamaCpp::Message &msg);
+    void pendingMessageChanged(const LlamaCpp::Message &msg);
+
+    void conversationCreated(const QString &convId);
+    void conversationRenamed(const QString &convId);
+    void conversationDeleted(const QString &convId);
+
+private:
+    explicit ChatManager(QObject *parent = nullptr);
+    void initServerProps();
+
+    QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
+
+    // internal state
+    Storage *m_storage;
+    bool m_showSettings{false};
+
+    QNetworkAccessManager m_network;
+    LlamaCppServerProps m_serverProps;
+    QString m_activeConvId;
+
+    QHash<QString, Message> m_pendingMessages;          // convId -> Pending
+    QHash<QString, QNetworkReply *> m_abortControllers; // convId -> reply
+};
+} // namespace LlamaCpp

@@ -1,0 +1,131 @@
+#include <QDesktopServices>
+#include <QDragEnterEvent>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QMimeData>
+#include <QTextEdit>
+#include <QToolButton>
+
+#include "llamachatinput.h"
+#include "llamatr.h"
+
+namespace LlamaCpp {
+
+ChatInput::ChatInput(QWidget *parent)
+    : QWidget(parent)
+{
+    setObjectName("ChatInput");
+    setAcceptDrops(true);
+    buildUI();
+    applyStyleSheet();
+}
+
+void ChatInput::buildUI()
+{
+    auto main = new QHBoxLayout(this);
+    main->setContentsMargins(10, 10, 10, 10);
+
+    m_txt = new QTextEdit(this);
+    m_txt->setPlaceholderText(Tr::tr("Type a message (Shift+Enter for new line)"));
+    m_txt->setAcceptRichText(false);
+    m_txt->installEventFilter(this);
+
+    QHBoxLayout *btnLayout = new QHBoxLayout;
+    btnLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_attachButton = new QToolButton(this);
+    m_attachButton->setIcon(QIcon::fromTheme("mail-attachment"));
+    m_attachButton->setToolTip(Tr::tr("Attach file"));
+    connect(m_attachButton, &QToolButton::clicked, [this]() {
+        QStringList files = QFileDialog::getOpenFileNames(this);
+        if (!files.isEmpty())
+            emit fileDropped(files);
+    });
+
+    m_sendStopButton = new QToolButton(this);
+    m_sendStopButton->setIcon(QIcon::fromTheme("mail-send"));
+    connect(m_sendStopButton, &QToolButton::clicked, this, [this] {
+        if (!m_isGenerating)
+            onSendClicked();
+        else
+            onStopClicked();
+    });
+
+    btnLayout->addWidget(m_attachButton);
+    btnLayout->addWidget(m_sendStopButton);
+
+    main->addWidget(m_txt);
+    main->addLayout(btnLayout);
+}
+
+void ChatInput::applyStyleSheet()
+{
+    setAttribute(Qt::WA_StyledBackground, true);
+
+    setStyleSheet(R"(
+        QWidget#ChatInput {
+            background-color: #ffffff;
+            border: 1px solid #b0b0b0;
+            border-radius: 8px;
+        }
+        QTextEdit {
+            border: 0px
+        }
+
+        QToolButton {
+            background-color: #f5f5f5;
+            border: 1px solid #b0b0b0;
+            border-radius: 6px;
+            padding: 4px 4px;
+        }
+        QToolButton:hover {
+            background-color: #d0d0d0;
+        }
+    )");
+}
+
+void ChatInput::onSendClicked()
+{
+    QString txt = m_txt->toPlainText().trimmed();
+    if (!txt.isEmpty())
+        emit sendRequested(txt);
+    m_txt->clear();
+}
+
+void ChatInput::onStopClicked()
+{
+    emit stopRequested();
+}
+
+void ChatInput::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls())
+        e->acceptProposedAction();
+}
+
+void ChatInput::dropEvent(QDropEvent *e)
+{
+    QStringList fileList;
+    for (const QUrl &url : e->mimeData()->urls())
+        fileList << url.toLocalFile();
+    emit fileDropped(fileList);
+}
+
+bool ChatInput::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_txt && event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->modifiers() == Qt::NoModifier
+            && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
+            onSendClicked();
+            return true;
+        }
+    }
+    if (obj == this && event->type() == QEvent::FocusIn) {
+        m_txt->setFocus();
+        return true;
+    }
+
+    return QWidget::eventFilter(obj, event);
+}
+} // namespace LlamaCpp

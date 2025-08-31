@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer)
-find_package(Qt6 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Qt6 COMPONENTS Widgets LinguistTools Sql REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
 # You don't want your released plugin binaries to contain tests,
@@ -29,6 +29,14 @@ if (WITH_TESTS)
   enable_testing()
 endif()
 
+add_qtc_library(md4c STATIC
+  PUBLIC_INCLUDES 3rdparty/md4c/src
+  SOURCES
+    3rdparty/md4c/src/entity.c
+    3rdparty/md4c/src/md4c.c
+    3rdparty/md4c/src/md4c-html.c
+)
+
 add_qtc_plugin(LlamaCpp
   LONG_DESCRIPTION_MD README.md
   PLUGIN_DEPENDS
@@ -37,15 +45,28 @@ add_qtc_plugin(LlamaCpp
     QtCreator::TextEditor
   DEPENDS
     Qt::Widgets
+    Qt::Sql
     QtCreator::ExtensionSystem
     QtCreator::Utils
+    QtCreator::qlitehtml
+    md4c
   SOURCES
     llama.qrc
-    llamaicons.h
+    llamaicons.h    
+    llamachateditor.cpp llamachateditor.h
+    llamachatinput.cpp llamachatinput.h
+    llamachatmanager.cpp llamachatmanager.h
+    llamachatmessage.cpp llamachatmessage.h
+    llamaconversationsmodel.cpp llamaconversationsmodel.h
+    llamaconversationsview.cpp llamaconversationsview.h
+    llamaconstants.h
+    llamamarkdownwidget.cpp llamamarkdownwidget.h
     llamaplugin.cpp llamaplugin.h
-    llamasettings.cpp llamasettings.h
     llamaprojectpanel.cpp llamaprojectpanel.h
+    llamasettings.cpp llamasettings.h
+    llamastorage.cpp llamastorage.h
     llamatr.h
+    llamatypes.h
     README.md
 )
 
