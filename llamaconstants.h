@@ -23,4 +23,6 @@ namespace LlamaCpp::Constants {
 
     const char LLAMACPP_CONVERSATIONS_VIEW_ID[] = "llama.cpp Conversations";
 
+    const char LLAMACPP_LOCATOR_ID[] = "LlamaCpp.Locator";
+
 } // namespace LlamaCpp::Constants

@@ -277,6 +277,11 @@ void ChatManager::setCurrentConversation(const QString &convId)
     m_activeConvId = convId;
 }
 
+Conversation ChatManager::createConversation(const QString &name)
+{
+    return m_storage->createConversation(name);
+}
+
 QList<Conversation> ChatManager::allConversations()
 {
     return m_storage->getAllConversations();

@@ -57,6 +57,7 @@ add_qtc_plugin(LlamaCpp
     llamachatinput.cpp llamachatinput.h
     llamachatmanager.cpp llamachatmanager.h
     llamachatmessage.cpp llamachatmessage.h
+    llamalocatorfilter.cpp llamalocatorfilter.h
     llamaconversationsmodel.cpp llamaconversationsmodel.h
     llamaconversationsview.cpp llamaconversationsview.h
     llamaconstants.h

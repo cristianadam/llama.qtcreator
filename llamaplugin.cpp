@@ -38,6 +38,7 @@
 #include "llamaconversationsview.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
+#include "llamalocatorfilter.h"
 #include "llamaprojectpanel.h"
 #include "llamasettings.h"
 #include "llamatr.h"
@@ -180,6 +181,7 @@ void LlamaPlugin::initialize()
 
     setupLlamaCppProjectPanel();
     setupConversationViewWidgetFactory();
+    setupLocatorFilter();
 
     // Connect to editor manager signals
     connect(EditorManager::instance(),

@@ -40,6 +40,7 @@ public:
     Conversation currentConversation();
     void setCurrentConversation(const QString &convId);
 
+    Conversation createConversation(const QString &name);
     void deleteConversation(const QString &convId);
     void renameConversation(const QString &convId, const QString &name);
 
