@@ -352,21 +352,25 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
 
 void MarkdownLabel::setMarkdown(const QString &markdown)
 {
+    const QString firstLine = markdown.split("\n").at(0);
+    QFontMetrics fm(font());
+    setMinimumWidth(fm.horizontalAdvance(firstLine) + 21);
+
     auto html = markdownToHtml(markdown);
     if (html) {
         // Feed the HTML to qlitehtml
 
-#ifdef USE_QLABEL
-        // Inject the optional CSS before the </head> tag
-        if (!m_css.isEmpty()) {
-            const QByteArray headEnd = "</head>";
-            int pos = html.value().indexOf(headEnd);
-            if (pos != -1)
-                html.value().insert(pos, QByteArray("\n<style>" + m_css + "</style>"));
-            else
-                html.value().prepend(QByteArray("<style>" + m_css + "</style>"));
-        }
+        // // Inject the optional CSS before the </head> tag
+        // if (!m_css.isEmpty()) {
+        //     const QByteArray headEnd = "</head>";
+        //     int pos = html.value().indexOf(headEnd);
+        //     if (pos != -1)
+        //         html.value().insert(pos, QByteArray("\n<style>" + m_css + "</style>"));
+        //     else
+        //         html.value().prepend(QByteArray("<style>" + m_css + "</style>"));
+        // }
 
+#ifdef USE_QLABEL
         setText(QString::fromUtf8(html.value()));
         setTextFormat(Qt::RichText);
 #else
@@ -400,7 +404,11 @@ void MarkdownLabel::setMarkdown(const QString &markdown)
 
 void MarkdownLabel::setStyleSheet(const QString &css)
 {
+#ifdef USE_QLABEL
+    QLabel::setStyleSheet(css);
+#else
     m_css = css.toUtf8();
+#endif
 }
 
 void MarkdownLabel::paintEvent(QPaintEvent *ev)

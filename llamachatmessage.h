@@ -8,7 +8,7 @@
 #include "llamatypes.h"
 
 class QToolButton;
-class QCheckBox;
+class QPushButton;
 
 namespace LlamaCpp {
 class MarkdownLabel;
@@ -25,8 +25,6 @@ public:
     Message &message() { return m_msg; }
     void renderMarkdown(const QString &text);
 
-    void showThought(const QString &content, bool isThinking);
-
     void messageCompleted(bool completed);
     bool isUser() const;
 signals:
@@ -40,10 +38,12 @@ private slots:
     void onRegenerateClicked();
     void onPrevSiblingClicked();
     void onNextSiblingClicked();
-    //void onThoughtToggle(bool checked);
+    void onThoughtToggle(bool checked);
 
 private:
     void buildUI();
+    void resizeEvent(QResizeEvent *ev) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
     void applyStyleSheet();
 
@@ -59,8 +59,7 @@ private:
     QToolButton *m_regenButton{nullptr};
     QToolButton *m_prevButton{nullptr};
     QToolButton *m_nextButton{nullptr};
-    QCheckBox *m_thoughToggle{nullptr};
-    QLabel *m_toughtLabel{nullptr};
+    QPushButton *m_thoughtToggle{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};
 };

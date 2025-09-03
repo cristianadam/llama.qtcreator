@@ -13,8 +13,12 @@ class ChatInput : public QWidget
 public:
     explicit ChatInput(QWidget *parent = nullptr);
 
+    void setIsGenerating(bool newIsGenerating);
+    void setEditingText(const QString &editingText);
+
 signals:
     void sendRequested(const QString &text);
+    void editingCancelled();
     void stopRequested();
     void fileDropped(const QStringList &filePaths);
     void pasteLongText(const QString &text);
@@ -22,6 +26,7 @@ signals:
 
 private:
     void buildUI();
+    void updateUI();
     void onSendClicked();
     void onStopClicked();
 

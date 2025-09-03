@@ -28,7 +28,9 @@ void ChatInput::buildUI()
     m_txt = new QTextEdit(this);
     m_txt->setPlaceholderText(Tr::tr("Type a message (Shift+Enter for new line)"));
     m_txt->setAcceptRichText(false);
+
     m_txt->installEventFilter(this);
+    installEventFilter(this);
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->setContentsMargins(0, 0, 0, 0);
@@ -43,7 +45,6 @@ void ChatInput::buildUI()
     });
 
     m_sendStopButton = new QToolButton(this);
-    m_sendStopButton->setIcon(QIcon::fromTheme("mail-send"));
     connect(m_sendStopButton, &QToolButton::clicked, this, [this] {
         if (!m_isGenerating)
             onSendClicked();
@@ -56,6 +57,19 @@ void ChatInput::buildUI()
 
     main->addWidget(m_txt);
     main->addLayout(btnLayout);
+
+    updateUI();
+}
+
+void ChatInput::updateUI()
+{
+    if (m_isGenerating) {
+        m_sendStopButton->setToolTip(Tr::tr("Stop assistant answer generation"));
+        m_sendStopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+    } else {
+        m_sendStopButton->setToolTip(Tr::tr("Send message to assistant"));
+        m_sendStopButton->setIcon(QIcon::fromTheme("mail-send"));
+    }
 }
 
 void ChatInput::applyStyleSheet()
@@ -86,9 +100,9 @@ void ChatInput::applyStyleSheet()
 
 void ChatInput::onSendClicked()
 {
-    QString txt = m_txt->toPlainText().trimmed();
-    if (!txt.isEmpty())
-        emit sendRequested(txt);
+    QString message = m_txt->toPlainText().trimmed();
+    if (!message.isEmpty())
+        emit sendRequested(message);
     m_txt->clear();
 }
 
@@ -113,6 +127,14 @@ void ChatInput::dropEvent(QDropEvent *e)
 
 bool ChatInput::eventFilter(QObject *obj, QEvent *event)
 {
+    if (event->type() == QEvent::ShortcutOverride) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Escape) {
+            emit editingCancelled();
+            return true;
+        }
+    }
+
     if (obj == m_txt && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->modifiers() == Qt::NoModifier
@@ -128,4 +150,17 @@ bool ChatInput::eventFilter(QObject *obj, QEvent *event)
 
     return QWidget::eventFilter(obj, event);
 }
+
+void ChatInput::setIsGenerating(bool newIsGenerating)
+{
+    m_isGenerating = newIsGenerating;
+    updateUI();
+}
+
+void ChatInput::setEditingText(const QString &editingText)
+{
+    m_txt->setText(editingText);
+    m_txt->setFocus();
+}
+
 } // namespace LlamaCpp

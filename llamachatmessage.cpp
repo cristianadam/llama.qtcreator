@@ -2,15 +2,23 @@
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QLabel>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
 
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
+#include "llamatr.h"
 
 namespace LlamaCpp {
+
+static const QString thinkingToken("<|channel|>analysis<|message|>");
+static const QString endToken("<|end|>");
+static qsizetype notfound = -1;
+
 ChatMessage::ChatMessage(const Message &msg,
                          const QVector<qint64> &siblingLeafIds,
                          int siblingIdx,
@@ -22,73 +30,68 @@ ChatMessage::ChatMessage(const Message &msg,
     , m_isUser(msg.role == "user")
 {
     setObjectName("ChatMessage");
+
     buildUI();
 }
 
 void ChatMessage::buildUI()
 {
     m_mainLayout = new QVBoxLayout(this);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setContentsMargins(10, 10, 10, 10);
 
-    // 1. Bubble container
     m_bubble = new QLabel(this);
-    //m_bubble->setFrameStyle(QFrame::NoFrame);
-    m_bubble->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
 
-    m_bubble->setStyleSheet(m_isUser ? "background:#d0f0ff; border-radius:8px;"
-                                     : "background:#f0f0f0; border-radius:8px;");
-
-    // 2. Markdown rendering using qlitehtml
     m_markdownLabel = new MarkdownLabel(this);
     m_markdownLabel->setWordWrap(true);
-    m_markdownLabel->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
-    renderMarkdown(m_msg.content);
 
-    // 3. Thought / extra context
-    if (!m_msg.extra.isEmpty()) {
-        // Render the extra context (simple key/value)
-        QString ctx;
-        for (const auto &kv : m_msg.extra) {
-            ctx += kv.value("name").toString() + ": " + kv.value("content").toString() + "\n";
-        }
-        showThought(ctx, false); // not "thinking" – just a static block
+    if (m_msg.content.indexOf(thinkingToken) != notfound) {
+        m_thoughtToggle = new QPushButton(this);
+        m_thoughtToggle->setText(Tr::tr("Thought Process"));
+        m_thoughtToggle->setCheckable(true);
+
+        connect(m_thoughtToggle, &QPushButton::toggled, this, &ChatMessage::onThoughtToggle);
+        onThoughtToggle(false);
+    } else {
+        renderMarkdown(m_msg.content);
     }
 
-    // 4. Assemble bubble
+    m_markdownLabel->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
+    m_markdownLabel->setContentsMargins(10, 10, 10, 10);
+    m_markdownLabel->installEventFilter(this);
+
     QVBoxLayout *bubbleLayout = new QVBoxLayout;
-    bubbleLayout->setContentsMargins(10, 10, 10, 10);
-    if (m_toughtLabel)
-        bubbleLayout->addWidget(m_toughtLabel);
-    bubbleLayout->addWidget(m_markdownLabel);
+    bubbleLayout->setContentsMargins(0, 0, 0, 0);
+    if (m_thoughtToggle) {
+        QHBoxLayout *thoughtLayout = new QHBoxLayout;
+        thoughtLayout->setContentsMargins(0, 0, 0, 0);
+        thoughtLayout->addWidget(m_thoughtToggle);
+        thoughtLayout->addStretch();
+        bubbleLayout->addLayout(thoughtLayout);
+    }
+    QHBoxLayout *labelLayout = new QHBoxLayout;
+    labelLayout->setContentsMargins(0, 0, 0, 0);
+    if (m_isUser) {
+        labelLayout->addStretch();
+        labelLayout->addWidget(m_markdownLabel);
+    } else {
+        labelLayout->addWidget(m_markdownLabel);
+        labelLayout->addStretch();
+    }
+    bubbleLayout->addLayout(labelLayout);
     m_bubble->setLayout(bubbleLayout);
 
-    // 5. Actions bar
     QHBoxLayout *actionLayout = new QHBoxLayout;
     actionLayout->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
     actionLayout->setContentsMargins(0, 0, 0, 0);
 
-    const QString toolButtonStyle = R"(
-        QToolButton {
-            background-color: #f5f5f5;
-            border: 1px solid #b0b0b0;
-            border-radius: 6px;
-            padding: 4px 4px;
-        }
-        QToolButton:hover {
-            background-color: #d0d0d0;
-        })";
-
-    // Prev / Next sibling
     if (m_siblingLeafIds.size() > 1) {
         m_prevButton = new QToolButton(this);
         m_prevButton->setIcon(QIcon::fromTheme("go-previous"));
-        m_prevButton->setStyleSheet(toolButtonStyle);
         m_prevButton->setEnabled(m_siblingIdx > 0);
         connect(m_prevButton, &QToolButton::clicked, this, &ChatMessage::onPrevSiblingClicked);
 
         m_nextButton = new QToolButton(this);
         m_nextButton->setIcon(QIcon::fromTheme("go-next"));
-        m_nextButton->setStyleSheet(toolButtonStyle);
         m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size() - 1);
         connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
 
@@ -96,51 +99,81 @@ void ChatMessage::buildUI()
         actionLayout->addWidget(m_nextButton);
     }
 
-    // Edit / Regenerate
     if (m_isUser) {
         m_editButton = new QToolButton(this);
         m_editButton->setIcon(QIcon::fromTheme("edit-undo"));
-        m_editButton->setStyleSheet(toolButtonStyle);
         connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
         actionLayout->addWidget(m_editButton);
-    } else { // assistant
+    } else {
         m_regenButton = new QToolButton(this);
         m_regenButton->setIcon(QIcon::fromTheme("edit-redo"));
-        m_regenButton->setStyleSheet(toolButtonStyle);
         connect(m_regenButton, &QToolButton::clicked, this, &ChatMessage::onRegenerateClicked);
         actionLayout->addWidget(m_regenButton);
     }
 
-    // Copy button
     m_copyButton = new QToolButton(this);
     m_copyButton->setIcon(QIcon::fromTheme("edit-copy"));
-    m_copyButton->setStyleSheet(toolButtonStyle);
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
     actionLayout->addWidget(m_copyButton);
 
     m_mainLayout->addWidget(m_bubble);
     m_mainLayout->addLayout(actionLayout);
 
-    //applyStyleSheet();
+    applyStyleSheet();
+}
+
+void ChatMessage::resizeEvent(QResizeEvent *ev)
+{
+    m_markdownLabel->setMinimumWidth(qMin(m_markdownLabel->minimumWidth(), int(width() * 0.9)));
+}
+
+bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->modifiers() == Qt::ControlModifier && (keyEvent->key() == Qt::Key_C)) {
+            QLabel *label = qobject_cast<QLabel *>(obj);
+            if (label) {
+                QGuiApplication::clipboard()->setText(label->selectedText());
+                return true;
+            }
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
 }
 
 void ChatMessage::renderMarkdown(const QString &text)
 {
-    m_markdownLabel->setMarkdown(text);
-}
+    if (m_thoughtToggle) {
+        if (m_thoughtToggle->isChecked()) {
+            QString message = text;
+            message.replace(thinkingToken, ">");
+            auto endIdx = message.indexOf(endToken);
+            if (endIdx != notfound) {
+                auto newLineIdx = message.indexOf("\n");
+                while (newLineIdx < endIdx && newLineIdx != notfound) {
+                    message.insert(newLineIdx + 1, ">");
+                    newLineIdx = message.indexOf("\n", newLineIdx + 2);
+                }
+            } else {
+                message.replace("\n", "\n>");
+            }
+            message.replace(endToken, "\n\n");
+            m_markdownLabel->setMarkdown(message);
 
-void ChatMessage::showThought(const QString &content, bool isThinking)
-{
-    if (!m_toughtLabel) {
-        m_toughtLabel = new QLabel(this);
-        m_toughtLabel->setWordWrap(true);
-        m_toughtLabel->setStyleSheet("color: gray; font-style: italic;");
-        m_bubble->layout()->addWidget(m_toughtLabel);
+            m_markdownLabel->setVisible(true);
+        } else {
+            auto endIdx = text.indexOf(endToken);
+            if (endIdx != notfound) {
+                m_markdownLabel->setMarkdown(text.mid(endIdx + endToken.size()));
+            } else {
+                m_markdownLabel->setVisible(false);
+            }
+        }
+    } else {
+        m_markdownLabel->setMarkdown(text);
     }
-    if (isThinking)
-        m_toughtLabel->setText("[Thinking...]");
-    else
-        m_toughtLabel->setText(content);
 }
 
 void ChatMessage::messageCompleted(bool completed)
@@ -161,30 +194,34 @@ void ChatMessage::applyStyleSheet()
 {
     setAttribute(Qt::WA_StyledBackground, true);
 
-    //background-color: #ffffff;
-
     setStyleSheet(R"(
-        QWidget#ChatMessage {
-            border: 1px solid #b0b0b0;
-        }
         QLabel#BubbleUser {
             background: #d0f0ff;
-            border: 1px solid #b0b0b0;
             border-radius: 8px;
         }
         QLabel#BubbleAssistant {
             background: #f0f0f0;
-            border: 1px solid #b0b0b0;
             border-radius: 8px;
         }
 
         QToolButton {
-            background-color: #f5f5f5;
             border: 1px solid #b0b0b0;
+            background-color: #f5f5f5;
             border-radius: 6px;
             padding: 2px 2px;
         }
         QToolButton:hover {
+            background-color: #d0d0d0;
+        }
+
+        QPushButton {
+           background-color: #f5f5f5;
+           border: 1px solid #b0b0b0;
+           border-radius: 6px;
+           padding: 4px 4px;
+        }
+
+        QPushButton:hover {
             background-color: #d0d0d0;
         }
     )");
@@ -215,5 +252,10 @@ void ChatMessage::onNextSiblingClicked()
 {
     if (m_siblingIdx < m_siblingLeafIds.size() - 1)
         emit siblingChanged(m_siblingLeafIds[m_siblingIdx + 1]);
+}
+
+void ChatMessage::onThoughtToggle(bool /*checked*/)
+{
+    renderMarkdown(m_msg.content);
 }
 } // namespace LlamaCpp

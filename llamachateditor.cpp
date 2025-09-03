@@ -6,6 +6,7 @@
 
 #include <utils/action.h>
 #include <utils/utilsicons.h>
+#include <utils/fsengine/fileiconprovider.h>
 
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
@@ -27,6 +28,7 @@
 #include "llamachatmanager.h"
 #include "llamachatmessage.h"
 #include "llamaconstants.h"
+#include "llamaicons.h"
 #include "llamatr.h"
 #include "llamatypes.h"
 
@@ -41,10 +43,13 @@ class ChatEditor : public IEditor
     Q_OBJECT
 public:
     ChatEditor()
-        : m_document(new TextDocument(Constants::LLAMACPP_TEXT_CONTEXT))
+        : m_document(new TextDocument())
     {
         setContext(Context(Constants::LLAMACPP_VIEWER_ID));
         setDuplicateSupported(false);
+
+        m_document->setId(Constants::LLAMACPP_VIEWER_ID);
+        m_document->setMimeType(Constants::LLAMACPP_CHAT_MIME_TYPE);
 
         auto widget = new QWidget;
 
@@ -69,7 +74,6 @@ public:
 
         widget->setLayout(layout);
         setWidget(widget);
-        m_widget->installEventFilter(this);
 
         ChatManager &chatManager = ChatManager::instance();
         connect(&chatManager, &ChatManager::messageAppended, this, &ChatEditor::onMessageAppended);
@@ -81,6 +85,7 @@ public:
         connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
         connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
         connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
+        connect(m_input, &ChatInput::editingCancelled, this, &ChatEditor::onEditingCancelled);
 
         // Connect to the document to get the conversation id
         connect(EditorManager::instance(),
@@ -129,16 +134,6 @@ public:
     QWidget *toolBar() override { return nullptr; }
 
     bool isDesignModePreferred() const override { return true; }
-
-    bool eventFilter(QObject *obj, QEvent *ev) override
-    {
-        // TODO: this doesn't seem to work
-        if (obj == m_widget && ev->type() == QEvent::FocusIn) {
-            m_input->setFocus();
-            return true;
-        }
-        return IEditor::eventFilter(obj, ev);
-    }
 
     void refreshMessages(const ViewingChat &chat)
     {
@@ -199,6 +194,8 @@ public:
         }
         w->messageCompleted(true);
 
+        m_input->setIsGenerating(false);
+
         scrollToBottom();
     }
 
@@ -229,6 +226,7 @@ public:
             w->message().content = pm.content;
         }
         w->messageCompleted(false);
+        m_input->setIsGenerating(true);
 
         scrollToBottom();
     }
@@ -237,11 +235,22 @@ public:
     {
         const Conversation conv = ChatManager::instance().currentConversation();
 
-        ChatManager::instance().sendMessage(conv.id,
-                                            conv.currNode, // last message id (simplified)
-                                            text,
-                                            {}, // extra context
-                                            [this](qint64 leafId) { scrollToBottom(); });
+        if (m_editedMessage) {
+            ChatManager::instance().replaceMessageAndGenerate(m_editedMessage->convId,
+                                                              m_editedMessage->id,
+                                                              text,
+                                                              {},
+                                                              [this](qint64 leafId) {
+                                                                  scrollToBottom();
+                                                              });
+            m_editedMessage.reset();
+        } else {
+            ChatManager::instance().sendMessage(conv.id,
+                                                conv.currNode, // last message id (simplified)
+                                                text,
+                                                {}, // extra context
+                                                [this](qint64 leafId) { scrollToBottom(); });
+        }
         scrollToBottom();
     }
 
@@ -249,6 +258,8 @@ public:
     {
         const Conversation conv = ChatManager::instance().currentConversation();
         ChatManager::instance().stopGenerating(conv.id);
+
+        m_input->setIsGenerating(false);
     }
 
     void onFileDropped(const QStringList &files)
@@ -259,8 +270,14 @@ public:
 
     void onEditRequested(const Message &msg)
     {
-        // Show a modal dialog with a QTextEdit to edit the message,
-        // then call ChatManager::replaceMessageAndGenerate()
+        m_editedMessage = msg;
+        m_input->setEditingText(msg.content);
+    }
+
+    void onEditingCancelled()
+    {
+        m_editedMessage.reset();
+        m_input->setEditingText({});
     }
 
     void onRegenerateRequested(const Message &msg)
@@ -294,6 +311,7 @@ private:
     ChatInput *m_input;
     QVBoxLayout *m_messageLayout;
     QVector<ChatMessage *> m_messageWidgets; // keep for cleanup
+    std::optional<Message> m_editedMessage;
 };
 
 class ChatEditorFactory final : public IEditorFactory
@@ -303,8 +321,11 @@ public:
     {
         setId(Constants::LLAMACPP_VIEWER_ID);
         setDisplayName(Tr::tr("LlamaCpp Chat Editor"));
-        addMimeType(Constants::LLAMACPP_CHAT_MIME_TYPE);
+        setMimeTypes({Constants::LLAMACPP_CHAT_MIME_TYPE});
         setEditorCreator([] { return new ChatEditor; });
+        // TODO: doesn't seem to work
+        FileIconProvider::registerIconForMimeType(LLAMACPP_ICON.icon(),
+                                                  QString(Constants::LLAMACPP_CHAT_MIME_TYPE));
     }
 };
 
