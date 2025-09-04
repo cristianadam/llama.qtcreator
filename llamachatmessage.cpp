@@ -161,14 +161,10 @@ void ChatMessage::renderMarkdown(const QString &text)
             }
             message.replace(endToken, "\n\n");
             m_markdownLabel->setMarkdown(message);
-
-            m_markdownLabel->setVisible(true);
         } else {
             auto endIdx = text.indexOf(endToken);
             if (endIdx != notfound) {
                 m_markdownLabel->setMarkdown(text.mid(endIdx + endToken.size()));
-            } else {
-                m_markdownLabel->setVisible(false);
             }
         }
     } else {
