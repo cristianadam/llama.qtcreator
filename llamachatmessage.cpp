@@ -178,6 +178,8 @@ void ChatMessage::messageCompleted(bool completed)
     if (!m_isUser) {
         m_regenButton->setVisible(completed);
         m_copyButton->setVisible(completed);
+
+        renderMarkdown(m_msg.content);
     }
 }
 

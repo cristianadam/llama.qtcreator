@@ -193,7 +193,6 @@ public:
             w->message().convId = msg.convId;
         }
         w->messageCompleted(true);
-
         m_input->setIsGenerating(false);
 
         scrollToBottom();
@@ -288,7 +287,7 @@ public:
                                                           msg.id,
                                                           nullptr, // new content = null → keep old
                                                           msg.extra,
-                                                          [this](qint64 leafId) { /* onChunk */ });
+                                                          [this](qint64 leafId) { scrollToBottom(); });
     }
 
     void onSiblingChanged(qint64 siblingId)

@@ -348,13 +348,22 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         setSizePolicy(policy);
 
     setTextInteractionFlags(Qt::TextSelectableByMouse);
+
+#ifndef USE_QLABEL
+    m_container.setDefaultFont(font());
+    m_context.setMasterStyleSheet(QString::fromUtf8(m_css));
+#endif
 }
 
 void MarkdownLabel::setMarkdown(const QString &markdown)
 {
-    const QString firstLine = markdown.split("\n").at(0);
+    const QStringList lines = markdown.split("\n");
+    const QString longestLine = *std::ranges::max_element(lines, std::less{}, &QString::length);
     QFontMetrics fm(font());
-    setMinimumWidth(fm.horizontalAdvance(firstLine) + 21);
+    const int longestLineWidth = fm.horizontalAdvance(longestLine) + 21;
+
+    if (minimumWidth() == 0 || lines.size() < 5 && minimumWidth() < longestLineWidth)
+        setMinimumWidth(fm.horizontalAdvance(longestLine) + 21);
 
     auto html = markdownToHtml(markdown);
     if (html) {
@@ -374,24 +383,12 @@ void MarkdownLabel::setMarkdown(const QString &markdown)
         setText(QString::fromUtf8(html.value()));
         setTextFormat(Qt::RichText);
 #else
-        m_container.setDefaultFont(font());
-        m_context.setMasterStyleSheet(QString::fromUtf8(m_css));
         m_container.setDocument(html.value(), &m_context);
-        m_container.render(width(), height());
-        qDebug() << Q_FUNC_INFO << m_container.documentWidth() << m_container.documentHeight()
-                 << width() << height();
-
-        resize(m_container.documentWidth(), m_container.documentHeight());
-        m_container.render(m_container.documentWidth(), m_container.documentHeight());
-
-        m_heightForWidth.clear();
-        m_heightForWidth[m_container.documentWidth()] = m_container.documentHeight();
 
         updateGeometry();
         qDebug() << Q_FUNC_INFO << m_container.documentWidth() << m_container.documentHeight()
                  << width() << height();
 #endif
-
         // emit rendered(html);
         // QFile htmlFile("rendered.html");
         // if (htmlFile.open(QFile::ReadWrite)) {
@@ -416,6 +413,9 @@ void MarkdownLabel::paintEvent(QPaintEvent *ev)
 #ifdef USE_QLABEL
     return QLabel::paintEvent(ev);
 #else
+    if (!m_container.hasDocument())
+        return;
+
     QPainter p(this);
     p.setRenderHint(QPainter::SmoothPixmapTransform, true);
     p.setRenderHint(QPainter::Antialiasing, true);
@@ -429,35 +429,21 @@ void MarkdownLabel::paintEvent(QPaintEvent *ev)
 #ifndef USE_QLABEL
 void MarkdownLabel::resizeEvent(QResizeEvent *ev)
 {
+    if (!m_container.hasDocument())
+        return;
+
     qDebug() << Q_FUNC_INFO;
     m_container.render(ev->size().width(), ev->size().height());
-
-    m_heightForWidth.clear();
-    m_heightForWidth[m_container.documentWidth()] = m_container.documentHeight();
 
     updateGeometry();
 }
 
-QSize MarkdownLabel::sizeHint() const
-{
-    return {m_container.documentWidth(), m_container.documentHeight()};
-}
-
-QSize MarkdownLabel::minimumSizeHint() const
-{
-    return {m_container.documentWidth(), m_container.documentHeight()};
-}
-
 int MarkdownLabel::heightForWidth(int w) const
 {
-    if (m_heightForWidth.contains(w))
-        return m_heightForWidth[w];
+    if (!m_container.hasDocument())
+        return 0;
 
     m_container.render(w, 0);
-
-    m_heightForWidth[w] = m_container.documentHeight();
-    qDebug() << Q_FUNC_INFO << w << m_container.documentHeight();
-
     return m_container.documentHeight();
 }
 #endif

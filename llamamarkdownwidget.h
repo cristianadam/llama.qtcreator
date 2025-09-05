@@ -22,16 +22,11 @@ public:
     void paintEvent(QPaintEvent *ev) override;
 #ifndef USE_QLABEL
     void resizeEvent(QResizeEvent *ev) override;
-
-    QSize sizeHint() const override;
-    QSize minimumSizeHint() const override;
-
     int heightForWidth(int w) const override;
 #endif
 private:
     mutable DocumentContainer m_container;
     DocumentContainerContext m_context;
-    mutable QHash<int, int> m_heightForWidth;
 
 signals:
     // /** Emitted when the Markdown → HTML conversion succeeds. */
