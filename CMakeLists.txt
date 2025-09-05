@@ -48,7 +48,6 @@ add_qtc_plugin(LlamaCpp
     Qt::Sql
     QtCreator::ExtensionSystem
     QtCreator::Utils
-    QtCreator::qlitehtml
     md4c
   SOURCES
     llama.qrc
