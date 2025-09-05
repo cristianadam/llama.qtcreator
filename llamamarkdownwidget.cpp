@@ -6,11 +6,9 @@
 #include <3rdparty/md4c/src/md4c.h>
 
 #include "llamamarkdownwidget.h"
+#include "llamatheme.h"
 
 namespace LlamaCpp {
-
-QByteArray MarkdownLabel::m_css = R"##(
-)##";
 
 MarkdownLabel::MarkdownLabel(QWidget *parent)
     : QLabel(parent)
@@ -30,6 +28,8 @@ void MarkdownLabel::setMarkdown(const QString &markdown)
 
     auto html = markdownToHtml(markdown);
     if (html) {
+        setStyleSheet();
+
         // Inject the optional CSS before the </head> tag
         if (!m_css.isEmpty()) {
             const QByteArray headEnd = "</head>";
@@ -53,9 +53,56 @@ void MarkdownLabel::setMarkdown(const QString &markdown)
     }
 }
 
-void MarkdownLabel::setStyleSheet(const QString &css)
+void MarkdownLabel::setStyleSheet()
 {
-    m_css = css.toUtf8();
+    if (!m_css.isEmpty())
+        return;
+
+    m_css = replaceThemeColorNamesWithRGBNames(R"##(
+        hr {
+          margin: 10px 0;
+          background-color: Token_Foreground_Muted;
+        }
+
+        p {
+          margin: 10px 0;
+        }
+
+        blockquote {
+          margin: 0;
+          color: Token_Text_Subtle;
+        }
+
+        code,
+        pre {
+          line-height: 1.5;
+        }
+
+        code {
+          font-size: small;
+        }
+
+        table {
+            margin: 10px 0;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+          background-color: Token_Background_Muted;
+          padding: 6px 6px;
+        }
+
+        table th,
+        table td {
+          padding: 6px 6px;
+          border: 1px solid Token_Foreground_Muted;
+        }
+
+        table tr {
+          background-color: Token_Background_Default;
+        }
+        )##").toUtf8();
 }
 
 void MarkdownLabel::paintEvent(QPaintEvent *ev)

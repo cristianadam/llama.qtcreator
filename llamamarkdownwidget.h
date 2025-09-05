@@ -14,12 +14,12 @@ public:
     ~MarkdownLabel() = default;
 
     void setMarkdown(const QString &markdown);
-    void setStyleSheet(const QString &css);
+    void setStyleSheet();
 
     void paintEvent(QPaintEvent *ev) override;
 
 private:
     Utils::expected<QByteArray, QString> markdownToHtml(const QString &markdown) const;
-    static QByteArray m_css;
+    QByteArray m_css;
 };
 } // namespace LlamaCpp
