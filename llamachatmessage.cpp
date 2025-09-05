@@ -11,6 +11,7 @@
 
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
+#include "llamatheme.h"
 #include "llamatr.h"
 
 namespace LlamaCpp {
@@ -56,7 +57,7 @@ void ChatMessage::buildUI()
     }
 
     m_markdownLabel->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
-    m_markdownLabel->setContentsMargins(10, 10, 10, 10);
+    m_markdownLabel->setContentsMargins(m_isUser ? QMargins(10, 10, 10, 10) : QMargins(0, 0, 0, 0));
     m_markdownLabel->installEventFilter(this);
 
     QVBoxLayout *bubbleLayout = new QVBoxLayout;
@@ -192,37 +193,33 @@ void ChatMessage::applyStyleSheet()
 {
     setAttribute(Qt::WA_StyledBackground, true);
 
-    setStyleSheet(R"(
+    setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
         QLabel#BubbleUser {
-            background: #d0f0ff;
+            background: Token_Background_Muted;
             border-radius: 8px;
         }
         QLabel#BubbleAssistant {
-            background: #f0f0f0;
-            border-radius: 8px;
         }
 
         QToolButton {
-            border: 1px solid #b0b0b0;
-            background-color: #f5f5f5;
+            border: 1px solid Token_Foreground_Muted;
             border-radius: 6px;
             padding: 2px 2px;
         }
         QToolButton:hover {
-            background-color: #d0d0d0;
+            background-color: Token_Foreground_Muted;
         }
 
         QPushButton {
-           background-color: #f5f5f5;
-           border: 1px solid #b0b0b0;
+           border: 1px solid Token_Foreground_Muted;
            border-radius: 6px;
            padding: 4px 4px;
         }
 
         QPushButton:hover {
-            background-color: #d0d0d0;
+            background-color: Token_Foreground_Muted;
         }
-    )");
+    )"));
 }
 
 void ChatMessage::onCopyClicked()

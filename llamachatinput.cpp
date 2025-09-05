@@ -7,6 +7,7 @@
 #include <QToolButton>
 
 #include "llamachatinput.h"
+#include "llamatheme.h"
 #include "llamatr.h"
 
 namespace LlamaCpp {
@@ -76,26 +77,29 @@ void ChatInput::applyStyleSheet()
 {
     setAttribute(Qt::WA_StyledBackground, true);
 
-    setStyleSheet(R"(
+    setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
         QWidget#ChatInput {
-            background-color: #ffffff;
-            border: 1px solid #b0b0b0;
+            background-color: Token_Background_Muted;
+            border: 1px solid Token_Foreground_Muted;
             border-radius: 8px;
         }
+        QWidget#ChatInput:hover {
+            border: 1px solid Token_Foreground_Default;
+        }
         QTextEdit {
+            background-color: Token_Background_Muted;
             border: 0px
         }
 
         QToolButton {
-            background-color: #f5f5f5;
-            border: 1px solid #b0b0b0;
+            border: 1px solid Token_Foreground_Muted;
             border-radius: 6px;
             padding: 4px 4px;
         }
         QToolButton:hover {
-            background-color: #d0d0d0;
+            background-color: Token_Foreground_Muted;
         }
-    )");
+    )"));
 }
 
 void ChatInput::onSendClicked()
