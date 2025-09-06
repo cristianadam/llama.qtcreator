@@ -1,6 +1,7 @@
 #include <QClipboard>
 #include <QDebug>
 #include <QFile>
+#include <QList>
 #include <QMimeData>
 #include <QResizeEvent>
 #include <QTextDocumentFragment>
@@ -8,20 +9,44 @@
 
 #include <3rdparty/md4c/src/md4c-html.h>
 #include <3rdparty/md4c/src/md4c.h>
+#include <repository.h>
 
+#include <coreplugin/icore.h>
 #include <projectexplorer/buildconfiguration.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
+#include "llamahtmlhighlighter.h"
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
 using namespace ProjectExplorer;
+using namespace TextEditor;
 using namespace Utils;
 
 namespace LlamaCpp {
+
+static KSyntaxHighlighting::Repository *highlightRepository()
+{
+    static KSyntaxHighlighting::Repository *repository = nullptr;
+    if (!repository) {
+        repository = new KSyntaxHighlighting::Repository();
+        const FilePath dir = Core::ICore::resourcePath("generic-highlighter/syntax");
+        if (dir.exists())
+            repository->addCustomSearchPath(dir.parentDir().path());
+        const FilePath userDir = Core::ICore::userResourcePath("generic-highlighter");
+        if (userDir.exists())
+            repository->addCustomSearchPath(userDir.path());
+    }
+    return repository;
+}
+
+static KSyntaxHighlighting::Definition definitionForName(const QString &name)
+{
+    return highlightRepository()->definitionForName(name);
+}
 
 MarkdownLabel::MarkdownLabel(QWidget *parent)
     : QLabel(parent)
@@ -225,15 +250,41 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             out->output_html.append("<tr><td colspan=\"3\">\n");
         };
 
+        auto processOneLine = [&]() {
+            QString verbatimLine = toVerbatimText(line);
+            out->codeBlocks.last().verbatimCode.append(verbatimLine);
+
+            if (out->awaitingNewLine) {
+                out->codeBlocks.last().hightlightedCode.append("<br>");
+                out->output_html.append("<br>");
+                out->awaitingNewLine = false;
+            }
+
+            QString highlightedLine = out->highlighter->hightlightCodeLine(verbatimLine);
+            auto newLineIndex = highlightedLine.lastIndexOf("<br>");
+            if (newLineIndex != -1) {
+                out->awaitingNewLine = true;
+                highlightedLine = highlightedLine.left(newLineIndex);
+            }
+
+            out->codeBlocks.last().hightlightedCode.append(highlightedLine);
+            out->output_html.append(highlightedLine.toUtf8());
+        };
+
         if (line == "<pre><code" && out->state == Data::NormalHtml) {
             out->state = Data::PreCode;
             CodeBlock c;
             out->codeBlocks.append(c);
+            out->awaitingNewLine = false;
+
+            out->highlighter.reset(new HtmlHighlighter());
         } else if (line == " class=\"language-" && out->state == Data::PreCode) {
             out->state = Data::Class;
         } else if (out->state == Data::Class) {
             out->state = Data::LanguageName;
             out->codeBlocks.last().language = QString::fromLatin1(line);
+
+            out->highlighter->setDefinition(definitionForName(QString::fromLatin1(line)));
         } else if (line == "\"" && out->state == Data::LanguageName) {
             out->state = Data::PreCodeEndQuote;
         } else if (line == ">" && out->state == Data::PreCodeEndQuote) {
@@ -242,6 +293,7 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             out->state = Data::PreCodeEndTag;
         } else if (line == "</code></pre>\n") {
             out->state = Data::NormalHtml;
+            out->awaitingNewLine = false;
             out->output_html.append("</td></tr></table>\n");
         } else if (out->state == Data::PreCodeEndTag) {
             out->state = Data::Code;
@@ -268,16 +320,20 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
                                     + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy"))
                                     + "</th></tr>");
             out->output_html.append("<tr><td>\n");
-            out->codeBlocks.last().hightlightedCode.append(line);
-            out->codeBlocks.last().verbatimCode.append(toVerbatimText(line));
+
+            processOneLine();
+            return;
         } else if (out->state == Data::SourceFile) {
             if (line == "\n")
                 // skip the empty line(s) after the source filename comment
                 return;
+
             out->state = Data::Code;
+            processOneLine();
+            return;
         } else if (out->state == Data::Code) {
-            out->codeBlocks.last().hightlightedCode.append(line);
-            out->codeBlocks.last().verbatimCode.append(toVerbatimText(line));
+            processOneLine();
+            return;
         }
 
         out->output_html.append(data, length);

@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QString>
 
+#include "llamahtmlhighlighter.h"
+
 namespace LlamaCpp {
 class MarkdownLabel : public QLabel
 {
@@ -45,6 +47,8 @@ private:
         State state{NormalHtml};
         QByteArray output_html;
         QList<CodeBlock> codeBlocks;
+        std::unique_ptr<HtmlHighlighter> highlighter;
+        bool awaitingNewLine{false};
     };
 
     Data m_data;

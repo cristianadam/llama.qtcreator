@@ -48,6 +48,7 @@ add_qtc_plugin(LlamaCpp
     Qt::Sql
     QtCreator::ExtensionSystem
     QtCreator::Utils
+    QtCreator::KSyntaxHighlighting
     md4c
   SOURCES
     llama.qrc
@@ -60,6 +61,7 @@ add_qtc_plugin(LlamaCpp
     llamaconversationsmodel.cpp llamaconversationsmodel.h
     llamaconversationsview.cpp llamaconversationsview.h
     llamaconstants.h
+    llamahtmlhighligher.cpp llamahtmlhighlighter.h
     llamamarkdownwidget.cpp llamamarkdownwidget.h
     llamaplugin.cpp llamaplugin.h
     llamaprojectpanel.cpp llamaprojectpanel.h
