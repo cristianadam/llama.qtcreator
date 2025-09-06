@@ -19,7 +19,34 @@ public:
     void paintEvent(QPaintEvent *ev) override;
 
 private:
-    Utils::expected<QByteArray, QString> markdownToHtml(const QString &markdown) const;
+    Utils::expected<QByteArray, QString> markdownToHtml(const QString &markdown);
     QByteArray m_css;
+
+    struct CodeBlock
+    {
+        std::optional<QString> language;
+        std::optional<QString> fileName;
+        QString verbatimCode;
+        QString hightlightedCode;
+    };
+
+    struct Data
+    {
+        enum State {
+            NormalHtml = 0,
+            PreCode,
+            Class,
+            LanguageName,
+            PreCodeEndQuote,
+            PreCodeEndTag,
+            SourceFile,
+            Code,
+        };
+        State state{NormalHtml};
+        QByteArray output_html;
+        QList<CodeBlock> codeBlocks;
+    };
+
+    Data m_data;
 };
 } // namespace LlamaCpp
