@@ -20,6 +20,10 @@ public:
 
     void paintEvent(QPaintEvent *ev) override;
 
+signals:
+    void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
+    void saveToFile(const QString &fileName, const QString &verbatimText);
+
 private:
     Utils::expected<QByteArray, QString> markdownToHtml(const QString &markdown);
     QByteArray m_css;

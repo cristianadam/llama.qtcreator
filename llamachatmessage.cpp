@@ -1,18 +1,31 @@
 #include <QCheckBox>
 #include <QClipboard>
+#include <QFileDialog>
 #include <QGuiApplication>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QMessageBox>
+#include <QMimeData>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QToolButton>
 #include <QVBoxLayout>
 
+#include <coreplugin/icore.h>
+#include <projectexplorer/buildconfiguration.h>
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectmanager.h>
+#include <utils/filepath.h>
+
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamatr.h"
+
+using namespace ProjectExplorer;
+using namespace Utils;
 
 namespace LlamaCpp {
 
@@ -44,6 +57,8 @@ void ChatMessage::buildUI()
 
     m_markdownLabel = new MarkdownLabel(this);
     m_markdownLabel->setWordWrap(true);
+    connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
+    connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
 
     if (m_msg.content.indexOf(thinkingToken) != notfound) {
         m_thoughtToggle = new QPushButton(this);
@@ -252,5 +267,55 @@ void ChatMessage::onNextSiblingClicked()
 void ChatMessage::onThoughtToggle(bool /*checked*/)
 {
     renderMarkdown(m_msg.content);
+}
+
+void ChatMessage::onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode)
+{
+    QMimeData *md = new QMimeData;
+    md->setText(verbatimCode);
+    md->setHtml("<pre><code>" + highlightedCode + "</code></pre>");
+    QGuiApplication::clipboard()->setMimeData(md);
+}
+
+void ChatMessage::onSaveToDisk(const QString &fileName, const QString &verbatimCode)
+{
+    FilePath sourceFile;
+
+    auto askOverwrite = [this](const FilePath &filePath) -> bool {
+        if (!filePath.exists())
+            return true;
+
+        QMessageBox::StandardButton result
+            = QMessageBox::question(window(),
+                                    Tr::tr("Overwrite File?"),
+                                    Tr::tr("The file \"%1\" already exists.\n\n"
+                                           "Do you want to overwrite it?")
+                                        .arg(filePath.fileName()),
+                                    QMessageBox::Yes | QMessageBox::No,
+                                    QMessageBox::No);
+
+        return (result == QMessageBox::Yes);
+    };
+
+    const Project *project = ProjectManager::startupProject();
+    if (project && !fileName.isEmpty()) {
+        FilePath projDir = project->projectDirectory();
+        sourceFile = projDir.pathAppended(fileName);
+
+        if (!askOverwrite(sourceFile))
+            return;
+    } else {
+        // Below the operating system file save dialog will ask if you want to overwrite
+        // an existing file. No need to ask twice.
+        QString fileNameWithPath
+            = QFileDialog::getSaveFileName(this,
+                                           Tr::tr("Save File"),
+                                           project ? project->projectDirectory().toFSPathString()
+                                                   : fileName,
+                                           Tr::tr("All Files (*)"));
+        sourceFile = FilePath::fromUserInput(fileNameWithPath);
+    }
+
+    sourceFile.writeFileContents(verbatimCode.toUtf8());
 }
 } // namespace LlamaCpp

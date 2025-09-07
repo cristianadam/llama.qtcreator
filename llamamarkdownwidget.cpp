@@ -2,27 +2,21 @@
 #include <QDebug>
 #include <QFile>
 #include <QList>
-#include <QMimeData>
 #include <QResizeEvent>
 #include <QTextDocumentFragment>
 #include <QToolTip>
 
+#include <coreplugin/icore.h>
+
 #include <3rdparty/md4c/src/md4c-html.h>
 #include <3rdparty/md4c/src/md4c.h>
 #include <repository.h>
-
-#include <coreplugin/icore.h>
-#include <projectexplorer/buildconfiguration.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
-#include <utils/filepath.h>
 
 #include "llamahtmlhighlighter.h"
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
-using namespace ProjectExplorer;
 using namespace TextEditor;
 using namespace Utils;
 
@@ -60,7 +54,7 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         if (command == "copy")
             QToolTip::showText(QCursor::pos(), Tr::tr("Copy the code below to Clipboard"));
         else if (command == "save")
-            QToolTip::showText(QCursor::pos(), Tr::tr("Save the code below in the current project"));
+            QToolTip::showText(QCursor::pos(), Tr::tr("Save the code below into a file on disk"));
     });
     connect(this, &QLabel::linkActivated, this, [this](const QString &link) {
         auto idx = link.indexOf(":");
@@ -68,25 +62,13 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         int codeBlockIndex = link.mid(idx + 1).toInt();
 
         if (command == "copy") {
-            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size()) {
-                QMimeData *md = new QMimeData;
-
-                md->setText(m_data.codeBlocks[codeBlockIndex].verbatimCode);
-                md->setHtml(m_data.codeBlocks[codeBlockIndex].hightlightedCode);
-                QGuiApplication::clipboard()->setMimeData(md);
-            }
+            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
+                emit copyToClipboard(m_data.codeBlocks[codeBlockIndex].verbatimCode,
+                                     m_data.codeBlocks[codeBlockIndex].hightlightedCode);
         } else if (command == "save") {
-            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size()) {
-                const Project *project = ProjectManager::startupProject();
-                if (project && m_data.codeBlocks[codeBlockIndex].fileName.has_value()) {
-                    FilePath projDir = project->projectDirectory();
-
-                    FilePath sourceFile = projDir.pathAppended(
-                        m_data.codeBlocks[codeBlockIndex].fileName.value());
-                    sourceFile.writeFileContents(
-                        m_data.codeBlocks[codeBlockIndex].verbatimCode.toUtf8());
-                }
-            }
+            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
+                emit saveToFile(m_data.codeBlocks[codeBlockIndex].fileName.value_or(QString()),
+                                m_data.codeBlocks[codeBlockIndex].verbatimCode);
         }
     });
 }
@@ -250,6 +232,15 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             out->output_html.append("<tr><td colspan=\"3\">\n");
         };
 
+        auto insertCopySave = [&]() {
+            out->output_html.append("<tr>");
+            out->output_html.append(
+                "<th>" + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "</th><th>"
+                + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
+            out->output_html.append("</tr>\n");
+            out->output_html.append("<tr><td colspan=\"2\">\n");
+        };
+
         auto processOneLine = [&]() {
             QString verbatimLine = toVerbatimText(line);
             out->codeBlocks.last().verbatimCode.append(verbatimLine);
@@ -298,8 +289,22 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
         } else if (out->state == Data::PreCodeEndTag) {
             out->state = Data::Code;
             out->output_html.append("<table class=\"codeblock\">\n");
-            if (out->codeBlocks.last().language.value_or("") == "cpp" && line.startsWith("// ")) {
-                out->codeBlocks.last().fileName = QString::fromUtf8(line.mid(3));
+
+            static const QRegularExpression
+                cxxAndBashFileNameRegex(R"(^\s*(?:\/\/|#)\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
+                                        QRegularExpression::NoPatternOption);
+            static const QRegularExpression
+                cFileNameRegex(R"(^\s*/\*\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
+                               QRegularExpression::NoPatternOption);
+            for (const auto &regex : {cxxAndBashFileNameRegex, cFileNameRegex}) {
+                auto sourceFileMatch = regex.match(QString::fromUtf8(line));
+                if (sourceFileMatch.hasMatch()) {
+                    out->codeBlocks.last().fileName = sourceFileMatch.captured(1);
+                    break;
+                }
+            }
+
+            if (out->codeBlocks.last().fileName.has_value()) {
                 insertSourceFileCopySave();
 
                 out->state = Data::SourceFile;
@@ -309,17 +314,14 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
                 out->codeBlocks.last().fileName = "CMakeLists.txt";
                 insertSourceFileCopySave();
 
-                if (line.startsWith("// ") || line.startsWith("# ")) {
+                if (out->codeBlocks.last().fileName.has_value()) {
                     out->state = Data::SourceFile;
                     // skip the comment with the line
                     return;
                 }
                 out->state = Data::Code;
             }
-            out->output_html.append("<tr><th>"
-                                    + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy"))
-                                    + "</th></tr>");
-            out->output_html.append("<tr><td>\n");
+            insertCopySave();
 
             processOneLine();
             return;

@@ -39,6 +39,8 @@ private slots:
     void onPrevSiblingClicked();
     void onNextSiblingClicked();
     void onThoughtToggle(bool checked);
+    void onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode);
+    void onSaveToDisk(const QString &fileName, const QString &verbatimCode);
 
 private:
     void buildUI();
