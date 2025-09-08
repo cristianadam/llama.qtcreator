@@ -269,6 +269,8 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             out->awaitingNewLine = false;
 
             out->highlighter.reset(new HtmlHighlighter());
+            // The generic definition needs to be loaded
+            out->highlighter->setDefinition({});
         } else if (line == " class=\"language-" && out->state == Data::PreCode) {
             out->state = Data::Class;
         } else if (out->state == Data::Class) {

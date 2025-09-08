@@ -18,8 +18,6 @@ namespace LlamaCpp {
 
 HtmlHighlighter::HtmlHighlighter()
 {
-    setDefinition({});
-
     m_colorScheme = TextEditorSettings::fontSettings().colorScheme();
 }
 
