@@ -6,8 +6,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/locator/ilocatorfilter.h>
 #include <solutions/tasking/tasktree.h>
+#include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 #include <utils/algorithm.h>
+#include <utils/mimeutils.h>
 
 #include "llamachatmanager.h"
 #include "llamaconstants.h"
@@ -37,10 +39,10 @@ private:
 
     // built‑in prompts – keep them in a list to generate the menu
     const QList<QString> m_predefined
-        = {Tr::tr("Create a summary"),
-           Tr::tr("Create a commit message"),
-           Tr::tr("Explain this code"),
-           Tr::tr("Generate test cases. Output only code. No explanations")};
+        = {Tr::tr("Create a summary of {selection}"),
+           Tr::tr("Create a commit message for {selection}"),
+           Tr::tr("Explain the code in {selection}"),
+           Tr::tr("Generate test cases for {selection}. Output only code. No explanations")};
 
     QList<QString> m_history;
     static constexpr int MaxHistory = 50;
@@ -97,7 +99,7 @@ LocatorMatcherTasks LocatorFilter::matchers()
         for (const QString &p : m_history)
             addEntry(p);
 
-        if (!m_history.contains(input))
+        if (!m_history.contains(input) && !input.trimmed().isEmpty())
             addEntry(input);
 
         return storage.reportOutput(
@@ -111,19 +113,15 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
     QString text;
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
     if (editor)
-        text = editor->selectedText();
-
-    if (text.isEmpty()) {
-        QMessageBox::warning(ICore::dialogParent(),
-                             tr("llama.cpp Prompt"),
-                             tr("No text selected – nothing to send."));
-        return;
-    }
+        text = TextDocument::convertToPlainText(editor->selectedText());
 
     QString message = prompt;
-    message += "\n```\n";
-    message += text;
-    message += "\n```\n";
+    const MimeType mimeType = mimeTypeForName(editor->textDocument()->mimeType());
+    QString language = mimeType.preferredSuffix();
+    if (mimeType.name() == "text/x-cmake-project")
+        language = "cmake";
+
+    message.replace("{selection}", QString("\n```%1\n%2\n```\n").arg(language, text));
 
     Conversation c = ChatManager::instance().createConversation(prompt.left(250));
     ChatManager::instance().sendMessage(c.id, c.currNode, message, {}, [](qint64 leafId) {});
