@@ -5,6 +5,7 @@
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/locator/ilocatorfilter.h>
+#include <git/gitconstants.h>
 #include <solutions/tasking/tasktree.h>
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
@@ -110,16 +111,22 @@ LocatorMatcherTasks LocatorFilter::matchers()
 
 void LocatorFilter::acceptPrompt(const QString &prompt)
 {
+    QString message = prompt;
     QString text;
-    TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (editor)
+    QString language;
+    if (TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget()) {
         text = TextDocument::convertToPlainText(editor->selectedText());
 
-    QString message = prompt;
-    const MimeType mimeType = mimeTypeForName(editor->textDocument()->mimeType());
-    QString language = mimeType.preferredSuffix();
-    if (mimeType.name() == "text/x-cmake-project")
-        language = "cmake";
+        const MimeType mimeType = mimeTypeForName(editor->textDocument()->mimeType());
+        language = mimeType.preferredSuffix();
+
+        // Manually select the language for either mimetype or editor id
+        if (mimeType.name() == "text/x-cmake-project")
+            language = "cmake";
+
+        if (editor->textDocument()->id() == Git::Constants::GIT_LOG_EDITOR_ID)
+            language = "diff";
+    }
 
     message.replace("{selection}", QString("\n```%1\n%2\n```\n").arg(language, text));
 
