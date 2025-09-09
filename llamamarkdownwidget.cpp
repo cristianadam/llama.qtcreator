@@ -315,15 +315,9 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             } else if (out->codeBlocks.last().language.value_or("") == "cmake") {
                 out->codeBlocks.last().fileName = "CMakeLists.txt";
                 insertSourceFileCopySave();
-
-                if (out->codeBlocks.last().fileName.has_value()) {
-                    out->state = Data::SourceFile;
-                    // skip the comment with the line
-                    return;
-                }
-                out->state = Data::Code;
+            } else {
+                insertCopySave();
             }
-            insertCopySave();
 
             processOneLine();
             return;
