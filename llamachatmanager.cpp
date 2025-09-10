@@ -80,6 +80,13 @@ ViewingChat ChatManager::getViewingChat(const QString &convId) const
     return vc;
 }
 
+QVector<Message> ChatManager::filterByLeafNodeId(const QVector<Message> &messages,
+                                                 qint64 leafNodeId,
+                                                 bool includeRoot)
+{
+    return m_storage->filterByLeafNodeId(messages, leafNodeId, includeRoot);
+}
+
 void ChatManager::sendMessage(const QString &convId,
                               qint64 leafNodeId,
                               const QString &content,

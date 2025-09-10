@@ -51,7 +51,7 @@ private:
 
     Message m_msg;
     QVector<qint64> m_siblingLeafIds;
-    int m_siblingIdx;
+    int m_siblingIdx{1};
     bool m_isUser;
 
     // UI
@@ -61,6 +61,7 @@ private:
     QToolButton *m_regenButton{nullptr};
     QToolButton *m_prevButton{nullptr};
     QToolButton *m_nextButton{nullptr};
+    QLabel *m_siblingLabel{nullptr};
     QPushButton *m_thoughtToggle{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};

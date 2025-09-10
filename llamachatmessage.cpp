@@ -63,6 +63,7 @@ void ChatMessage::buildUI()
     if (m_msg.content.indexOf(thinkingToken) != notfound) {
         m_thoughtToggle = new QPushButton(this);
         m_thoughtToggle->setText(Tr::tr("Thought Process"));
+        m_thoughtToggle->setToolTip(Tr::tr("Click to expand / hide the thought process"));
         m_thoughtToggle->setCheckable(true);
 
         connect(m_thoughtToggle, &QPushButton::toggled, this, &ChatMessage::onThoughtToggle);
@@ -103,32 +104,41 @@ void ChatMessage::buildUI()
     if (m_siblingLeafIds.size() > 1) {
         m_prevButton = new QToolButton(this);
         m_prevButton->setIcon(QIcon::fromTheme("go-previous"));
-        m_prevButton->setEnabled(m_siblingIdx > 0);
+        m_prevButton->setEnabled(m_siblingIdx > 1);
+        m_prevButton->setToolTip(Tr::tr("Go to previous message"));
         connect(m_prevButton, &QToolButton::clicked, this, &ChatMessage::onPrevSiblingClicked);
+
+        m_siblingLabel = new QLabel(this);
+        m_siblingLabel->setText(QString("%1/%2").arg(m_siblingIdx).arg(m_siblingLeafIds.size()));
 
         m_nextButton = new QToolButton(this);
         m_nextButton->setIcon(QIcon::fromTheme("go-next"));
-        m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size() - 1);
+        m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size());
+        m_nextButton->setToolTip(Tr::tr("Go to next message"));
         connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
 
         actionLayout->addWidget(m_prevButton);
+        actionLayout->addWidget(m_siblingLabel);
         actionLayout->addWidget(m_nextButton);
     }
 
     if (m_isUser) {
         m_editButton = new QToolButton(this);
         m_editButton->setIcon(QIcon::fromTheme("edit-undo"));
+        m_editButton->setToolTip(Tr::tr("Edit the message"));
         connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
         actionLayout->addWidget(m_editButton);
     } else {
         m_regenButton = new QToolButton(this);
         m_regenButton->setIcon(QIcon::fromTheme("edit-redo"));
+        m_regenButton->setToolTip(Tr::tr("Re-generate the answer"));
         connect(m_regenButton, &QToolButton::clicked, this, &ChatMessage::onRegenerateClicked);
         actionLayout->addWidget(m_regenButton);
     }
 
     m_copyButton = new QToolButton(this);
     m_copyButton->setIcon(QIcon::fromTheme("edit-copy"));
+    m_copyButton->setToolTip(Tr::tr("Copy the message to clipboard"));
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
     actionLayout->addWidget(m_copyButton);
 
@@ -181,6 +191,11 @@ void ChatMessage::renderMarkdown(const QString &text)
             auto endIdx = text.indexOf(endToken);
             if (endIdx != notfound) {
                 m_markdownLabel->setMarkdown(text.mid(endIdx + endToken.size()));
+            } else {
+                static QVector<QChar>
+                    chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
+                static int position = 0;
+                m_markdownLabel->setMarkdown(QString("%1").arg(chars[position++ % chars.size()]));
             }
         }
     } else {
@@ -254,14 +269,16 @@ void ChatMessage::onRegenerateClicked()
 
 void ChatMessage::onPrevSiblingClicked()
 {
-    if (m_siblingIdx > 0)
-        emit siblingChanged(m_siblingLeafIds[m_siblingIdx - 1]);
+    int index = m_siblingIdx - 1; // 1 based
+    if (index > 0)
+        emit siblingChanged(m_siblingLeafIds[index - 1]);
 }
 
 void ChatMessage::onNextSiblingClicked()
 {
-    if (m_siblingIdx < m_siblingLeafIds.size() - 1)
-        emit siblingChanged(m_siblingLeafIds[m_siblingIdx + 1]);
+    int index = m_siblingIdx - 1; // 1 based
+    if (index < m_siblingLeafIds.size() - 1)
+        emit siblingChanged(m_siblingLeafIds[index + 1]);
 }
 
 void ChatMessage::onThoughtToggle(bool /*checked*/)

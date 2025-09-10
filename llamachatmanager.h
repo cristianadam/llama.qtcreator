@@ -18,6 +18,9 @@ public:
 
     bool isGenerating(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
+    QVector<Message> filterByLeafNodeId(const QVector<Message> &messages,
+                                        qint64 leafNodeId,
+                                        bool includeRoot);
 
     void sendMessage(const QString &convId,
                      qint64 leafNodeId,

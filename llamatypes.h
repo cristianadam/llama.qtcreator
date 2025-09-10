@@ -17,6 +17,36 @@ struct TimingReport
     int predicted_ms{0};
 };
 
+/**
+ * What is conversation "branching"? It is a feature that allows the user to edit an old message
+ * in the history, while still keeping the conversation flow.
+ * Inspired by ChatGPT / Claude / Hugging Chat where you edit a message, a new branch of the
+ * conversation is created, and the old message is still visible.
+ *
+ * We use the same node-based structure like other chat UIs, where each message has a parent
+ * and children. A "root" message is the first message in a conversation, which will not be
+ * displayed in the UI.
+ *
+ * root
+ *  ├── message 1
+ *  │      └── message 2
+ *  │             └── message 3
+ *  └── message 4
+ *        └── message 5
+ *
+ * In the above example, assuming that user wants to edit message 2, a new branch will be created:
+ *
+ *          ├── message 2
+ *          │   └── message 3
+ *          └── message 6
+ *
+ * Message 2 and 6 are siblings, and message 6 is the new branch.
+ *
+ * We only need to know the last node (aka leaf) to get the current branch. In the above example,
+ * message 5 is the leaf of branch containing message 4 and 5.
+ *
+ */
+
 struct Message
 {
     qint64 id; // 64‑bit is plenty
