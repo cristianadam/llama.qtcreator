@@ -194,8 +194,9 @@ void ChatMessage::renderMarkdown(const QString &text)
             } else {
                 static QVector<QChar>
                     chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
-                static int position = 0;
-                m_markdownLabel->setMarkdown(QString("%1").arg(chars[position++ % chars.size()]));
+                // Dividing with 33ms results in 30fps
+                m_markdownLabel->setMarkdown(QString("%1").arg(
+                    chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()]));
             }
         }
     } else {
