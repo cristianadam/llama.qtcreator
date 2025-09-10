@@ -43,6 +43,7 @@ private:
         = {Tr::tr("Create a summary of {selection}"),
            Tr::tr("Create a commit message for {selection}"),
            Tr::tr("Explain the code in {selection}"),
+           Tr::tr("Do spell checking and fix any typos in {selection}"),
            Tr::tr("Generate test cases for {selection}. Output only code. No explanations")};
 
     QList<QString> m_history;
