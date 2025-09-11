@@ -4,5 +4,14 @@
         <file>images/settingscategory_llama@2x.png</file>
         <file>images/llama.png</file>
         <file>images/llama@2x.png</file>
+        <file>images/arrow-up.svg</file>
+        <file>images/stop.svg</file>
+        <file>images/paper-clip.svg</file>
+        <file>images/chevron-left.svg</file>
+        <file>images/chevron-right.svg</file>
+        <file>images/pencil-square.svg</file>
+        <file>images/arrow-path.svg</file>
+        <file>images/document-duplicate.svg</file>
+        <file>images/folder-arrow-down.svg</file>
     </qresource>
 </RCC>

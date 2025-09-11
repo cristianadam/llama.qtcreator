@@ -77,7 +77,7 @@ void ChatInput::buildUI()
     btnLayout->setContentsMargins(0, 0, 0, 0);
 
     m_attachButton = new QToolButton(this);
-    m_attachButton->setIcon(QIcon::fromTheme("mail-attachment"));
+    m_attachButton->setIcon(QIcon(":/images/paper-clip.svg"));
     m_attachButton->setToolTip(Tr::tr("Attach file"));
     connect(m_attachButton, &QToolButton::clicked, [this]() {
         const QStringList files = QFileDialog::getOpenFileNames(this);
@@ -133,10 +133,10 @@ void ChatInput::updateUI()
 {
     if (m_isGenerating) {
         m_sendStopButton->setToolTip(Tr::tr("Stop assistant answer generation"));
-        m_sendStopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+        m_sendStopButton->setIcon(QIcon(":/images/stop.svg"));
     } else {
         m_sendStopButton->setToolTip(Tr::tr("Send message to assistant"));
-        m_sendStopButton->setIcon(QIcon::fromTheme("mail-send"));
+        m_sendStopButton->setIcon(QIcon(":/images/arrow-up.svg"));
     }
 }
 
