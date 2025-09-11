@@ -1,4 +1,5 @@
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
 #include <QSettings>
 #include <QSqlError>
@@ -13,6 +14,62 @@
 Q_LOGGING_CATEGORY(llamaStorage, "llama.cpp.storage", QtWarningMsg)
 
 namespace LlamaCpp {
+
+static QString serialize(const QList<QVariantMap> &list)
+{
+    QJsonArray arr;
+    for (const QVariantMap &m : list)
+        arr.append(QJsonObject::fromVariantMap(m));
+    return QString::fromUtf8(QJsonDocument(arr).toJson(QJsonDocument::Compact));
+}
+
+static QList<QVariantMap> deserializeExtra(const QString &json)
+{
+    QList<QVariantMap> list;
+    QJsonDocument d = QJsonDocument::fromJson(json.toUtf8());
+    if (!d.isArray())
+        return list;
+    for (const QJsonValue &v : d.array()) {
+        if (v.isObject())
+            list.append(v.toObject().toVariantMap());
+    }
+    return list;
+}
+
+static QString serialize(const TimingReport &tr)
+{
+    QJsonObject obj;
+    obj["prompt_n"] = tr.prompt_n;
+    obj["prompt_ms"] = tr.prompt_ms;
+    obj["predicted_n"] = tr.predicted_n;
+    obj["predicted_ms"] = tr.predicted_ms;
+
+    QJsonDocument doc(obj);
+    return QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
+}
+
+static TimingReport deserializeTimingsReport(const QString &json)
+{
+    TimingReport result;
+
+    QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+    if (!doc.isObject())
+        return result;
+
+    QJsonObject obj = doc.object();
+    auto getInt = [&](const QString &key, int &field) {
+        if (obj.contains(key))
+            field = obj[key].toInt();
+    };
+
+    getInt("prompt_n", result.prompt_n);
+    getInt("prompt_ms", result.prompt_ms);
+    getInt("predicted_n", result.predicted_n);
+    getInt("predicted_ms", result.predicted_ms);
+
+    return result;
+}
+
 Storage &Storage::instance()
 {
     static Storage inst;
@@ -36,7 +93,10 @@ Storage::Storage()
 
     if (!q.exec("CREATE TABLE IF NOT EXISTS messages "
                 "(id INTEGER PRIMARY KEY, convId TEXT, type TEXT, timestamp INTEGER, role TEXT, "
-                "content TEXT, parent INTEGER, "
+                "content TEXT, "
+                "timings TEXT, "
+                "extra TEXT, "
+                "parent INTEGER, "
                 "children TEXT, "
                 "FOREIGN KEY(convId) REFERENCES conversations(id))"))
         qCCritical(llamaStorage) << "Failed to create table \"messages\"" << q.lastError();
@@ -104,14 +164,17 @@ Conversation Storage::createConversation(const QString &name)
         qCWarning(llamaStorage) << "createConversation insert into conversations" << q.lastError();
 
     // create root node
-    q.prepare("INSERT INTO messages (id,convId,type,timestamp,role,content,parent,children) "
-              "VALUES (:id,:conv,:type,:ts,:role,:content,:parent,:children)");
+    q.prepare("INSERT INTO messages "
+              "(id,convId,type,timestamp,role,content,timings,extra,parent,children) "
+              "VALUES (:id,:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
     q.bindValue(":id", msgId);
     q.bindValue(":conv", convId);
     q.bindValue(":type", "root");
     q.bindValue(":ts", now);
     q.bindValue(":role", "system");
     q.bindValue(":content", "");
+    q.bindValue(":timings", "");
+    q.bindValue(":extra", "[]");
     q.bindValue(":parent", -1);
     q.bindValue(":children", "[]");
     if (!q.exec())
@@ -175,6 +238,8 @@ QVector<Message> Storage::getMessages(const QString &convId)
         m.timestamp = q.value("timestamp").toLongLong();
         m.role = q.value("role").toString();
         m.content = q.value("content").toString();
+        m.timings = deserializeTimingsReport(q.value("timings").toString());
+        m.extra = deserializeExtra(q.value("extra").toString());
         m.parent = q.value("parent").toLongLong();
         QJsonArray arr = QJsonDocument::fromJson(q.value("children").toString().toUtf8()).array();
         for (const QJsonValue &v : std::as_const(arr))
@@ -210,14 +275,17 @@ void Storage::appendMsg(const Message &msg, qint64 parentNodeId)
         qCWarning(llamaStorage) << "appendMsg: Failed update children messages" << q.lastError();
 
     // insert new message
-    q.prepare("INSERT INTO messages (id,convId,type,timestamp,role,content,parent,children) "
-              "VALUES (:id,:conv,:type,:ts,:role,:content,:parent,:children)");
+    q.prepare("INSERT INTO messages "
+              "(id,convId,type,timestamp,role,content,timings,extra,parent,children) "
+              "VALUES (:id,:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
     q.bindValue(":id", msg.id);
     q.bindValue(":conv", msg.convId);
     q.bindValue(":type", msg.type);
     q.bindValue(":ts", msg.timestamp);
     q.bindValue(":role", msg.role);
     q.bindValue(":content", msg.content);
+    q.bindValue(":timings", serialize(msg.timings));
+    q.bindValue(":extra", serialize(msg.extra));
     q.bindValue(":parent", parentNodeId);
     q.bindValue(":children", "[]");
     if (!q.exec())

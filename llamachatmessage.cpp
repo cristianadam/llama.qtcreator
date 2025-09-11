@@ -1,29 +1,37 @@
 #include <QCheckBox>
 #include <QClipboard>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QTemporaryFile>
 #include <QToolButton>
 #include <QVBoxLayout>
 
+#include <coreplugin/editormanager/editormanager.h>
+#include <coreplugin/editormanager/ieditor.h>
+#include <coreplugin/editormanager/ieditorfactory.h>
 #include <coreplugin/icore.h>
 #include <projectexplorer/buildconfiguration.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
+#include <utils/fsengine/fileiconprovider.h>
 
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
+using namespace Core;
 using namespace ProjectExplorer;
 using namespace Utils;
 
@@ -100,6 +108,81 @@ void ChatMessage::buildUI()
     QHBoxLayout *actionLayout = new QHBoxLayout;
     actionLayout->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
     actionLayout->setContentsMargins(0, 0, 0, 0);
+
+    if (m_isUser && !m_msg.extra.isEmpty()) {
+        m_attachedFiles = new QToolButton(this);
+        m_attachedFiles->setIcon(QIcon::fromTheme("mail-attachment"));
+        m_attachedFiles->setToolTip(Tr::tr("Attached files"));
+        actionLayout->addWidget(m_attachedFiles);
+
+        QMenu *menu = new QMenu(m_attachedFiles);
+        for (const QVariantMap &e : m_msg.extra) {
+            if (e.value("type").toString() == "textFile") {
+                const QString fileName = e.value("name").toString();
+                const QByteArray content = e.value("content").toByteArray();
+
+                FilePath file = FilePath::fromString(fileName);
+                const QIcon icon = FileIconProvider::icon(file);
+                auto action = menu->addAction(icon, fileName);
+
+                connect(action, &QAction::triggered, this, [file, content](bool /*triggered*/) {
+                    QString title = file.fileName();
+                    EditorFactories factories = IEditorFactory::preferredEditorTypes(file);
+                    if (factories.isEmpty())
+                        return;
+                    auto editor = EditorManager::openEditorWithContents(factories.first()->id(),
+                                                                        &title,
+                                                                        content);
+                });
+                action->setIconVisibleInMenu(true);
+            } else if (e.value("type").toString() == "imageFile") {
+                const QString fileName = e.value("name").toString();
+                const QString base64Url = e.value("base64Url").toString();
+                const QByteArray content = QByteArray::fromBase64(
+                    base64Url.split(',').last().toUtf8());
+
+                FilePath file = FilePath::fromString(fileName);
+                const QIcon icon = FileIconProvider::icon(file);
+                auto action = menu->addAction(icon, fileName);
+
+                connect(action, &QAction::triggered, this, [content, fileName](bool /*triggered*/) {
+                    QTemporaryFile tmpFile;
+                    tmpFile.setFileName(QDir::tempPath() + "/" + fileName);
+                    if (tmpFile.open()) {
+                        tmpFile.write(content);
+                        tmpFile.flush();
+                        tmpFile.close();
+                        QDesktopServices::openUrl(QUrl::fromLocalFile(tmpFile.fileName()));
+                    }
+                });
+                action->setIconVisibleInMenu(true);
+            } else if (e.value("type").toString() == "audioFile") {
+                const QString fileName = e.value("name").toString();
+                const QString base64Url = e.value("base64Url").toString();
+                const QByteArray content = QByteArray::fromBase64(
+                    base64Url.split(',').last().toUtf8());
+
+                FilePath file = FilePath::fromString(fileName);
+                const QIcon icon = FileIconProvider::icon(file);
+                auto action = menu->addAction(icon, fileName);
+
+                connect(action, &QAction::triggered, this, [content, fileName](bool /*triggered*/) {
+                    QTemporaryFile tmpFile;
+                    tmpFile.setFileName(QDir::tempPath() + "/" + fileName);
+                    if (tmpFile.open()) {
+                        tmpFile.write(content);
+                        tmpFile.flush();
+                        tmpFile.close();
+                        QDesktopServices::openUrl(QUrl::fromLocalFile(tmpFile.fileName()));
+                    }
+                });
+                action->setIconVisibleInMenu(true);
+            }
+        }
+        m_attachedFiles->setMenu(menu);
+
+        connect(m_attachedFiles, &QToolButton::clicked, m_attachedFiles, &QToolButton::showMenu);
+    }
 
     if (m_siblingLeafIds.size() > 1) {
         m_prevButton = new QToolButton(this);
@@ -240,6 +323,9 @@ void ChatMessage::applyStyleSheet()
         QToolButton:hover {
             background-color: Token_Foreground_Muted;
         }
+        QToolButton::menu-indicator {
+            image: none;
+        }
 
         QPushButton {
            border: 1px solid Token_Foreground_Muted;
@@ -248,6 +334,21 @@ void ChatMessage::applyStyleSheet()
         }
 
         QPushButton:hover {
+            background-color: Token_Foreground_Muted;
+        }
+
+        QMenu {
+            background-color: Token_Background_Muted;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        QMenu::item {
+            padding: 2px 2px;
+            border-radius: 6px;
+        }
+
+        QMenu::item:selected {
             background-color: Token_Foreground_Muted;
         }
     )"));

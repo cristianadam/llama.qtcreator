@@ -237,7 +237,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     scrollToBottom();
 }
 
-void ChatEditor::onSendRequested(const QString &text)
+void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &extra)
 {
     const Conversation conv = ChatManager::instance().currentConversation();
 
@@ -245,7 +245,7 @@ void ChatEditor::onSendRequested(const QString &text)
         ChatManager::instance().replaceMessageAndGenerate(m_editedMessage->convId,
                                                           m_editedMessage->parent,
                                                           text,
-                                                          m_editedMessage->extra,
+                                                          extra,
                                                           [this](qint64 leafId) {
                                                               scrollToBottom();
                                                           });
@@ -254,7 +254,7 @@ void ChatEditor::onSendRequested(const QString &text)
         ChatManager::instance().sendMessage(conv.id,
                                             conv.currNode,
                                             text,
-                                            {}, // extra context
+                                            extra,
                                             [this](qint64 leafId) { scrollToBottom(); });
     }
     scrollToBottom();
@@ -277,13 +277,13 @@ void ChatEditor::onFileDropped(const QStringList &files)
 void ChatEditor::onEditRequested(const Message &msg)
 {
     m_editedMessage = msg;
-    m_input->setEditingText(msg.content);
+    m_input->setEditingText(msg.content, msg.extra);
 }
 
 void ChatEditor::onEditingCancelled()
 {
     m_editedMessage.reset();
-    m_input->setEditingText({});
+    m_input->setEditingText({}, {});
 }
 
 void ChatEditor::onRegenerateRequested(const Message &msg)

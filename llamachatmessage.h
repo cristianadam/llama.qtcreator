@@ -61,6 +61,7 @@ private:
     QToolButton *m_regenButton{nullptr};
     QToolButton *m_prevButton{nullptr};
     QToolButton *m_nextButton{nullptr};
+    QToolButton *m_attachedFiles{nullptr};
     QLabel *m_siblingLabel{nullptr};
     QPushButton *m_thoughtToggle{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};

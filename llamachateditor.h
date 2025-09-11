@@ -36,7 +36,7 @@ public:
 public slots:
     void onMessageAppended(const LlamaCpp::Message &msg);
     void onPendingMessageChanged(const LlamaCpp::Message &pm);
-    void onSendRequested(const QString &text);
+    void onSendRequested(const QString &text, const QList<QVariantMap> &extra);
     void onStopRequested();
     void onFileDropped(const QStringList &files);
     void onEditRequested(const LlamaCpp::Message &msg);
