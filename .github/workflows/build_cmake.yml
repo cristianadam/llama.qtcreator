@@ -28,10 +28,10 @@ jobs:
           }
         - {
             name: "Windows Latest MSVC Arm64", artifact: "Windows-arm64",
-            os: windows-latest,
+            os: windows-11-arm,
             platform: windows_arm64,
             cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsamd64_arm64.bat",
+            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsarm64.bat",
           }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux-x64",
@@ -41,9 +41,9 @@ jobs:
           }
         - {
             name: "Ubuntu Latest GCC Arm64", artifact: "Linux-arm64",
-            os: ubuntu-latest,
+            os: ubuntu-24.04-arm,
             platform: linux_arm64,
-            cc: "aarch64-linux-gnu-gcc", cxx: "aarch64-linux-gnu-g++"
+            cc: "gcc", cxx: "g++"
           }
         - {
             name: "macOS Latest Clang", artifact: "macOS-universal",
@@ -73,34 +73,12 @@ jobs:
     - name: Install system libs
       shell: cmake -P {0}
       run: |
-        if ("${{ matrix.config.platform }}" STREQUAL "linux_x64")
+        if ("${{ matrix.config.platform }}" MATCHES "linux")
           execute_process(
             COMMAND sudo apt-get update
           )
           execute_process(
             COMMAND sudo apt-get install -y libgl1-mesa-dev
-            RESULT_VARIABLE result
-          )
-          if (NOT result EQUAL 0)
-            message(FATAL_ERROR "Failed to install dependencies")
-          endif()
-        elseif ("${{ matrix.config.platform }}" STREQUAL "linux_arm64")
-          execute_process(COMMAND sudo dpkg --add-architecture arm64)
-
-          # TODO: Check to see if the azure.ubuntu added arm64 support
-          execute_process(COMMAND sudo apt-get install -y bash curl apt-transport-https ca-certificates)
-          execute_process(COMMAND sudo curl https://raw.githubusercontent.com/vegardit/fast-apt-mirror.sh/v1/fast-apt-mirror.sh -o /usr/local/bin/fast-apt-mirror.sh)
-          execute_process(COMMAND sudo chmod 755 /usr/local/bin/fast-apt-mirror.sh)
-
-          #execute_process(COMMAND sudo /usr/local/bin/fast-apt-mirror.sh set https://mirrors.ocf.berkeley.edu/ubuntu-ports/)
-          execute_process(COMMAND sudo /usr/local/bin/fast-apt-mirror.sh set https://mirror.kumi.systems/ubuntu-ports/)
-
-          execute_process(
-            COMMAND sudo apt-get update
-          )
-          execute_process(
-            COMMAND
-              sudo apt-get install -y crossbuild-essential-arm64 libgl1-mesa-dev:arm64
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
@@ -122,10 +100,10 @@ jobs:
             set(qt_dir_prefix "${qt_version}/msvc_64")
             set(qt_package_suffix "-Windows-Windows_11_23H2-MSVC2022-Windows-Windows_11_23H2-X86_64")
           elseif (platform STREQUAL "windows_arm64")
-            set(url_os "windows_x86")
-            set(qt_package_arch_suffix "win64_msvc2022_arm64_cross_compiled")
-            set(qt_dir_prefix "${qt_version}/msvc_arm64")
-            set(qt_package_suffix "-Windows-Windows_11_23H2-MSVC2022-Windows-Windows_11_23H2-ARM64")
+            set(url_os "windows_arm64")
+            set(qt_package_arch_suffix "win64_msvc2022_arm64")
+            set(qt_dir_prefix "${qt_version}/msvc2022_arm64")
+            set(qt_package_suffix "-Windows-Windows_11_22H2-MSVC2022-Windows-Windows_11_22H2-AARCH64")
           elseif (platform STREQUAL "linux_x64")
             set(url_os "linux_x64")
             set(qt_package_arch_suffix "linux_gcc_64")
@@ -183,11 +161,15 @@ jobs:
           endforeach()
 
           # uic depends on libicu*.so
-          if (platform STREQUAL "linux_x64")
-            if (qt_version VERSION_LESS "6.7.0")
-              set(uic_suffix "Rhel7.2-x64")
+          if (platform MATCHES "linux")
+            if (platform STREQUAL "linux_x64")
+              if (qt_version VERSION_LESS "6.7.0")
+                set(uic_suffix "Rhel7.2-x64")
+              else()
+                set(uic_suffix "Rhel8.6-x86_64")
+              endif()
             else()
-              set(uic_suffix "Rhel8.6-x86_64")
+              set(uic_suffix "Debian11.6-arm64")
             endif()
             downloadAndExtract(
               "${qt_base_url}/qt.qt6.${qt_version_dotless}.${qt_package_arch_suffix}/${qt_package_version}icu-linux-${uic_suffix}.7z"
@@ -202,12 +184,10 @@ jobs:
         if ("${{ matrix.config.platform }}" STREQUAL "windows_x64")
           download_qt(windows_x64 TRUE)
         elseif ("${{ matrix.config.platform }}" STREQUAL "windows_arm64")
-          download_qt(windows_x64 FALSE)
           download_qt(windows_arm64 TRUE)
         elseif ("${{ matrix.config.platform }}" STREQUAL "linux_x64")
           download_qt(linux_x64 TRUE)
         elseif ("${{ matrix.config.platform }}" STREQUAL "linux_arm64")
-          download_qt(linux_x64 FALSE)
           download_qt(linux_arm64 TRUE)
         elseif ("${{ runner.os }}" STREQUAL "macOS")
           download_qt(mac_x64 TRUE)
@@ -259,14 +239,6 @@ jobs:
             break()
           endif()
         endforeach()
-
-        if ("${{ matrix.config.platform }}" STREQUAL "windows_arm64")
-          file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt6/$ENV{QT_VERSION}/msvc_64" qt_host_dir)
-          set(additional_config "--add-config=-DQT_HOST_PATH=${qt_host_dir}")
-        elseif ("${{ matrix.config.platform }}" STREQUAL "linux_arm64")
-          file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}/qt6/$ENV{QT_VERSION}/gcc_64" qt_host_dir)
-          set(additional_config "--add-config=-DQT_HOST_PATH=${qt_host_dir}")
-        endif()
 
         execute_process(
           COMMAND python
@@ -333,4 +305,3 @@ jobs:
           release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-Windows-x64.7z
         draft: false
         prerelease: false
-
