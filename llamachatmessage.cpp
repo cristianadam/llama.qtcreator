@@ -111,7 +111,7 @@ void ChatMessage::buildUI()
 
     if (m_isUser && !m_msg.extra.isEmpty()) {
         m_attachedFiles = new QToolButton(this);
-        m_attachedFiles->setIcon(QIcon::fromTheme("mail-attachment"));
+        m_attachedFiles->setText("G");
         m_attachedFiles->setToolTip(Tr::tr("Attached files"));
         actionLayout->addWidget(m_attachedFiles);
 
@@ -186,7 +186,7 @@ void ChatMessage::buildUI()
 
     if (m_siblingLeafIds.size() > 1) {
         m_prevButton = new QToolButton(this);
-        m_prevButton->setIcon(QIcon::fromTheme("go-previous"));
+        m_prevButton->setText("C");
         m_prevButton->setEnabled(m_siblingIdx > 1);
         m_prevButton->setToolTip(Tr::tr("Go to previous message"));
         connect(m_prevButton, &QToolButton::clicked, this, &ChatMessage::onPrevSiblingClicked);
@@ -195,7 +195,7 @@ void ChatMessage::buildUI()
         m_siblingLabel->setText(QString("%1/%2").arg(m_siblingIdx).arg(m_siblingLeafIds.size()));
 
         m_nextButton = new QToolButton(this);
-        m_nextButton->setIcon(QIcon::fromTheme("go-next"));
+        m_nextButton->setText("D");
         m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size());
         m_nextButton->setToolTip(Tr::tr("Go to next message"));
         connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
@@ -207,20 +207,20 @@ void ChatMessage::buildUI()
 
     if (m_isUser) {
         m_editButton = new QToolButton(this);
-        m_editButton->setIcon(QIcon::fromTheme("edit-undo"));
+        m_editButton->setText("H");
         m_editButton->setToolTip(Tr::tr("Edit the message"));
         connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
         actionLayout->addWidget(m_editButton);
     } else {
         m_regenButton = new QToolButton(this);
-        m_regenButton->setIcon(QIcon::fromTheme("edit-redo"));
+        m_regenButton->setText("A");
         m_regenButton->setToolTip(Tr::tr("Re-generate the answer"));
         connect(m_regenButton, &QToolButton::clicked, this, &ChatMessage::onRegenerateClicked);
         actionLayout->addWidget(m_regenButton);
     }
 
     m_copyButton = new QToolButton(this);
-    m_copyButton->setIcon(QIcon::fromTheme("edit-copy"));
+    m_copyButton->setText("E");
     m_copyButton->setToolTip(Tr::tr("Copy the message to clipboard"));
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
     actionLayout->addWidget(m_copyButton);
@@ -317,8 +317,10 @@ void ChatMessage::applyStyleSheet()
 
         QToolButton {
             border: 1px solid Token_Foreground_Muted;
+            font-family: heroicons_outline;
+            font-size: 14px;
             border-radius: 6px;
-            padding: 2px 2px;
+            padding: 4px -2px;
         }
         QToolButton:hover {
             background-color: Token_Foreground_Muted;

@@ -77,7 +77,7 @@ void ChatInput::buildUI()
     btnLayout->setContentsMargins(0, 0, 0, 0);
 
     m_attachButton = new QToolButton(this);
-    m_attachButton->setIcon(QIcon::fromTheme("mail-attachment"));
+    m_attachButton->setText("G");
     m_attachButton->setToolTip(Tr::tr("Attach file"));
     connect(m_attachButton, &QToolButton::clicked, [this]() {
         const QStringList files = QFileDialog::getOpenFileNames(this);
@@ -133,10 +133,10 @@ void ChatInput::updateUI()
 {
     if (m_isGenerating) {
         m_sendStopButton->setToolTip(Tr::tr("Stop assistant answer generation"));
-        m_sendStopButton->setIcon(QIcon::fromTheme("media-playback-stop"));
+        m_sendStopButton->setText("I");
     } else {
         m_sendStopButton->setToolTip(Tr::tr("Send message to assistant"));
-        m_sendStopButton->setIcon(QIcon::fromTheme("mail-send"));
+        m_sendStopButton->setText("B");
     }
 }
 
@@ -159,8 +159,10 @@ void ChatInput::applyStyleSheet()
 
         QToolButton {
             border: 1px solid Token_Foreground_Muted;
+            font-family: heroicons_outline;
+            font-size: 18px;
             border-radius: 6px;
-            padding: 4px 4px;
+            padding: 6px -2px;
         }
 
         QToolButton:hover {

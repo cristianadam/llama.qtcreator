@@ -4,5 +4,6 @@
         <file>images/settingscategory_llama@2x.png</file>
         <file>images/llama.png</file>
         <file>images/llama@2x.png</file>
+        <file>images/heroicons_outline.ttf</file>
     </qresource>
 </RCC>

@@ -165,7 +165,7 @@ void MarkdownLabel::setStyleSheet()
         table.codeblock th {
           background-color: Token_Background_Default;
           font-weight: 400;
-          padding: 0px 0px;
+          padding: 4px 4px;
         }
 
         table th,
@@ -182,6 +182,12 @@ void MarkdownLabel::setStyleSheet()
         }
         table.codeblock tr {
           background-color: Token_Background_Muted;
+        }
+
+        a.heroicons {
+          color: Token_Text_Default;
+          font-family: heroicons_outline;
+          font-size: medium;
         }
 
     )##")
@@ -211,7 +217,20 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
 
         auto createLink =
             [](const QString &name, qsizetype index, const QString &label) -> QByteArray {
-            return QString("<a href=\"%1:%2\">%3</a>").arg(name).arg(index).arg(label).toUtf8();
+            QString href = QString("%1:%2").arg(name).arg(index);
+
+            // Choose the image based on the command name
+            QString heroIconText;
+            if (name == "copy") {
+                heroIconText = "E";
+            } else if (name == "save") {
+                heroIconText = "F";
+            }
+
+            return QString("<a class=\"heroicons\" href=\"%1\">%2</a>")
+                .arg(href)
+                .arg(heroIconText)
+                .toUtf8();
         };
 
         auto toVerbatimText = [](const QByteArray &line) -> QString {
