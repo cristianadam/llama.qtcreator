@@ -243,7 +243,10 @@ bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
         if (keyEvent->modifiers() == Qt::ControlModifier && (keyEvent->key() == Qt::Key_C)) {
             QLabel *label = qobject_cast<QLabel *>(obj);
             if (label) {
-                QGuiApplication::clipboard()->setText(label->selectedText());
+                QString selectedText = label->selectedText();
+                // replace the unicode line separator with a newline
+                selectedText.replace("\u2028", "\n");
+                QGuiApplication::clipboard()->setText(selectedText);
                 return true;
             }
         }
