@@ -157,6 +157,11 @@ void MarkdownLabel::setStyleSheet()
             width: 100%;
             border-collapse: collapse;
         }
+        table.codeblock {
+          margin: 0px 0px;
+          width: 100%;
+          border-collapse: collapse;
+        }
 
         table th {
           background-color: Token_Background_Muted;
@@ -166,6 +171,7 @@ void MarkdownLabel::setStyleSheet()
           background-color: Token_Background_Default;
           font-weight: 400;
           padding: 4px 4px;
+          border: 1px solid Token_Foreground_Muted;
         }
 
         table th,
@@ -175,6 +181,7 @@ void MarkdownLabel::setStyleSheet()
         }
         table.codeblock td {
           padding: 6px 6px;
+          border: 1px solid Token_Foreground_Muted;
         }
 
         table tr {
@@ -182,6 +189,10 @@ void MarkdownLabel::setStyleSheet()
         }
         table.codeblock tr {
           background-color: Token_Background_Muted;
+        }
+        table.codeblock .copy-save-links {
+          text-align: right;
+          padding: 2px 12px;
         }
 
         a.heroicons {
@@ -244,20 +255,22 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
         auto insertSourceFileCopySave = [&]() {
             out->output_html.append("<tr>");
             out->output_html.append(
-                "<th>" + out->codeBlocks.last().fileName.value().toUtf8() + "</th><th>"
-                + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "</th><th>"
+                "<th class=\"copy-save-links\"><span style=\"font-size:small\">"
+                + out->codeBlocks.last().fileName.value().toUtf8() + "</span>" + "&nbsp;&nbsp;"
+                + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
                 + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
             out->output_html.append("</tr>\n");
-            out->output_html.append("<tr><td colspan=\"3\">\n");
+            out->output_html.append("<tr><td>\n");
         };
 
         auto insertCopySave = [&]() {
             out->output_html.append("<tr>");
             out->output_html.append(
-                "<th>" + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "</th><th>"
+                "<th class=\"copy-save-links\">"
+                + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
                 + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
             out->output_html.append("</tr>\n");
-            out->output_html.append("<tr><td colspan=\"2\">\n");
+            out->output_html.append("<tr><td>\n");
         };
 
         auto processOneLine = [&]() {
