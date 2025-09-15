@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
@@ -29,6 +30,7 @@
 #include "llamachatmessage.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
+#include "llamatheme.h"
 #include "llamatr.h"
 
 using namespace TextEditor;
@@ -92,6 +94,13 @@ ChatEditor::ChatEditor()
                     if (!convId.isEmpty()) {
                         auto chat = ChatManager::instance().getViewingChat(convId);
                         refreshMessages(chat.messages, chat.conv.currNode);
+                    } else {
+                        // If there were no messages, show the server props
+                        if (m_messageWidgets.isEmpty() && !m_propsWidget) {
+                            m_propsWidget = displayServerProps();
+                            // Place it at the top of the layout
+                            m_messageLayout->insertWidget(0, m_propsWidget);
+                        }
                     }
                     ChatManager::instance().setCurrentConversation(convId);
 
@@ -144,11 +153,54 @@ bool ChatEditor::isDesignModePreferred() const
     return true;
 }
 
+QWidget *ChatEditor::displayServerProps()
+{
+    QWidget *w = new QWidget(widget());
+    w->setObjectName("ServerProps");
+    auto lay = new QVBoxLayout(w);
+    lay->setContentsMargins(8, 8, 8, 8);
+    lay->setAlignment(Qt::AlignTop);
+
+    const auto &sp = ChatManager::instance().serverProps();
+
+    auto addLabel = [&](const QString &title, const QString &value) {
+        QLabel *l = value.isEmpty() ? new QLabel(QString("<b>%1</b>").arg(title), w)
+                                    : new QLabel(QString("<b>%1:</b> %2").arg(title, value), w);
+        l->setObjectName("ServerPropsLabel");
+        l->setWordWrap(true);
+        l->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        lay->addWidget(l);
+    };
+
+    addLabel(Tr::tr("Server Info"), {});
+    addLabel(Tr::tr("Model Path"), FilePath::fromUserInput(sp.model_path).fileName());
+    addLabel(Tr::tr("Build"), sp.build_info);
+
+    w->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
+        QWidget#ServerProps {
+            border: 1px solid Token_Foreground_Muted;
+            border-radius: 8px;
+        }
+
+        QLabel#ServerPropsLabel {
+            color: Token_Text_Subtle;
+        }
+    )"));
+
+    return w;
+}
+
 void ChatEditor::refreshMessages(const QVector<Message>& messages, qint64 leafNodeId)
 {
     // Clean old widgets
     qDeleteAll(m_messageWidgets);
     m_messageWidgets.clear();
+
+    // Delete old server‑props widget if it exists
+    if (m_propsWidget) {
+        m_propsWidget->deleteLater();
+        m_propsWidget = nullptr;
+    }
 
     // Filter the messages that belong to the requested leaf node
     const QVector<Message> currNodes = ChatManager::instance().filterByLeafNodeId(messages,
@@ -189,6 +241,13 @@ void ChatEditor::refreshMessages(const QVector<Message>& messages, qint64 leafNo
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
+    }
+
+    // If there were no messages, show the server props
+    if (m_messageWidgets.isEmpty() && !m_propsWidget) {
+        m_propsWidget = displayServerProps();
+        // Place it at the top of the layout
+        m_messageLayout->insertWidget(0, m_propsWidget);
     }
 
     scrollToBottom();

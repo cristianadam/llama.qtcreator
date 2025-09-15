@@ -32,6 +32,7 @@ public:
 
     void refreshMessages(const QVector<Message>& messages, qint64 leafNodeId);
     void scrollToBottom();
+    QWidget *displayServerProps();
 
 public slots:
     void onMessageAppended(const LlamaCpp::Message &msg);
@@ -52,6 +53,9 @@ private:
     QVBoxLayout *m_messageLayout;
     QVector<ChatMessage *> m_messageWidgets; // keep for cleanup
     std::optional<Message> m_editedMessage;
+
+    // Widget that displays server props when no messages exist.
+    QWidget *m_propsWidget{nullptr};
 };
 
 void setupChatEditor();
