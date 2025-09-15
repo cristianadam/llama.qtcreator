@@ -8,6 +8,9 @@
 #include <QTextEdit>
 #include <QToolButton>
 
+#include <projectexplorer/projectnodes.h>
+#include <utils/algorithm.h>
+#include <utils/dropsupport.h>
 #include <utils/filepath.h>
 #include <utils/fsengine/fileiconprovider.h>
 
@@ -15,6 +18,7 @@
 #include "llamatheme.h"
 #include "llamatr.h"
 
+using namespace ProjectExplorer;
 using namespace Utils;
 
 namespace LlamaCpp {
@@ -267,17 +271,100 @@ void ChatInput::addFilesFromLocalPaths(const QStringList &filePaths)
 
 void ChatInput::dragEnterEvent(QDragEnterEvent *e)
 {
+    const auto *dropData = dynamic_cast<const DropMimeData *>(e->mimeData());
+    if (dropData)
+        e->acceptProposedAction();
+
     if (e->mimeData()->hasUrls())
         e->acceptProposedAction();
+}
+
+static bool isSourceFileType(FileType type)
+{
+    return type == FileType::Header || type == FileType::Source || type == FileType::Form
+           || type == FileType::QML || type == FileType::StateChart || type == FileType::Project;
+}
+
+static bool isInterestingFileNode(const FileNode *node)
+{
+    return node->listInProject() && !node->isGenerated() && isSourceFileType(node->fileType());
+}
+
+static void collectFilesFromFolderNode(const FolderNode *folderNode, QStringList &outPaths)
+{
+    if (!folderNode)
+        return;
+
+    // Skip the resource files for now.
+    if (folderNode->displayName().endsWith(".qrc"))
+        return;
+
+    // Use the existing forEachFileNode method to iterate through all file nodes in this folder
+    folderNode->forEachFileNode([&outPaths](FileNode *fileNode) {
+        if (isInterestingFileNode(fileNode)) {
+            FilePath fp = fileNode->filePath();
+            if (fp.isLocal())
+                outPaths.append(fp.toFSPathString());
+        }
+    });
+
+    folderNode->forEachFolderNode([&outPaths](FolderNode *childFolderNode) {
+        collectFilesFromFolderNode(childFolderNode, outPaths);
+    });
+}
+
+static void collectFilesFromProjectNode(const ProjectNode *projectNode, QStringList &outPaths)
+{
+    if (!projectNode)
+        return;
+
+    projectNode->forEachFileNode([&outPaths](FileNode *fileNode) {
+        if (isInterestingFileNode(fileNode)) {
+            FilePath fp = fileNode->filePath();
+            if (fp.isLocal())
+                outPaths.append(fp.toFSPathString());
+        }
+    });
+
+    projectNode->forEachFolderNode(
+        [&outPaths](FolderNode *folderNode) { collectFilesFromFolderNode(folderNode, outPaths); });
 }
 
 void ChatInput::dropEvent(QDropEvent *e)
 {
     QStringList localPaths;
-    for (const QUrl &url : e->mimeData()->urls()) {
-        FilePath fp = FilePath::fromUrl(url);
-        if (fp.isLocal())
-            localPaths.append(fp.toFSPathString());
+
+    const auto *dropData = dynamic_cast<const DropMimeData *>(e->mimeData());
+    if (dropData) {
+        using NodesList = QList<const Node *>;
+        NodesList nodes = transform<QList<const Node *>>(dropData->values(), [](const QVariant &v) {
+            return v.value<Node *>();
+        });
+
+        // Filter to only file nodes (not directories or project nodes)
+        NodesList fileNodes = filtered(nodes, [](const Node *n) {
+            return n->asFileNode() && isInterestingFileNode(n->asFileNode());
+        });
+
+        for (const Node *node : fileNodes) {
+            FilePath fp = node->filePath();
+            if (fp.isLocal())
+                localPaths.append(fp.toFSPathString());
+        }
+
+        for (const Node *node : nodes) {
+            if (auto projectNode = node->asProjectNode())
+                collectFilesFromProjectNode(projectNode, localPaths);
+            else if (auto folderNode = node->asFolderNode())
+                collectFilesFromFolderNode(folderNode, localPaths);
+        }
+    } else {
+        // Fallback to URL-based handling
+        for (const QUrl &url : e->mimeData()->urls()) {
+            FilePath fp = FilePath::fromUrl(url);
+            if (fp.isLocal())
+                localPaths.append(fp.toFSPathString());
+        }
     }
 
     addFilesFromLocalPaths(localPaths);
