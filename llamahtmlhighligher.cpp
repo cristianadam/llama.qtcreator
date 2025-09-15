@@ -21,7 +21,7 @@ HtmlHighlighter::HtmlHighlighter()
     m_colorScheme = TextEditorSettings::fontSettings().colorScheme();
 }
 
-TextStyle categoryForTextStyle(int style)
+TextStyle categoryForTextStyle(int style, KSyntaxHighlighting::Definition definition)
 {
     switch (style) {
     case KSyntaxHighlighting::Theme::Normal:
@@ -31,7 +31,7 @@ TextStyle categoryForTextStyle(int style)
     case KSyntaxHighlighting::Theme::Function:
         return C_FUNCTION;
     case KSyntaxHighlighting::Theme::Variable:
-        return C_LOCAL;
+        return definition.name() == "Diff" ?  C_ADDED_LINE : C_LOCAL;
     case KSyntaxHighlighting::Theme::ControlFlow:
         return C_KEYWORD;
     case KSyntaxHighlighting::Theme::Operator:
@@ -49,7 +49,7 @@ TextStyle categoryForTextStyle(int style)
     case KSyntaxHighlighting::Theme::SpecialChar:
         return C_STRING;
     case KSyntaxHighlighting::Theme::String:
-        return C_STRING;
+        return definition.name() == "Diff" ? C_REMOVED_LINE : C_STRING;
     case KSyntaxHighlighting::Theme::VerbatimString:
         return C_STRING;
     case KSyntaxHighlighting::Theme::SpecialString:
@@ -114,7 +114,7 @@ void HtmlHighlighter::setDefinition(const KSyntaxHighlighting::Definition &defin
              std::as_const(KSyntaxHighlighting::DefinitionData::get(definition)->formats)) {
             auto &buffer = m_htmlStyles[format.id()];
 
-            TextStyle ts = categoryForTextStyle(format.textStyle());
+            TextStyle ts = categoryForTextStyle(format.textStyle(), m_definition);
             Format fm = m_colorScheme.formatFor(ts);
 
             buffer += "color:" + fm.foreground().name() + ';';
