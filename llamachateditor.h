@@ -44,6 +44,7 @@ public slots:
     void onEditingCancelled();
     void onRegenerateRequested(const LlamaCpp::Message &msg);
     void onSiblingChanged(qint64 siblingId);
+    void onServerPropsUpdated();
 
 private:
     TextEditor::TextDocumentPtr m_document;

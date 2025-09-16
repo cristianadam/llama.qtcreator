@@ -16,6 +16,8 @@ class ChatManager : public QObject
 public:
     static ChatManager &instance(); // singleton
 
+    void refreshServerProps();
+
     bool isGenerating(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
     QVector<Message> filterByLeafNodeId(const QVector<Message> &messages,
@@ -61,6 +63,8 @@ signals:
     void conversationCreated(const QString &convId);
     void conversationRenamed(const QString &convId);
     void conversationDeleted(const QString &convId);
+
+    void serverPropsUpdated();
 
 private:
     explicit ChatManager(QObject *parent = nullptr);

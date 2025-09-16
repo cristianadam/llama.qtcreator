@@ -79,6 +79,11 @@ ChatEditor::ChatEditor()
             this,
             &ChatEditor::onPendingMessageChanged);
 
+    connect(&chatManager,
+            &ChatManager::serverPropsUpdated,
+            this,
+            &ChatEditor::onServerPropsUpdated);
+
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
     connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
@@ -95,12 +100,7 @@ ChatEditor::ChatEditor()
                         auto chat = ChatManager::instance().getViewingChat(convId);
                         refreshMessages(chat.messages, chat.conv.currNode);
                     } else {
-                        // If there were no messages, show the server props
-                        if (m_messageWidgets.isEmpty() && !m_propsWidget) {
-                            m_propsWidget = displayServerProps();
-                            // Place it at the top of the layout
-                            m_messageLayout->insertWidget(0, m_propsWidget);
-                        }
+                        ChatManager::instance().refreshServerProps();
                     }
                     ChatManager::instance().setCurrentConversation(convId);
 
@@ -362,6 +362,19 @@ void ChatEditor::onSiblingChanged(qint64 siblingId)
     ViewingChat chat = ChatManager::instance().getViewingChat(c.id);
 
     refreshMessages(chat.messages, siblingId);
+}
+
+void ChatEditor::onServerPropsUpdated()
+{
+    if (m_propsWidget) {
+        m_propsWidget->deleteLater();
+        m_propsWidget = nullptr;
+    }
+
+    if (m_messageWidgets.isEmpty() && !m_propsWidget) {
+        m_propsWidget = displayServerProps();
+        m_messageLayout->insertWidget(0, m_propsWidget);
+    }
 }
 
 void ChatEditor::scrollToBottom()

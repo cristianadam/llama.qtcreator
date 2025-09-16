@@ -45,6 +45,11 @@ static QNetworkReply *getServerProps(QNetworkAccessManager *manager,
     return manager->get(req);
 }
 
+void ChatManager::refreshServerProps()
+{
+    initServerProps();
+}
+
 void ChatManager::initServerProps()
 {
     QNetworkReply *reply = getServerProps(&m_network,
@@ -66,6 +71,8 @@ void ChatManager::initServerProps()
         m_serverProps.modalities.vision = mod.value("vision").toBool();
         m_serverProps.modalities.audio = mod.value("audio").toBool();
         reply->deleteLater();
+
+        emit serverPropsUpdated();
     });
 }
 
