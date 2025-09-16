@@ -73,6 +73,7 @@ private:
 
     bool deleteConversation();
     bool renameConversation();
+    bool summarizeConversation();
 
     QAction *m_addAction{nullptr};
     QAction *m_refreshAction{nullptr};
@@ -217,6 +218,7 @@ void ConversationsView::contextMenuAtPoint(const QPoint &point)
 
     QMenu contextMenu;
     contextMenu.addAction(Tr::tr("Rename..."), this, &ConversationsView::renameConversation);
+    contextMenu.addAction(Tr::tr("Summarize"), this, &ConversationsView::summarizeConversation);
     contextMenu.addAction(Tr::tr("Delete"), this, &ConversationsView::deleteConversation);
 
     contextMenu.exec(m_conversationsView->viewport()->mapToGlobal(point));
@@ -274,6 +276,31 @@ bool ConversationsView::renameConversation()
         return false;
 
     m_conversationsView->edit(selected.at(0));
+    return true;
+}
+
+bool ConversationsView::summarizeConversation()
+{
+    const QModelIndex selected = selectedIndex();
+    if (!selected.isValid())
+        return false;
+
+    const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
+    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+    if (chat.messages.isEmpty())
+        return false;
+
+    ChatManager::instance()
+        .summarizeConversationTitle(convId, chat.messages.last().id, [convId](const QString &title) {
+            QString shortTitle = title;
+            const QString endToken = "<|end|>";
+            auto endIdx = title.indexOf(endToken);
+            if (endIdx != -1) {
+                shortTitle = title.mid(endIdx + endToken.size());
+            }
+            ChatManager::instance().renameConversation(convId, shortTitle);
+        });
+
     return true;
 }
 

@@ -278,7 +278,7 @@ void ChatManager::generateMessage(const QString &convId,
                 // A newly created conversation will have exactly three messages
                 // (root + user + assistant) after the first reply.
                 if (msgs.size() == 3) {
-                    summarizeConversationTitle(convId, [this, convId](const QString &title) {
+                    summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
                         QString shortTitle = title;
                         const QString endToken = "<|end|>";
                         auto endIdx = title.indexOf(endToken);
@@ -314,20 +314,21 @@ QList<Conversation> ChatManager::allConversations()
 }
 
 void ChatManager::summarizeConversationTitle(const QString &convId,
+                                             qint64 leafNodeId,
                                              std::function<void(const QString &)> onSuccess)
 {
     auto msgs = m_storage->getMessages(convId);
-    // drop the "root" message
-    msgs.removeFirst();
+    auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
-    QJsonArray msgArray = normalizeMsgsForAPI(msgs);
+    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
     QJsonObject payload;
 
     // Append the prompt that asks for the title
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
-    txt["text"] = "Summarize the title of the conversation in a few words including one emoji";
+    txt["text"] = "Summarize the title of the conversation in a few words including one emoji. Use "
+                  "plain text, no markdown.";
     parts.append(txt);
     QJsonObject prompt;
     prompt["role"] = "user";

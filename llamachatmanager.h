@@ -50,6 +50,7 @@ public:
     QList<Conversation> allConversations();
 
     void summarizeConversationTitle(const QString &convId,
+                                    qint64 leafNodeId,
                                     std::function<void(const QString &)> onSuccess);
 
 signals:
