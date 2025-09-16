@@ -270,6 +270,25 @@ void ChatManager::generateMessage(const QString &convId,
         Message pm = m_pendingMessages.take(convId);
         if (!pm.content.isNull() && !pm.content.isEmpty()) {
             m_storage->appendMsg(pm, pm.parent);
+
+            // After the first assistant reply we ask the server to give us
+            // a short title (emoji‑rich) for the conversation.
+            if (pm.role == "assistant") {
+                auto msgs = m_storage->getMessages(convId);
+                // A newly created conversation will have exactly three messages
+                // (root + user + assistant) after the first reply.
+                if (msgs.size() == 3) {
+                    summarizeConversationTitle(convId, [this, convId](const QString &title) {
+                        QString shortTitle = title;
+                        const QString endToken = "<|end|>";
+                        auto endIdx = title.indexOf(endToken);
+                        if (endIdx != -1) {
+                            shortTitle = title.mid(endIdx + endToken.size());
+                        }
+                        renameConversation(convId, shortTitle);
+                    });
+                }
+            }
         }
     });
 }
@@ -292,6 +311,90 @@ Conversation ChatManager::createConversation(const QString &name)
 QList<Conversation> ChatManager::allConversations()
 {
     return m_storage->getAllConversations();
+}
+
+void ChatManager::summarizeConversationTitle(const QString &convId,
+                                             std::function<void(const QString &)> onSuccess)
+{
+    auto msgs = m_storage->getMessages(convId);
+    // drop the "root" message
+    msgs.removeFirst();
+
+    QJsonArray msgArray = normalizeMsgsForAPI(msgs);
+    QJsonObject payload;
+
+    // Append the prompt that asks for the title
+    QJsonArray parts;
+    QJsonObject txt;
+    txt["type"] = "text";
+    txt["text"] = "Summarize the title of the conversation in a few words including one emoji";
+    parts.append(txt);
+    QJsonObject prompt;
+    prompt["role"] = "user";
+    prompt["content"] = parts;
+
+    msgArray.append(prompt);
+    payload["messages"] = msgArray;
+
+    // Use the same generation settings – but no streaming
+    payload["stream"] = false;
+    payload["cache_prompt"] = true;
+    payload["reasoning_format"] = "none";
+    payload["samplers"] = settings().samplers.value();
+    payload["temperature"] = settings().temperature.value();
+    payload["dynatemp_range"] = settings().dynatemp_range.value();
+    payload["dynatemp_exponent"] = settings().dynatemp_exponent.value();
+    payload["top_k"] = settings().top_k.value();
+    payload["top_p"] = settings().top_p.value();
+    payload["min_p"] = settings().min_p.value();
+    payload["typical_p"] = settings().typical_p.value();
+    payload["xtc_probability"] = settings().xtc_probability.value();
+    payload["xtc_threshold"] = settings().xtc_threshold.value();
+    payload["repeat_last_n"] = settings().repeat_last_n.value();
+    payload["repeat_penalty"] = settings().repeat_penalty.value();
+    payload["presence_penalty"] = settings().presence_penalty.value();
+    payload["frequency_penalty"] = settings().frequency_penalty.value();
+    payload["dry_multiplier"] = settings().dry_multiplier.value();
+    payload["dry_base"] = settings().dry_base.value();
+    payload["dry_allowed_length"] = settings().dry_allowed_length.value();
+    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
+    payload["max_tokens"] = settings().max_tokens.value();
+    payload["timings_per_token"] = settings().showTokensPerSecond.value();
+
+    QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+
+    QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
+
+    QObject::connect(reply, &QNetworkReply::finished, [reply, onSuccess, this, convId]() {
+        reply->deleteLater();
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qCWarning(llamaChatNetwork) << "Title summary request failed:" << reply->errorString();
+            return;
+        }
+
+        QByteArray data = reply->readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (!doc.isObject()) {
+            qCWarning(llamaChatNetwork) << "Title summary JSON malformed";
+            return;
+        }
+
+        QJsonObject obj = doc.object();
+        QJsonArray choices = obj.value("choices").toArray();
+        if (choices.isEmpty())
+            return;
+
+        QJsonObject choice = choices[0].toObject();
+        QJsonObject message = choice.value("message").toObject();
+        QString title = message.value("content").toString().trimmed();
+
+        if (!title.isEmpty())
+            onSuccess(title);
+    });
 }
 
 void ChatManager::stopGenerating(const QString &convId)

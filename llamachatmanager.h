@@ -49,6 +49,9 @@ public:
 
     QList<Conversation> allConversations();
 
+    void summarizeConversationTitle(const QString &convId,
+                                    std::function<void(const QString &)> onSuccess);
+
 signals:
     // emitted when the active conversation changes – UI can react
     void messageAppended(const LlamaCpp::Message &msg);
