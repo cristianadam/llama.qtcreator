@@ -8,6 +8,7 @@
 #include <utils/stylehelper.h>
 #include <utils/utilsicons.h>
 
+#include <QFileDialog>
 #include <QKeySequence>
 #include <QLabel>
 #include <QMenu>
@@ -16,6 +17,7 @@
 #include <QPointer>
 #include <QPushButton>
 #include <QSortFilterProxyModel>
+#include <QStandardPaths>
 #include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
@@ -74,6 +76,7 @@ private:
     bool deleteConversation();
     bool renameConversation();
     bool summarizeConversation();
+    bool saveConversationAsMarkdown();
 
     QAction *m_addAction{nullptr};
     QAction *m_refreshAction{nullptr};
@@ -220,6 +223,9 @@ void ConversationsView::contextMenuAtPoint(const QPoint &point)
     contextMenu.addAction(Tr::tr("Rename..."), this, &ConversationsView::renameConversation);
     contextMenu.addAction(Tr::tr("Summarize"), this, &ConversationsView::summarizeConversation);
     contextMenu.addAction(Tr::tr("Delete"), this, &ConversationsView::deleteConversation);
+    contextMenu.addAction(Tr::tr("Save as Markdown"),
+                          this,
+                          &ConversationsView::saveConversationAsMarkdown);
 
     contextMenu.exec(m_conversationsView->viewport()->mapToGlobal(point));
 }
@@ -300,6 +306,53 @@ bool ConversationsView::summarizeConversation()
             }
             ChatManager::instance().renameConversation(convId, shortTitle);
         });
+
+    return true;
+}
+
+bool ConversationsView::saveConversationAsMarkdown()
+{
+    const QModelIndex selected = selectedIndex();
+    if (!selected.isValid())
+        return false;
+
+    const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
+    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+
+    // Build markdown content
+    QByteArray content;
+    for (const Message &msg : chat.messages) {
+        if (msg.role == "user") {
+            content.append("### User\n\n");
+        } else if (msg.role == "assistant") {
+            content.append("### Assistant\n\n");
+        }
+        content.append(msg.content.toUtf8());
+        content.append("\n\n");
+    }
+
+    // Default filename
+    QString defaultFileName = QString("%1.md").arg(selected.data().toString());
+    FilePath filePath = FilePath::fromUserInput(
+        QFileDialog::getSaveFileName(this,
+                                     Tr::tr("Save Conversation as Markdown"),
+                                     QStandardPaths::writableLocation(
+                                         QStandardPaths::DocumentsLocation)
+                                         + QDir::separator() + defaultFileName,
+                                     "Markdown Files (*.md)"));
+
+    if (filePath.isEmpty())
+        return false;
+
+    auto result = filePath.writeFileContents(content);
+    if (!result) {
+        QMessageBox::warning(this,
+                             Tr::tr("Error"),
+                             Tr::tr("Cannot write file:\n%1").arg(result.error()));
+        return false;
+    }
+
+    EditorManager::openEditor(filePath);
 
     return true;
 }
