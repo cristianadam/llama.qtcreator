@@ -78,11 +78,15 @@ ChatEditor::ChatEditor()
             &ChatManager::pendingMessageChanged,
             this,
             &ChatEditor::onPendingMessageChanged);
-
-    connect(&chatManager,
-            &ChatManager::serverPropsUpdated,
+    connect(&chatManager, &ChatManager::serverPropsUpdated, this, &ChatEditor::onServerPropsUpdated);
+    connect(&ChatManager::instance(),
+            &ChatManager::conversationRenamed,
             this,
-            &ChatEditor::onServerPropsUpdated);
+            [this](const QString &convId) {
+                ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+                m_document->setPreferredDisplayName(chat.conv.name);
+                EditorManager::instance()->updateWindowTitles();
+            });
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
@@ -103,6 +107,14 @@ ChatEditor::ChatEditor()
                         ChatManager::instance().refreshServerProps();
                     }
                     ChatManager::instance().setCurrentConversation(convId);
+
+                    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+                    if (chat.conv.name.isEmpty())
+                        m_document->setPreferredDisplayName(Tr::tr("llama.cpp coversation"));
+                    else
+                        m_document->setPreferredDisplayName(chat.conv.name);
+
+                    EditorManager::instance()->updateWindowTitles();
 
                     m_input->setFocus();
                 }

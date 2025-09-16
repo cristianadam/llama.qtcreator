@@ -114,7 +114,7 @@ void LlamaPlugin::initialize()
     Core::Command *newConversationCmd
         = ActionManager::registerAction(&m_newConversation, Constants::LLAMACPP_NEW_CONVERSATION);
     connect(&m_newConversation, &QAction::triggered, this, [this] {
-        QString title("llama.cpp coversation");
+        QString title(Tr::tr("llama.cpp coversation"));
         Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID, &title);
     });
     ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID)->addAction(newConversationCmd);
