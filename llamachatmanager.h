@@ -55,6 +55,9 @@ public:
                                     qint64 leafNodeId,
                                     std::function<void(const QString &)> onSuccess);
 
+    void followUpQuestions(const QString &convId,
+                           qint64 leafNodeId,
+                           std::function<void(const QStringList &)> onSuccess);
 signals:
     // emitted when the active conversation changes – UI can react
     void messageAppended(const LlamaCpp::Message &msg);
@@ -65,6 +68,9 @@ signals:
     void conversationDeleted(const QString &convId);
 
     void serverPropsUpdated();
+    void followUpQuestionsReceived(const QString &convId,
+                                   qint64 leafNodeId,
+                                   const QStringList &quetions);
 
 private:
     explicit ChatManager(QObject *parent = nullptr);

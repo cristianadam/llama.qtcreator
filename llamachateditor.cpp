@@ -4,8 +4,8 @@
 #include <coreplugin/icore.h>
 
 #include <utils/action.h>
-#include <utils/utilsicons.h>
 #include <utils/fsengine/fileiconprovider.h>
+#include <utils/utilsicons.h>
 
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
@@ -87,6 +87,10 @@ ChatEditor::ChatEditor()
                 m_document->setPreferredDisplayName(chat.conv.name);
                 EditorManager::instance()->updateWindowTitles();
             });
+    connect(&ChatManager::instance(),
+            &ChatManager::followUpQuestionsReceived,
+            this,
+            &ChatEditor::createFollowUpWidget);
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
@@ -202,7 +206,64 @@ QWidget *ChatEditor::displayServerProps()
     return w;
 }
 
-void ChatEditor::refreshMessages(const QVector<Message>& messages, qint64 leafNodeId)
+void ChatEditor::createFollowUpWidget(const QString &convId,
+                                      qint64 leafNodeId,
+                                      const QStringList &questions)
+{
+    if (m_followUpWidget) {
+        m_followUpWidget->deleteLater();
+        m_followUpWidget = nullptr;
+    }
+
+    if (questions.isEmpty())
+        return; // nothing to show
+
+    m_followUpWidget = new QWidget(widget());
+    QVBoxLayout *lay = new QVBoxLayout(m_followUpWidget);
+    lay->setContentsMargins(0, 0, 0, 0);
+
+    QLabel *title = new QLabel(Tr::tr("Follow‑up questions:"), m_followUpWidget);
+    title->setObjectName("FollowUpLabel");
+    lay->addWidget(title);
+
+    for (const QString &q : questions) {
+        QPushButton *btn = new QPushButton(q, m_followUpWidget);
+        btn->setFlat(true);
+        btn->setObjectName("FollowUpQuestion");
+
+        // capture convId / leafNodeId / question in the lambda
+        connect(btn, &QPushButton::clicked, this, [this, convId, leafNodeId, q]() {
+            ChatManager::instance().sendMessage(convId, leafNodeId, q, {}, [this](qint64) {
+                scrollToBottom();
+            });
+        });
+
+        lay->addWidget(btn);
+    }
+
+    m_followUpWidget->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
+            QLabel#FollowUpLabel {
+                color: Token_Text_Subtle;
+            }
+            QPushButton#FollowUpQuestion {
+                background: transparent;
+                border: none;
+                color: Token_Text_Subtle;
+                text-align: left;
+                margin-left: 20px;
+            }
+            QPushButton#FollowUpQuestion:hover {
+                color: Token_Text_Default;
+                text-decoration:underline;
+            }
+        )"));
+
+    lay->addStretch();
+    // Append below the regular messages
+    m_messageLayout->addWidget(m_followUpWidget);
+}
+
+void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNodeId)
 {
     // Clean old widgets
     qDeleteAll(m_messageWidgets);
