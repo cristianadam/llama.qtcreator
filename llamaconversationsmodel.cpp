@@ -36,13 +36,15 @@ QVariant ConversationsModel::data(const QModelIndex &index, int role) const
         }
     } else if (role == Qt::ToolTipRole) {
         // Render the lastModified as ISO‑8601 for readability
-        QDateTime dt = QDateTime::fromMSecsSinceEpoch(c.lastModified, Qt::UTC);
+        QDateTime dt = QDateTime::fromMSecsSinceEpoch(c.lastModified, Qt::LocalTime);
         return dt.toString(Qt::ISODate);
     } else if (role == TimestampRole) {
         // Custom role: return the raw epoch value
         return c.lastModified;
     } else if (role == ConversationIdRole) {
         return c.id;
+    } else if (role == Qt::EditRole) {
+        return data(index, Qt::DisplayRole);
     }
 
     return {};
