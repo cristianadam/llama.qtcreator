@@ -385,10 +385,21 @@ void ChatManager::followUpQuestions(const QString &convId,
         QJsonObject message = choice.value("message").toObject();
         QString content = message.value("content").toString().trimmed();
 
+        // Skip the thinking part
         const QString endToken = "<|end|>";
         auto endIdx = content.lastIndexOf(endToken);
         if (endIdx != -1) {
             content = content.mid(endIdx + endToken.size());
+        }
+
+        if (content.isEmpty())
+            return;
+
+        // Sometimes the model continues "thinking" also in the answer
+        if (!content.startsWith("[\"")) {
+            auto startOfArrayIdx = content.lastIndexOf("[\"");
+            if (startOfArrayIdx != -1)
+                content = content.mid(startOfArrayIdx);
         }
 
         // `content` should be a JSON array of strings (plain text).
@@ -396,6 +407,7 @@ void ChatManager::followUpQuestions(const QString &convId,
         QJsonDocument arrDoc = QJsonDocument::fromJson(content.toUtf8(), &err);
         if (err.error != QJsonParseError::NoError) {
             qCWarning(llamaChatNetwork) << "Could not parse follow‑up array:" << err.errorString();
+            qCWarning(llamaChatNetwork) << "The faulty content was:" << content.toUtf8();
             return;
         }
 
@@ -629,6 +641,9 @@ void LlamaCpp::ChatManager::deleteConversation(const QString &convId)
 
 void ChatManager::renameConversation(const QString &convId, const QString &name)
 {
+    if (name.isEmpty())
+        return;
+
     m_storage->renameConversation(convId, name);
 }
 

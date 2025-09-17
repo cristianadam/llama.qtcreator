@@ -288,6 +288,11 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         m_propsWidget = nullptr;
     }
 
+    if (m_followUpWidget) {
+        m_followUpWidget->deleteLater();
+        m_followUpWidget = nullptr;
+    }
+
     // Filter the messages that belong to the requested leaf node
     const QVector<Message> currNodes = ChatManager::instance().filterByLeafNodeId(messages,
                                                                                   leafNodeId,
