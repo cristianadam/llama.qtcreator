@@ -57,15 +57,15 @@ static TimingReport deserializeTimingsReport(const QString &json)
         return result;
 
     QJsonObject obj = doc.object();
-    auto getInt = [&](const QString &key, int &field) {
+    auto getDouble = [&](const QString &key, double &field) {
         if (obj.contains(key))
-            field = obj[key].toInt();
+            field = obj[key].toDouble();
     };
 
-    getInt("prompt_n", result.prompt_n);
-    getInt("prompt_ms", result.prompt_ms);
-    getInt("predicted_n", result.predicted_n);
-    getInt("predicted_ms", result.predicted_ms);
+    getDouble("prompt_n", result.prompt_n);
+    getDouble("prompt_ms", result.prompt_ms);
+    getDouble("predicted_n", result.predicted_n);
+    getDouble("predicted_ms", result.predicted_ms);
 
     return result;
 }

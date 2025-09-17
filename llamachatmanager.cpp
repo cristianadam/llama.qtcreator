@@ -241,6 +241,16 @@ void ChatManager::generateMessage(const QString &convId,
                 return;
             }
 
+            if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
+                QJsonObject t = chunk["timings"].toObject();
+                TimingReport tr;
+                tr.prompt_n = t["prompt_n"].toDouble();
+                tr.prompt_ms = t["prompt_ms"].toDouble();
+                tr.predicted_n = t["predicted_n"].toDouble();
+                tr.predicted_ms = t["predicted_ms"].toDouble();
+                m_pendingMessages[convId].timings = tr;
+            }
+
             QJsonArray choices = chunk["choices"].toArray();
             if (!choices.isEmpty()) {
                 QString added = choices[0].toObject()["delta"].toObject()["content"].toString();
@@ -250,15 +260,6 @@ void ChatManager::generateMessage(const QString &convId,
 
                     emit pendingMessageChanged(pm);
                 }
-            }
-            if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
-                QJsonObject t = chunk["timings"].toObject();
-                TimingReport tr;
-                tr.prompt_n = t["prompt_n"].toInt();
-                tr.prompt_ms = t["prompt_ms"].toInt();
-                tr.predicted_n = t["predicted_n"].toInt();
-                tr.predicted_ms = t["predicted_ms"].toInt();
-                m_pendingMessages[convId].timings = tr;
             }
             onChunk(-1); // caller will scroll to bottom
         },

@@ -365,7 +365,7 @@ LlamaSettings::LlamaSettings()
 
     showTokensPerSecond.setDisplayName(Tr::tr("Show Tokens Per Second"));
     showTokensPerSecond.setSettingsKey("LlamaCpp.ShowTokensPerSecond");
-    showTokensPerSecond.setLabelText(Tr::tr("Show Tokens Per Second:"));
+    showTokensPerSecond.setLabelText(Tr::tr("Show Tokens Per Second"));
     showTokensPerSecond.setDefaultValue(false);
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
 
@@ -468,6 +468,7 @@ LlamaSettings::LlamaSettings()
                 Row {dry_allowed_length}, br,
                 Row {dry_penalty_last_n}, br,
                 hr, br,
+                showTokensPerSecond, br,
                 customJson, br,
             },
         };

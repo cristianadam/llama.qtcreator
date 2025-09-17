@@ -6,6 +6,7 @@
 
 #include "llamatypes.h"
 
+class QLabel;
 class QVBoxLayout;
 class QScrollArea;
 
@@ -30,7 +31,7 @@ public:
 
     bool isDesignModePreferred() const override;
 
-    void refreshMessages(const QVector<Message>& messages, qint64 leafNodeId);
+    void refreshMessages(const QVector<Message> &messages, qint64 leafNodeId);
     void scrollToBottom();
     QWidget *displayServerProps();
     void createFollowUpWidget(const QString &convId,
@@ -50,6 +51,9 @@ public slots:
     void onServerPropsUpdated();
 
 private:
+    void updateSpeedLabel(const Message &msg);
+
+private:
     TextEditor::TextDocumentPtr m_document;
     QScrollArea *m_scrollArea;
     QWidget *m_messageContainer;
@@ -59,6 +63,7 @@ private:
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
     QWidget *m_followUpWidget{nullptr};
+    QLabel *m_speedLabel{nullptr};
 };
 
 void setupChatEditor();

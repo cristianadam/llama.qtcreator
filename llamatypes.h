@@ -11,10 +11,10 @@ namespace LlamaCpp {
 
 struct TimingReport
 {
-    int prompt_n{0};
-    int prompt_ms{0};
-    int predicted_n{0};
-    int predicted_ms{0};
+    double prompt_n{0};
+    double prompt_ms{0};
+    double predicted_n{0};
+    double predicted_ms{0};
 };
 
 /**

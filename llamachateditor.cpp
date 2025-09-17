@@ -30,6 +30,7 @@
 #include "llamachatmessage.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
+#include "llamasettings.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -71,6 +72,18 @@ ChatEditor::ChatEditor()
 
     widget->setLayout(layout);
     setWidget(widget);
+
+    m_speedLabel = new QLabel(widget);
+    m_speedLabel->setObjectName("SpeedLabel");
+    m_speedLabel->setVisible(false);
+    m_speedLabel->setTextFormat(Qt::PlainText);
+    widget->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
+        QLabel#SpeedLabel {
+           color: Token_Text_Muted;
+           margin-left: 10px;
+           font-style: italic;
+        }
+        )"));
 
     ChatManager &chatManager = ChatManager::instance();
     connect(&chatManager, &ChatManager::messageAppended, this, &ChatEditor::onMessageAppended);
@@ -287,7 +300,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
 
     for (const Message &msg : currNodes) {
         if (msg.parent < 0 || msg.type == "root")
-            continue;       // skip leaf nodes
+            continue; // skip leaf nodes
 
         int siblingIdx = 0;
         QVector<qint64> siblings;
@@ -314,6 +327,15 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
+    }
+
+    // Insert speed label after the assistant widget
+    if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
+        && settings().showTokensPerSecond.value()) {
+        m_messageLayout->addWidget(m_speedLabel);
+        m_speedLabel->setVisible(true);
+
+        updateSpeedLabel(m_messageWidgets.last()->message());
     }
 
     // If there were no messages, show the server props
@@ -358,6 +380,12 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
         connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
+
+        // Insert speed label after the assistant widget
+        if (settings().showTokensPerSecond.value()) {
+            m_messageLayout->addWidget(m_speedLabel);
+            m_speedLabel->setVisible(true);
+        }
     } else {
         w = *it;
         w->renderMarkdown(pm.content);
@@ -365,6 +393,8 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     }
     w->messageCompleted(false);
     m_input->setIsGenerating(true);
+
+    updateSpeedLabel(pm);
 
     scrollToBottom();
 }
@@ -410,12 +440,14 @@ void ChatEditor::onEditRequested(const Message &msg)
 {
     m_editedMessage = msg;
     m_input->setEditingText(msg.content, msg.extra);
+    m_speedLabel->setVisible(false);
 }
 
 void ChatEditor::onEditingCancelled()
 {
     m_editedMessage.reset();
     m_input->setEditingText({}, {});
+    m_speedLabel->setVisible(false);
 }
 
 void ChatEditor::onRegenerateRequested(const Message &msg)
@@ -447,6 +479,30 @@ void ChatEditor::onServerPropsUpdated()
     if (m_messageWidgets.isEmpty() && !m_propsWidget) {
         m_propsWidget = displayServerProps();
         m_messageLayout->insertWidget(0, m_propsWidget);
+    }
+}
+
+void ChatEditor::updateSpeedLabel(const Message &msg)
+{
+    // Update the speed label using the latest timings
+    if (settings().showTokensPerSecond.value()) {
+        const auto &t = msg.timings;
+        if (t.predicted_ms > 0 && t.prompt_ms > 0) {
+            qreal tokensPerSec = (t.predicted_n + t.prompt_n) * 1000.0
+                                 / (t.predicted_ms + t.prompt_ms);
+            m_speedLabel->setText(Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1));
+
+            QString labelTooltip(
+                Tr::tr("<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
+                       "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
+                    .arg(t.prompt_n)
+                    .arg(t.prompt_ms)
+                    .arg(t.prompt_n * 1000.0 / t.prompt_ms)
+                    .arg(t.predicted_n)
+                    .arg(t.predicted_ms)
+                    .arg(t.predicted_n * 1000.0 / t.predicted_ms));
+            m_speedLabel->setToolTip(labelTooltip);
+        }
     }
 }
 
