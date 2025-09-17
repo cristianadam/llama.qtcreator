@@ -161,7 +161,8 @@ ConversationsView::ConversationsView()
 
                     Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
                                                                 &name,
-                                                                convId.toUtf8());
+                                                                convId.toUtf8(),
+                                                                convId);
                 }
             });
     connect(m_conversationsView,
