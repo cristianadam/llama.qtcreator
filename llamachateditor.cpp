@@ -256,12 +256,12 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
 
     m_followUpWidget->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
             QLabel#FollowUpLabel {
-                color: Token_Text_Subtle;
+                color: Token_Text_Muted;
             }
             QPushButton#FollowUpQuestion {
                 background: transparent;
                 border: none;
-                color: Token_Text_Subtle;
+                color: Token_Text_Muted;
                 text-align: left;
                 margin-left: 20px;
             }
@@ -502,10 +502,10 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
                        "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
                     .arg(t.prompt_n)
                     .arg(t.prompt_ms)
-                    .arg(t.prompt_n * 1000.0 / t.prompt_ms)
+                    .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
                     .arg(t.predicted_n)
                     .arg(t.predicted_ms)
-                    .arg(t.predicted_n * 1000.0 / t.predicted_ms));
+                    .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1));
             m_speedLabel->setToolTip(labelTooltip);
         }
     }
