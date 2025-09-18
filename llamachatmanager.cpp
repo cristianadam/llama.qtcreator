@@ -11,6 +11,30 @@ Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
 
 namespace LlamaCpp {
 
+static void addCommonPayloadParams(QJsonObject &payload)
+{
+    payload["samplers"] = settings().samplers.value();
+    payload["temperature"] = settings().temperature.value();
+    payload["dynatemp_range"] = settings().dynatemp_range.value();
+    payload["dynatemp_exponent"] = settings().dynatemp_exponent.value();
+    payload["top_k"] = settings().top_k.value();
+    payload["top_p"] = settings().top_p.value();
+    payload["min_p"] = settings().min_p.value();
+    payload["typical_p"] = settings().typical_p.value();
+    payload["xtc_probability"] = settings().xtc_probability.value();
+    payload["xtc_threshold"] = settings().xtc_threshold.value();
+    payload["repeat_last_n"] = settings().repeat_last_n.value();
+    payload["repeat_penalty"] = settings().repeat_penalty.value();
+    payload["presence_penalty"] = settings().presence_penalty.value();
+    payload["frequency_penalty"] = settings().frequency_penalty.value();
+    payload["dry_multiplier"] = settings().dry_multiplier.value();
+    payload["dry_base"] = settings().dry_base.value();
+    payload["dry_allowed_length"] = settings().dry_allowed_length.value();
+    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
+    payload["max_tokens"] = settings().max_tokens.value();
+    payload["timings_per_token"] = settings().showTokensPerSecond.value();
+}
+
 ChatManager &ChatManager::instance()
 {
     static ChatManager inst;
@@ -192,26 +216,7 @@ void ChatManager::generateMessage(const QString &convId,
     payload["stream"] = true;
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "none";
-    payload["samplers"] = settings().samplers.value();
-    payload["temperature"] = settings().temperature.value();
-    payload["dynatemp_range"] = settings().dynatemp_range.value();
-    payload["dynatemp_exponent"] = settings().dynatemp_exponent.value();
-    payload["top_k"] = settings().top_k.value();
-    payload["top_p"] = settings().top_p.value();
-    payload["min_p"] = settings().min_p.value();
-    payload["typical_p"] = settings().typical_p.value();
-    payload["xtc_probability"] = settings().xtc_probability.value();
-    payload["xtc_threshold"] = settings().xtc_threshold.value();
-    payload["repeat_last_n"] = settings().repeat_last_n.value();
-    payload["repeat_penalty"] = settings().repeat_penalty.value();
-    payload["presence_penalty"] = settings().presence_penalty.value();
-    payload["frequency_penalty"] = settings().frequency_penalty.value();
-    payload["dry_multiplier"] = settings().dry_multiplier.value();
-    payload["dry_base"] = settings().dry_base.value();
-    payload["dry_allowed_length"] = settings().dry_allowed_length.value();
-    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
-    payload["max_tokens"] = settings().max_tokens.value();
-    payload["timings_per_token"] = settings().showTokensPerSecond.value();
+    addCommonPayloadParams(payload);
 
     // parse custom JSON if present
     if (!settings().customJson.value().isEmpty()) {
@@ -333,26 +338,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     payload["stream"] = false;
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "none";
-    payload["samplers"] = settings().samplers.value();
-    payload["temperature"] = settings().temperature.value();
-    payload["dynatemp_range"] = settings().dynatemp_range.value();
-    payload["dynatemp_exponent"] = settings().dynatemp_exponent.value();
-    payload["top_k"] = settings().top_k.value();
-    payload["top_p"] = settings().top_p.value();
-    payload["min_p"] = settings().min_p.value();
-    payload["typical_p"] = settings().typical_p.value();
-    payload["xtc_probability"] = settings().xtc_probability.value();
-    payload["xtc_threshold"] = settings().xtc_threshold.value();
-    payload["repeat_last_n"] = settings().repeat_last_n.value();
-    payload["repeat_penalty"] = settings().repeat_penalty.value();
-    payload["presence_penalty"] = settings().presence_penalty.value();
-    payload["frequency_penalty"] = settings().frequency_penalty.value();
-    payload["dry_multiplier"] = settings().dry_multiplier.value();
-    payload["dry_base"] = settings().dry_base.value();
-    payload["dry_allowed_length"] = settings().dry_allowed_length.value();
-    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
-    payload["max_tokens"] = settings().max_tokens.value();
-    payload["timings_per_token"] = settings().showTokensPerSecond.value();
+    addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -471,26 +457,7 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     payload["stream"] = false;
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "none";
-    payload["samplers"] = settings().samplers.value();
-    payload["temperature"] = settings().temperature.value();
-    payload["dynatemp_range"] = settings().dynatemp_range.value();
-    payload["dynatemp_exponent"] = settings().dynatemp_exponent.value();
-    payload["top_k"] = settings().top_k.value();
-    payload["top_p"] = settings().top_p.value();
-    payload["min_p"] = settings().min_p.value();
-    payload["typical_p"] = settings().typical_p.value();
-    payload["xtc_probability"] = settings().xtc_probability.value();
-    payload["xtc_threshold"] = settings().xtc_threshold.value();
-    payload["repeat_last_n"] = settings().repeat_last_n.value();
-    payload["repeat_penalty"] = settings().repeat_penalty.value();
-    payload["presence_penalty"] = settings().presence_penalty.value();
-    payload["frequency_penalty"] = settings().frequency_penalty.value();
-    payload["dry_multiplier"] = settings().dry_multiplier.value();
-    payload["dry_base"] = settings().dry_base.value();
-    payload["dry_allowed_length"] = settings().dry_allowed_length.value();
-    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
-    payload["max_tokens"] = settings().max_tokens.value();
-    payload["timings_per_token"] = settings().showTokensPerSecond.value();
+    addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
