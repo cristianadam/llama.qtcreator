@@ -61,7 +61,6 @@ void ChatMessage::buildUI()
     m_bubble = new QLabel(this);
 
     m_markdownLabel = new MarkdownLabel(this);
-    m_markdownLabel->setWordWrap(true);
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
     connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
 
@@ -293,11 +292,13 @@ void ChatMessage::applyStyleSheet()
     setAttribute(Qt::WA_StyledBackground, true);
 
     setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
-        QLabel#BubbleUser {
+        QTextBrowser#BubbleUser {
             background: Token_Background_Muted;
             border-radius: 8px;
         }
-        QLabel#BubbleAssistant {
+        QTextBrowser#BubbleAssistant {
+            background: Token_Background_Default;
+            border-radius: 8px;
         }
 
         QToolButton {

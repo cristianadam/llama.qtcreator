@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QList>
 #include <QResizeEvent>
+#include <QTextBlock>
 #include <QTextDocumentFragment>
 #include <QToolTip>
 
@@ -42,24 +43,76 @@ static KSyntaxHighlighting::Definition definitionForName(const QString &name)
     return highlightRepository()->definitionForName(name);
 }
 
+class HoverFilter : public QObject
+{
+    Q_OBJECT
+public:
+    explicit HoverFilter(QObject *parent = nullptr)
+        : QObject(parent)
+    {}
+    bool eventFilter(QObject *obj, QEvent *event)
+    {
+        if (event->type() == QEvent::MouseMove) {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+            QTextEdit *te = qobject_cast<QTextEdit *>(obj->parent());
+            if (!te)
+                return QObject::eventFilter(obj, event);
+
+            QTextCursor cur = te->cursorForPosition(me->pos());
+            if (!cur.isNull()) {
+                QTextCharFormat fmt = cur.charFormat();
+                if (fmt.isAnchor()) {
+                    QString url = fmt.anchorHref();
+                    emit linkHovered(url);
+                    return true; // we handled it
+                }
+            }
+        }
+        return QObject::eventFilter(obj, event);
+    }
+
+signals:
+    void linkHovered(const QString &link);
+};
+
 MarkdownLabel::MarkdownLabel(QWidget *parent)
-    : QLabel(parent)
+    : QTextBrowser(parent)
 {
     setTextInteractionFlags(Qt::TextBrowserInteraction);
 
-    connect(this, &QLabel::linkHovered, this, [](const QString &link) {
-        auto idx = link.indexOf(":");
-        QString command = link.left(idx);
+    setReadOnly(true);
+    setOpenLinks(false);
+    setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+
+    auto policy = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    policy.setHeightForWidth(true);
+    setSizePolicy(policy);
+
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    connect(document(), &QTextDocument::contentsChanged, this, &MarkdownLabel::updateGeometry);
+
+    viewport()->setMouseTracking(true);
+
+    HoverFilter *hoverFilter = new HoverFilter(this);
+    viewport()->installEventFilter(hoverFilter);
+
+    connect(hoverFilter, &HoverFilter::linkHovered, this, [](const QString &link) {
+        const int idx = link.indexOf(':');
+        const QString command = link.left(idx);
 
         if (command == "copy")
             QToolTip::showText(QCursor::pos(), Tr::tr("Copy the code below to Clipboard"));
         else if (command == "save")
             QToolTip::showText(QCursor::pos(), Tr::tr("Save the code below into a file on disk"));
     });
-    connect(this, &QLabel::linkActivated, this, [this](const QString &link) {
-        auto idx = link.indexOf(":");
-        QString command = link.left(idx);
-        int codeBlockIndex = link.mid(idx + 1).toInt();
+
+    connect(this, &QTextBrowser::anchorClicked, this, [this](const QUrl &url) {
+        const QString link = url.toString();
+        const int idx = link.indexOf(':');
+        const QString command = link.left(idx);
+        const int codeBlockIndex = link.mid(idx + 1).toInt();
 
         if (command == "copy") {
             if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
@@ -75,47 +128,33 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
 
 void MarkdownLabel::setMarkdown(const QString &markdown)
 {
-    const QStringList lines = markdown.split("\n");
-    const QString longestLine = *std::ranges::max_element(lines, std::less{}, &QString::length);
-    QFontMetrics fm(font());
-    const int longestLineWidth = fm.horizontalAdvance(longestLine) + 21;
+    // Make sure the widget’s minimum width is large enough for the
+    // longest line in the markdown.
+    adjustMinimumWidth(markdown);
 
-    if (minimumWidth() == 0 || lines.size() < 5 && minimumWidth() < longestLineWidth)
-        setMinimumWidth(fm.horizontalAdvance(longestLine) + 21);
+    setStyleSheet();
 
-    auto html = markdownToHtml(markdown);
-    if (html) {
-        setStyleSheet();
-
-        // Inject the optional CSS before the </head> tag
-        if (!m_css.isEmpty()) {
-            const QByteArray headEnd = "</head>";
-            int pos = html.value().indexOf(headEnd);
-            if (pos != -1)
-                html.value().insert(pos, QByteArray("\n<style>" + m_css + "</style>"));
-            else
-                html.value().prepend(QByteArray("<style>" + m_css + "</style>"));
-        }
-
-        setText(QString::fromUtf8(html.value()));
-        setTextFormat(Qt::RichText);
-
-        // emit rendered(html);
-        // QFile htmlFile("rendered.html");
-        // if (htmlFile.open(QFile::ReadWrite)) {
-        //     htmlFile.write(html.value().toUtf8());
-        // }
-    } else {
-        qWarning() << "Markdown conversion failed:" << html.error();
+    // Render the markdown to a new `Data` instance.
+    auto result = markdownToHtml(markdown);
+    if (!result) { // error handling – keep widget in a sane state
+        qWarning() << "Markdown rendering failed:" << result.error();
+        return;
     }
+    Data newData = std::move(result.value());
+
+    // Update the document: delete obsolete sections and insert the new ones
+    updateDocumentHtmlSections(newData);
+
+    // Store the new data and finish.
+    m_data = std::move(newData);
+
+    document()->setTextWidth(viewport()->width());
+    updateGeometry();
 }
 
 void MarkdownLabel::setStyleSheet()
 {
-    if (!m_css.isEmpty())
-        return;
-
-    m_css = replaceThemeColorNamesWithRGBNames(R"##(
+    QString css = replaceThemeColorNamesWithRGBNames(R"##(
         hr {
           margin: 10px 0;
           background-color: Token_Foreground_Muted;
@@ -201,16 +240,84 @@ void MarkdownLabel::setStyleSheet()
           font-size: medium;
         }
 
-    )##")
-                .toUtf8();
+    )##");
+
+    document()->setDefaultStyleSheet(css);
 }
 
-void MarkdownLabel::paintEvent(QPaintEvent *ev)
+void MarkdownLabel::resizeEvent(QResizeEvent *event)
 {
-    return QLabel::paintEvent(ev);
+    QTextEdit::resizeEvent(event);                 // keep normal behaviour
+    document()->setTextWidth(viewport()->width()); // re‑wrap at new width
+    updateGeometry();                              // notify layout
 }
 
-Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString &markdown)
+int MarkdownLabel::heightForWidth(int w) const
+{
+    // Ask the document what height it needs for w px
+    // (this does not change the widget’s real geometry)
+    QTextDocument *doc = const_cast<QTextDocument *>(document());
+    doc->setTextWidth(w);
+    return qRound(doc->size().height());
+}
+
+void MarkdownLabel::adjustMinimumWidth(const QString &markdown)
+{
+    const QStringList lines = markdown.split('\n');
+    const QString longestLine = *std::ranges::max_element(lines, std::less{}, &QString::length);
+    QFontMetrics fm(font());
+    const int longestLineWidth = fm.horizontalAdvance(longestLine) + 10;
+
+    if (minimumWidth() == 0 || (lines.size() < 5 && minimumWidth() < longestLineWidth))
+        setMinimumWidth(longestLineWidth);
+}
+
+int MarkdownLabel::commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const
+{
+    const int n = std::min(a.size(), b.size());
+    int i = 0;
+    while (i < n && a[i] == b[i])
+        ++i;
+    return i;
+}
+
+void MarkdownLabel::removeHtmlSection(int index)
+{
+    QTextCursor cur(document());
+    const auto &range = m_insertedHtmlSection[index];
+    cur.setPosition(range.first);
+    cur.setPosition(range.second, QTextCursor::KeepAnchor);
+    cur.removeSelectedText();
+}
+
+void MarkdownLabel::insertHtmlSection(const QByteArray &html, int index)
+{
+    QTextCursor cur(document());
+    cur.movePosition(QTextCursor::End);
+    int start = cur.position();
+
+    insertHtml(QString::fromUtf8(html));
+
+    int end = cur.position();
+    m_insertedHtmlSection[index] = {start, end};
+}
+
+void MarkdownLabel::updateDocumentHtmlSections(const Data &newData)
+{
+    const auto &oldSections = m_data.outputHtmlSections;
+    const auto &newSections = newData.outputHtmlSections;
+    const int common = commonPrefixLength(oldSections, newSections);
+
+    // Delete sections that are no longer needed (from the end).
+    for (int i = oldSections.size() - 1; i >= common; --i)
+        removeHtmlSection(i);
+
+    // Insert the new sections that appear after the common prefix.
+    for (int i = common; i < newSections.size(); ++i)
+        insertHtmlSection(newSections[i], i);
+}
+
+Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(const QString &markdown)
 {
     if (markdown.isEmpty())
         return {};
@@ -218,8 +325,8 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
     // md4c expects UTF‑8 data
     QByteArray md = markdown.toUtf8();
 
-    m_data = {};
-    m_data.output_html.reserve(md.size() * 4); // heuristic
+    Data out;
+    out.outputHtml.reserve(md.size() * 4); // heuristic
 
     // md4c output callback
     auto append_cb = [](const MD_CHAR *data, MD_SIZE length, void *user_data) -> void {
@@ -253,24 +360,24 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
         };
 
         auto insertSourceFileCopySave = [&]() {
-            out->output_html.append("<tr>");
-            out->output_html.append(
+            out->outputHtml.append("<tr>");
+            out->outputHtml.append(
                 "<th class=\"copy-save-links\"><span style=\"font-size:small\">"
                 + out->codeBlocks.last().fileName.value().toUtf8() + "</span>" + "&nbsp;&nbsp;"
                 + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
                 + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
-            out->output_html.append("</tr>\n");
-            out->output_html.append("<tr><td>\n");
+            out->outputHtml.append("</tr>\n");
+            out->outputHtml.append("<tr><td>\n");
         };
 
         auto insertCopySave = [&]() {
-            out->output_html.append("<tr>");
-            out->output_html.append(
+            out->outputHtml.append("<tr>");
+            out->outputHtml.append(
                 "<th class=\"copy-save-links\">"
                 + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
                 + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
-            out->output_html.append("</tr>\n");
-            out->output_html.append("<tr><td>\n");
+            out->outputHtml.append("</tr>\n");
+            out->outputHtml.append("<tr><td>\n");
         };
 
         auto processOneLine = [&]() {
@@ -279,7 +386,7 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
 
             if (out->awaitingNewLine) {
                 out->codeBlocks.last().hightlightedCode.append("<br>");
-                out->output_html.append("<br>");
+                out->outputHtml.append("<br>");
                 out->awaitingNewLine = false;
             }
 
@@ -291,8 +398,19 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             }
 
             out->codeBlocks.last().hightlightedCode.append(highlightedLine);
-            out->output_html.append(highlightedLine.toUtf8());
+            out->outputHtml.append(highlightedLine.toUtf8());
         };
+
+        // Break the output into logical sections, this way we could cache some of the output
+        // in the QTextBrowser's document
+        if (line == "<h1>" || line == "<h2>" || line == "<h3>" || line == "<h4>" || line == "<h5>"
+            || line == "<h6>" || line == "<br>\n") {
+            if (!out->outputHtml.isEmpty()) {
+                out->outputHtml.append("<br>");
+                out->outputHtmlSections << out->outputHtml;
+                out->outputHtml.clear();
+            }
+        }
 
         if (line == "<pre><code" && out->state == Data::NormalHtml) {
             out->state = Data::PreCode;
@@ -319,10 +437,10 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
         } else if (line == "</code></pre>\n") {
             out->state = Data::NormalHtml;
             out->awaitingNewLine = false;
-            out->output_html.append("</td></tr></table>\n");
+            out->outputHtml.append("</td></tr></table>\n");
         } else if (out->state == Data::PreCodeEndTag) {
             out->state = Data::Code;
-            out->output_html.append("<table class=\"codeblock\">\n");
+            out->outputHtml.append("<table class=\"codeblock\">\n");
 
             static const QRegularExpression
                 cxxAndBashFileNameRegex(R"(^\s*(?:\/\/|#)\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
@@ -366,20 +484,27 @@ Utils::expected<QByteArray, QString> MarkdownLabel::markdownToHtml(const QString
             return;
         }
 
-        out->output_html.append(data, length);
+        out->outputHtml.append(data, length);
     };
 
     // Render Markdown to HTML
     int rc = md_html(reinterpret_cast<const MD_CHAR *>(md.constData()),
                      static_cast<MD_SIZE>(md.size()),
                      append_cb,
-                     reinterpret_cast<void *>(&m_data),
+                     reinterpret_cast<void *>(&out),
                      MD_DIALECT_GITHUB,
                      0);
 
     if (rc != 0)
         return Utils::make_unexpected(QString("md4c failed to render"));
 
-    return m_data.output_html;
+    if (!out.outputHtml.isEmpty()) {
+        out.outputHtmlSections << out.outputHtml;
+        out.outputHtml.clear();
+    }
+
+    return out;
 }
 } // namespace LlamaCpp
+
+#include "llamamarkdownwidget.moc"
