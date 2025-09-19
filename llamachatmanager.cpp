@@ -132,7 +132,6 @@ void ChatManager::sendMessage(const QString &convId,
 
     Message newMsg;
     auto now = QDateTime::currentMSecsSinceEpoch();
-    newMsg.id = now;
     newMsg.convId = convId;
     newMsg.type = "text";
     newMsg.timestamp = now;
@@ -525,7 +524,6 @@ void ChatManager::replaceMessageAndGenerate(const QString &convId,
     if (!content.isEmpty()) {
         auto now = QDateTime::currentMSecsSinceEpoch();
         Message newMsg;
-        newMsg.id = now;
         newMsg.convId = convId;
         newMsg.type = "text";
         newMsg.timestamp = now;

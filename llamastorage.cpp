@@ -92,7 +92,7 @@ Storage::Storage()
         qCCritical(llamaStorage) << "Failed to create table \"conversations\"" << q.lastError();
 
     if (!q.exec("CREATE TABLE IF NOT EXISTS messages "
-                "(id INTEGER PRIMARY KEY, convId TEXT, type TEXT, timestamp INTEGER, role TEXT, "
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, convId TEXT, type TEXT, timestamp INTEGER, role TEXT, "
                 "content TEXT, "
                 "timings TEXT, "
                 "extra TEXT, "
@@ -148,9 +148,7 @@ Conversation Storage::getOneConversation(const QString &convId)
 
 Conversation Storage::createConversation(const QString &name)
 {
-    qint64 now = QDateTime::currentMSecsSinceEpoch()
-                 - 1;   // do not have "root" message as the first "user" message created next
-    qint64 msgId = now; // use timestamp as id
+    qint64 now = QDateTime::currentMSecsSinceEpoch() - 1;
 
     QSqlQuery q(db);
     q.prepare("INSERT INTO conversations (id,lastModified,currNode,name) "
@@ -158,16 +156,15 @@ Conversation Storage::createConversation(const QString &name)
     QString convId = QString("conv-%1").arg(now);
     q.bindValue(":id", convId);
     q.bindValue(":lm", now);
-    q.bindValue(":curr", msgId);
+    q.bindValue(":curr", -1); // Will be updated after root message is created
     q.bindValue(":name", name);
     if (!q.exec())
         qCWarning(llamaStorage) << "createConversation insert into conversations" << q.lastError();
 
     // create root node
     q.prepare("INSERT INTO messages "
-              "(id,convId,type,timestamp,role,content,timings,extra,parent,children) "
-              "VALUES (:id,:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
-    q.bindValue(":id", msgId);
+              "(convId,type,timestamp,role,content,timings,extra,parent,children) "
+              "VALUES (:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
     q.bindValue(":conv", convId);
     q.bindValue(":type", "root");
     q.bindValue(":ts", now);
@@ -180,10 +177,20 @@ Conversation Storage::createConversation(const QString &name)
     if (!q.exec())
         qCWarning(llamaStorage) << "createConversation insert into messages" << q.lastError();
 
+    // Get the auto-generated root message ID
+    qint64 rootMsgId = q.lastInsertId().toLongLong();
+
+    // Update conversation with actual root message ID
+    q.prepare("UPDATE conversations SET currNode = (:curr) WHERE id = (:id)");
+    q.bindValue(":curr", rootMsgId);
+    q.bindValue(":id", convId);
+    if (!q.exec())
+        qCWarning(llamaStorage) << "createConversation update currNode" << q.lastError();
+
     Conversation c;
     c.id = convId;
     c.lastModified = now;
-    c.currNode = msgId;
+    c.currNode = rootMsgId;
     c.name = name;
 
     emit conversationCreated(convId);
@@ -249,36 +256,15 @@ QVector<Message> Storage::getMessages(const QString &convId)
     return res;
 }
 
-void Storage::appendMsg(const Message &msg, qint64 parentNodeId)
+void Storage::appendMsg(Message &msg, qint64 parentNodeId)
 {
     QSqlQuery q(db);
     db.transaction();
-    // update parent children
-    q.prepare("SELECT children FROM messages WHERE  id = (:pid)");
-    q.bindValue(":pid", parentNodeId);
-    if (!q.exec()) {
-        qCWarning(llamaStorage) << "appendMsg: Failed to select children for parent node"
-                                << parentNodeId << q.lastError();
-        return;
-    }
-    if (!q.next()) {
-        qCWarning(llamaStorage) << "appendsMsg: exiting because there are no children for"
-                                << parentNodeId;
-        return;
-    }
-    QJsonArray arr = QJsonDocument::fromJson(q.value(0).toString().toUtf8()).array();
-    arr.append(msg.id);
-    q.prepare("UPDATE messages SET children = (:arr) WHERE id = (:pid)");
-    q.bindValue(":arr", QJsonDocument(arr).toJson(QJsonDocument::Compact));
-    q.bindValue(":pid", parentNodeId);
-    if (!q.exec())
-        qCWarning(llamaStorage) << "appendMsg: Failed update children messages" << q.lastError();
 
-    // insert new message
+    // insert new message - note: we don't specify the id column, let SQLite auto-generate it
     q.prepare("INSERT INTO messages "
-              "(id,convId,type,timestamp,role,content,timings,extra,parent,children) "
-              "VALUES (:id,:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
-    q.bindValue(":id", msg.id);
+              "(convId,type,timestamp,role,content,timings,extra,parent,children) "
+              "VALUES (:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
     q.bindValue(":conv", msg.convId);
     q.bindValue(":type", msg.type);
     q.bindValue(":ts", msg.timestamp);
@@ -291,6 +277,30 @@ void Storage::appendMsg(const Message &msg, qint64 parentNodeId)
     if (!q.exec())
         qCWarning(llamaStorage) << "appendMsg: Failed to insert messages" << parentNodeId
                                 << q.lastError();
+
+    // Get the auto-generated ID
+    msg.id = q.lastInsertId().toLongLong();
+
+    // update parent children
+    q.prepare("SELECT children FROM messages WHERE  id = (:pid)");
+    q.bindValue(":pid", parentNodeId);
+    if (!q.exec()) {
+        qCWarning(llamaStorage) << "appendMsg: Failed to select children for parent node"
+                                << parentNodeId << q.lastError();
+        return;
+    }
+    if (!q.next()) {
+        qCWarning(llamaStorage) << "appendMsg: no children found for"
+                                << parentNodeId;
+        return;
+    }
+    QJsonArray arr = QJsonDocument::fromJson(q.value(0).toString().toUtf8()).array();
+    arr.append(msg.id);
+    q.prepare("UPDATE messages SET children = (:arr) WHERE id = (:pid)");
+    q.bindValue(":arr", QJsonDocument(arr).toJson(QJsonDocument::Compact));
+    q.bindValue(":pid", parentNodeId);
+    if (!q.exec())
+        qCWarning(llamaStorage) << "appendMsg: Failed update children messages" << q.lastError();
 
     // update conversation lastModified & currNode
     q.prepare(

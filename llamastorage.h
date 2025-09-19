@@ -23,7 +23,7 @@ public:
     void deleteConversation(const QString &convId);
 
     QVector<Message> getMessages(const QString &convId);
-    void appendMsg(const Message &msg, qint64 parentNodeId);
+    void appendMsg(Message &msg, qint64 parentNodeId);
     QVector<Message> filterByLeafNodeId(const QVector<Message> &msgs,
                                         qint64 leafNodeId,
                                         bool includeRoot);
