@@ -91,7 +91,8 @@ void ChatManager::initServerProps()
         QJsonObject obj = doc.object();
         m_serverProps.build_info = obj.value("build_info").toString();
         m_serverProps.model_path = obj.value("model_path").toString();
-        m_serverProps.n_ctx = obj.value("n_ctx").toInt();
+        QJsonObject genSettings = obj.value("default_generation_settings").toObject();
+        m_serverProps.n_ctx = genSettings.value("n_ctx").toInt();
         QJsonObject mod = obj.value("modalities").toObject();
         m_serverProps.modalities.vision = mod.value("vision").toBool();
         m_serverProps.modalities.audio = mod.value("audio").toBool();

@@ -192,18 +192,17 @@ QWidget *ChatEditor::displayServerProps()
 
     const auto &sp = ChatManager::instance().serverProps();
 
-    auto addLabel = [&](const QString &title, const QString &value) {
-        QLabel *l = value.isEmpty() ? new QLabel(QString("<b>%1</b>").arg(title), w)
-                                    : new QLabel(QString("<b>%1:</b> %2").arg(title, value), w);
+    auto addLabel = [&](const QString &label) {
+        QLabel *l = new QLabel(label, w);
         l->setObjectName("ServerPropsLabel");
         l->setWordWrap(true);
         l->setTextInteractionFlags(Qt::TextSelectableByMouse);
         lay->addWidget(l);
     };
 
-    addLabel(Tr::tr("Server Info"), {});
-    addLabel(Tr::tr("Model Path"), FilePath::fromUserInput(sp.model_path).fileName());
-    addLabel(Tr::tr("Build"), sp.build_info);
+    addLabel(Tr::tr("Model Path: %1").arg(FilePath::fromUserInput(sp.model_path).fileName()));
+    addLabel(Tr::tr("Context: %L1").arg(sp.n_ctx));
+    addLabel(Tr::tr("Vision: %1").arg(sp.modalities.vision ? Tr::tr("yes") : Tr::tr("no")));
 
     w->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
         QWidget#ServerProps {
