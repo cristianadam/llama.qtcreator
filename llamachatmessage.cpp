@@ -258,6 +258,7 @@ bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
 void ChatMessage::renderMarkdown(const QString &text)
 {
     if (m_thoughtToggle) {
+        bool isThinking = false;
         if (m_thoughtToggle->isChecked()) {
             QString message = text;
             message.replace(thinkingToken, ">");
@@ -269,6 +270,7 @@ void ChatMessage::renderMarkdown(const QString &text)
                     newLineIdx = message.indexOf("\n", newLineIdx + 2);
                 }
             } else {
+                isThinking = true;
                 message.replace("\n", "\n>");
             }
             message.replace(endToken, "\n\n");
@@ -278,13 +280,18 @@ void ChatMessage::renderMarkdown(const QString &text)
             if (endIdx != notfound) {
                 m_markdownLabel->setMarkdown(text.mid(endIdx + endToken.size()));
             } else {
-                static QVector<QChar>
-                    chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
-                // Dividing with 33ms results in 30fps
-                m_markdownLabel->setMarkdown(QString("%1").arg(
-                    chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()]));
+                isThinking = true;
+                m_markdownLabel->setMarkdown("");
             }
         }
+
+        static QVector<QChar> chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
+        // Dividing with 33ms results in 30fps
+        m_thoughtToggle->setText(
+            isThinking ? Tr::tr("Thinking %1")
+                             .arg(chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()])
+                       : Tr::tr("Thought Process"));
+
     } else {
         m_markdownLabel->setMarkdown(text);
     }
