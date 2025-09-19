@@ -16,6 +16,7 @@ public:
     explicit ChatInput(QWidget *parent = nullptr);
 
     void setIsGenerating(bool newIsGenerating);
+    bool isGenerating() const;
     void setEditingText(const QString &editingText, const QList<QVariantMap> &extra);
 
     void updateMaximumHeight();

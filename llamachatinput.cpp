@@ -399,6 +399,11 @@ bool ChatInput::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
+bool ChatInput::isGenerating() const
+{
+    return m_isGenerating;
+}
+
 void ChatInput::setIsGenerating(bool newIsGenerating)
 {
     m_isGenerating = newIsGenerating;
