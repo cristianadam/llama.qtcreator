@@ -273,6 +273,8 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
     lay->addStretch();
     // Append below the regular messages
     m_messageLayout->addWidget(m_followUpWidget);
+
+    scrollToBottom();
 }
 
 void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNodeId)
@@ -512,8 +514,11 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
 
 void ChatEditor::scrollToBottom()
 {
-    QScrollBar *sb = m_scrollArea->verticalScrollBar();
-    sb->setValue(sb->maximum());
+    // Scroll to bottom after the layout has finished
+    QTimer::singleShot(100, this, [this] {
+        QScrollBar *sb = m_scrollArea->verticalScrollBar();
+        sb->setValue(sb->maximum());
+    });
 }
 
 class ChatEditorFactory final : public IEditorFactory
