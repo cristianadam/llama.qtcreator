@@ -6,6 +6,7 @@
 #include "llamachatmanager.h"
 #include "llamasettings.h"
 #include "llamastorage.h"
+#include "llamathinkingsectionparser.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
 
@@ -96,6 +97,7 @@ void ChatManager::initServerProps()
         m_serverProps.modalities.audio = mod.value("audio").toBool();
         reply->deleteLater();
 
+        ThinkingSectionParser::setTokensFromServerProps(m_serverProps);
         emit serverPropsUpdated();
     });
 }
@@ -292,12 +294,8 @@ void ChatManager::generateMessage(const QString &convId,
                 // (root + user + assistant) after the first reply.
                 if (msgs.size() == 3) {
                     summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
-                        QString shortTitle = title;
-                        const QString endToken = "<|end|>";
-                        auto endIdx = title.indexOf(endToken);
-                        if (endIdx != -1) {
-                            shortTitle = title.mid(endIdx + endToken.size());
-                        }
+                        auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(
+                            title);
                         renameConversation(convId, shortTitle);
                     });
                 }
@@ -369,23 +367,29 @@ void ChatManager::followUpQuestions(const QString &convId,
 
         QJsonObject choice = choices[0].toObject();
         QJsonObject message = choice.value("message").toObject();
-        QString content = message.value("content").toString().trimmed();
 
         // Skip the thinking part
-        const QString endToken = "<|end|>";
-        auto endIdx = content.lastIndexOf(endToken);
-        if (endIdx != -1) {
-            content = content.mid(endIdx + endToken.size());
-        }
+        auto [thinking, content] = ThinkingSectionParser::parseThinkingSection(
+            message.value("content").toString().trimmed());
 
         if (content.isEmpty())
             return;
 
         // Sometimes the model continues "thinking" also in the answer
-        if (!content.startsWith("[\"")) {
-            auto startOfArrayIdx = content.lastIndexOf("[\"");
+        const QString startOfArray("[\"");
+        const QString endOfArray("\"]");
+
+        if (!content.startsWith(startOfArray)) {
+            auto startOfArrayIdx = content.lastIndexOf(startOfArray);
             if (startOfArrayIdx != -1)
                 content = content.mid(startOfArrayIdx);
+        }
+
+        // Sometimes we have \n``` at the end
+        if (!content.endsWith(endOfArray)) {
+            auto endOfArrayIdx = content.lastIndexOf(endOfArray);
+            if (endOfArrayIdx != -1)
+                content = content.left(endOfArrayIdx + endOfArray.size());
         }
 
         // `content` should be a JSON array of strings (plain text).

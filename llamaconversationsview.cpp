@@ -26,6 +26,7 @@
 #include "llamaconstants.h"
 #include "llamaconversationsmodel.h"
 #include "llamaconversationsview.h"
+#include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 
 using namespace Core;
@@ -299,12 +300,7 @@ bool ConversationsView::summarizeConversation()
 
     ChatManager::instance()
         .summarizeConversationTitle(convId, chat.messages.last().id, [convId](const QString &title) {
-            QString shortTitle = title;
-            const QString endToken = "<|end|>";
-            auto endIdx = title.indexOf(endToken);
-            if (endIdx != -1) {
-                shortTitle = title.mid(endIdx + endToken.size());
-            }
+            auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(title);
             ChatManager::instance().renameConversation(convId, shortTitle);
         });
 

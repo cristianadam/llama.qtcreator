@@ -29,6 +29,7 @@
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
+#include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 
 using namespace Core;
@@ -36,10 +37,6 @@ using namespace ProjectExplorer;
 using namespace Utils;
 
 namespace LlamaCpp {
-
-static const QString thinkingToken("<|channel|>analysis<|message|>");
-static const QString endToken("<|end|>");
-static qsizetype notfound = -1;
 
 ChatMessage::ChatMessage(const Message &msg,
                          const QVector<qint64> &siblingLeafIds,
@@ -68,7 +65,7 @@ void ChatMessage::buildUI()
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
     connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
 
-    if (m_msg.content.indexOf(thinkingToken) != notfound) {
+    if (ThinkingSectionParser::hasThinkingSection(m_msg.content)) {
         m_thoughtToggle = new QPushButton(this);
         m_thoughtToggle->setText(Tr::tr("Thought Process"));
         m_thoughtToggle->setToolTip(Tr::tr("Click to expand / hide the thought process"));
@@ -258,39 +255,21 @@ bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
 void ChatMessage::renderMarkdown(const QString &text)
 {
     if (m_thoughtToggle) {
-        bool isThinking = false;
+        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
         if (m_thoughtToggle->isChecked()) {
-            QString message = text;
-            message.replace(thinkingToken, ">");
-            auto endIdx = message.indexOf(endToken);
-            if (endIdx != notfound) {
-                auto newLineIdx = message.indexOf("\n");
-                while (newLineIdx < endIdx && newLineIdx != notfound) {
-                    message.insert(newLineIdx + 1, ">");
-                    newLineIdx = message.indexOf("\n", newLineIdx + 2);
-                }
-            } else {
-                isThinking = true;
-                message.replace("\n", "\n>");
-            }
-            message.replace(endToken, "\n\n");
-            m_markdownLabel->setMarkdown(message);
+            m_markdownLabel->setMarkdown(
+                ThinkingSectionParser::formatThinkingContent(thinking) + "\n\n" + message);
         } else {
-            auto endIdx = text.indexOf(endToken);
-            if (endIdx != notfound) {
-                m_markdownLabel->setMarkdown(text.mid(endIdx + endToken.size()));
-            } else {
-                isThinking = true;
-                m_markdownLabel->setMarkdown("");
-            }
+            m_markdownLabel->setMarkdown(message);
         }
 
         static QVector<QChar> chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
         // Dividing with 33ms results in 30fps
         m_thoughtToggle->setText(
-            isThinking ? Tr::tr("Thinking %1")
-                             .arg(chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()])
-                       : Tr::tr("Thought Process"));
+            message.isEmpty()
+                ? Tr::tr("Thinking %1")
+                      .arg(chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()])
+                : Tr::tr("Thought Process"));
 
     } else {
         m_markdownLabel->setMarkdown(text);
