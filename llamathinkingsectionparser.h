@@ -4,7 +4,7 @@
 
 namespace LlamaCpp {
 
-class LlamaCppServerProps;
+struct LlamaCppServerProps;
 
 class ThinkingSectionParser
 {
