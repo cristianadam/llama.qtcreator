@@ -33,16 +33,16 @@
 #include <QToolButton>
 #include <QTranslator>
 
-#include "llamaplugin.h"
 #include "llamachateditor.h"
-#include "llamaconversationsview.h"
+#include "llamachatmanager.h"
 #include "llamaconstants.h"
+#include "llamaconversationsview.h"
 #include "llamaicons.h"
 #include "llamalocatorfilter.h"
+#include "llamaplugin.h"
 #include "llamaprojectpanel.h"
 #include "llamasettings.h"
 #include "llamatr.h"
-
 
 using namespace Core;
 using namespace TextEditor;
@@ -115,7 +115,11 @@ void LlamaPlugin::initialize()
         = ActionManager::registerAction(&m_newConversation, Constants::LLAMACPP_NEW_CONVERSATION);
     connect(&m_newConversation, &QAction::triggered, this, [this] {
         QString title(Tr::tr("llama.cpp coversation"));
-        Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID, &title);
+        Conversation c = ChatManager::instance().createConversation(title);
+        Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
+                                                    &title,
+                                                    c.id.toUtf8(),
+                                                    c.id);
     });
     ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID)->addAction(newConversationCmd);
 

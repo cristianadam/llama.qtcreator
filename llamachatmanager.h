@@ -60,7 +60,7 @@ public:
                            std::function<void(const QStringList &)> onSuccess);
 signals:
     // emitted when the active conversation changes – UI can react
-    void messageAppended(const LlamaCpp::Message &msg);
+    void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void pendingMessageChanged(const LlamaCpp::Message &msg);
 
     void conversationCreated(const QString &convId);

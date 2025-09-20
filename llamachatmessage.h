@@ -27,6 +27,10 @@ public:
 
     void messageCompleted(bool completed);
     bool isUser() const;
+    void setSiblingLeafIds(const QVector<qint64> &newSiblingLeafIds);
+
+    void setSiblingIdx(int newSiblingIdx);
+
 signals:
     void regenerateRequested(const Message &msg);
     void editRequested(const Message &msg);
@@ -44,6 +48,7 @@ private slots:
 
 private:
     void buildUI();
+    void updateUI();
     void resizeEvent(QResizeEvent *ev) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
 

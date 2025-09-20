@@ -186,7 +186,11 @@ void ConversationsView::refresh()
 void ConversationsView::newConversation()
 {
     QString title("llama.cpp coversation");
-    Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID, &title);
+    Conversation c = ChatManager::instance().createConversation(title);
+    Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
+                                                &title,
+                                                c.id.toUtf8(),
+                                                c.id);
 }
 
 void ConversationsView::showEvent(QShowEvent *)

@@ -357,14 +357,90 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
     scrollToBottom();
 }
 
-void ChatEditor::onMessageAppended(const Message &msg)
+void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
 {
-    Conversation c = ChatManager::instance().currentConversation();
-    ViewingChat chat = ChatManager::instance().getViewingChat(c.id);
-    refreshMessages(chat.messages, msg.id);
+    ViewingChat chat = ChatManager::instance().getViewingChat(msg.convId);
+    if (pendingId < 0) {
+        refreshMessages(chat.messages, msg.id);
+
+        m_input->setIsGenerating(false);
+        scrollToBottom();
+        return;
+    }
+
+    // Delete old server‑props widget if it exists
+    if (m_propsWidget) {
+        m_propsWidget->deleteLater();
+        m_propsWidget = nullptr;
+    }
+
+    if (m_followUpWidget) {
+        m_followUpWidget->deleteLater();
+        m_followUpWidget = nullptr;
+    }
+
+    QMap<qint64, Message> map;
+    for (const Message &m : chat.messages)
+        map.insert(m.id, m);
+
+    // Skip root / orphan messages
+    if (msg.type == "root")
+        return;
+
+    int siblingIdx = 1;
+    QVector<qint64> siblings;
+    if (msg.parent >= 0) {
+        const Message *parent = &map[msg.parent];
+        for (qint64 cid : parent->children) {
+            siblings.append(cid);
+            if (msg.id == cid)
+                siblingIdx = siblings.size(); // 1‑based index
+        }
+    }
+
+    // Find the leaf of each sibling
+    QVector<qint64> leafs;
+    for (qint64 cid : siblings) {
+        const Message *cur = &map[cid];
+        while (!cur->children.isEmpty())
+            cur = &map[cur->children.back()];
+        leafs.append(cur->id);
+    }
+
+    ChatMessage *w{nullptr};
+    auto it = std::find_if(m_messageWidgets.begin(),
+                           m_messageWidgets.end(),
+                           [this, msg, pendingId](ChatMessage *cm) {
+                               return cm->message().id == (pendingId < 0 ? msg.id : pendingId);
+                           });
+    if (it == m_messageWidgets.end()) {
+        w = new ChatMessage(msg, leafs, siblingIdx, widget());
+        connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
+        connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
+        connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
+
+        m_messageLayout->addWidget(w);
+        m_messageWidgets.append(w);
+
+        // Speed‑label handling for assistant messages
+        if (settings().showTokensPerSecond.value() && !w->isUser()) {
+            m_messageLayout->addWidget(m_speedLabel);
+            m_speedLabel->setVisible(true);
+        }
+    } else {
+        w = *it;
+        w->message() = msg;
+
+        w->setSiblingIdx(siblingIdx);
+        w->setSiblingLeafIds(siblings);
+
+        w->renderMarkdown(msg.content);
+        w->messageCompleted(true);
+    }
+
+    updateSpeedLabel(msg);
 
     m_input->setIsGenerating(false);
-
     scrollToBottom();
 }
 
@@ -464,13 +540,19 @@ void ChatEditor::onEditingCancelled()
 
 void ChatEditor::onRegenerateRequested(const Message &msg)
 {
+    Message msgCopy = msg;
     ViewingChat chat = ChatManager::instance().getViewingChat(msg.convId);
 
-    ChatManager::instance().replaceMessageAndGenerate(chat.conv.id,
-                                                      msg.parent,
+    // refreshMessages will invalidate msg, which part of a ChatMessage object
+    refreshMessages(chat.messages, msgCopy.parent);
+
+    ChatManager::instance().replaceMessageAndGenerate(msgCopy.convId,
+                                                      msgCopy.parent,
                                                       QString(),
-                                                      msg.extra,
-                                                      [this](qint64 leafId) { scrollToBottom(); });
+                                                      msgCopy.extra,
+                                                      [this, msgCopy](qint64 leafId) {
+                                                          scrollToBottom();
+                                                      });
 
     m_userInteracted = false;
 }

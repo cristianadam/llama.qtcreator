@@ -181,26 +181,22 @@ void ChatMessage::buildUI()
         connect(m_attachedFiles, &QToolButton::clicked, m_attachedFiles, &QToolButton::showMenu);
     }
 
-    if (m_siblingLeafIds.size() > 1) {
-        m_prevButton = new QToolButton(this);
-        m_prevButton->setText("C");
-        m_prevButton->setEnabled(m_siblingIdx > 1);
-        m_prevButton->setToolTip(Tr::tr("Go to previous message"));
-        connect(m_prevButton, &QToolButton::clicked, this, &ChatMessage::onPrevSiblingClicked);
+    m_prevButton = new QToolButton(this);
+    m_prevButton->setText("C");
+    m_prevButton->setToolTip(Tr::tr("Go to previous message"));
+    connect(m_prevButton, &QToolButton::clicked, this, &ChatMessage::onPrevSiblingClicked);
 
-        m_siblingLabel = new QLabel(this);
-        m_siblingLabel->setText(QString("%1/%2").arg(m_siblingIdx).arg(m_siblingLeafIds.size()));
+    m_siblingLabel = new QLabel(this);
 
-        m_nextButton = new QToolButton(this);
-        m_nextButton->setText("D");
-        m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size());
-        m_nextButton->setToolTip(Tr::tr("Go to next message"));
-        connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
+    m_nextButton = new QToolButton(this);
+    m_nextButton->setText("D");
+    m_nextButton->setToolTip(Tr::tr("Go to next message"));
+    connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
+    actionLayout->addWidget(m_prevButton);
+    actionLayout->addWidget(m_siblingLabel);
+    actionLayout->addWidget(m_nextButton);
 
-        actionLayout->addWidget(m_prevButton);
-        actionLayout->addWidget(m_siblingLabel);
-        actionLayout->addWidget(m_nextButton);
-    }
+    updateUI();
 
     if (m_isUser) {
         m_editButton = new QToolButton(this);
@@ -257,8 +253,8 @@ void ChatMessage::renderMarkdown(const QString &text)
     if (m_thoughtToggle) {
         auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
         if (m_thoughtToggle->isChecked()) {
-            m_markdownLabel->setMarkdown(
-                ThinkingSectionParser::formatThinkingContent(thinking) + "\n\n" + message);
+            m_markdownLabel->setMarkdown(ThinkingSectionParser::formatThinkingContent(thinking)
+                                         + "\n\n" + message);
         } else {
             m_markdownLabel->setMarkdown(message);
         }
@@ -345,6 +341,17 @@ void ChatMessage::applyStyleSheet()
     )"));
 }
 
+void ChatMessage::setSiblingIdx(int newSiblingIdx)
+{
+    m_siblingIdx = newSiblingIdx;
+}
+
+void ChatMessage::setSiblingLeafIds(const QVector<qint64> &newSiblingLeafIds)
+{
+    m_siblingLeafIds = newSiblingLeafIds;
+    updateUI();
+}
+
 void ChatMessage::onCopyClicked()
 {
     QGuiApplication::clipboard()->setText(m_msg.content);
@@ -428,4 +435,16 @@ void ChatMessage::onSaveToDisk(const QString &fileName, const QString &verbatimC
 
     sourceFile.writeFileContents(verbatimCode.toUtf8());
 }
+
+void ChatMessage::updateUI()
+{
+    m_siblingLabel->setText(QString("%1/%2").arg(m_siblingIdx).arg(m_siblingLeafIds.size()));
+    m_prevButton->setEnabled(m_siblingIdx > 1);
+    m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size());
+
+    m_prevButton->setVisible(m_siblingLeafIds.size() > 1);
+    m_siblingLabel->setVisible(m_siblingLeafIds.size() > 1);
+    m_nextButton->setVisible(m_siblingLeafIds.size() > 1);
+}
+
 } // namespace LlamaCpp

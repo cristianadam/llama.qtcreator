@@ -32,7 +32,7 @@ signals:
     void conversationCreated(const QString &convId);
     void conversationRenamed(const QString &convId);
     void conversationDeleted(const QString &convId);
-    void messageAppended(const LlamaCpp::Message &msg);
+    void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
 
 private:
     QSqlDatabase db;

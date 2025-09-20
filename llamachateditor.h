@@ -41,7 +41,7 @@ public:
                               const QStringList &questions);
 
 public slots:
-    void onMessageAppended(const LlamaCpp::Message &msg);
+    void onMessageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void onPendingMessageChanged(const LlamaCpp::Message &pm);
     void onSendRequested(const QString &text, const QList<QVariantMap> &extra);
     void onStopRequested();

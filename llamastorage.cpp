@@ -279,6 +279,7 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
                                 << q.lastError();
 
     // Get the auto-generated ID
+    qint64 pendingId = msg.role == "assistant" ? msg.id : -1;
     msg.id = q.lastInsertId().toLongLong();
 
     // update parent children
@@ -313,7 +314,7 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
 
     db.commit();
 
-    emit messageAppended(msg);
+    emit messageAppended(msg, pendingId);
 }
 
 QVector<Message> Storage::filterByLeafNodeId(const QVector<Message> &msgs,

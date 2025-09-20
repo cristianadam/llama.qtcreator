@@ -127,7 +127,7 @@ void ChatManager::sendMessage(const QString &convId,
                               const QList<QVariantMap> &extra,
                               std::function<void(qint64)> onChunk)
 {
-    if (isGenerating(convId) || content.trimmed().isEmpty())
+    if (isGenerating(convId) || content.trimmed().isEmpty() || convId.isEmpty())
         return;
 
     Message newMsg;
@@ -140,13 +140,6 @@ void ChatManager::sendMessage(const QString &convId,
     newMsg.parent = leafNodeId;
     newMsg.children.clear();
     newMsg.extra = extra; // simple wrapper – see MessageExtra
-
-    // create conversation if needed
-    if (newMsg.convId.isEmpty() || newMsg.convId.isNull()) {
-        Conversation c = m_storage->createConversation(content.left(256));
-        newMsg.convId = c.id;
-        leafNodeId = c.currNode;
-    }
 
     m_storage->appendMsg(newMsg, leafNodeId);
     onChunk(newMsg.id);
@@ -201,7 +194,7 @@ void ChatManager::generateMessage(const QString &convId,
 
     // prepare pending msg
     Message pending{};
-    pending.id = QDateTime::currentMSecsSinceEpoch() + 1; // not to have the same id as the user
+    pending.id = QDateTime::currentMSecsSinceEpoch();
     pending.convId = convId;
     pending.type = "text";
     pending.timestamp = pending.id;

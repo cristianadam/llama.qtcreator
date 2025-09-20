@@ -136,7 +136,8 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
 
     Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
                                                 &c.name,
-                                                c.id.toUtf8());
+                                                c.id.toUtf8(),
+                                                c.id);
 
     if (!m_predefined.contains(prompt)) {
         m_history.removeAll(prompt);
