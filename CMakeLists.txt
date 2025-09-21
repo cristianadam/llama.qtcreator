@@ -65,6 +65,7 @@ add_qtc_plugin(LlamaCpp
     llamamarkdownwidget.cpp llamamarkdownwidget.h
     llamaplugin.cpp llamaplugin.h
     llamaprojectpanel.cpp llamaprojectpanel.h
+    llamasearchtoolbar.cpp llamasearchtoolbar.h
     llamasettings.cpp llamasettings.h
     llamastorage.cpp llamastorage.h
     llamathinkingsectionparser.cpp llamathinkingsectionparser.h

@@ -31,6 +31,11 @@ public:
 
     void setSiblingIdx(int newSiblingIdx);
 
+    QString plainText() const;
+    void highlightAllMatches(const QString &query);
+    void highlightMatch(int start, int length, bool selected = true);
+    void clearHighlight();
+
 signals:
     void regenerateRequested(const Message &msg);
     void editRequested(const Message &msg);

@@ -2,6 +2,7 @@
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/find/textfindconstants.h>
 
 #include <utils/action.h>
 #include <utils/fsengine/fileiconprovider.h>
@@ -87,6 +88,29 @@ ChatEditor::ChatEditor()
         }
         )"));
 
+    m_searchToolbar = new SearchToolbar(widget);
+
+    connect(m_searchToolbar,
+            &SearchToolbar::onPrevSearchClicked,
+            this,
+            &ChatEditor::prevSearchResult);
+    connect(m_searchToolbar,
+            &SearchToolbar::onNextSearchClicked,
+            this,
+            &ChatEditor::nextSearchResult);
+    connect(m_searchToolbar, &SearchToolbar::onCloseEvent, this, [this]() { clearSearch(); });
+    connect(m_searchToolbar, &SearchToolbar::onSearchTextChanged, this, [this](const QString &text) {
+        if (text.isEmpty()) {
+            clearSearch();
+            return;
+        }
+        m_searchQuery = text;
+        performSearch(text);
+        m_searchActive = true;
+        m_currentResult = 0;
+        jumpToResult(m_currentResult);
+    });
+
     ChatManager &chatManager = ChatManager::instance();
     connect(&chatManager, &ChatManager::messageAppended, this, &ChatEditor::onMessageAppended);
     connect(&chatManager,
@@ -162,10 +186,29 @@ ChatEditor::ChatEditor()
                     m_document->setContents(content);
                 }
             });
+
+    // Search in chat  (Ctrl+F)
+    ActionBuilder startSearchAction(this, Core::Constants::FIND_IN_DOCUMENT);
+    startSearchAction.setText(Tr::tr("Search in chat"));
+    startSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
+    startSearchAction.addOnTriggered(this, [this] { startSearch(); });
+
+    // Next search result (F3)
+    ActionBuilder nextSearchAction(this, Core::Constants::FIND_NEXT);
+    nextSearchAction.setText(Tr::tr("Next search result"));
+    nextSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
+    nextSearchAction.addOnTriggered(this, [this] { nextSearchResult(); });
+
+    // Previous search result (Shift+F3)
+    ActionBuilder prevSearchAction(this, Core::Constants::FIND_PREVIOUS);
+    prevSearchAction.setText(Tr::tr("Previous search result"));
+    prevSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
+    prevSearchAction.addOnTriggered(this, [this] { prevSearchResult(); });
 }
 
 ChatEditor::~ChatEditor()
 {
+    clearSearch();
     delete widget();
 }
 
@@ -353,6 +396,9 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         // Place it at the top of the layout
         m_messageLayout->insertWidget(0, m_propsWidget);
     }
+
+    if (m_searchActive)
+        performSearch(m_searchQuery);
 
     scrollToBottom();
 }
@@ -576,6 +622,124 @@ void ChatEditor::onServerPropsUpdated()
         m_propsWidget = displayServerProps();
         m_messageLayout->insertWidget(0, m_propsWidget);
     }
+}
+
+void ChatEditor::startSearch()
+{
+    // Show the floating search toolbar
+    m_searchToolbar->show();
+    m_searchToolbar->raise();
+    m_searchToolbar->activateWindow();
+
+    // If we already have a query, run a search to highlight it
+    if (!m_searchQuery.isEmpty()) {
+        performSearch(m_searchQuery);
+        m_searchActive = true;
+        m_currentResult = 0;
+        jumpToResult(m_currentResult);
+    } else {
+        clearSearch(); // clear any old highlights
+    }
+}
+
+void ChatEditor::nextSearchResult()
+{
+    if (!m_searchActive || m_searchResults.isEmpty())
+        return;
+
+    jumpToResult(m_currentResult, false);
+
+    m_currentResult = (m_currentResult + 1) % m_searchResults.size();
+    jumpToResult(m_currentResult);
+}
+
+void ChatEditor::prevSearchResult()
+{
+    if (!m_searchActive || m_searchResults.isEmpty())
+        return;
+
+    jumpToResult(m_currentResult, false);
+
+    m_currentResult = (m_currentResult - 1 + m_searchResults.size()) % m_searchResults.size();
+    jumpToResult(m_currentResult);
+}
+
+void ChatEditor::clearSearch()
+{
+    for (ChatMessage *w : std::as_const(m_messageWidgets))
+        w->clearHighlight();
+
+    m_searchResults.clear();
+    m_currentResult = 0;
+    m_searchActive = false;
+    m_searchQuery.clear();
+}
+
+void ChatEditor::performSearch(const QString &query)
+{
+    clearSearch(); // wipe old highlights
+
+    QRegularExpression re(query, QRegularExpression::CaseInsensitiveOption);
+    for (ChatMessage *w : std::as_const(m_messageWidgets)) {
+        const QString txt = w->plainText();
+        QRegularExpressionMatchIterator it = re.globalMatch(txt);
+        while (it.hasNext()) {
+            QRegularExpressionMatch m = it.next();
+            SearchResult r;
+            r.widget = w;
+            r.start = m.capturedStart();
+            r.length = m.capturedLength();
+            m_searchResults.append(r);
+        }
+        // highlight all matches inside the widget
+        w->highlightAllMatches(query);
+    }
+}
+
+void ChatEditor::jumpToResult(int idx, bool selected)
+{
+    if (m_searchResults.isEmpty())
+        m_searchToolbar->setIndexLabel(QString("0/0"));
+    else
+        m_searchToolbar->setIndexLabel(QString("%1/%2").arg(idx + 1).arg(m_searchResults.size()));
+
+    if (idx < 0 || idx >= m_searchResults.size())
+        return;
+
+    const SearchResult &r = m_searchResults[idx];
+    if (!r.widget)
+        return;
+
+    // Find the QTextEdit inside the widget (MarkdownLabel is a QTextBrowser)
+    QTextEdit *te = r.widget->findChild<QTextEdit *>();
+    if (!te)
+        return;
+
+    QTextCursor cursor(te->document());
+    cursor.setPosition(r.start);
+    cursor.setPosition(r.start + r.length, QTextCursor::KeepAnchor);
+
+    QRect selRect = te->cursorRect(cursor);
+
+    // Map that rectangle to the outer viewport coordinates We must map from the viewport,
+    // otherwise the widget's own scroll position is ignored and the coordinates are wrong.
+    QPoint topLeftInOuter = te->viewport()->mapTo(m_scrollArea->viewport(), selRect.topLeft());
+
+    // Centre the rectangle vertically in the outer viewport ---
+    int viewportHeight = m_scrollArea->viewport()->height();
+
+    int targetY = topLeftInOuter.y()     // top of the selection
+                  + selRect.height() / 2 // centre of the selection
+                  - viewportHeight / 2;  // centre of the viewport
+
+    // Clamp to the valid scroll‑bar range
+    QScrollBar *vbar = m_scrollArea->verticalScrollBar();
+    targetY = qBound(0, targetY, vbar->maximum());
+
+    vbar->setValue(targetY);
+
+    // Highlight only the current hit inside the widget
+    r.widget->highlightMatch(r.start, r.length, selected);
 }
 
 void ChatEditor::updateSpeedLabel(const Message &msg)

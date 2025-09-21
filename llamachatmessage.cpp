@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QScrollArea>
 #include <QTemporaryFile>
 #include <QToolButton>
@@ -25,6 +26,7 @@
 #include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 #include <utils/fsengine/fileiconprovider.h>
+#include <utils/theme/theme.h>
 
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
@@ -354,6 +356,70 @@ void ChatMessage::setSiblingLeafIds(const QVector<qint64> &newSiblingLeafIds)
 {
     m_siblingLeafIds = newSiblingLeafIds;
     updateUI();
+}
+
+QString ChatMessage::plainText() const
+{
+    return m_markdownLabel->toPlainText();
+}
+
+void ChatMessage::highlightAllMatches(const QString &query)
+{
+    auto te = qobject_cast<QTextEdit *>(m_markdownLabel);
+    if (!te)
+        return;
+
+    clearHighlight();
+
+    if (query.isEmpty())
+        return;
+
+    QRegularExpression re(query, QRegularExpression::CaseInsensitiveOption);
+    QTextDocument *doc = te->document();
+
+    QVector<QTextEdit::ExtraSelection> selections;
+    QTextCursor cursor(doc);
+    while (!(cursor = doc->find(re, cursor)).isNull()) {
+        QTextEdit::ExtraSelection sel;
+
+        sel.format.setBackground(creatorColor(Theme::TextColorHighlightBackground));
+        sel.cursor = cursor;
+        selections.append(sel);
+    }
+
+    te->setExtraSelections(selections);
+}
+
+void ChatMessage::highlightMatch(int start, int length, bool selected)
+{
+    auto te = qobject_cast<QTextEdit *>(m_markdownLabel);
+    if (!te)
+        return;
+
+    if (start < 0 || length <= 0)
+        return;
+
+    QTextDocument *doc = te->document();
+    QTextCursor cursor(doc);
+    cursor.setPosition(start);
+    cursor.setPosition(start + length, QTextCursor::KeepAnchor);
+
+    QList<QTextEdit::ExtraSelection> selections = te->extraSelections();
+    auto sel = std::ranges::find_if(selections,
+                                    [cursor](const auto &s) { return s.cursor == cursor; });
+    if (sel != selections.end())
+        sel->format.setBackground(creatorColor(selected ? Theme::BackgroundColorSelected
+                                                        : Theme::TextColorHighlightBackground));
+
+    te->setExtraSelections(selections);
+}
+
+void ChatMessage::clearHighlight()
+{
+    auto te = qobject_cast<QTextEdit *>(m_markdownLabel);
+    if (!te)
+        return;
+    te->setExtraSelections({});
 }
 
 void ChatMessage::onCopyClicked()
