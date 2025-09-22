@@ -1,5 +1,6 @@
 #include <QClipboard>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QFile>
 #include <QList>
 #include <QResizeEvent>
@@ -106,6 +107,8 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
             QToolTip::showText(QCursor::pos(), Tr::tr("Copy the code below to Clipboard"));
         else if (command == "save")
             QToolTip::showText(QCursor::pos(), Tr::tr("Save the code below into a file on disk"));
+        else
+            QToolTip::showText(QCursor::pos(), link);
     });
 
     connect(this, &QTextBrowser::anchorClicked, this, [this](const QUrl &url) {
@@ -122,6 +125,8 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
             if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
                 emit saveToFile(m_data.codeBlocks[codeBlockIndex].fileName.value_or(QString()),
                                 m_data.codeBlocks[codeBlockIndex].verbatimCode);
+        } else {
+            QDesktopServices::openUrl(url);
         }
     });
 }
