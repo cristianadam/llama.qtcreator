@@ -133,6 +133,13 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
 
 void MarkdownLabel::setMarkdown(const QString &markdown)
 {
+    // We don't want something faster than 30fps, which would cause UI freezes
+    if (m_markdownConversionTimer.isValid() && m_markdownConversionTimer.elapsed() < 33)
+        return;
+
+    m_markdownConversionTimer.start();
+    auto guard = qScopeGuard([this] { m_markdownConversionTimer.restart(); });
+
     // Make sure the widget’s minimum width is large enough for the
     // longest line in the markdown.
     adjustMinimumWidth(markdown);
@@ -264,6 +271,11 @@ int MarkdownLabel::heightForWidth(int w) const
     QTextDocument *doc = const_cast<QTextDocument *>(document());
     doc->setTextWidth(w);
     return qRound(doc->size().height());
+}
+
+void MarkdownLabel::invalidate()
+{
+    m_markdownConversionTimer.invalidate();
 }
 
 void MarkdownLabel::adjustMinimumWidth(const QString &markdown)

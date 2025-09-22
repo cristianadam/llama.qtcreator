@@ -2,6 +2,7 @@
 
 #include <utils/expected.h>
 
+#include <QElapsedTimer>
 #include <QString>
 #include <QTextBrowser>
 
@@ -19,6 +20,7 @@ public:
     void setStyleSheet();
     void resizeEvent(QResizeEvent *event) override;
     int heightForWidth(int w) const override;
+    void invalidate();
 
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
@@ -64,5 +66,6 @@ private:
 
     Data m_data;
     QMap<int, QPair<int, int>> m_insertedHtmlSection;
+    QElapsedTimer m_markdownConversionTimer;
 };
 } // namespace LlamaCpp

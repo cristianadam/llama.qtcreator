@@ -434,7 +434,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         w->setSiblingIdx(siblingIdx);
         w->setSiblingLeafIds(siblings);
 
-        w->renderMarkdown(msg.content);
+        w->renderMarkdown(msg.content, true);
         w->messageCompleted(true);
     }
 

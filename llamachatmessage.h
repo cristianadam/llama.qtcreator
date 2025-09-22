@@ -23,7 +23,7 @@ public:
                          QWidget *parent = nullptr);
 
     Message &message() { return m_msg; }
-    void renderMarkdown(const QString &text);
+    void renderMarkdown(const QString &text, bool forceUpdate = false);
 
     void messageCompleted(bool completed);
     bool isUser() const;

@@ -73,7 +73,7 @@ void ChatMessage::buildUI()
         connect(m_thoughtToggle, &QPushButton::toggled, this, &ChatMessage::onThoughtToggle);
         onThoughtToggle(false);
     } else {
-        renderMarkdown(m_msg.content);
+        renderMarkdown(m_msg.content, true);
     }
 
     m_markdownLabel->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
@@ -247,8 +247,11 @@ bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
-void ChatMessage::renderMarkdown(const QString &text)
+void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
 {
+    if (forceUpdate)
+        m_markdownLabel->invalidate();
+
     if (m_thoughtToggle) {
         auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
         if (m_thoughtToggle->isChecked()) {
@@ -278,7 +281,7 @@ void ChatMessage::messageCompleted(bool completed)
         m_regenButton->setVisible(completed);
         m_copyButton->setVisible(completed);
 
-        renderMarkdown(m_msg.content);
+        renderMarkdown(m_msg.content, completed);
     }
 }
 
