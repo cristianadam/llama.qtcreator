@@ -127,6 +127,21 @@ ChatEditor::ChatEditor()
                 EditorManager::instance()->updateWindowTitles();
             });
     connect(&ChatManager::instance(),
+            &ChatManager::conversationDeleted,
+            this,
+            [this](const QString &convId) {
+                QString name;
+                IEditor *ed = EditorManager::openEditorWithContents(
+                    Constants::LLAMACPP_VIEWER_ID,
+                    &name,
+                    convId.toUtf8(),
+                    convId,
+                    EditorManager::DoNotMakeVisible | EditorManager::DoNotSwitchToEditMode
+                        | EditorManager::DoNotChangeCurrentEditor);
+
+                EditorManager::closeEditors({ed}, false);
+            });
+    connect(&ChatManager::instance(),
             &ChatManager::followUpQuestionsReceived,
             this,
             &ChatEditor::createFollowUpWidget);
