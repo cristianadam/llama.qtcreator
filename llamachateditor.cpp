@@ -778,14 +778,12 @@ void ChatEditor::scrollToBottom()
 
 bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
 {
-    if (m_input && m_input->isGenerating()) {
-        if (obj == m_scrollArea || obj == m_scrollArea->verticalScrollBar()) {
-            // Mouse wheel, mouse press, key press – any user interaction
-            if (event->type() == QEvent::Wheel || event->type() == QEvent::MouseButtonPress
-                || event->type() == QEvent::MouseButtonRelease
-                || event->type() == QEvent::KeyPress) {
-                m_userInteracted = true;
-            }
+    if (obj == m_scrollArea || obj == m_scrollArea->verticalScrollBar()) {
+        // Mouse wheel, mouse press, key press – any user interaction
+        if (event->type() == QEvent::Wheel || event->type() == QEvent::MouseButtonPress
+            || event->type() == QEvent::MouseButtonRelease
+            || event->type() == QEvent::KeyPress) {
+            m_userInteracted = true;
         }
     }
     return QObject::eventFilter(obj, event);
