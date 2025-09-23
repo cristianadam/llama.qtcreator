@@ -185,6 +185,14 @@ ChatEditor::ChatEditor()
                 }
             });
 
+    connect(EditorManager::instance(),
+            &EditorManager::editorAboutToClose,
+            this,
+            [this](Core::IEditor *editor) {
+                if (editor == this)
+                    onStopRequested();
+            });
+
     // Search in chat  (Ctrl+F)
     ActionBuilder startSearchAction(this, Core::Constants::FIND_IN_DOCUMENT);
     startSearchAction.setText(Tr::tr("Search in chat"));
