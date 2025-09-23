@@ -143,19 +143,17 @@ ChatEditor::ChatEditor()
             [this](Core::IEditor *editor) {
                 if (editor == this) {
                     const QString convId = QString::fromUtf8(m_document->contents());
-                    if (!convId.isEmpty()) {
-                        auto chat = ChatManager::instance().getViewingChat(convId);
+                    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+
+                    // A new conversation has one root message
+                    if (chat.messages.size() > 1) {
                         refreshMessages(chat.messages, chat.conv.currNode);
                     } else {
                         ChatManager::instance().refreshServerProps();
                     }
-                    ChatManager::instance().setCurrentConversation(convId);
 
-                    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
-                    if (chat.conv.name.isEmpty())
-                        m_document->setPreferredDisplayName(Tr::tr("llama.cpp coversation"));
-                    else
-                        m_document->setPreferredDisplayName(chat.conv.name);
+                    ChatManager::instance().setCurrentConversation(convId);
+                    m_document->setPreferredDisplayName(chat.conv.name);
 
                     EditorManager::instance()->updateWindowTitles();
 
