@@ -21,6 +21,7 @@ public:
     void resizeEvent(QResizeEvent *event) override;
     int heightForWidth(int w) const override;
     void invalidate();
+    QSize sizeHint() const override;
 
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);

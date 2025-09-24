@@ -227,7 +227,9 @@ void ChatMessage::buildUI()
 
 void ChatMessage::resizeEvent(QResizeEvent *ev)
 {
-    m_markdownLabel->setMinimumWidth(qMin(m_markdownLabel->minimumWidth(), int(width() * 0.9)));
+    const int minWidth = qMin(m_markdownLabel->minimumWidth(),
+                              qMax(m_markdownLabel->minimumWidth(), int(width() * 0.9)));
+    m_markdownLabel->setMinimumWidth(m_msg.role == "user" ? minWidth : int(width() * 0.9));
 }
 
 bool ChatMessage::eventFilter(QObject *obj, QEvent *event)
@@ -300,6 +302,7 @@ void ChatMessage::applyStyleSheet()
         QTextBrowser#BubbleUser {
             background: Token_Background_Muted;
             border-radius: 8px;
+            padding: 4px 4px;
         }
         QTextBrowser#BubbleAssistant {
             background: Token_Background_Default;

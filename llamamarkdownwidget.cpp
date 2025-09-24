@@ -270,7 +270,7 @@ int MarkdownLabel::heightForWidth(int w) const
     // (this does not change the widget’s real geometry)
     QTextDocument *doc = const_cast<QTextDocument *>(document());
     doc->setTextWidth(w);
-    return qRound(doc->size().height());
+    return qRound(doc->size().height() + 8);
 }
 
 void MarkdownLabel::invalidate()
@@ -278,12 +278,19 @@ void MarkdownLabel::invalidate()
     m_markdownConversionTimer.invalidate();
 }
 
+QSize MarkdownLabel::sizeHint() const
+{
+    QSize sh = QTextBrowser::sizeHint();
+    sh.setWidth(minimumWidth());
+    return sh;
+}
+
 void MarkdownLabel::adjustMinimumWidth(const QString &markdown)
 {
     const QStringList lines = markdown.split('\n');
     const QString longestLine = *std::ranges::max_element(lines, std::less{}, &QString::length);
     QFontMetrics fm(font());
-    const int longestLineWidth = fm.horizontalAdvance(longestLine) + 10;
+    const int longestLineWidth = fm.horizontalAdvance(longestLine) + 20;
 
     if (minimumWidth() == 0 || (lines.size() < 5 && minimumWidth() < longestLineWidth))
         setMinimumWidth(longestLineWidth);
