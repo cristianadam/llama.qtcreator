@@ -156,24 +156,25 @@ ChatEditor::ChatEditor()
             &EditorManager::currentEditorChanged,
             this,
             [this](Core::IEditor *editor) {
-                if (editor == this) {
-                    const QString convId = QString::fromUtf8(m_document->contents());
-                    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+                if (editor != this)
+                    return;
 
-                    // A new conversation has one root message
-                    if (chat.messages.size() > 1) {
-                        refreshMessages(chat.messages, chat.conv.currNode);
-                    } else {
-                        ChatManager::instance().refreshServerProps();
-                    }
+                m_viewingConvId = QString::fromUtf8(m_document->contents());
+                ViewingChat chat = ChatManager::instance().getViewingChat(m_viewingConvId);
 
-                    ChatManager::instance().setCurrentConversation(convId);
-                    m_document->setPreferredDisplayName(chat.conv.name);
-
-                    EditorManager::instance()->updateWindowTitles();
-
-                    m_input->setFocus();
+                // A new conversation has one root message
+                if (chat.messages.size() > 1) {
+                    refreshMessages(chat.messages, chat.conv.currNode);
+                } else {
+                    ChatManager::instance().refreshServerProps();
                 }
+
+                ChatManager::instance().setCurrentConversation(m_viewingConvId);
+                m_document->setPreferredDisplayName(chat.conv.name);
+
+                EditorManager::instance()->updateWindowTitles();
+
+                m_input->setFocus();
             });
 
     // Make sure we have the markdown content before saving
@@ -288,6 +289,9 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
                                       qint64 leafNodeId,
                                       const QStringList &questions)
 {
+    if (convId != m_viewingConvId)
+        return;
+
     if (m_followUpWidget) {
         m_followUpWidget->deleteLater();
         m_followUpWidget = nullptr;
@@ -426,6 +430,9 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
 
 void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
 {
+    if (msg.convId != m_viewingConvId)
+        return;
+
     ViewingChat chat = ChatManager::instance().getViewingChat(msg.convId);
     if (pendingId < 0) {
         refreshMessages(chat.messages, msg.id);
@@ -513,6 +520,9 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
 
 void ChatEditor::onPendingMessageChanged(const Message &pm)
 {
+    if (pm.convId != m_viewingConvId)
+        return;
+
     ChatMessage *w = nullptr;
 
     auto it = std::find_if(m_messageWidgets.begin(),

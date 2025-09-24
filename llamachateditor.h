@@ -91,6 +91,7 @@ private:
     bool m_searchActive{false};
 
     SearchToolbar *m_searchToolbar{nullptr};
+    QString m_viewingConvId;
 };
 
 void setupChatEditor();
