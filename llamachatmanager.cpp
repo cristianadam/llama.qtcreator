@@ -316,7 +316,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     txt["type"] = "text";
     txt["text"] = "Generate up to five follow up questions in the context of the "
                   "current conversation. The questions are from the user point of view. "
-                  "Only questions, no explanations. "
+                  "Only questions, no explanations. Use the language used in the conversation. "
                   "Return the questions in the form of a JSON array as plain text strings, "
                   "no markdown.";
     parts.append(txt);
@@ -442,7 +442,7 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     QJsonObject txt;
     txt["type"] = "text";
     txt["text"] = "Summarize the title of the conversation in a few words including one emoji. Use "
-                  "plain text, no markdown.";
+                  "the language used in the conversation. Use plain text, no markdown.";
     parts.append(txt);
     QJsonObject prompt;
     prompt["role"] = "user";
