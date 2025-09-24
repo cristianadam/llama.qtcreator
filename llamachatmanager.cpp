@@ -314,9 +314,10 @@ void ChatManager::followUpQuestions(const QString &convId,
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
-    txt["text"] = "Generate up to five questions in the context of the "
-                  "current conversation. Only questions, no explanations. "
-                  "Please return the questions in the form of a JSON array as plain text strings, "
+    txt["text"] = "Generate up to five follow up questions in the context of the "
+                  "current conversation. The questions are from the user point of view. "
+                  "Only questions, no explanations. "
+                  "Return the questions in the form of a JSON array as plain text strings, "
                   "no markdown.";
     parts.append(txt);
     QJsonObject prompt;
