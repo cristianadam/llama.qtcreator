@@ -543,6 +543,15 @@ LlamaCppServerProps ChatManager::serverProps() const
 QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 {
     QJsonArray res;
+
+    const QString sysMsgText = LlamaCpp::settings().systemMessage.value();
+    if (!sysMsgText.trimmed().isEmpty()) {
+        QJsonObject sys;
+        sys["role"] = "system";
+        sys["content"] = sysMsgText;
+        res.append(sys);
+    }
+
     for (const Message &msg : msgs) {
         if (msg.role != "user" || msg.extra.isEmpty()) {
             QJsonObject out;
