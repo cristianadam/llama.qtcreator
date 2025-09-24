@@ -44,7 +44,9 @@ private:
            Tr::tr("Create a commit message for {selection}"),
            Tr::tr("Explain the code in {selection}"),
            Tr::tr("Do spell checking and fix any typos in {selection}"),
-           Tr::tr("Generate test cases for {selection}. Output only code. No explanations")};
+           Tr::tr("Generate test cases for {selection}. Output only code. No explanations"),
+           Tr::tr(
+               "Update translation in {selection}. Provide the full translation file as output")};
 
     QList<QString> m_history;
     static constexpr int MaxHistory = 50;
