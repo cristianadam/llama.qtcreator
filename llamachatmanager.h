@@ -58,6 +58,9 @@ public:
     void followUpQuestions(const QString &convId,
                            qint64 leafNodeId,
                            std::function<void(const QStringList &)> onSuccess);
+
+    void cancelTitleSummary(const QString &convId);
+    void cancelFollowUp(const QString &convId);
 signals:
     // emitted when the active conversation changes – UI can react
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
@@ -86,7 +89,9 @@ private:
     LlamaCppServerProps m_serverProps;
     QString m_activeConvId;
 
-    QHash<QString, Message> m_pendingMessages;          // convId -> Pending
-    QHash<QString, QNetworkReply *> m_abortControllers; // convId -> reply
+    QHash<QString, Message> m_pendingMessages;
+    QHash<QString, QNetworkReply *> m_abortControllers;
+    QHash<QString, QNetworkReply *> m_titleSummaryReplies;
+    QHash<QString, QNetworkReply *> m_followUpReplies;
 };
 } // namespace LlamaCpp

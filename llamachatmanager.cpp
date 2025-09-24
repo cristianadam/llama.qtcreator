@@ -338,8 +338,10 @@ void ChatManager::followUpQuestions(const QString &convId,
         req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
 
     QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
+    m_followUpReplies.insert(convId, reply);
 
-    QObject::connect(reply, &QNetworkReply::finished, [reply, onSuccess, this]() {
+    QObject::connect(reply, &QNetworkReply::finished, [reply, onSuccess, convId, this]() {
+        m_followUpReplies.remove(convId);
         reply->deleteLater();
 
         if (reply->error() != QNetworkReply::NoError) {
@@ -407,6 +409,24 @@ void ChatManager::followUpQuestions(const QString &convId,
     });
 }
 
+void ChatManager::cancelTitleSummary(const QString &convId)
+{
+    if (m_titleSummaryReplies.contains(convId)) {
+        auto r = m_titleSummaryReplies.take(convId);
+        r->abort();
+        r->deleteLater();
+    }
+}
+
+void ChatManager::cancelFollowUp(const QString &convId)
+{
+    if (m_followUpReplies.contains(convId)) {
+        auto r = m_followUpReplies.take(convId);
+        r->abort();
+        r->deleteLater();
+    }
+}
+
 Conversation ChatManager::currentConversation()
 {
     return m_storage->getOneConversation(m_activeConvId);
@@ -463,8 +483,10 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
         req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
 
     QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
+    m_titleSummaryReplies.insert(convId, reply);
 
     QObject::connect(reply, &QNetworkReply::finished, [reply, onSuccess, this, convId]() {
+        m_titleSummaryReplies.remove(convId);
         reply->deleteLater();
 
         if (reply->error() != QNetworkReply::NoError) {

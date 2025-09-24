@@ -1,8 +1,8 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
-#include <coreplugin/icore.h>
 #include <coreplugin/find/textfindconstants.h>
+#include <coreplugin/icore.h>
 
 #include <utils/action.h>
 #include <utils/fsengine/fileiconprovider.h>
@@ -205,8 +205,13 @@ ChatEditor::ChatEditor()
             &EditorManager::editorAboutToClose,
             this,
             [this](Core::IEditor *editor) {
-                if (editor == this)
-                    onStopRequested();
+                if (editor == this) {
+                    ChatManager::instance().stopGenerating(m_viewingConvId);
+                    ChatManager::instance().cancelTitleSummary(m_viewingConvId);
+                    ChatManager::instance().cancelFollowUp(m_viewingConvId);
+                }
+
+                onStopRequested();
             });
 
     // Search in chat  (Ctrl+F)
@@ -814,8 +819,7 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
     if (obj == m_scrollArea || obj == m_scrollArea->verticalScrollBar()) {
         // Mouse wheel, mouse press, key press – any user interaction
         if (event->type() == QEvent::Wheel || event->type() == QEvent::MouseButtonPress
-            || event->type() == QEvent::MouseButtonRelease
-            || event->type() == QEvent::KeyPress) {
+            || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::KeyPress) {
             m_userInteracted = true;
         }
     }
