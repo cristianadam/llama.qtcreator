@@ -22,6 +22,9 @@ Local LLM-assisted text completion for Qt Creator.
 - Speculative FIM support
 - Speculative Decoding support
 - Display performance stats
+- Chat support
+- Source and Image drag & drop support
+- Current editor selection predefined and custom LLM prompts
 
 
 ### llama.cpp setup
@@ -81,6 +84,10 @@ The plugin requires FIM-compatible models: [HF collection](https://huggingface.c
 ### A Qt Quick example on MacBook Pro M3 `Qwen2.5-Coder 3B Q8_0`:
 
 ![Qt Creator llama.cpp Qt Quick](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-quick@2x.webp)
+
+### Chat on a Mac Studio M2 with `gpt-oss 20B`:
+
+![Qt Creator llama.cpp Chat](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-chat.webp)
 
 ## Implementation details
 
