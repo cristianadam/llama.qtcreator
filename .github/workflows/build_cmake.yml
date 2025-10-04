@@ -244,7 +244,7 @@ jobs:
           COMMAND python
             -u
             "${{ steps.qt_creator.outputs.qtc_dir }}/${build_plugin_py}"
-            --name "$ENV{PLUGIN_NAME}-$ENV{QT_CREATOR_VERSION}-${{ matrix.config.artifact }}"
+            --name "$ENV{PLUGIN_NAME}-${{ steps.git.outputs.tag }}-${{ matrix.config.artifact }}"
             --src .
             --build build
             --qt-path "${{ steps.qt.outputs.qt_dir }}"
@@ -263,8 +263,8 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
-        path: ./${{ env.PLUGIN_NAME }}-${{ env.QT_CREATOR_VERSION }}-${{ matrix.config.artifact }}.7z
-        name: ${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-${{ matrix.config.artifact }}.7z
+        path: ./${{ env.PLUGIN_NAME }}-${{ steps.git.outputs.tag }}-${{ matrix.config.artifact }}.7z
+        name: ${{ env.PLUGIN_NAME}}-${{ steps.git.outputs.tag }}-${{ matrix.config.artifact }}.7z
 
     # The json is the same for all platforms, but we need to save one
     - name: Upload plugin json
@@ -298,10 +298,10 @@ jobs:
       with:
         tag_name: v${{ needs.build.outputs.tag }}
         files: |
-          release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-Linux-arm64.7z
-          release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-Linux-x64.7z
-          release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-macOS-universal.7z
-          release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-Windows-arm64.7z
-          release/${{ env.PLUGIN_NAME}}-${{ env.QT_CREATOR_VERSION }}-Windows-x64.7z
+          release/${{ env.PLUGIN_NAME}}-${{ needs.build.outputs.tag }}-Linux-arm64.7z
+          release/${{ env.PLUGIN_NAME}}-${{ needs.build.outputs.tag }}-Linux-x64.7z
+          release/${{ env.PLUGIN_NAME}}-${{ needs.build.outputs.tag }}-macOS-universal.7z
+          release/${{ env.PLUGIN_NAME}}-${{ needs.build.outputs.tag }}-Windows-arm64.7z
+          release/${{ env.PLUGIN_NAME}}-${{ needs.build.outputs.tag }}-Windows-x64.7z
         draft: false
         prerelease: false
