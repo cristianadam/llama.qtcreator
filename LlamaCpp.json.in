@@ -7,7 +7,6 @@
     "VendorId" : "ggml",
     "Copyright" : "(C) 2025 The llama.qtcreator Contributors, ${IDE_COPYRIGHT}",
     "License" : "MIT",
-    "SoftLoadable" : true,
     "Description": "llama.cpp infill completion plugin for Qt Creator",
     "LongDescription" : ${LONG_DESCRIPTION},
     "Url" : "https://github.com/ggml-org/llama.qtcreator",

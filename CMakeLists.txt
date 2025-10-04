@@ -72,6 +72,7 @@ add_qtc_plugin(LlamaCpp
     llamatheme.cpp llamatheme.h
     llamatr.h
     llamatypes.h
+    LlamaCpp.json.in
     README.md
 )
 
