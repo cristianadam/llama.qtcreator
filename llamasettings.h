@@ -60,6 +60,8 @@ public:
     Utils::IntegerAspect max_tokens{this};
     Utils::StringAspect customJson{this};
     Utils::BoolAspect showTokensPerSecond{this};
+
+    Utils::StringListAspect tools{this};
 };
 
 LlamaSettings &settings();

@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QWidget>
 
+#include "llamachatmanager.h"
 #include "llamatypes.h"
 
 class QToolButton;
@@ -58,6 +59,7 @@ private:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
     void applyStyleSheet();
+    QString getToolUsageAndResult();
 
     Message m_msg;
     QVector<qint64> m_siblingLeafIds;
@@ -76,5 +78,6 @@ private:
     QPushButton *m_thoughtToggle{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};
+    bool m_isToolCall{false};
 };
 } // namespace LlamaCpp

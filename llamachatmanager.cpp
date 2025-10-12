@@ -2,13 +2,25 @@
 #include <QJsonArray>
 #include <QLoggingCategory>
 #include <QNetworkReply>
+#include <QProcess>
+
+#include <coreplugin/documentmanager.h>
+
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectmanager.h>
 
 #include "llamachatmanager.h"
 #include "llamasettings.h"
 #include "llamastorage.h"
 #include "llamathinkingsectionparser.h"
+#include "llamatools.h"
+#include "llamatr.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
+Q_LOGGING_CATEGORY(llamaChatTools, "llama.cpp.chat.tools", QtWarningMsg)
+
+using namespace ProjectExplorer;
+using namespace Utils;
 
 namespace LlamaCpp {
 
@@ -36,6 +48,25 @@ static void addCommonPayloadParams(QJsonObject &payload)
     payload["timings_per_token"] = settings().showTokensPerSecond.value();
 }
 
+static void addToolsToPayload(QJsonObject &payload)
+{
+    if (settings().tools.value().isEmpty())
+        return;
+
+    QJsonArray toolsArr;
+    for (const QString &toolStr : settings().tools.value()) {
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(toolStr.toUtf8(), &err);
+        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+            qWarning() << "Invalid tool JSON:" << err.errorString();
+            continue;
+        }
+        toolsArr.append(doc.object());
+    }
+
+    payload["tools"] = toolsArr;
+}
+
 ChatManager &ChatManager::instance()
 {
     static ChatManager inst;
@@ -55,6 +86,7 @@ ChatManager::ChatManager(QObject *parent)
     });
     connect(m_storage, &Storage::conversationRenamed, this, &ChatManager::conversationRenamed);
     connect(m_storage, &Storage::conversationDeleted, this, &ChatManager::conversationDeleted);
+    connect(m_storage, &Storage::messageExtraUpdated, this, &ChatManager::messageExtraUpdated);
 }
 
 static QNetworkReply *getServerProps(QNetworkAccessManager *manager,
@@ -205,102 +237,22 @@ void ChatManager::generateMessage(const QString &convId,
     m_pendingMessages.insert(convId, pending);
     m_abortControllers[convId] = nullptr; // will hold the reply
 
-    // build request payload
-    QJsonObject payload;
-    payload["messages"] = normalizeMsgsForAPI(leafMsgs);
-    payload["stream"] = true;
-    payload["cache_prompt"] = true;
-    payload["reasoning_format"] = "none";
-    addCommonPayloadParams(payload);
+    sendChatRequest(
+        convId,
+        [leafMsgs, this](QJsonObject &payload) {
+            payload["messages"] = normalizeMsgsForAPI(leafMsgs);
+            if (m_toolsSupport)
+                addToolsToPayload(payload);
 
-    // parse custom JSON if present
-    if (!settings().customJson.value().isEmpty()) {
-        QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
-        if (d.isObject())
-            for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
-                payload[it.key()] = it.value();
-    }
-
-    QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    if (!settings().chatApiKey.value().isEmpty())
-        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
-
-    QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
-    m_abortControllers[convId] = reply;
-    qCDebug(llamaChatNetwork).noquote() << "Request:" << QJsonDocument(payload).toJson();
-
-    // read SSE
-    readSSEStream(
-        reply,
-        // onChunk
-        [this, convId, onChunk](const QJsonObject &chunk) {
-            if (chunk.contains("error")) {
-                qCWarning(llamaChatNetwork)
-                    << "SSE error:" << chunk["error"].toObject()["message"].toString();
-                return;
+            // custom JSON from settings (if any)
+            if (!settings().customJson.value().isEmpty()) {
+                QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
+                if (d.isObject())
+                    for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
+                        payload[it.key()] = it.value();
             }
-
-            if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
-                QJsonObject t = chunk["timings"].toObject();
-                TimingReport tr;
-                tr.prompt_n = t["prompt_n"].toDouble();
-                tr.prompt_ms = t["prompt_ms"].toDouble();
-                tr.predicted_n = t["predicted_n"].toDouble();
-                tr.predicted_ms = t["predicted_ms"].toDouble();
-                m_pendingMessages[convId].timings = tr;
-            }
-
-            QJsonArray choices = chunk["choices"].toArray();
-            if (!choices.isEmpty()) {
-                QString added = choices[0].toObject()["delta"].toObject()["content"].toString();
-                if (!added.isEmpty()) {
-                    Message &pm = m_pendingMessages[convId];
-                    pm.content += added;
-
-                    emit pendingMessageChanged(pm);
-                }
-            }
-            onChunk(-1); // caller will scroll to bottom
         },
-        //Error
-        [this, convId](const QString &err) {
-            qCWarning(llamaChatNetwork) << "SSE stream error:" << err;
-            m_pendingMessages.remove(convId);
-            if (m_abortControllers.contains(convId))
-                m_abortControllers[convId]->deleteLater();
-        });
-
-    QObject::connect(reply, &QNetworkReply::finished, [this, convId, reply] {
-        reply->deleteLater();
-        m_abortControllers.remove(convId);
-
-        Message pm = m_pendingMessages.take(convId);
-        if (!pm.content.isNull() && !pm.content.isEmpty()) {
-            m_storage->appendMsg(pm, pm.parent);
-
-            // After the first assistant reply we ask the server to give us
-            // a short title (emoji‑rich) for the conversation.
-            if (pm.role == "assistant") {
-                auto msgs = m_storage->getMessages(convId);
-                // A newly created conversation will have exactly three messages
-                // (root + user + assistant) after the first reply.
-                if (msgs.size() == 3) {
-                    summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
-                        auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(
-                            title);
-                        renameConversation(convId, shortTitle);
-                    });
-                }
-
-                followUpQuestions(convId,
-                                  pm.id,
-                                  [this, convId, leafNodeId = pm.id](const QStringList &questions) {
-                                      emit followUpQuestionsReceived(convId, leafNodeId, questions);
-                                  });
-            }
-        }
-    });
+        onChunk);
 }
 
 void ChatManager::followUpQuestions(const QString &convId,
@@ -579,7 +531,22 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             QJsonObject out;
             out["role"] = msg.role;
             out["content"] = msg.content;
-            res.append(out);
+
+            if (msg.role == "assistant") {
+                for (const QVariantMap &e : msg.extra) {
+                    if (e.contains("tool_calls"))
+                        out["tool_calls"] = e["tool_calls"].toJsonArray();
+                }
+                res.append(out);
+
+                for (const QVariantMap &e : msg.extra) {
+                    if (e.contains("tool_result"))
+                        res.append(e["tool_result"].toJsonObject());
+                }
+            } else {
+                res.append(out);
+            }
+
             continue;
         }
 
@@ -629,7 +596,254 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     return res;
 }
 
-void LlamaCpp::ChatManager::deleteConversation(const QString &convId)
+void ChatManager::sendChatRequest(const QString &convId,
+                                  const std::function<void(QJsonObject &)> &payloadBuilder,
+                                  std::function<void(qint64)> onChunk)
+{
+    QJsonObject payload;
+    payloadBuilder(payload); // <- fills the request‑specific fields
+
+    payload["stream"] = true;
+    payload["cache_prompt"] = true;
+    payload["reasoning_format"] = "none";
+    addCommonPayloadParams(payload);
+
+    QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+
+    QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
+    m_abortControllers[convId] = reply; // (same map used elsewhere)
+    qCDebug(llamaChatNetwork).noquote() << "Request payload:" << QJsonDocument(payload).toJson();
+
+    readSSEStream(
+        reply,
+        [this, convId, onChunk](const QJsonObject &chunk) {
+            if (chunk.contains("error")) {
+                qCWarning(llamaChatNetwork)
+                    << "SSE error:" << chunk["error"].toObject()["message"].toString();
+                return;
+            }
+
+            if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
+                QJsonObject t = chunk["timings"].toObject();
+                TimingReport tr;
+                tr.prompt_n = t["prompt_n"].toDouble();
+                tr.prompt_ms = t["prompt_ms"].toDouble();
+                tr.predicted_n = t["predicted_n"].toDouble();
+                tr.predicted_ms = t["predicted_ms"].toDouble();
+                m_pendingMessages[convId].timings = tr;
+            }
+
+            QJsonArray choices = chunk["choices"].toArray();
+            if (!choices.isEmpty()) {
+                QString added = choices[0].toObject()["delta"].toObject()["content"].toString();
+                Message &pm = m_pendingMessages[convId];
+                if (!added.isEmpty()) {
+                    pm.content += added;
+                    emit pendingMessageChanged(pm);
+                }
+
+                for (const QJsonValue &choiceVal : choices) {
+                    const QJsonObject &choice = choiceVal.toObject();
+                    const QJsonObject &delta = choice["delta"].toObject();
+                    if (!delta.contains("tool_calls"))
+                        continue;
+
+                    const QJsonArray &toolCalls = delta["tool_calls"].toArray();
+                    for (const QJsonValue &tcVal : toolCalls) {
+                        const QJsonObject &tc = tcVal.toObject();
+                        const QString toolId = tc["id"].toString();
+                        const int index = tc["index"].toInt();
+
+                        while (index >= m_toolCalls.size())
+                            m_toolCalls.emplace_back();
+
+                        if (index < 0)
+                            continue;
+
+                        ToolCall &tool = m_toolCalls[index];
+                        if (!toolId.isEmpty())
+                            tool.id = toolId;
+
+                        if (tc.contains("function")) {
+                            const QJsonObject &func = tc["function"].toObject();
+                            if (func.contains("name"))
+                                tool.name = func["name"].toString();
+                            if (func.contains("arguments"))
+                                tool.arguments += func["arguments"].toString();
+                        }
+
+                        QJsonParseError err;
+                        QJsonDocument parsed = QJsonDocument::fromJson(tool.arguments.toUtf8(),
+                                                                       &err);
+                        if (err.error == QJsonParseError::NoError) {
+                            QVariantMap extra;
+                            extra["tool_calls"] = QJsonArray{
+                                QJsonObject{{"id", tool.id},
+                                            {"type", "function"},
+                                            {"function",
+                                             QJsonObject{{"name", tool.name},
+                                                         {"arguments", tool.arguments}}}}};
+                            pm.extra << extra;
+
+                            m_toolCalls.remove(index);
+                        }
+
+                        emit pendingMessageChanged(pm);
+                    }
+                }
+            }
+            onChunk(-1); // UI scroll‑to‑bottom
+        },
+        [this, convId](const QString &err) {
+            qCWarning(llamaChatNetwork) << "SSE stream error:" << err;
+            m_pendingMessages.remove(convId);
+            if (m_abortControllers.contains(convId))
+                m_abortControllers[convId]->deleteLater();
+        });
+
+    QObject::connect(reply, &QNetworkReply::finished, [this, convId, reply] {
+        reply->deleteLater();
+        m_abortControllers.remove(convId);
+
+        Message pm = m_pendingMessages.take(convId);
+        m_storage->appendMsg(pm, pm.parent);
+
+        if (pm.role == "assistant") {
+            auto msgs = m_storage->getMessages(convId);
+            const bool doSummarization = msgs.size() == 3;
+
+            for (const QVariantMap &e : pm.extra) {
+                if (e.contains("tool_calls")) {
+                    QJsonArray array = e["tool_calls"].toJsonArray();
+                    for (const QJsonValue &v : array) {
+                        QJsonObject obj = v.toObject();
+                        ToolCall tool;
+                        tool.id = obj["id"].toString();
+                        obj = obj["function"].toObject();
+                        tool.name = obj["name"].toString();
+                        tool.arguments = obj["arguments"].toString();
+
+                        executeToolAndSendResult(convId, pm, tool, [](qint64) {});
+                    }
+                }
+            }
+
+            if (doSummarization) { // first assistant reply
+                summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
+                    auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(title);
+                    renameConversation(convId, shortTitle);
+                });
+            }
+
+            followUpQuestions(convId,
+                              pm.id,
+                              [this, convId, leafNodeId = pm.id](const QStringList &questions) {
+                                  emit followUpQuestionsReceived(convId, leafNodeId, questions);
+                              });
+        }
+    });
+}
+
+void ChatManager::executeToolAndSendResult(const QString &convId,
+                                           const Message &msg,
+                                           const ToolCall &tool,
+                                           std::function<void(qint64)> onChunk)
+{
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(tool.arguments.toUtf8(), &err);
+    if (err.error != QJsonParseError::NoError) {
+        qCWarning(llamaChatNetwork)
+            << "Tool args JSON malformed:" << err.errorString() << tool.arguments.toUtf8();
+        return;
+    }
+
+    qCInfo(llamaChatTools).noquote() << "Calling:" << tool.name << "with the arguments:\n"
+                                     << tool.arguments;
+
+    QString toolOutput;
+    if (tool.name == "python") {
+        // Expect {"code":"..."}
+        const QString code = doc.object().value("code").toString();
+        toolOutput = Tools::runPython(code);
+    } else if (tool.name == "edit_file") {
+        const QString path = doc.object().value("file_path").toString();
+        const QString op = doc.object().value("operation").toString();
+        const QString search = doc.object().value("search").toString();
+        const QString replace = doc.object().value("replace").toString();
+        const QString newContent = doc.object().value("new_file_content").toString();
+        toolOutput = Tools::editFile(path, op, search, replace, newContent);
+    } else if (tool.name == "list_directory") {
+        const QString directoryPath = doc.object().value("directory_path").toString();
+        toolOutput = Tools::listDirectory(directoryPath);
+    } else if (tool.name == "read_file") {
+        const QJsonObject obj = doc.object();
+
+        if (!obj.contains(QStringLiteral("file_path"))) {
+            qCWarning(llamaChatNetwork) << tr("Missing required field \"file_path\".");
+            return;
+        }
+        const QString relPath = obj.value(QStringLiteral("file_path")).toString();
+
+        const int firstLine = obj.value(QStringLiteral("first_line")).toInt(1);
+        const int lastLineIncl = obj.value(QStringLiteral("last_line_inclusive")).toInt(-1);
+        const bool readAll = obj.value(QStringLiteral("should_read_entire_file")).toBool(false);
+
+        toolOutput = Tools::readFile(relPath, firstLine, lastLineIncl, readAll);
+    } else if (tool.name == "regex_search") {
+        const QJsonObject obj = doc.object();
+
+        const QString includePattern = doc.object().value("include_pattern").toString();
+        const QString excludePattern = doc.object().value("exclude_pattern").toString();
+        const QString regex = doc.object().value("regex").toString();
+
+        toolOutput = Tools::regexSearch(includePattern, excludePattern, regex);
+    } else {
+        qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
+        return;
+    }
+
+    auto payloadBuilder = [this, convId, &tool, &toolOutput, &msg](QJsonObject &payload) {
+        // Append the tool‑result message.
+        QJsonObject toolMsg;
+        toolMsg["role"] = "tool";
+        toolMsg["tool_call_id"] = tool.id;
+        toolMsg["name"] = tool.name;
+        toolMsg["content"] = toolOutput;
+        QVariantMap extra;
+        extra["tool_result"] = toolMsg;
+
+        QList<QVariantMap> msgExtra = msg.extra;
+        msgExtra << extra;
+        m_storage->updateMessageExtra(msg, msgExtra);
+
+        auto currMsgs = m_storage->getMessages(convId);
+        auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, msg.id, false);
+
+        QJsonArray msgs = normalizeMsgsForAPI(leafMsgs);
+        payload["messages"] = msgs;
+        addToolsToPayload(payload);
+
+        // custom JSON from settings (if any)
+        if (!settings().customJson.value().isEmpty()) {
+            QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
+            if (d.isObject())
+                for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
+                    payload[it.key()] = it.value();
+        }
+    };
+
+    sendChatRequest(convId, payloadBuilder, onChunk);
+}
+
+void ChatManager::onToolsSupportEnabled(bool enabled)
+{
+    m_toolsSupport = enabled;
+}
+
+void ChatManager::deleteConversation(const QString &convId)
 {
     m_storage->deleteConversation(convId);
 }

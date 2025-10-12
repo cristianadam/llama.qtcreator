@@ -26,11 +26,10 @@ public:
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
     void saveToFile(const QString &fileName, const QString &verbatimText);
-
 private:
     struct CodeBlock
     {
-        std::optional<QString> language;
+        QString language;
         std::optional<QString> fileName;
         QString verbatimCode;
         QString hightlightedCode;

@@ -80,6 +80,16 @@ void ChatInput::buildUI()
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->setContentsMargins(0, 0, 0, 0);
 
+    m_toolsButton = new QToolButton(this);
+    m_toolsButton->setText("O");
+    m_toolsButton->setCheckable(true);
+    m_toolsButton->setToolTip(Tr::tr("Enable Tools usage"));
+    connect(m_toolsButton, &QToolButton::clicked, this, [this](bool checked) {
+        m_toolsButton->setToolTip(checked ? Tr::tr("Disable Tools usage")
+                                          : Tr::tr("Enable Tools usage"));
+        emit toolsSupportEnabled(checked);
+    });
+
     m_attachButton = new QToolButton(this);
     m_attachButton->setText("G");
     m_attachButton->setToolTip(Tr::tr("Attach file"));
@@ -97,6 +107,7 @@ void ChatInput::buildUI()
             onStopClicked();
     });
 
+    btnLayout->addWidget(m_toolsButton);
     btnLayout->addWidget(m_attachButton);
     btnLayout->addWidget(m_sendStopButton);
 
@@ -171,6 +182,14 @@ void ChatInput::applyStyleSheet()
 
         QToolButton:hover {
             background-color: Token_Foreground_Muted;
+        }
+
+        QToolButton:checked {
+            color: Token_Text_Accent;
+        }
+
+        QToolButton:unchecked {
+            color: Token_Text_Default;
         }
 
         QTabBar {

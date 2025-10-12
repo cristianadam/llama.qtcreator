@@ -1,5 +1,4 @@
 #include <QClipboard>
-#include <QDebug>
 #include <QDesktopServices>
 #include <QFile>
 #include <QList>
@@ -12,6 +11,7 @@
 
 #include <3rdparty/md4c/src/md4c-html.h>
 #include <3rdparty/md4c/src/md4c.h>
+#include <coreplugin/editormanager/editormanager.h>
 #include <repository.h>
 
 #include "llamahtmlhighlighter.h"
@@ -116,6 +116,7 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         const int idx = link.indexOf(':');
         const QString command = link.left(idx);
         const int codeBlockIndex = link.mid(idx + 1).toInt();
+        const QString argument = link.mid(idx + 1);
 
         if (command == "copy") {
             if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
@@ -126,7 +127,10 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
                 emit saveToFile(m_data.codeBlocks[codeBlockIndex].fileName.value_or(QString()),
                                 m_data.codeBlocks[codeBlockIndex].verbatimCode);
         } else {
-            QDesktopServices::openUrl(url);
+            if (url.isLocalFile())
+                Core::EditorManager::openEditor(FilePath::fromUrl(url));
+            else
+                QDesktopServices::openUrl(url);
         }
     });
 }
@@ -358,8 +362,8 @@ Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(cons
         QByteArray line(data, length);
 
         auto createLink =
-            [](const QString &name, qsizetype index, const QString &label) -> QByteArray {
-            QString href = QString("%1:%2").arg(name).arg(index);
+            [](const QString &name, auto indexOrId, const QString &label) -> QByteArray {
+            QString href = QString("%1:%2").arg(name).arg(indexOrId);
 
             // Choose the image based on the command name
             QString heroIconText;
@@ -449,9 +453,8 @@ Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(cons
             out->state = Data::Class;
         } else if (out->state == Data::Class) {
             out->state = Data::LanguageName;
-            out->codeBlocks.last().language = QString::fromLatin1(line);
-
-            out->highlighter->setDefinition(definitionForName(QString::fromLatin1(line)));
+            out->codeBlocks.last().language = QString::fromUtf8(line);
+            out->highlighter->setDefinition(definitionForName(out->codeBlocks.last().language));
         } else if (line == "\"" && out->state == Data::LanguageName) {
             out->state = Data::PreCodeEndQuote;
         } else if (line == ">" && out->state == Data::PreCodeEndQuote) {
@@ -486,7 +489,7 @@ Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(cons
                 out->state = Data::SourceFile;
                 // skip the comment with the line
                 return;
-            } else if (out->codeBlocks.last().language.value_or("") == "cmake") {
+            } else if (out->codeBlocks.last().language == "cmake") {
                 out->codeBlocks.last().fileName = "CMakeLists.txt";
                 insertSourceFileCopySave();
             } else {

@@ -27,12 +27,14 @@ public:
     QVector<Message> filterByLeafNodeId(const QVector<Message> &msgs,
                                         qint64 leafNodeId,
                                         bool includeRoot);
+    bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
 
 signals:
     void conversationCreated(const QString &convId);
     void conversationRenamed(const QString &convId);
     void conversationDeleted(const QString &convId);
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
+    void messageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
 
 private:
     QSqlDatabase db;

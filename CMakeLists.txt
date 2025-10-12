@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer)
-find_package(Qt6 COMPONENTS Widgets LinguistTools Sql REQUIRED)
+find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
 # You don't want your released plugin binaries to contain tests,
@@ -70,10 +70,12 @@ add_qtc_plugin(LlamaCpp
     llamastorage.cpp llamastorage.h
     llamathinkingsectionparser.cpp llamathinkingsectionparser.h
     llamatheme.cpp llamatheme.h
+    llamatools.cpp llamatools.h
     llamatr.h
     llamatypes.h
     LlamaCpp.json.in
     README.md
 )
 
+add_subdirectory(tests)
 add_subdirectory(translations)

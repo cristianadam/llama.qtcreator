@@ -145,11 +145,16 @@ ChatEditor::ChatEditor()
             &ChatManager::followUpQuestionsReceived,
             this,
             &ChatEditor::createFollowUpWidget);
+    connect(&chatManager, &ChatManager::messageExtraUpdated, this, &ChatEditor::onMessageExtraUpdated);
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
     connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
     connect(m_input, &ChatInput::editingCancelled, this, &ChatEditor::onEditingCancelled);
+    connect(m_input,
+            &ChatInput::toolsSupportEnabled,
+            &ChatManager::instance(),
+            &ChatManager::onToolsSupportEnabled);
 
     // Connect to the document to get the conversation id
     connect(EditorManager::instance(),
@@ -709,6 +714,21 @@ void ChatEditor::clearSearch()
     m_currentResult = 0;
     m_searchActive = false;
     m_searchQuery.clear();
+}
+
+void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantMap> &newExtra)
+{
+    if (msg.convId != m_viewingConvId)
+        return;
+
+    auto it = std::find_if(m_messageWidgets.begin(),
+                           m_messageWidgets.end(),
+                           [this, msg](ChatMessage *cm) { return cm->message().id == msg.id; });
+    if (it != m_messageWidgets.end()) {
+        ChatMessage *w = *it;
+        w->message().extra = newExtra;
+        w->messageCompleted(true);
+    }
 }
 
 void ChatEditor::performSearch(const QString &query)
