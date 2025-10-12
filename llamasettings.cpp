@@ -1,6 +1,7 @@
 #include "llamasettings.h"
 #include "llamaconstants.h"
 #include "llamatr.h"
+#include "llamatools.h"
 
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
@@ -369,6 +370,9 @@ LlamaSettings::LlamaSettings()
     showTokensPerSecond.setLabelText(Tr::tr("Show Tokens Per Second"));
     showTokensPerSecond.setDefaultValue(false);
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
+
+    tools.setSettingsKey("LlamaCpp.Tools");
+    tools.setDefaultValue(Tools::getTools());
 
     initEnableAspect(enableLlamaCpp);
 

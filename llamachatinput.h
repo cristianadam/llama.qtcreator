@@ -29,6 +29,7 @@ signals:
     void fileDropped(const QStringList &filePaths);
     void pasteLongText(const QString &text);
     void pasteFiles(const QStringList &filePaths);
+    void toolsSupportEnabled(bool enabled);
 
 private:
     void buildUI();
@@ -46,6 +47,7 @@ private:
     QTextEdit *m_txt;
     QToolButton *m_sendStopButton;
     QToolButton *m_attachButton;
+    QToolButton *m_toolsButton;
     QTabBar *m_attachedFilesBar;
     bool m_isGenerating{false};
 

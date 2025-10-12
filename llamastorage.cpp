@@ -95,7 +95,8 @@ Storage::Storage()
         qCCritical(llamaStorage) << "Failed to create table \"conversations\"" << q.lastError();
 
     if (!q.exec("CREATE TABLE IF NOT EXISTS messages "
-                "(id INTEGER PRIMARY KEY AUTOINCREMENT, convId TEXT, type TEXT, timestamp INTEGER, role TEXT, "
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, convId TEXT, type TEXT, timestamp INTEGER, "
+                "role TEXT, "
                 "content TEXT, "
                 "timings TEXT, "
                 "extra TEXT, "
@@ -294,8 +295,7 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
         return;
     }
     if (!q.next()) {
-        qCWarning(llamaStorage) << "appendMsg: no children found for"
-                                << parentNodeId;
+        qCWarning(llamaStorage) << "appendMsg: no children found for" << parentNodeId;
         return;
     }
     QJsonArray arr = QJsonDocument::fromJson(q.value(0).toString().toUtf8()).array();
@@ -348,6 +348,43 @@ QVector<Message> Storage::filterByLeafNodeId(const QVector<Message> &msgs,
         return a.timestamp < b.timestamp;
     });
     return res;
+}
+
+bool Storage::updateMessageExtra(const Message &msg, const QList<QVariantMap> &extra)
+{
+    // Serialize the list to the same JSON format we use everywhere else.
+    const QString json = serialize(extra);
+
+    QSqlQuery q(db);
+    // We use an explicit transaction – if anything fails we roll back.
+    if (!db.transaction()) {
+        qCWarning(llamaStorage) << "updateMessageExtra: cannot start transaction" << db.lastError();
+        return false;
+    }
+
+    q.prepare("UPDATE messages "
+              "SET extra = :extra "
+              "WHERE id = :id");
+    q.bindValue(":extra", json);
+    q.bindValue(":id", msg.id);
+
+    if (!q.exec()) {
+        qCWarning(llamaStorage) << "updateMessageExtra: UPDATE failed for id" << msg.id
+                                << q.lastError();
+        db.rollback();
+        return false;
+    }
+
+    // Commit the transaction – this will also release any locks.
+    if (!db.commit()) {
+        qCWarning(llamaStorage) << "updateMessageExtra: commit failed" << db.lastError();
+        db.rollback();
+        return false;
+    }
+
+    // Let everybody know the extra field changed.
+    emit messageExtraUpdated(msg, extra);
+    return true;
 }
 
 } // namespace LlamaCpp

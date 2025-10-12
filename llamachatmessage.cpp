@@ -5,11 +5,14 @@
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QInputDialog>
+#include <QJsonArray>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QPlainTextEdit>
+#include <QProcess>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
@@ -21,6 +24,7 @@
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/messagemanager.h>
 #include <projectexplorer/buildconfiguration.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
@@ -32,6 +36,7 @@
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamathinkingsectionparser.h"
+#include "llamatools.h"
 #include "llamatr.h"
 
 using namespace Core;
@@ -256,8 +261,10 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
     if (forceUpdate)
         m_markdownLabel->invalidate();
 
+    const QString labelText = text + getToolUsageAndResult();
+
     if (m_thoughtToggle) {
-        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
+        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(labelText);
         if (m_thoughtToggle->isChecked()) {
             m_markdownLabel->setMarkdown(ThinkingSectionParser::formatThinkingContent(thinking)
                                          + "\n\n" + message);
@@ -274,7 +281,7 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
                 : Tr::tr("Thought Process"));
 
     } else {
-        m_markdownLabel->setMarkdown(text);
+        m_markdownLabel->setMarkdown(labelText);
     }
 }
 
@@ -348,6 +355,96 @@ void ChatMessage::applyStyleSheet()
             background-color: Token_Foreground_Muted;
         }
     )"));
+}
+
+QString ChatMessage::getToolUsageAndResult()
+{
+    QString functionName;
+    QString argumentsJson;
+    QString functionResult;
+
+    if (!m_msg.extra.isEmpty()) {
+        for (const QVariantMap &e : m_msg.extra) {
+            if (e.contains("tool_calls")) {
+                QJsonArray calls = e.value("tool_calls").toJsonArray();
+                if (!calls.isEmpty()) {
+                    QJsonObject callObj = calls.first().toObject();
+                    functionName = callObj.value("function").toObject().value("name").toString();
+                    argumentsJson
+                        = callObj.value("function").toObject().value("arguments").toString();
+                }
+            }
+            if (e.contains("tool_result")) {
+                QJsonObject result = e.value("tool_result").toJsonObject();
+                if (!result.isEmpty())
+                    functionResult = result.value("content").toString();
+            }
+        }
+    }
+
+    // If there is no tool call at all we simply return an empty string.
+    if (functionName.isEmpty())
+        return {};
+
+    QString out = Tr::tr("**Tool call:** %1").arg(functionName);
+
+    QString details; // will hold markdown/HTML that goes inside <details>
+
+    // Helper to safely format JSON arguments (pretty‑print)
+    auto prettyPrintJson = [](const QString &json) -> QString {
+        QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
+        if (!doc.isNull())
+            return QString::fromUtf8(doc.toJson(QJsonDocument::Indented));
+        return json; // fallback – not a valid JSON string
+    };
+
+    if (functionName == "python") {
+        // Show the code that was executed and its stdout/stderr.
+        QJsonDocument doc = QJsonDocument::fromJson(argumentsJson.toUtf8());
+        QString code = doc.object().value("code").toString();
+
+        details = QString("```python\n%1\n```\n\n"
+                          "**Result:**\n"
+                          "```\n%2\n```")
+                      .arg(code, functionResult);
+    } else if (functionName == "edit_file") {
+        // Build a diff that visualises what the edit will do.
+        QJsonDocument doc = QJsonDocument::fromJson(argumentsJson.toUtf8());
+        QJsonObject obj = doc.object();
+
+        const QString path = obj.value("file_path").toString();
+        const QString op = obj.value("operation").toString();
+        const QString search = obj.value("search").toString();
+        const QString replace = obj.value("replace").toString();
+        const QString newFile = obj.value("new_file_content").toString();
+
+        // Use the existing diff generator.
+        const QString diff = Tools::diffForEditFile(path, op, search, replace, newFile);
+
+        details = QString("**Operation:** %1\n\n"
+                          "**Diff:**\n"
+                          "```diff\n%2\n```")
+                      .arg(op, diff);
+    } else {
+        // Generic fallback – show raw arguments (pretty‑printed) and result.
+        if (!argumentsJson.isEmpty())
+            details = QString("```json\n%1\n```").arg(prettyPrintJson(argumentsJson));
+
+        if (!functionResult.isEmpty()) {
+            if (!details.isEmpty())
+                details += "\n\n";
+            details += QString("**Result:**\n```\n%1\n```").arg(functionResult);
+        }
+    }
+
+    // Only add the <details> block when we actually have something to show.
+    if (!details.isEmpty()) {
+        out += "\n<details><summary>" + Tr::tr("Show details") + "</summary>\n\n" + details
+               + "\n</details>";
+    }
+
+    // Return the assembled markdown string
+    return out;
 }
 
 void ChatMessage::setSiblingIdx(int newSiblingIdx)

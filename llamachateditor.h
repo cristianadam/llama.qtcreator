@@ -21,6 +21,7 @@ namespace LlamaCpp {
 
 class ChatInput;
 class ChatMessage;
+struct ToolCall;
 
 class ChatEditor : public Core::IEditor
 {
@@ -66,6 +67,7 @@ public slots:
     void nextSearchResult();
     void prevSearchResult();
     void clearSearch();
+    void onMessageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
 
 private:
     void updateSpeedLabel(const Message &msg);
