@@ -29,6 +29,7 @@ LlamaSettings &settings()
 
 LlamaSettings::LlamaSettings()
 {
+    setSettingsGroup(Constants::LLAMA_SETTINGS_GROUP);
     setAutoApply(false);
 
     //
@@ -37,7 +38,7 @@ LlamaSettings::LlamaSettings()
 
     endpoint.setDisplayName(Tr::tr("Endpoint"));
     endpoint.setDisplayStyle(StringAspect::LineEditDisplay);
-    endpoint.setSettingsKey("LlamaCpp.Endpoint");
+    endpoint.setSettingsKey("Endpoint");
     endpoint.setLabelText(Tr::tr("Endpoint:"));
     endpoint.setDefaultValue("http://127.0.0.1:8012/infill");
     endpoint.setToolTip(Tr::tr("llama.cpp server endpoint"));
@@ -45,14 +46,14 @@ LlamaSettings::LlamaSettings()
 
     apiKey.setDisplayName(Tr::tr("API Key"));
     apiKey.setDisplayStyle(StringAspect::LineEditDisplay);
-    apiKey.setSettingsKey("LlamaCpp.ApiKey");
+    apiKey.setSettingsKey("ApiKey");
     apiKey.setLabelText(Tr::tr("API Key:"));
     apiKey.setDefaultValue("");
     apiKey.setToolTip(Tr::tr("llama.cpp server api key (optional)"));
     apiKey.setHistoryCompleter("LlamaCpp.ApiKey.History");
 
     nPrefix.setDisplayName(Tr::tr("Prefix Code Lines"));
-    nPrefix.setSettingsKey("LlamaCpp.NPrefix");
+    nPrefix.setSettingsKey("NPrefix");
     nPrefix.setLabelText(Tr::tr("Prefix Code Lines:"));
     nPrefix.setDefaultValue(256);
     nPrefix.setToolTip(
@@ -60,7 +61,7 @@ LlamaSettings::LlamaSettings()
     nPrefix.setRange(0, 65535);
 
     nSuffix.setDisplayName(Tr::tr("Suffix Code Lines"));
-    nSuffix.setSettingsKey("LlamaCpp.NSuffix");
+    nSuffix.setSettingsKey("NSuffix");
     nSuffix.setLabelText(Tr::tr("Suffix Code Lines:"));
     nSuffix.setDefaultValue(64);
     nSuffix.setToolTip(
@@ -68,7 +69,7 @@ LlamaSettings::LlamaSettings()
     nSuffix.setRange(0, 65535);
 
     nPredict.setDisplayName(Tr::tr("Max Token Predictions"));
-    nPredict.setSettingsKey("LlamaCpp.NPredict");
+    nPredict.setSettingsKey("NPredict");
     nPredict.setLabelText(Tr::tr("Max Token Predictions:"));
     nPredict.setDefaultValue(128);
     nPredict.setToolTip(Tr::tr("Max number of tokens to predict."));
@@ -76,7 +77,7 @@ LlamaSettings::LlamaSettings()
 
     stopStrings.setDisplayName(Tr::tr("Stop Strings"));
     stopStrings.setDisplayStyle(StringAspect::LineEditDisplay);
-    stopStrings.setSettingsKey("LlamaCpp.StopStrings");
+    stopStrings.setSettingsKey("StopStrings");
     stopStrings.setLabelText(Tr::tr("Stop Strings:"));
     stopStrings.setDefaultValue("");
     stopStrings.setToolTip(
@@ -85,7 +86,7 @@ LlamaSettings::LlamaSettings()
     stopStrings.setHistoryCompleter("LlamaCpp.StopStrings.History");
 
     tMaxPromptMs.setDisplayName(Tr::tr("Max Prompt Time (ms)"));
-    tMaxPromptMs.setSettingsKey("LlamaCpp.TMaxPromptMs");
+    tMaxPromptMs.setSettingsKey("TMaxPromptMs");
     tMaxPromptMs.setLabelText(Tr::tr("Max Prompt Time (ms):"));
     tMaxPromptMs.setDefaultValue(500);
     tMaxPromptMs.setToolTip(
@@ -93,14 +94,14 @@ LlamaSettings::LlamaSettings()
     tMaxPromptMs.setRange(0, 65535);
 
     tMaxPredictMs.setDisplayName(Tr::tr("Max Predict Time (ms)"));
-    tMaxPredictMs.setSettingsKey("LlamaCpp.TMaxPredictMs");
+    tMaxPredictMs.setSettingsKey("TMaxPredictMs");
     tMaxPredictMs.setLabelText(Tr::tr("Max Predict Time (ms):"));
     tMaxPredictMs.setDefaultValue(1000);
     tMaxPredictMs.setToolTip(Tr::tr("Max alloted time for the prediction."));
     tMaxPredictMs.setRange(0, 65535);
 
     showInfo.setDisplayName(Tr::tr("Show Info"));
-    showInfo.setSettingsKey("LlamaCpp.ShowInfo");
+    showInfo.setSettingsKey("ShowInfo");
     showInfo.setLabelText(Tr::tr("Show Info:"));
     showInfo.setDefaultValue(2);
     showInfo.setToolTip(
@@ -108,14 +109,14 @@ LlamaSettings::LlamaSettings()
     showInfo.setRange(0, 2);
 
     autoFim.setDisplayName(Tr::tr("Auto FIM"));
-    autoFim.setSettingsKey("LlamaCpp.AutoFim");
+    autoFim.setSettingsKey("AutoFim");
     autoFim.setLabelText(Tr::tr("Auto FIM"));
     autoFim.setDefaultValue(true);
     autoFim.setToolTip(
         Tr::tr("Trigger FIM (Fill-in-the-Middle) completion automatically on cursor movement."));
 
     maxLineSuffix.setDisplayName(Tr::tr("Max Line Suffix"));
-    maxLineSuffix.setSettingsKey("LlamaCpp.MaxlineSuffix");
+    maxLineSuffix.setSettingsKey("MaxlineSuffix");
     maxLineSuffix.setLabelText(Tr::tr("Max Line Suffix:"));
     maxLineSuffix.setDefaultValue(8);
     maxLineSuffix.setToolTip(Tr::tr("Do not auto-trigger FIM completion if there are more than "
@@ -123,14 +124,14 @@ LlamaSettings::LlamaSettings()
     maxLineSuffix.setRange(0, 65535);
 
     maxCacheKeys.setDisplayName(Tr::tr("Max Cache Keys"));
-    maxCacheKeys.setSettingsKey("LlamaCpp.MaxCacheKeys");
+    maxCacheKeys.setSettingsKey("MaxCacheKeys");
     maxCacheKeys.setLabelText(Tr::tr("Max Cache Keys:"));
     maxCacheKeys.setDefaultValue(250);
     maxCacheKeys.setToolTip(Tr::tr("Max number of cached completions to keep in result_cache."));
     maxCacheKeys.setRange(0, 65535);
 
     ringNChunks.setDisplayName(Tr::tr("Ring Chunks"));
-    ringNChunks.setSettingsKey("LlamaCpp.RingNChunks");
+    ringNChunks.setSettingsKey("RingNChunks");
     ringNChunks.setLabelText(Tr::tr("Ring Chunks:"));
     ringNChunks.setDefaultValue(16);
     ringNChunks.setToolTip(
@@ -138,7 +139,7 @@ LlamaSettings::LlamaSettings()
     ringNChunks.setRange(0, 65535);
 
     ringChunkSize.setDisplayName(Tr::tr("Chunk Line Size"));
-    ringChunkSize.setSettingsKey("LlamaCpp.RingChunkSize");
+    ringChunkSize.setSettingsKey("RingChunkSize");
     ringChunkSize.setLabelText(Tr::tr("Chunk Line Size:"));
     ringChunkSize.setDefaultValue(64);
     ringChunkSize.setToolTip(Tr::tr(
@@ -148,7 +149,7 @@ LlamaSettings::LlamaSettings()
     ringChunkSize.setRange(0, 65535);
 
     ringScope.setDisplayName(Tr::tr("Ring Line Scope"));
-    ringScope.setSettingsKey("LlamaCpp.RingScope");
+    ringScope.setSettingsKey("RingScope");
     ringScope.setLabelText(Tr::tr("Ring Line Scope:"));
     ringScope.setDefaultValue(1024);
     ringScope.setToolTip(Tr::tr("The range around the cursor position (in number of lines) for "
@@ -156,7 +157,7 @@ LlamaSettings::LlamaSettings()
     ringScope.setRange(0, 65535);
 
     ringUpdateMs.setDisplayName(Tr::tr("Update Interval (ms)"));
-    ringUpdateMs.setSettingsKey("LlamaCpp.RingUpdateMs");
+    ringUpdateMs.setSettingsKey("RingUpdateMs");
     ringUpdateMs.setLabelText(Tr::tr("Update Interval (ms):"));
     ringUpdateMs.setDefaultValue(100);
     ringUpdateMs.setToolTip(Tr::tr("How often to process queued chunks in normal mode."));
@@ -167,7 +168,7 @@ LlamaSettings::LlamaSettings()
     //
 
     chatEndpoint.setDisplayName(Tr::tr("Chat Endpoint"));
-    chatEndpoint.setSettingsKey("LlamaCpp.ChatEndpoint");
+    chatEndpoint.setSettingsKey("ChatEndpoint");
     chatEndpoint.setLabelText(Tr::tr("Chat Endpoint:"));
     chatEndpoint.setDisplayStyle(StringAspect::LineEditDisplay);
     chatEndpoint.setDefaultValue("http://127.0.0.1:8080");
@@ -175,7 +176,7 @@ LlamaSettings::LlamaSettings()
     chatEndpoint.setHistoryCompleter("LlamaCpp.ChatEndpoint.History");
 
     chatApiKey.setDisplayName(Tr::tr("Chat API Key"));
-    chatApiKey.setSettingsKey("LlamaCpp.ChatApiKey");
+    chatApiKey.setSettingsKey("ChatApiKey");
     chatApiKey.setLabelText(Tr::tr("Chat API Key:"));
     chatApiKey.setDisplayStyle(StringAspect::LineEditDisplay);
     chatApiKey.setDefaultValue("");
@@ -184,7 +185,7 @@ LlamaSettings::LlamaSettings()
     chatApiKey.setHistoryCompleter("LlamaCpp.ChatApiKey.History");
 
     systemMessage.setDisplayName(Tr::tr("System Message"));
-    systemMessage.setSettingsKey("LlamaCpp.SystemMessage");
+    systemMessage.setSettingsKey("SystemMessage");
     systemMessage.setLabelText(Tr::tr("System Message:"));
     systemMessage.setDefaultValue("");
     systemMessage.setPlaceHolderText(Tr::tr("Default: none"));
@@ -194,7 +195,7 @@ LlamaSettings::LlamaSettings()
     systemMessage.setHistoryCompleter("LlamaCpp.SystemMessage.History");
 
     pasteLongTextToFileLen.setDisplayName(Tr::tr("Paste Long Text to File Length"));
-    pasteLongTextToFileLen.setSettingsKey("LlamaCpp.PasteLongTextToFileLen");
+    pasteLongTextToFileLen.setSettingsKey("PasteLongTextToFileLen");
     pasteLongTextToFileLen.setLabelText(Tr::tr("Paste Long Text to File Length:"));
     pasteLongTextToFileLen.setDefaultValue(2500);
     pasteLongTextToFileLen.setToolTip(
@@ -203,7 +204,7 @@ LlamaSettings::LlamaSettings()
     pasteLongTextToFileLen.setRange(0, 65535);
 
     samplers.setDisplayName(Tr::tr("Samplers"));
-    samplers.setSettingsKey("LlamaCpp.Samplers");
+    samplers.setSettingsKey("Samplers");
     samplers.setLabelText(Tr::tr("Samplers:"));
     samplers.setDefaultValue("edkypmxt");
     samplers.setToolTip(
@@ -213,7 +214,7 @@ LlamaSettings::LlamaSettings()
     samplers.setDisplayStyle(StringAspect::LineEditDisplay);
 
     temperature.setDisplayName(Tr::tr("Temperature"));
-    temperature.setSettingsKey("LlamaCpp.Temperature");
+    temperature.setSettingsKey("Temperature");
     temperature.setLabelText(Tr::tr("Temperature:"));
     temperature.setDefaultValue(0.8);
     temperature.setToolTip(
@@ -222,7 +223,7 @@ LlamaSettings::LlamaSettings()
     temperature.setRange(0.0, 1.0);
 
     dynatemp_range.setDisplayName(Tr::tr("Dynamic Temperature Range"));
-    dynatemp_range.setSettingsKey("LlamaCpp.DynatempRange");
+    dynatemp_range.setSettingsKey("DynatempRange");
     dynatemp_range.setLabelText(Tr::tr("Dynamic Temperature Range:"));
     dynatemp_range.setToolTip(
         Tr::tr("Addon for the temperature sampler. The added value to the range of dynamic "
@@ -231,7 +232,7 @@ LlamaSettings::LlamaSettings()
     dynatemp_range.setRange(0.0, 1.0);
 
     dynatemp_exponent.setDisplayName(Tr::tr("Dynamic Temperature Exponent"));
-    dynatemp_exponent.setSettingsKey("LlamaCpp.DynatempExponent");
+    dynatemp_exponent.setSettingsKey("DynatempExponent");
     dynatemp_exponent.setLabelText(Tr::tr("Dynamic Temperature Exponent:"));
     dynatemp_exponent.setToolTip(
         Tr::tr("Addon for the temperature sampler. Smoothes out the probability redistribution "
@@ -240,14 +241,14 @@ LlamaSettings::LlamaSettings()
     dynatemp_exponent.setRange(0.0, 10.0);
 
     top_k.setDisplayName(Tr::tr("Top K"));
-    top_k.setSettingsKey("LlamaCpp.TopK");
+    top_k.setSettingsKey("TopK");
     top_k.setLabelText(Tr::tr("Top K:"));
     top_k.setDefaultValue(40);
     top_k.setToolTip(Tr::tr("Keeps only k top tokens."));
     top_k.setRange(0, 100);
 
     top_p.setDisplayName(Tr::tr("Top P"));
-    top_p.setSettingsKey("LlamaCpp.TopP");
+    top_p.setSettingsKey("TopP");
     top_p.setLabelText(Tr::tr("Top P:"));
     top_p.setDefaultValue(0.95);
     top_p.setToolTip(
@@ -255,7 +256,7 @@ LlamaSettings::LlamaSettings()
     top_p.setRange(0.0, 1.0);
 
     min_p.setDisplayName(Tr::tr("Min P"));
-    min_p.setSettingsKey("LlamaCpp.MinP");
+    min_p.setSettingsKey("MinP");
     min_p.setLabelText(Tr::tr("Min P:"));
     min_p.setDefaultValue(0.05);
     min_p.setToolTip(Tr::tr("Limits tokens based on the minimum probability for a token to be "
@@ -263,7 +264,7 @@ LlamaSettings::LlamaSettings()
     min_p.setRange(0.0, 1.0);
 
     xtc_probability.setDisplayName(Tr::tr("XTC Probability"));
-    xtc_probability.setSettingsKey("LlamaCpp.XtcProbability");
+    xtc_probability.setSettingsKey("XtcProbability");
     xtc_probability.setLabelText(Tr::tr("XTC Probability:"));
     xtc_probability.setToolTip(Tr::tr("XTC sampler cuts out top tokens; this parameter controls "
                                       "the chance of cutting tokens at all. 0 disables XTC."));
@@ -271,7 +272,7 @@ LlamaSettings::LlamaSettings()
     xtc_probability.setRange(0.0, 1.0);
 
     xtc_threshold.setDisplayName(Tr::tr("XTC Threshold"));
-    xtc_threshold.setSettingsKey("LlamaCpp.XtcThreshold");
+    xtc_threshold.setSettingsKey("XtcThreshold");
     xtc_threshold.setLabelText(Tr::tr("XTC Threshold:"));
     xtc_threshold.setToolTip(Tr::tr("XTC sampler cuts out top tokens; this parameter controls the "
                                     "token probability that is required to cut that token."));
@@ -279,7 +280,7 @@ LlamaSettings::LlamaSettings()
     xtc_threshold.setRange(0.0, 1.0);
 
     typical_p.setDisplayName(Tr::tr("Typical P"));
-    typical_p.setSettingsKey("LlamaCpp.TypicalP");
+    typical_p.setSettingsKey("TypicalP");
     typical_p.setLabelText(Tr::tr("Typical P:"));
     typical_p.setDefaultValue(1.0);
     typical_p.setToolTip(Tr::tr(
@@ -287,35 +288,35 @@ LlamaSettings::LlamaSettings()
     typical_p.setRange(0.0, 1.0);
 
     repeat_last_n.setDisplayName(Tr::tr("Repeat Last N"));
-    repeat_last_n.setSettingsKey("LlamaCpp.RepeatLastN");
+    repeat_last_n.setSettingsKey("RepeatLastN");
     repeat_last_n.setLabelText(Tr::tr("Repeat Last N:"));
     repeat_last_n.setDefaultValue(64);
     repeat_last_n.setToolTip(Tr::tr("Last n tokens to consider for penalizing repetition"));
     repeat_last_n.setRange(-1, 1048576);
 
     repeat_penalty.setDisplayName(Tr::tr("Repeat Penalty"));
-    repeat_penalty.setSettingsKey("LlamaCpp.RepeatPenalty");
+    repeat_penalty.setSettingsKey("RepeatPenalty");
     repeat_penalty.setLabelText(Tr::tr("Repeat Penalty:"));
     repeat_penalty.setDefaultValue(1.0);
     repeat_penalty.setToolTip(
         Tr::tr("Controls the repetition of token sequences in the generated text"));
 
     presence_penalty.setDisplayName(Tr::tr("Presence Penalty"));
-    presence_penalty.setSettingsKey("LlamaCpp.PresencePenalty");
+    presence_penalty.setSettingsKey("PresencePenalty");
     presence_penalty.setLabelText(Tr::tr("Presence Penalty:"));
     presence_penalty.setDefaultValue(0.0);
     presence_penalty.setToolTip(
         Tr::tr("Limits tokens based on whether they appear in the output or not."));
 
     frequency_penalty.setDisplayName(Tr::tr("Frequency Penalty"));
-    frequency_penalty.setSettingsKey("LlamaCpp.FrequencyPenalty");
+    frequency_penalty.setSettingsKey("FrequencyPenalty");
     frequency_penalty.setLabelText(Tr::tr("Frequency Penalty:"));
     frequency_penalty.setDefaultValue(0.0);
     frequency_penalty.setToolTip(
         Tr::tr("Limits tokens based on how often they appear in the output."));
 
     dry_multiplier.setDisplayName(Tr::tr("DRY Multiplier"));
-    dry_multiplier.setSettingsKey("LlamaCpp.DryMultiplier");
+    dry_multiplier.setSettingsKey("DryMultiplier");
     dry_multiplier.setLabelText(Tr::tr("DRY Multiplier:"));
     dry_multiplier.setToolTip(
         Tr::tr("DRY sampling reduces repetition in generated text even across long contexts. This "
@@ -324,7 +325,7 @@ LlamaSettings::LlamaSettings()
     dry_multiplier.setRange(0.0, 10.0);
 
     dry_base.setDisplayName(Tr::tr("DRY Base"));
-    dry_base.setSettingsKey("LlamaCpp.DryBase");
+    dry_base.setSettingsKey("DryBase");
     dry_base.setLabelText(Tr::tr("DRY Base:"));
     dry_base.setToolTip(Tr::tr("DRY sampling reduces repetition in generated text even across long "
                                "contexts. This parameter sets the DRY sampling base value."));
@@ -332,7 +333,7 @@ LlamaSettings::LlamaSettings()
     dry_base.setRange(0.0, 10.0);
 
     dry_allowed_length.setDisplayName(Tr::tr("DRY Allowed Length"));
-    dry_allowed_length.setSettingsKey("LlamaCpp.DryAllowedLength");
+    dry_allowed_length.setSettingsKey("DryAllowedLength");
     dry_allowed_length.setLabelText(Tr::tr("DRY Allowed Length:"));
     dry_allowed_length.setToolTip(
         Tr::tr("DRY sampling reduces repetition in generated text even across long contexts. This "
@@ -341,7 +342,7 @@ LlamaSettings::LlamaSettings()
     dry_allowed_length.setRange(0, 100);
 
     dry_penalty_last_n.setDisplayName(Tr::tr("DRY Penalty Last N"));
-    dry_penalty_last_n.setSettingsKey("LlamaCpp.DryPenaltyLastN");
+    dry_penalty_last_n.setSettingsKey("DryPenaltyLastN");
     dry_penalty_last_n.setLabelText(Tr::tr("DRY Penalty Last N:"));
     dry_penalty_last_n.setToolTip(
         Tr::tr("DRY sampling reduces repetition in generated text even across long contexts. This "
@@ -350,21 +351,21 @@ LlamaSettings::LlamaSettings()
     dry_penalty_last_n.setRange(-1, 1048576);
 
     max_tokens.setDisplayName(Tr::tr("Max Tokens"));
-    max_tokens.setSettingsKey("LlamaCpp.MaxTokens");
+    max_tokens.setSettingsKey("MaxTokens");
     max_tokens.setLabelText(Tr::tr("Max Tokens:"));
     max_tokens.setDefaultValue(-1);
     max_tokens.setToolTip(Tr::tr("The maximum number of token per output. -1 means no limit."));
     max_tokens.setRange(-1, 1048576);
 
     customJson.setDisplayName(Tr::tr("Custom JSON config"));
-    customJson.setSettingsKey("LlamaCpp.CustomJson");
+    customJson.setSettingsKey("CustomJson");
     customJson.setLabelText(Tr::tr("Custom JSON config:"));
     customJson.setToolTip(Tr::tr("Custom JSON string of extra parameters."));
     customJson.setHistoryCompleter("LlamaCpp.Custom.History");
     customJson.setDisplayStyle(StringAspect::TextEditDisplay);
 
     showTokensPerSecond.setDisplayName(Tr::tr("Show Tokens Per Second"));
-    showTokensPerSecond.setSettingsKey("LlamaCpp.ShowTokensPerSecond");
+    showTokensPerSecond.setSettingsKey("ShowTokensPerSecond");
     showTokensPerSecond.setLabelText(Tr::tr("Show Tokens Per Second"));
     showTokensPerSecond.setDefaultValue(false);
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
@@ -418,6 +419,7 @@ LlamaSettings::LlamaSettings()
     setLayouter([this] {
         using namespace Layouting;
 
+        // clang-format off
         Group fim {
             Column {
                 endpoint, br,
@@ -473,7 +475,6 @@ LlamaSettings::LlamaSettings()
             },
         };
 
-        // clang-format off
         return Column {
             enableLlamaCpp, br,
             Row {

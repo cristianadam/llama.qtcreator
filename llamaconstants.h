@@ -1,6 +1,7 @@
 #pragma once
 
 namespace LlamaCpp::Constants {
+    const char LLAMA_SETTINGS_GROUP[] = "LlamaCpp";
     const char LLAMACPP_PROJECT_SETTINGS_ID[] = "LlamaCpp.Project.Settings";
     const char ENABLE_LLAMACPP[] = "LlamaCpp.EnableLlamaCpp";
     const char LLAMACPP_USE_GLOBAL_SETTINGS[] = "LlamaCpp.UseGlobalSettings";
