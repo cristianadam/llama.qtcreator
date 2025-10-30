@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDebug>
+#include <QElapsedTimer>
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
