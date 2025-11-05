@@ -9,11 +9,11 @@
 #include <QTextStream>
 
 #include <coreplugin/documentmanager.h>
-
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
-
+#include <texteditor/basefilefind.h>
 #include <utils/filepath.h>
+#include <utils/searchresultitem.h>
 
 using namespace ProjectExplorer;
 using namespace Utils;
@@ -152,13 +152,13 @@ QStringList getTools()
         "type": "function",
         "function": {
             "name": "regex_search",
-            "description": "Fast text-based regex search in the code base (prefer it for finding exact function names or expressions) that finds exact pattern matches with file names and line numbers within files or directories. If there is no exclude_pattern - provide an empty string. Returns up to 50 matches in format file_name:line_number: line_content",
+            "description": "Fast text-based regex search in the code base (prefer it for finding exact function names or expressions) that finds exact pattern matches with file names and line numbers within files or directories. If there is no exclude_pattern - provide an empty string. Returns matches in format file_name:line_number: line_content",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "include_pattern": { "type": "string", "description": "Glob pattern for files to include (specify file extensions only if you are absolutely sure)" },
-                    "exclude_pattern": { "type": "string", "description": "Glob pattern for files to exclude" },
-                    "regex": { "type": "string", "description": "A string for constructing a typescript RegExp pattern to search for. Escape special regex characters when needed." }
+                    "include_pattern": { "type": "string", "description": "Comma separated glob patterns for files to include (specify file extensions only if you are absolutely sure)" },
+                    "exclude_pattern": { "type": "string", "description": "Comma separated glob patterns for files to exclude" },
+                    "regex": { "type": "string", "description": "A string for constructing a regular expression pattern to search for. Escape special regex characters when needed." }
                 },
                 "required": [ "include_pattern", "regex" ],
                 "strict": true
@@ -304,6 +304,30 @@ QString readFile(const QString &relPath, int firstLine, int lastLineIncl, bool r
     return slice.join('\n');
 }
 
+class RegexFileFind : public TextEditor::BaseFileFind
+{
+public:
+    using TextEditor::BaseFileFind::currentSearchEngine;
+    using TextEditor::BaseFileFind::searchDir;
+    using TextEditor::BaseFileFind::setSearchDir;
+
+    QString id() const { return {}; }
+    QString displayName() const { return {}; }
+    QString label() const { return {}; }
+    QString toolTip() const { return {}; }
+
+    TextEditor::FileContainerProvider fileContainerProvider() const
+    {
+        return [this] {
+            return SubDirFileContainer(FilePaths{searchDir()},
+                                       fileFindParameters.nameFilters,
+                                       fileFindParameters.exclusionFilters);
+        };
+    }
+
+    TextEditor::FileFindParameters fileFindParameters;
+};
+
 QString regexSearch(const QString &includePattern,
                     const QString &excludePattern,
                     const QString &regex)
@@ -312,66 +336,41 @@ QString regexSearch(const QString &includePattern,
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
 
-    // If the user left the include pattern empty we treat it as “everything”.
-    const QString incGlob = includePattern.isEmpty() ? QStringLiteral("*") : includePattern;
-    const QRegularExpression incRe(QRegularExpression::wildcardToRegularExpression(incGlob));
+    RegexFileFind finder;
+    finder.setSearchDir(cwd);
 
-    QRegularExpression exclRe;
-    bool haveExclude = false;
-    if (!excludePattern.isEmpty()) {
-        haveExclude = true;
-        exclRe.setPattern(QRegularExpression::wildcardToRegularExpression(excludePattern));
-    }
+    TextEditor::FileFindParameters &params = finder.fileFindParameters;
+    params.text = regex;
+    params.flags = FindRegularExpression;
+    params.nameFilters = includePattern.isEmpty() ? QStringList()
+                                                  : splitFilterUiText(includePattern);
+    params.exclusionFilters = excludePattern.isEmpty() ? QStringList()
+                                                       : splitFilterUiText(excludePattern);
+    params.searchDir = cwd;
+    params.fileContainerProvider = finder.fileContainerProvider();
 
-    static QRegularExpression searchRe(regex);
-    if (!searchRe.isValid())
-        return Tr::tr("Invalid regular expression: %1").arg(searchRe.errorString());
+    TextEditor::SearchEngine *engine = finder.currentSearchEngine();
+    QTC_ASSERT(engine, return Tr::tr("No search engine available."));
 
-    // We ask for *all* files; the include/exclude globs are applied manually.
-    const FileFilter allFilesFilter(QStringList(),
-                                    QDir::Files | QDir::NoSymLinks | QDir::AllDirs,
-                                    QDirIterator::Subdirectories);
-    const FilePaths allEntries = cwd.dirEntries(allFilesFilter, QDir::Name);
+    params.searchExecutor = engine->searchExecutor();
+    QFuture<SearchResultItems> future = params.searchExecutor(params);
+    future.waitForFinished();
+    const SearchResultItems items = future.result();
 
-    const int maxMatches = 50;
-    QStringList matches;
-
-    for (const FilePath &entry : allEntries) {
-        if (matches.size() >= maxMatches)
-            break;
-
-        const QString fileName = entry.fileName();
-
-        if (!incRe.match(fileName).hasMatch())
-            continue;
-
-        if (haveExclude && exclRe.match(fileName).hasMatch())
-            continue;
-
-        const Result<QByteArray> readRes = entry.fileContents();
-        if (!readRes)
-            continue;
-
-        QTextStream ts(readRes.value());
-        int lineNo = 0;
-
-        while (!ts.atEnd() && matches.size() < maxMatches) {
-            const QString line = ts.readLine();
-            ++lineNo;
-
-            QRegularExpressionMatch m = searchRe.match(line);
-            if (m.hasMatch()) {
-                // Build a *relative* path for nicer output (relative to cwd)
-                const QString relPath = entry.relativeChildPath(cwd).toUserOutput();
-                matches << QString("%1:%2: %3").arg(relPath, QString::number(lineNo), line);
-            }
-        }
-    }
-
-    if (matches.isEmpty())
+    if (items.isEmpty())
         return Tr::tr("No matches found for pattern \"%1\".").arg(regex);
 
-    return matches.join('\n');
+    QStringList lines;
+    for (const SearchResultItem &it : items) {
+        // `it.path()` returns a `FilePath` – make it relative to the cwd
+        const QString relPath
+            = FilePath::fromString(it.path().first()).relativeChildPath(cwd).toUserOutput();
+        const int lineNumber = it.mainRange().begin.line;
+        const QString lineText = it.lineText();
+        lines << QString("%1:%2: %3").arg(relPath, QString::number(lineNumber), lineText);
+    }
+
+    return lines.join('\n');
 }
 
 QString createFile(const QString &relPath, const QString &content)

@@ -5,6 +5,7 @@ add_qtc_test(llamatools_test
   DEPENDS
     Qt::Test Qt::Core Qt::Gui
     QtCreator::Utils
+    QtCreator::TextEditor
   SOURCES
     llamatools_test.cpp
     ../llamatools.cpp

@@ -8,6 +8,7 @@
 #include "llamatools.h"
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
+#include <texteditor/basefilefind.h>
 
 using namespace LlamaCpp::Tools;
 
