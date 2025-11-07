@@ -819,8 +819,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         can_accept = false;
 
     if (can_accept) {
-        // Text:positionInText has 1 based line and column values
-        int currentIntPos = Text::positionInText(editor->document(), pos_y, pos_x + 1);
+        // Text:positionInText has 1 based line and 0 based column values
+        int currentIntPos = Text::positionInText(editor->document(), pos_y, pos_x);
         TextSuggestion::Data data;
         Text::Position currentPos = Text::Position::fromPositionInDocument(editor->document(),
                                                                            currentIntPos);
