@@ -78,6 +78,9 @@ Storage &Storage::instance()
 
 Storage::Storage()
 {
+    const Utils::FilePath cacheResourceDir = Core::ICore::cacheResourcePath(".");
+    cacheResourceDir.ensureWritableDir();
+
     const QString databasePath = Core::ICore::cacheResourcePath("llamacpp.db").path();
     qCDebug(llamaStorage) << "Storage path:" << databasePath;
     db = QSqlDatabase::addDatabase("QSQLITE");
