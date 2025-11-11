@@ -2,13 +2,14 @@
 <svg
    id="Layer_1"
    version="1.1"
-   viewBox="0 0 220 220"
+   viewBox="0 0 24 24"
    sodipodi:docname="llama.svg"
-   width="220"
-   height="220"
-   inkscape:version="1.4.2 (ebf0e940, 2025-05-08)"
+   width="24"
+   height="24"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -21,15 +22,15 @@
      inkscape:pagecheckerboard="true"
      inkscape:deskcolor="#d1d1d1"
      showguides="true"
-     inkscape:zoom="0.55466667"
-     inkscape:cx="-193.81009"
-     inkscape:cy="250.60096"
-     inkscape:window-width="1152"
-     inkscape:window-height="987"
-     inkscape:window-x="559"
-     inkscape:window-y="25"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Layer_1">
+     inkscape:zoom="50.202696"
+     inkscape:cx="11.284255"
+     inkscape:cy="16.622613"
+     inkscape:window-width="2560"
+     inkscape:window-height="1368"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g2">
     <sodipodi:guide
        position="126.20192,-26.99519"
        orientation="0,-1"
@@ -40,59 +41,59 @@
        orientation="1,0"
        id="guide4"
        inkscape:locked="false" />
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="0.5"
+       spacingy="0.5"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14902"
+       empspacing="2"
+       enabled="true"
+       visible="true"
+       dotted="true" />
   </sodipodi:namedview>
-  <!-- Generator: Adobe Illustrator 29.3.1, SVG Export Plug-In . SVG Version: 2.1.0 Build 151)  -->
   <defs
-     id="defs1">
-    <style
-       id="style1">
-      .st0 {
-        fill: #ff0000;
-      }
-
-      .st2 {
-        fill: #fffff;
-      }
-    </style>
-  </defs>
+     id="defs1" />
   <rect
-     style="display:inline;fill:#ffffff;fill-opacity:1"
-     id="rect1"
-     width="220"
-     height="220"
-     x="2.5845139e-08"
-     y="5.1690279e-08"
-     inkscape:label="rect1" />
+     style="fill:#ffffff;stroke:none"
+     id="rect2"
+     width="24"
+     height="24"
+     x="0"
+     y="0" />
   <g
-     id="g3"
-     transform="translate(-129.8077,-102.76442)"
-     style="fill:#000000;fill-opacity:1">
+     id="g2">
+    <rect
+       style="fill:#ffffff"
+       id="rect1"
+       width="16"
+       height="16"
+       x="4"
+       y="4" />
     <path
-       class="st0"
-       d="m 287.09808,192.54519 -13.5,24 c -17.8,-13.7 -44.2,-15.7 -62,-1 -28.7,23.7 -26.7,78.5 18,78.8 12.5,0 23.1,-5.9 34.5,-9.8 l 6,23.9 c -10.1,4.7 -20.4,9.5 -31.5,11 -101.2,13.8 -95.4,-132.3 -3.9,-139.9 19.2,-1.6 36.1,3.4 52.5,13 z"
-       id="path1"
-       style="fill:#000000;fill-opacity:1" />
-    <path
-       class="st0"
-       d="m 217.19808,169.54519 c -15.4,4.6 -29.7,13.1 -40.5,25 -2,-24.2 3.4,-73.1 30.3,-82.7 4,-1.4 17.7,-4.9 17.3,2.2 -0.4,7.1 -9.9,19.3 -12.2,25.9 -4,11.6 -0.3,19.6 5.2,29.7 z"
        id="path2"
-       style="fill:#000000;fill-opacity:1" />
-    <polygon
-       class="st0"
-       points="1099.4,290.8 1099.4,276.8 1114.9,276.8 1116.4,275.3 1116.4,258.8 1131.4,258.8 1131.4,276.8 1147.4,276.8 1147.4,290.8 1131.4,290.8 1131.4,307.8 1116.4,307.8 1116.4,290.8 "
-       id="polygon2"
-       transform="translate(-876.20192,-34.254808)"
-       style="fill:#000000;fill-opacity:1" />
-    <polygon
-       class="st0"
-       points="1171.4,290.8 1155.4,290.8 1155.4,276.8 1171.4,276.8 1171.4,258.8 1186.4,258.8 1186.4,275.3 1187.9,276.8 1203.4,276.8 1203.4,290.8 1186.4,290.8 1186.4,307.8 1171.4,307.8 "
-       id="polygon3"
-       transform="translate(-876.20192,-34.254808)"
-       style="fill:#000000;fill-opacity:1" />
+       style="fill:#000000"
+       d="M 7.5,9.5 C 7.36,7.92 7.78,4.98 9.65,4.36 9.92,4.26 10.87,4.04 10.85,4.5 10.82,4.96 10.16,5.76 10,6.2 9.72,6.95 9.72,7.38 10,8.08 9.37,8.29 8.25,8.72 7.5,9.5 Z M 13.89,4.89 C 14.03,5.09 13.32,6 13.17,6.31 12.81,6.95 13.43,7.46 13.7,8.07 12.62,7.81 11.62,7.84 10.93,7.97 11.11,6.56 11.99,4.37 13.89,4.89 Z"
+       sodipodi:nodetypes="ccscccccccc" />
     <path
-       class="st0"
-       d="m 266.09808,122.64519 c 2,3 -9.3,15.9 -11.1,19.2 -5.2,9.8 -1.7,15.4 2.2,24.7 -11.3,-1.7 -21.8,-0.3 -33,1 2.5,-21.5 14.6,-52.8 41.9,-44.9 z"
-       id="path3"
-       style="fill:#000000;fill-opacity:1" />
+       style="fill:none;stroke:#000000;stroke-width:2"
+       id="path4"
+       sodipodi:nodetypes="cc"
+       d="M 15.5,11 C 5.5,6 3,23 15,18" />
+    <path
+       style="fill:#000000"
+       d="m 11,14 h 1 v -1 h 1 v 1 h 1 v 1 h -1 v 1 h -1 v -1 h -1 z"
+       id="path1" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use2"
+       transform="translate(4)" />
   </g>
 </svg>
