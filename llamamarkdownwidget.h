@@ -8,6 +8,9 @@
 
 #include "llamahtmlhighlighter.h"
 
+typedef char MD_CHAR;
+typedef unsigned MD_SIZE;
+
 namespace LlamaCpp {
 class MarkdownLabel : public QTextBrowser
 {
@@ -26,6 +29,7 @@ public:
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
     void saveToFile(const QString &fileName, const QString &verbatimText);
+
 private:
     struct CodeBlock
     {
@@ -33,6 +37,15 @@ private:
         std::optional<QString> fileName;
         QString verbatimCode;
         QString hightlightedCode;
+    };
+
+    struct DetailsBlock
+    {
+        QString summary;
+        QString collapsedHtml;
+        QString expandedHtml;
+        std::pair<int, int> range;
+        bool expanded = false;
     };
 
     struct Data
@@ -46,10 +59,13 @@ private:
             PreCodeEndTag,
             SourceFile,
             Code,
+            DetailsContent
         };
         State state{NormalHtml};
         QByteArray outputHtml;
         QList<CodeBlock> codeBlocks;
+        QList<DetailsBlock> detailsBlocks;
+        QByteArrayList detailsBuffer;
         std::unique_ptr<HtmlHighlighter> highlighter;
         bool awaitingNewLine{false};
         QList<QByteArray> outputHtmlSections;
@@ -57,12 +73,14 @@ private:
 
 private:
     Utils::expected<Data, QString> markdownToHtml(const QString &markdown);
+    static void markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, void *user_data);
+
     void adjustMinimumWidth(const QString &markdown);
-    int commonPrefixLength(const QList<QByteArray> &a,
-                                          const QList<QByteArray> &b) const;
+    int commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const;
     void removeHtmlSection(int index);
     void insertHtmlSection(const QByteArray &html, int index);
     void updateDocumentHtmlSections(const Data &newData);
+    void toggleDetailsBlock(int id);
 
     Data m_data;
     QMap<int, QPair<int, int>> m_insertedHtmlSection;

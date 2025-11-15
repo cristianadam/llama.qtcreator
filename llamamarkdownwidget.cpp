@@ -107,6 +107,8 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
             QToolTip::showText(QCursor::pos(), Tr::tr("Copy the code below to Clipboard"));
         else if (command == "save")
             QToolTip::showText(QCursor::pos(), Tr::tr("Save the code below into a file on disk"));
+        else if (command == "details-toggle")
+            QToolTip::showText(QCursor::pos(), Tr::tr("Toggle the details of the tool usage"));
         else
             QToolTip::showText(QCursor::pos(), link);
     });
@@ -115,17 +117,18 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         const QString link = url.toString();
         const int idx = link.indexOf(':');
         const QString command = link.left(idx);
-        const int codeBlockIndex = link.mid(idx + 1).toInt();
-        const QString argument = link.mid(idx + 1);
+        const int argument = link.mid(idx + 1).toInt();
 
         if (command == "copy") {
-            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
-                emit copyToClipboard(m_data.codeBlocks[codeBlockIndex].verbatimCode,
-                                     m_data.codeBlocks[codeBlockIndex].hightlightedCode);
+            if (argument >= 0 && argument < m_data.codeBlocks.size())
+                emit copyToClipboard(m_data.codeBlocks[argument].verbatimCode,
+                                     m_data.codeBlocks[argument].hightlightedCode);
         } else if (command == "save") {
-            if (codeBlockIndex >= 0 && codeBlockIndex < m_data.codeBlocks.size())
-                emit saveToFile(m_data.codeBlocks[codeBlockIndex].fileName.value_or(QString()),
-                                m_data.codeBlocks[codeBlockIndex].verbatimCode);
+            if (argument >= 0 && argument < m_data.codeBlocks.size())
+                emit saveToFile(m_data.codeBlocks[argument].fileName.value_or(QString()),
+                                m_data.codeBlocks[argument].verbatimCode);
+        } else if (command == "details-toggle") {
+            toggleDetailsBlock(argument);
         } else {
             if (url.isLocalFile())
                 Core::EditorManager::openEditor(FilePath::fromUrl(url));
@@ -256,6 +259,10 @@ void MarkdownLabel::setStyleSheet()
           font-size: medium;
         }
 
+        a.details {
+          color: Token_Text_Default;
+        }
+
     )##");
 
     document()->setDefaultStyleSheet(css);
@@ -345,6 +352,258 @@ void MarkdownLabel::updateDocumentHtmlSections(const Data &newData)
         insertHtmlSection(newSections[i], i);
 }
 
+void MarkdownLabel::toggleDetailsBlock(int id)
+{
+    if (id < 0 || id >= m_data.detailsBlocks.size())
+        return;
+
+    auto &block = m_data.detailsBlocks[id];
+    const QString newHtml = block.expanded ? block.collapsedHtml : block.expandedHtml;
+
+    // Remove the old section (if it already exists)
+    if (block.range.first != -1) {
+        QTextCursor cur(document());
+        cur.setPosition(block.range.first);
+        cur.setPosition(block.range.second, QTextCursor::KeepAnchor);
+        cur.removeSelectedText();
+    }
+
+    // Insert the new HTML at the end of the document
+    QTextCursor cur(document());
+    cur.movePosition(QTextCursor::End);
+    const int startPos = cur.position();
+    insertHtml(newHtml);
+    const int endPos = cur.position();
+
+    block.range = {startPos, endPos};
+    block.expanded = !block.expanded;
+}
+
+void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, void *user_data)
+{
+    Data *out = static_cast<Data *>(user_data);
+    QByteArray line(data, length);
+
+    auto createLink = [](const QString &name, auto indexOrId, const QString &label) -> QByteArray {
+        QString href = QString("%1:%2").arg(name).arg(indexOrId);
+
+        // Choose the image based on the command name
+        QString heroIconText;
+        if (name == "copy") {
+            heroIconText = "E";
+        } else if (name == "save") {
+            heroIconText = "F";
+        }
+
+        return QString("<a class=\"heroicons\" href=\"%1\">%2</a>")
+            .arg(href)
+            .arg(heroIconText)
+            .toUtf8();
+    };
+
+    auto toVerbatimText = [](const QByteArray &line) -> QString {
+        QString newLine = QString::fromUtf8(line);
+        newLine.replace("\n", "<br>");
+        newLine.replace(" ", "&nbsp;");
+
+        return QTextDocumentFragment::fromHtml(newLine).toPlainText();
+    };
+
+    auto insertSourceFileCopySave = [&]() {
+        out->outputHtml.append("<tr>");
+        out->outputHtml.append(
+            "<th class=\"copy-save-links\"><span style=\"font-size:small\">"
+            + out->codeBlocks.last().fileName.value().toUtf8() + "</span>" + "&nbsp;&nbsp;"
+            + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
+            + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
+        out->outputHtml.append("</tr>\n");
+        out->outputHtml.append("<tr><td>\n");
+    };
+
+    auto insertCopySave = [&]() {
+        out->outputHtml.append("<tr>");
+        out->outputHtml.append(
+            "<th class=\"copy-save-links\">"
+            + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
+            + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
+        out->outputHtml.append("</tr>\n");
+        out->outputHtml.append("<tr><td>\n");
+    };
+
+    auto processOneLine = [&]() {
+        QString verbatimLine = toVerbatimText(line);
+        out->codeBlocks.last().verbatimCode.append(verbatimLine);
+
+        if (out->awaitingNewLine) {
+            out->codeBlocks.last().hightlightedCode.append("<br>");
+            out->outputHtml.append("<br>");
+            out->awaitingNewLine = false;
+        }
+
+        QString highlightedLine = out->highlighter->hightlightCodeLine(verbatimLine);
+        auto newLineIndex = highlightedLine.lastIndexOf("<br>");
+        if (newLineIndex != -1) {
+            out->awaitingNewLine = true;
+            highlightedLine = highlightedLine.left(newLineIndex);
+        }
+
+        out->codeBlocks.last().hightlightedCode.append(highlightedLine);
+        out->outputHtml.append(highlightedLine.toUtf8());
+    };
+
+    static const QRegularExpression detailsRegex(R"(^<details><summary>(.+?)</summary>$)",
+                                                 QRegularExpression::DotMatchesEverythingOption);
+    auto detailsMatch = detailsRegex.match(QString::fromUtf8(line));
+    if (detailsMatch.hasMatch() && out->state == Data::NormalHtml) {
+        out->state = Data::DetailsContent;
+        MarkdownLabel::DetailsBlock db;
+        db.summary = detailsMatch.captured(1).trimmed();
+        out->detailsBlocks.append(db);
+        out->detailsBuffer.clear();
+
+        return;
+    }
+    if (out->state == Data::DetailsContent && line == "</details>") {
+        Data innerOut;
+        innerOut.codeBlocks = out->codeBlocks;
+        for (const QByteArray &innerLine : out->detailsBuffer) {
+            markdownHtmlCallback(innerLine.data(),
+                                 innerLine.size(),
+                                 reinterpret_cast<void *>(&innerOut));
+        }
+        if (!innerOut.outputHtml.isEmpty())
+            innerOut.outputHtmlSections << innerOut.outputHtml;
+        out->codeBlocks = innerOut.codeBlocks;
+
+        QByteArray innerHtml = innerOut.outputHtmlSections.join("");
+
+        // Build the two HTML fragments we will toggle between
+        const int id = out->detailsBlocks.size() - 1; // unique id for this block
+        const QString arrowClosed = QChar(0x25B6);    // ▶
+        const QString arrowOpen = QChar(0x25BC);      // ▼
+
+        const QString collapsed = QString("<a href=\"details-toggle:%1\" class=\"details\">"
+                                          "%2&nbsp;%3</a>")
+                                      .arg(id)
+                                      .arg(arrowClosed)
+                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped());
+
+        const QString expanded = QString("<div style=\"margin-left:1.2em;\">"
+                                         "<a href=\"details-toggle:%1\" class=\"details\">"
+                                         "%2&nbsp;%3</a>"
+                                         "<div>%4</div>"
+                                         "</div>")
+                                     .arg(id)
+                                     .arg(arrowOpen)
+                                     .arg(out->detailsBlocks.last().summary.toHtmlEscaped())
+                                     .arg(innerHtml);
+
+        // store them
+        out->detailsBlocks[id].collapsedHtml = collapsed;
+        out->detailsBlocks[id].expandedHtml = expanded;
+        out->detailsBlocks[id].expanded = false;
+
+        // Insert the *collapsed* version into the document
+        out->outputHtml.append(collapsed.toUtf8());
+        out->outputHtmlSections << out->outputHtml;
+        out->outputHtml.clear();
+
+        // reset state – we are back to normal HTML parsing
+        out->state = Data::NormalHtml;
+        out->detailsBuffer.clear();
+        return;
+    }
+
+    if (out->state == Data::DetailsContent) {
+        out->detailsBuffer.append(line);
+        return;
+    }
+
+    // Break the output into logical sections, this way we could cache some of the output
+    // in the QTextBrowser's document
+    if (line == "<h1>" || line == "<h2>" || line == "<h3>" || line == "<h4>" || line == "<h5>"
+        || line == "<h6>" || line == "<br>\n") {
+        if (!out->outputHtml.isEmpty()) {
+            out->outputHtml.append("<br>");
+            out->outputHtmlSections << out->outputHtml;
+            out->outputHtml.clear();
+        }
+    }
+
+    if (line == "<pre><code" && out->state == Data::NormalHtml) {
+        out->state = Data::PreCode;
+        CodeBlock c;
+        out->codeBlocks.append(c);
+        out->awaitingNewLine = false;
+
+        out->highlighter.reset(new HtmlHighlighter());
+        // The generic definition needs to be loaded
+        out->highlighter->setDefinition({});
+    } else if (line == " class=\"language-" && out->state == Data::PreCode) {
+        out->state = Data::Class;
+    } else if (out->state == Data::Class) {
+        out->state = Data::LanguageName;
+        out->codeBlocks.last().language = QString::fromUtf8(line);
+        out->highlighter->setDefinition(definitionForName(out->codeBlocks.last().language));
+    } else if (line == "\"" && out->state == Data::LanguageName) {
+        out->state = Data::PreCodeEndQuote;
+    } else if (line == ">" && out->state == Data::PreCodeEndQuote) {
+        out->state = Data::PreCodeEndTag;
+    } else if (line == ">" && out->state == Data::PreCode) {
+        out->state = Data::PreCodeEndTag;
+    } else if (line == "</code></pre>\n") {
+        out->state = Data::NormalHtml;
+        out->awaitingNewLine = false;
+        out->outputHtml.append("</td></tr></table>\n");
+    } else if (out->state == Data::PreCodeEndTag) {
+        out->state = Data::Code;
+        out->outputHtml.append("<table class=\"codeblock\">\n");
+
+        static const QRegularExpression
+            cxxAndBashFileNameRegex(R"(^\s*(?:\/\/|#)\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
+                                    QRegularExpression::NoPatternOption);
+        static const QRegularExpression
+            cFileNameRegex(R"(^\s*/\*\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
+                           QRegularExpression::NoPatternOption);
+        for (const auto &regex : {cxxAndBashFileNameRegex, cFileNameRegex}) {
+            auto sourceFileMatch = regex.match(QString::fromUtf8(line));
+            if (sourceFileMatch.hasMatch()) {
+                out->codeBlocks.last().fileName = sourceFileMatch.captured(1);
+                break;
+            }
+        }
+
+        if (out->codeBlocks.last().fileName.has_value()) {
+            insertSourceFileCopySave();
+
+            out->state = Data::SourceFile;
+            // skip the comment with the line
+            return;
+        } else if (out->codeBlocks.last().language == "cmake") {
+            out->codeBlocks.last().fileName = "CMakeLists.txt";
+            insertSourceFileCopySave();
+        } else {
+            insertCopySave();
+        }
+
+        processOneLine();
+        return;
+    } else if (out->state == Data::SourceFile) {
+        if (line == "\n")
+            // skip the empty line(s) after the source filename comment
+            return;
+
+        out->state = Data::Code;
+        processOneLine();
+        return;
+    } else if (out->state == Data::Code) {
+        processOneLine();
+        return;
+    }
+
+    out->outputHtml.append(data, length);
+}
+
 Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(const QString &markdown)
 {
     if (markdown.isEmpty())
@@ -356,168 +615,10 @@ Utils::expected<MarkdownLabel::Data, QString> MarkdownLabel::markdownToHtml(cons
     Data out;
     out.outputHtml.reserve(md.size() * 4); // heuristic
 
-    // md4c output callback
-    auto append_cb = [](const MD_CHAR *data, MD_SIZE length, void *user_data) -> void {
-        Data *out = static_cast<Data *>(user_data);
-        QByteArray line(data, length);
-
-        auto createLink =
-            [](const QString &name, auto indexOrId, const QString &label) -> QByteArray {
-            QString href = QString("%1:%2").arg(name).arg(indexOrId);
-
-            // Choose the image based on the command name
-            QString heroIconText;
-            if (name == "copy") {
-                heroIconText = "E";
-            } else if (name == "save") {
-                heroIconText = "F";
-            }
-
-            return QString("<a class=\"heroicons\" href=\"%1\">%2</a>")
-                .arg(href)
-                .arg(heroIconText)
-                .toUtf8();
-        };
-
-        auto toVerbatimText = [](const QByteArray &line) -> QString {
-            QString newLine = QString::fromUtf8(line);
-            newLine.replace("\n", "<br>");
-            newLine.replace(" ", "&nbsp;");
-
-            return QTextDocumentFragment::fromHtml(newLine).toPlainText();
-        };
-
-        auto insertSourceFileCopySave = [&]() {
-            out->outputHtml.append("<tr>");
-            out->outputHtml.append(
-                "<th class=\"copy-save-links\"><span style=\"font-size:small\">"
-                + out->codeBlocks.last().fileName.value().toUtf8() + "</span>" + "&nbsp;&nbsp;"
-                + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
-                + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
-            out->outputHtml.append("</tr>\n");
-            out->outputHtml.append("<tr><td>\n");
-        };
-
-        auto insertCopySave = [&]() {
-            out->outputHtml.append("<tr>");
-            out->outputHtml.append(
-                "<th class=\"copy-save-links\">"
-                + createLink("copy", out->codeBlocks.size() - 1, Tr::tr("Copy")) + "&nbsp;&nbsp;"
-                + createLink("save", out->codeBlocks.size() - 1, Tr::tr("Save")) + "</th>");
-            out->outputHtml.append("</tr>\n");
-            out->outputHtml.append("<tr><td>\n");
-        };
-
-        auto processOneLine = [&]() {
-            QString verbatimLine = toVerbatimText(line);
-            out->codeBlocks.last().verbatimCode.append(verbatimLine);
-
-            if (out->awaitingNewLine) {
-                out->codeBlocks.last().hightlightedCode.append("<br>");
-                out->outputHtml.append("<br>");
-                out->awaitingNewLine = false;
-            }
-
-            QString highlightedLine = out->highlighter->hightlightCodeLine(verbatimLine);
-            auto newLineIndex = highlightedLine.lastIndexOf("<br>");
-            if (newLineIndex != -1) {
-                out->awaitingNewLine = true;
-                highlightedLine = highlightedLine.left(newLineIndex);
-            }
-
-            out->codeBlocks.last().hightlightedCode.append(highlightedLine);
-            out->outputHtml.append(highlightedLine.toUtf8());
-        };
-
-        // Break the output into logical sections, this way we could cache some of the output
-        // in the QTextBrowser's document
-        if (line == "<h1>" || line == "<h2>" || line == "<h3>" || line == "<h4>" || line == "<h5>"
-            || line == "<h6>" || line == "<br>\n") {
-            if (!out->outputHtml.isEmpty()) {
-                out->outputHtml.append("<br>");
-                out->outputHtmlSections << out->outputHtml;
-                out->outputHtml.clear();
-            }
-        }
-
-        if (line == "<pre><code" && out->state == Data::NormalHtml) {
-            out->state = Data::PreCode;
-            CodeBlock c;
-            out->codeBlocks.append(c);
-            out->awaitingNewLine = false;
-
-            out->highlighter.reset(new HtmlHighlighter());
-            // The generic definition needs to be loaded
-            out->highlighter->setDefinition({});
-        } else if (line == " class=\"language-" && out->state == Data::PreCode) {
-            out->state = Data::Class;
-        } else if (out->state == Data::Class) {
-            out->state = Data::LanguageName;
-            out->codeBlocks.last().language = QString::fromUtf8(line);
-            out->highlighter->setDefinition(definitionForName(out->codeBlocks.last().language));
-        } else if (line == "\"" && out->state == Data::LanguageName) {
-            out->state = Data::PreCodeEndQuote;
-        } else if (line == ">" && out->state == Data::PreCodeEndQuote) {
-            out->state = Data::PreCodeEndTag;
-        } else if (line == ">" && out->state == Data::PreCode) {
-            out->state = Data::PreCodeEndTag;
-        } else if (line == "</code></pre>\n") {
-            out->state = Data::NormalHtml;
-            out->awaitingNewLine = false;
-            out->outputHtml.append("</td></tr></table>\n");
-        } else if (out->state == Data::PreCodeEndTag) {
-            out->state = Data::Code;
-            out->outputHtml.append("<table class=\"codeblock\">\n");
-
-            static const QRegularExpression
-                cxxAndBashFileNameRegex(R"(^\s*(?:\/\/|#)\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
-                                        QRegularExpression::NoPatternOption);
-            static const QRegularExpression
-                cFileNameRegex(R"(^\s*/\*\s*([a-zA-Z0-9_]+\.[a-zA-Z0-9]+).*$)",
-                               QRegularExpression::NoPatternOption);
-            for (const auto &regex : {cxxAndBashFileNameRegex, cFileNameRegex}) {
-                auto sourceFileMatch = regex.match(QString::fromUtf8(line));
-                if (sourceFileMatch.hasMatch()) {
-                    out->codeBlocks.last().fileName = sourceFileMatch.captured(1);
-                    break;
-                }
-            }
-
-            if (out->codeBlocks.last().fileName.has_value()) {
-                insertSourceFileCopySave();
-
-                out->state = Data::SourceFile;
-                // skip the comment with the line
-                return;
-            } else if (out->codeBlocks.last().language == "cmake") {
-                out->codeBlocks.last().fileName = "CMakeLists.txt";
-                insertSourceFileCopySave();
-            } else {
-                insertCopySave();
-            }
-
-            processOneLine();
-            return;
-        } else if (out->state == Data::SourceFile) {
-            if (line == "\n")
-                // skip the empty line(s) after the source filename comment
-                return;
-
-            out->state = Data::Code;
-            processOneLine();
-            return;
-        } else if (out->state == Data::Code) {
-            processOneLine();
-            return;
-        }
-
-        out->outputHtml.append(data, length);
-    };
-
     // Render Markdown to HTML
     int rc = md_html(reinterpret_cast<const MD_CHAR *>(md.constData()),
                      static_cast<MD_SIZE>(md.size()),
-                     append_cb,
+                     markdownHtmlCallback,
                      reinterpret_cast<void *>(&out),
                      MD_DIALECT_GITHUB,
                      0);
