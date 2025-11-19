@@ -1,49 +1,33 @@
-#include "llamatools.h"
+#include "editfile_tool.h"
+#include "factory.h"
 #include "llamatr.h"
-
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QProcess>
-#include <QRegularExpression>
-#include <QTextStream>
 
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
-#include <texteditor/basefilefind.h>
 #include <utils/filepath.h>
-#include <utils/searchresultitem.h>
 
-using namespace ProjectExplorer;
 using namespace Utils;
+using namespace ProjectExplorer;
 
-namespace LlamaCpp::Tools {
+namespace LlamaCpp {
 
-QStringList getTools()
+namespace {
+const bool registered = [] {
+    ToolFactory::instance().registerCreator(EditFileTool{}.name(),
+                                            []() { return std::make_unique<EditFileTool>(); });
+    return true;
+}();
+} // namespace
+
+QString EditFileTool::name() const
 {
-    QStringList tools;
-    tools << R"raw(
-    {
-        "type": "function",
-        "function": {
-            "name": "python",
-            "description": "Runs code in an Python interpreter and returns the result of the execution.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "code": {
-                        "type": "string",
-                        "description": "The code to run in the Python interpreter."
-                    }
-                },
-                "required": ["code"],
-                "strict": true
-            }
-        }
-    })raw";
+    return QStringLiteral("edit_file");
+}
 
-    tools << R"raw(
+QString EditFileTool::toolDefinition() const
+{
+    return R"raw(
     {
       "type": "function",
       "function": {
@@ -109,268 +93,23 @@ QStringList getTools()
         }
       }
     })raw";
-
-    tools << R"raw(
-    {
-        "type": "function",
-        "function": {
-            "name": "list_directory",
-            "description": "List the contents of a directory. The quick tool to understand the file structure and explore the codebase.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "directory_path": { "type": "string", "description": "Absolute or relative workspace path" }
-                },
-                "required": [ "directory_path" ],
-                "strict": true
-            }
-        }
-    })raw";
-
-    tools << R"raw(
-    {
-        "type": "function",
-        "function": {
-            "name": "read_file",
-            "description": "Read the contents of a file from first_line to last_line_inclusive, at most 250 lines at a time or the entire file if parameter should_read_entire_file is true.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "first_line": { "type": "integer", "description": "The number of first line to read. Starts with 1." },
-                    "last_line_inclusive": { "type": "integer", "description": "The number of last line to read. Line numbers start with 1" },
-                    "should_read_entire_file": { "type": "boolean", "description": "Whether to read the entire file. Defaults to false." },
-                    "file_path": { "type": "string", "description": "The path of the file to read" }
-                },
-                "required": [ "first_line", "last_line_inclusive", "file_path" ],
-                "strict": true
-            }
-        }
-    })raw";
-
-    tools << R"raw(
-    {
-        "type": "function",
-        "function": {
-            "name": "regex_search",
-            "description": "Fast text-based regex search in the code base (prefer it for finding exact function names or expressions) that finds exact pattern matches with file names and line numbers within files or directories. If there is no exclude_pattern - provide an empty string. Returns matches in format file_name:line_number: line_content",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "include_pattern": { "type": "string", "description": "Comma separated glob patterns for files to include (specify file extensions only if you are absolutely sure)" },
-                    "exclude_pattern": { "type": "string", "description": "Comma separated glob patterns for files to exclude" },
-                    "regex": { "type": "string", "description": "A string for constructing a regular expression pattern to search for. Escape special regex characters when needed." }
-                },
-                "required": [ "include_pattern", "regex" ],
-                "strict": true
-            }
-        }
-    })raw";
-
-    tools << R"raw(
-    {
-        "type": "function",
-        "function": {
-            "name": "ask_user",
-            "description": "Use this tool to ask the user for clarifications if something is unclear.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "question": { "type": "string", "description": "The question to the user." }
-                },
-                "required": [ "question" ],
-                "strict": true
-            }
-        }
-    })raw";
-
-    return tools;
 }
 
-QString runPython(const QString &code)
+QString EditFileTool::oneLineSummary(const QJsonObject &args) const
 {
-    QProcess proc;
-    proc.setProgram("python3");
-    proc.setArguments({"-u", "-c", code});
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-    proc.setWorkingDirectory(cwd.toFSPathString());
-    proc.setProcessChannelMode(QProcess::MergedChannels);
-    proc.start();
-    proc.waitForFinished();
-    return QString::fromUtf8(proc.readAllStandardOutput());
-}
+    const QString path = args.value("file_path").toString();
+    const QString op = args.value("operation").toString();
 
-QString listDirectory(const QString &rawPath)
-{
-    // Resolve the directory path – same strategy as other tools.
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    FilePath dirPath = rawPath.isEmpty() ? cwd : cwd.pathAppended(rawPath);
-
-    if (!dirPath.exists())
-        return Tr::tr("Directory \"%1\" does not exist.").arg(dirPath.toUserOutput());
-
-    if (!dirPath.isDir())
-        return Tr::tr("\"%1\" is not a directory.").arg(dirPath.toUserOutput());
-
-    const FileFilter filter(QStringList(),
-                            QDir::AllEntries | QDir::NoDotAndDotDot,
-                            QDirIterator::NoIteratorFlags);
-
-    const FilePaths entries = dirPath.dirEntries(filter, QDir::Name | QDir::DirsFirst);
-    QStringList lines;
-
-    lines << Tr::tr("Directory listing for %1:").arg(dirPath.toUserOutput());
-    lines << "";
-
-    for (const FilePath &entry : entries) {
-        if (entry.isDir()) {
-            lines << QStringLiteral("[DIR] %1/").arg(entry.fileName());
-        } else {
-            // Human‑readable size
-            qint64 size = entry.fileSize();
-            QString sizeStr;
-
-            if (size < 1024)
-                sizeStr = QString::number(size) + " B";
-            else if (size < 1024 * 1024)
-                sizeStr = QString::number(size / 1024.0, 'f', 1) + " KiB";
-            else if (size < 1024LL * 1024 * 1024)
-                sizeStr = QString::number(size / (1024.0 * 1024), 'f', 1) + " MiB";
-            else
-                sizeStr = QString::number(size / (1024.0 * 1024 * 1024), 'f', 1) + " GiB";
-
-            const QString mod = entry.lastModified().toString(Qt::ISODate);
-            lines << QStringLiteral("%1 (%2, %3)").arg(entry.fileName(), sizeStr, mod);
-        }
-    }
-
-    return lines.join('\n');
-}
-
-QString readFile(const QString &relPath, int firstLine, int lastLineIncl, bool readAll)
-{
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    const FilePath targetFile = cwd.pathAppended(relPath);
-
-    if (!targetFile.exists()) {
-        return Tr::tr("File \"%1\" does not exist.").arg(relPath);
-    }
-
-    const Result<QByteArray> readRes = targetFile.fileContents();
-    if (!readRes) {
-        return Tr::tr("Failed to read \"%1\": %2").arg(relPath, readRes.error());
-    }
-
-    const QString fileText = QString::fromUtf8(readRes.value());
-    const QStringList allLines = fileText.split('\n', Qt::KeepEmptyParts);
-
-    if (readAll) {
-        return fileText;
-    }
-
-    if (firstLine < 1) {
-        return Tr::tr("first_line must be >= 1.");
-    }
-    if (lastLineIncl < firstLine) {
-        return Tr::tr("last_line_inclusive must be >= first_line.");
-    }
-
-    // Compute the number of lines requested
-    int requestedLines = lastLineIncl - firstLine + 1;
-
-    // Enforce the 250‑line hard limit
-    if (requestedLines > 250) {
-        requestedLines = 250;
-    }
-
-    const int startIdx = firstLine - 1; // zero‑based
-    const int endIdx = qMin(startIdx + requestedLines, allLines.size());
-
-    if (startIdx >= allLines.size()) {
-        return Tr::tr("first_line (%1) exceeds the number of lines in \"%2\" (%3).")
-            .arg(firstLine)
-            .arg(relPath)
-            .arg(allLines.size());
-    }
-
-    const QStringList slice = allLines.mid(startIdx, endIdx - startIdx);
-    return slice.join('\n');
-}
-
-class RegexFileFind : public TextEditor::BaseFileFind
-{
-public:
-    using TextEditor::BaseFileFind::currentSearchEngine;
-    using TextEditor::BaseFileFind::searchDir;
-    using TextEditor::BaseFileFind::setSearchDir;
-
-    QString id() const { return {}; }
-    QString displayName() const { return {}; }
-    QString label() const { return {}; }
-    QString toolTip() const { return {}; }
-
-    TextEditor::FileContainerProvider fileContainerProvider() const
-    {
-        return [this] {
-            return SubDirFileContainer(FilePaths{searchDir()},
-                                       fileFindParameters.nameFilters,
-                                       fileFindParameters.exclusionFilters);
-        };
-    }
-
-    TextEditor::FileFindParameters fileFindParameters;
-};
-
-QString regexSearch(const QString &includePattern,
-                    const QString &excludePattern,
-                    const QString &regex)
-{
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    RegexFileFind finder;
-    finder.setSearchDir(cwd);
-
-    TextEditor::FileFindParameters &params = finder.fileFindParameters;
-    params.text = regex;
-    params.flags = FindRegularExpression;
-    params.nameFilters = includePattern.isEmpty() ? QStringList()
-                                                  : splitFilterUiText(includePattern);
-    params.exclusionFilters = excludePattern.isEmpty() ? QStringList()
-                                                       : splitFilterUiText(excludePattern);
-    params.searchDir = cwd;
-    params.fileContainerProvider = finder.fileContainerProvider();
-
-    TextEditor::SearchEngine *engine = finder.currentSearchEngine();
-    QTC_ASSERT(engine, return Tr::tr("No search engine available."));
-
-    params.searchExecutor = engine->searchExecutor();
-    QFuture<SearchResultItems> future = params.searchExecutor(params);
-    future.waitForFinished();
-    const SearchResultItems items = future.result();
-
-    if (items.isEmpty())
-        return Tr::tr("No matches found for pattern \"%1\".").arg(regex);
-
-    QStringList lines;
-    for (const SearchResultItem &it : items) {
-        // `it.path()` returns a `FilePath` – make it relative to the cwd
-        const QString relPath
-            = FilePath::fromString(it.path().first()).relativeChildPath(cwd).toUserOutput();
-        const int lineNumber = it.mainRange().begin.line;
-        const QString lineText = it.lineText();
-        lines << QString("%1:%2: %3").arg(relPath, QString::number(lineNumber), lineText);
-    }
-
-    return lines.join('\n');
+    static const QMap<QString, QString> opMap{
+        {"create", "create file"},
+        {"delete_file", "delete file"},
+        {"replace", "replace in"},
+        {"delete", "delete from"},
+        {"insert_before", "insert before in"},
+        {"insert_after", "insert after in"},
+    };
+    const QString opDesc = opMap.value(op, op);
+    return QStringLiteral("%1 %2").arg(opDesc, path);
 }
 
 QString createFile(const QString &relPath, const QString &content)
@@ -613,4 +352,30 @@ QString diffForEditFile(const QString &filePath,
     return Tr::tr("Unsupported operation \"%1\" in diff generator.").arg(operation);
 }
 
-} // namespace LlamaCpp::Tools
+QString EditFileTool::run(const QJsonObject &args) const
+{
+    // The actual work is already done by the old `editFile` free function.
+    // We just forward the parameters and return the *result* that the
+    // assistant already sent back (the JSON response contains the result,
+    // not the diff).  Therefore the implementation simply returns an empty
+    // string – the UI will later fill the diff using `diffForEditFile`.
+    Q_UNUSED(args);
+    return {}; // result will be filled later from the JSON payload
+}
+
+QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &) const
+{
+    const QString filePath = args.value("file_path").toString();
+    const QString op = args.value("operation").toString();
+    const QString search = args.value("search").toString();
+    const QString replace = args.value("replace").toString();
+    const QString newFile = args.value("new_file_content").toString();
+
+    const QString diff = diffForEditFile(filePath, op, search, replace, newFile);
+
+    return QString("**Operation:** %1\n\n"
+                   "**Diff:**\n"
+                   "```diff\n%2\n```")
+        .arg(op, diff);
+}
+} // namespace LlamaCpp

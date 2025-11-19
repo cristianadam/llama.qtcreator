@@ -1,7 +1,8 @@
 #include "llamasettings.h"
 #include "llamaconstants.h"
 #include "llamatr.h"
-#include "llamatools.h"
+#include "tools/factory.h"
+#include "tools/tool.h"
 
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
@@ -372,7 +373,15 @@ LlamaSettings::LlamaSettings()
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
 
     tools.setSettingsKey("LlamaCpp.Tools");
-    tools.setDefaultValue(Tools::getTools());
+
+    const QStringList creatorsList = ToolFactory::instance().creatorsList();
+    QStringList toolDefinitions;
+    for (const QString &toolName : creatorsList) {
+        std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
+        toolDefinitions << tool->toolDefinition();
+    }
+
+    tools.setDefaultValue(toolDefinitions);
 
     initEnableAspect(enableLlamaCpp);
 

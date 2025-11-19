@@ -13,8 +13,9 @@
 #include "llamasettings.h"
 #include "llamastorage.h"
 #include "llamathinkingsectionparser.h"
-#include "llamatools.h"
 #include "llamatr.h"
+#include "tools/factory.h"
+#include "tools/tool.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
 Q_LOGGING_CATEGORY(llamaChatTools, "llama.cpp.chat.tools", QtWarningMsg)
@@ -764,42 +765,10 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                                      << tool.arguments;
 
     QString toolOutput;
-    if (tool.name == "python") {
-        // Expect {"code":"..."}
-        const QString code = doc.object().value("code").toString();
-        toolOutput = Tools::runPython(code);
-    } else if (tool.name == "edit_file") {
-        const QString path = doc.object().value("file_path").toString();
-        const QString op = doc.object().value("operation").toString();
-        const QString search = doc.object().value("search").toString();
-        const QString replace = doc.object().value("replace").toString();
-        const QString newContent = doc.object().value("new_file_content").toString();
-        toolOutput = Tools::editFile(path, op, search, replace, newContent);
-    } else if (tool.name == "list_directory") {
-        const QString directoryPath = doc.object().value("directory_path").toString();
-        toolOutput = Tools::listDirectory(directoryPath);
-    } else if (tool.name == "read_file") {
-        const QJsonObject obj = doc.object();
+    std::unique_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
 
-        if (!obj.contains(QStringLiteral("file_path"))) {
-            qCWarning(llamaChatNetwork) << tr("Missing required field \"file_path\".");
-            return;
-        }
-        const QString relPath = obj.value(QStringLiteral("file_path")).toString();
-
-        const int firstLine = obj.value(QStringLiteral("first_line")).toInt(1);
-        const int lastLineIncl = obj.value(QStringLiteral("last_line_inclusive")).toInt(-1);
-        const bool readAll = obj.value(QStringLiteral("should_read_entire_file")).toBool(false);
-
-        toolOutput = Tools::readFile(relPath, firstLine, lastLineIncl, readAll);
-    } else if (tool.name == "regex_search") {
-        const QJsonObject obj = doc.object();
-
-        const QString includePattern = doc.object().value("include_pattern").toString();
-        const QString excludePattern = doc.object().value("exclude_pattern").toString();
-        const QString regex = doc.object().value("regex").toString();
-
-        toolOutput = Tools::regexSearch(includePattern, excludePattern, regex);
+    if (realTool) {
+        toolOutput = realTool->run(doc.object());
     } else {
         qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
         return;

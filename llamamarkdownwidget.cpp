@@ -488,11 +488,9 @@ void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, vo
                                       .arg(arrowClosed)
                                       .arg(out->detailsBlocks.last().summary.toHtmlEscaped());
 
-        const QString expanded = QString("<div style=\"margin-left:1.2em;\">"
-                                         "<a href=\"details-toggle:%1\" class=\"details\">"
+        const QString expanded = QString("<a href=\"details-toggle:%1\" class=\"details\">"
                                          "%2&nbsp;%3</a>"
-                                         "<div>%4</div>"
-                                         "</div>")
+                                         "<div>%4</div>")
                                      .arg(id)
                                      .arg(arrowOpen)
                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped())

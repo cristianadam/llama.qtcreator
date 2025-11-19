@@ -36,8 +36,9 @@
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamathinkingsectionparser.h"
-#include "llamatools.h"
 #include "llamatr.h"
+#include "tools/factory.h"
+#include "tools/tool.h"
 
 using namespace Core;
 using namespace ProjectExplorer;
@@ -386,65 +387,26 @@ QString ChatMessage::getToolUsageAndResult()
     if (functionName.isEmpty())
         return {};
 
-    QString out = Tr::tr("**Tool call:** %1").arg(functionName);
+    const QJsonDocument argDoc = QJsonDocument::fromJson(argumentsJson.toUtf8());
+    const QJsonObject args = argDoc.object();
 
-    QString details; // will hold markdown/HTML that goes inside <details>
-
-    // Helper to safely format JSON arguments (pretty‑print)
-    auto prettyPrintJson = [](const QString &json) -> QString {
-        QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8());
-        if (!doc.isNull())
-            return QString::fromUtf8(doc.toJson(QJsonDocument::Indented));
-        return json; // fallback – not a valid JSON string
-    };
-
-    if (functionName == "python") {
-        // Show the code that was executed and its stdout/stderr.
-        QJsonDocument doc = QJsonDocument::fromJson(argumentsJson.toUtf8());
-        QString code = doc.object().value("code").toString();
-
-        details = QString("```python\n%1\n```\n\n"
-                          "**Result:**\n"
-                          "```\n%2\n```")
-                      .arg(code, functionResult);
-    } else if (functionName == "edit_file") {
-        // Build a diff that visualises what the edit will do.
-        QJsonDocument doc = QJsonDocument::fromJson(argumentsJson.toUtf8());
-        QJsonObject obj = doc.object();
-
-        const QString path = obj.value("file_path").toString();
-        const QString op = obj.value("operation").toString();
-        const QString search = obj.value("search").toString();
-        const QString replace = obj.value("replace").toString();
-        const QString newFile = obj.value("new_file_content").toString();
-
-        // Use the existing diff generator.
-        const QString diff = Tools::diffForEditFile(path, op, search, replace, newFile);
-
-        details = QString("**Operation:** %1\n\n"
-                          "**Diff:**\n"
-                          "```diff\n%2\n```")
-                      .arg(op, diff);
-    } else {
-        // Generic fallback – show raw arguments (pretty‑printed) and result.
-        if (!argumentsJson.isEmpty())
-            details = QString("```json\n%1\n```").arg(prettyPrintJson(argumentsJson));
-
-        if (!functionResult.isEmpty()) {
-            if (!details.isEmpty())
-                details += "\n\n";
-            details += QString("**Result:**\n```\n%1\n```").arg(functionResult);
-        }
+    std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName);
+    if (!tool) {
+        // Fallback – unknown tool, keep the old behaviour
+        const QString fallbackSummary = QStringLiteral("%1").arg(functionName);
+        const QString fallbackDetails = QStringLiteral("**Result:**\n```\n%1\n```")
+                                            .arg(functionResult);
+        return QString("<details><summary>%1</summary>\n\n%2\n</details>")
+            .arg(fallbackSummary, fallbackDetails);
     }
 
-    // Only add the <details> block when we actually have something to show.
-    if (!details.isEmpty()) {
-        out += "\n<details><summary>" + Tr::tr("Show details") + "</summary>\n\n" + details
-               + "\n</details>";
-    }
+    const QString summary = tool->oneLineSummary(args);
+    QString details = tool->detailsMarkdown(args, functionResult);
 
-    // Return the assembled markdown string
-    return out;
+    if (details.isEmpty())
+        return summary; // only the one‑liner, no <details> needed
+
+    return QString("<details><summary>%1</summary>\n\n%2\n</details>").arg(summary, details);
 }
 
 void ChatMessage::setSiblingIdx(int newSiblingIdx)

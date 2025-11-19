@@ -5,12 +5,25 @@
 #include <QTextStream>
 #include <QtTest/QtTest>
 
-#include "llamatools.h"
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
 #include <texteditor/basefilefind.h>
 
-using namespace LlamaCpp::Tools;
+namespace LlamaCpp {
+QString createFile(const QString &relPath, const QString &content);
+QString deleteFile(const QString &relPath);
+QString editFile(const QString &path,
+                 const QString &operation,
+                 const QString &search,
+                 const QString &replace,
+                 const QString &newContent);
+QString diffForEditFile(const QString &filePath,
+                        const QString &operation,
+                        const QString &search,
+                        const QString &replace,
+                        const QString &newFileContent);
+} // namespace LLamaCpp
+using namespace LlamaCpp;
 
 static bool writeFile(const QString &absPath, const QString &content)
 {
