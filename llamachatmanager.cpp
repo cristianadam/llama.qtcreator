@@ -474,6 +474,8 @@ void ChatManager::stopGenerating(const QString &convId)
         return;
 
     m_pendingMessages.remove(convId);
+    m_continuationMode.remove(convId);
+
     if (m_abortControllers.contains(convId)) {
         auto controller = m_abortControllers.take(convId);
         controller->abort();
@@ -710,7 +712,16 @@ void ChatManager::sendChatRequest(const QString &convId,
         m_abortControllers.remove(convId);
 
         Message pm = m_pendingMessages.take(convId);
-        m_storage->appendMsg(pm, pm.parent);
+
+        const bool continuationMode = m_continuationMode.take(convId);
+        if (continuationMode) {
+            // The row already exists – only the content (and timings) have
+            // changed.
+            m_storage->updateMessageContent(pm);
+        } else {
+            // Normal case – a brand‑new assistant message.
+            m_storage->appendMsg(pm, pm.parent);
+        }
 
         if (pm.role == "assistant") {
             auto msgs = m_storage->getMessages(convId);
@@ -727,7 +738,8 @@ void ChatManager::sendChatRequest(const QString &convId,
                         tool.name = obj["name"].toString();
                         tool.arguments = obj["arguments"].toString();
 
-                        executeToolAndSendResult(convId, pm, tool, [](qint64) {});
+                        if (!continuationMode)
+                            executeToolAndSendResult(convId, pm, tool, [](qint64) {});
                     }
                 }
             }
@@ -774,20 +786,22 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         return;
     }
 
-    auto payloadBuilder = [this, convId, &tool, &toolOutput, &msg](QJsonObject &payload) {
-        // Append the tool‑result message.
-        QJsonObject toolMsg;
-        toolMsg["role"] = "tool";
-        toolMsg["tool_call_id"] = tool.id;
-        toolMsg["name"] = tool.name;
-        toolMsg["content"] = toolOutput;
-        QVariantMap extra;
-        extra["tool_result"] = toolMsg;
+    QJsonObject toolMsg;
+    toolMsg["role"] = "tool";
+    toolMsg["tool_call_id"] = tool.id;
+    toolMsg["name"] = tool.name;
+    toolMsg["content"] = toolOutput;
+    QVariantMap toolResultExtra;
+    toolResultExtra["tool_result"] = toolMsg;
 
-        QList<QVariantMap> msgExtra = msg.extra;
-        msgExtra << extra;
-        m_storage->updateMessageExtra(msg, msgExtra);
+    QList<QVariantMap> newExtra = msg.extra; // keep the previously‑sent tool_calls
+    newExtra << toolResultExtra;
+    m_storage->updateMessageExtra(msg, newExtra);
 
+    m_pendingMessages[convId] = msg;
+    m_continuationMode[convId] = true;
+
+    auto payloadBuilder = [this, convId, &tool, &msg](QJsonObject &payload) {
         auto currMsgs = m_storage->getMessages(convId);
         auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, msg.id, false);
 

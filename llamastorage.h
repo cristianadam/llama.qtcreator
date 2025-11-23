@@ -28,6 +28,7 @@ public:
                                         qint64 leafNodeId,
                                         bool includeRoot);
     bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
+    bool updateMessageContent(const Message &msg);
 
 signals:
     void conversationCreated(const QString &convId);
@@ -35,6 +36,7 @@ signals:
     void conversationDeleted(const QString &convId);
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void messageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
+    void messageContentUpdated(const LlamaCpp::Message &msg);
 
 private:
     QSqlDatabase db;

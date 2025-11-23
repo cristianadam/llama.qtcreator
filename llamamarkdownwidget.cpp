@@ -360,17 +360,15 @@ void MarkdownLabel::toggleDetailsBlock(int id)
     auto &block = m_data.detailsBlocks[id];
     const QString newHtml = block.expanded ? block.collapsedHtml : block.expandedHtml;
 
+    QTextCursor cur(document());
+
     // Remove the old section (if it already exists)
     if (block.range.first != -1) {
-        QTextCursor cur(document());
         cur.setPosition(block.range.first);
         cur.setPosition(block.range.second, QTextCursor::KeepAnchor);
         cur.removeSelectedText();
     }
 
-    // Insert the new HTML at the end of the document
-    QTextCursor cur(document());
-    cur.movePosition(QTextCursor::End);
     const int startPos = cur.position();
     insertHtml(newHtml);
     const int endPos = cur.position();

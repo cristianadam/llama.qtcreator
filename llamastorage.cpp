@@ -387,4 +387,40 @@ bool Storage::updateMessageExtra(const Message &msg, const QList<QVariantMap> &e
     return true;
 }
 
+bool Storage::updateMessageContent(const Message &msg)
+{
+    // Serialize the timings – content is a plain string.
+    const QString timingsJson = serialize(msg.timings);
+
+    QSqlQuery q(db);
+    if (!db.transaction()) {
+        qCWarning(llamaStorage) << "updateMessageContent: cannot start transaction"
+                                << db.lastError();
+        return false;
+    }
+
+    q.prepare("UPDATE messages "
+              "SET content = :content, timings = :timings "
+              "WHERE id = :id");
+    q.bindValue(":content", msg.content);
+    q.bindValue(":timings", timingsJson);
+    q.bindValue(":id", msg.id);
+
+    if (!q.exec()) {
+        qCWarning(llamaStorage) << "updateMessageContent: UPDATE failed for id" << msg.id
+                                << q.lastError();
+        db.rollback();
+        return false;
+    }
+
+    if (!db.commit()) {
+        qCWarning(llamaStorage) << "updateMessageContent: commit failed" << db.lastError();
+        db.rollback();
+        return false;
+    }
+
+    emit messageContentUpdated(msg);
+    return true;
+}
+
 } // namespace LlamaCpp

@@ -262,10 +262,9 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
     if (forceUpdate)
         m_markdownLabel->invalidate();
 
-    const QString labelText = text + getToolUsageAndResult();
-
     if (m_thoughtToggle) {
-        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(labelText);
+        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
+        message = getToolUsageAndResult() + message;
         if (m_thoughtToggle->isChecked()) {
             m_markdownLabel->setMarkdown(ThinkingSectionParser::formatThinkingContent(thinking)
                                          + "\n\n" + message);
@@ -282,7 +281,7 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
                 : Tr::tr("Thought Process"));
 
     } else {
-        m_markdownLabel->setMarkdown(labelText);
+        m_markdownLabel->setMarkdown(getToolUsageAndResult() + text);
     }
 }
 
@@ -396,7 +395,7 @@ QString ChatMessage::getToolUsageAndResult()
         const QString fallbackSummary = QStringLiteral("%1").arg(functionName);
         const QString fallbackDetails = QStringLiteral("**Result:**\n```\n%1\n```")
                                             .arg(functionResult);
-        return QString("<details><summary>%1</summary>\n\n%2\n</details>")
+        return QString("<details><summary>%1</summary>\n\n%2\n</details>\n\n<br/><br/>")
             .arg(fallbackSummary, fallbackDetails);
     }
 
@@ -404,9 +403,10 @@ QString ChatMessage::getToolUsageAndResult()
     QString details = tool->detailsMarkdown(args, functionResult);
 
     if (details.isEmpty())
-        return summary; // only the one‑liner, no <details> needed
+        return summary + "\n\n<br/><br/>"; // only the one‑liner, no <details> needed
 
-    return QString("<details><summary>%1</summary>\n\n%2\n</details>").arg(summary, details);
+    return QString("<details><summary>%1</summary>\n\n%2\n</details>\n\n<br/><br/>")
+        .arg(summary, details);
 }
 
 void ChatMessage::setSiblingIdx(int newSiblingIdx)
