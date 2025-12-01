@@ -477,21 +477,21 @@ void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, vo
 
         // Build the two HTML fragments we will toggle between
         const int id = out->detailsBlocks.size() - 1; // unique id for this block
-        const QString arrowClosed = QChar(0x25B6);    // ▶
-        const QString arrowOpen = QChar(0x25BC);      // ▼
+        const QString arrowDown = "<span style=\"font-family: heroicons_outline\">N</span>";
+        const QString arrowUp = "<span style=\"font-family: heroicons_outline\">M</span>";
 
         const QString collapsed = QString("<a href=\"details-toggle:%1\" class=\"details\">"
                                           "%2&nbsp;%3</a>")
                                       .arg(id)
-                                      .arg(arrowClosed)
-                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped());
+                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped())
+                                      .arg(arrowDown);
 
         const QString expanded = QString("<a href=\"details-toggle:%1\" class=\"details\">"
                                          "%2&nbsp;%3</a>"
                                          "<div>%4</div>")
                                      .arg(id)
-                                     .arg(arrowOpen)
                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped())
+                                     .arg(arrowUp)
                                      .arg(innerHtml);
 
         // store them
