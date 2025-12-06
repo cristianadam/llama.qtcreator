@@ -2,6 +2,7 @@
 
 #include <QJsonObject>
 #include <QString>
+#include <functional>
 
 namespace LlamaCpp {
 
@@ -29,9 +30,12 @@ public:
 
     /*! Executes the tool.  The concrete class may delegate to the old free
         function (runPython, editFile, …) or implement a new algorithm.
-        The return value is the *result* that will later be shown in the
-        details block. */
-    virtual QString run(const QJsonObject &arguments) const = 0;
+        done is a callback that **must** be called exactly once when the
+        tool finishes.  The first argument is the textual output,
+        the second argument tells whether the run was successful. */
+    virtual void run(const QJsonObject &arguments,
+                     std::function<void(const QString &output, bool ok)> done) const
+        = 0;
 };
 
 } // namespace LlamaCpp

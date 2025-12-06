@@ -37,6 +37,14 @@ add_qtc_library(md4c STATIC
     3rdparty/md4c/src/md4c-html.c
 )
 
+add_qtc_library(LlamaSpinner STATIC
+  DEFINES QT_STATICPLUGIN
+  SOURCES
+    llamaspinner.cpp llamaspinner.h llamaspinner.json
+  DEPENDS
+    Qt::Widgets
+)
+
 add_qtc_plugin(LlamaCpp
   LONG_DESCRIPTION_MD README.md
   PLUGIN_DEPENDS
@@ -50,6 +58,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::Utils
     QtCreator::KSyntaxHighlighting
     md4c
+    LlamaSpinner
   SOURCES
     llama.qrc
     llamaicons.h    

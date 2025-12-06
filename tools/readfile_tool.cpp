@@ -60,7 +60,8 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
     return QStringLiteral("read %1:%2‑%3").arg(file).arg(first).arg(last);
 }
 
-QString ReadFileTool::run(const QJsonObject &args) const
+void ReadFileTool::run(const QJsonObject &args,
+                       std::function<void(const QString &, bool)> done) const
 {
     const QString relPath = args.value("file_path").toString();
     int firstLine = args.value("first_line").toInt(1);
@@ -74,26 +75,26 @@ QString ReadFileTool::run(const QJsonObject &args) const
     const FilePath targetFile = cwd.pathAppended(relPath);
 
     if (!targetFile.exists()) {
-        return Tr::tr("File \"%1\" does not exist.").arg(relPath);
+        return done(Tr::tr("File \"%1\" does not exist.").arg(relPath), false);
     }
 
     const Result<QByteArray> readRes = targetFile.fileContents();
     if (!readRes) {
-        return Tr::tr("Failed to read \"%1\": %2").arg(relPath, readRes.error());
+        return done(Tr::tr("Failed to read \"%1\": %2").arg(relPath, readRes.error()), false);
     }
 
     const QString fileText = QString::fromUtf8(readRes.value());
     const QStringList allLines = fileText.split('\n', Qt::KeepEmptyParts);
 
     if (readAll) {
-        return fileText;
+        return done(fileText, true);
     }
 
     if (firstLine < 1) {
-        return Tr::tr("first_line must be >= 1.");
+        return done(Tr::tr("first_line must be >= 1."), false);
     }
     if (lastLineIncl < firstLine) {
-        return Tr::tr("last_line_inclusive must be >= first_line.");
+        return done(Tr::tr("last_line_inclusive must be >= first_line."), false);
     }
 
     // Compute the number of lines requested
@@ -108,13 +109,14 @@ QString ReadFileTool::run(const QJsonObject &args) const
     const int endIdx = qMin(startIdx + requestedLines, allLines.size());
 
     if (startIdx >= allLines.size()) {
-        return Tr::tr("first_line (%1) exceeds the number of lines in \"%2\" (%3).")
-            .arg(firstLine)
-            .arg(relPath)
-            .arg(allLines.size());
+        return done(Tr::tr("first_line (%1) exceeds the number of lines in \"%2\" (%3).")
+                        .arg(firstLine)
+                        .arg(relPath)
+                        .arg(allLines.size()),
+                    false);
     }
 
     const QStringList slice = allLines.mid(startIdx, endIdx - startIdx);
-    return slice.join('\n');
+    return done(slice.join('\n'), true);
 }
 } // namespace LlamaCpp::Tools

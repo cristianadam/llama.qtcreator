@@ -43,6 +43,7 @@
 #include "llamaplugin.h"
 #include "llamaprojectpanel.h"
 #include "llamasettings.h"
+#include "llamaspinner.h"
 #include "llamatr.h"
 
 using namespace Core;
@@ -52,6 +53,8 @@ using namespace ProjectExplorer;
 
 Q_LOGGING_CATEGORY(llamaLog, "llama.cpp", QtWarningMsg)
 Q_LOGGING_CATEGORY(llamaNetwork, "llama.cpp.network", QtWarningMsg)
+
+Q_IMPORT_PLUGIN(SpinnerPlugin);
 
 namespace LlamaCpp {
 

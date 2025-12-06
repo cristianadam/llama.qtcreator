@@ -12,7 +12,8 @@ public:
 
     // The LLM itself will never call `run()` for this tool – the UI pops a
     // dialog.  Still we provide a stub.
-    QString run(const QJsonObject &) const override;
+    void run(const QJsonObject &arguments,
+             std::function<void(const QString &output, bool ok)> done) const override;
 };
 
 } // namespace LlamaCpp

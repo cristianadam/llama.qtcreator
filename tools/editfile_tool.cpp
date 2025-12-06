@@ -352,15 +352,16 @@ QString diffForEditFile(const QString &filePath,
     return Tr::tr("Unsupported operation \"%1\" in diff generator.").arg(operation);
 }
 
-QString EditFileTool::run(const QJsonObject &args) const
+void EditFileTool::run(const QJsonObject &args,
+                       std::function<void(const QString &, bool)> done) const
 {
-    // The actual work is already done by the old `editFile` free function.
-    // We just forward the parameters and return the *result* that the
-    // assistant already sent back (the JSON response contains the result,
-    // not the diff).  Therefore the implementation simply returns an empty
-    // string – the UI will later fill the diff using `diffForEditFile`.
-    Q_UNUSED(args);
-    return {}; // result will be filled later from the JSON payload
+    const QString filePath = args.value("file_path").toString();
+    const QString op = args.value("operation").toString();
+    const QString search = args.value("search").toString();
+    const QString replace = args.value("replace").toString();
+    const QString newFile = args.value("new_file_content").toString();
+
+    return done(editFile(filePath, op, search, replace, newFile), true);
 }
 
 QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &) const

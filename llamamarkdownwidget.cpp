@@ -1,7 +1,9 @@
+#include <QBuffer>
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QFile>
 #include <QList>
+#include <QMovie>
 #include <QResizeEvent>
 #include <QTextBlock>
 #include <QTextDocumentFragment>
@@ -98,6 +100,12 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
 
     HoverFilter *hoverFilter = new HoverFilter(this);
     viewport()->installEventFilter(hoverFilter);
+
+    QBuffer *buffer = new QBuffer(this);
+    QMovie *spinnerMovie = new QMovie(buffer, "spinner", this);
+    spinnerMovie->setScaledSize(QSize(14, 14));
+
+    setMovie(spinnerMovie);
 
     connect(hoverFilter, &HoverFilter::linkHovered, this, [](const QString &link) {
         const int idx = link.indexOf(':');
@@ -296,6 +304,64 @@ QSize MarkdownLabel::sizeHint() const
     return sh;
 }
 
+void MarkdownLabel::setMovie(QMovie *movie)
+{
+    if (m_spinner == movie)
+        return;
+
+    if (m_spinner)
+        disconnect(m_spinner, &QMovie::frameChanged, this, &MarkdownLabel::onSpinnerFrameChanged);
+
+    m_spinner = movie;
+
+    if (m_spinner) {
+        connect(m_spinner,
+                &QMovie::frameChanged,
+                this,
+                &MarkdownLabel::onSpinnerFrameChanged,
+                Qt::QueuedConnection);
+        // make sure the movie is started – it will also be started lazily
+        // the first time loadResource() is called.
+        if (m_spinner->state() != QMovie::Running)
+            m_spinner->start();
+    }
+}
+
+QVariant MarkdownLabel::loadResource(int type, const QUrl &name)
+{
+    if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("spinner")) {
+        if (!m_spinner) {
+            qWarning() << "MarkdownLabel: no movie set for spinner resource";
+            return QVariant();
+        }
+
+        m_spinnerUrls.insert(name);
+
+        // The movie already keeps the correct device pixel ratio.
+        QImage frame = m_spinner->currentImage();
+        if (frame.isNull()) {
+            // The movie may not have produced a frame yet – force an update.
+            m_spinner->jumpToNextFrame();
+            frame = m_spinner->currentImage();
+        }
+
+        // Return a QImage – the layout will paint it directly.
+        return frame;
+    }
+
+    // Default handling for everything else (e.g. normal file URLs).
+    return QTextBrowser::loadResource(type, name);
+}
+
+void MarkdownLabel::onSpinnerFrameChanged(int)
+{
+    const QImage frame = m_spinner->currentImage();
+    for (const QUrl &url : m_spinnerUrls)
+        document()->addResource(QTextDocument::ImageResource, url, frame);
+
+    viewport()->update();
+}
+
 void MarkdownLabel::adjustMinimumWidth(const QString &markdown)
 {
     const QStringList lines = markdown.split('\n');
@@ -483,14 +549,14 @@ void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, vo
         const QString collapsed = QString("<a href=\"details-toggle:%1\" class=\"details\">"
                                           "%2&nbsp;%3</a>")
                                       .arg(id)
-                                      .arg(out->detailsBlocks.last().summary.toHtmlEscaped())
+                                      .arg(out->detailsBlocks.last().summary)
                                       .arg(arrowDown);
 
         const QString expanded = QString("<a href=\"details-toggle:%1\" class=\"details\">"
                                          "%2&nbsp;%3</a>"
                                          "<div>%4</div>")
                                      .arg(id)
-                                     .arg(out->detailsBlocks.last().summary.toHtmlEscaped())
+                                     .arg(out->detailsBlocks.last().summary)
                                      .arg(arrowUp)
                                      .arg(innerHtml);
 

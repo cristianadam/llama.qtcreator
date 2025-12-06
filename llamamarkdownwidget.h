@@ -26,6 +26,18 @@ public:
     void invalidate();
     QSize sizeHint() const override;
 
+    /* set the movie that will be used for all URLs that start with
+       "spinner://".  The movie is *not* owned by the document – you can
+       reuse the same QMovie for many documents if you wish. */
+    void setMovie(QMovie *movie);
+
+protected:
+    // Called by the layout whenever an image resource is required.
+    QVariant loadResource(int type, const QUrl &name) override;
+
+private slots:
+    void onSpinnerFrameChanged(int);
+
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
     void saveToFile(const QString &fileName, const QString &verbatimText);
@@ -85,5 +97,7 @@ private:
     Data m_data;
     QMap<int, QPair<int, int>> m_insertedHtmlSection;
     QElapsedTimer m_markdownConversionTimer;
+    QMovie *m_spinner = nullptr;
+    QSet<QUrl> m_spinnerUrls;
 };
 } // namespace LlamaCpp

@@ -9,7 +9,8 @@ public:
     QString name() const override;
     QString toolDefinition() const override;
     QString oneLineSummary(const QJsonObject &) const override;
-    QString run(const QJsonObject &arguments) const override;
+    void run(const QJsonObject &arguments,
+             std::function<void(const QString &output, bool ok)> done) const override;
     QString detailsMarkdown(const QJsonObject &arguments, const QString &result) const override;
 };
 

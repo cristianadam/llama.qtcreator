@@ -54,21 +54,36 @@ QString PythonTool::oneLineSummary(const QJsonObject &) const
     return QStringLiteral("running python");
 }
 
-QString PythonTool::run(const QJsonObject &arguments) const
+void PythonTool::run(const QJsonObject &arguments,
+                     std::function<void(const QString &, bool)> done) const
 {
     const QString code = arguments.value("code").toString();
 
-    QProcess proc;
-    proc.setProgram("python3");
-    proc.setArguments({"-u", "-c", code});
+    QProcess *proc = new QProcess();
+    proc->setProgram("python3");
+    proc->setArguments({"-u", "-c", code});
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
-    proc.setWorkingDirectory(cwd.toFSPathString());
-    proc.setProcessChannelMode(QProcess::MergedChannels);
-    proc.start();
-    proc.waitForFinished();
-    return QString::fromUtf8(proc.readAllStandardOutput());
+    proc->setWorkingDirectory(cwd.toFSPathString());
+
+    QObject::connect(proc,
+                     &QProcess::finished,
+                     [proc, done](int exitCode, QProcess::ExitStatus /*status*/) {
+                         QString out = QString::fromUtf8(proc->readAllStandardOutput());
+                         QString err = QString::fromUtf8(proc->readAllStandardError());
+
+                         bool ok = (exitCode == 0);
+                         if (!ok && !err.isEmpty()) {
+                             out += "\n\n";
+                             out += err;
+                         }
+
+                         done(out, ok);
+                         proc->deleteLater();
+                     });
+
+    proc->start();
 }
 
 QString PythonTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const

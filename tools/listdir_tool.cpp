@@ -42,7 +42,7 @@ QString ListDirTool::oneLineSummary(const QJsonObject &args) const
     return QStringLiteral("list directory %1").arg(dir.isEmpty() ? "." : dir);
 }
 
-QString ListDirTool::run(const QJsonObject &args) const
+void ListDirTool::run(const QJsonObject &args, std::function<void(const QString &, bool)> done) const
 {
     const QString rawPath = args.value("directory_path").toString();
 
@@ -54,10 +54,10 @@ QString ListDirTool::run(const QJsonObject &args) const
     FilePath dirPath = rawPath.isEmpty() ? cwd : cwd.pathAppended(rawPath);
 
     if (!dirPath.exists())
-        return Tr::tr("Directory \"%1\" does not exist.").arg(dirPath.toUserOutput());
+        return done(Tr::tr("Directory \"%1\" does not exist.").arg(dirPath.toUserOutput()), false);
 
     if (!dirPath.isDir())
-        return Tr::tr("\"%1\" is not a directory.").arg(dirPath.toUserOutput());
+        return done(Tr::tr("\"%1\" is not a directory.").arg(dirPath.toUserOutput()), false);
 
     const FileFilter filter(QStringList(),
                             QDir::AllEntries | QDir::NoDotAndDotDot,
@@ -91,7 +91,7 @@ QString ListDirTool::run(const QJsonObject &args) const
         }
     }
 
-    return lines.join('\n');
+    return done(lines.join('\n'), true);
 }
 
 } // namespace LlamaCpp

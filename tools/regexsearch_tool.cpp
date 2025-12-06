@@ -86,7 +86,8 @@ public:
     TextEditor::FileFindParameters fileFindParameters;
 };
 
-QString RegexSearchTool::run(const QJsonObject &args) const
+void RegexSearchTool::run(const QJsonObject &args,
+                          std::function<void(const QString &, bool)> done) const
 {
     const QString includePattern = args.value("include_pattern").toString();
     const QString excludePattern = args.value("exclude_pattern").toString();
@@ -110,7 +111,7 @@ QString RegexSearchTool::run(const QJsonObject &args) const
     params.fileContainerProvider = finder.fileContainerProvider();
 
     TextEditor::SearchEngine *engine = finder.currentSearchEngine();
-    QTC_ASSERT(engine, return Tr::tr("No search engine available."));
+    QTC_ASSERT(engine, return done(Tr::tr("No search engine available."), false));
 
     params.searchExecutor = engine->searchExecutor();
     QFuture<SearchResultItems> future = params.searchExecutor(params);
@@ -118,7 +119,7 @@ QString RegexSearchTool::run(const QJsonObject &args) const
     const SearchResultItems items = future.result();
 
     if (items.isEmpty())
-        return Tr::tr("No matches found for pattern \"%1\".").arg(regex);
+        return done(Tr::tr("No matches found for pattern \"%1\".").arg(regex), false);
 
     QStringList lines;
     for (const SearchResultItem &it : items) {
@@ -130,6 +131,6 @@ QString RegexSearchTool::run(const QJsonObject &args) const
         lines << QString("%1:%2: %3").arg(relPath, QString::number(lineNumber), lineText);
     }
 
-    return lines.join('\n');
+    return done(lines.join('\n'), true);
 }
 } // namespace LlamaCpp

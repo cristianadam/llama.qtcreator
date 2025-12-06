@@ -34,7 +34,6 @@ QString AskUserTool::toolDefinition() const
             }
         }
     })raw";
-
 }
 
 QString AskUserTool::oneLineSummary(const QJsonObject &args) const
@@ -43,8 +42,9 @@ QString AskUserTool::oneLineSummary(const QJsonObject &args) const
     return QStringLiteral("ask user");
 }
 
-QString AskUserTool::run(const QJsonObject &) const
+void AskUserTool::run(const QJsonObject &arguments,
+                      std::function<void(const QString &, bool)> done) const
 {
-    return {}; // no result, the UI will handle the question.
+    return done({}, true); // no result, the UI will handle the question.
 }
 } // namespace LlamaCpp

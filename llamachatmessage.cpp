@@ -362,6 +362,7 @@ QString ChatMessage::getToolUsageAndResult()
     QString functionName;
     QString argumentsJson;
     QString functionResult;
+    QString toolStatus;
 
     if (!m_msg.extra.isEmpty()) {
         for (const QVariantMap &e : m_msg.extra) {
@@ -378,6 +379,10 @@ QString ChatMessage::getToolUsageAndResult()
                 QJsonObject result = e.value("tool_result").toJsonObject();
                 if (!result.isEmpty())
                     functionResult = result.value("content").toString();
+            }
+
+            if (e.contains("tool_status")) {
+                toolStatus = e.value("tool_status").toString(); // "success" / "failed"
             }
         }
     }
@@ -399,7 +404,20 @@ QString ChatMessage::getToolUsageAndResult()
             .arg(fallbackSummary, fallbackDetails);
     }
 
-    const QString summary = tool->oneLineSummary(args);
+    QString statusIconHtml;
+    if (toolStatus.isEmpty()) {
+        statusIconHtml = "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/>";
+    } else if (toolStatus == "success") {
+        statusIconHtml = replaceThemeColorNamesWithRGBNames(
+            "<span style=\"font-family: heroicons_outline; color: "
+            "Token_Notification_Success_Default\">R</span>");
+    } else {
+        statusIconHtml = replaceThemeColorNamesWithRGBNames(
+            "<span style=\"font-family: heroicons_outline; color: "
+            "Token_Notification_Danger_Default\">J</span>");
+    }
+
+    const QString summary = statusIconHtml + "&nbsp;" + tool->oneLineSummary(args);
     QString details = tool->detailsMarkdown(args, functionResult);
 
     if (details.isEmpty())

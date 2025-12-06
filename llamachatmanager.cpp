@@ -779,46 +779,50 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     QString toolOutput;
     std::unique_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
 
+    auto toolFinished = [this, convId, msg, tool, onChunk](const QString &toolOutput,
+                                                           bool ok) mutable {
+        QJsonObject toolMsg;
+        toolMsg["role"] = "tool";
+        toolMsg["tool_call_id"] = tool.id;
+        toolMsg["name"] = tool.name;
+        toolMsg["content"] = toolOutput;
+        QVariantMap toolResultExtra;
+        toolResultExtra["tool_result"] = toolMsg;
+        toolResultExtra["tool_status"] = ok ? "success" : "failed";
+
+        QList<QVariantMap> newExtra = msg.extra; // keep the previously‑sent tool_calls
+        newExtra << toolResultExtra;
+        m_storage->updateMessageExtra(msg, newExtra);
+
+        m_pendingMessages[convId] = msg;
+        m_continuationMode[convId] = true;
+
+        auto payloadBuilder = [this, convId, &tool, &msg](QJsonObject &payload) {
+            auto currMsgs = m_storage->getMessages(convId);
+            auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, msg.id, false);
+
+            QJsonArray msgs = normalizeMsgsForAPI(leafMsgs);
+            payload["messages"] = msgs;
+            addToolsToPayload(payload);
+
+            // custom JSON from settings (if any)
+            if (!settings().customJson.value().isEmpty()) {
+                QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
+                if (d.isObject())
+                    for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
+                        payload[it.key()] = it.value();
+            }
+        };
+
+        sendChatRequest(convId, payloadBuilder, onChunk);
+    };
+
     if (realTool) {
-        toolOutput = realTool->run(doc.object());
+        realTool->run(doc.object(), std::move(toolFinished));
     } else {
         qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
         return;
     }
-
-    QJsonObject toolMsg;
-    toolMsg["role"] = "tool";
-    toolMsg["tool_call_id"] = tool.id;
-    toolMsg["name"] = tool.name;
-    toolMsg["content"] = toolOutput;
-    QVariantMap toolResultExtra;
-    toolResultExtra["tool_result"] = toolMsg;
-
-    QList<QVariantMap> newExtra = msg.extra; // keep the previously‑sent tool_calls
-    newExtra << toolResultExtra;
-    m_storage->updateMessageExtra(msg, newExtra);
-
-    m_pendingMessages[convId] = msg;
-    m_continuationMode[convId] = true;
-
-    auto payloadBuilder = [this, convId, &tool, &msg](QJsonObject &payload) {
-        auto currMsgs = m_storage->getMessages(convId);
-        auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, msg.id, false);
-
-        QJsonArray msgs = normalizeMsgsForAPI(leafMsgs);
-        payload["messages"] = msgs;
-        addToolsToPayload(payload);
-
-        // custom JSON from settings (if any)
-        if (!settings().customJson.value().isEmpty()) {
-            QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
-            if (d.isObject())
-                for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
-                    payload[it.key()] = it.value();
-        }
-    };
-
-    sendChatRequest(convId, payloadBuilder, onChunk);
 }
 
 void ChatManager::onToolsSupportEnabled(bool enabled)

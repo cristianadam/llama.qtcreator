@@ -1,0 +1,5 @@
+{
+    "Keys": [ "spinner" ],
+    "Description": "Circle spinner pseudo‑image format",
+    "MimeTypes": [ "image/spinner" ]
+}
