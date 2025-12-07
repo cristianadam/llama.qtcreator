@@ -2,18 +2,14 @@
 #include "factory.h"
 #include "llamatr.h"
 
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QProcess>
+#include <QFutureWatcher>
 #include <QRegularExpression>
-#include <QTextStream>
 
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
-#include <texteditor/basefilefind.h>
 #include <utils/filepath.h>
+#include <utils/filesearch.h>
 #include <utils/searchresultitem.h>
 
 using namespace Utils;
@@ -62,30 +58,6 @@ QString RegexSearchTool::oneLineSummary(const QJsonObject &args) const
     return QStringLiteral("regex search %1").arg(regex);
 }
 
-class RegexFileFind : public TextEditor::BaseFileFind
-{
-public:
-    using TextEditor::BaseFileFind::currentSearchEngine;
-    using TextEditor::BaseFileFind::searchDir;
-    using TextEditor::BaseFileFind::setSearchDir;
-
-    QString id() const { return {}; }
-    QString displayName() const { return {}; }
-    QString label() const { return {}; }
-    QString toolTip() const { return {}; }
-
-    TextEditor::FileContainerProvider fileContainerProvider() const
-    {
-        return [this] {
-            return SubDirFileContainer(FilePaths{searchDir()},
-                                       fileFindParameters.nameFilters,
-                                       fileFindParameters.exclusionFilters);
-        };
-    }
-
-    TextEditor::FileFindParameters fileFindParameters;
-};
-
 void RegexSearchTool::run(const QJsonObject &args,
                           std::function<void(const QString &, bool)> done) const
 {
@@ -97,40 +69,49 @@ void RegexSearchTool::run(const QJsonObject &args,
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
 
-    RegexFileFind finder;
-    finder.setSearchDir(cwd);
+    const QStringList includeFilters = includePattern.isEmpty() ? QStringList()
+                                                                : splitFilterUiText(includePattern);
+    const QStringList excludeFilters = excludePattern.isEmpty()
+                                           ? splitFilterUiText("*/.git/*,*/build/*")
+                                           : splitFilterUiText(excludePattern);
 
-    TextEditor::FileFindParameters &params = finder.fileFindParameters;
-    params.text = regex;
-    params.flags = FindRegularExpression;
-    params.nameFilters = includePattern.isEmpty() ? QStringList()
-                                                  : splitFilterUiText(includePattern);
-    params.exclusionFilters = excludePattern.isEmpty() ? QStringList()
-                                                       : splitFilterUiText(excludePattern);
-    params.searchDir = cwd;
-    params.fileContainerProvider = finder.fileContainerProvider();
+    const SubDirFileContainer container(FilePaths{cwd}, includeFilters, excludeFilters);
 
-    TextEditor::SearchEngine *engine = finder.currentSearchEngine();
-    QTC_ASSERT(engine, return done(Tr::tr("No search engine available."), false));
+    const FindFlags flags = FindRegularExpression | DontFindBinaryFiles;
+    const QFuture<SearchResultItems> future = Utils::findInFiles(regex, container, flags, {});
 
-    params.searchExecutor = engine->searchExecutor();
-    QFuture<SearchResultItems> future = params.searchExecutor(params);
-    future.waitForFinished();
-    const SearchResultItems items = future.result();
+    // Watch the whole asynchronous operation.
+    auto *watcher = new QFutureWatcher<SearchResultItems>(nullptr);
+    watcher->setFuture(future);
 
-    if (items.isEmpty())
-        return done(Tr::tr("No matches found for pattern \"%1\".").arg(regex), false);
+    QObject::connect(watcher,
+                     &QFutureWatcher<SearchResultItems>::finished,
+                     [watcher, cwd, regex, done]() mutable {
+                         const QFuture<SearchResultItems> f = watcher->future();
+                         SearchResultItems allItems;
+                         for (const SearchResultItems &partial : f.results())
+                             allItems << partial;
 
-    QStringList lines;
-    for (const SearchResultItem &it : items) {
-        // `it.path()` returns a `FilePath` – make it relative to the cwd
-        const QString relPath
-            = FilePath::fromString(it.path().first()).relativeChildPath(cwd).toUserOutput();
-        const int lineNumber = it.mainRange().begin.line;
-        const QString lineText = it.lineText();
-        lines << QString("%1:%2: %3").arg(relPath, QString::number(lineNumber), lineText);
-    }
+                         if (allItems.isEmpty()) {
+                             done(Tr::tr("No matches found for pattern \"%1\".").arg(regex), false);
+                         } else {
+                             QStringList lines;
+                             for (const SearchResultItem &it : std::as_const(allItems)) {
+                                 // Convert the absolute path to a path relative to the search root.
+                                 const QString relPath = FilePath::fromString(it.path().first())
+                                                             .relativeChildPath(cwd)
+                                                             .toUserOutput();
 
-    return done(lines.join('\n'), true);
+                                 const int lineNumber = it.mainRange().begin.line;
+                                 const QString lineText = it.lineText();
+
+                                 lines << QString("%1:%2: %3")
+                                              .arg(relPath, QString::number(lineNumber), lineText);
+                             }
+                             done(lines.join('\n'), true);
+                         }
+
+                         watcher->deleteLater(); // clean‑up
+                     });
 }
 } // namespace LlamaCpp
