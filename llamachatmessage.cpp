@@ -72,17 +72,7 @@ void ChatMessage::buildUI()
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
     connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
 
-    if (ThinkingSectionParser::hasThinkingSection(m_msg.content)) {
-        m_thoughtToggle = new QPushButton(this);
-        m_thoughtToggle->setText(Tr::tr("Thought Process"));
-        m_thoughtToggle->setToolTip(Tr::tr("Click to expand / hide the thought process"));
-        m_thoughtToggle->setCheckable(true);
-
-        connect(m_thoughtToggle, &QPushButton::toggled, this, &ChatMessage::onThoughtToggle);
-        onThoughtToggle(false);
-    } else {
-        renderMarkdown(m_msg.content, true);
-    }
+    renderMarkdown(m_msg.content, true);
 
     m_markdownLabel->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
     m_markdownLabel->setContentsMargins(m_isUser ? QMargins(10, 10, 10, 10) : QMargins(0, 0, 0, 0));
@@ -90,13 +80,6 @@ void ChatMessage::buildUI()
 
     QVBoxLayout *bubbleLayout = new QVBoxLayout;
     bubbleLayout->setContentsMargins(0, 0, 0, 0);
-    if (m_thoughtToggle) {
-        QHBoxLayout *thoughtLayout = new QHBoxLayout;
-        thoughtLayout->setContentsMargins(0, 0, 0, 0);
-        thoughtLayout->addWidget(m_thoughtToggle);
-        thoughtLayout->addStretch();
-        bubbleLayout->addLayout(thoughtLayout);
-    }
     QHBoxLayout *labelLayout = new QHBoxLayout;
     labelLayout->setContentsMargins(0, 0, 0, 0);
     if (m_isUser) {
@@ -262,27 +245,9 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
     if (forceUpdate)
         m_markdownLabel->invalidate();
 
-    if (m_thoughtToggle) {
-        auto [thinking, message] = ThinkingSectionParser::parseThinkingSection(text);
-        message = getToolUsageAndResult() + message;
-        if (m_thoughtToggle->isChecked()) {
-            m_markdownLabel->setMarkdown(ThinkingSectionParser::formatThinkingContent(thinking)
-                                         + "\n\n" + message);
-        } else {
-            m_markdownLabel->setMarkdown(message);
-        }
-
-        static QVector<QChar> chars{u'⠋', u'⠙', u'⠹', u'⠸', u'⠼', u'⠴', u'⠦', u'⠧', u'⠇', u'⠏'};
-        // Dividing with 33ms results in 30fps
-        m_thoughtToggle->setText(
-            message.isEmpty()
-                ? Tr::tr("Thinking %1")
-                      .arg(chars[(QDateTime::currentMSecsSinceEpoch() / 33) % chars.size()])
-                : Tr::tr("Thought Process"));
-
-    } else {
-        m_markdownLabel->setMarkdown(getToolUsageAndResult() + text);
-    }
+    QString markdown = getToolUsageAndResult() + text;
+    markdown = ThinkingSectionParser::replaceThinkingSections(markdown, forceUpdate);
+    m_markdownLabel->setMarkdown(markdown);
 }
 
 void ChatMessage::messageCompleted(bool completed)
@@ -529,11 +494,6 @@ void ChatMessage::onNextSiblingClicked()
     int index = m_siblingIdx - 1; // 1 based
     if (index < m_siblingLeafIds.size() - 1)
         emit siblingChanged(m_siblingLeafIds[index + 1]);
-}
-
-void ChatMessage::onThoughtToggle(bool /*checked*/)
-{
-    renderMarkdown(m_msg.content);
 }
 
 void ChatMessage::onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode)

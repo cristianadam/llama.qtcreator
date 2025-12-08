@@ -18,5 +18,6 @@ public:
     static QPair<QString, QString> parseThinkingSection(const QString &text);
     static bool hasThinkingSection(const QString &text);
     static QString formatThinkingContent(const QString &thinkingContent);
+    static QString replaceThinkingSections(const QString &src, bool completed);
 };
 } // namespace LlamaCpp

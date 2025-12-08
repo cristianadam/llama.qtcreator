@@ -48,7 +48,6 @@ private slots:
     void onRegenerateClicked();
     void onPrevSiblingClicked();
     void onNextSiblingClicked();
-    void onThoughtToggle(bool checked);
     void onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode);
     void onSaveToDisk(const QString &fileName, const QString &verbatimCode);
 
@@ -75,7 +74,6 @@ private:
     QToolButton *m_nextButton{nullptr};
     QToolButton *m_attachedFiles{nullptr};
     QLabel *m_siblingLabel{nullptr};
-    QPushButton *m_thoughtToggle{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};
     bool m_isToolCall{false};
