@@ -516,10 +516,7 @@ LlamaCppServerProps ChatManager::serverProps() const
     return m_serverProps;
 }
 
-static Message createToolMessage(const Message &assistantCall,
-                                 const QString &toolResult,
-                                 const ToolCall &tool,
-                                 const QString &status) // "success" or "failed"
+static Message createToolMessage(const Message &assistantCall)
 {
     Message toolMsg;
     toolMsg.convId = assistantCall.convId;
@@ -530,18 +527,7 @@ static Message createToolMessage(const Message &assistantCall,
     toolMsg.parent = assistantCall.id; // link to the assistant that called it
     toolMsg.children.clear();
 
-    QJsonObject toolJsonMsg;
-    toolJsonMsg["role"] = "tool";
-    toolJsonMsg["tool_call_id"] = tool.id;
-    toolJsonMsg["name"] = tool.name;
-    toolJsonMsg["content"] = toolResult;
-    QVariantMap toolResultExtra;
-    toolResultExtra["tool_result"] = toolJsonMsg;
-    toolResultExtra["tool_status"] = status;
-
     toolMsg.extra << assistantCall.extra; // copy the tool calling for display
-    toolMsg.extra << toolResultExtra;
-
     return toolMsg;
 }
 
@@ -747,7 +733,6 @@ void ChatManager::sendChatRequest(const QString &convId,
 
             for (const QVariantMap &e : pm.extra) {
                 if (e.contains("tool_calls")) {
-
                     // Store the "tool_calls" into the database
                     m_storage->updateMessageExtra(pm, pm.extra);
 
@@ -803,15 +788,23 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         return;
     }
 
-    auto toolFinished = [this, convId, assistantMsg, tool, onChunk](const QString &toolOutput,
-                                                                    bool ok) mutable {
-        Message toolMsg = createToolMessage(assistantMsg,
-                                            toolOutput,
-                                            tool,
-                                            ok ? QStringLiteral("success") : "failed");
+    Message toolMsg = createToolMessage(assistantMsg);
+    m_storage->appendMsg(toolMsg, assistantMsg.id);
+    onChunk(toolMsg.id);
 
-        m_storage->appendMsg(toolMsg, assistantMsg.id);
-        onChunk(toolMsg.id);
+    auto toolFinished = [this, convId, toolMsg, tool, onChunk](const QString &toolOutput,
+                                                               bool ok) mutable {
+        QJsonObject toolJsonMsg;
+        toolJsonMsg["role"] = "tool";
+        toolJsonMsg["tool_call_id"] = tool.id;
+        toolJsonMsg["name"] = tool.name;
+        toolJsonMsg["content"] = toolOutput;
+        QVariantMap toolResultExtra;
+        toolResultExtra["tool_result"] = toolJsonMsg;
+        toolResultExtra["tool_status"] = ok ? QStringLiteral("success") : "failed";
+
+        toolMsg.extra << toolResultExtra;
+        m_storage->updateMessageExtra(toolMsg, toolMsg.extra);
 
         // generate assistant reply
         generateMessage(toolMsg.convId, toolMsg.id, onChunk);
