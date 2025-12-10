@@ -730,6 +730,7 @@ void ChatManager::sendChatRequest(const QString &convId,
         if (pm.role == "assistant") {
             auto msgs = m_storage->getMessages(convId);
             const bool doSummarization = msgs.size() == 3;
+            bool haveToolExecution = false;
 
             for (const QVariantMap &e : pm.extra) {
                 if (e.contains("tool_calls")) {
@@ -746,6 +747,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                         tool.arguments = obj["arguments"].toString();
 
                         executeToolAndSendResult(convId, pm, tool, [](qint64) {});
+                        haveToolExecution = true;
                     }
                 }
             }
@@ -757,11 +759,12 @@ void ChatManager::sendChatRequest(const QString &convId,
                 });
             }
 
-            followUpQuestions(convId,
-                              pm.id,
-                              [this, convId, leafNodeId = pm.id](const QStringList &questions) {
-                                  emit followUpQuestionsReceived(convId, leafNodeId, questions);
-                              });
+            if (!haveToolExecution)
+                followUpQuestions(convId,
+                                  pm.id,
+                                  [this, convId, leafNodeId = pm.id](const QStringList &questions) {
+                                      emit followUpQuestionsReceived(convId, leafNodeId, questions);
+                                  });
         }
     });
 }
