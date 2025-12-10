@@ -474,7 +474,6 @@ void ChatManager::stopGenerating(const QString &convId)
         return;
 
     m_pendingMessages.remove(convId);
-    m_continuationMode.remove(convId);
 
     if (m_abortControllers.contains(convId)) {
         auto controller = m_abortControllers.take(convId);
@@ -517,6 +516,35 @@ LlamaCppServerProps ChatManager::serverProps() const
     return m_serverProps;
 }
 
+static Message createToolMessage(const Message &assistantCall,
+                                 const QString &toolResult,
+                                 const ToolCall &tool,
+                                 const QString &status) // "success" or "failed"
+{
+    Message toolMsg;
+    toolMsg.convId = assistantCall.convId;
+    toolMsg.type = "text";
+    toolMsg.timestamp = QDateTime::currentMSecsSinceEpoch();
+    toolMsg.role = "tool";
+    toolMsg.content = QString();
+    toolMsg.parent = assistantCall.id; // link to the assistant that called it
+    toolMsg.children.clear();
+
+    QJsonObject toolJsonMsg;
+    toolJsonMsg["role"] = "tool";
+    toolJsonMsg["tool_call_id"] = tool.id;
+    toolJsonMsg["name"] = tool.name;
+    toolJsonMsg["content"] = toolResult;
+    QVariantMap toolResultExtra;
+    toolResultExtra["tool_result"] = toolJsonMsg;
+    toolResultExtra["tool_status"] = status;
+
+    toolMsg.extra << assistantCall.extra; // copy the tool calling for display
+    toolMsg.extra << toolResultExtra;
+
+    return toolMsg;
+}
+
 QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 {
     QJsonArray res;
@@ -540,15 +568,14 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                     if (e.contains("tool_calls"))
                         out["tool_calls"] = e["tool_calls"].toJsonArray();
                 }
-                res.append(out);
-
+            } else if (msg.role == "tool") {
                 for (const QVariantMap &e : msg.extra) {
                     if (e.contains("tool_result"))
                         res.append(e["tool_result"].toJsonObject());
                 }
-            } else {
-                res.append(out);
             }
+
+            res.append(out);
 
             continue;
         }
@@ -712,16 +739,7 @@ void ChatManager::sendChatRequest(const QString &convId,
         m_abortControllers.remove(convId);
 
         Message pm = m_pendingMessages.take(convId);
-
-        const bool continuationMode = m_continuationMode.take(convId);
-        if (continuationMode) {
-            // The row already exists – only the content (and timings) have
-            // changed.
-            m_storage->updateMessageContent(pm);
-        } else {
-            // Normal case – a brand‑new assistant message.
-            m_storage->appendMsg(pm, pm.parent);
-        }
+        m_storage->appendMsg(pm, pm.parent);
 
         if (pm.role == "assistant") {
             auto msgs = m_storage->getMessages(convId);
@@ -729,6 +747,10 @@ void ChatManager::sendChatRequest(const QString &convId,
 
             for (const QVariantMap &e : pm.extra) {
                 if (e.contains("tool_calls")) {
+
+                    // Store the "tool_calls" into the database
+                    m_storage->updateMessageExtra(pm, pm.extra);
+
                     QJsonArray array = e["tool_calls"].toJsonArray();
                     for (const QJsonValue &v : array) {
                         QJsonObject obj = v.toObject();
@@ -738,8 +760,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                         tool.name = obj["name"].toString();
                         tool.arguments = obj["arguments"].toString();
 
-                        if (!continuationMode)
-                            executeToolAndSendResult(convId, pm, tool, [](qint64) {});
+                        executeToolAndSendResult(convId, pm, tool, [](qint64) {});
                     }
                 }
             }
@@ -761,7 +782,7 @@ void ChatManager::sendChatRequest(const QString &convId,
 }
 
 void ChatManager::executeToolAndSendResult(const QString &convId,
-                                           const Message &msg,
+                                           const Message &assistantMsg,
                                            const ToolCall &tool,
                                            std::function<void(qint64)> onChunk)
 {
@@ -773,48 +794,27 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         return;
     }
 
-    qCInfo(llamaChatTools).noquote() << "Calling:" << tool.name << "with the arguments:\n"
+    qCInfo(llamaChatTools).noquote() << "Calling tool:" << tool.name << "with arguments:\n"
                                      << tool.arguments;
 
-    QString toolOutput;
     std::unique_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
+    if (!realTool) {
+        qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
+        return;
+    }
 
-    auto toolFinished = [this, convId, msg, tool, onChunk](const QString &toolOutput,
-                                                           bool ok) mutable {
-        QJsonObject toolMsg;
-        toolMsg["role"] = "tool";
-        toolMsg["tool_call_id"] = tool.id;
-        toolMsg["name"] = tool.name;
-        toolMsg["content"] = toolOutput;
-        QVariantMap toolResultExtra;
-        toolResultExtra["tool_result"] = toolMsg;
-        toolResultExtra["tool_status"] = ok ? "success" : "failed";
+    auto toolFinished = [this, convId, assistantMsg, tool, onChunk](const QString &toolOutput,
+                                                                    bool ok) mutable {
+        Message toolMsg = createToolMessage(assistantMsg,
+                                            toolOutput,
+                                            tool,
+                                            ok ? QStringLiteral("success") : "failed");
 
-        QList<QVariantMap> newExtra = msg.extra; // keep the previously‑sent tool_calls
-        newExtra << toolResultExtra;
-        m_storage->updateMessageExtra(msg, newExtra);
+        m_storage->appendMsg(toolMsg, assistantMsg.id);
+        onChunk(toolMsg.id);
 
-        m_pendingMessages[convId] = msg;
-        m_continuationMode[convId] = true;
-
-        auto payloadBuilder = [this, convId, &tool, &msg](QJsonObject &payload) {
-            auto currMsgs = m_storage->getMessages(convId);
-            auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, msg.id, false);
-
-            QJsonArray msgs = normalizeMsgsForAPI(leafMsgs);
-            payload["messages"] = msgs;
-            addToolsToPayload(payload);
-
-            // custom JSON from settings (if any)
-            if (!settings().customJson.value().isEmpty()) {
-                QJsonDocument d = QJsonDocument::fromJson(settings().customJson.value().toUtf8());
-                if (d.isObject())
-                    for (auto it = d.object().constBegin(); it != d.object().constEnd(); ++it)
-                        payload[it.key()] = it.value();
-            }
-        };
-
-        sendChatRequest(convId, payloadBuilder, onChunk);
+        // generate assistant reply
+        generateMessage(toolMsg.convId, toolMsg.id, onChunk);
     };
 
     if (realTool) {

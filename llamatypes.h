@@ -53,7 +53,7 @@ struct Message
     QString convId;
     QString type;     // "text" | "root"
     qint64 timestamp; // from QDateTime::currentMSecsSinceEpoch()
-    QString role;     // "user" | "assistant" | "system"
+    QString role;     // "user" | "assistant" | "system" | "tool"
     QString content;
     TimingReport timings;
     QList<QVariantMap> extra; // array of MessageExtra

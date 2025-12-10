@@ -93,8 +93,7 @@ QString ThinkingSectionParser::replaceThinkingSections(const QString &src, bool 
         }
 
         const QString detailsBlock
-            = QStringLiteral(
-                  "<details><summary>%1&nbsp;%2</summary>\n\n%3\n</details>\n\n<br/><br/>")
+            = QStringLiteral("<details><summary>%1&nbsp;%2</summary>\n\n%3\n</details>\n")
                   .arg(statusIcon)
                   .arg(doneThinking ? Tr::tr("Thought Process") : Tr::tr("Thinking"))
                   .arg(formattedThinking);
@@ -103,6 +102,10 @@ QString ThinkingSectionParser::replaceThinkingSections(const QString &src, bool 
 
         if (endIdx != -1) {
             pos = endIdx + m_endToken.length();
+
+            // We have a details section with new content afterads, insert a sepparation
+            if (pos != src.length())
+                out.append("<br/><br/>");
         } else {
             // nothing after an open‑ended block – we are done for now
             pos = src.length();

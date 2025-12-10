@@ -114,7 +114,6 @@ private:
     QHash<QString, QNetworkReply *> m_abortControllers;
     QHash<QString, QNetworkReply *> m_titleSummaryReplies;
     QHash<QString, QNetworkReply *> m_followUpReplies;
-    QHash<QString, bool> m_continuationMode;
     QVector<ToolCall> m_toolCalls;
     bool m_toolsSupport{false};
 };

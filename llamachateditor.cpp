@@ -418,7 +418,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
 
     // Insert speed label after the assistant widget
     if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
-        && settings().showTokensPerSecond.value()) {
+        && !m_messageWidgets.last()->isTool() && settings().showTokensPerSecond.value()) {
         m_messageLayout->addWidget(m_speedLabel);
         m_speedLabel->setVisible(true);
 

@@ -37,6 +37,8 @@ public:
     void highlightMatch(int start, int length, bool selected = true);
     void clearHighlight();
 
+    bool isTool() const;
+
 signals:
     void regenerateRequested(const Message &msg);
     void editRequested(const Message &msg);
@@ -58,12 +60,14 @@ private:
     bool eventFilter(QObject *obj, QEvent *event) override;
 
     void applyStyleSheet();
-    QString getToolUsageAndResult();
+    QString getToolUsageAndResult() const;
+    bool haveToolCalls() const;
 
     Message m_msg;
     QVector<qint64> m_siblingLeafIds;
     int m_siblingIdx{1};
     bool m_isUser;
+    bool m_isTool = false;
 
     // UI
     QLabel *m_bubble{nullptr};
@@ -77,5 +81,6 @@ private:
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};
     bool m_isToolCall{false};
+    bool m_haveToolCalls{false};
 };
 } // namespace LlamaCpp

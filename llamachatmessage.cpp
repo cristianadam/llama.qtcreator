@@ -55,8 +55,16 @@ ChatMessage::ChatMessage(const Message &msg,
     , m_siblingLeafIds(siblingLeafIds)
     , m_siblingIdx(siblingIdx)
     , m_isUser(msg.role == "user")
+    , m_isTool(msg.role == "tool")
 {
     setObjectName("ChatMessage");
+
+    if (!m_msg.extra.isEmpty()) {
+        for (const QVariantMap &e : std::as_const(m_msg.extra)) {
+            if (e.contains("tool_calls"))
+                m_haveToolCalls = true;
+        }
+    }
 
     buildUI();
 }
@@ -64,7 +72,7 @@ ChatMessage::ChatMessage(const Message &msg,
 void ChatMessage::buildUI()
 {
     m_mainLayout = new QVBoxLayout(this);
-    m_mainLayout->setContentsMargins(10, 10, 10, 10);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
 
     m_bubble = new QLabel(this);
 
@@ -74,7 +82,8 @@ void ChatMessage::buildUI()
 
     renderMarkdown(m_msg.content, true);
 
-    m_markdownLabel->setObjectName(m_isUser ? "BubbleUser" : "BubbleAssistant");
+    m_markdownLabel->setObjectName(m_isUser ? "BubbleUser"
+                                            : (m_isTool ? "BubbleTool" : "BubbleAssistant"));
     m_markdownLabel->setContentsMargins(m_isUser ? QMargins(10, 10, 10, 10) : QMargins(0, 0, 0, 0));
     m_markdownLabel->installEventFilter(this);
 
@@ -198,6 +207,7 @@ void ChatMessage::buildUI()
         m_regenButton = new QToolButton(this);
         m_regenButton->setText("A");
         m_regenButton->setToolTip(Tr::tr("Re-generate the answer"));
+        m_regenButton->setVisible(!m_haveToolCalls);
         connect(m_regenButton, &QToolButton::clicked, this, &ChatMessage::onRegenerateClicked);
         actionLayout->addWidget(m_regenButton);
     }
@@ -205,6 +215,7 @@ void ChatMessage::buildUI()
     m_copyButton = new QToolButton(this);
     m_copyButton->setText("E");
     m_copyButton->setToolTip(Tr::tr("Copy the message to clipboard"));
+    m_copyButton->setVisible(!m_haveToolCalls);
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
     actionLayout->addWidget(m_copyButton);
 
@@ -245,19 +256,22 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
     if (forceUpdate)
         m_markdownLabel->invalidate();
 
-    QString markdown = getToolUsageAndResult() + text;
+    QString markdown = m_isTool ? getToolUsageAndResult() : text;
+
     markdown = ThinkingSectionParser::replaceThinkingSections(markdown, forceUpdate);
     m_markdownLabel->setMarkdown(markdown);
 }
 
 void ChatMessage::messageCompleted(bool completed)
 {
-    // For assistant messages show regenerate and copy buttons
-    if (!m_isUser) {
-        m_regenButton->setVisible(completed);
-        m_copyButton->setVisible(completed);
+    if (!m_isUser && !m_isTool) {
+        // Normal assistant – show buttons only when the answer is finished.
+        m_regenButton->setVisible(completed && !haveToolCalls());
+        m_copyButton->setVisible(completed && !haveToolCalls());
 
         renderMarkdown(m_msg.content, completed);
+    } else if (m_isTool) {
+        renderMarkdown(m_msg.content, true);
     }
 }
 
@@ -277,6 +291,10 @@ void ChatMessage::applyStyleSheet()
             padding: 4px 4px;
         }
         QTextBrowser#BubbleAssistant {
+            background: Token_Background_Default;
+            border-radius: 8px;
+        }
+        QTextBrowser#BubbleTool {
             background: Token_Background_Default;
             border-radius: 8px;
         }
@@ -322,7 +340,7 @@ void ChatMessage::applyStyleSheet()
     )"));
 }
 
-QString ChatMessage::getToolUsageAndResult()
+QString ChatMessage::getToolUsageAndResult() const
 {
     QString functionName;
     QString argumentsJson;
@@ -365,7 +383,7 @@ QString ChatMessage::getToolUsageAndResult()
         const QString fallbackSummary = QStringLiteral("%1").arg(functionName);
         const QString fallbackDetails = QStringLiteral("**Result:**\n```\n%1\n```")
                                             .arg(functionResult);
-        return QString("<details><summary>%1</summary>\n\n%2\n</details>\n\n<br/><br/>")
+        return QString("<details><summary>%1</summary>\n\n%2\n</details>\n")
             .arg(fallbackSummary, fallbackDetails);
     }
 
@@ -385,11 +403,17 @@ QString ChatMessage::getToolUsageAndResult()
     const QString summary = statusIconHtml + "&nbsp;" + tool->oneLineSummary(args);
     QString details = tool->detailsMarkdown(args, functionResult);
 
-    if (details.isEmpty())
-        return summary + "\n\n<br/><br/>"; // only the one‑liner, no <details> needed
+    return QString("<details><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
+}
 
-    return QString("<details><summary>%1</summary>\n\n%2\n</details>\n\n<br/><br/>")
-        .arg(summary, details);
+bool ChatMessage::haveToolCalls() const
+{
+    return m_haveToolCalls;
+}
+
+bool ChatMessage::isTool() const
+{
+    return m_isTool;
 }
 
 void ChatMessage::setSiblingIdx(int newSiblingIdx)
