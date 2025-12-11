@@ -31,6 +31,8 @@ public:
        reuse the same QMovie for many documents if you wish. */
     void setMovie(QMovie *movie);
 
+    void setHeightAdjustment(int newHeightAdjustment);
+
 protected:
     // Called by the layout whenever an image resource is required.
     QVariant loadResource(int type, const QUrl &name) override;
@@ -99,5 +101,6 @@ private:
     QElapsedTimer m_markdownConversionTimer;
     QMovie *m_spinner = nullptr;
     QSet<QUrl> m_spinnerUrls;
+    int m_heightAdjustment{0};
 };
 } // namespace LlamaCpp

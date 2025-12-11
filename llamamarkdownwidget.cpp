@@ -289,7 +289,7 @@ int MarkdownLabel::heightForWidth(int w) const
     // (this does not change the widget’s real geometry)
     QTextDocument *doc = const_cast<QTextDocument *>(document());
     doc->setTextWidth(w);
-    return qRound(doc->size().height() + 8);
+    return qRound(doc->size().height() + m_heightAdjustment);
 }
 
 void MarkdownLabel::invalidate()
@@ -441,6 +441,11 @@ void MarkdownLabel::toggleDetailsBlock(int id)
 
     block.range = {startPos, endPos};
     block.expanded = !block.expanded;
+}
+
+void MarkdownLabel::setHeightAdjustment(int newHeightAdjustment)
+{
+    m_heightAdjustment = newHeightAdjustment;
 }
 
 void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, void *user_data)

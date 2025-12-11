@@ -72,13 +72,16 @@ ChatMessage::ChatMessage(const Message &msg,
 void ChatMessage::buildUI()
 {
     m_mainLayout = new QVBoxLayout(this);
-    m_mainLayout->setContentsMargins(0, 0, 0, 0);
+    m_mainLayout->setContentsMargins(10, 0, 10, 0);
 
     m_bubble = new QLabel(this);
 
     m_markdownLabel = new MarkdownLabel(this);
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
     connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
+
+    if (m_isUser)
+        m_markdownLabel->setHeightAdjustment(8);
 
     renderMarkdown(m_msg.content, true);
 
