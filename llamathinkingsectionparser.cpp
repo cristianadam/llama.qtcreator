@@ -103,9 +103,9 @@ QString ThinkingSectionParser::replaceThinkingSections(const QString &src, bool 
         if (endIdx != -1) {
             pos = endIdx + m_endToken.length();
 
-            // We have a details section with new content afterads, insert a sepparation
+            // We have a details section with new content afterwards, insert a sepparation
             if (pos != src.length())
-                out.append("<br/><br/>");
+                out.append("\n\n<br/><br/>");
         } else {
             // nothing after an open‑ended block – we are done for now
             pos = src.length();
