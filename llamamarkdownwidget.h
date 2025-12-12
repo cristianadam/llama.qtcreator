@@ -58,8 +58,16 @@ private:
         QString summary;
         QString collapsedHtml;
         QString expandedHtml;
-        std::pair<int, int> range;
         bool expanded = false;
+        int id{-1};
+    };
+
+    struct HtmlSection
+    {
+        int start{0};
+        int end{0};
+        int detailsId{-1};
+        bool expanded{false};
     };
 
     struct Data
@@ -93,11 +101,13 @@ private:
     int commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const;
     void removeHtmlSection(int index);
     void insertHtmlSection(const QByteArray &html, int index);
+    void insertHtmlDetailsSection(const QByteArray &html, int index, bool expanded, int detailsId);
     void updateDocumentHtmlSections(const Data &newData);
+    void updateDetailsBlocksHtmlSections(Data &newData);
     void toggleDetailsBlock(int id);
 
     Data m_data;
-    QMap<int, QPair<int, int>> m_insertedHtmlSection;
+    QMap<int, HtmlSection> m_insertedHtmlSection;
     QElapsedTimer m_markdownConversionTimer;
     QMovie *m_spinner = nullptr;
     QSet<QUrl> m_spinnerUrls;

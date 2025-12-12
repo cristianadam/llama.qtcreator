@@ -169,6 +169,8 @@ void MarkdownLabel::setMarkdown(const QString &markdown)
     }
     Data newData = std::move(result.value());
 
+    updateDetailsBlocksHtmlSections(newData);
+
     // Update the document: delete obsolete sections and insert the new ones
     updateDocumentHtmlSections(newData);
 
@@ -386,8 +388,8 @@ void MarkdownLabel::removeHtmlSection(int index)
 {
     QTextCursor cur(document());
     const auto &range = m_insertedHtmlSection[index];
-    cur.setPosition(range.first);
-    cur.setPosition(range.second, QTextCursor::KeepAnchor);
+    cur.setPosition(range.start);
+    cur.setPosition(range.end, QTextCursor::KeepAnchor);
     cur.removeSelectedText();
 }
 
@@ -400,7 +402,26 @@ void MarkdownLabel::insertHtmlSection(const QByteArray &html, int index)
     insertHtml(QString::fromUtf8(html));
 
     int end = cur.position();
-    m_insertedHtmlSection[index] = {start, end};
+    m_insertedHtmlSection[index].start = start;
+    m_insertedHtmlSection[index].end = end;
+}
+
+void MarkdownLabel::insertHtmlDetailsSection(const QByteArray &html,
+                                             int index,
+                                             bool expanded,
+                                             int detailsId)
+{
+    QTextCursor cur(document());
+    cur.setPosition(m_insertedHtmlSection[index].start);
+    int start = cur.position();
+
+    insertHtml(QString::fromUtf8(html));
+
+    int end = cur.position();
+    m_insertedHtmlSection[index].start = start;
+    m_insertedHtmlSection[index].end = end;
+    m_insertedHtmlSection[index].expanded = expanded;
+    m_insertedHtmlSection[index].detailsId = detailsId;
 }
 
 void MarkdownLabel::updateDocumentHtmlSections(const Data &newData)
@@ -418,6 +439,21 @@ void MarkdownLabel::updateDocumentHtmlSections(const Data &newData)
         insertHtmlSection(newSections[i], i);
 }
 
+void MarkdownLabel::updateDetailsBlocksHtmlSections(Data &newData)
+{
+    const auto &oldSections = m_data.outputHtmlSections;
+    auto &newSections = newData.outputHtmlSections;
+
+    const auto commonSize = std::min(oldSections.size(), newSections.size());
+    for (int i = 0; i < commonSize; ++i) {
+        if (m_insertedHtmlSection.value(i).expanded) {
+            newSections[i] = newData.detailsBlocks[m_insertedHtmlSection.value(i).detailsId]
+                                 .expandedHtml.toUtf8();
+            newData.detailsBlocks[m_insertedHtmlSection.value(i).detailsId].expanded = true;
+        }
+    }
+}
+
 void MarkdownLabel::toggleDetailsBlock(int id)
 {
     if (id < 0 || id >= m_data.detailsBlocks.size())
@@ -429,18 +465,9 @@ void MarkdownLabel::toggleDetailsBlock(int id)
     QTextCursor cur(document());
 
     // Remove the old section (if it already exists)
-    if (block.range.first != -1) {
-        cur.setPosition(block.range.first);
-        cur.setPosition(block.range.second, QTextCursor::KeepAnchor);
-        cur.removeSelectedText();
-    }
-
-    const int startPos = cur.position();
-    insertHtml(newHtml);
-    const int endPos = cur.position();
-
-    block.range = {startPos, endPos};
+    removeHtmlSection(block.id);
     block.expanded = !block.expanded;
+    insertHtmlDetailsSection(newHtml.toUtf8(), block.id, block.expanded, id);
 }
 
 void MarkdownLabel::setHeightAdjustment(int newHeightAdjustment)
@@ -573,6 +600,7 @@ void MarkdownLabel::markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, vo
         // Insert the *collapsed* version into the document
         out->outputHtml.append(collapsed.toUtf8());
         out->outputHtmlSections << out->outputHtml;
+        out->detailsBlocks[id].id = out->outputHtmlSections.size() - 1;
         out->outputHtml.clear();
 
         // reset state – we are back to normal HTML parsing
