@@ -39,7 +39,7 @@ QString ReadFileTool::toolDefinition() const
                     "first_line": { "type": "integer", "description": "The number of first line to read. Starts with 1." },
                     "last_line_inclusive": { "type": "integer", "description": "The number of last line to read. Line numbers start with 1" },
                     "should_read_entire_file": { "type": "boolean", "description": "Whether to read the entire file. Defaults to false." },
-                    "file_path": { "type": "string", "description": "The path of the file to read" }
+                    "file_path": { "type": "string", "description": "The path of the file to read. The path may be absolute or relative to the current project directory." }
                 },
                 "required": [ "first_line", "last_line_inclusive", "file_path" ],
                 "strict": true
@@ -63,7 +63,7 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
 void ReadFileTool::run(const QJsonObject &args,
                        std::function<void(const QString &, bool)> done) const
 {
-    const QString relPath = args.value("file_path").toString();
+    const FilePath filePath = FilePath::fromUserInput(args.value("file_path").toString());
     int firstLine = args.value("first_line").toInt(1);
     int lastLineIncl = args.value("last_line_inclusive").toInt(firstLine);
     bool readAll = args.value("should_read_entire_file").toBool(false);
@@ -72,15 +72,18 @@ void ReadFileTool::run(const QJsonObject &args,
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
 
-    const FilePath targetFile = cwd.pathAppended(relPath);
+    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
+                                                          : cwd.pathAppended(filePath.path());
 
     if (!targetFile.exists()) {
-        return done(Tr::tr("File \"%1\" does not exist.").arg(relPath), false);
+        return done(Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput()), false);
     }
 
     const Result<QByteArray> readRes = targetFile.fileContents();
     if (!readRes) {
-        return done(Tr::tr("Failed to read \"%1\": %2").arg(relPath, readRes.error()), false);
+        return done(Tr::tr("Failed to read \"%1\": %2")
+                        .arg(targetFile.toUserOutput(), readRes.error()),
+                    false);
     }
 
     const QString fileText = QString::fromUtf8(readRes.value());
@@ -111,7 +114,7 @@ void ReadFileTool::run(const QJsonObject &args,
     if (startIdx >= allLines.size()) {
         return done(Tr::tr("first_line (%1) exceeds the number of lines in \"%2\" (%3).")
                         .arg(firstLine)
-                        .arg(relPath)
+                        .arg(filePath.toUserOutput())
                         .arg(allLines.size()),
                     false);
     }
