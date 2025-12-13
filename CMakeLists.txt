@@ -84,6 +84,7 @@ add_qtc_plugin(LlamaCpp
     LlamaCpp.json.in
     README.md
     tools/askuser_tool.cpp tools/askuser_tool.h
+    tools/build_project_tool.cpp tools/build_project_tool.h
     tools/create_directory_tool.cpp tools/create_directory_tool.h
     tools/editfile_tool.cpp tools/editfile_tool.h
     tools/factory.h
