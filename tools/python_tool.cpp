@@ -1,5 +1,6 @@
 #include "python_tool.h"
 #include "factory.h"
+#include "llamatr.h"
 
 #include <QProcess>
 
@@ -51,7 +52,7 @@ QString PythonTool::toolDefinition() const
 
 QString PythonTool::oneLineSummary(const QJsonObject &) const
 {
-    return QStringLiteral("running python");
+    return Tr::tr("running python");
 }
 
 void PythonTool::run(const QJsonObject &arguments,

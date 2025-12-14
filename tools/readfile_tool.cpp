@@ -53,11 +53,11 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
     const QString file = args.value("file_path").toString();
     const bool all = args.value("should_read_entire_file").toBool(false);
     if (all)
-        return QStringLiteral("read whole file %1").arg(file);
+        return Tr::tr("read whole file %1").arg(file);
 
     int first = args.value("first_line").toInt(1);
     int last = args.value("last_line_inclusive").toInt(first);
-    return QStringLiteral("read %1:%2‑%3").arg(file).arg(first).arg(last);
+    return Tr::tr("read %1:%2‑%3").arg(file).arg(first).arg(last);
 }
 
 void ReadFileTool::run(const QJsonObject &args,

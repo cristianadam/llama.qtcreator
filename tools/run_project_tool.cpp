@@ -58,7 +58,7 @@ QString RunProjectTool::toolDefinition() const
 QString RunProjectTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString proj = args.value("project_path").toString();
-    return QStringLiteral("run project %1").arg(proj);
+    return Tr::tr("run project %1").arg(proj);
 }
 
 void RunProjectTool::run(const QJsonObject &args,

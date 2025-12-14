@@ -39,7 +39,7 @@ QString ListDirTool::toolDefinition() const
 QString ListDirTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString dir = args.value("directory_path").toString();
-    return QStringLiteral("list directory %1").arg(dir.isEmpty() ? "." : dir);
+    return Tr::tr("list directory %1").arg(dir.isEmpty() ? "." : dir);
 }
 
 void ListDirTool::run(const QJsonObject &args, std::function<void(const QString &, bool)> done) const

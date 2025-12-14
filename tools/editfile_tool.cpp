@@ -106,11 +106,11 @@ QString EditFileTool::oneLineSummary(const QJsonObject &args) const
     const int line = args.value("line").toInt(-1);
     const int endLine = args.value("end_line").toInt(-1);
     static const QMap<QString, QString> opMap{
-        {"create", "create file"},
-        {"delete_file", "delete file"},
-        {"replace", "replace line(s)"},
-        {"insert", "insert at line"},
-        {"delete", "delete line(s)"},
+        {"create", Tr::tr("create file")},
+        {"delete_file", Tr::tr("delete file")},
+        {"replace", Tr::tr("replace line(s)")},
+        {"insert", Tr::tr("insert at line")},
+        {"delete", Tr::tr("delete line(s)")},
     };
     QString desc = opMap.value(op, op);
     if (line > 0 && (op == "replace" || op == "insert" || op == "delete")) {

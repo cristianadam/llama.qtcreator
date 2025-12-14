@@ -153,15 +153,13 @@ QString ListIssuesTool::oneLineSummary(const QJsonObject &args) const
 
     QStringList parts;
     if (incErr)
-        parts << "errors";
+        parts << Tr::tr("errors");
     if (incWarn)
-        parts << "warnings";
-    if (parts.isEmpty())
-        parts << "no types";
+        parts << Tr::tr("warnings");
 
-    QString summary = QStringLiteral("list %1 (%2)")
+    QString summary = Tr::tr("list %1 (%2)")
                           .arg(parts.join(QLatin1String(" + ")),
-                               all ? QStringLiteral("all") : QString::number(maxRes));
+                               all ? Tr::tr("all") : QString::number(maxRes));
     return summary;
 }
 

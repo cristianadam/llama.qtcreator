@@ -56,7 +56,7 @@ QString CreateDirectoryTool::toolDefinition() const
 QString CreateDirectoryTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString rel = args.value("dir_path").toString();
-    return QStringLiteral("create directory %1").arg(rel);
+    return Tr::tr("create directory %1").arg(rel);
 }
 
 void CreateDirectoryTool::run(const QJsonObject &args,

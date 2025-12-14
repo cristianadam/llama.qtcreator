@@ -55,7 +55,7 @@ QString ListProjectFilesTool::toolDefinition() const
 QString ListProjectFilesTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString rel = args.value("project_path").toString();
-    return QStringLiteral("list files of project %1").arg(rel);
+    return Tr::tr("list files of project %1").arg(rel);
 }
 
 void ListProjectFilesTool::run(const QJsonObject &args,

@@ -50,7 +50,7 @@ QString AskUserTool::toolDefinition() const
 QString AskUserTool::oneLineSummary(const QJsonObject &args) const
 {
     Q_UNUSED(args);
-    return QStringLiteral("ask user");
+    return Tr::tr("ask user");
 }
 
 namespace {

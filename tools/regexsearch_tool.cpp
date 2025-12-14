@@ -62,8 +62,8 @@ QString RegexSearchTool::oneLineSummary(const QJsonObject &args) const
     const QString regex = args.value("regex").toString();
     const bool all = args.value("provide_all_results").toBool(false);
     if (all)
-        return QStringLiteral("regex search <tt>%1</tt> (all results)").arg(regex);
-    return QStringLiteral("regex search <tt>%1</tt> (max 100)").arg(regex);
+        return Tr::tr("regex search <tt>%1</tt>").arg(regex);
+    return Tr::tr("regex search <tt>%1</tt> (max 100)").arg(regex);
 }
 
 void RegexSearchTool::run(const QJsonObject &args,

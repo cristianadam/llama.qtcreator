@@ -56,7 +56,7 @@ QString BuildProjectTool::toolDefinition() const
 QString BuildProjectTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString rel = args.value("project_path").toString();
-    return QStringLiteral("build project %1").arg(rel);
+    return Tr::tr("build project %1").arg(rel);
 }
 
 void BuildProjectTool::run(const QJsonObject &args,

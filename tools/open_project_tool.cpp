@@ -53,7 +53,7 @@ QString OpenProjectTool::toolDefinition() const
 QString OpenProjectTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString rel = args.value("project_path").toString();
-    return QStringLiteral("open project %1").arg(rel);
+    return Tr::tr("open project %1").arg(rel);
 }
 
 void OpenProjectTool::run(const QJsonObject &args,
