@@ -159,9 +159,9 @@ QString ListIssuesTool::oneLineSummary(const QJsonObject &args) const
     if (parts.isEmpty())
         parts << "no types";
 
-    QString summary = QStringLiteral("list %1 (%2)").arg(parts.join(QLatin1String(" + ")),
-                                                    all ? QStringLiteral("all")
-                                                        : QString::number(maxRes));
+    QString summary = QStringLiteral("list %1 (%2)")
+                          .arg(parts.join(QLatin1String(" + ")),
+                               all ? QStringLiteral("all") : QString::number(maxRes));
     return summary;
 }
 
@@ -211,7 +211,7 @@ void ListIssuesTool::run(const QJsonObject &args,
     }
 
     if (lines.isEmpty()) {
-        done(Tr::tr("No issues match the requested criteria."), false);
+        done(Tr::tr("No issues found."), true);
     } else {
         done(lines.join('\n'), true);
     }
