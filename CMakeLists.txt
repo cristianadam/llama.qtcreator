@@ -89,6 +89,7 @@ add_qtc_plugin(LlamaCpp
     tools/editfile_tool.cpp tools/editfile_tool.h
     tools/factory.h
     tools/listdir_tool.cpp tools/listdir_tool.h
+    tools/list_issues_tool.cpp tools/list_issues_tool.h
     tools/list_project_tool.cpp tools/list_project_tool.h
     tools/python_tool.cpp tools/python_tool.h
     tools/readfile_tool.cpp tools/readfile_tool.h
