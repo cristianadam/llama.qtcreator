@@ -44,14 +44,16 @@ QString ListDirTool::oneLineSummary(const QJsonObject &args) const
 
 void ListDirTool::run(const QJsonObject &args, std::function<void(const QString &, bool)> done) const
 {
-    const QString rawPath = args.value("directory_path").toString();
+    const FilePath rawPath = FilePath::fromUserInput(args.value("directory_path").toString());
 
     // Resolve the directory path – same strategy as other tools.
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
 
-    FilePath dirPath = rawPath.isEmpty() ? cwd : cwd.pathAppended(rawPath);
+    const FilePath dirPath = rawPath.isAbsolutePath()
+                                 ? rawPath
+                                 : cwd.pathAppended(rawPath.path()).absoluteFilePath();
 
     if (!dirPath.exists())
         return done(Tr::tr("Directory \"%1\" does not exist.").arg(dirPath.toUserOutput()), false);

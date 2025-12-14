@@ -66,14 +66,15 @@ void CreateDirectoryTool::run(const QJsonObject &args,
     if (const Project *p = ProjectManager::startupProject())
         base = p->projectDirectory();
 
-    const QString relPath = args.value("dir_path").toString().trimmed();
-
+    const FilePath relPath = FilePath::fromUserInput(args.value("dir_path").toString());
     if (relPath.isEmpty()) {
         return done(Tr::tr("dir_path argument is empty."), false);
     }
 
     // Resolve the final target path
-    FilePath target = base.pathAppended(relPath);
+    const FilePath target = relPath.isAbsolutePath()
+                                ? relPath
+                                : base.pathAppended(relPath.path()).absoluteFilePath();
 
     // If the directory already exists we treat it as success (idempotent).
     if (target.exists())
