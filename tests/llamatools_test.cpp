@@ -14,15 +14,17 @@ QString createFile(const QString &relPath, const QString &content);
 QString deleteFile(const QString &relPath);
 QString editFile(const QString &path,
                  const QString &operation,
-                 const QString &search,
-                 const QString &replace,
-                 const QString &newContent);
-QString diffForEditFile(const QString &filePath,
+                 int line,            // 1‑based, -1 if not applicable
+                 int endLine,         // 1‑based inclusive end line, -1 if not supplied
+                 const QString &text, // may be empty for delete/create/delete_file
+                 const QString &newFileContent);
+QString diffForEditFile(const QString &path,
                         const QString &operation,
-                        const QString &search,
-                        const QString &replace,
+                        int line,
+                        int endLine,
+                        const QString &text,
                         const QString &newFileContent);
-} // namespace LLamaCpp
+} // namespace LlamaCpp
 using namespace LlamaCpp;
 
 static bool writeFile(const QString &absPath, const QString &content)
@@ -45,15 +47,13 @@ private slots:
     void editCreate();
     void editReplace();
     void editDelete();
-    void editInsertBefore();
-    void editInsertAfter();
+    void editInsert();
     void editDeleteFile();
 
     void diffCreate();
     void diffReplace();
     void diffDelete();
-    void diffInsertBefore();
-    void diffInsertAfter();
+    void diffInsert();
     void diffDeleteFile();
 };
 
@@ -82,7 +82,7 @@ void LlamaToolsTest::editCreate()
     const QString content = "first line\nsecond line\nthird line";
 
     // invoke the helper
-    const QString result = editFile(relPath, "create", {}, {}, content);
+    const QString result = editFile(relPath, "create", -1, -1, {}, content);
     QVERIFY2(result.contains("Created"), result.toLocal8Bit().constData());
 
     // verify that the file really exists and contains exactly what we passed
@@ -99,13 +99,10 @@ void LlamaToolsTest::editReplace()
     const QString original = "AAA\nBBB\nCCC\nDDD\nEEE";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "BBB\nCCC";
-    const QString replace = "bb\ncc";
-
-    const QString result = editFile(relPath, "replace", search, replace, {});
+    const QString result = editFile(relPath, "replace", 2, 3, "bbb\nccc", {});
     QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
 
-    const QString expected = "AAA\nbb\ncc\nDDD\nEEE";
+    const QString expected = "AAA\nbbb\nccc\nDDD\nEEE";
     QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
     QCOMPARE(file.readAll(), expected.toUtf8());
@@ -117,9 +114,7 @@ void LlamaToolsTest::editDelete()
     const QString original = "111\n222\n333\n444\n555";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "222\n333";
-
-    const QString result = editFile(relPath, "delete", search, {}, {});
+    const QString result = editFile(relPath, "delete", 2, 3, {}, {});
     QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
 
     const QString expected = "111\n444\n555";
@@ -128,37 +123,16 @@ void LlamaToolsTest::editDelete()
     QCOMPARE(file.readAll(), expected.toUtf8());
 }
 
-void LlamaToolsTest::editInsertBefore()
+void LlamaToolsTest::editInsert()
 {
     const QString relPath = "insert_before.txt";
     const QString original = "alpha\nbeta\ngamma";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "beta";
-    const QString replace = "INSERTED";
-
-    const QString result = editFile(relPath, "insert_before", search, replace, {});
+    const QString result = editFile(relPath, "insert", 2, -1, "INSERTED", {});
     QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
 
     const QString expected = "alpha\nINSERTED\nbeta\ngamma";
-    QFile file(gTempDir->filePath(relPath));
-    file.open(QFile::ReadWrite);
-    QCOMPARE(file.readAll(), expected.toUtf8());
-}
-
-void LlamaToolsTest::editInsertAfter()
-{
-    const QString relPath = "insert_after.txt";
-    const QString original = "one\ntwo\nthree";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString search = "two";
-    const QString replace = "INSERTED";
-
-    const QString result = editFile(relPath, "insert_after", search, replace, {});
-    QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
-
-    const QString expected = "one\ntwo\nINSERTED\nthree";
     QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
     QCOMPARE(file.readAll(), expected.toUtf8());
@@ -169,7 +143,7 @@ void LlamaToolsTest::editDeleteFile()
     const QString relPath = "to_be_removed.txt";
     writeFile(gTempDir->filePath(relPath), "something");
 
-    const QString result = editFile(relPath, "delete_file", {}, {}, {});
+    const QString result = editFile(relPath, "delete_file", -1, -1, {}, {});
     QVERIFY2(result.contains("Deleted"), result.toLocal8Bit().constData());
 
     QFileInfo fi(gTempDir->filePath(relPath));
@@ -181,7 +155,7 @@ void LlamaToolsTest::diffCreate()
     const QString relPath = "diff_create.txt";
     const QString newContent = "a\nb\nc";
 
-    const QString diff = diffForEditFile(relPath, "create", {}, {}, newContent);
+    const QString diff = diffForEditFile(relPath, "create", -1, -1, {}, newContent);
     QVERIFY2(diff.contains("--- a/" + relPath), "Missing --- header");
     QVERIFY2(diff.contains("+++ b/" + relPath), "Missing +++ header");
     QVERIFY2(diff.contains("@@ -0,0 +1,3 @@"), "Wrong hunk header");
@@ -196,10 +170,7 @@ void LlamaToolsTest::diffReplace()
     const QString original = "line1\nold\nline3";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "old";
-    const QString replace = "new";
-
-    const QString diff = diffForEditFile(relPath, "replace", search, replace, {});
+    const QString diff = diffForEditFile(relPath, "replace", 2, -1, "new", {});
     // The diff should remove the line “old” and add “new”
     QVERIFY2(diff.contains("-old"), "Old line not removed in diff");
     QVERIFY2(diff.contains("+new"), "New line not added in diff");
@@ -211,41 +182,21 @@ void LlamaToolsTest::diffDelete()
     const QString original = "A\nB\nC\nD";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "B\nC";
-
-    const QString diff = diffForEditFile(relPath, "delete", search, {}, {});
+    const QString diff = diffForEditFile(relPath, "delete", 2, 3, {}, {});
     QVERIFY2(diff.contains("-B"), "Missing deletion of line B");
     QVERIFY2(diff.contains("-C"), "Missing deletion of line C");
 }
 
-void LlamaToolsTest::diffInsertBefore()
+void LlamaToolsTest::diffInsert()
 {
     const QString relPath = "diff_insert_before.txt";
     const QString original = "start\nmid\nend";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString search = "mid";
-    const QString replace = "INSERTED";
-
-    const QString diff = diffForEditFile(relPath, "insert_before", search, replace, {});
+    const QString diff = diffForEditFile(relPath, "insert", 2, -1, "INSERTED", {});
     QVERIFY2(diff.contains("+INSERTED"), "Inserted line missing");
     // The context line “mid” must still be present (it is not removed)
     QVERIFY2(diff.contains(" mid"), "Context line missing");
-}
-
-void LlamaToolsTest::diffInsertAfter()
-{
-    const QString relPath = "diff_insert_after.txt";
-    const QString original = "head\nbody\nfoot";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString search = "body";
-    const QString replace = "INSERTED";
-
-    const QString diff = diffForEditFile(relPath, "insert_after", search, replace, {});
-    QVERIFY2(diff.contains("+INSERTED"), "Inserted line missing");
-    // The line “body” should still appear in the diff as context
-    QVERIFY2(diff.contains(" body"), "Context line missing");
 }
 
 void LlamaToolsTest::diffDeleteFile()
@@ -254,7 +205,7 @@ void LlamaToolsTest::diffDeleteFile()
     const QString original = "some content";
     writeFile(gTempDir->filePath(relPath), original);
 
-    const QString diff = diffForEditFile(relPath, "delete_file", {}, {}, {});
+    const QString diff = diffForEditFile(relPath, "delete_file", -1, -1, {}, {});
     // For a delete‑file operation the diff has the content with -
     QVERIFY2(diff.startsWith("--- a/" + relPath), "Missing --- header");
     QVERIFY2(diff.contains("+++ b/" + relPath), "Missing +++ header");

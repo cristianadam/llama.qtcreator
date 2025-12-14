@@ -43,46 +43,50 @@ QString EditFileTool::toolDefinition() const
 
             "operation": {
               "type": "string",
-              "enum": ["replace", "insert_before", "insert_after", "delete", "create", "delete_file"],
+              "enum": ["replace", "insert", "delete", "create", "delete_file"],
               "description": "What should be done with the file.
-                             - **replace** – replace a contiguous block of text.
-                             - **insert_before** – insert new text before a line that matches a search pattern.
-                             - **insert_after** – insert new text after a line that matches a search pattern.
-                             - **delete** – delete a contiguous block of text.
+                             - **replace** – replace the line(s) from `line` to `end_line` (inclusive) with `text`.
+                             - **insert** – insert `text` **before** the line at `line`.
+                             - **delete** – delete the line(s) from `line` to `end_line` (inclusive).
                              - **create** – create a brand‑new file (the file must not exist).
                              - **delete_file** – delete the file entirely."
             },
 
-            "search": {
-              "type": "string",
-              "description": "Exact text (including whitespace) that identifies the block to be replaced / deleted / the line before/after which to insert.
-                              Required for *replace*, *insert_before*, *insert_after* and *delete*."
+            "line": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "1‑based start line number the operation refers to. Required for replace, insert and delete."
             },
 
-            "replace": {
+            "end_line": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "1‑based inclusive end line number. Optional – if omitted the operation works on a single line (`line`)."
+            },
+
+            "text": {
               "type": "string",
-              "description": "The new text that will replace the *search* block (for **replace**) or the text that will be inserted (for **insert_before** / **insert_after**).
-                              If the operation is **delete**, this field must be an empty string."
+              "description": "The new line(s) (may contain new‑lines) for replace/insert operations."
             },
 
             "new_file_content": {
               "type": "string",
-              "description": "Full content of the file when **operation** is **create**. Ignored for all other operations."
+              "description": "Full content of the file when **operation** is **create**."
             }
           },
           "required": ["file_path", "operation"],
           "allOf": [
             {
               "if": { "properties": { "operation": { "const": "replace" } } },
-              "then": { "required": ["search", "replace"] }
+              "then": { "required": ["line", "text"] }
             },
             {
-              "if": { "properties": { "operation": { "enum": ["insert_before", "insert_after"] } } },
-              "then": { "required": ["search", "replace"] }
+              "if": { "properties": { "operation": { "const": "insert" } } },
+              "then": { "required": ["line", "text"] }
             },
             {
               "if": { "properties": { "operation": { "const": "delete" } } },
-              "then": { "required": ["search"], "properties": { "replace": { "const": "" } } }
+              "then": { "required": ["line"] }
             },
             {
               "if": { "properties": { "operation": { "const": "create" } } },
@@ -99,201 +103,198 @@ QString EditFileTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString path = args.value("file_path").toString();
     const QString op = args.value("operation").toString();
-
+    const int line = args.value("line").toInt(-1);
+    const int endLine = args.value("end_line").toInt(-1);
     static const QMap<QString, QString> opMap{
         {"create", "create file"},
         {"delete_file", "delete file"},
-        {"replace", "replace in"},
-        {"delete", "delete from"},
-        {"insert_before", "insert before in"},
-        {"insert_after", "insert after in"},
+        {"replace", "replace line(s)"},
+        {"insert", "insert at line"},
+        {"delete", "delete line(s)"},
     };
-    const QString opDesc = opMap.value(op, op);
-    return QStringLiteral("%1 %2").arg(opDesc, path);
+    QString desc = opMap.value(op, op);
+    if (line > 0 && (op == "replace" || op == "insert" || op == "delete")) {
+        QString linePart = QString::number(line);
+        if (endLine > line)
+            linePart += QStringLiteral("‑%1").arg(endLine);
+        desc = QString("%1 %2").arg(desc, linePart);
+    } else {
+        desc = QString("%1 %2").arg(desc, path);
+    }
+    return desc;
 }
 
-QString createFile(const QString &relPath, const QString &content)
+QString createFile(const FilePath &targetFile, const QString &content)
 {
-    // Resolve the working directory (project directory if any, otherwise generic workspace)
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    const FilePath targetFile = cwd.pathAppended(relPath);
-
-    // Do not overwrite an existing file
     if (targetFile.exists())
         return Tr::tr("File \"%1\" already exists – cannot create a new file at this location.")
-            .arg(relPath);
+            .arg(targetFile.toUserOutput());
 
-    // Ensure the parent directory exists; create it if necessary
     const FilePath parentDir = targetFile.parentDir();
     if (!parentDir.exists()) {
         const Result<> mkRes = parentDir.ensureWritableDir();
-        if (!mkRes) {
+        if (!mkRes)
             return Tr::tr("Failed to create parent directory \"%1\": %2")
                 .arg(parentDir.toUserOutput(), mkRes.error());
-        }
     }
 
-    // Write the supplied content
     const Result<qint64> writeRes = targetFile.writeFileContents(content.toUtf8());
     if (!writeRes)
-        return Tr::tr("Cannot create \"%1\": %2").arg(relPath, writeRes.error());
+        return Tr::tr("Cannot create \"%1\": %2").arg(targetFile.toUserOutput(), writeRes.error());
 
-    const QString fileUrl
-        = QString("<a href=\"file://%1\">%2</a>").arg(targetFile.toFSPathString()).arg(relPath);
-    return Tr::tr("Created %1").arg(fileUrl);
+    return Tr::tr("Created %1").arg(targetFile.toUserOutput());
 }
 
-QString deleteFile(const QString &relPath)
+QString deleteFile(const FilePath &targetFile)
 {
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    const FilePath targetFile = cwd.pathAppended(relPath);
-
-    if (!targetFile.exists()) {
-        return Tr::tr("File \"%1\" does not exist.").arg(relPath);
-    }
+    if (!targetFile.exists())
+        return Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput());
 
     Result<> removeRes = targetFile.removeFile();
-    if (!removeRes) {
-        return Tr::tr("Failed to delete \"%1\": %2").arg(relPath, removeRes.error());
-    }
+    if (!removeRes)
+        return Tr::tr("Failed to delete \"%1\": %2")
+            .arg(targetFile.toUserOutput(), removeRes.error());
 
-    return Tr::tr("Deleted file \"%1\"").arg(relPath);
+    return Tr::tr("Deleted file \"%1\"").arg(targetFile.toUserOutput());
 }
 
 QString editFile(const QString &path,
                  const QString &operation,
-                 const QString &search,
-                 const QString &replace,
-                 const QString &newContent)
+                 int line,            // 1‑based start line, -1 if N/A
+                 int endLine,         // 1‑based inclusive end line, -1 if not supplied
+                 const QString &text, // may be empty for delete/create/delete_file
+                 const QString &newFileContent)
 {
-    // Resolve the target file (same logic you already have)
+    // Resolve the target file (same logic as before)
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
-    const FilePath target = cwd.pathAppended(path);
 
-    if (operation == "create") {
-        return createFile(path, newContent);
-    } else if (operation == "delete_file") {
-        return deleteFile(path);
+    const FilePath filePath = FilePath::fromUserInput(path);
+    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
+                                                          : cwd.pathAppended(filePath.path());
+
+    if (operation == "create")
+        return createFile(targetFile, newFileContent);
+    if (operation == "delete_file")
+        return deleteFile(targetFile);
+
+    if (!targetFile.exists())
+        return Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput());
+
+    const Result<QByteArray> readRes = targetFile.fileContents();
+    if (!readRes)
+        return Tr::tr("Failed to read \"%1\": %2").arg(targetFile.toUserOutput(), readRes.error());
+
+    // Split into lines – keep empty lines, no trimming
+    QStringList fileLines = QString::fromUtf8(readRes.value()).split('\n', Qt::KeepEmptyParts);
+
+    auto rangeFromArgs = [&](int start, int end) -> std::pair<int, int> {
+        // If end is not supplied or <= 0, treat as a single line operation
+        if (end < start || end < 1)
+            return {start - 1, start - 1};
+        return {start - 1, end - 1};
+    };
+
+    if (operation == "replace") {
+        const auto [startIdx, endIdx] = rangeFromArgs(line, endLine);
+        if (startIdx < 0 || startIdx >= fileLines.size())
+            return Tr::tr("Start line %1 out of range (file has %2 lines).")
+                .arg(line)
+                .arg(fileLines.size());
+
+        if (endIdx >= fileLines.size())
+            return Tr::tr("End line %1 out of range (file has %2 lines).")
+                .arg(endLine)
+                .arg(fileLines.size());
+
+        // Remove the old range
+        for (int i = endIdx; i >= startIdx; --i)
+            fileLines.removeAt(i);
+
+        // Insert the new text (may be multi‑line)
+        const QStringList newLines = text.split('\n', Qt::KeepEmptyParts);
+        for (int i = 0; i < newLines.size(); ++i)
+            fileLines.insert(startIdx + i, newLines[i]);
+
+    } else if (operation == "insert") {
+        // Insertion before the line at `line`. `end_line` is ignored.
+        const int idx = line - 1; // 0‑based insertion point
+        if (idx < 0 || idx > fileLines.size())
+            return Tr::tr("Line %1 out of range for insertion (file has %2 lines).")
+                .arg(line)
+                .arg(fileLines.size());
+
+        const QStringList newLines = text.split('\n', Qt::KeepEmptyParts);
+        for (int i = 0; i < newLines.size(); ++i)
+            fileLines.insert(idx + i, newLines[i]);
+
+    } else if (operation == "delete") {
+        const auto [startIdx, endIdx] = rangeFromArgs(line, endLine);
+        if (startIdx < 0 || startIdx >= fileLines.size())
+            return Tr::tr("Start line %1 out of range (file has %2 lines).")
+                .arg(line)
+                .arg(fileLines.size());
+
+        if (endIdx >= fileLines.size())
+            return Tr::tr("End line %1 out of range (file has %2 lines).")
+                .arg(endLine)
+                .arg(fileLines.size());
+
+        for (int i = endIdx; i >= startIdx; --i)
+            fileLines.removeAt(i);
     } else {
-        // All other ops need the file to exist
-        if (!target.exists())
-            return Tr::tr("File \"%1\" does not exist.").arg(path);
-
-        // Load current content
-        const Result<QByteArray> readRes = target.fileContents();
-        if (!readRes)
-            return Tr::tr("Failed to read \"%1\": %2").arg(path, readRes.error());
-
-        QStringList fileLines = QString::fromUtf8(readRes.value()).split('\n', Qt::KeepEmptyParts);
-
-        QStringList searchLines = search.split('\n', Qt::KeepEmptyParts);
-        QStringList replaceLines = replace.split('\n', Qt::KeepEmptyParts);
-
-        int matchStart = -1;
-        for (int i = 0; i <= fileLines.size() - searchLines.size(); ++i) {
-            bool ok = true;
-            for (int j = 0; j < searchLines.size(); ++j) {
-                if (fileLines[i + j] != searchLines[j]) {
-                    ok = false;
-                    break;
-                }
-            }
-            if (ok) {
-                matchStart = i;
-                break;
-            }
-        }
-        if (matchStart == -1)
-            return Tr::tr("Search text not found in \"%1\".").arg(path);
-
-        QStringList newContentLines;
-
-        if (operation == "replace") {
-            newContentLines = fileLines.mid(0, matchStart)                      // before SEARCH
-                              + replaceLines                                    // new block
-                              + fileLines.mid(matchStart + searchLines.size()); // after SEARCH
-        } else if (operation == "delete") {
-            newContentLines = fileLines.mid(0, matchStart)
-                              + fileLines.mid(matchStart + searchLines.size());
-        } else if (operation == "insert_before") {
-            newContentLines = fileLines.mid(0, matchStart) + replaceLines
-                              + fileLines.mid(matchStart);
-        } else if (operation == "insert_after") {
-            newContentLines = fileLines.mid(0, matchStart + searchLines.size()) + replaceLines
-                              + fileLines.mid(matchStart + searchLines.size());
-        } else {
-            // should never happen – the JSON schema guarantees the enum values
-            return Tr::tr("Unsupported operation \"%1\".").arg(operation);
-        }
-
-        const Result<qint64> writeRes = target.writeFileContents(
-            newContentLines.join('\n').toUtf8());
-
-        if (!writeRes)
-            return Tr::tr("Cannot write \"%1\": %2").arg(path, writeRes.error());
-
-        return Tr::tr("Edited %1").arg(path);
+        return Tr::tr("Unsupported operation \"%1\".").arg(operation);
     }
-    return {};
+
+    // Write back the modified content
+    const Result<qint64> writeRes = targetFile.writeFileContents(fileLines.join('\n').toUtf8());
+    if (!writeRes)
+        return Tr::tr("Cannot write \"%1\": %2").arg(targetFile.toUserOutput(), writeRes.error());
+
+    return Tr::tr("Edited %1").arg(targetFile.toUserOutput());
 }
 
-QString diffForEditFile(const QString &filePath,
+QString diffForEditFile(const QString &path,
                         const QString &operation,
-                        const QString &search,
-                        const QString &replace,
+                        int line,
+                        int endLine,
+                        const QString &text,
                         const QString &newFileContent)
 {
+    FilePath cwd = Core::DocumentManager::projectsDirectory();
+    if (const Project *p = ProjectManager::startupProject())
+        cwd = p->projectDirectory();
+
+    const FilePath filePath = FilePath::fromUserInput(path);
+    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
+                                                          : cwd.pathAppended(filePath.path());
+
     QStringList oldLines;
     if (operation != "create") {
-        FilePath cwd = Core::DocumentManager::projectsDirectory();
-        if (const Project *p = ProjectManager::startupProject())
-            cwd = p->projectDirectory();
-
-        const FilePath target = cwd.pathAppended(filePath);
-        const Result<QByteArray> readRes = target.fileContents();
+        const Result<QByteArray> readRes = targetFile.fileContents();
         if (!readRes)
-            return Tr::tr("Failed to read \"%1\": %2").arg(filePath, readRes.error());
+            return Tr::tr("Failed to read \"%1\": %2")
+                .arg(targetFile.toUserOutput(), readRes.error());
 
         oldLines = QString::fromUtf8(readRes.value()).split('\n', Qt::KeepEmptyParts);
     }
 
-    const QStringList searchLines = search.split('\n', Qt::KeepEmptyParts);
-    const QStringList replaceLines = replace.split('\n', Qt::KeepEmptyParts);
     const QStringList newLines = newFileContent.split('\n', Qt::KeepEmptyParts);
+    const QStringList insertLines = text.split('\n', Qt::KeepEmptyParts);
 
-    int matchStart = -1;
-    if (!searchLines.isEmpty()) {
-        for (int i = 0; i <= oldLines.size() - searchLines.size(); ++i) {
-            bool ok = true;
-            for (int j = 0; j < searchLines.size(); ++j) {
-                if (oldLines[i + j] != searchLines[j]) {
-                    ok = false;
-                    break;
-                }
-            }
-            if (ok) {
-                matchStart = i;
-                break;
-            }
-        }
-        if (matchStart == -1 && operation != "create" && operation != "delete_file")
-            return Tr::tr("Search block not found in \"%1\".").arg(filePath);
-    }
-
-    QString diff;
-    QTextStream out(&diff);
-    out << "--- a/" << filePath << "\n";
-    out << "+++ b/" << filePath << "\n";
+    // Helper to format a diff header
+    auto header = [&] {
+        QString diff;
+        QTextStream out(&diff);
+        out << "--- a/" << filePath.toUserOutput() << "\n";
+        out << "+++ b/" << filePath.toUserOutput() << "\n";
+        return diff;
+    };
 
     if (operation == "create") {
+        QString diff = header();
+        QTextStream out(&diff);
         out << "@@ -0,0 +" << 1 << "," << newLines.size() << " @@\n";
         for (const QString &ln : newLines)
             out << "+" << ln << "\n";
@@ -301,51 +302,84 @@ QString diffForEditFile(const QString &filePath,
     }
 
     if (operation == "delete_file") {
+        QString diff = header();
+        QTextStream out(&diff);
         out << "@@ -1," << oldLines.size() << " +0,0 @@\n";
-        for (const QString &ln : oldLines)
+        for (const QString &ln : std::as_const(oldLines))
             out << "-" << ln << "\n";
         return diff;
     }
 
+    if (line < 1)
+        return Tr::tr("Invalid line number %1 (must be >= 1).").arg(line);
+    const int startIdx = line - 1;
+    const int endIdx = (endLine >= line) ? endLine - 1
+                                         : startIdx; // if endLine missing, use startIdx
+
     if (operation == "replace") {
-        out << "@@ -" << matchStart + 1 << "," << searchLines.size() << " +" << matchStart + 1
-            << "," << replaceLines.size() << " @@\n";
-        for (const QString &ln : searchLines)
-            out << "-" << ln << "\n";
-        for (const QString &ln : replaceLines)
+        if (startIdx >= oldLines.size())
+            return Tr::tr("Start line %1 out of range for replace (file has %2 lines).")
+                .arg(line)
+                .arg(oldLines.size());
+        if (endIdx >= oldLines.size())
+            return Tr::tr("End line %1 out of range for replace (file has %2 lines).")
+                .arg(endLine)
+                .arg(oldLines.size());
+
+        QString diff = header();
+        QTextStream out(&diff);
+        // Hunk header: show the range being replaced
+        out << "@@ -" << line << "," << (endIdx - startIdx + 1) << " +" << line << ","
+            << insertLines.size() << " @@\n";
+
+        // Old lines (with '-')
+        for (int i = startIdx; i <= endIdx; ++i)
+            out << "-" << oldLines.at(i) << "\n";
+
+        // New lines (with '+')
+        for (const QString &ln : insertLines)
             out << "+" << ln << "\n";
+
+        return diff;
+    }
+
+    if (operation == "insert") {
+        // Insertion before line `line`; allowed to insert at EOF (idx == size)
+        if (startIdx > oldLines.size())
+            return Tr::tr("Line %1 out of range for insert (file has %2 lines).")
+                .arg(line)
+                .arg(oldLines.size());
+
+        QString diff = header();
+        QTextStream out(&diff);
+        // Insertion hunk: 0 lines removed, N lines added
+        out << "@@ -" << line << ",0 +" << line << "," << insertLines.size() << " @@\n";
+        for (const QString &ln : insertLines)
+            out << "+" << ln << "\n";
+
+        // Optional context line (the line that follows the insertion)
+        if (startIdx < oldLines.size())
+            out << " " << oldLines.at(startIdx) << "\n";
+
         return diff;
     }
 
     if (operation == "delete") {
-        out << "@@ -" << matchStart + 1 << "," << searchLines.size() << " +0,0 @@\n";
-        for (const QString &ln : searchLines)
-            out << "-" << ln << "\n";
-        return diff;
-    }
+        if (startIdx >= oldLines.size())
+            return Tr::tr("Start line %1 out of range for delete (file has %2 lines).")
+                .arg(line)
+                .arg(oldLines.size());
+        if (endIdx >= oldLines.size())
+            return Tr::tr("End line %1 out of range for delete (file has %2 lines).")
+                .arg(endLine)
+                .arg(oldLines.size());
 
-    if (operation == "insert_before") {
-        // added lines appear **before** the search block
-        out << "@@ -" << matchStart + 1 << ",0 +" << matchStart + 1 << "," << replaceLines.size()
-            << " @@\n";
-        for (const QString &ln : replaceLines)
-            out << "+" << ln << "\n";
-        // the search block itself becomes context
-        for (const QString &ln : searchLines)
-            out << " " << ln << "\n";
-        return diff;
-    }
+        QString diff = header();
+        QTextStream out(&diff);
+        out << "@@ -" << line << "," << (endIdx - startIdx + 1) << " +0,0 @@\n";
+        for (int i = startIdx; i <= endIdx; ++i)
+            out << "-" << oldLines.at(i) << "\n";
 
-    if (operation == "insert_after") {
-        // insertion point is just after the search block
-        const int afterLine = matchStart + searchLines.size(); // 0‑based
-        out << "@@ -" << afterLine + 1 << ",0 +" << afterLine + 1 << "," << replaceLines.size()
-            << " @@\n";
-        for (const QString &ln : replaceLines)
-            out << "+" << ln << "\n";
-        // keep the search block as context (it appears before the hunk)
-        for (const QString &ln : searchLines)
-            out << " " << ln << "\n";
         return diff;
     }
 
@@ -357,26 +391,72 @@ void EditFileTool::run(const QJsonObject &args,
 {
     const QString filePath = args.value("file_path").toString();
     const QString op = args.value("operation").toString();
-    const QString search = args.value("search").toString();
-    const QString replace = args.value("replace").toString();
+    const int line = args.value("line").toInt(-1);
+    const int endLine = args.value("end_line").toInt(-1);
+    const QString text = args.value("text").toString();
     const QString newFile = args.value("new_file_content").toString();
 
-    return done(editFile(filePath, op, search, replace, newFile), true);
+    if (filePath.isEmpty())
+        return done(Tr::tr(R"(Tool error: "file_path" must be a non‑empty string.)"), false);
+    if (op.isEmpty())
+        return done(Tr::tr(R"(Tool error: "operation" must be a non‑empty string.)"), false);
+
+    static const QSet<QString> validOps{"replace", "insert", "delete", "create", "delete_file"};
+    if (!validOps.contains(op))
+        return done(Tr::tr(R"(Tool error: unknown operation "%1".)").arg(op), false);
+
+    // Helper for missing required fields
+    auto missing = [&](const QString &field) {
+        return Tr::tr(R"(Tool error: "%1" operation requires the field "%2".)").arg(op, field);
+    };
+
+    if (op == "replace" || op == "insert") {
+        if (line < 1)
+            return done(missing("line"), false);
+        if (text.isEmpty())
+            return done(missing("text"), false);
+        if (endLine != -1 && endLine < line)
+            return done(Tr::tr(R"(Tool error: "end_line" must be >= "line".)"), false);
+    } else if (op == "delete") {
+        if (line < 1)
+            return done(missing("line"), false);
+        if (!text.isEmpty())
+            return done(Tr::tr(R"(Tool error: "delete" operation must not contain "text".)"), false);
+        if (endLine != -1 && endLine < line)
+            return done(Tr::tr(R"(Tool error: "end_line" must be >= "line".)"), false);
+    } else if (op == "create") {
+        if (newFile.isEmpty())
+            return done(missing("new_file_content"), false);
+        if (line != -1 || !text.isEmpty() || endLine != -1)
+            return done(Tr::tr(
+                            R"(Tool error: "create" must not contain "line", "end_line" or "text".)"),
+                        false);
+    } else if (op == "delete_file") {
+        if (line != -1 || !text.isEmpty() || !newFile.isEmpty() || endLine != -1)
+            return done(Tr::tr(R"(Tool error: "delete_file" must not contain extra fields.)"),
+                        false);
+    }
+
+    // Dispatch to the core implementation (now with endLine)
+    const QString result = editFile(filePath, op, line, endLine, text, newFile);
+    done(result, true);
 }
 
-QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &) const
+QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &result) const
 {
     const QString filePath = args.value("file_path").toString();
     const QString op = args.value("operation").toString();
-    const QString search = args.value("search").toString();
-    const QString replace = args.value("replace").toString();
+    const int line = args.value("line").toInt(-1);
+    const int endLine = args.value("end_line").toInt(-1);
+    const QString text = args.value("text").toString();
     const QString newFile = args.value("new_file_content").toString();
 
-    const QString diff = diffForEditFile(filePath, op, search, replace, newFile);
+    const QString diff = diffForEditFile(filePath, op, line, endLine, text, newFile);
 
     return QString("**Operation:** %1\n\n"
                    "**Diff:**\n"
-                   "```diff\n%2\n```")
-        .arg(op, diff);
+                   "```diff\n%2\n```\n"
+                   "**Result:**\n```\n%3\n```")
+        .arg(op, diff, result);
 }
 } // namespace LlamaCpp

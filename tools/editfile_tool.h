@@ -11,8 +11,7 @@ public:
     QString oneLineSummary(const QJsonObject &args) const override;
     void run(const QJsonObject &arguments,
              std::function<void(const QString &output, bool ok)> done) const override;
-    QString detailsMarkdown(const QJsonObject &args,
-                            const QString & /*unusedResult*/) const override;
+    QString detailsMarkdown(const QJsonObject &args, const QString &result) const override;
 };
 
 } // namespace LlamaCpp
