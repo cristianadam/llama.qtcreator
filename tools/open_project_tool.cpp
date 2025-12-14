@@ -3,6 +3,7 @@
 #include "llamatr.h"
 
 #include <coreplugin/documentmanager.h>
+#include <projectexplorer/buildsystem.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectexplorer.h>
 #include <projectexplorer/projectmanager.h>
@@ -71,13 +72,48 @@ void OpenProjectTool::run(const QJsonObject &args,
                                 : base.pathAppended(relPath.path()).absoluteFilePath();
 
     const OpenProjectResult result = ProjectExplorerPlugin::openProject(target);
+    if (!result.alreadyOpen().isEmpty())
+        return done(Tr::tr("Project is already opened \"%1\".").arg(target.toUserOutput()), true);
+
+    Project *project = result.project();
+    if (project) {
+        if (project->needsConfiguration()) {
+            auto parsingFinishedConn = new QMetaObject::Connection;
+            *parsingFinishedConn = QObject::connect(
+                ProjectManager::instance(),
+                &ProjectManager::projectFinishedParsing,
+                [done, target, parsingFinishedConn](Project *project) {
+                    QObject::disconnect(*parsingFinishedConn);
+                    delete parsingFinishedConn;
+
+                    const bool success = project->activeBuildSystem()
+                                             ? project->activeBuildSystem()->hasParsingData()
+                                             : false;
+
+                    if (success)
+                        done(Tr::tr("Successfully opened project \"%1\".").arg(target.toUserOutput()),
+                             true);
+                    else
+                        return done(Tr::tr(
+                                        "Failed to open project \"%1\". No build system or failed "
+                                        "to parse project.")
+                                        .arg(target.toUserOutput()),
+                                    false);
+                });
+        } else {
+            done(Tr::tr("Successfully opened project \"%1\".").arg(target.toUserOutput()), true);
+        }
+    } else {
+        return done(Tr::tr("Failed to open project \"%1\". No project found.")
+                        .arg(target.toUserOutput()),
+                    false);
+    }
+
     if (!result) {
         return done(Tr::tr("Failed to open project \"%1\": %2")
                         .arg(target.toUserOutput(), result.errorMessage()),
                     false);
     }
-
-    return done(Tr::tr("Successfully opened project \"%1\".").arg(target.toUserOutput()), true);
 }
 
 } // namespace LlamaCpp::Tools
