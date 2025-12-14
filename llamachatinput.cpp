@@ -15,6 +15,7 @@
 #include <utils/fsengine/fileiconprovider.h>
 
 #include "llamachatinput.h"
+#include "llamasettings.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -83,8 +84,15 @@ void ChatInput::buildUI()
     m_toolsButton = new QToolButton(this);
     m_toolsButton->setText("O");
     m_toolsButton->setCheckable(true);
-    m_toolsButton->setToolTip(Tr::tr("Enable Tools usage"));
+    const bool toolsInitiallyEnabled = settings().toolsEnabled();
+    m_toolsButton->setChecked(toolsInitiallyEnabled);
+    m_toolsButton->setToolTip(toolsInitiallyEnabled
+                                  ? Tr::tr("Disable Tools usage")
+                                  : Tr::tr("Enable Tools usage"));
     connect(m_toolsButton, &QToolButton::clicked, this, [this](bool checked) {
+        settings().toolsEnabled.setValue(checked);
+        settings().writeSettings();
+
         m_toolsButton->setToolTip(checked ? Tr::tr("Disable Tools usage")
                                           : Tr::tr("Enable Tools usage"));
         emit toolsSupportEnabled(checked);

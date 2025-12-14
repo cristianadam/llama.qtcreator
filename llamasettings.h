@@ -1,5 +1,6 @@
 #pragma once
 
+#include <coreplugin/dialogs/ioptionspage.h>
 #include <utils/aspects.h>
 
 namespace ProjectExplorer {
@@ -61,7 +62,8 @@ public:
     Utils::StringAspect customJson{this};
     Utils::BoolAspect showTokensPerSecond{this};
 
-    Utils::StringListAspect tools{this};
+    Utils::StringListAspect enabledToolsList{this};
+    Utils::BoolAspect toolsEnabled{this};
 };
 
 LlamaSettings &settings();
@@ -78,6 +80,12 @@ public:
 
     Utils::BoolAspect enableLlamaCpp{this};
     Utils::BoolAspect useGlobalSettings{this};
+};
+
+class ToolsSettingsPage : public Core::IOptionsPage
+{
+public:
+    ToolsSettingsPage();
 };
 
 } // namespace LlamaCpp

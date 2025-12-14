@@ -51,21 +51,41 @@ static void addCommonPayloadParams(QJsonObject &payload)
 
 static void addToolsToPayload(QJsonObject &payload)
 {
-    if (settings().tools.value().isEmpty())
-        return;
+    const QStringList enabledTools = settings().enabledToolsList();
+
+    const QStringList creatorsList = ToolFactory::instance().creatorsList();
+    QStringList toolDefinitions;
+    for (const QString &toolName : creatorsList) {
+        std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
+        toolDefinitions << tool->toolDefinition();
+    }
 
     QJsonArray toolsArr;
-    for (const QString &toolStr : settings().tools.value()) {
+    for (const QString &toolStr : std::as_const(toolDefinitions)) {
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(toolStr.toUtf8(), &err);
         if (err.error != QJsonParseError::NoError || !doc.isObject()) {
             qWarning() << "Invalid tool JSON:" << err.errorString();
             continue;
         }
-        toolsArr.append(doc.object());
+
+        // Extract the tool name so we can check whether it is enabled.
+        const QJsonObject root = doc.object();
+        const QJsonObject functionObj = root.value(QStringLiteral("function")).toObject();
+        const QString toolName = functionObj.value(QStringLiteral("name")).toString();
+
+        if (!enabledTools.contains(toolName)) {
+            // Skip disabled tools – they must never be advertised to the server.
+            qCInfo(llamaChatTools).nospace()
+                << "Tool '" << toolName << "' is disabled, not adding it to payload.";
+            continue;
+        }
+
+        toolsArr.append(root);
     }
 
-    payload["tools"] = toolsArr;
+    if (!toolsArr.isEmpty())
+        payload["tools"] = toolsArr;
 }
 
 ChatManager &ChatManager::instance()
@@ -774,6 +794,30 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                                            const ToolCall &tool,
                                            std::function<void(qint64)> onChunk)
 {
+    // Check whether the requested tool is enabled.
+    if (!settings().enabledToolsList().contains(tool.name)) {
+        qCWarning(llamaChatTools) << "Tool" << tool.name
+                                  << "was called but is disabled – skipping.";
+
+        // Insert a synthetic “failed” tool‑result so the conversation can continue.
+        Message toolMsg = createToolMessage(assistantMsg);
+        QJsonObject toolJsonMsg;
+        toolJsonMsg["role"] = "tool";
+        toolJsonMsg["tool_call_id"] = tool.id;
+        toolJsonMsg["name"] = tool.name;
+        toolJsonMsg["content"] = QStringLiteral("Tool disabled");
+        QVariantMap toolResultExtra;
+        toolResultExtra["tool_result"] = toolJsonMsg;
+        toolResultExtra["tool_status"] = QStringLiteral("failed");
+        toolMsg.extra << toolResultExtra;
+        m_storage->appendMsg(toolMsg, assistantMsg.id);
+        onChunk(toolMsg.id);
+
+        // Continue the conversation as if the tool had returned an error.
+        generateMessage(convId, toolMsg.id, onChunk);
+        return;
+    }
+
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(tool.arguments.toUtf8(), &err);
     if (err.error != QJsonParseError::NoError) {

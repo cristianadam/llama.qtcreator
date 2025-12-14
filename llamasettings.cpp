@@ -3,6 +3,7 @@
 #include "llamatr.h"
 #include "tools/factory.h"
 #include "tools/tool.h"
+#include "toolsettingswidget.h"
 
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
@@ -13,6 +14,17 @@
 using namespace Utils;
 
 namespace LlamaCpp {
+
+ToolsSettingsPage::ToolsSettingsPage()
+{
+    setId("LlamaCpp.Tools");         // unique identifier
+    setDisplayName(Tr::tr("Tools")); // title shown in the Settings dialog
+    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+    setSettingsProvider([] { return &LlamaCpp::settings(); });
+    setWidgetCreator([] { return new LlamaCpp::ToolsSettingsWidget; });
+}
+
+// The static instance makes the page appear automatically.
 
 static void initEnableAspect(BoolAspect &enableLlamaCpp)
 {
@@ -25,6 +37,8 @@ static void initEnableAspect(BoolAspect &enableLlamaCpp)
 
 LlamaSettings &settings()
 {
+    static ToolsSettingsPage theToolsPage;
+
     static LlamaSettings settings;
     return settings;
 }
@@ -372,16 +386,19 @@ LlamaSettings::LlamaSettings()
     showTokensPerSecond.setDefaultValue(false);
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
 
-    tools.setSettingsKey("LlamaCpp.Tools");
-
+    //
+    // Tools
+    //
     const QStringList creatorsList = ToolFactory::instance().creatorsList();
-    QStringList toolDefinitions;
-    for (const QString &toolName : creatorsList) {
-        std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
-        toolDefinitions << tool->toolDefinition();
-    }
+    enabledToolsList.setSettingsKey("EnabledToolsList");
+    enabledToolsList.setDefaultValue(creatorsList);
 
-    tools.setDefaultValue(toolDefinitions);
+    toolsEnabled.setSettingsKey("ToolsEnabled");
+    toolsEnabled.setDefaultValue(false);
+    toolsEnabled.setDisplayName(Tr::tr("Enable Tools in Chat"));
+    toolsEnabled.setLabelText(Tr::tr("Enable Tools in Chat"));
+    toolsEnabled.setToolTip(
+        Tr::tr("If checked the chat will start with the Tools button turned on."));
 
     initEnableAspect(enableLlamaCpp);
 
@@ -428,6 +445,7 @@ LlamaSettings::LlamaSettings()
     dry_penalty_last_n.setEnabler(&enableLlamaCpp);
     max_tokens.setEnabler(&enableLlamaCpp);
     customJson.setEnabler(&enableLlamaCpp);
+    toolsEnabled.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {
         using namespace Layouting;
@@ -484,6 +502,7 @@ LlamaSettings::LlamaSettings()
                 Row {dry_penalty_last_n}, br,
                 hr, br,
                 showTokensPerSecond, br,
+                toolsEnabled, br,
                 customJson, br,
             },
         };
