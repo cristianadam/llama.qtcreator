@@ -37,13 +37,18 @@ QString RegexSearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "regex_search",
-            "description": "Fast text-based regex search in the code base (prefer it for finding exact function names or expressions) that finds exact pattern matches with file names and line numbers within files or directories. If there is no exclude_pattern - provide an empty string. Returns matches in format file_name:line_number: line_content",
+            "description": "Fast text-based regex search in the code base (prefer it for finding exact function names or expressions). Returns matches in the format `file_name:line_number: line_content`. By default only the first 100 matches are returned; set `provide_all_results` to true to get all matches.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "include_pattern": { "type": "string", "description": "Comma separated glob patterns for files to include (specify file extensions only if you are absolutely sure)" },
-                    "exclude_pattern": { "type": "string", "description": "Comma separated glob patterns for files to exclude" },
-                    "regex": { "type": "string", "description": "A string for constructing a regular expression pattern to search for. Escape special regex characters when needed." }
+                    "include_pattern": { "type": "string", "description": "Comma‑separated glob patterns for files to include (specify file extensions only if you are absolutely sure)" },
+                    "exclude_pattern": { "type": "string", "description": "Comma‑separated glob patterns for files to exclude" },
+                    "regex": { "type": "string", "description": "A string for constructing a regular‑expression pattern to search for. Escape special regex characters when needed." },
+                    "provide_all_results": {
+                        "type": "boolean",
+                        "description": "If true, return all matches. If omitted or false, the tool returns at most 100 matches.",
+                        "default": false
+                    }
                 },
                 "required": [ "include_pattern", "regex" ],
                 "strict": true
@@ -55,7 +60,10 @@ QString RegexSearchTool::toolDefinition() const
 QString RegexSearchTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString regex = args.value("regex").toString();
-    return QStringLiteral("regex search %1").arg(regex);
+    const bool all = args.value("provide_all_results").toBool(false);
+    if (all)
+        return QStringLiteral("regex search <tt>%1</tt> (all results)").arg(regex);
+    return QStringLiteral("regex search <tt>%1</tt> (max 100)").arg(regex);
 }
 
 void RegexSearchTool::run(const QJsonObject &args,
@@ -65,6 +73,11 @@ void RegexSearchTool::run(const QJsonObject &args,
     const QString excludePattern = args.value("exclude_pattern").toString();
     const QString regex = args.value("regex").toString();
 
+    const bool provideAll = args.value("provide_all_results").toBool(false);
+
+    const int kDefaultLimit = 100;
+    int maxResults = provideAll ? std::numeric_limits<int>::max() : kDefaultLimit;
+
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *p = ProjectManager::startupProject())
         cwd = p->projectDirectory();
@@ -72,7 +85,7 @@ void RegexSearchTool::run(const QJsonObject &args,
     const QStringList includeFilters = includePattern.isEmpty() ? QStringList()
                                                                 : splitFilterUiText(includePattern);
     const QStringList excludeFilters = excludePattern.isEmpty()
-                                           ? splitFilterUiText("*/.git/*,*/build/*")
+                                           ? splitFilterUiText("*/.git/*,*/.qtcreator/*,*/build/*")
                                            : splitFilterUiText(excludePattern);
 
     const SubDirFileContainer container(FilePaths{cwd}, includeFilters, excludeFilters);
@@ -86,7 +99,7 @@ void RegexSearchTool::run(const QJsonObject &args,
 
     QObject::connect(watcher,
                      &QFutureWatcher<SearchResultItems>::finished,
-                     [watcher, cwd, regex, done]() mutable {
+                     [watcher, cwd, regex, done, maxResults, provideAll]() mutable {
                          const QFuture<SearchResultItems> f = watcher->future();
                          SearchResultItems allItems;
                          for (const SearchResultItems &partial : f.results())
@@ -96,7 +109,12 @@ void RegexSearchTool::run(const QJsonObject &args,
                              done(Tr::tr("No matches found for pattern \"%1\".").arg(regex), false);
                          } else {
                              QStringList lines;
+                             int resultCount = 0;
+
                              for (const SearchResultItem &it : std::as_const(allItems)) {
+                                 if (resultCount >= maxResults)
+                                     break; // respect the limit
+
                                  // Convert the absolute path to a path relative to the search root.
                                  const QString relPath = FilePath::fromString(it.path().first())
                                                              .relativeChildPath(cwd)
@@ -107,7 +125,16 @@ void RegexSearchTool::run(const QJsonObject &args,
 
                                  lines << QString("%1:%2: %3")
                                               .arg(relPath, QString::number(lineNumber), lineText);
+                                 ++resultCount;
                              }
+
+                             // If we stopped because of the limit, tell the user/LLM.
+                             if (!provideAll && allItems.size() > maxResults) {
+                                 lines << Tr::tr("[output truncated to first %1 results; set "
+                                                 "`provide_all_results` to true for more]")
+                                              .arg(maxResults);
+                             }
+
                              done(lines.join('\n'), true);
                          }
 
