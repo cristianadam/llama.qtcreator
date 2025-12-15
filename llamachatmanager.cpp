@@ -262,7 +262,7 @@ void ChatManager::generateMessage(const QString &convId,
         convId,
         [leafMsgs, this](QJsonObject &payload) {
             payload["messages"] = normalizeMsgsForAPI(leafMsgs);
-            if (m_toolsSupport)
+            if (settings().toolsEnabled())
                 addToolsToPayload(payload);
 
             // custom JSON from settings (if any)
@@ -863,11 +863,6 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
         return;
     }
-}
-
-void ChatManager::onToolsSupportEnabled(bool enabled)
-{
-    m_toolsSupport = enabled;
 }
 
 void ChatManager::deleteConversation(const QString &convId)

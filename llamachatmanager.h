@@ -89,9 +89,6 @@ signals:
                                    const QStringList &quetions);
     void messageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
 
-public slots:
-    void onToolsSupportEnabled(bool enabled);
-
 private:
     explicit ChatManager(QObject *parent = nullptr);
     void initServerProps();
@@ -115,6 +112,5 @@ private:
     QHash<QString, QNetworkReply *> m_titleSummaryReplies;
     QHash<QString, QNetworkReply *> m_followUpReplies;
     QVector<ToolCall> m_toolCalls;
-    bool m_toolsSupport{false};
 };
 } // namespace LlamaCpp

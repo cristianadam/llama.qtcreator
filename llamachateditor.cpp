@@ -151,10 +151,6 @@ ChatEditor::ChatEditor()
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
     connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
     connect(m_input, &ChatInput::editingCancelled, this, &ChatEditor::onEditingCancelled);
-    connect(m_input,
-            &ChatInput::toolsSupportEnabled,
-            &ChatManager::instance(),
-            &ChatManager::onToolsSupportEnabled);
 
     // Connect to the document to get the conversation id
     connect(EditorManager::instance(),

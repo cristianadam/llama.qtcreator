@@ -29,7 +29,6 @@ signals:
     void fileDropped(const QStringList &filePaths);
     void pasteLongText(const QString &text);
     void pasteFiles(const QStringList &filePaths);
-    void toolsSupportEnabled(bool enabled);
 
 private:
     void buildUI();

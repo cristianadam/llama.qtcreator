@@ -95,7 +95,6 @@ void ChatInput::buildUI()
 
         m_toolsButton->setToolTip(checked ? Tr::tr("Disable Tools usage")
                                           : Tr::tr("Enable Tools usage"));
-        emit toolsSupportEnabled(checked);
     });
 
     m_attachButton = new QToolButton(this);
