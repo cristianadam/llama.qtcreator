@@ -4,9 +4,9 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../llamaplugin.cpp" line="+117"/>
-        <source>llama.cpp coversation</source>
-        <translation>чат llama.cpp</translation>
+        <location filename="../llamaplugin.cpp" line="+121"/>
+        <source>llama.cpp conversation</source>
+        <translation>чат с llama.cpp</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -16,7 +16,7 @@
     <message>
         <location line="+2"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
-        <translation>Запросить предложение от llama.cpp в текущей позиции курсора редактора.</translation>
+        <translation>Запросить предложение llama.cpp по текущей позиции курсора.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -50,8 +50,8 @@
     </message>
     <message>
         <location line="+362"/>
-        <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
-        <translation>[llama.cpp] Ошибка получения завершения fim от %1: %2</translation>
+        <source>[llama.cpp] Error fetching FIM completion from %1: %2</source>
+        <translation>[llama.cpp] Ошибка получения завершения FIM от %1: %2</translation>
     </message>
     <message>
         <location line="-427"/>
@@ -60,7 +60,12 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+18"/>
+        <location filename="../llamasettings.cpp" line="+21"/>
+        <source>Tools</source>
+        <translation>Инструменты</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Включить llama.cpp</translation>
@@ -71,7 +76,7 @@
         <translation>Включает интеграцию с llama.cpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+21"/>
         <source>Endpoint</source>
         <translation>Конечная точка</translation>
     </message>
@@ -98,37 +103,37 @@
     <message>
         <location line="+2"/>
         <source>llama.cpp server api key (optional)</source>
-        <translation>Ключ API сервера llama.cpp (необязательно)</translation>
+        <translation>Ключ API сервера llama.cpp (необязательный)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Prefix Code Lines</source>
-        <translation>Префиксные строки кода</translation>
+        <translation>Строки кода перед курсором</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Prefix Code Lines:</source>
-        <translation>Префиксные строки кода:</translation>
+        <translation>Строки кода перед курсором:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Number of code lines before the cursor location to include in the local prefix.</source>
-        <translation>Количество строк кода перед позицией курсора, которые нужно включить в локальный префикс.</translation>
+        <translation>Количество строк кода перед курсором для включения в локальный префикс.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Suffix Code Lines</source>
-        <translation>Суффиксные строки кода</translation>
+        <translation>Строки кода после курсора</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Suffix Code Lines:</source>
-        <translation>Суффиксные строки кода:</translation>
+        <translation>Строки кода после курсора:</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Number of code lines after  the cursor location to include in the local suffix.</source>
-        <translation>Количество строк кода после позиции курсора, которые нужно включить в локальный суффикс.</translation>
+        <source>Number of code lines after the cursor location to include in the local suffix.</source>
+        <translation>Количество строк кода после курсора для включения в локальный суффикс.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -158,7 +163,7 @@
     <message>
         <location line="+3"/>
         <source>Return the result immediately as soon as any of these strings are encountered in the generated text. Separated by semicolons.</source>
-        <translation>Возвращать результат сразу, как только в сгенерированном тексте встретится любая из этих строк. Разделяются точками с запятой.</translation>
+        <translation>Возвращать результат сразу, как только в сгенерированном тексте будет найдена любая из указанных строк. Строки разделяются точками с запятой.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -173,7 +178,7 @@
     <message>
         <location line="+3"/>
         <source>Max alloted time for the prompt processing (TODO: not yet supported).</source>
-        <translation>Максимальное время, отведенное на обработку запроса (TODO: пока не поддерживается).</translation>
+        <translation>Максимальное время, отведенное на обработку запроса (пока не поддерживается).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -188,7 +193,7 @@
     <message>
         <location line="+2"/>
         <source>Max alloted time for the prediction.</source>
-        <translation>Максимальное время, отведенное на предсказание.</translation>
+        <translation>Максимальное время, отведенное на выполнение предсказания.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -203,7 +208,7 @@
     <message>
         <location line="+3"/>
         <source>Show extra info about the inference (0 - disabled, 1 - statusline, 2 - inline).</source>
-        <translation>Показывать дополнительную информацию о выводах (0 - отключено, 1 - строка состояния, 2 - встроенная).</translation>
+        <translation>Показывать дополнительную информацию о работе модели (0 - отключено, 1 - строка состояния, 2 - встроенная).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -214,7 +219,7 @@
     <message>
         <location line="+3"/>
         <source>Trigger FIM (Fill-in-the-Middle) completion automatically on cursor movement.</source>
-        <translation>Автоматически запускать завершение FIM (Fill-in-the-Middle) при движении курсора.</translation>
+        <translation>Автоматически активировать завершение FIM (Fill-in-the-Middle) при перемещении курсора.</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -229,7 +234,7 @@
     <message>
         <location line="+2"/>
         <source>Do not auto-trigger FIM completion if there are more than this number of characters to the right of the cursor.</source>
-        <translation>Не запускать автоматически завершение FIM, если справа от курсора больше этого количества символов.</translation>
+        <translation>Не активировать завершение FIM автоматически, если справа от курсора более этого количества символов.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -244,17 +249,17 @@
     <message>
         <location line="+2"/>
         <source>Max number of cached completions to keep in result_cache.</source>
-        <translation>Максимальное количество завершений в кэше, которые нужно сохранять в result_cache.</translation>
+        <translation>Максимальное количество завершений в кэше, которые необходимо сохранять.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Ring Chunks</source>
-        <translation>Чанки кольца</translation>
+        <translation>Чанки кольцевого контекста</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Ring Chunks:</source>
-        <translation>Чанки кольца:</translation>
+        <translation>Чанки кольцевого контекста:</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -264,32 +269,32 @@
     <message>
         <location line="+3"/>
         <source>Chunk Line Size</source>
-        <translation>Размер чанка строк</translation>
+        <translation>Размер чанка в строках</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Chunk Line Size:</source>
-        <translation>Размер чанка строк:</translation>
+        <translation>Размер чанка в строках:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max size of the chunks (in number of lines).&lt;br/&gt;&lt;br/&gt;Note: adjust these numbers so that you don&apos;t overrun your context. At ring_n_chunks = 64 and ring_chunk_size = 64 you need ~32k context.</source>
-        <translation>Максимальный размер чанков (в количестве строк).&lt;br/&gt;&lt;br/&gt;Примечание: настройте эти числа так, чтобы не превышать лимит контекста. При ring_n_chunks = 64 и ring_chunk_size = 64 вам нужно ~32k контекста.</translation>
+        <translation>Максимальный размер чанков в строках.&lt;br/&gt;&lt;br/&gt;Примечание: настройте эти значения так, чтобы не превышать лимит контекста. При ring_n_chunks = 64 и ring_chunk_size = 64 требуется около ~32k контекста.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Ring Line Scope</source>
-        <translation>Область видимости строки кольца</translation>
+        <translation>Область видимости кольцевого контекста</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Ring Line Scope:</source>
-        <translation>Область видимости строки кольца:</translation>
+        <translation>Область видимости кольцевого контекста:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The range around the cursor position (in number of lines) for gathering chunks after FIM.</source>
-        <translation>Диапазон вокруг позиции курсора (в количестве строк) для сбора чанков после FIM.</translation>
+        <translation>Диапазон вокруг позиции курсора (в количестве строк) для сбора чанков после выполнения FIM.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -304,37 +309,37 @@
     <message>
         <location line="+2"/>
         <source>How often to process queued chunks in normal mode.</source>
-        <translation>Как часто обрабатывать очереди чанков в обычном режиме.</translation>
+        <translation>Как часто обрабатывать чанки в очереди в обычном режиме.</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Chat Endpoint</source>
-        <translation>Конечная точка чата</translation>
+        <translation>Конечная точка для чата</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Chat Endpoint:</source>
-        <translation>Конечная точка чата:</translation>
+        <translation>Конечная точка для чата:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>llama.cpp server chat endpoint</source>
-        <translation>Конечная точка чата сервера llama.cpp</translation>
+        <translation>Конечная точка для чата сервера llama.cpp</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Chat API Key</source>
-        <translation>Ключ API чата</translation>
+        <translation>Ключ API для чата</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Chat API Key:</source>
-        <translation>Ключ API чата:</translation>
+        <translation>Ключ API для чата:</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Set the API Key if you are using --api-key option for the server.</source>
-        <translation>Установите ключ API, если вы используете опцию --api-key для сервера.</translation>
+        <translation>Установите ключ API, если для сервера используется опция --api-key.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -349,27 +354,27 @@
     <message>
         <location line="+2"/>
         <source>Default: none</source>
-        <translation>По умолчанию: нет</translation>
+        <translation>По умолчанию: пусто</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The starting message that defines how model should behave. Will be disabled if left empty.</source>
-        <translation>Начальное сообщение, определяющее, как модель должна себя вести. Будет отключено, если оставлено пустым.</translation>
+        <translation>Начальное сообщение, определяющее поведение модели. Если оставлено пустым, функция отключается.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Paste Long Text to File Length</source>
-        <translation>Длина файла при вставке длинного текста</translation>
+        <translation>Максимальная длина текста при вставке в файл</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Paste Long Text to File Length:</source>
-        <translation>Длина файла при вставке длинного текста:</translation>
+        <translation>Максимальная длина текста при вставке в файл:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>On pasting long text, it will be converted to a file. You can control the file length by setting the value of this parameter. Value 0 means disable.</source>
-        <translation>При вставке длинного текста он будет преобразован в файл. Вы можете контролировать длину файла, установив значение этого параметра. Значение 0 означает отключение.</translation>
+        <translation>При вставке длинного текста он будет преобразован в файл. Вы можете задать максимальную длину текста в файле, установив значение этого параметра. Значение 0 отключает эту функцию.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -384,7 +389,7 @@
     <message>
         <location line="+3"/>
         <source>The order at which samplers are applied, in simplified way. Default is &quot;edkypmxt&quot;: dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</source>
-        <translation>Порядок применения семплеров. По умолчанию: "edkypmxt": dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</translation>
+        <translation>Порядок применения семплеров. По умолчанию: &quot;edkypmxt&quot;: dry → top_k → typ_p → top_p → min_p → xtc → temperature.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -399,22 +404,22 @@
     <message>
         <location line="+3"/>
         <source>Controls the randomness of the generated text by affecting the probability distribution of the output tokens. Higher = more random, lower = more focused.</source>
-        <translation>Контролирует случайность сгенерированного текста, влияя на распределение вероятностей выходных токенов. Более высокое значение = более случайный текст, более низкое = более сфокусированный.</translation>
+        <translation>Контролирует случайность сгенерированного текста, влияя на распределение вероятностей токенов в выводе. Более высокое значение = более случайный текст, более низкое = более детерминированный.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Dynamic Temperature Range</source>
-        <translation>Диапазон динамической температуры</translation>
+        <translation>Динамический диапазон температуры</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Dynamic Temperature Range:</source>
-        <translation>Диапазон динамической температуры:</translation>
+        <translation>Динамический диапазон температуры:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Addon for the temperature sampler. The added value to the range of dynamic temperature, which adjusts probabilities by entropy of tokens.</source>
-        <translation>Дополнение для семплера температуры. Добавленное значение к диапазону динамической температуры, которое корректирует вероятности по энтропии токенов.</translation>
+        <translation>Дополнение для семплера температуры. Значение для динамического диапазона температуры, которое корректирует вероятности на основе энтропии токенов.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -434,47 +439,47 @@
     <message>
         <location line="+5"/>
         <source>Top K</source>
-        <translation>Top K</translation>
+        <translation>Топ K</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Top K:</source>
-        <translation>Top K:</translation>
+        <translation>Топ K:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Keeps only k top tokens.</source>
-        <translation>Оставляет только k топовых токенов.</translation>
+        <translation>Оставляет только k наиболее вероятных токенов.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Top P</source>
-        <translation>Top P</translation>
+        <translation>Топ P</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Top P:</source>
-        <translation>Top P:</translation>
+        <translation>Топ P:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Limits tokens to those that together have a cumulative probability of at least p</source>
-        <translation>Ограничивает токены теми, которые вместе имеют кумулятивную вероятность не менее p</translation>
+        <translation>Ограничивает выбор токенов теми, суммарная вероятность которых составляет хотя бы p</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Min P</source>
-        <translation>Min P</translation>
+        <translation>Минимальная вероятность P</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Min P:</source>
-        <translation>Min P:</translation>
+        <translation>Минимальная вероятность P:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Limits tokens based on the minimum probability for a token to be considered, relative to the probability of the most likely token.</source>
-        <translation>Ограничивает токены на основе минимальной вероятности для токена, который следует учитывать, относительно вероятности наиболее вероятного токена.</translation>
+        <translation>Ограничивает токены на основе минимальной вероятности, ниже которой токены не учитываются, относительно вероятности наиболее вероятного токена.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -489,7 +494,7 @@
     <message>
         <location line="+1"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the chance of cutting tokens at all. 0 disables XTC.</source>
-        <translation>Семплер XTC вырезает топовые токены; этот параметр контролирует вероятность вырезания токенов вообще. 0 отключает XTC.</translation>
+        <translation>Семплер XTC исключает топовые токены; этот параметр контролирует вероятность их исключения. Значение 0 отключает XTC.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -504,17 +509,17 @@
     <message>
         <location line="+1"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the token probability that is required to cut that token.</source>
-        <translation>Семплер XTC вырезает топовые токены; этот параметр контролирует вероятность токена, при которой этот токен будет вырезан.</translation>
+        <translation>Семплер XTC исключает топовые токены; этот параметр задает вероятность токена, при которой он будет исключен.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Typical P</source>
-        <translation>Типичная P</translation>
+        <translation>Типичная вероятность P</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Typical P:</source>
-        <translation>Типичная P:</translation>
+        <translation>Типичная вероятность P:</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -524,17 +529,17 @@
     <message>
         <location line="+4"/>
         <source>Repeat Last N</source>
-        <translation>Последние N повторений</translation>
+        <translation>Последние N токенов для повторения</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Repeat Last N:</source>
-        <translation>Последние N повторений:</translation>
+        <translation>Последние N токенов для повторения:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Last n tokens to consider for penalizing repetition</source>
-        <translation>Последние n токенов для учета при наказании за повторение</translation>
+        <translation>Последние n токенов, учитываемые для штрафа за повторение</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -564,7 +569,7 @@
     <message>
         <location line="+3"/>
         <source>Limits tokens based on whether they appear in the output or not.</source>
-        <translation>Ограничивает токены на основе того, появляются ли они в выводе или нет.</translation>
+        <translation>Ограничивает токены на основе того, появлялись ли они в выводе или нет.</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -579,7 +584,7 @@
     <message>
         <location line="+3"/>
         <source>Limits tokens based on how often they appear in the output.</source>
-        <translation>Ограничивает токены на основе того, как часто они появляются в выводе.</translation>
+        <translation>Ограничивает токены на основе их частоты появления в выводе.</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -594,7 +599,7 @@
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling multiplier.</source>
-        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр устанавливает множитель семплирования DRY.</translation>
+        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр задает множитель семплирования DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -609,37 +614,37 @@
     <message>
         <location line="+1"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling base value.</source>
-        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр устанавливает базовое значение семплирования DRY.</translation>
+        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр задает базовое значение семплирования DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>DRY Allowed Length</source>
-        <translation>Разрешенная длина DRY</translation>
+        <translation>Разрешенная длина для DRY</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY Allowed Length:</source>
-        <translation>Разрешенная длина DRY:</translation>
+        <translation>Разрешенная длина для DRY:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the allowed length for DRY sampling.</source>
-        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр устанавливает разрешенную длину для семплирования DRY.</translation>
+        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр задает разрешенную длину для семплирования DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>DRY Penalty Last N</source>
-        <translation>Штраф DRY за последние N</translation>
+        <translation>Штраф DRY за последние N токенов</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY Penalty Last N:</source>
-        <translation>Штраф DRY за последние N:</translation>
+        <translation>Штраф DRY за последние N токенов:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets DRY penalty for the last n tokens.</source>
-        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр устанавливает штраф DRY за последние n токенов.</translation>
+        <translation>Сепмлирование DRY снижает повторение в сгенерированном тексте даже в длинных контекстах. Этот параметр задает штраф DRY за последние n токенов.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -654,36 +659,47 @@
     <message>
         <location line="+2"/>
         <source>The maximum number of token per output. -1 means no limit.</source>
-        <translation>Максимальное количество токенов на вывод. -1 означает отсутствие ограничения.</translation>
+        <translation>Максимальное количество токенов на один вывод. -1 означает отсутствие ограничений.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Custom JSON config</source>
-        <translation>Пользовательская JSON конфигурация</translation>
+        <translation>Пользовательская JSON-конфигурация</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Custom JSON config:</source>
-        <translation>Пользовательская JSON конфигурация:</translation>
+        <translation>Пользовательская JSON-конфигурация:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Custom JSON string of extra parameters.</source>
-        <translation>Пользовательская JSON строка дополнительных параметров.</translation>
+        <translation>Пользовательская JSON-строка с дополнительными параметрами.</translation>
     </message>
     <message>
         <location line="+4"/>
         <location line="+2"/>
         <source>Show Tokens Per Second</source>
-        <translation>Показывать токены в секунду</translation>
+        <translation>Показывать количество токенов в секунду</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Показывать токены в секунду в интерфейсе чата.</translation>
+        <translation>Отображать количество токенов в секунду в интерфейсе чата.</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+219"/>
+        <location line="+11"/>
+        <location line="+1"/>
+        <source>Enable Tools in Chat</source>
+        <translation>Включить использование инструментов в чате</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>If checked the chat will start with the Tools button turned on.</source>
+        <translation>Если отмечено, чат будет начинаться с включенной кнопкой «Инструменты».</translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="+224"/>
         <source>Search in chat</source>
         <translation>Поиск в чате</translation>
     </message>
@@ -705,7 +721,7 @@
     <message>
         <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Контекст: %L1</translation>
+        <translation>Контекст: %L1 токенов</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -724,38 +740,50 @@
     </message>
     <message>
         <location line="+35"/>
-        <source>Follow‑up questions:</source>
-        <translation>Дополнительные вопросы:</translation>
+        <source>Follow-up questions:</source>
+        <translation>Продолжение разговора:</translation>
     </message>
     <message>
-        <location line="+477"/>
+        <location line="+492"/>
         <source>Speed: %1 t/s</source>
-        <translation>Скорость: %1 т/с</translation>
+        <translation>Скорость генерации: %1 токенов/с</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
-        <translation>&lt;b&gt;Запрос:&lt;/b&gt;&lt;br&gt;Токены: %1&lt;br&gt;Время: %2 мс&lt;br&gt;Скорость: %3 т/с&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерация:&lt;/b&gt;&lt;br&gt;Токены: %4&lt;br&gt;Время: %5 мс&lt;br&gt;Скорость: %6 т/с</translation>
+        <translation>&lt;b&gt;Запрос:&lt;/b&gt;&lt;br&gt;Токенов: %1&lt;br&gt;Время: %2 мс&lt;br&gt;Скорость: %3 токенов/с&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерация:&lt;/b&gt;&lt;br&gt;Токенов: %4&lt;br&gt;Время: %5 мс&lt;br&gt;Скорость: %6 токенов/с</translation>
     </message>
     <message>
         <location line="+43"/>
         <source>LlamaCpp Chat Editor</source>
-        <translation>Редактор чата LlamaCpp</translation>
+        <translation>Редактор чата llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+73"/>
+        <location filename="../llamachatinput.cpp" line="+74"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Введите сообщение (Shift+Enter для новой строки)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+16"/>
+        <location line="+6"/>
+        <source>Disable Tools usage</source>
+        <translation>Отключить использование инструментов</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <location line="+6"/>
+        <source>Enable Tools usage</source>
+        <translation>Включить использование инструментов</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Attach file</source>
         <translation>Прикрепить файл</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Stop assistant answer generation</source>
-        <translation>Остановить генерацию ответа ассистента</translation>
+        <translation>Остановить генерацию ответа ассистентом</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -763,18 +791,17 @@
         <translation>Отправить сообщение ассистенту</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+71"/>
-        <location line="+203"/>
+        <location filename="../llamathinkingsectionparser.cpp" line="+98"/>
         <source>Thought Process</source>
         <translation>Процесс мышления</translation>
     </message>
     <message>
-        <location line="-202"/>
-        <source>Click to expand / hide the thought process</source>
-        <translation>Нажмите, чтобы развернуть/скрыть процесс мышления</translation>
+        <location line="+0"/>
+        <source>Thinking</source>
+        <translation>Мышление</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location filename="../llamachatmessage.cpp" line="+114"/>
         <source>Attached files</source>
         <translation>Прикрепленные файлы</translation>
     </message>
@@ -799,17 +826,12 @@
         <translation>Перегенерировать ответ</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Copy the message to clipboard</source>
-        <translation>Копировать сообщение в буфер обмена</translation>
+        <translation>Скопировать сообщение в буфер обмена</translation>
     </message>
     <message>
-        <location line="+54"/>
-        <source>Thinking %1</source>
-        <translation>Думайте %1</translation>
-    </message>
-    <message>
-        <location line="+208"/>
+        <location line="+324"/>
         <source>Overwrite File?</source>
         <translation>Перезаписать файл?</translation>
     </message>
@@ -819,8 +841,7 @@
 
 Do you want to overwrite it?</source>
         <translation>Файл &quot;%1&quot; уже существует.
-
-Вы хотите его перезаписать?</translation>
+Хотите его перезаписать?</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -850,7 +871,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../llamaconversationsview.cpp" line="+111"/>
         <source>Creates a new llama.cpp conversation</source>
-        <translation>Создать новый разговор llama.cpp</translation>
+        <translation>Создает новый разговор с llama.cpp</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -865,7 +886,7 @@ Do you want to overwrite it?</source>
     <message>
         <location line="+1"/>
         <source>Summarize</source>
-        <translation>Сводка</translation>
+        <translation>Создать сводку</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -904,7 +925,7 @@ Do you want to overwrite it?</source>
         <location line="+1"/>
         <source>Cannot write file:
 %1</source>
-        <translation>Не удалось записать файл:
+        <translation>Невозможно сохранить файл:
 %1</translation>
     </message>
     <message>
@@ -915,7 +936,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../llamalocatorfilter.cpp" line="+43"/>
         <source>Create a summary of {selection}</source>
-        <translation>Создать сводку выделенного</translation>
+        <translation>Создать сводку для выделенного</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -930,31 +951,31 @@ Do you want to overwrite it?</source>
     <message>
         <location line="+1"/>
         <source>Do spell checking and fix any typos in {selection}</source>
-        <translation>Проверить орфографию и исправить опечатки в выделении</translation>
+        <translation>Проверка орфографии и исправление опечаток в выделении</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Сгенерировать тестовые примеры для выделенного. Выводить только код. Без объяснений</translation>
+        <translation>Сгенерировать тестовые примеры для выделенного. Выводить только код без объяснений</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Обновить перевод в выделении. Предоставить полный файл перевода в качестве вывода</translation>
+        <translation>Обновить перевод для выделенного. Предоставить полный файл перевода в качестве результата</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Send the current selection to llama.cpp with a prompt.
-Built‑in prompts: %1
+Built-in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
         <translation>Отправить текущее выделение в llama.cpp с запросом.
 Встроенные запросы: %1
-Вы можете ввести любой другой запрос – они запоминаются на следующий раз.</translation>
+Вы можете ввести любой другой запрос – они будут сохранены для следующего использования.</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+107"/>
+        <location filename="../llamamarkdownwidget.cpp" line="+115"/>
         <source>Copy the code below to Clipboard</source>
-        <translation>Копировать код ниже в буфер обмена</translation>
+        <translation>Скопировать код ниже в буфер обмена</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -962,7 +983,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Сохранить код ниже в файл на диске</translation>
     </message>
     <message>
-        <location line="+282"/>
+        <location line="+2"/>
+        <source>Toggle the details of the tool usage</source>
+        <translation>Показывать/скрывать детали использования инструментов</translation>
+    </message>
+    <message>
+        <location line="+394"/>
         <location line="+10"/>
         <source>Copy</source>
         <translation>Копировать</translation>
@@ -997,6 +1023,453 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+2"/>
         <source>Next result</source>
         <translation>Следующий результат</translation>
+    </message>
+    <message>
+        <location filename="../tools/askuser_tool.cpp" line="+53"/>
+        <source>ask user</source>
+        <translation>запрос пользователю</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Ask the user</source>
+        <translation>Запросить пользователя</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Type your answer here ...</source>
+        <translation>Введите ваш ответ здесь...</translation>
+    </message>
+    <message>
+        <location filename="../tools/build_project_tool.cpp" line="+59"/>
+        <source>build project %1</source>
+        <translation>собрать проект %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location filename="../tools/list_project_tool.cpp" line="+70"/>
+        <location filename="../tools/open_project_tool.cpp" line="+68"/>
+        <location filename="../tools/run_project_tool.cpp" line="+71"/>
+        <source>project_path argument is empty.</source>
+        <translation>аргумент project_path пуст.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/list_project_tool.cpp" line="+10"/>
+        <location filename="../tools/open_project_tool.cpp" line="+45"/>
+        <source>Failed to open project &quot;%1&quot;: %2</source>
+        <translation>Не удалось открыть проект &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Could not determine a project to build for &quot;%1&quot;.</source>
+        <translation>Не удалось определить проект для сборки &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Build succeeded for &quot;%1&quot;.</source>
+        <translation>Сборка проекта &quot;%1&quot; завершена успешно.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build failed for &quot;%1&quot;.</source>
+        <translation>Сборка проекта &quot;%1&quot; завершилась неудачно.</translation>
+    </message>
+    <message>
+        <location filename="../tools/create_directory_tool.cpp" line="+59"/>
+        <source>create directory %1</source>
+        <translation>создать директорию %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>dir_path argument is empty.</source>
+        <translation>аргумент dir_path пуст.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Directory &quot;%1&quot; already exists.</source>
+        <translation>Директория &quot;%1&quot; уже существует.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to create directory &quot;%1&quot;.</source>
+        <translation>Не удалось создать директорию &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully created directory &quot;%1&quot;.</source>
+        <translation>Директория &quot;%1&quot; успешно создана.</translation>
+    </message>
+    <message>
+        <location filename="../tools/editfile_tool.cpp" line="+109"/>
+        <source>create file</source>
+        <translation>создать файл</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete file</source>
+        <translation>удалить файл</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>replace line(s)</source>
+        <translation>заменить строку/строки</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>insert at line</source>
+        <translation>вставить в строку</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete line(s)</source>
+        <translation>удалить строку/строки</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>File &quot;%1&quot; already exists – cannot create a new file at this location.</source>
+        <translation>Файл &quot;%1&quot; уже существует – невозможно создать новый файл здесь.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Failed to create parent directory &quot;%1&quot;: %2</source>
+        <translation>Не удалось создать родительскую директорию &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot create &quot;%1&quot;: %2</source>
+        <translation>Невозможно создать &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Created %1</source>
+        <translation>Создано: %1</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+32"/>
+        <location filename="../tools/readfile_tool.cpp" line="+79"/>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation>Файл &quot;%1&quot; не существует.</translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <source>Failed to delete &quot;%1&quot;: %2</source>
+        <translation>Не удалось удалить &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Deleted file &quot;%1&quot;</source>
+        <translation>Файл &quot;%1&quot; удален</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <location line="+90"/>
+        <location filename="../tools/readfile_tool.cpp" line="+5"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>Не удалось прочитать &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="-75"/>
+        <location line="+33"/>
+        <source>Start line %1 out of range (file has %2 lines).</source>
+        <translation>Начальная строка %1 вне диапазона (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="-33"/>
+        <location line="+33"/>
+        <source>End line %1 out of range (file has %2 lines).</source>
+        <translation>Конечная строка %1 вне диапазона (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="-16"/>
+        <source>Line %1 out of range for insertion (file has %2 lines).</source>
+        <translation>Строка %1 вне диапазона для вставки (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Unsupported operation &quot;%1&quot;.</source>
+        <translation>Операция &quot;%1&quot; не поддерживается.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Невозможно записать &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Edited %1</source>
+        <translation>Отредактировано: %1</translation>
+    </message>
+    <message>
+        <location line="+59"/>
+        <source>Invalid line number %1 (must be &gt;= 1).</source>
+        <translation>Некорректный номер строки %1 (должен быть &gt;= 1).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Start line %1 out of range for replace (file has %2 lines).</source>
+        <translation>Начальная строка %1 вне диапазона для замены (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for replace (file has %2 lines).</source>
+        <translation>Конечная строка %1 вне диапазона для замены (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Line %1 out of range for insert (file has %2 lines).</source>
+        <translation>Строка %1 вне диапазона для вставки (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Start line %1 out of range for delete (file has %2 lines).</source>
+        <translation>Начальная строка %1 вне диапазона для удаления (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for delete (file has %2 lines).</source>
+        <translation>Конечная строка %1 вне диапазона для удаления (в файле %2 строк).</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Unsupported operation &quot;%1&quot; in diff generator.</source>
+        <translation>Операция &quot;%1&quot; не поддерживается в генераторе разницы.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Tool error: &quot;file_path&quot; must be a non-empty string.</source>
+        <translation>Ошибка инструмента: &quot;file_path&quot; должен быть непустой строкой.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool error: &quot;operation&quot; must be a non-empty string.</source>
+        <translation>Ошибка инструмента: &quot;operation&quot; должен быть непустой строкой.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: unknown operation &quot;%1&quot;.</source>
+        <translation>Ошибка инструмента: неизвестная операция &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: &quot;%1&quot; operation requires the field &quot;%2&quot;.</source>
+        <translation>Ошибка инструмента: операция &quot;%1&quot; требует поле &quot;%2&quot;.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+7"/>
+        <source>Tool error: &quot;end_line&quot; must be &gt;= &quot;line&quot;.</source>
+        <translation>Ошибка инструмента: &quot;end_line&quot; должен быть &gt;= &quot;line&quot;.</translation>
+    </message>
+    <message>
+        <location line="-2"/>
+        <source>Tool error: &quot;delete&quot; operation must not contain &quot;text&quot;.</source>
+        <translation>Ошибка инструмента: операция &quot;delete&quot; не должна содержать &quot;text&quot;.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Tool error: &quot;create&quot; must not contain &quot;line&quot;, &quot;end_line&quot; or &quot;text&quot;.</source>
+        <translation>Ошибка инструмента: операция &quot;create&quot; не должна содержать поля &quot;line&quot;, &quot;end_line&quot; или &quot;text&quot;.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tool error: &quot;delete_file&quot; must not contain extra fields.</source>
+        <translation>Ошибка инструмента: операция &quot;delete_file&quot; не должна содержать дополнительные поля.</translation>
+    </message>
+    <message>
+        <location filename="../tools/list_issues_tool.cpp" line="+156"/>
+        <source>errors</source>
+        <translation>ошибки</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>warnings</source>
+        <translation>предупреждения</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>list %1 (%2)</source>
+        <translation>список %1 (%2)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>all</source>
+        <translation>все</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <location filename="../tools/regexsearch_tool.cpp" line="+133"/>
+        <source>[output truncated to first %1 results; set `provide_all_results` to true for more]</source>
+        <translation>[вывод сокращен до первых %1 результатов; установите `provide_all_results` в true для получения всех]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No issues found.</source>
+        <translation>Ошибки или предупреждения не найдены.</translation>
+    </message>
+    <message>
+        <location filename="../tools/list_project_tool.cpp" line="-22"/>
+        <source>list files of project %1</source>
+        <translation>список файлов проекта %1</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Could not determine a project to list files for &quot;%1&quot;.</source>
+        <translation>Не удалось определить проект для получения списка файлов &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../tools/listdir_tool.cpp" line="+42"/>
+        <source>list directory %1</source>
+        <translation>список директорий %1</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Directory &quot;%1&quot; does not exist.</source>
+        <translation>Директория &quot;%1&quot; не существует.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&quot;%1&quot; is not a directory.</source>
+        <translation>&quot;%1&quot; не является директорией.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Directory listing for %1:</source>
+        <translation>Содержимое директории %1:</translation>
+    </message>
+    <message>
+        <location filename="../tools/open_project_tool.cpp" line="-57"/>
+        <source>open project %1</source>
+        <translation>открыть проект %1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Project is already opened &quot;%1&quot;.</source>
+        <translation>Проект уже открыт: &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location line="+10"/>
+        <source>Successfully opened project &quot;%1&quot;.</source>
+        <translation>Проект &quot;%1&quot; успешно открыт.</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>Failed to open project &quot;%1&quot;. No build system or failed to parse project.</source>
+        <translation>Не удалось открыть проект &quot;%1&quot;. Нет системы сборки или ошибка разбора проекта.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Failed to open project &quot;%1&quot;. No project found.</source>
+        <translation>Не удалось открыть проект &quot;%1&quot;. Проект не найден.</translation>
+    </message>
+    <message>
+        <location filename="../tools/python_tool.cpp" line="+55"/>
+        <source>running python</source>
+        <translation>выполнение Python-кода</translation>
+    </message>
+    <message>
+        <location filename="../tools/readfile_tool.cpp" line="-28"/>
+        <source>read whole file %1</source>
+        <translation>прочитать весь файл %1</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>read %1:%2‑%3</source>
+        <translation>прочитать %1:%2-%3</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>первая строка должна быть &gt;= 1.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>последняя строка включительно должна быть &gt;= первой строке.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>первая строка (%1) превышает количество строк в файле &quot;%2&quot; (%3).</translation>
+    </message>
+    <message>
+        <location filename="../tools/regexsearch_tool.cpp" line="-68"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
+        <translation>поиск по регулярному выражению &lt;tt&gt;%1&lt;/tt&gt;</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt; (max 100)</source>
+        <translation>поиск по регулярному выражению &lt;tt&gt;%1&lt;/tt&gt; (максимум 100 результатов)</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>No matches found for pattern &quot;%1&quot;.</source>
+        <translation>Ничего не найдено по шаблону &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../tools/run_project_tool.cpp" line="-10"/>
+        <source>run project %1</source>
+        <translation>запустить проект %1</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Failed to open project &quot;%1&quot;</source>
+        <translation>Не удалось открыть проект &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>No run configuration found for project &quot;%1&quot;</source>
+        <translation>Нет конфигурации запуска для проекта &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>Run succeeded for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation>Проект &quot;%1&quot; запущен успешно.
+--- stdout ---
+%2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+6"/>
+        <source>
+--- stderr ---
+%1</source>
+        <translation>
+--- stderr ---
+%1</translation>
+    </message>
+    <message>
+        <location line="-3"/>
+        <source>Run failed for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation>Проект &quot;%1&quot; не удался.
+--- stdout ---
+%2</translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="+26"/>
+        <source>Select a tool to view its JSON definition</source>
+        <translation>Выберите инструмент, чтобы просмотреть его JSON-определение</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool</source>
+        <translation>Инструмент</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>No description</source>
+        <translation>Описание отсутствует</translation>
     </message>
 </context>
 </TS>

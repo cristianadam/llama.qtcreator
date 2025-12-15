@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../llamaplugin.cpp" line="+117"/>
+        <location filename="../llamaplugin.cpp" line="+121"/>
         <source>llama.cpp coversation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,7 +60,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+18"/>
+        <location filename="../llamasettings.cpp" line="+21"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation type="unfinished"></translation>
@@ -71,7 +76,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+21"/>
         <source>Endpoint</source>
         <translation type="unfinished"></translation>
     </message>
@@ -683,7 +688,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+219"/>
+        <location line="+11"/>
+        <location line="+1"/>
+        <source>Enable Tools in Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>If checked the chat will start with the Tools button turned on.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="+224"/>
         <source>Search in chat</source>
         <translation type="unfinished"></translation>
     </message>
@@ -728,7 +744,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+477"/>
+        <location line="+492"/>
         <source>Speed: %1 t/s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -743,17 +759,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+73"/>
+        <location filename="../llamachatinput.cpp" line="+74"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+16"/>
+        <location line="+6"/>
+        <source>Disable Tools usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <location line="+6"/>
+        <source>Enable Tools usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Attach file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Stop assistant answer generation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -763,18 +791,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+71"/>
-        <location line="+203"/>
+        <location filename="../llamathinkingsectionparser.cpp" line="+98"/>
         <source>Thought Process</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-202"/>
-        <source>Click to expand / hide the thought process</source>
+        <location line="+0"/>
+        <source>Thinking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location filename="../llamachatmessage.cpp" line="+114"/>
         <source>Attached files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -799,17 +826,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Copy the message to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+54"/>
-        <source>Thinking %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+208"/>
+        <location line="+324"/>
         <source>Overwrite File?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -946,7 +968,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+107"/>
+        <location filename="../llamamarkdownwidget.cpp" line="+115"/>
         <source>Copy the code below to Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -956,7 +978,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+282"/>
+        <location line="+2"/>
+        <source>Toggle the details of the tool usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+394"/>
         <location line="+10"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
@@ -990,6 +1017,447 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+2"/>
         <source>Next result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/askuser_tool.cpp" line="+53"/>
+        <source>ask user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Ask the user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Type your answer here ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/build_project_tool.cpp" line="+59"/>
+        <source>build project %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location filename="../tools/list_project_tool.cpp" line="+70"/>
+        <location filename="../tools/open_project_tool.cpp" line="+68"/>
+        <location filename="../tools/run_project_tool.cpp" line="+71"/>
+        <source>project_path argument is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location filename="../tools/list_project_tool.cpp" line="+10"/>
+        <location filename="../tools/open_project_tool.cpp" line="+45"/>
+        <source>Failed to open project &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Could not determine a project to build for &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Build succeeded for &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build failed for &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/create_directory_tool.cpp" line="+59"/>
+        <source>create directory %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>dir_path argument is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Directory &quot;%1&quot; already exists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to create directory &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully created directory &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/editfile_tool.cpp" line="+109"/>
+        <source>create file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>replace line(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>insert at line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete line(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>File &quot;%1&quot; already exists – cannot create a new file at this location.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Failed to create parent directory &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot create &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Created %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+32"/>
+        <location filename="../tools/readfile_tool.cpp" line="+79"/>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <source>Failed to delete &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Deleted file &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <location line="+90"/>
+        <location filename="../tools/readfile_tool.cpp" line="+5"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-75"/>
+        <location line="+33"/>
+        <source>Start line %1 out of range (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <location line="+33"/>
+        <source>End line %1 out of range (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-16"/>
+        <source>Line %1 out of range for insertion (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Unsupported operation &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Edited %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+59"/>
+        <source>Invalid line number %1 (must be &gt;= 1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Start line %1 out of range for replace (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for replace (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Line %1 out of range for insert (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Start line %1 out of range for delete (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for delete (file has %2 lines).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Unsupported operation &quot;%1&quot; in diff generator.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Tool error: &quot;file_path&quot; must be a non‑empty string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool error: &quot;operation&quot; must be a non‑empty string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: unknown operation &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: &quot;%1&quot; operation requires the field &quot;%2&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+7"/>
+        <source>Tool error: &quot;end_line&quot; must be &gt;= &quot;line&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-2"/>
+        <source>Tool error: &quot;delete&quot; operation must not contain &quot;text&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Tool error: &quot;create&quot; must not contain &quot;line&quot;, &quot;end_line&quot; or &quot;text&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tool error: &quot;delete_file&quot; must not contain extra fields.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/list_issues_tool.cpp" line="+156"/>
+        <source>errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>warnings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>list %1 (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <location filename="../tools/regexsearch_tool.cpp" line="+133"/>
+        <source>[output truncated to first %1 results; set `provide_all_results` to true for more]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No issues found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/list_project_tool.cpp" line="-22"/>
+        <source>list files of project %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Could not determine a project to list files for &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/listdir_tool.cpp" line="+42"/>
+        <source>list directory %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Directory &quot;%1&quot; does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&quot;%1&quot; is not a directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Directory listing for %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/open_project_tool.cpp" line="-57"/>
+        <source>open project %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Project is already opened &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location line="+10"/>
+        <source>Successfully opened project &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>Failed to open project &quot;%1&quot;. No build system or failed to parse project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Failed to open project &quot;%1&quot;. No project found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/python_tool.cpp" line="+55"/>
+        <source>running python</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/readfile_tool.cpp" line="-28"/>
+        <source>read whole file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>read %1:%2‑%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/regexsearch_tool.cpp" line="-68"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt; (max 100)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>No matches found for pattern &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/run_project_tool.cpp" line="-10"/>
+        <source>run project %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Failed to open project &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>No run configuration found for project &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>Run succeeded for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+6"/>
+        <source>
+--- stderr ---
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-3"/>
+        <source>Run failed for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="+26"/>
+        <source>Select a tool to view its JSON definition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>No description</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

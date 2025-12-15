@@ -4,9 +4,9 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../llamaplugin.cpp" line="+117"/>
+        <location filename="../llamaplugin.cpp" line="+121"/>
         <source>llama.cpp coversation</source>
-        <translation>Anotace kódu pomocí llama.cpp</translation>
+        <translation>Konverzace s llama.cpp</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -16,7 +16,7 @@
     <message>
         <location line="+2"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
-        <translation>Požádat o návrh llama.cpp na aktuální pozici kurzoru v editoru.</translation>
+        <translation>Požádat o návrh v llama.cpp na aktuální pozici kurzoru v editoru.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -26,12 +26,12 @@
     <message>
         <location line="+3"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>Přepnout povolení/zakázání llama.cpp</translation>
+        <translation>Zapnout/vypnout llama.cpp</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Toggle Auto FIM</source>
-        <translation>Přepnout automatické FIM</translation>
+        <translation>Zapnout/vypnout automatické FIM</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -41,12 +41,12 @@
     <message>
         <location line="+7"/>
         <source>Disable llama.cpp.</source>
-        <translation>Zakázat llama.cpp.</translation>
+        <translation>Vypnout llama.cpp.</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Enable llama.cpp.</source>
-        <translation>Povolit llama.cpp.</translation>
+        <translation>Zapnout llama.cpp.</translation>
     </message>
     <message>
         <location line="+362"/>
@@ -57,21 +57,21 @@
         <location line="-427"/>
         <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
-        <translation>llama.cpp</translation>
+        <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+18"/>
+        <location filename="../llamasettings.cpp" line="+32"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>Povolit llama.cpp</translation>
+        <translation>Povolit LlamaCpp</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Povoluje integraci llama.cpp.</translation>
+        <translation>Povoluje integraci LlamaCpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+21"/>
         <source>Endpoint</source>
         <translation>Konečný bod</translation>
     </message>
@@ -83,7 +83,7 @@
     <message>
         <location line="+2"/>
         <source>llama.cpp server endpoint</source>
-        <translation>Konečný bod serveru llama.cpp</translation>
+        <translation>Konečný bod serveru LlamaCpp</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -98,7 +98,7 @@
     <message>
         <location line="+2"/>
         <source>llama.cpp server api key (optional)</source>
-        <translation>API klíč serveru llama.cpp (volitelné)</translation>
+        <translation>API klíč serveru LlamaCpp (volitelné)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -128,6 +128,16 @@
     <message>
         <location line="+3"/>
         <source>Number of code lines after the cursor location to include in the local suffix.</source>
+        <translation>Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
+    </message>
+    <message>
+        <location line="-60"/>
+        <source>Tools</source>
+        <translation>Nástroje</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
     </message>
     <message>
@@ -163,32 +173,32 @@
     <message>
         <location line="+4"/>
         <source>Max Prompt Time (ms)</source>
-        <translation>Maximální čas na prompt (ms)</translation>
+        <translation>Maximální doba zpracování promptu (ms)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max Prompt Time (ms):</source>
-        <translation>Maximální čas na prompt (ms):</translation>
+        <translation>Maximální doba zpracování promptu (ms):</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Max alloted time for the prompt processing (TODO: not yet supported).</source>
-        <translation>Maximální přidělený čas pro zpracování promptu (TODO: zatím nepodporováno).</translation>
+        <translation>Maximální povolený čas pro zpracování promptu (TODO: zatím nepodporováno).</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Max Predict Time (ms)</source>
-        <translation>Maximální čas na předpověď (ms)</translation>
+        <translation>Maximální doba pro předpověď (ms)</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max Predict Time (ms):</source>
-        <translation>Maximální čas na předpověď (ms):</translation>
+        <translation>Maximální doba pro předpověď (ms):</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max alloted time for the prediction.</source>
-        <translation>Maximální přidělený čas pro předpověď.</translation>
+        <translation>Maximální povolený čas pro předpověď.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -203,7 +213,7 @@
     <message>
         <location line="+3"/>
         <source>Show extra info about the inference (0 - disabled, 1 - statusline, 2 - inline).</source>
-        <translation>Zobrazit další informace o inferenci (0 - zakázáno, 1 - řádek stavu, 2 - inline).</translation>
+        <translation>Zobrazit další informace o inferenci (0 - vypnuto, 1 - řádek stavu, 2 - inline).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -214,22 +224,22 @@
     <message>
         <location line="+3"/>
         <source>Trigger FIM (Fill-in-the-Middle) completion automatically on cursor movement.</source>
-        <translation>Automaticky spustit dokončení FIM (Fill-in-the-Middle) při pohybu kurzoru.</translation>
+        <translation>Automaticky spouštět dokončení FIM (Fill-in-the-Middle) při pohybu kurzoru.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max Line Suffix</source>
-        <translation>Maximální příponový řádek</translation>
+        <translation>Maximální příponový znak v řádku</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Max Line Suffix:</source>
-        <translation>Maximální příponový řádek:</translation>
+        <translation>Maximální příponový znak v řádku:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Do not auto-trigger FIM completion if there are more than this number of characters to the right of the cursor.</source>
-        <translation>Nespouštět automaticky dokončení FIM, pokud je vpravo od kurzoru více znaků než tento počet.</translation>
+        <translation>Nespouštět dokončení FIM automaticky, pokud je vpravo od kurzoru více znaků než tento počet.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -244,17 +254,17 @@
     <message>
         <location line="+2"/>
         <source>Max number of cached completions to keep in result_cache.</source>
-        <translation>Maximální počet uložených dokončení v mezipaměti výsledků.</translation>
+        <translation>Maximální počet uložených dokončení, které mají zůstat v mezipaměti výsledků.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Ring Chunks</source>
-        <translation>Bloky v kruhu</translation>
+        <translation>Cyklické bloky</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Ring Chunks:</source>
-        <translation>Bloky v kruhu:</translation>
+        <translation>Cyklické bloky:</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -274,22 +284,22 @@
     <message>
         <location line="+2"/>
         <source>Max size of the chunks (in number of lines).&lt;br/&gt;&lt;br/&gt;Note: adjust these numbers so that you don&apos;t overrun your context. At ring_n_chunks = 64 and ring_chunk_size = 64 you need ~32k context.</source>
-        <translation>Maximální velikost bloků (v počtu řádků).&lt;br/&gt;&lt;br/&gt;Poznámka: upravte tyto čísla tak, abyste nepřekročili svůj kontext. Při ring_n_chunks = 64 a ring_chunk_size = 64 potřebujete ~32k kontextu.</translation>
+        <translation>Maximální velikost bloků (v počtu řádků).&lt;br/&gt;&lt;br/&gt;Poznámka: upravte tyto čísla tak, abyste nepřekročili svůj kontext. Při cyklických blocích = 64 a velikosti bloku v řádcích = 64 potřebujete přibližně 32k kontextu.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Ring Line Scope</source>
-        <translation>Rozsah řádků v kruhu</translation>
+        <translation>Rozsah cyklických řádků</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Ring Line Scope:</source>
-        <translation>Rozsah řádků v kruhu:</translation>
+        <translation>Rozsah cyklických řádků:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The range around the cursor position (in number of lines) for gathering chunks after FIM.</source>
-        <translation>Rozsah kolem pozice kurzoru (v počtu řádků) pro sběr bloků po FIM.</translation>
+        <translation>Rozsah kolem pozice kurzoru (v počtu řádků) pro sběr bloků po dokončení FIM.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -319,7 +329,7 @@
     <message>
         <location line="+3"/>
         <source>llama.cpp server chat endpoint</source>
-        <translation>Konečný bod chatu serveru llama.cpp</translation>
+        <translation>Konečný bod chatu serveru LlamaCpp</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -334,7 +344,7 @@
     <message>
         <location line="+4"/>
         <source>Set the API Key if you are using --api-key option for the server.</source>
-        <translation>Nastavte API klíč, pokud používáte možnost --api-key pro server.</translation>
+        <translation>Nastavte API klíč, pokud používáte volbu --api-key pro server.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -354,22 +364,22 @@
     <message>
         <location line="+2"/>
         <source>The starting message that defines how model should behave. Will be disabled if left empty.</source>
-        <translation>Počáteční zpráva, která definuje, jak má se model chovat. Pokud je prázdná, bude zakázána.</translation>
+        <translation>Počáteční zpráva, která definuje chování modelu. Pokud je prázdná, bude vypnuta.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Paste Long Text to File Length</source>
-        <translation>Délka souboru pro vložení dlouhého textu</translation>
+        <translation>Délka vkládaného dlouhého textu do souboru</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Paste Long Text to File Length:</source>
-        <translation>Délka souboru pro vložení dlouhého textu:</translation>
+        <translation>Délka vkládaného dlouhého textu do souboru:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>On pasting long text, it will be converted to a file. You can control the file length by setting the value of this parameter. Value 0 means disable.</source>
-        <translation>Při vkládání dlouhého textu bude převeden na soubor. Délku souboru můžete ovládat nastavením hodnoty tohoto parametru. Hodnota 0 znamená zakázání.</translation>
+        <translation>Při vkládání dlouhého textu bude převeden do souboru. Můžete ovládat délku textu v souboru nastavením hodnoty tohoto parametru. Hodnota 0 znamená zakázání.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -384,7 +394,7 @@
     <message>
         <location line="+3"/>
         <source>The order at which samplers are applied, in simplified way. Default is &quot;edkypmxt&quot;: dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</source>
-        <translation>Pořadí, v jakém se aplikují vzorkovače, zjednodušeně. Výchozí je "edkypmxt": dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</translation>
+        <translation>Pořadí aplikace vzorkovačů. Výchozí je „edkypmxt“: dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;teplota</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -399,7 +409,7 @@
     <message>
         <location line="+3"/>
         <source>Controls the randomness of the generated text by affecting the probability distribution of the output tokens. Higher = more random, lower = more focused.</source>
-        <translation>Ovládá náhodnost generovaného textu ovlivňováním distribuce pravděpodobnosti výstupních tokenů. Vyšší = více náhodné, nižší = více zaměřené.</translation>
+        <translation>Ovládá náhodnost generovaného textu prostřednictvím ovlivňování pravděpodobnostního rozdělení výstupních tokenů. Vyšší hodnota = více náhodný, nižší hodnota = více zaměřený.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -414,7 +424,7 @@
     <message>
         <location line="+2"/>
         <source>Addon for the temperature sampler. The added value to the range of dynamic temperature, which adjusts probabilities by entropy of tokens.</source>
-        <translation>Doplněk pro vzorkovač teploty. Přidaná hodnota do rozsahu dynamické teploty, která upravuje pravděpodobnosti na základě entropie tokenů.</translation>
+        <translation>Doplněk pro vzorkovač teploty. Přidaná hodnota do dynamického rozsahu teploty, který upravuje pravděpodobnosti na základě entropie tokenů.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -474,7 +484,7 @@
     <message>
         <location line="+2"/>
         <source>Limits tokens based on the minimum probability for a token to be considered, relative to the probability of the most likely token.</source>
-        <translation>Omezuje tokany na základě minimální pravděpodobnosti pro token, který má být zvažován, relativně k pravděpodobnosti nejpravděpodobnějšího tokenu.</translation>
+        <translation>Omezuje tokany na základě minimální pravděpodobnosti, kterou musí mít token pro zohlednění, relativně k pravděpodobnosti nejpravděpodobnějšího tokenu.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -489,32 +499,32 @@
     <message>
         <location line="+1"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the chance of cutting tokens at all. 0 disables XTC.</source>
-        <translation>Vzorkovač XTC odřezává horní tokany; tento parametr ovládá šanci odřezávání tokenů vůbec. 0 zakazuje XTC.</translation>
+        <translation>Vzorkovač XTC odřezává nejlepší tokany; tento parametr ovládá pravděpodobnost odřezání tokenů vůbec. 0 zakazuje XTC.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>XTC Threshold</source>
-        <translation>XTC prahová hodnota</translation>
+        <translation>Prah XTC</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>XTC Threshold:</source>
-        <translation>XTC prahová hodnota:</translation>
+        <translation>Prah XTC:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the token probability that is required to cut that token.</source>
-        <translation>Vzorkovač XTC odřezává horní tokany; tento parametr ovládá pravděpodobnost tokenu, která je vyžadována k odřezání tohoto tokenu.</translation>
+        <translation>Vzorkovač XTC odřezává nejlepší tokany; tento parametr ovládá pravděpodobnost tokenu, která určuje, zda bude odřezán.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Typical P</source>
-        <translation>Typická P</translation>
+        <translation>Typická pravděpodobnost P</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Typical P:</source>
-        <translation>Typická P:</translation>
+        <translation>Typická pravděpodobnost P:</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -524,12 +534,12 @@
     <message>
         <location line="+4"/>
         <source>Repeat Last N</source>
-        <translation>Opakovat poslední N</translation>
+        <translation>Opakování posledních N tokenů</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Repeat Last N:</source>
-        <translation>Opakovat poslední N:</translation>
+        <translation>Opakování posledních N tokenů:</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -594,7 +604,7 @@
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling multiplier.</source>
-        <translation>Vzorkování DRY snižuje opakování v generovaném textu dokonce i přes dlouhé kontexty. Tento parametr nastavuje násobič vzorkování DRY.</translation>
+        <translation>Vzorkování DRY snižuje opakování v generovaném textu i přes dlouhé kontexty. Tento parametr nastavuje násobič pro vzorkování DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -609,37 +619,37 @@
     <message>
         <location line="+1"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling base value.</source>
-        <translation>Vzorkování DRY snižuje opakování v generovaném textu dokonce i přes dlouhé kontexty. Tento parametr nastavuje základní hodnotu vzorkování DRY.</translation>
+        <translation>Vzorkování DRY snižuje opakování v generovaném textu i přes dlouhé kontexty. Tento parametr nastavuje základní hodnotu pro vzorkování DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>DRY Allowed Length</source>
-        <translation>Povolená délka DRY</translation>
+        <translation>Povolená délka pro DRY</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY Allowed Length:</source>
-        <translation>Povolená délka DRY:</translation>
+        <translation>Povolená délka pro DRY:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the allowed length for DRY sampling.</source>
-        <translation>Vzorkování DRY snižuje opakování v generovaném textu dokonce i přes dlouhé kontexty. Tento parametr nastavuje povolenou délku pro vzorkování DRY.</translation>
+        <translation>Vzorkování DRY snižuje opakování v generovaném textu i přes dlouhé kontexty. Tento parametr nastavuje povolenou délku pro vzorkování DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>DRY Penalty Last N</source>
-        <translation>Trest DRY za poslední N</translation>
+        <translation>Trest DRY za poslední N tokany</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY Penalty Last N:</source>
-        <translation>Trest DRY za poslední N:</translation>
+        <translation>Trest DRY za poslední N tokany:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets DRY penalty for the last n tokens.</source>
-        <translation>Vzorkování DRY snižuje opakování v generovaném textu dokonce i přes dlouhé kontexty. Tento parametr nastavuje trest DRY za poslední n tokeny.</translation>
+        <translation>Vzorkování DRY snižuje opakování v generovaném textu i přes dlouhé kontexty. Tento parametr nastavuje trest za poslední n tokany v DRY.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -654,7 +664,7 @@
     <message>
         <location line="+2"/>
         <source>The maximum number of token per output. -1 means no limit.</source>
-        <translation>Maximální počet tokenů na výstup. -1 znamená bez omezení.</translation>
+        <translation>Maximální počet tokenů na výstup. -1 znamená žádné omezení.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -683,7 +693,18 @@
         <translation>Zobrazit tokany za sekundu v rozhraní chatu.</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+219"/>
+        <location line="+11"/>
+        <location line="+1"/>
+        <source>Enable Tools in Chat</source>
+        <translation>Povolit nástroje v chatu</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>If checked the chat will start with the Tools button turned on.</source>
+        <translation>Pokud je zaškrtnuto, chat bude spuštěn s nástroji aktivovanými.</translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="+224"/>
         <source>Search in chat</source>
         <translation>Hledat v chatu</translation>
     </message>
@@ -725,17 +746,17 @@
     <message>
         <location line="+35"/>
         <source>Follow‑up questions:</source>
-        <translation>Následné otázky:</translation>
+        <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+477"/>
+        <location line="+492"/>
         <source>Speed: %1 t/s</source>
-        <translation>Rychlost: %1 t/s</translation>
+        <translation>Rychlost: %1 tokenů za sekundu</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
-        <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokany: %1&lt;br&gt;Čas: %2 ms&lt;br&gt;Rychlost: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generování:&lt;/b&gt;&lt;br&gt;Tokany: %4&lt;br&gt;Čas: %5 ms&lt;br&gt;Rychlost: %6 t/s</translation>
+        <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokany: %1&lt;br&gt;Čas: %2 ms&lt;br&gt;Rychlost: %3 tokenů za sekundu&lt;br&gt;&lt;br&gt;&lt;b&gt;Generování:&lt;/b&gt;&lt;br&gt;Tokany: %4&lt;br&gt;Čas: %5 ms&lt;br&gt;Rychlost: %6 tokenů za sekundu</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -743,17 +764,29 @@
         <translation>Editor chatu LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+73"/>
+        <location filename="../llamachatinput.cpp" line="+74"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Napište zprávu (Shift+Enter pro nový řádek)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+16"/>
+        <location line="+6"/>
+        <source>Disable Tools usage</source>
+        <translation>Vypnout použití nástrojů</translation>
+    </message>
+    <message>
+        <location line="-5"/>
+        <location line="+6"/>
+        <source>Enable Tools usage</source>
+        <translation>Zapnout použití nástrojů</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Attach file</source>
         <translation>Připojit soubor</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Stop assistant answer generation</source>
         <translation>Zastavit generování odpovědi asistenta</translation>
     </message>
@@ -763,53 +796,17 @@
         <translation>Odeslat zprávu asistentovi</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+71"/>
-        <location line="+203"/>
+        <location filename="../llamathinkingsectionparser.cpp" line="+98"/>
         <source>Thought Process</source>
-        <translation>Mýšlenkový proces</translation>
+        <translation>Myslící proces</translation>
     </message>
     <message>
-        <location line="-202"/>
-        <source>Click to expand / hide the thought process</source>
-        <translation>Klikněte pro rozšíření / skrytí myšlenkového procesu</translation>
+        <location line="+0"/>
+        <source>Thinking</source>
+        <translation>Mysleno</translation>
     </message>
     <message>
-        <location line="+41"/>
-        <source>Attached files</source>
-        <translation>Připojené soubory</translation>
-    </message>
-    <message>
-        <location line="+74"/>
-        <source>Go to previous message</source>
-        <translation>Jít na předchozí zprávu</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Go to next message</source>
-        <translation>Jít na následující zprávu</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Edit the message</source>
-        <translation>Upravit zprávu</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Re-generate the answer</source>
-        <translation>Znovu vygenerovat odpověď</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Copy the message to clipboard</source>
-        <translation>Zkopírovat zprávu do schránky</translation>
-    </message>
-    <message>
-        <location line="+54"/>
-        <source>Thinking %1</source>
-        <translation>Myslím %1</translation>
-    </message>
-    <message>
-        <location line="+208"/>
+        <location filename="../llamachatmessage.cpp" line="+324"/>
         <source>Overwrite File?</source>
         <translation>Přepsat soubor?</translation>
     </message>
@@ -833,9 +830,24 @@ Chcete ho přepsat?</translation>
         <translation>Všechny soubory (*)</translation>
     </message>
     <message>
+        <location line="+114"/>
+        <source>Edit the message</source>
+        <translation>Upravit zprávu</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Re-generate the answer</source>
+        <translation>Znovu vygenerovat odpověď</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Copy the message to clipboard</source>
+        <translation>Zkopírovat zprávu do schránky</translation>
+    </message>
+    <message>
         <location filename="../llamaconversationsmodel.cpp" line="+73"/>
         <source>Name</source>
-        <translation>Jméno</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -850,7 +862,7 @@ Chcete ho přepsat?</translation>
     <message>
         <location filename="../llamaconversationsview.cpp" line="+111"/>
         <source>Creates a new llama.cpp conversation</source>
-        <translation>Vytvořit novou konverzaci llama.cpp</translation>
+        <translation>Vytvoří novou konverzaci s LlamaCpp</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -887,8 +899,7 @@ Chcete ho přepsat?</translation>
         <location line="+1"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
-        <translation>Jste si jistí, že chcete smazat konverzaci:
-%1</translation>
+        <translation>Jste si jistí, že chcete smazat konverzaci: %1</translation>
     </message>
     <message>
         <location line="+74"/>
@@ -904,65 +915,69 @@ Chcete ho přepsat?</translation>
         <location line="+1"/>
         <source>Cannot write file:
 %1</source>
-        <translation>Nelze zapisovat do souboru:
-%1</translation>
+        <translation>Nelze zapisovat do souboru: %1</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>llama.cpp Conversations</source>
-        <translation>Konverzace llama.cpp</translation>
+        <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
         <location filename="../llamalocatorfilter.cpp" line="+43"/>
         <source>Create a summary of {selection}</source>
-        <translation>Vytvořit shrnutí {výběr}</translation>
+        <translation>Vytvořit shrnutí výběru</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Vytvořit zprávu pro commit pro {výběr}</translation>
+        <translation>Vytvořit zprávu pro commit výběru</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Explain the code in {selection}</source>
-        <translation>Vysvětlit kód v {výběr}</translation>
+        <translation>Vysvětlit kód ve výběru</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Do spell checking and fix any typos in {selection}</source>
-        <translation>Provést kontrolu pravopisu a opravit všechny chyby v {výběr}</translation>
+        <translation>Provést kontrolu pravopisu a opravit chyby ve výběru</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Generovat testovací případy pro {výběr}. Výstupem pouze kód. Žádná vysvětlení</translation>
+        <translation>Generovat testovací případy pro výběr. Výstupem pouze kód. Žádná vysvětlení</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Aktualizovat překlad v {výběr}. Poskytněte celý překladový soubor jako výstup</translation>
+        <translation>Aktualizovat překlad výběru. Poskytnout překladový soubor jako výstup</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Odeslat aktuální výběr do llama.cpp s promptem.
+        <translation>Odeslat aktuální výběr do LlamaCpp s promptem.
 Vestavěné prompty: %1
-Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.</translation>
+Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použití.</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+107"/>
+        <location filename="../llamamarkdownwidget.cpp" line="+115"/>
         <source>Copy the code below to Clipboard</source>
-        <translation>Zkopírujte kód níže do schránky</translation>
+        <translation>Zkopírovat kód níže do schránky</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Save the code below into a file on disk</source>
-        <translation>Uložte kód níže do souboru na disk</translation>
+        <translation>Uložit kód níže do souboru na disku</translation>
     </message>
     <message>
-        <location line="+282"/>
+        <location line="+2"/>
+        <source>Toggle the details of the tool usage</source>
+        <translation>Zapnout/vypnout podrobnosti použití nástrojů</translation>
+    </message>
+    <message>
+        <location line="+394"/>
         <location line="+10"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
@@ -997,6 +1012,453 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <location line="+2"/>
         <source>Next result</source>
         <translation>Další výsledek</translation>
+    </message>
+    <message>
+        <location filename="../tools/askuser_tool.cpp" line="+53"/>
+        <source>ask user</source>
+        <translation>zeptat se uživatele</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Ask the user</source>
+        <translation>Zeptat se uživatele</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Type your answer here ...</source>
+        <translation>Zadejte zde svou odpověď...</translation>
+    </message>
+    <message>
+        <location filename="../tools/build_project_tool.cpp" line="+59"/>
+        <source>build project %1</source>
+        <translation>postavit projekt %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <location filename="../tools/list_project_tool.cpp" line="+70"/>
+        <location filename="../tools/open_project_tool.cpp" line="+68"/>
+        <location filename="../tools/run_project_tool.cpp" line="+71"/>
+        <source>project_path argument is empty.</source>
+        <translation>Argument cesta_k_projektu je prázdný.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/list_project_tool.cpp" line="+10"/>
+        <location filename="../tools/open_project_tool.cpp" line="+45"/>
+        <source>Failed to open project &quot;%1&quot;: %2</source>
+        <translation>Nepodařilo se otevřít projekt „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Could not determine a project to build for &quot;%1&quot;.</source>
+        <translation>Nepodařilo se určit projekt pro stavbu „%1“.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Build succeeded for &quot;%1&quot;.</source>
+        <translation>Stavba projektu „%1“ se podařila.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build failed for &quot;%1&quot;.</source>
+        <translation>Stavba projektu „%1“ se nezdařila.</translation>
+    </message>
+    <message>
+        <location filename="../tools/create_directory_tool.cpp" line="+59"/>
+        <source>create directory %1</source>
+        <translation>vytvořit adresář %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>dir_path argument is empty.</source>
+        <translation>Argument cesta_k_adresari je prázdný.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Directory &quot;%1&quot; already exists.</source>
+        <translation>Adresář „%1“ již existuje.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to create directory &quot;%1&quot;.</source>
+        <translation>Nepodařilo se vytvořit adresář „%1“.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully created directory &quot;%1&quot;.</source>
+        <translation>Adresář „%1“ byl úspěšně vytvořen.</translation>
+    </message>
+    <message>
+        <location filename="../tools/editfile_tool.cpp" line="+109"/>
+        <source>create file</source>
+        <translation>vytvořit soubor</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete file</source>
+        <translation>smazat soubor</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>replace line(s)</source>
+        <translation>nahrazení řádků</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>insert at line</source>
+        <translation>vložit na řádek</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>delete line(s)</source>
+        <translation>smazat řádek/řádky</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>File &quot;%1&quot; already exists – cannot create a new file at this location.</source>
+        <translation>Soubor „%1“ již existuje – nelze vytvořit nový soubor na tomto místě.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Failed to create parent directory &quot;%1&quot;: %2</source>
+        <translation>Nepodařilo se vytvořit nadřazený adresář „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot create &quot;%1&quot;: %2</source>
+        <translation>Nelze vytvořit „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Created %1</source>
+        <translation>Vytvořeno %1</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+32"/>
+        <location filename="../tools/readfile_tool.cpp" line="+79"/>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation>Soubor „%1“ neexistuje.</translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <source>Failed to delete &quot;%1&quot;: %2</source>
+        <translation>Nepodařilo se smazat „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Deleted file &quot;%1&quot;</source>
+        <translation>Soubor „%1“ byl smazán</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <location line="+90"/>
+        <location filename="../tools/readfile_tool.cpp" line="+5"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>Nepodařilo se přečíst „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="-75"/>
+        <location line="+33"/>
+        <source>Start line %1 out of range (file has %2 lines).</source>
+        <translation>Počáteční řádek %1 je mimo rozsah (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="-28"/>
+        <location line="+33"/>
+        <source>End line %1 out of range (file has %2 lines).</source>
+        <translation>Koncový řádek %1 je mimo rozsah (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="-16"/>
+        <source>Line %1 out of range for insertion (file has %2 lines).</source>
+        <translation>Řádek %1 je mimo rozsah pro vložení (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Unsupported operation &quot;%1&quot;.</source>
+        <translation>Operace „%1“ není podporována.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Nelze zapisovat do „%1“: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Edited %1</source>
+        <translation>Upraveno %1</translation>
+    </message>
+    <message>
+        <location line="+59"/>
+        <source>Invalid line number %1 (must be &gt;= 1).</source>
+        <translation>Neplatné číslo řádku %1 (musí být &gt;= 1).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Start line %1 out of range for replace (file has %2 lines).</source>
+        <translation>Počáteční řádek %1 je mimo rozsah pro nahrazení (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for replace (file has %2 lines).</source>
+        <translation>Koncový řádek %1 je mimo rozsah pro nahrazení (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Line %1 out of range for insert (file has %2 lines).</source>
+        <translation>Řádek %1 je mimo rozsah pro vložení (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Start line %1 out of range for delete (file has %2 lines).</source>
+        <translation>Počáteční řádek %1 je mimo rozsah pro smazání (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>End line %1 out of range for delete (file has %2 lines).</source>
+        <translation>Koncový řádek %1 je mimo rozsah pro smazání (soubor má %2 řádků).</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Unsupported operation &quot;%1&quot; in diff generator.</source>
+        <translation>Operace „%1“ není podporována v generátoru rozdílů.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Tool error: &quot;file_path&quot; must be a non‑empty string.</source>
+        <translation>Chyba nástroje: „cesta_k_souboru“ musí být neprázdný řetězec.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool error: &quot;operation&quot; must be a non‑empty string.</source>
+        <translation>Chyba nástroje: „operace“ musí být neprázdný řetězec.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: unknown operation &quot;%1&quot;.</source>
+        <translation>Chyba nástroje: neznámá operace „%1“.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: &quot;%1&quot; operation requires the field &quot;%2&quot;.</source>
+        <translation>Chyba nástroje: operace „%1“ vyžaduje pole „%2“.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+7"/>
+        <source>Tool error: &quot;end_line&quot; must be &gt;= &quot;line&quot;.</source>
+        <translation>Chyba nástroje: „end_line“ musí být &gt;= „line“.</translation>
+    </message>
+    <message>
+        <location line="-2"/>
+        <source>Tool error: &quot;delete&quot; operation must not contain &quot;text&quot;.</source>
+        <translation>Chyba nástroje: operace „smazat“ nesmí obsahovat „text“.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Tool error: &quot;create&quot; must not contain &quot;line&quot;, &quot;end_line&quot; or &quot;text&quot;.</source>
+        <translation>Chyba nástroje: operace „vytvořit“ nesmí obsahovat „line“, „end_line“ nebo „text“.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tool error: &quot;delete_file&quot; must not contain extra fields.</source>
+        <translation>Chyba nástroje: operace „smazat_soubor“ nesmí obsahovat další pole.</translation>
+    </message>
+    <message>
+        <location filename="../tools/list_issues_tool.cpp" line="+156"/>
+        <source>errors</source>
+        <translation>chyby</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>warnings</source>
+        <translation>varování</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>list %1 (%2)</source>
+        <translation>seznam %1 (%2)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>all</source>
+        <translation>všechno</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <location filename="../tools/regexsearch_tool.cpp" line="+133"/>
+        <source>[output truncated to first %1 results; set `provide_all_results` to true for more]</source>
+        <translation>[výstup zkrácen na první %1 výsledky; nastavte `provide_all_results` na true pro více]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No issues found.</source>
+        <translation>Žádné problémy nalezeny.</translation>
+    </message>
+    <message>
+        <location filename="../tools/list_project_tool.cpp" line="-22"/>
+        <source>list files of project %1</source>
+        <translation>seznam souborů projektu %1</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Could not determine a project to list files for &quot;%1&quot;.</source>
+        <translation>Nepodařilo se určit projekt pro seznamování souborů „%1“.</translation>
+    </message>
+    <message>
+        <location filename="../tools/listdir_tool.cpp" line="+42"/>
+        <source>list directory %1</source>
+        <translation>seznam adresáře %1</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Directory &quot;%1&quot; does not exist.</source>
+        <translation>Adresář „%1“ neexistuje.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&quot;%1&quot; is not a directory.</source>
+        <translation>„%1“ není adresářem.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Directory listing for %1:</source>
+        <translation>Seznam souborů v adresáři %1:</translation>
+    </message>
+    <message>
+        <location filename="../tools/open_project_tool.cpp" line="-57"/>
+        <source>open project %1</source>
+        <translation>otevřít projekt %1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Project is already opened &quot;%1&quot;.</source>
+        <translation>Projekt „%1“ je již otevřen.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location line="+10"/>
+        <source>Successfully opened project &quot;%1&quot;.</source>
+        <translation>Projekt „%1“ byl úspěšně otevřen.</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>Failed to open project &quot;%1&quot;. No build system or failed to parse project.</source>
+        <translation>Nepodařilo se otevřít projekt „%1“. Žádný systém pro stavbu nebo selhalo rozpoznání projektu.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Failed to open project &quot;%1&quot;. No project found.</source>
+        <translation>Nepodařilo se otevřít projekt „%1“. Projekt nenalezen.</translation>
+    </message>
+    <message>
+        <location filename="../tools/python_tool.cpp" line="+55"/>
+        <source>running python</source>
+        <translation>spuštěno Python</translation>
+    </message>
+    <message>
+        <location filename="../tools/readfile_tool.cpp" line="-28"/>
+        <source>read whole file %1</source>
+        <translation>přečíst celý soubor %1</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>read %1:%2‑%3</source>
+        <translation>přečíst %1:%2‑%3</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>první_řádka musí být &gt;= 1.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>poslední_řádka_muze_byt_vcetna musí být &gt;= první_řádka.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>první_řádka (%1) přesahuje počet řádků v souboru „%2“ (%3).</translation>
+    </message>
+    <message>
+        <location filename="../tools/regexsearch_tool.cpp" line="-68"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
+        <translation>vyhledávání pomocí regexu &lt;tt&gt;%1&lt;/tt&gt;</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>regex search &lt;tt&gt;%1&lt;/tt&gt; (max 100)</source>
+        <translation>vyhledávání pomocí regexu &lt;tt&gt;%1&lt;/tt&gt; (max. 100)</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>No matches found for pattern &quot;%1&quot;.</source>
+        <translation>Nenašly se žádné shody pro vzor &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../tools/run_project_tool.cpp" line="-10"/>
+        <source>run project %1</source>
+        <translation>spustit projekt %1</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Failed to open project &quot;%1&quot;</source>
+        <translation>Nepodařilo se otevřít projekt „%1“.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>No run configuration found for project &quot;%1&quot;</source>
+        <translation>Nebyla nalezena žádná konfigurace pro spuštění projektu „%1“.</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>Run succeeded for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation>Spuštění projektu „%1“ se podařilo.
+--- stdout ---
+%2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+6"/>
+        <source>
+--- stderr ---
+%1</source>
+        <translation>
+--- chybový výstup ---
+%1</translation>
+    </message>
+    <message>
+        <location line="-3"/>
+        <source>Run failed for &quot;%1&quot;.
+--- stdout ---
+%2</source>
+        <translation>Spuštění projektu „%1“ se nezdařilo.
+--- stdout ---
+%2</translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="+26"/>
+        <source>Select a tool to view its JSON definition</source>
+        <translation>Vyberte nástroj pro zobrazení jeho JSON definice</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool</source>
+        <translation>Nástroj</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Description</source>
+        <translation>Popis</translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>No description</source>
+        <translation>Žádný popis</translation>
     </message>
 </context>
 </TS>
