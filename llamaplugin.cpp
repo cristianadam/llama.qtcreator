@@ -831,6 +831,15 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         data.range.end = currentPos;
         data.position = currentPos;
 
+        static const QString qtCreatorVersion1800 = "18.0.0";
+
+        if (QCoreApplication::applicationVersion() != qtCreatorVersion1800) {
+            combined_content = line_cur_prefix + combined_content;
+            if (!combined_content.endsWith(line_cur_suffix))
+                combined_content.append(line_cur_suffix);
+            data.range.begin.column = 0;
+        }
+
         int separator = combined_content.indexOf("\n");
         data.range.end.column = separator != -1 ? combined_content.size() - separator - 1
                                                 : combined_content.size();
@@ -838,9 +847,10 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
 
         if (m_suggestionContent != content) {
             auto suggestion = std::make_unique<TextEditor::TextSuggestion>(data, editor->document());
-            suggestion->replacementDocument()->setPlainText(line_cur_prefix + combined_content
-                                                            + line_cur_suffix);
-
+            if (QCoreApplication::applicationVersion() == qtCreatorVersion1800) {
+                suggestion->replacementDocument()->setPlainText(line_cur_prefix + combined_content
+                                                                + line_cur_suffix);
+            }
             editor->insertSuggestion(std::move(suggestion));
 
             qCInfo(llamaLog) << "fim_render:" << pos_x << pos_y
