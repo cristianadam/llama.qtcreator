@@ -1,14 +1,11 @@
 #include "editfile_tool.h"
 #include "factory.h"
 #include "llamatr.h"
+#include "tool_utils.h"
 
-#include <coreplugin/documentmanager.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 using namespace Utils;
-using namespace ProjectExplorer;
 
 namespace LlamaCpp {
 
@@ -165,14 +162,8 @@ QString editFile(const QString &path,
                  const QString &text, // may be empty for delete/create/delete_file
                  const QString &newFileContent)
 {
-    // Resolve the target file (same logic as before)
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
     const FilePath filePath = FilePath::fromUserInput(path);
-    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
-                                                          : cwd.pathAppended(filePath.path());
+    const FilePath targetFile = absoluteProjectPath(filePath);
 
     if (operation == "create")
         return createFile(targetFile, newFileContent);
@@ -262,13 +253,8 @@ QString diffForEditFile(const QString &path,
                         const QString &text,
                         const QString &newFileContent)
 {
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
     const FilePath filePath = FilePath::fromUserInput(path);
-    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
-                                                          : cwd.pathAppended(filePath.path());
+    const FilePath targetFile = absoluteProjectPath(filePath);
 
     QStringList oldLines;
     if (operation != "create") {

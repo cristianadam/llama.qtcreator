@@ -97,6 +97,7 @@ add_qtc_plugin(LlamaCpp
     tools/run_project_tool.cpp tools/run_project_tool.h
     tools/open_project_tool.cpp tools/open_project_tool.h
     tools/tool.cpp tools/tool.h
+    tools/tool_utils.cpp tools/tool_utils.h
     toolsettingswidget.cpp toolsettingswidget.h
 )
 

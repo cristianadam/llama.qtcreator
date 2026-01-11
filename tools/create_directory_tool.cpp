@@ -1,14 +1,11 @@
 #include "create_directory_tool.h"
 #include "factory.h"
 #include "llamatr.h"
+#include "tool_utils.h"
 
-#include <coreplugin/documentmanager.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 using namespace Utils;
-using namespace ProjectExplorer;
 
 namespace LlamaCpp::Tools {
 
@@ -62,19 +59,13 @@ QString CreateDirectoryTool::oneLineSummary(const QJsonObject &args) const
 void CreateDirectoryTool::run(const QJsonObject &args,
                               std::function<void(const QString &, bool)> done) const
 {
-    FilePath base = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        base = p->projectDirectory();
-
     const FilePath relPath = FilePath::fromUserInput(args.value("dir_path").toString());
     if (relPath.isEmpty()) {
         return done(Tr::tr("dir_path argument is empty."), false);
     }
 
     // Resolve the final target path
-    const FilePath target = relPath.isAbsolutePath()
-                                ? relPath
-                                : base.pathAppended(relPath.path()).absoluteFilePath();
+    const FilePath target = absoluteProjectPath(relPath).absoluteFilePath();
 
     // If the directory already exists we treat it as success (idempotent).
     if (target.exists())

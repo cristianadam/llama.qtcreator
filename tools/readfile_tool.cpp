@@ -1,14 +1,11 @@
 #include "readfile_tool.h"
 #include "factory.h"
 #include "llamatr.h"
+#include "tool_utils.h"
 
-#include <coreplugin/documentmanager.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 using namespace Utils;
-using namespace ProjectExplorer;
 
 namespace LlamaCpp::Tools {
 
@@ -68,13 +65,7 @@ void ReadFileTool::run(const QJsonObject &args,
     int lastLineIncl = args.value("last_line_inclusive").toInt(firstLine);
     bool readAll = args.value("should_read_entire_file").toBool(false);
 
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    const FilePath targetFile = filePath.isAbsolutePath() ? filePath
-                                                          : cwd.pathAppended(filePath.path());
-
+    const FilePath targetFile = absoluteProjectPath(filePath);
     if (!targetFile.exists()) {
         return done(Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput()), false);
     }

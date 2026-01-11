@@ -1,13 +1,10 @@
 #include "listdir_tool.h"
 #include "llamatr.h"
+#include "tool_utils.h"
 
-#include <coreplugin/documentmanager.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 using namespace Utils;
-using namespace ProjectExplorer;
 
 namespace LlamaCpp {
 
@@ -44,16 +41,8 @@ QString ListDirTool::oneLineSummary(const QJsonObject &args) const
 
 void ListDirTool::run(const QJsonObject &args, std::function<void(const QString &, bool)> done) const
 {
-    const FilePath rawPath = FilePath::fromUserInput(args.value("directory_path").toString());
-
-    // Resolve the directory path – same strategy as other tools.
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-
-    const FilePath dirPath = rawPath.isAbsolutePath()
-                                 ? rawPath
-                                 : cwd.pathAppended(rawPath.path()).absoluteFilePath();
+    const FilePath rawPath = FilePath::fromUserInput(args.value("directory_path").toString());    
+    const FilePath dirPath = absoluteProjectPath(rawPath).absoluteFilePath();
 
     if (!dirPath.exists())
         return done(Tr::tr("Directory \"%1\" does not exist.").arg(dirPath.toUserOutput()), false);
