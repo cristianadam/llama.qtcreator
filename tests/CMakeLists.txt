@@ -10,4 +10,5 @@ add_qtc_test(llamatools_test
     llamatools_test.cpp
     ../tools/editfile_tool.cpp
     ../tools/tool.cpp
+    ../tools/tool_utils.cpp
 )
