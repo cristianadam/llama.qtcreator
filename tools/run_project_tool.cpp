@@ -101,10 +101,10 @@ void RunProjectTool::run(const QJsonObject &args,
         QMetaObject::Connection procStdOutConn;
         QMetaObject::Connection procStdErrConn;
     };
-    const Tasking::Storage<Data> outputStorage;
+    const QtTaskTree::Storage<Data> outputStorage;
 
     auto modifier =
-        [outputStorage, projectFile, done](Utils::Process &proc) -> Tasking::SetupResult {
+        [outputStorage, projectFile, done](Utils::Process &proc) -> QtTaskTree::SetupResult {
         Data *d = outputStorage.activeStorage();
 
         d->procStdOutConn = QObject::connect(&proc, &Process::readyReadStandardOutput, [d, &proc]() {
@@ -137,10 +137,10 @@ void RunProjectTool::run(const QJsonObject &args,
             done(result, ok);
         });
 
-        return Tasking::SetupResult::Continue;
+        return QtTaskTree::SetupResult::Continue;
     };
 
-    const Tasking::Group recipe = Tasking::Group{outputStorage, runControl->processTask(modifier)};
+    const QtTaskTree::Group recipe = QtTaskTree::Group{outputStorage, runControl->processTask(modifier)};
     runControl->setRunRecipe(recipe);
 
     runControl->initiateStart();

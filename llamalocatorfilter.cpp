@@ -1,12 +1,13 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QtTaskTree/QTaskTree>
+
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/editormanager/ieditor.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/locator/ilocatorfilter.h>
 #include <git/gitconstants.h>
-#include <solutions/tasking/tasktree.h>
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 #include <utils/algorithm.h>
@@ -109,7 +110,7 @@ LocatorMatcherTasks LocatorFilter::matchers()
         return storage.reportOutput(
             std::accumulate(std::begin(entries), std::end(entries), LocatorFilterEntries()));
     };
-    return {Tasking::Sync(onSetup)};
+    return {QSyncTask(onSetup)};
 }
 
 void LocatorFilter::acceptPrompt(const QString &prompt)
