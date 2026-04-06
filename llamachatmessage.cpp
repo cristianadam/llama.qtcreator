@@ -262,7 +262,7 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
     QString markdown = m_isTool ? getToolUsageAndResult() : text;
 
     markdown = ThinkingSectionParser::replaceThinkingSections(markdown, forceUpdate);
-    m_markdownLabel->setMarkdown(markdown);
+    m_markdownLabel->setMarkdown(markdown, forceUpdate);
 }
 
 void ChatMessage::messageCompleted(bool completed)

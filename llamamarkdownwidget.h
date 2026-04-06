@@ -6,21 +6,18 @@
 #include <QString>
 #include <QTextBrowser>
 
-#include "llamahtmlhighlighter.h"
-
-typedef char MD_CHAR;
-typedef unsigned MD_SIZE;
+#include "llamasyntaxhighlighter.h"
+#include "markdownrenderer.h"
 
 namespace LlamaCpp {
-class MarkdownLabel : public QTextBrowser
+class MarkdownLabel : public MarkdownRenderer
 {
     Q_OBJECT
 public:
     explicit MarkdownLabel(QWidget *parent = nullptr);
     ~MarkdownLabel() = default;
 
-    void setMarkdown(const QString &markdown);
-    void setStyleSheet();
+    void setMarkdown(const QString &markdown, bool completed);
     void resizeEvent(QResizeEvent *event) override;
     int heightForWidth(int w) const override;
     void invalidate();
@@ -45,69 +42,11 @@ signals:
     void saveToFile(const QString &fileName, const QString &verbatimText);
 
 private:
-    struct CodeBlock
-    {
-        QString language;
-        std::optional<QString> fileName;
-        QString verbatimCode;
-        QString hightlightedCode;
-    };
-
-    struct DetailsBlock
-    {
-        QString summary;
-        QString collapsedHtml;
-        QString expandedHtml;
-        bool expanded = false;
-        int id{-1};
-    };
-
-    struct HtmlSection
-    {
-        int start{0};
-        int end{0};
-        int detailsId{-1};
-        bool expanded{false};
-    };
-
-    struct Data
-    {
-        enum State {
-            NormalHtml = 0,
-            PreCode,
-            Class,
-            LanguageName,
-            PreCodeEndQuote,
-            PreCodeEndTag,
-            SourceFile,
-            Code,
-            DetailsContent
-        };
-        State state{NormalHtml};
-        QByteArray outputHtml;
-        QList<CodeBlock> codeBlocks;
-        QList<DetailsBlock> detailsBlocks;
-        QByteArrayList detailsBuffer;
-        std::unique_ptr<HtmlHighlighter> highlighter;
-        bool awaitingNewLine{false};
-        QList<QByteArray> outputHtmlSections;
-    };
-
-private:
-    Utils::expected<Data, QString> markdownToHtml(const QString &markdown);
-    static void markdownHtmlCallback(const MD_CHAR *data, MD_SIZE length, void *user_data);
-
     void adjustMinimumWidth(const QString &markdown);
     int commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const;
-    void removeHtmlSection(int index);
-    void insertHtmlSection(const QByteArray &html, int index);
-    void insertHtmlDetailsSection(const QByteArray &html, int index, bool expanded, int detailsId);
-    void updateDocumentHtmlSections(const Data &newData);
-    void updateDetailsBlocksHtmlSections(Data &newData);
-    void toggleDetailsBlock(int id);
+    void updateColorPalette();
 
-    Data m_data;
-    QMap<int, HtmlSection> m_insertedHtmlSection;
+
     QElapsedTimer m_markdownConversionTimer;
     QMovie *m_spinner = nullptr;
     QSet<QUrl> m_spinnerUrls;

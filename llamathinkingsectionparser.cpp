@@ -47,72 +47,67 @@ bool ThinkingSectionParser::hasThinkingSection(const QString &text)
            || (startIdx != -1 && endIdx == -1);
 }
 
-QString ThinkingSectionParser::formatThinkingContent(const QString &thinkingContent)
+QString ThinkingSectionParser::formatThinkingHtml(const QString &content, bool isFinished)
 {
-    QString formatted = thinkingContent;
-    formatted.replace("\n", "\n>");
-    return ">" + formatted;
+    QString statusIcon;
+    QString label;
+
+    if (isFinished) {
+        statusIcon = "<span style=\"font-family: heroicons_outline;\">Q</span>";
+        label = Tr::tr("Thought Process");
+    } else {
+        statusIcon = "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/>";
+        label = Tr::tr("Thinking");
+    }
+
+    return QStringLiteral("<details><summary>%1&nbsp;%2</summary>\n\n%3\n</details>\n")
+        .arg(statusIcon, label, content);
 }
 
 QString ThinkingSectionParser::replaceThinkingSections(const QString &src, bool completed)
 {
+    if (src.isEmpty())
+        return {};
+
     QString out;
-    int pos = 0;
+    int currentPos = 0;
 
-    while (true) {
-        int startIdx = src.indexOf(m_startToken, pos);
+    while (currentPos < src.length()) {
+        int startIdx = src.indexOf(m_startToken, currentPos);
+
+        // If no more thinking sections, append the rest of the text and exit
         if (startIdx == -1) {
-            out.append(src.mid(pos));
+            out.append(src.mid(currentPos));
             break;
         }
 
-        // Find the matching end token – it may be missing while the model
-        // is still streaming.
-        int endIdx = src.indexOf(m_endToken, startIdx + m_startToken.length());
+        // Append everything from the current position up to the start token
+        out.append(src.mid(currentPos, startIdx - currentPos));
 
-        // copy everything before the thinking block
-        out.append(src.mid(pos, startIdx - pos));
-
-        QString thinking;
-        bool doneThinking = false;
-        if (endIdx != -1) {
-            doneThinking = true;
-            thinking = src.mid(startIdx + m_startToken.length(),
-                               endIdx - startIdx - m_startToken.length());
-        } else {
-            // open‑ended – everything after the start token belongs to the
-            // thinking part (the answer will be appended on the next render).
-            thinking = src.mid(startIdx + m_startToken.length());
-        }
-
-        QString formattedThinking = formatThinkingContent(thinking);
-
-        QString statusIcon;
-        if (doneThinking) {
-            statusIcon = "<span style=\"font-family: heroicons_outline;\">Q</span>";
-        } else {
-            // spinner while the answer is still being generated
-            statusIcon = "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/>";
-        }
-
-        const QString detailsBlock
-            = QStringLiteral("<details><summary>%1&nbsp;%2</summary>\n\n%3\n</details>\n")
-                  .arg(statusIcon)
-                  .arg(doneThinking ? Tr::tr("Thought Process") : Tr::tr("Thinking"))
-                  .arg(formattedThinking);
-
-        out.append(detailsBlock);
+        // Look for the end token starting from the end of the start token
+        int contentStart = startIdx + m_startToken.length();
+        int endIdx = src.indexOf(m_endToken, contentStart);
 
         if (endIdx != -1) {
-            pos = endIdx + m_endToken.length();
+            // Fully formed block <think>...</think>
+            QString thinkingContent = src.mid(contentStart, endIdx - contentStart);
+            out.append(formatThinkingHtml(thinkingContent, true));
 
-            // We have a details section with new content afterwards, insert a sepparation
-            if (pos != src.length())
-                out.append("\n\n<br/><br/>");
+            // Move cursor past the end token
+            currentPos = endIdx + m_endToken.length();
+
+            // Add a separator if there is more text coming
+            if (currentPos < src.length()) {
+                out.append("\n\n");
+            }
         } else {
-            // nothing after an open‑ended block – we are done for now
-            pos = src.length();
-            break;
+            // Open-ended block <think>... (streaming)
+            // Note: We treat the rest of the string as the thinking content
+            QString thinkingContent = src.mid(contentStart);
+            out.append(formatThinkingHtml(thinkingContent, false));
+
+            // Since this block consumes the rest of the string, we are done
+            currentPos = src.length();
         }
     }
 

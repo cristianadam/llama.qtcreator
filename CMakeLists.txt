@@ -70,7 +70,7 @@ add_qtc_plugin(LlamaCpp
     llamaconversationsmodel.cpp llamaconversationsmodel.h
     llamaconversationsview.cpp llamaconversationsview.h
     llamaconstants.h
-    llamahtmlhighligher.cpp llamahtmlhighlighter.h
+    llamasyntaxhighligher.cpp llamasyntaxhighlighter.h
     llamamarkdownwidget.cpp llamamarkdownwidget.h
     llamaplugin.cpp llamaplugin.h
     llamaprojectpanel.cpp llamaprojectpanel.h
@@ -82,6 +82,7 @@ add_qtc_plugin(LlamaCpp
     llamatr.h
     llamatypes.h
     LlamaCpp.json.in
+    markdownrenderer.cpp markdownrenderer.h
     README.md
     tools/askuser_tool.cpp tools/askuser_tool.h
     tools/build_project_tool.cpp tools/build_project_tool.h
