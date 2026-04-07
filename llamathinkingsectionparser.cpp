@@ -11,6 +11,9 @@ void ThinkingSectionParser::setTokensFromServerProps(const LlamaCppServerProps &
     if (serverProps.model_path.contains("gpt-oss", Qt::CaseInsensitive)) {
         m_startToken = "<|channel|>analysis<|message|>";
         m_endToken = "<|end|>";
+    } else if (serverProps.model_path.contains("gemma", Qt::CaseInsensitive)) {
+        m_startToken = "<|channel>";
+        m_endToken = "<channel|>";
     } else {
         // Tested with DeepSeek.
         m_startToken = "<think>";
