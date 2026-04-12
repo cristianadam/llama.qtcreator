@@ -17,6 +17,14 @@ struct TimingReport
     double predicted_ms{0};
 };
 
+struct PromptProgress
+{
+    int total{0};
+    int cache{0};
+    int processed{0};
+    qint64 time_ms{0};
+};
+
 /**
  * What is conversation "branching"? It is a feature that allows the user to edit an old message
  * in the history, while still keeping the conversation flow.
@@ -56,6 +64,7 @@ struct Message
     QString role;     // "user" | "assistant" | "system" | "tool"
     QString content;
     TimingReport timings;
+    PromptProgress promptProgress;
     QList<QVariantMap> extra; // array of MessageExtra
 
     // Node relations – stored in the DB, not serialised directly

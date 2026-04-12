@@ -47,6 +47,7 @@ static void addCommonPayloadParams(QJsonObject &payload)
     payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
     payload["max_tokens"] = settings().max_tokens.value();
     payload["timings_per_token"] = settings().showTokensPerSecond.value();
+    payload["return_progress"] = settings().showTokensPerSecond.value();
 }
 
 static void addToolsToPayload(QJsonObject &payload)
@@ -659,6 +660,18 @@ void ChatManager::sendChatRequest(const QString &convId,
                 return;
             }
 
+            if (chunk.contains("prompt_progress")) {
+                QJsonObject progressObj = chunk["prompt_progress"].toObject();
+                Message &pm = m_pendingMessages[convId];
+
+                pm.promptProgress.total = progressObj["total"].toInt();
+                pm.promptProgress.cache = progressObj["cache"].toInt();
+                pm.promptProgress.processed = progressObj["processed"].toInt();
+                pm.promptProgress.time_ms = progressObj["time_ms"].toInteger();
+
+                emit pendingMessageChanged(pm);
+            }
+
             if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
                 QJsonObject t = chunk["timings"].toObject();
                 TimingReport tr;
@@ -670,7 +683,7 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
 
             QJsonArray choices = chunk["choices"].toArray();
-            if (!choices.isEmpty()) {                                
+            if (!choices.isEmpty()) {
                 const QJsonObject &delta = choices[0].toObject()["delta"].toObject();
 
                 if (delta.contains("reasoning_content")) {

@@ -152,7 +152,10 @@ ChatEditor::ChatEditor()
             &ChatManager::followUpQuestionsReceived,
             this,
             &ChatEditor::createFollowUpWidget);
-    connect(&chatManager, &ChatManager::messageExtraUpdated, this, &ChatEditor::onMessageExtraUpdated);
+    connect(&chatManager,
+            &ChatManager::messageExtraUpdated,
+            this,
+            &ChatEditor::onMessageExtraUpdated);
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
@@ -812,22 +815,42 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
 {
     // Update the speed label using the latest timings
     if (settings().showTokensPerSecond.value()) {
-        const auto &t = msg.timings;
-        if (t.predicted_ms > 0 && t.prompt_ms > 0) {
-            qreal tokensPerSec = (t.predicted_n + t.prompt_n) * 1000.0
-                                 / (t.predicted_ms + t.prompt_ms);
-            m_speedLabel->setText(Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1));
+        if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
+            double processed = msg.promptProgress.processed + msg.promptProgress.cache;
+            double percent = (processed / msg.promptProgress.total) * 100.0;
 
-            QString labelTooltip(
-                Tr::tr("<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
-                       "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
-                    .arg(t.prompt_n)
-                    .arg(t.prompt_ms)
-                    .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
-                    .arg(t.predicted_n)
-                    .arg(t.predicted_ms)
-                    .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1));
+            percent = qBound(0.0, percent, 100.0);
+
+            m_speedLabel->setText(Tr::tr("Processing: %1%").arg(percent, 0, 'f', 0));
+
+            QString labelTooltip = Tr::tr("<b>Prompt Processing:</b><br>"
+                                          "Total Tokens: %1<br>"
+                                          "Processed: %2<br>"
+                                          "Cached: %3<br>"
+                                          "Time: %4 ms")
+                                       .arg(msg.promptProgress.total)
+                                       .arg(msg.promptProgress.processed)
+                                       .arg(msg.promptProgress.cache)
+                                       .arg(msg.promptProgress.time_ms);
             m_speedLabel->setToolTip(labelTooltip);
+        } else if (!msg.content.isEmpty()) {
+            const auto &t = msg.timings;
+            if (t.predicted_ms > 0 && t.prompt_ms > 0) {
+                qreal tokensPerSec = (t.predicted_n + t.prompt_n) * 1000.0
+                                     / (t.predicted_ms + t.prompt_ms);
+                m_speedLabel->setText(Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1));
+
+                QString labelTooltip(
+                    Tr::tr("<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
+                           "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
+                        .arg(t.prompt_n)
+                        .arg(t.prompt_ms)
+                        .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
+                        .arg(t.predicted_n)
+                        .arg(t.predicted_ms)
+                        .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1));
+                m_speedLabel->setToolTip(labelTooltip);
+            }
         }
     }
 }
