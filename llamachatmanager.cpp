@@ -491,8 +491,6 @@ void ChatManager::stopGenerating(const QString &convId)
     if (!m_pendingMessages.contains(convId))
         return;
 
-    m_pendingMessages.remove(convId);
-
     if (m_abortControllers.contains(convId)) {
         auto controller = m_abortControllers.take(convId);
         controller->abort();
@@ -763,7 +761,7 @@ void ChatManager::sendChatRequest(const QString &convId,
         },
         [this, convId](const QString &err) {
             qCWarning(llamaChatNetwork) << "SSE stream error:" << err;
-            m_pendingMessages.remove(convId);
+
             if (m_abortControllers.contains(convId))
                 m_abortControllers[convId]->deleteLater();
         });
