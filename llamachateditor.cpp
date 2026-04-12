@@ -122,6 +122,9 @@ ChatEditor::ChatEditor()
             &ChatManager::conversationRenamed,
             this,
             [this](const QString &convId) {
+                if (convId != m_viewingConvId)
+                    return;
+
                 ViewingChat chat = ChatManager::instance().getViewingChat(convId);
                 m_document->setPreferredDisplayName(chat.conv.name);
                 EditorManager::instance()->updateWindowTitles();
@@ -130,6 +133,9 @@ ChatEditor::ChatEditor()
             &ChatManager::conversationDeleted,
             this,
             [this](const QString &convId) {
+                if (convId != m_viewingConvId)
+                    return;
+
                 QString name;
                 IEditor *ed = EditorManager::openEditorWithContents(
                     Constants::LLAMACPP_VIEWER_ID,
