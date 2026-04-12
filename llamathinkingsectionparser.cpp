@@ -3,8 +3,8 @@
 #include "llamatypes.h"
 
 namespace LlamaCpp {
-QString ThinkingSectionParser::m_startToken;
-QString ThinkingSectionParser::m_endToken;
+QString ThinkingSectionParser::m_startToken = "<think>";
+QString ThinkingSectionParser::m_endToken = "</think>";
 
 void ThinkingSectionParser::setTokensFromServerProps(const LlamaCppServerProps &serverProps)
 {
