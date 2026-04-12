@@ -125,13 +125,12 @@ void LlamaPlugin::initialize()
                                                     c.id.toUtf8(),
                                                     c.id);
     });
-    ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID)->addAction(newConversationCmd);
 
-    ActionBuilder requestAction(this, Constants::LLAMACPP_REQUEST_SUGGESTION);
-    requestAction.setText(Tr::tr("Request llama.cpp Suggestion"));
-    requestAction.setToolTip(
+    Core::Command *requestCmd
+        = ActionManager::registerAction(&m_requestAction, Constants::LLAMACPP_REQUEST_SUGGESTION);
+    m_requestAction.setToolTip(
         Tr::tr("Request llama.cpp suggestion at the current editor's cursor position."));
-    requestAction.addOnTriggered(this, [this] {
+    connect(&m_requestAction, &QAction::triggered, this, [this] {
         if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
             QTextCursor cursor = editor->textCursor();
             int pos_x = cursor.positionInBlock();
@@ -139,23 +138,23 @@ void LlamaPlugin::initialize()
             fim(pos_x, pos_y, false);
         }
     });
-    requestAction.setDefaultKeySequence(Tr::tr("Ctrl+G"));
+    requestCmd->setDefaultKeySequence(Tr::tr("Ctrl+G"));
 
-    ActionBuilder toggleAction(this, Constants::LLAMACPP_TOGGLE_ENABLE_DISABLE);
-    toggleAction.setText(Tr::tr("Toggle enable/disable llama.cpp"));
-    toggleAction.setCheckable(true);
-    toggleAction.setChecked(settings().enableLlamaCpp());
-    toggleAction.setIcon(LLAMACPP_ICON.icon());
-    toggleAction.addOnTriggered(this, [](bool checked) {
+    Core::Command *toggleCmd
+        = ActionManager::registerAction(&m_toggleAction, Constants::LLAMACPP_TOGGLE_ENABLE_DISABLE);
+    m_toggleAction.setCheckable(true);
+    m_toggleAction.setChecked(settings().enableLlamaCpp());
+    m_toggleAction.setIcon(LLAMACPP_ICON.icon());
+    connect(&m_toggleAction, &QAction::triggered, this, [this](bool checked) {
         settings().enableLlamaCpp.setValue(checked);
         settings().apply();
     });
 
-    ActionBuilder toggleAutoFimAction(this, Constants::LLAMACPP_TOGGLE_AUTOFIM);
-    toggleAutoFimAction.setText(Tr::tr("Toggle Auto FIM"));
-    toggleAutoFimAction.setCheckable(true);
-    toggleAutoFimAction.setChecked(settings().autoFim());
-    toggleAutoFimAction.addOnTriggered(this, [this](bool checked) {
+    Core::Command *toggleAutoFimCmd
+        = ActionManager::registerAction(&m_toogleAutoFimAction, Constants::LLAMACPP_TOGGLE_AUTOFIM);
+    m_toogleAutoFimAction.setCheckable(true);
+    m_toogleAutoFimAction.setChecked(settings().autoFim());
+    connect(&m_toogleAutoFimAction, &QAction::triggered, this, [this](bool checked) {
         qCInfo(llamaLog) << "Toggle Auto FIM" << checked;
 
         settings().autoFim.setValue(checked);
@@ -168,17 +167,21 @@ void LlamaPlugin::initialize()
             hideCompletionHint();
         }
     });
-    toggleAutoFimAction.setDefaultKeySequence(Tr::tr("Ctrl+Shift+G"));
+    toggleAutoFimCmd->setDefaultKeySequence(Tr::tr("Ctrl+Shift+G"));
 
-    QAction *toggleAct = toggleAction.contextAction();
-    QAction *requestAct = requestAction.contextAction();
-    QAction *toogleAutoFimAct = toggleAutoFimAction.contextAction();
-    auto updateActions = [toggleAct, requestAct, toogleAutoFimAct] {
+    auto menuContainer = ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID);
+    menuContainer->addAction(newConversationCmd);
+    menuContainer->addSeparator();
+    menuContainer->addAction(requestCmd);
+    menuContainer->addAction(toggleCmd);
+    menuContainer->addAction(toggleAutoFimCmd);
+
+    auto updateActions = [this] {
         const bool enabled = settings().enableLlamaCpp();
-        toggleAct->setToolTip(enabled ? Tr::tr("Disable llama.cpp.") : Tr::tr("Enable llama.cpp."));
-        toggleAct->setChecked(enabled);
-        requestAct->setEnabled(enabled);
-        toogleAutoFimAct->setEnabled(enabled);
+        m_toggleAction.setToolTip(enabled ? Tr::tr("Disable llama.cpp.") : Tr::tr("Enable llama.cpp."));
+        m_toggleAction.setChecked(enabled);
+        m_requestAction.setEnabled(enabled);
+        m_toogleAutoFimAction.setEnabled(enabled);
     };
 
     settings().enableLlamaCpp.addOnChanged(this, updateActions);
@@ -186,7 +189,7 @@ void LlamaPlugin::initialize()
     updateActions();
 
     auto toggleButton = new QToolButton;
-    toggleButton->setDefaultAction(toggleAction.contextAction());
+    toggleButton->setDefaultAction(&m_toggleAction);
     StatusBarManager::addStatusBarWidget(toggleButton, StatusBarManager::RightCorner);
 
     setupLlamaCppProjectPanel();

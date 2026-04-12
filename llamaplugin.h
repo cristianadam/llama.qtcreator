@@ -116,6 +116,9 @@ private:
     static QRegularExpression s_whitespace_regex;
 
     QAction m_newConversation{Tr::tr("New Conversation")};
+    QAction m_toggleAction{Tr::tr("Toggle enable/disable llama.cpp")};
+    QAction m_requestAction{Tr::tr("Request llama.cpp Suggestion")};
+    QAction m_toogleAutoFimAction{Tr::tr("Toggle Auto FIM")};
 };
 
 } // namespace LlamaCpp
