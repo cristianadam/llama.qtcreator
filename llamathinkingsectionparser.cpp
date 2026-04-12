@@ -6,19 +6,14 @@ namespace LlamaCpp {
 QString ThinkingSectionParser::m_startToken = "<think>";
 QString ThinkingSectionParser::m_endToken = "</think>";
 
-void ThinkingSectionParser::setTokensFromServerProps(const LlamaCppServerProps &serverProps)
+QString ThinkingSectionParser::startToken()
 {
-    if (serverProps.model_path.contains("gpt-oss", Qt::CaseInsensitive)) {
-        m_startToken = "<|channel|>analysis<|message|>";
-        m_endToken = "<|end|>";
-    } else if (serverProps.model_path.contains("gemma", Qt::CaseInsensitive)) {
-        m_startToken = "<|channel>";
-        m_endToken = "<channel|>";
-    } else {
-        // Tested with DeepSeek.
-        m_startToken = "<think>";
-        m_endToken = "</think>";
-    }
+    return m_startToken;
+}
+
+QString ThinkingSectionParser::endToken()
+{
+    return m_endToken;
 }
 
 QPair<QString, QString> ThinkingSectionParser::parseThinkingSection(const QString &text)

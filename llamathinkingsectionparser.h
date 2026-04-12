@@ -13,11 +13,11 @@ private:
     static QString m_endToken;
 
 public:
-    static void setTokensFromServerProps(const LlamaCppServerProps &serverProps);
-
     static QPair<QString, QString> parseThinkingSection(const QString &text);
     static bool hasThinkingSection(const QString &text);
     static QString replaceThinkingSections(const QString &src, bool completed);
     static QString formatThinkingHtml(const QString &content, bool isFinished);
+    static QString startToken();
+    static QString endToken();
 };
 } // namespace LlamaCpp

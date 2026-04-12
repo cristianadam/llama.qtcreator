@@ -151,7 +151,6 @@ void ChatManager::initServerProps()
         m_serverProps.modalities.audio = mod.value("audio").toBool();
         reply->deleteLater();
 
-        ThinkingSectionParser::setTokensFromServerProps(m_serverProps);
         emit serverPropsUpdated();
     });
 }
@@ -302,7 +301,8 @@ void ChatManager::followUpQuestions(const QString &convId,
     payload["messages"] = msgArray;
     payload["stream"] = false;
     payload["cache_prompt"] = true;
-    payload["reasoning_format"] = "none";
+    payload["reasoning_format"] = "deepseek";
+    payload["reasoning_in_content"] = "false";
     addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
@@ -337,10 +337,7 @@ void ChatManager::followUpQuestions(const QString &convId,
         QJsonObject choice = choices[0].toObject();
         QJsonObject message = choice.value("message").toObject();
 
-        // Skip the thinking part
-        auto [thinking, content] = ThinkingSectionParser::parseThinkingSection(
-            message.value("content").toString().trimmed());
-
+        QString content = message.value("content").toString().trimmed();
         if (content.isEmpty())
             return;
 
@@ -447,7 +444,8 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     // Use the same generation settings – but no streaming
     payload["stream"] = false;
     payload["cache_prompt"] = true;
-    payload["reasoning_format"] = "none";
+    payload["reasoning_format"] = "deepseek";
+    payload["reasoning_in_content"] = "false";
     addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
@@ -641,7 +639,8 @@ void ChatManager::sendChatRequest(const QString &convId,
 
     payload["stream"] = true;
     payload["cache_prompt"] = true;
-    payload["reasoning_format"] = "none";
+    payload["reasoning_format"] = "deepseek";
+    payload["reasoning_in_content"] = "false";
     addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
@@ -673,12 +672,34 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
 
             QJsonArray choices = chunk["choices"].toArray();
-            if (!choices.isEmpty()) {
-                QString added = choices[0].toObject()["delta"].toObject()["content"].toString();
-                Message &pm = m_pendingMessages[convId];
-                if (!added.isEmpty()) {
-                    pm.content += added;
-                    emit pendingMessageChanged(pm);
+            if (!choices.isEmpty()) {                                
+                const QJsonObject &delta = choices[0].toObject()["delta"].toObject();
+
+                if (delta.contains("reasoning_content")) {
+                    QString reasoningAdded = delta["reasoning_content"].toString();
+                    if (!reasoningAdded.isEmpty()) {
+                        Message &pm = m_pendingMessages[convId];
+
+                        if (pm.content.isEmpty())
+                            pm.content = ThinkingSectionParser::startToken();
+
+                        pm.content += reasoningAdded;
+                        emit pendingMessageChanged(pm);
+                    }
+                }
+
+                if (delta.contains("content")) {
+                    QString added = delta["content"].toString();
+                    if (!added.isEmpty()) {
+                        Message &pm = m_pendingMessages[convId];
+                        if (!pm.haveContent
+                            && pm.content.startsWith(ThinkingSectionParser::startToken())) {
+                            pm.content += ThinkingSectionParser::endToken();
+                            pm.haveContent = true;
+                        }
+                        pm.content += added;
+                        emit pendingMessageChanged(pm);
+                    }
                 }
 
                 for (const QJsonValue &choiceVal : choices) {
@@ -686,6 +707,13 @@ void ChatManager::sendChatRequest(const QString &convId,
                     const QJsonObject &delta = choice["delta"].toObject();
                     if (!delta.contains("tool_calls"))
                         continue;
+
+                    Message &pm = m_pendingMessages[convId];
+                    if (!pm.haveContent
+                        && pm.content.startsWith(ThinkingSectionParser::startToken())) {
+                        pm.content += ThinkingSectionParser::endToken();
+                        pm.haveContent = true;
+                    }
 
                     const QJsonArray &toolCalls = delta["tool_calls"].toArray();
                     for (const QJsonValue &tcVal : toolCalls) {

@@ -61,6 +61,7 @@ struct Message
     // Node relations – stored in the DB, not serialised directly
     qint64 parent;
     QList<qint64> children;
+    bool haveContent = false;
 };
 
 struct MessageExtraTextFile
