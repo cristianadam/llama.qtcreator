@@ -380,6 +380,10 @@ QString ChatMessage::getToolUsageAndResult() const
     const QJsonDocument argDoc = QJsonDocument::fromJson(argumentsJson.toUtf8());
     const QJsonObject args = argDoc.object();
 
+    // No need for a newline for the result
+    if (functionResult.endsWith("\n"))
+        functionResult.chop(1);
+
     std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName);
     if (!tool) {
         // Fallback – unknown tool, keep the old behaviour
