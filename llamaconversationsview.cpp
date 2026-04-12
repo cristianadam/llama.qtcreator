@@ -325,11 +325,20 @@ bool ConversationsView::saveConversationAsMarkdown()
     for (const Message &msg : chat.messages) {
         if (msg.role == "user") {
             content.append("### User\n\n");
-        } else if (msg.role == "assistant") {
+            content.append(msg.content.toUtf8());
+            content.append("\n\n");
+        } else {
             content.append("### Assistant\n\n");
+
+            QString processedContent = msg.content;
+            processedContent.replace(ThinkingSectionParser::startToken(),
+                                     "<details><summary>Thought</summary>\n");
+            processedContent.replace(ThinkingSectionParser::endToken(),
+                                     "\n</details>\n\n");
+
+            content.append(processedContent.toUtf8());
+            content.append("\n\n");
         }
-        content.append(msg.content.toUtf8());
-        content.append("\n\n");
     }
 
     // Default filename

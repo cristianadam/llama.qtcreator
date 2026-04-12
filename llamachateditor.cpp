@@ -33,6 +33,7 @@
 #include "llamaicons.h"
 #include "llamasettings.h"
 #include "llamatheme.h"
+#include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 
 using namespace TextEditor;
@@ -199,7 +200,14 @@ ChatEditor::ChatEditor()
                             content.append("\n\n");
                         } else {
                             content.append("### Assistant\n\n");
-                            content.append(chat->message().content.toUtf8());
+
+                            QString processedContent = chat->message().content;
+                            processedContent.replace(ThinkingSectionParser::startToken(),
+                                                     "<details><summary>Thought</summary>\n");
+                            processedContent.replace(ThinkingSectionParser::endToken(),
+                                                     "\n</details>\n\n");
+
+                            content.append(processedContent.toUtf8());
                             content.append("\n\n");
                         }
                     }
