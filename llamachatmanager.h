@@ -55,6 +55,8 @@ public:
     Conversation createConversation(const QString &name);
     void deleteConversation(const QString &convId);
     void renameConversation(const QString &convId, const QString &name);
+    void deleteMessageBranch(const QString &convId, qint64 msgId);
+    QPair<int,int> getBranchStats(const QString &convId, qint64 msgId) const;
 
     QList<Conversation> allConversations();
 
@@ -88,6 +90,7 @@ signals:
                                    qint64 leafNodeId,
                                    const QStringList &quetions);
     void messageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
+    void messageDeleted(const QString &convId);
 
 private:
     explicit ChatManager(QObject *parent = nullptr);

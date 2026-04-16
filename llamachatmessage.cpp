@@ -222,6 +222,13 @@ void ChatMessage::buildUI()
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
     actionLayout->addWidget(m_copyButton);
 
+    m_deleteButton = new QToolButton(this);
+    m_deleteButton->setText("K");
+    m_deleteButton->setToolTip(Tr::tr("Delete this message"));
+    m_deleteButton->setVisible(!m_haveToolCalls);
+    connect(m_deleteButton, &QToolButton::clicked, this, &ChatMessage::onDeleteClicked);
+    actionLayout->addWidget(m_deleteButton);
+
     m_mainLayout->addWidget(m_bubble);
     m_mainLayout->addLayout(actionLayout);
 
@@ -271,6 +278,7 @@ void ChatMessage::messageCompleted(bool completed)
         // Normal assistant – show buttons only when the answer is finished.
         m_regenButton->setVisible(completed && !haveToolCalls());
         m_copyButton->setVisible(completed && !haveToolCalls());
+        m_deleteButton->setVisible(completed && !haveToolCalls());
 
         renderMarkdown(m_msg.content, completed);
     } else if (m_isTool) {
@@ -575,6 +583,11 @@ void ChatMessage::onSaveToDisk(const QString &fileName, const QString &verbatimC
     }
 
     sourceFile.writeFileContents(verbatimCode.toUtf8());
+}
+
+void ChatMessage::onDeleteClicked()
+{
+    emit deleteRequested(m_msg);
 }
 
 void ChatMessage::updateUI()

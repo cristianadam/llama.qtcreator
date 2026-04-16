@@ -29,6 +29,7 @@ public:
                                         bool includeRoot);
     bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
     bool updateMessageContent(const Message &msg);
+    bool deleteMessageBranch(qint64 msgId);
 
 signals:
     void conversationCreated(const QString &convId);

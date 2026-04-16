@@ -62,6 +62,7 @@ public slots:
     void onRegenerateRequested(const LlamaCpp::Message &msg);
     void onSiblingChanged(qint64 siblingId);
     void onServerPropsUpdated();
+    void onDeleteMessageRequested(const LlamaCpp::Message &msg);
 
     void startSearch();
     void nextSearchResult();

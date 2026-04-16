@@ -917,4 +917,52 @@ void ChatManager::renameConversation(const QString &convId, const QString &name)
     m_storage->renameConversation(convId, name);
 }
 
+void ChatManager::deleteMessageBranch(const QString &convId, qint64 msgId)
+{
+    if (m_storage->deleteMessageBranch(msgId))
+        emit messageDeleted(convId);
+}
+
+QPair<int, int> ChatManager::getBranchStats(const QString &convId, qint64 msgId) const
+{
+    QPair<int, int> stats{0, 0};
+    int &userMessages = stats.first;
+    int &assistantMessages = stats.second;
+
+    QVector<Message> allMessages = m_storage->getMessages(convId);
+
+    // Map for quick lookup
+    QHash<qint64, Message> map;
+    for (const auto &m : std::as_const(allMessages)) {
+        map.insert(m.id, m);
+    }
+
+    if (!map.contains(msgId))
+        return stats;
+
+    // Traverse the branch using a stack (DFS)
+    QVector<qint64> stack;
+    stack.push_back(msgId);
+
+    while (!stack.isEmpty()) {
+        qint64 currentId = stack.takeLast();
+        if (!map.contains(currentId))
+            continue;
+
+        const Message &m = map[currentId];
+        if (m.role == "user") {
+            ++userMessages;
+        } else {
+            ++assistantMessages;
+        }
+
+        // Add children to stack to continue traversal
+        for (qint64 childId : m.children) {
+            stack.push_back(childId);
+        }
+    }
+
+    return stats;
+}
+
 } // namespace LlamaCpp

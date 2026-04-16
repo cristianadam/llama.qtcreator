@@ -43,6 +43,7 @@ signals:
     void regenerateRequested(const Message &msg);
     void editRequested(const Message &msg);
     void siblingChanged(qint64 siblingId);
+    void deleteRequested(const Message &msg);
 
 private slots:
     void onCopyClicked();
@@ -52,6 +53,7 @@ private slots:
     void onNextSiblingClicked();
     void onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode);
     void onSaveToDisk(const QString &fileName, const QString &verbatimCode);
+    void onDeleteClicked();
 
 private:
     void buildUI();
@@ -77,6 +79,7 @@ private:
     QToolButton *m_prevButton{nullptr};
     QToolButton *m_nextButton{nullptr};
     QToolButton *m_attachedFiles{nullptr};
+    QToolButton *m_deleteButton{nullptr};
     QLabel *m_siblingLabel{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};

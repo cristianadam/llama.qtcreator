@@ -156,6 +156,16 @@ ChatEditor::ChatEditor()
             &ChatManager::messageExtraUpdated,
             this,
             &ChatEditor::onMessageExtraUpdated);
+    connect(&ChatManager::instance(),
+            &ChatManager::messageDeleted,
+            this,
+            [this](const QString &convId) {
+                if (convId == m_viewingConvId) {
+                    // Refresh the entire view to update the tree
+                    ViewingChat chat = ChatManager::instance().getViewingChat(m_viewingConvId);
+                    refreshMessages(chat.messages, chat.conv.currNode);
+                }
+            });
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
@@ -425,6 +435,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
         connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
+        connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
     }
@@ -515,6 +526,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
         connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
+        connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
 
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
@@ -565,6 +577,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
         connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
+        connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
 
         // Insert speed label after the assistant widget
         if (settings().showTokensPerSecond.value()) {
@@ -676,6 +689,34 @@ void ChatEditor::onServerPropsUpdated()
         m_propsWidget = displayServerProps();
         m_messageLayout->insertWidget(0, m_propsWidget);
     }
+}
+
+void ChatEditor::onDeleteMessageRequested(const Message &msg)
+{
+    auto [userMessages, assistantMessages] = ChatManager::instance().getBranchStats(msg.convId,
+                                                                                    msg.id);
+    int totalMessages = userMessages + assistantMessages;
+    if (totalMessages > 1) {
+        QString warningText = Tr::tr("This will delete %1 messages including: %2 user messages and "
+                                     "%3 assistant responses ...")
+                                  .arg(totalMessages)
+                                  .arg(userMessages)
+                                  .arg(assistantMessages);
+
+        if (QMessageBox::question(widget(), Tr::tr("Confirm Branch Deletion"), warningText)
+            != QMessageBox::Yes) {
+            return;
+        }
+    } else {
+        if (QMessageBox::question(widget(),
+                                  Tr::tr("Delete Message"),
+                                  Tr::tr("Are you sure you want to delete this message?"))
+            != QMessageBox::Yes) {
+            return;
+        }
+    }
+
+    ChatManager::instance().deleteMessageBranch(msg.convId, msg.id);
 }
 
 void ChatEditor::startSearch()

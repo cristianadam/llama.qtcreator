@@ -265,7 +265,32 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
     QSqlQuery q(db);
     db.transaction();
 
-    // insert new message - note: we don't specify the id column, let SQLite auto-generate it
+    // Check if the parent node actually exists.
+    // If not, the conversation's currNode is likely a "ghost" from a deleted branch.
+    QSqlQuery qCheck(db);
+    qCheck.prepare("SELECT id FROM messages WHERE id = :pid");
+    qCheck.bindValue(":pid", parentNodeId);
+
+    if (!qCheck.exec() || !qCheck.next()) {
+        qCWarning(llamaStorage) << "appendMsg: parent node" << parentNodeId
+                                << "not found. Recovering by attaching to conversation root.";
+
+        // Try to find the root message for this conversation to re-anchor the thread
+        QSqlQuery qRoot(db);
+        qRoot.prepare("SELECT id FROM messages WHERE convId = :conv AND type = 'root'");
+        qRoot.bindValue(":conv", msg.convId);
+
+        if (qRoot.exec() && qRoot.next()) {
+            parentNodeId = qRoot.value(0).toLongLong();
+        } else {
+            qCWarning(llamaStorage)
+                << "appendMsg: Failed to find root for conversation" << msg.convId << ". Aborting.";
+            db.rollback();
+            return;
+        }
+    }
+
+    // Insert new message using the (potentially updated) parentNodeId
     q.prepare("INSERT INTO messages "
               "(convId,type,timestamp,role,content,timings,extra,parent,children) "
               "VALUES (:conv,:type,:ts,:role,:content,:timings,:extra,:parent,:children)");
@@ -278,35 +303,41 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
     q.bindValue(":extra", serialize(msg.extra));
     q.bindValue(":parent", parentNodeId);
     q.bindValue(":children", "[]");
-    if (!q.exec())
+
+    if (!q.exec()) {
         qCWarning(llamaStorage) << "appendMsg: Failed to insert messages" << parentNodeId
                                 << q.lastError();
+        db.rollback();
+        return;
+    }
 
     // Get the auto-generated ID
     qint64 pendingId = msg.role == "assistant" ? msg.id : -1;
     msg.id = q.lastInsertId().toLongLong();
 
-    // update parent children
-    q.prepare("SELECT children FROM messages WHERE  id = (:pid)");
+    // Update parent's children list
+    q.prepare("SELECT children FROM messages WHERE id = :pid");
     q.bindValue(":pid", parentNodeId);
-    if (!q.exec()) {
+    if (!q.exec() || !q.next()) {
         qCWarning(llamaStorage) << "appendMsg: Failed to select children for parent node"
                                 << parentNodeId << q.lastError();
+        db.rollback();
         return;
     }
-    if (!q.next()) {
-        qCWarning(llamaStorage) << "appendMsg: no children found for" << parentNodeId;
-        return;
-    }
+
     QJsonArray arr = QJsonDocument::fromJson(q.value(0).toString().toUtf8()).array();
     arr.append(msg.id);
     q.prepare("UPDATE messages SET children = (:arr) WHERE id = (:pid)");
     q.bindValue(":arr", QJsonDocument(arr).toJson(QJsonDocument::Compact));
     q.bindValue(":pid", parentNodeId);
-    if (!q.exec())
+    if (!q.exec()) {
         qCWarning(llamaStorage) << "appendMsg: Failed update children messages" << q.lastError();
+        db.rollback();
+        return;
+    }
 
-    // update conversation lastModified & currNode
+    // Update conversation lastModified & currNode
+    // This effectively "heals" the dangling pointer in the conversations table
     q.prepare(
         "UPDATE conversations SET lastModified = (:lm), currNode = (:node) WHERE id = (:conv)");
     q.bindValue(":lm", QDateTime::currentMSecsSinceEpoch());
@@ -316,7 +347,6 @@ void Storage::appendMsg(Message &msg, qint64 parentNodeId)
         qCWarning(llamaStorage) << "appendMsg: Failed to update conversations" << q.lastError();
 
     db.commit();
-
     emit messageAppended(msg, pendingId);
 }
 
@@ -423,4 +453,126 @@ bool Storage::updateMessageContent(const Message &msg)
     return true;
 }
 
+bool Storage::deleteMessageBranch(qint64 msgId)
+{
+    if (!db.transaction()) {
+        qCWarning(llamaStorage) << "deleteMessageBranch: Failed to start transaction:"
+                                << db.lastError().text();
+        return false;
+    }
+
+    QVector<qint64> idsToDelete;
+    QVector<qint64> stack;
+    stack.push_back(msgId);
+
+    // Find the parent of the branch root to update its children list later
+    qint64 rootParentId = -1;
+    QSqlQuery qParent(db);
+    qParent.prepare("SELECT parent FROM messages WHERE id = :id");
+    qParent.bindValue(":id", msgId);
+
+    if (!qParent.exec()) {
+        qCWarning(llamaStorage) << "deleteMessageBranch: Failed to find parent for root msgId"
+                                << msgId << ":" << qParent.lastError().text();
+        db.rollback();
+        return false;
+    } else if (qParent.next()) {
+        rootParentId = qParent.value(0).toLongLong();
+    }
+
+    // Collect all IDs in the branch using the 'children' column (DFS)
+    while (!stack.isEmpty()) {
+        qint64 currentId = stack.takeLast();
+        idsToDelete.append(currentId);
+
+        QSqlQuery qChild(db);
+        qChild.prepare("SELECT children FROM messages WHERE id = :id");
+        qChild.bindValue(":id", currentId);
+
+        if (!qChild.exec()) {
+            qCWarning(llamaStorage) << "deleteMessageBranch: Failed to fetch children for msgId"
+                                    << currentId << ":" << qChild.lastError().text();
+            db.rollback();
+            return false;
+        } else if (qChild.next()) {
+            QString childrenJson = qChild.value(0).toString();
+            QJsonArray arr = QJsonDocument::fromJson(childrenJson.toUtf8()).array();
+            for (const QJsonValue &v : arr) {
+                stack.push_back(v.toInteger());
+            }
+        }
+    }
+
+    // If there is a parent, remove the branch root from the parent's children list
+    if (rootParentId >= 0) {
+        QSqlQuery qUpdateParent(db);
+        qUpdateParent.prepare("SELECT children FROM messages WHERE id = :pid");
+        qUpdateParent.bindValue(":pid", rootParentId);
+
+        if (!qUpdateParent.exec()) {
+            qCWarning(llamaStorage)
+                << "deleteMessageBranch: Failed to fetch parent's children (parentId:"
+                << rootParentId << "):" << qUpdateParent.lastError().text();
+            db.rollback();
+            return false;
+        } else if (qUpdateParent.next()) {
+            QJsonArray children
+                = QJsonDocument::fromJson(qUpdateParent.value(0).toString().toUtf8()).array();
+
+            // Remove the target msgId from the parent's array
+            bool removed = false;
+            for (int i = 0; i < children.size(); ++i) {
+                if (children[i].toInteger() == msgId) {
+                    children.removeAt(i);
+                    removed = true;
+                    break;
+                }
+            }
+
+            if (removed) {
+                qUpdateParent.prepare("UPDATE messages SET children = :c WHERE id = :pid");
+                qUpdateParent.bindValue(":c",
+                                        QJsonDocument(children).toJson(QJsonDocument::Compact));
+                qUpdateParent.bindValue(":pid", rootParentId);
+
+                if (!qUpdateParent.exec()) {
+                    qCWarning(llamaStorage)
+                        << "deleteMessageBranch: Failed to update parent's children list (parentId:"
+                        << rootParentId << "):" << qUpdateParent.lastError().text();
+                    db.rollback();
+                    return false;
+                }
+            } else {
+                qCWarning(llamaStorage)
+                    << "deleteMessageBranch: msgId" << msgId << "not found in parent"
+                    << rootParentId << "children list.";
+                // We don't necessarily rollback here as it might be a data inconsistency,
+                // but we log it.
+            }
+        }
+    }
+
+    // Delete all messages in the branch
+    for (qint64 id : idsToDelete) {
+        QSqlQuery qDel(db);
+        qDel.prepare("DELETE FROM messages WHERE id = :id");
+        qDel.bindValue(":id", id);
+
+        if (!qDel.exec()) {
+            qCWarning(llamaStorage) << "deleteMessageBranch: Failed to delete msgId" << id << ":"
+                                    << qDel.lastError().text();
+            db.rollback();
+            return false;
+        }
+    }
+
+    if (!db.commit()) {
+        qCWarning(llamaStorage) << "deleteMessageBranch: Failed to commit transaction:"
+                                << db.lastError().text();
+        db.rollback();
+        return false;
+    }
+
+    return true;
+}
 } // namespace LlamaCpp
