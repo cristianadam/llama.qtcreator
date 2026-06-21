@@ -110,7 +110,7 @@ LocatorMatcherTasks LocatorFilter::matchers()
         return storage.reportOutput(
             std::accumulate(std::begin(entries), std::end(entries), LocatorFilterEntries()));
     };
-    return {QSyncTask(onSetup)};
+    return {QtTaskTree::QSyncTask(onSetup)};
 }
 
 void LocatorFilter::acceptPrompt(const QString &prompt)
