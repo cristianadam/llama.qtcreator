@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QByteArray>
+#include <QColor>
 #include <QFont>
 #include <QHash>
 #include <QMap>
@@ -16,14 +17,11 @@
 #include <QTextTable>
 #include <QVector>
 
-#include "llamasyntaxhighlighter.h"
-#include <repository.h>
+#include <3rdparty/markus/markus.h>
 
 class QFrame;
-#include <3rdparty/md4c/src/md4c.h>
 
 namespace LlamaCpp {
-struct MarkdownOp;
 
 class MarkdownRenderer : public QTextBrowser
 {
@@ -58,8 +56,12 @@ public:
 
     static constexpr QChar ZeroWidthSpace = QChar(L'\u200b');
 
-    void feed(const QByteArray &chunk);
+    // Feed the full markdown buffer rendered so far. Only the suffix that is
+    // new compared to the previous buffer is parsed; if the buffer diverged
+    // (e.g. thinking sections rewritten) the renderer resets and re-renders.
+    void feed(const QByteArray &buffer);
     void finish();
+    void reset();
 
     void setColor(ColorRole role, const QColor &color);
     QColor color(ColorRole role) const;
@@ -85,161 +87,111 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    void applyOpToCursor(const MarkdownOp &op);
-    void updateAllOverlaysGeometry();
-    void createOverlayForCodeBlock(int blockId);
-    QPointF contentOffset() const;
-    QRectF blockBoundingRect(const QTextBlock &block) const;
-    QTextBlock blockForCodeId(int id) const;
-    QMap<int, QRectF> collectBlockRects(int prop, int skipProp = -1) const;
-    QPair<QString, QString> collectCodeById(int id) const;
-    void toggleSection(int secId);
-    QString detailsHtmlLabel(const QString &text, int secId, bool isVisible);
-
-    static int md_enter_block(MD_BLOCKTYPE type, void *detail, void *userdata);
-    static int md_leave_block(MD_BLOCKTYPE type, void *detail, void *userdata);
-    static int md_enter_span(MD_SPANTYPE type, void *detail, void *userdata);
-    static int md_leave_span(MD_SPANTYPE type, void *detail, void *userdata);
-    static int md_text(MD_TEXTTYPE type, const MD_CHAR *text, MD_SIZE size, void *userdata);
-
-    void setupDocumentSettings();
-
-private:
-    MD_PARSER m_parser;
-    QByteArray m_buffer;
-    QTextDocument *m_doc = nullptr;
-    QTextCursor m_cursor;
-
-    QVector<MarkdownOp> m_lastOps;
-    QStack<QTextTable *> m_tableStack;
-    QStack<QTextList *> m_listStack;
-    QStack<QTextBlock> m_detailsStartStack;
-    QMap<int, bool> m_toggleDetails;
-
-    QHash<int, QFrame *> m_codeOverlays;
-    QFont m_baseFont;
-    QFont m_monoFont;
-    double m_baseFontSize = 0.0;
-    int m_paragraphMargin = 0;
-    QHash<ColorRole, QColor> m_colorMap;
-    bool m_expandDetailsByDefault = true;
-};
-
-// Represents a single atomic instruction for the QTextDocument.
-// This allows us to "replay" the exact state of the parser.
-struct MarkdownOp
-{
-    enum Type {
-        InsertText,
-        InsertCode,
-        InsertHeading,
-        InsertCodeBlock,
-        InsertBlock,
-        InsertDetails,
-        InsertHtml,
-        InsertImage,
-        InsertTable,
-        InsertTableCell,
-        InsertThematicBreak,
-        InsertList,
-        SetCharFormat,
-        SetBlockFormat,
-        CloseTable,
-        CloseList,
-        CloseDetails,
-    };
-
-    Type type;
-    QString content;
-    std::optional<QTextCharFormat> charFmt;
-    std::optional<QTextBlockFormat> blockFmt;
-    std::optional<QTextListFormat> listFmt;
-    QTextTableFormat tableFmt;
-
-    // Table metadata
-    int tableRows = 0;
-    int tableCols = 0;
-    int cellRow = 0;
-    int cellCol = 0;
-    Qt::Alignment cellAlign = Qt::AlignLeft;
-    QTextCharFormat cellBgFmt;
-
-    // Target position for MoveCursor or the position AFTER this op is applied
-    int docPosition = 0;
-
-    bool operator==(const MarkdownOp &other) const
-    {
-        return type == other.type && content == other.content && charFmt == other.charFmt
-               && blockFmt == other.blockFmt && listFmt == other.listFmt
-               && tableFmt == other.tableFmt && tableRows == other.tableRows
-               && tableCols == other.tableCols && cellRow == other.cellRow
-               && cellCol == other.cellCol && cellAlign == other.cellAlign
-               && cellBgFmt == other.cellBgFmt;
-    }
-    bool operator!=(const MarkdownOp &other) const { return !(*this == other); }
-};
-
-struct MarkdownParserContext
-{
     struct ListState
     {
         QTextListFormat fmt;
+        QTextList *list = nullptr;
     };
     struct TableState
     {
-        int rows = 0;
-        int cols = 0;
-        int curRow = -1;
-        int curCol = -1;
+        QTextTable *qtTable = nullptr;
+        int columns = 0;
         QVector<Qt::Alignment> colAlign;
+        bool header = false;
+        int curRow = 0;
+        int curCol = -1;
     };
 
-    QVector<MarkdownOp> ops;
-    QStack<ListState> listStack;
-    QStack<TableState> tableStack;
-    QStack<QTextCharFormat> textCharFormatStack;
-    QStack<QTextBlockFormat> codeBlockFormatStack;
-    QStack<int> detailsIdStack;
+    // Render the finalized top-level blocks delivered by the streaming parser.
+    void renderBlocks(const markus::Document &doc, size_t first, size_t last);
+    void renderBlock(const markus::Document &doc, const markus::BlockNode &node);
+    void renderBlockIds(const markus::Document &doc,
+                        const std::pmr::vector<markus::BlockNodeId> &ids);
+    void renderInlines(const markus::Document &doc,
+                       const std::pmr::vector<markus::InlineNodeId> &ids);
+    void renderInline(const markus::Document &doc, markus::InlineNodeId id);
 
-    int blockQuoteDepth = 0;
-    int currentHeadingLevel = 0;
-    bool skipNextParagraph = false;
-    int nextDetailsId = 0;
-    int nextCodeBlockId = 0;
+    // Re-render the parser's held-back tail (the block that may still grow),
+    // so in-progress paragraphs, code blocks and <details> sections stream
+    // live instead of waiting for their terminator.
+    void renderPendingTail();
+    void clearTailRegion();
+    void pruneStaleCodeBlocks();
+    int documentEndPosition() const;
 
-    QFont baseFont;
-    QFont monoFont;
-    double baseFontSize = 0.0;
-    int paragraphMargin = 0;
-    QHash<MarkdownRenderer::ColorRole, QColor> colorMap;
-    static const int indentWidth = 30;
-    std::unique_ptr<SyntaxHighlighter> highlighter;
-
-    static KSyntaxHighlighting::Repository *highlightRepository();
-    static KSyntaxHighlighting::Definition definitionForName(const QString &name);
-
-    int getBlockQuoteMargin(int depth) const;
-
-    // Parser logic methods
-    void handleHeading(MD_BLOCK_H_DETAIL *detail);
+    void beginBlock();
+    void handleHeading(int level);
+    void leaveHeading();
     void handleParagraph();
     void handleBlockQuote();
-    void handleCodeBlock(MD_BLOCK_CODE_DETAIL *detail);
+    void leaveBlockQuote();
+    void handleCodeBlock(const markus::CodeBlock &code);
     void handleThematicBreak();
-    void handleList(MD_BLOCKTYPE type, void *detail);
-    void handleItem(MD_BLOCK_LI_DETAIL *detail);
-    void handleText(MD_TEXTTYPE type, const MD_CHAR *text, MD_SIZE size);
+    void handleList(const markus::List &list);
+    void leaveList();
+    void handleItem(const markus::ListItem &item);
+    void renderDetails(const markus::Document &doc, const markus::DetailsBlock &details);
+    void renderGenericHtmlBlock(const markus::HtmlBlock &block);
+    void renderTable(const markus::Document &doc, const markus::Table &table);
+    void renderImage(const markus::Image &img);
     void handleEmph();
     void handleStrong();
-    void handleInlineCode();
-    void handleLink(MD_SPAN_A_DETAIL *detail);
-    void handleImage(MD_SPAN_IMG_DETAIL *detail);
-    void handleTable(MD_BLOCK_TABLE_DETAIL *detail);
-    void handleTableRow();
-    void handleTableCell(MD_BLOCK_TD_DETAIL *detail);
     void handleStrikethrough();
-    void handleHtml(const QString &html);
+    void handleInlineCode();
+    void handleLink(const markus::Link &link);
+    void popCharFormat();
 
-    QString mdAttrToString(const MD_ATTRIBUTE &attr);
+    void createOverlayForCodeBlock(int blockId);
+    void updateAllOverlaysGeometry();
+    void toggleSection(int secId);
+    void setupDocumentSettings();
+
+    static QString languageFromInfoString(const markus::CodeBlock &code);
+    static int getBlockQuoteMargin(int depth, int paragraphMargin);
+    QString detailsHtmlLabel(const QString &summary, int secId, bool isVisible) const;
+
+    QPointF contentOffset() const;
+    QRectF blockBoundingRect(const QTextBlock &block) const;
+    QTextBlock blockForCodeId(int id) const;
+    QPair<QString, QString> collectCodeById(int id) const;
+    QMap<int, QRectF> collectBlockRects(int prop, int skipProp = -1) const;
+
+    markus::StreamingBlockParser m_streamParser;
+    markus::Options m_options;
+    QByteArray m_buffer;
+    QTextDocument *m_doc = nullptr;
+    QTextCursor m_cursor;
+    // Document position where the in-progress tail starts (-1 = none).
+    // Kept as a plain position rather than a QTextCursor so that appending
+    // text does not drag the boundary forward (which would defeat clearing).
+    int m_tailStart = -1;
+
+    QVector<ListState> m_listStack;
+    QVector<TableState> m_tableStack;
+    QStack<QTextCharFormat> m_textCharFormatStack;
+    QMap<int, bool> m_toggleDetails;
+    // Section id of the <details> block currently being rendered (0 = none).
+    // beginBlock() tags every inner block with it so the section can be
+    // toggled as a unit.
+    int m_detailsSecId = 0;
+
+    QHash<int, QFrame *> m_codeOverlays;
+    int m_blockQuoteDepth = 0;
+    // Level of the heading currently being rendered (0 = none). While non-zero,
+    // inline markup (e.g. `code`) inherits the heading's font instead of the
+    // inline-code "chip" styling.
+    int m_headingLevel = 0;
+    bool m_codeBlock = false;
+    QString m_codeBlockLanguage;
+    QChar m_codeFenceChar = QChar::Null;
+    int m_nextDetailsId = 0;
+    int m_nextCodeBlockId = 0;
+    int m_paragraphMargin = 0;
+    bool m_skipNextParagraphBlock = false;
+    bool m_expandDetailsByDefault = true;
+    double m_baseFontSize = 0.0;
+    QFont m_baseFont;
+    QFont m_monoFont;
+    QHash<ColorRole, QColor> m_colorMap;
 };
 } // namespace LlamaCpp

@@ -524,7 +524,7 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
     setAutoApply(true);
 
     useGlobalSettings.setSettingsKey(Constants::LLAMACPP_USE_GLOBAL_SETTINGS);
-    useGlobalSettings.setDefaultValue(true);
+    useGlobalSettings.setSettingsPageId(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
 
     initEnableAspect(enableLlamaCpp);
 

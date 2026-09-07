@@ -1,6 +1,7 @@
 #pragma once
 
 #include <coreplugin/dialogs/ioptionspage.h>
+#include <projectexplorer/useglobalaspect.h>
 #include <utils/aspects.h>
 
 namespace ProjectExplorer {
@@ -79,7 +80,7 @@ public:
     bool isEnabled() const;
 
     Utils::BoolAspect enableLlamaCpp{this};
-    Utils::BoolAspect useGlobalSettings{this};
+    ProjectExplorer::UseGlobalAspect useGlobalSettings{Utils::Id(), this};
 };
 
 class ToolsSettingsPage : public Core::IOptionsPage

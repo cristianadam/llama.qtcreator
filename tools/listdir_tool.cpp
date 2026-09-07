@@ -51,10 +51,10 @@ void ListDirTool::run(const QJsonObject &args, std::function<void(const QString 
         return done(Tr::tr("\"%1\" is not a directory.").arg(dirPath.toUserOutput()), false);
 
     const FileFilter filter(QStringList(),
-                            QDir::AllEntries | QDir::NoDotAndDotDot,
-                            QDirIterator::NoIteratorFlags);
+                            DirFilterFlag::AllEntries | DirFilterFlag::NoDotAndDotDot,
+                            DirIteratorFlag::NoIteratorFlags);
 
-    const FilePaths entries = dirPath.dirEntries(filter, QDir::Name | QDir::DirsFirst);
+    const FilePaths entries = dirPath.dirEntries(filter, DirSortFlag::Name | DirSortFlag::DirsFirst);
     QStringList lines;
 
     lines << Tr::tr("Directory listing for %1:").arg(dirPath.toUserOutput());

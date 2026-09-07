@@ -12,3 +12,19 @@ add_qtc_test(llamatools_test
     ../tools/tool.cpp
     ../tools/tool_utils.cpp
 )
+
+add_qtc_test(markdownrenderer_test
+  INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+  DEPENDS
+    Qt::Test Qt::Core Qt::Gui Qt::Widgets
+    QtCreator::Utils
+    QtCreator::TextEditor
+    QtCreator::KSyntaxHighlighting
+    markus
+  SOURCES
+    markdownrenderer_test.cpp
+    ../markdownrenderer.cpp
+    ../llamasyntaxhighligher.cpp
+)

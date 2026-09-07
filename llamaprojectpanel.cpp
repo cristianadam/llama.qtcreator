@@ -6,52 +6,47 @@
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectpanelfactory.h>
-#include <projectexplorer/projectsettingswidget.h>
 
 #include <utils/layoutbuilder.h>
+
+#include <QWidget>
 
 using namespace ProjectExplorer;
 
 namespace LlamaCpp {
 
-class LlamaCppProjectSettingsWidget final : public ProjectSettingsWidget
+class LlamaCppProjectSettingsWidget final : public QWidget
 {
 public:
-    LlamaCppProjectSettingsWidget()
+    explicit LlamaCppProjectSettingsWidget(Project *project)
     {
-        setGlobalSettingsId(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
-        setUseGlobalSettingsCheckBoxVisible(true);
+        using namespace Layouting;
+
+        m_settings = new LlamaProjectSettings(project);
+        m_settings->setParent(this);
+
+        Column {
+            m_settings->useGlobalSettings,
+            m_settings->enableLlamaCpp,
+            st,
+        }.attachTo(this);
+
+        applyGlobalState();
+        m_settings->useGlobalSettings.addOnChanged(this, [this] { applyGlobalState(); });
     }
+
+private:
+    void applyGlobalState()
+    {
+        m_settings->enableLlamaCpp.setEnabled(!m_settings->useGlobalSettings());
+    }
+
+    LlamaProjectSettings *m_settings = nullptr;
 };
 
-static ProjectSettingsWidget *createLlamaCppProjectPanel(Project *project)
+static QWidget *createLlamaCppProjectPanel(Project *project)
 {
-    using namespace Layouting;
-
-    auto widget = new LlamaCppProjectSettingsWidget;
-    auto settings = new LlamaProjectSettings(project);
-    settings->setParent(widget);
-
-    QObject::connect(widget,
-                     &ProjectSettingsWidget::useGlobalSettingsChanged,
-                     settings,
-                     &LlamaProjectSettings::setUseGlobalSettings);
-
-    widget->setUseGlobalSettings(settings->useGlobalSettings());
-    widget->setEnabled(!settings->useGlobalSettings());
-
-    QObject::connect(widget,
-                     &ProjectSettingsWidget::useGlobalSettingsChanged,
-                     widget,
-                     [widget](bool useGlobal) { widget->setEnabled(!useGlobal); });
-
-    // clang-format off
-        Column {
-            settings->enableLlamaCpp,
-        }.attachTo(widget);
-    // clang-format on
-
-    return widget;
+    return new LlamaCppProjectSettingsWidget(project);
 }
 
 class LlamaCppProjectPanelFactory final : public ProjectPanelFactory

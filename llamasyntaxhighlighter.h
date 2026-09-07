@@ -10,7 +10,15 @@
 
 namespace LlamaCpp {
 
-struct MarkdownParserContext;
+// A run of text together with the char format it should be rendered with.
+struct HighlightFragment
+{
+    QString text;
+    QTextCharFormat format;
+};
+
+// Look up a syntax definition by its Qt Creator name (e.g. "cpp", "python").
+KSyntaxHighlighting::Definition syntaxDefinitionForName(const QString &name);
 
 class SyntaxHighlighter : public KSyntaxHighlighting::AbstractHighlighter
 {
@@ -19,22 +27,24 @@ public:
 
     void setDefinition(const KSyntaxHighlighting::Definition &def) override;
 
-    // Processes a chunk of text that might contain multiple lines
-    void processChunk(const QString &chunk, MarkdownParserContext *ctx);
-
-    // Flushes any leftover text (the last line of a block)
-    void finish(MarkdownParserContext *ctx);
+    // Highlights a complete chunk of text (e.g. a finished code block) and
+    // appends the resulting formatted runs to \a fragments. Unformatted runs
+    // get \a defaultFmt.
+    void highlight(const QString &content,
+                   const QTextCharFormat &defaultFmt,
+                   QVector<HighlightFragment> &fragments);
 
 protected:
     void applyFormat(int offset, int length, const KSyntaxHighlighting::Format &format) override;
 
 private:
-    void processLine(const QString &line, MarkdownParserContext *ctx);
+    void processLine(const QString &line,
+                     const QTextCharFormat &defaultFmt,
+                     QVector<HighlightFragment> &fragments);
 
     KSyntaxHighlighting::Definition m_definition;
     TextEditor::ColorScheme m_colorScheme;
     KSyntaxHighlighting::State m_state;
-    QString m_leftover; // Stores partial lines between chunks
 
     struct RecordedFormat
     {
@@ -44,6 +54,5 @@ private:
     };
     QVector<RecordedFormat> m_recordedFormats;
     QTextCharFormat m_defaultFmt;
-    QTextBlockFormat m_defaultBlockFmt;
 };
 } // namespace LlamaCpp

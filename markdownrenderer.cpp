@@ -3,10 +3,6 @@
 #include <QAbstractTextDocumentLayout>
 #include <QClipboard>
 #include <QColor>
-#include <QDebug>
-#include <QElapsedTimer>
-#include <QFile>
-#include <QFileDialog>
 #include <QFrame>
 #include <QGuiApplication>
 #include <QHBoxLayout>
@@ -15,24 +11,24 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPalette>
-#include <QRegularExpression>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QStyle>
 #include <QToolButton>
 #include <QToolTip>
 
-#include <coreplugin/icore.h>
-#include <utils/filepath.h>
-
+#include "llamasyntaxhighlighter.h"
 #include "llamatr.h"
 
 using namespace LlamaCpp;
-using namespace Utils;
 
 static QString colorToRgba(const QColor &c)
 {
     return QString("rgba(%1,%2,%3,%4)").arg(c.red()).arg(c.green()).arg(c.blue()).arg(c.alpha());
+}
+
+static QString fromStdString(const std::pmr::string &s)
+{
+    return QString::fromUtf8(s.data(), s.size());
 }
 
 MarkdownRenderer::MarkdownRenderer(QWidget *parent)
@@ -65,13 +61,22 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     p.setColor(QPalette::Text, color(TextForeground));
     setPalette(p);
 
-    m_parser.abi_version = 0;
-    m_parser.flags = MD_DIALECT_GITHUB | MD_FLAG_NOHTMLSPANS;
-    m_parser.enter_block = &MarkdownRenderer::md_enter_block;
-    m_parser.leave_block = &MarkdownRenderer::md_leave_block;
-    m_parser.enter_span = &MarkdownRenderer::md_enter_span;
-    m_parser.leave_span = &MarkdownRenderer::md_leave_span;
-    m_parser.text = &MarkdownRenderer::md_text;
+    m_doc = new QTextDocument(this);
+    m_doc->setIndentWidth(30);
+    setDocument(m_doc);
+    setupDocumentSettings();
+    m_cursor = QTextCursor(m_doc);
+
+    // Markus streaming parser setup (GitHub-flavored Markdown)
+    m_options.enable_tables = true;
+    m_options.enable_autolink = true;
+    m_options.enable_strikethrough = true;
+    m_options.enable_tasklist = true;
+    m_streamParser.SetOptions(m_options);
+    m_streamParser.setBlockCallback(
+        [this](const markus::Document &doc, size_t first, size_t last) {
+            renderBlocks(doc, first, last);
+        });
 
     connect(verticalScrollBar(),
             &QScrollBar::valueChanged,
@@ -88,66 +93,22 @@ MarkdownRenderer::~MarkdownRenderer()
     qDeleteAll(m_codeOverlays);
 }
 
-void MarkdownRenderer::feed(const QByteArray &chunk)
+void MarkdownRenderer::feed(const QByteArray &buffer)
 {
-    m_buffer = chunk;
-
-    if (!m_doc) {
-        m_doc = new QTextDocument(this);
-        m_doc->setIndentWidth(MarkdownParserContext::indentWidth);
-        setDocument(m_doc);
-        setupDocumentSettings();
-        m_cursor = QTextCursor(m_doc);
-    }
-
-    MarkdownParserContext context;
-    context.baseFont = m_baseFont;
-    context.monoFont = m_monoFont;
-    context.baseFontSize = m_baseFontSize;
-    context.paragraphMargin = m_paragraphMargin;
-    context.colorMap = m_colorMap;
-
-    md_parse(m_buffer.constData(), m_buffer.size(), &m_parser, &context);
-
-    auto validIndex = [](const MarkdownOp &op) {
-        return op.type == MarkdownOp::InsertHeading && op.docPosition != 0;
-    };
-
-    // Find divergence point
-    int diffIndex = m_lastOps.size() ? m_lastOps.size() - 1 : 0;
-    while (diffIndex > 0 && diffIndex < context.ops.size()) {
-        if (m_lastOps[diffIndex] == context.ops[diffIndex] && validIndex(m_lastOps[diffIndex]))
-            break;
-        --diffIndex;
-    }
-
-    m_cursor = QTextCursor(m_doc);
-    m_cursor.beginEditBlock();
-
-    if (diffIndex == 0) {
-        // This can happen with [url] like this
-        // [url]: https://url
-        m_doc->clear();
-        m_cursor.movePosition(QTextCursor::Start);
-
-        m_listStack.clear();
-        m_tableStack.clear();
-        m_detailsStartStack.clear();
+    QByteArray delta = buffer;
+    if (buffer.startsWith(m_buffer)) {
+        delta = buffer.mid(m_buffer.size());
     } else {
-        // Revert to the last known good position
-        int lastGoodPos = m_lastOps[diffIndex].docPosition;
-        m_cursor.setPosition(lastGoodPos);
-        m_cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-        m_cursor.removeSelectedText();
+        // The buffer diverged (e.g. a thinking section was rewritten):
+        // start over and re-feed everything.
+        reset();
+        delta = buffer;
     }
+    m_buffer = buffer;
 
-    // Replay all operations from the divergence point onwards
-    for (int i = diffIndex; i < context.ops.size(); ++i) {
-        context.ops[i].docPosition = m_cursor.position();
-        applyOpToCursor(context.ops[i]);
-    }
-
-    m_lastOps = context.ops;
+    m_cursor.beginEditBlock();
+    m_streamParser.Feed(std::string_view(delta.constData(), delta.size()));
+    renderPendingTail();
     m_cursor.endEditBlock();
 
     updateAllOverlaysGeometry();
@@ -155,788 +116,680 @@ void MarkdownRenderer::feed(const QByteArray &chunk)
 
 void MarkdownRenderer::finish()
 {
-    m_lastOps.clear();
+    m_cursor.beginEditBlock();
+    m_streamParser.Flush();
+    renderPendingTail();
+    m_cursor.endEditBlock();
+
+    updateAllOverlaysGeometry();
 }
 
-void MarkdownRenderer::applyOpToCursor(const MarkdownOp &op)
+void MarkdownRenderer::reset()
 {
-    switch (op.type) {
-    case MarkdownOp::InsertText:
-        m_cursor.setCharFormat(op.charFmt.value_or(m_cursor.charFormat()));
-        m_cursor.insertText(op.content);
-        break;
-    case MarkdownOp::InsertCode:
-        m_cursor.setCharFormat(op.charFmt.value_or(m_cursor.charFormat()));
-        m_cursor.setBlockFormat(op.blockFmt.value_or(m_cursor.blockFormat()));
-        m_cursor.insertText(op.content);
-        break;
-    case MarkdownOp::InsertHeading: {
-        // Removal of old text up to a heading will result in empty paragraphs
-        bool reuseExistingBlock = m_cursor.atBlockStart() && m_cursor.block().text().isEmpty()
-                                  && m_cursor.block().isVisible();
-        if (m_cursor.document()->isEmpty() || reuseExistingBlock) {
-            m_cursor.setBlockFormat(*op.blockFmt);
-            m_cursor.setCharFormat(*op.charFmt);
-        } else {
-            m_cursor.insertBlock(*op.blockFmt, *op.charFmt);
-        }
-        break;
+    m_streamParser.Reset();
+    m_buffer.clear();
+
+    qDeleteAll(m_codeOverlays);
+    m_codeOverlays.clear();
+    m_toggleDetails.clear();
+    m_listStack.clear();
+    m_tableStack.clear();
+    m_textCharFormatStack.clear();
+    m_blockQuoteDepth = 0;
+    m_headingLevel = 0;
+    m_codeBlock = false;
+    m_codeBlockLanguage.clear();
+    m_codeFenceChar = QChar::Null;
+    m_skipNextParagraphBlock = false;
+    m_tailStart = -1;
+
+    if (m_doc) {
+        m_doc->clear();
+        m_cursor = QTextCursor(m_doc);
     }
-    case MarkdownOp::InsertBlock: {
-        QTextBlockFormat blkFmt = op.blockFmt.value_or(m_cursor.blockFormat());
-        QTextCharFormat chFmt = op.charFmt.value_or(m_cursor.charFormat());
+}
 
-        if (!m_listStack.isEmpty() && !op.listFmt)
-            blkFmt.setIndent(m_listStack.size());
+// ---------------------------------------------------------------------------
+// AST rendering
+// ---------------------------------------------------------------------------
 
-        if (m_cursor.document()->isEmpty()) {
-            m_cursor.setBlockFormat(blkFmt);
-            m_cursor.setCharFormat(chFmt);
-        } else {
-            m_cursor.insertBlock(blkFmt, chFmt);
-        }
-        if (op.listFmt) {
-            if (!m_listStack.isEmpty()) {
-                QTextList *&list = m_listStack.last();
-                if (!list) {
-                    list = m_cursor.createList(*op.listFmt);
-                } else {
-                    if (!m_cursor.document()->isEmpty())
-                        list->add(m_cursor.block());
+void MarkdownRenderer::renderBlocks(const markus::Document &doc, size_t first, size_t last)
+{
+    clearTailRegion();
+    for (size_t i = first; i < last; ++i)
+        renderBlock(doc, doc.children[i]);
+
+    // The blocks rendered above are now stable. Move the tail boundary to the
+    // end so the renderPendingTail() that runs right after this does not treat
+    // them as the (to-be-replaced) in-progress tail and wipe them out.
+    m_tailStart = documentEndPosition();
+}
+
+void MarkdownRenderer::renderBlock(const markus::Document &doc, const markus::BlockNode &node)
+{
+    std::visit(
+        [&](const auto &n) {
+            using T = std::decay_t<decltype(n)>;
+            if constexpr (std::is_same_v<T, markus::Paragraph>) {
+                handleParagraph();
+                renderInlines(doc, n.children);
+            } else if constexpr (std::is_same_v<T, markus::Heading>) {
+                handleHeading(n.level);
+                renderInlines(doc, n.children);
+                leaveHeading();
+            } else if constexpr (std::is_same_v<T, markus::ThematicBreak>) {
+                handleThematicBreak();
+            } else if constexpr (std::is_same_v<T, markus::CodeBlock>) {
+                handleCodeBlock(n);
+            } else if constexpr (std::is_same_v<T, markus::DetailsBlock>) {
+                renderDetails(doc, n);
+            } else if constexpr (std::is_same_v<T, markus::HtmlBlock>) {
+                renderGenericHtmlBlock(n);
+            } else if constexpr (std::is_same_v<T, markus::BlockQuote>) {
+                handleBlockQuote();
+                renderBlockIds(doc, n.children);
+                leaveBlockQuote();
+            } else if constexpr (std::is_same_v<T, markus::List>) {
+                handleList(n);
+                for (const auto &item : n.items) {
+                    handleItem(item);
+                    renderBlockIds(doc, item.children);
                 }
+                leaveList();
+            } else if constexpr (std::is_same_v<T, markus::ListItem>) {
+                // Items are rendered as part of their List.
+            } else if constexpr (std::is_same_v<T, markus::Table>) {
+                renderTable(doc, n);
             }
-        }
+        },
+        node);
+}
 
-        break;
-    }
-    case MarkdownOp::InsertCodeBlock: {
-        QTextBlockFormat blkFmt = op.blockFmt.value_or(m_cursor.blockFormat());
-        QTextCharFormat chFmt = op.charFmt.value_or(m_cursor.charFormat());
-        if (m_cursor.document()->isEmpty()) {
-            m_cursor.setBlockFormat(blkFmt);
-            m_cursor.setCharFormat(chFmt);
-        } else {
-            m_cursor.insertBlock(blkFmt, chFmt);
-        }
-        if (blkFmt.hasProperty(MarkdownRenderer::BlockCodeIdProp)) {
-            createOverlayForCodeBlock(blkFmt.property(MarkdownRenderer::BlockCodeIdProp).toInt());
-        }
-        break;
-    }
-    case MarkdownOp::InsertHtml:
-        m_cursor.insertHtml(op.content);
-        break;
-    case MarkdownOp::InsertImage: {
-        QTextImageFormat imgFmt;
-        imgFmt.setName(op.content);
-        m_cursor.insertImage(imgFmt);
-        break;
-    }
-    case MarkdownOp::InsertTable:
-        m_tableStack.push(m_cursor.insertTable(op.tableRows, op.tableCols, op.tableFmt));
-        break;
-    case MarkdownOp::InsertTableCell: {
-        if (!m_tableStack.isEmpty()) {
-            QTextTable *table = m_tableStack.last();
-            QTextTableCell cell = table->cellAt(op.cellRow, op.cellCol);
-            if (cell.isValid()) {
-                QTextCursor cellCursor = cell.firstCursorPosition();
+void MarkdownRenderer::renderBlockIds(const markus::Document &doc,
+                                      const std::pmr::vector<markus::BlockNodeId> &ids)
+{
+    for (markus::BlockNodeId id : ids)
+        renderBlock(doc, doc.block_nodes[id]);
+}
 
-                QTextBlockFormat blockFmt = op.blockFmt.value_or(cellCursor.blockFormat());
-                blockFmt.setAlignment(op.cellAlign);
-                cellCursor.setBlockFormat(blockFmt);
-                if (op.charFmt)
-                    cellCursor.setCharFormat(*op.charFmt);
-                cell.setFormat(op.cellBgFmt);
-                m_cursor = cellCursor;
-                if (op.charFmt)
-                    m_cursor.insertText(op.content, *op.charFmt);
-                else
-                    m_cursor.insertText(op.content);
+void MarkdownRenderer::renderInlines(const markus::Document &doc,
+                                     const std::pmr::vector<markus::InlineNodeId> &ids)
+{
+    for (markus::InlineNodeId id : ids)
+        renderInline(doc, id);
+}
+
+void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineNodeId id)
+{
+    const markus::InlineNode &node = doc.inline_nodes[id];
+    std::visit(
+        [&](const auto &n) {
+            using T = std::decay_t<decltype(n)>;
+            if constexpr (std::is_same_v<T, markus::Text>) {
+                m_cursor.insertText(QString::fromUtf8(n.content.data(), n.content.size()));
+            } else if constexpr (std::is_same_v<T, markus::SoftBreak>) {
+                m_cursor.insertText(QStringLiteral(" "));
+            } else if constexpr (std::is_same_v<T, markus::HardBreak>) {
+                m_cursor.insertText(QStringLiteral("\n"));
+            } else if constexpr (std::is_same_v<T, markus::Code>) {
+                handleInlineCode();
+                m_cursor.insertText(fromStdString(n.content));
+                popCharFormat();
+            } else if constexpr (std::is_same_v<T, markus::Emphasis>) {
+                handleEmph();
+                renderInlines(doc, n.children);
+                popCharFormat();
+            } else if constexpr (std::is_same_v<T, markus::Strong>) {
+                handleStrong();
+                renderInlines(doc, n.children);
+                popCharFormat();
+            } else if constexpr (std::is_same_v<T, markus::Strikethrough>) {
+                handleStrikethrough();
+                renderInlines(doc, n.children);
+                popCharFormat();
+            } else if constexpr (std::is_same_v<T, markus::Link>) {
+                handleLink(n);
+                renderInlines(doc, n.children);
+                popCharFormat();
+            } else if constexpr (std::is_same_v<T, markus::Image>) {
+                renderImage(n);
+            } else if constexpr (std::is_same_v<T, markus::HtmlInline>) {
+                m_cursor.insertText(QString::fromUtf8(n.content.data(), n.content.size()));
             }
+        },
+        node);
+}
+
+// ---------------------------------------------------------------------------
+// Held-back tail (live preview of the block that may still grow)
+// ---------------------------------------------------------------------------
+
+int MarkdownRenderer::documentEndPosition() const
+{
+    if (!m_doc)
+        return -1;
+    QTextCursor cursor(m_doc);
+    cursor.movePosition(QTextCursor::End);
+    return cursor.position();
+}
+
+void MarkdownRenderer::renderPendingTail()
+{
+    clearTailRegion();
+
+    // Mark where the in-progress tail starts. This is a plain document
+    // position (not a QTextCursor), because a cursor left at this spot would be
+    // pushed forward to the end by the insertions that follow, and the tail
+    // would then never be cleared.
+    m_tailStart = documentEndPosition();
+
+    const std::string &pending = m_streamParser.pending();
+    if (pending.empty())
+        return;
+
+    markus::Document tailDoc = markus::Parse(pending, m_options);
+    for (const markus::BlockNode &block : tailDoc.children)
+        renderBlock(tailDoc, block);
+}
+
+void MarkdownRenderer::clearTailRegion()
+{
+    if (!m_doc || m_tailStart < 0)
+        return;
+    QTextCursor cursor(m_doc);
+    cursor.setPosition(qBound(0, m_tailStart, documentEndPosition()));
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    if (cursor.hasSelection())
+        cursor.removeSelectedText();
+    pruneStaleCodeBlocks();
+}
+
+void MarkdownRenderer::pruneStaleCodeBlocks()
+{
+    for (auto it = m_codeOverlays.begin(); it != m_codeOverlays.end();) {
+        if (blockForCodeId(it.key()).isValid()) {
+            ++it;
+            continue;
         }
-        break;
-    }
-    case MarkdownOp::InsertThematicBreak:
-        m_cursor.insertBlock(*op.blockFmt);
-        // Insert a zero space character. Not to get removed by a heading cleanup.
-        m_cursor.insertText(ZeroWidthSpace);
-        break;
-    case MarkdownOp::InsertList:
-        m_listStack.push_back(nullptr);
-        break;
-    case MarkdownOp::SetCharFormat:
-        m_cursor.setCharFormat(*op.charFmt);
-        break;
-    case MarkdownOp::SetBlockFormat:
-        m_cursor.setBlockFormat(*op.blockFmt);
-        break;
-    case MarkdownOp::CloseTable:
-        if (!m_tableStack.isEmpty()) {
-            QTextTable *table = m_tableStack.takeLast();
-            m_cursor = table->lastCursorPosition();
-            m_cursor.movePosition(QTextCursor::End);
-        }
-        break;
-    case MarkdownOp::CloseList:
-        if (!m_listStack.isEmpty())
-            m_listStack.removeLast();
-        break;
-    case MarkdownOp::InsertDetails: {
-        QTextBlockFormat blkFmt = op.blockFmt.value_or(m_cursor.blockFormat());
-        m_cursor.insertBlock(blkFmt);
-        m_detailsStartStack.push(m_cursor.block());
-        int secId = blkFmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt();
-        if (!m_toggleDetails.contains(secId))
-            m_toggleDetails.insert(secId, m_expandDetailsByDefault);
-
-        m_cursor.insertHtml(detailsHtmlLabel(op.content, secId, m_expandDetailsByDefault));
-
-        break;
-    }
-    case MarkdownOp::CloseDetails:
-        if (!m_detailsStartStack.isEmpty()) {
-            QTextBlock hiddenStart = m_detailsStartStack.pop();
-            int secId
-                = hiddenStart.blockFormat().property(MarkdownRenderer::DetailsSectionIdProp).toInt();
-            hiddenStart = hiddenStart.next();
-            for (QTextBlock blk = hiddenStart; blk.isValid(); blk = blk.next()) {
-                if (blk.blockFormat().property(MarkdownRenderer::DetailsSectionIdProp).toInt()
-                        == secId
-                    && blk.blockFormat().property(MarkdownRenderer::DetailsToggleBlockProp).isNull()) {
-                    blk.setVisible(m_toggleDetails.value(secId));
-                }
-            }
-        }
-        break;
+        delete it.value();
+        it = m_codeOverlays.erase(it);
     }
 }
 
-int MarkdownRenderer::md_enter_block(MD_BLOCKTYPE type, void *detail, void *userdata)
+// ---------------------------------------------------------------------------
+// Block-level handlers
+// ---------------------------------------------------------------------------
+
+void MarkdownRenderer::beginBlock()
 {
-    auto *ctx = static_cast<MarkdownParserContext *>(userdata);
-    switch (type) {
-    case MD_BLOCK_H:
-        ctx->handleHeading(static_cast<MD_BLOCK_H_DETAIL *>(detail));
-        break;
-    case MD_BLOCK_P:
-        ctx->handleParagraph();
-        break;
-    case MD_BLOCK_QUOTE:
-        ctx->handleBlockQuote();
-        break;
-    case MD_BLOCK_CODE:
-        ctx->handleCodeBlock(static_cast<MD_BLOCK_CODE_DETAIL *>(detail));
-        break;
-    case MD_BLOCK_HR:
-        ctx->handleThematicBreak();
-        break;
-    case MD_BLOCK_UL:
-    case MD_BLOCK_OL:
-        ctx->handleList(type, detail);
-        break;
-    case MD_BLOCK_LI:
-        ctx->handleItem(static_cast<MD_BLOCK_LI_DETAIL *>(detail));
-        break;
-    case MD_BLOCK_TABLE:
-        ctx->handleTable(static_cast<MD_BLOCK_TABLE_DETAIL *>(detail));
-        break;
-    case MD_BLOCK_TR:
-        ctx->handleTableRow();
-        break;
-    case MD_BLOCK_TD:
-    case MD_BLOCK_TH:
-        ctx->handleTableCell(static_cast<MD_BLOCK_TD_DETAIL *>(detail));
-        break;
-    default:
-        break;
-    }
-    return 0;
-}
-
-int MarkdownRenderer::md_leave_block(MD_BLOCKTYPE type, void *detail, void *userdata)
-{
-    auto *ctx = static_cast<MarkdownParserContext *>(userdata);
-
-    if (type == MD_BLOCK_QUOTE) {
-        --ctx->blockQuoteDepth;
-        if (!ctx->textCharFormatStack.isEmpty())
-            ctx->textCharFormatStack.pop();
-    } else if (type == MD_BLOCK_UL || type == MD_BLOCK_OL) {
-        ctx->skipNextParagraph = false;
-        if (!ctx->listStack.isEmpty()) {
-            ctx->listStack.removeLast();
-            ctx->ops.push_back({MarkdownOp::CloseList});
-        }
-    } else if (type == MD_BLOCK_H) {
-        ctx->currentHeadingLevel = 0;
-        if (!ctx->textCharFormatStack.isEmpty())
-            ctx->textCharFormatStack.pop();
-    } else if (type == MD_BLOCK_TABLE) {
-        if (!ctx->tableStack.isEmpty()) {
-            ctx->tableStack.pop();
-            ctx->ops.push_back({MarkdownOp::CloseTable});
-        }
-    } else if (type == MD_BLOCK_CODE) {
-        if (ctx->highlighter) {
-            ctx->highlighter->finish(ctx);
-            ctx->highlighter.reset();
-        }
-        if (!ctx->codeBlockFormatStack.isEmpty())
-            ctx->codeBlockFormatStack.pop();
-        if (!ctx->textCharFormatStack.isEmpty())
-            ctx->textCharFormatStack.pop();
-
-        if (!ctx->ops.isEmpty()) {
-            MarkdownOp spacer = ctx->ops.last();
-            // A newline with a zero space character that is small
-            spacer.content = spacer.content == "\n" ? QString(ZeroWidthSpace)
-                                                    : QString("\n" + ZeroWidthSpace);
-            spacer.charFmt->setFontPointSize(1);
-            ctx->ops.push_back(spacer);
-        }
-    }
-    return 0;
-}
-
-int MarkdownRenderer::md_enter_span(MD_SPANTYPE type, void *detail, void *userdata)
-{
-    auto *ctx = static_cast<MarkdownParserContext *>(userdata);
-    switch (type) {
-    case MD_SPAN_EM:
-        ctx->handleEmph();
-        break;
-    case MD_SPAN_STRONG:
-        ctx->handleStrong();
-        break;
-    case MD_SPAN_DEL:
-        ctx->handleStrikethrough();
-        break;
-    case MD_SPAN_CODE:
-        ctx->handleInlineCode();
-        break;
-    case MD_SPAN_A:
-        ctx->handleLink(static_cast<MD_SPAN_A_DETAIL *>(detail));
-        break;
-    case MD_SPAN_IMG:
-        ctx->handleImage(static_cast<MD_SPAN_IMG_DETAIL *>(detail));
-        break;
-    default:
-        break;
-    }
-    return 0;
-}
-
-int MarkdownRenderer::md_leave_span(MD_SPANTYPE type, void *detail, void *userdata)
-{
-    auto *ctx = static_cast<MarkdownParserContext *>(userdata);
-    if (!ctx->textCharFormatStack.isEmpty())
-        ctx->textCharFormatStack.pop();
-
-    MarkdownOp op{MarkdownOp::SetCharFormat};
-    op.charFmt = QTextCharFormat();
-    if (!ctx->textCharFormatStack.isEmpty())
-        op.charFmt = ctx->textCharFormatStack.top();
-
-    ctx->ops.push_back(op);
-
-    return 0;
-}
-
-int MarkdownRenderer::md_text(MD_TEXTTYPE type, const MD_CHAR *text, MD_SIZE size, void *userdata)
-{
-    auto *ctx = static_cast<MarkdownParserContext *>(userdata);
-    if (type == MD_TEXT_HTML)
-        ctx->handleHtml(QString::fromUtf8(reinterpret_cast<const char *>(text), size));
-    else
-        ctx->handleText(type, text, size);
-
-    return 0;
-}
-
-KSyntaxHighlighting::Repository *MarkdownParserContext::highlightRepository()
-{
-    static KSyntaxHighlighting::Repository *repository = nullptr;
-    if (!repository) {
-        repository = new KSyntaxHighlighting::Repository();
-        const FilePath dir = Core::ICore::resourcePath("generic-highlighter/syntax");
-        if (dir.exists())
-            repository->addCustomSearchPath(dir.parentDir().path());
-        const FilePath userDir = Core::ICore::userResourcePath("generic-highlighter");
-        if (userDir.exists())
-            repository->addCustomSearchPath(userDir.path());
-    }
-    return repository;
-}
-
-KSyntaxHighlighting::Definition MarkdownParserContext::definitionForName(const QString &name)
-{
-    return highlightRepository()->definitionForName(name);
-}
-
-int MarkdownParserContext::getBlockQuoteMargin(int depth) const
-{
-    if (depth <= 0)
-        return 0;
-    int baseIndent = paragraphMargin;
-    int extraPerLevel = 8;
-    return baseIndent + extraPerLevel * (depth - 1);
-}
-
-void MarkdownParserContext::handleHeading(MD_BLOCK_H_DETAIL *detail)
-{
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertHeading;
-    currentHeadingLevel = detail->level;
+    QTextCharFormat charFmt;
+    if (!m_textCharFormatStack.isEmpty())
+        charFmt = m_textCharFormatStack.top();
     QTextBlockFormat blkFmt;
-    blkFmt.setHeadingLevel(currentHeadingLevel);
+    if (!m_listStack.isEmpty())
+        blkFmt.setIndent(m_listStack.size());
+    if (m_detailsSecId)
+        blkFmt.setProperty(DetailsSectionIdProp, m_detailsSecId);
+    if (m_blockQuoteDepth) {
+        blkFmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
+        blkFmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin));
+    }
+    if (m_codeBlock) {
+        blkFmt.setProperty(QTextFormat::BlockCodeLanguage, m_codeBlockLanguage);
+        if (!m_codeFenceChar.isNull()) {
+            blkFmt.setNonBreakableLines(true);
+            blkFmt.setProperty(QTextFormat::BlockCodeFence, QString(m_codeFenceChar));
+        }
+        charFmt.setFont(m_monoFont);
+    } else {
+        blkFmt.setTopMargin(m_paragraphMargin);
+        blkFmt.setBottomMargin(m_paragraphMargin);
+    }
+
+    if (m_cursor.document()->isEmpty()) {
+        m_cursor.setBlockFormat(blkFmt);
+        m_cursor.setCharFormat(charFmt);
+    } else {
+        m_cursor.insertBlock(blkFmt, charFmt);
+    }
+}
+
+void MarkdownRenderer::handleHeading(int level)
+{
+    m_headingLevel = level;
+    beginBlock();
+    QTextBlockFormat blkFmt = m_cursor.blockFormat();
+    blkFmt.setHeadingLevel(level);
     blkFmt.setTopMargin(24);
     blkFmt.setBottomMargin(16);
-    op.blockFmt = blkFmt;
+    m_cursor.setBlockFormat(blkFmt);
 
-    QTextCharFormat chFmt;
+    QTextCharFormat chFmt = m_cursor.charFormat();
     static const double mult[6] = {2.0, 1.5, 1.25, 1.0, 0.875, 0.85};
-    qreal fontSize = baseFontSize * mult[currentHeadingLevel - 1];
-    chFmt.setFontPointSize(fontSize);
+    chFmt.setFontPointSize(m_baseFontSize * mult[level - 1]);
     chFmt.setFontWeight(QFont::Bold);
-    op.charFmt = chFmt;
-
-    ops.push_back(op);
-
-    textCharFormatStack.push(chFmt);
+    // Push the heading's char format so inline markup (e.g. `code`) inherits
+    // the bold, scaled font instead of restarting from the default format.
+    m_textCharFormatStack.push(chFmt);
+    m_cursor.setCharFormat(chFmt);
 }
 
-void MarkdownParserContext::handleParagraph()
+void MarkdownRenderer::leaveHeading()
 {
-    if (skipNextParagraph) {
-        skipNextParagraph = false;
+    if (!m_textCharFormatStack.isEmpty())
+        m_textCharFormatStack.pop();
+    if (!m_textCharFormatStack.isEmpty())
+        m_cursor.setCharFormat(m_textCharFormatStack.top());
+    else
+        m_cursor.setCharFormat(QTextCharFormat());
+    m_headingLevel = 0;
+}
+
+void MarkdownRenderer::handleParagraph()
+{
+    if (m_skipNextParagraphBlock) {
+        m_skipNextParagraphBlock = false;
         return;
     }
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertBlock;
-    QTextBlockFormat blkFmt;
+
+    beginBlock();
+    QTextBlockFormat blkFmt = m_cursor.blockFormat();
     blkFmt.setTopMargin(0);
     blkFmt.setBottomMargin(10);
-    if (blockQuoteDepth > 0) {
-        blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteDepth);
-        blkFmt.setLeftMargin(getBlockQuoteMargin(blockQuoteDepth));
-    }
-    op.blockFmt = blkFmt;
-    op.charFmt = QTextCharFormat();
-    ops.push_back(op);
+    m_cursor.setBlockFormat(blkFmt);
 }
 
-void MarkdownParserContext::handleBlockQuote()
+void MarkdownRenderer::handleBlockQuote()
 {
-    ++blockQuoteDepth;
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
-    fmt.setForeground(colorMap[MarkdownRenderer::BlockquoteText]);
-    textCharFormatStack.push(fmt);
+    ++m_blockQuoteDepth;
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
+    fmt.setForeground(color(BlockquoteText));
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
 
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertBlock;
-
-    QTextBlockFormat blkFmt;
-    blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteDepth);
-    blkFmt.setTopMargin(paragraphMargin);
-    blkFmt.setBottomMargin(paragraphMargin);
-    blkFmt.setLeftMargin(getBlockQuoteMargin(blockQuoteDepth));
-
-    op.blockFmt = blkFmt;
-    op.charFmt = fmt;
-    ops.push_back(op);
-    skipNextParagraph = true;
+    beginBlock();
+    QTextBlockFormat blkFmt = m_cursor.blockFormat();
+    blkFmt.setLeftMargin(m_baseFontSize);
+    m_cursor.setBlockFormat(blkFmt);
+    m_skipNextParagraphBlock = true;
 }
 
-void MarkdownParserContext::handleCodeBlock(MD_BLOCK_CODE_DETAIL *detail)
+void MarkdownRenderer::leaveBlockQuote()
 {
-    QString codeBlockLanguage = mdAttrToString(detail->lang);
-    QChar codeFenceChar = detail->fence_char ? QChar::fromLatin1(detail->fence_char) : QChar::Null;
+    --m_blockQuoteDepth;
+    if (!m_textCharFormatStack.isEmpty())
+        m_textCharFormatStack.pop();
+    if (!m_textCharFormatStack.isEmpty())
+        m_cursor.setCharFormat(m_textCharFormatStack.top());
+    else
+        m_cursor.setCharFormat(QTextCharFormat());
+}
 
-    highlighter = std::make_unique<SyntaxHighlighter>();
-    highlighter->setDefinition(definitionForName(codeBlockLanguage));
+void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
+{
+    m_codeBlock = true;
+    m_codeBlockLanguage = languageFromInfoString(code);
+    m_codeFenceChar = code.fence_char ? QChar::fromLatin1(code.fence_char) : QChar::Null;
+    beginBlock();
 
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertCodeBlock;
-    int blockId = ++nextCodeBlockId;
-    QTextBlockFormat blkFmt;
-    blkFmt.setProperty(MarkdownRenderer::BlockCodeIdProp, blockId);
-    blkFmt.setLineHeight(70, QTextBlockFormat::ProportionalHeight);
-    blkFmt.setAlignment(Qt::AlignVCenter);
-    blkFmt.setTopMargin(paragraphMargin);
-    blkFmt.setBottomMargin(paragraphMargin);
-
-    blkFmt.setProperty(QTextFormat::BlockCodeLanguage, codeBlockLanguage);
-    if (blockQuoteDepth > 0) {
-        blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteDepth);
-        blkFmt.setLeftMargin(getBlockQuoteMargin(blockQuoteDepth) + paragraphMargin);
+    int blockId = ++m_nextCodeBlockId;
+    QTextBlock first = m_cursor.block();
+    QTextBlockFormat fmt = first.blockFormat();
+    fmt.setProperty(BlockCodeIdProp, blockId);
+    fmt.setLineHeight(70, QTextBlockFormat::ProportionalHeight);
+    fmt.setAlignment(Qt::AlignVCenter);
+    // Qt creates one block per code line and inherits this format, so the
+    // per-line top/bottom margins produce the vertical spacing between lines.
+    fmt.setTopMargin(m_paragraphMargin);
+    fmt.setBottomMargin(m_paragraphMargin);
+    fmt.setProperty(QTextFormat::BlockCodeLanguage, m_codeBlockLanguage);
+    if (m_blockQuoteDepth > 0) {
+        fmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
+        fmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin)
+                          + m_paragraphMargin);
     } else {
-        blkFmt.setLeftMargin(paragraphMargin);
+        fmt.setLeftMargin(m_paragraphMargin);
+    }
+    if (!m_listStack.isEmpty())
+        fmt.setIndent(m_listStack.size());
+    if (!m_codeFenceChar.isNull()) {
+        fmt.setNonBreakableLines(true);
+        fmt.setProperty(QTextFormat::BlockCodeFence, QString(m_codeFenceChar));
+    }
+    m_cursor.setBlockFormat(fmt);
+
+    QTextCharFormat baseCharFmt = m_cursor.charFormat();
+    baseCharFmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
+    baseCharFmt.setFontFixedPitch(true);
+    baseCharFmt.setFontPointSize(m_baseFontSize * 0.90);
+    m_cursor.setCharFormat(baseCharFmt);
+
+    const QString content = fromStdString(code.content);
+
+    // Invisible 1pt zero-width spacer lines at the top and bottom of the
+    // block keep the code away from the edges of the rounded background.
+    // They are part of the code block (same block id) and are stripped from
+    // copies by collectCodeById().
+    QTextCharFormat spacerFmt = baseCharFmt;
+    spacerFmt.setFontPointSize(1);
+    m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
+
+    QVector<HighlightFragment> fragments;
+    SyntaxHighlighter highlighter;
+    highlighter.setDefinition(syntaxDefinitionForName(m_codeBlockLanguage));
+    highlighter.highlight(content, baseCharFmt, fragments);
+    if (fragments.isEmpty()) {
+        m_cursor.insertText(content);
+    } else {
+        for (const HighlightFragment &fragment : fragments)
+            m_cursor.insertText(fragment.text, fragment.format);
     }
 
-    if (!listStack.isEmpty())
-        blkFmt.setIndent(listStack.size());
+    // Same zero-width space for the bottom.
+    m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
 
-    if (!codeFenceChar.isNull()) {
-        blkFmt.setNonBreakableLines(true);
-        blkFmt.setProperty(QTextFormat::BlockCodeFence, QString(codeFenceChar));
-    }
+    m_codeBlock = false;
+    m_codeBlockLanguage.clear();
+    m_codeFenceChar = QChar::Null;
 
-    codeBlockFormatStack.push(blkFmt);
-
-    QTextCharFormat charFmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                            : textCharFormatStack.top();
-    charFmt.setFont(monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
-    charFmt.setFontFixedPitch(true);
-    charFmt.setFontPointSize(baseFontSize * 0.90);
-    textCharFormatStack.push(charFmt);
-
-    op.blockFmt = blkFmt;
-    op.charFmt = charFmt;
-    ops.push_back(op);
+    createOverlayForCodeBlock(blockId);
 }
 
-void MarkdownParserContext::handleThematicBreak()
+void MarkdownRenderer::handleThematicBreak()
 {
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertThematicBreak;
-    QTextBlockFormat blkFmt;
-    blkFmt.setProperty(MarkdownRenderer::HorizontalRulerIdProp, 1);
-    blkFmt.setTopMargin(paragraphMargin);
-    blkFmt.setBottomMargin(paragraphMargin);
-    if (blockQuoteDepth > 0) {
-        blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteDepth);
-        blkFmt.setLeftMargin(getBlockQuoteMargin(blockQuoteDepth));
-    }
-    op.blockFmt = blkFmt;
-    ops.push_back(op);
+    beginBlock();
+    QTextBlockFormat blkFmt = m_cursor.blockFormat();
+    blkFmt.setProperty(HorizontalRulerIdProp, 1);
+    m_cursor.setBlockFormat(blkFmt);
+    // Insert a zero space character so the block keeps its height.
+    m_cursor.insertText(ZeroWidthSpace);
 }
 
-void MarkdownParserContext::handleList(MD_BLOCKTYPE type, void *detail)
+void MarkdownRenderer::handleList(const markus::List &list)
 {
     ListState ls;
-    ls.fmt.setIndent(listStack.size());
-    if (type == MD_BLOCK_UL) {
-        auto *d = static_cast<MD_BLOCK_UL_DETAIL *>(detail);
-        ls.fmt.setStyle(d->mark == '*' ? QTextListFormat::ListCircle
-                                       : (d->mark == '+' ? QTextListFormat::ListSquare
-                                                         : QTextListFormat::ListDisc));
+    ls.list = nullptr;
+    ls.fmt.setIndent(m_listStack.size());
+    if (!list.is_ordered) {
+        ls.fmt.setStyle(list.bullet_char == '*' ? QTextListFormat::ListCircle
+                                                : (list.bullet_char == '+'
+                                                       ? QTextListFormat::ListSquare
+                                                       : QTextListFormat::ListDisc));
     } else {
-        auto *d = static_cast<MD_BLOCK_OL_DETAIL *>(detail);
-        ls.fmt.setStyle(listStack.isEmpty() ? QTextListFormat::ListDecimal
-                                            : QTextListFormat::ListLowerRoman);
-        ls.fmt.setStart(d->start);
+        ls.fmt.setStyle(m_listStack.isEmpty() ? QTextListFormat::ListDecimal
+                                              : QTextListFormat::ListLowerRoman);
+        ls.fmt.setStart(list.start);
     }
-    listStack.append(ls);
-
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertList;
-    op.listFmt = ls.fmt;
-    ops.push_back(op);
+    m_listStack.append(ls);
 }
 
-void MarkdownParserContext::handleItem(MD_BLOCK_LI_DETAIL *detail)
+void MarkdownRenderer::leaveList()
 {
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertBlock;
-    skipNextParagraph = true;
-    QTextBlockFormat blkFmt;
-    blkFmt.setTopMargin(static_cast<int>(baseFontSize * 0.25));
-    blkFmt.setBottomMargin(paragraphMargin);
-    if (blockQuoteDepth > 0) {
-        blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteDepth);
-        blkFmt.setLeftMargin(getBlockQuoteMargin(blockQuoteDepth) + indentWidth);
-    }
-    if (detail->is_task) {
-        blkFmt.setMarker(detail->task_mark == 'x' || detail->task_mark == 'X'
-                             ? QTextBlockFormat::MarkerType::Checked
-                             : QTextBlockFormat::MarkerType::Unchecked);
-    }
-    op.charFmt = textCharFormatStack.isEmpty() ? QTextCharFormat() : textCharFormatStack.top();
-
-    if (!listStack.isEmpty()) {
-        op.listFmt = listStack.last().fmt;
-        blkFmt.setLeftMargin(paragraphMargin + indentWidth);
-    }
-    op.blockFmt = blkFmt;
-    ops.push_back(op);
+    if (!m_listStack.isEmpty())
+        m_listStack.removeLast();
+    m_skipNextParagraphBlock = false;
 }
 
-void MarkdownParserContext::handleText(MD_TEXTTYPE type, const MD_CHAR *text, MD_SIZE size)
+void MarkdownRenderer::handleItem(const markus::ListItem &item)
 {
-    QString str = QString::fromUtf8(reinterpret_cast<const char *>(text), size);
-    if (type == MD_TEXT_BR) {
-        ops.push_back({MarkdownOp::InsertText, "\n"});
-    } else if (type == MD_TEXT_SOFTBR) {
-        ops.push_back({MarkdownOp::InsertText, " "});
-    } else if (type == MD_TEXT_NORMAL) {
-        MarkdownOp op{MarkdownOp::InsertText, str};
-        if (!textCharFormatStack.isEmpty())
-            op.charFmt = textCharFormatStack.top();
-        ops.push_back(op);
-    } else if (type == MD_TEXT_CODE) {
-        if (!ops.isEmpty() && ops.last().type == MarkdownOp::InsertCodeBlock) {
-            MarkdownOp spacer{MarkdownOp::InsertCode};
-            // A newline with a zero space character that is small
-            spacer.content = MarkdownRenderer::ZeroWidthSpace + "\n";
-            spacer.charFmt = !textCharFormatStack.isEmpty() ? textCharFormatStack.top()
-                                                            : QTextCharFormat();
-            if (!codeBlockFormatStack.isEmpty())
-                spacer.blockFmt = codeBlockFormatStack.top();
-            spacer.charFmt->setFontPointSize(1);
-            ops.push_back(spacer);
-        }
+    beginBlock();
+    m_skipNextParagraphBlock = true;
+    QTextBlockFormat blkFmt = m_cursor.blockFormat();
+    blkFmt.setTopMargin(static_cast<int>(m_baseFontSize * 0.25));
+    blkFmt.setBottomMargin(0);
+    if (item.is_tasklist)
+        blkFmt.setMarker(item.tasklist_checked ? QTextBlockFormat::MarkerType::Checked
+                                               : QTextBlockFormat::MarkerType::Unchecked);
+    m_cursor.setBlockFormat(blkFmt);
 
-        if (highlighter) {
-            // Use the syntax highlighter to generate ops instead of a single InsertCode
-            highlighter->processChunk(str, this);
+    if (!m_listStack.isEmpty()) {
+        ListState &ls = m_listStack.last();
+        if (!ls.list) {
+            ls.list = m_cursor.createList(ls.fmt);
         } else {
-            // Fallback if highlighter isn't ready
-            MarkdownOp op{MarkdownOp::InsertCode, str};
-            if (!textCharFormatStack.isEmpty())
-                op.charFmt = textCharFormatStack.top();
-            if (!codeBlockFormatStack.isEmpty())
-                op.blockFmt = codeBlockFormatStack.top();
-            ops.push_back(op);
+            if (!m_cursor.document()->isEmpty())
+                ls.list->add(m_cursor.block());
         }
-    } else if (type == MD_TEXT_HTML) {
-        ops.push_back({MarkdownOp::InsertHtml, str});
     }
 }
 
-void MarkdownParserContext::handleEmph()
+void MarkdownRenderer::renderDetails(const markus::Document &doc,
+                                     const markus::DetailsBlock &details)
 {
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
-    fmt.setFontItalic(true);
-    textCharFormatStack.push(fmt);
+    int secId = ++m_nextDetailsId;
+    if (!m_toggleDetails.contains(secId))
+        m_toggleDetails.insert(secId, m_expandDetailsByDefault);
+    const bool visible = m_toggleDetails.value(secId);
+    const QString summary = fromStdString(details.summary);
 
-    MarkdownOp op{MarkdownOp::SetCharFormat};
-    op.charFmt = fmt;
-    ops.push_back(op);
-}
+    // Summary (toggle) block.
+    // Note: insertHtml() on an empty block clobbers the block format, so the
+    // format with the details properties must be applied *after* the insert.
+    beginBlock();
+    m_cursor.insertHtml(detailsHtmlLabel(summary, secId, visible));
+    QTextBlockFormat sumFmt = m_cursor.blockFormat();
+    sumFmt.setProperty(DetailsSectionIdProp, secId);
+    sumFmt.setProperty(DetailsToggleBlockProp, true);
+    sumFmt.setProperty(DetailsSummaryTextProp, summary);
+    m_cursor.setBlockFormat(sumFmt);
+    QTextBlock toggleBlock = m_cursor.block();
 
-void MarkdownParserContext::handleStrong()
-{
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
-    fmt.setFontWeight(QFont::Bold);
-    textCharFormatStack.push(fmt);
+    // Content: markdown blocks that markus parsed from the section body.
+    // While rendering them, m_detailsSecId makes beginBlock() tag every inner
+    // block with the section id and the extra quote level indents the content
+    // (and makes paintEvent() draw the quote line).
+    const int prevSecId = m_detailsSecId;
+    m_detailsSecId = secId;
+    const int prevQuoteDepth = m_blockQuoteDepth;
+    m_blockQuoteDepth += 1;
 
-    MarkdownOp op{MarkdownOp::SetCharFormat};
-    op.charFmt = fmt;
-    ops.push_back(op);
-}
+    QTextCharFormat quoteCharFmt;
+    quoteCharFmt.setForeground(color(BlockquoteText));
+    m_textCharFormatStack.push(quoteCharFmt);
 
-void MarkdownParserContext::handleInlineCode()
-{
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
-    fmt.setFont(monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
-    fmt.setFontFixedPitch(true);
-    if (currentHeadingLevel == 0) {
-        fmt.setBackground(colorMap[MarkdownRenderer::InlineCodeBackground]);
-        fmt.setFontPointSize(baseFontSize * 0.90);
+    renderBlockIds(doc, details.children);
+
+    m_textCharFormatStack.pop();
+    m_blockQuoteDepth = prevQuoteDepth;
+    m_detailsSecId = prevSecId;
+
+    for (QTextBlock blk = toggleBlock.next(); blk.isValid(); blk = blk.next()) {
+        // Blocks of a nested section carry their own id and were already
+        // shown/hidden by that section's renderDetails().
+        if (blk.blockFormat().property(DetailsSectionIdProp).toInt() != secId)
+            continue;
+        if (!blk.blockFormat().property(DetailsToggleBlockProp).toBool())
+            blk.setVisible(visible);
     }
-    textCharFormatStack.push(fmt);
-
-    MarkdownOp op{MarkdownOp::SetCharFormat};
-    op.charFmt = fmt;
-    ops.push_back(op);
 }
 
-void MarkdownParserContext::handleLink(MD_SPAN_A_DETAIL *detail)
+void MarkdownRenderer::renderGenericHtmlBlock(const markus::HtmlBlock &block)
 {
-    QString href = QString::fromUtf8(detail->href.text, detail->href.size);
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
-    fmt.setAnchor(true);
-    fmt.setAnchorHref(href);
-    fmt.setForeground(colorMap[MarkdownRenderer::Link]);
-    fmt.setFontUnderline(false);
-    if (detail->title.size > 0)
-        fmt.setToolTip(QString::fromUtf8(detail->title.text, detail->title.size));
-    textCharFormatStack.push(fmt);
-
-    MarkdownOp op{MarkdownOp::SetCharFormat};
-    op.charFmt = fmt;
-    ops.push_back(op);
+    QString text = fromStdString(block.content);
+    if (text.endsWith('\n'))
+        text.chop(1);
+    if (text.trimmed().isEmpty())
+        return;
+    beginBlock();
+    m_cursor.insertText(text);
 }
 
-void MarkdownParserContext::handleImage(MD_SPAN_IMG_DETAIL *detail)
+void MarkdownRenderer::renderTable(const markus::Document &doc, const markus::Table &table)
 {
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertImage;
-    op.content = mdAttrToString(detail->src);
-    ops.push_back(op);
-}
+    const int rows = static_cast<int>(table.rows.size());
+    const int cols = static_cast<int>(table.alignments.size());
 
-void MarkdownParserContext::handleTable(MD_BLOCK_TABLE_DETAIL *detail)
-{
     QTextTableFormat tblFmt;
     tblFmt.setBorder(1);
     tblFmt.setBorderStyle(QTextFrameFormat::BorderStyle_Solid);
-    tblFmt.setBorderBrush(QBrush(colorMap[MarkdownRenderer::TableBorder]));
+    tblFmt.setBorderBrush(QBrush(color(TableBorder)));
     tblFmt.setCellPadding(6);
     tblFmt.setCellSpacing(0);
     tblFmt.setTopMargin(10);
     tblFmt.setBottomMargin(10);
 
+    QTextTable *qtTable = m_cursor.insertTable(rows, cols, tblFmt);
+
     TableState ts;
-    ts.rows = detail->body_row_count + detail->head_row_count;
-    ts.cols = detail->col_count;
+    ts.qtTable = qtTable;
+    ts.columns = cols;
+    ts.colAlign.resize(cols);
+    for (int i = 0; i < cols; ++i) {
+        switch (table.alignments[i]) {
+        case markus::TableAlign::kCenter:
+            ts.colAlign[i] = Qt::AlignHCenter;
+            break;
+        case markus::TableAlign::kRight:
+            ts.colAlign[i] = Qt::AlignRight;
+            break;
+        default:
+            ts.colAlign[i] = Qt::AlignLeft;
+            break;
+        }
+    }
     ts.curRow = -1;
     ts.curCol = -1;
-    ts.colAlign.fill(Qt::AlignLeft, ts.cols);
-    tableStack.push_back(ts);
+    m_tableStack.append(ts);
 
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertTable;
-    op.tableRows = ts.rows;
-    op.tableCols = ts.cols;
-    op.tableFmt = tblFmt;
-    ops.push_back(op);
+    for (const auto &row : table.rows) {
+        TableState &s = m_tableStack.last();
+        ++s.curRow;
+        s.header = row.is_header;
+        s.curCol = -1;
+        for (const auto &cell : row.cells) {
+            ++s.curCol;
+
+            QTextTableCell qtCell = s.qtTable->cellAt(s.curRow, s.curCol);
+            if (!qtCell.isValid())
+                continue;
+
+            QTextCursor cellCursor = qtCell.firstCursorPosition();
+            QTextBlockFormat blkFmt = cellCursor.blockFormat();
+            blkFmt.setAlignment(s.colAlign.value(s.curCol, Qt::AlignLeft));
+            cellCursor.setBlockFormat(blkFmt);
+
+            if (s.header) {
+                QTextCharFormat fmt = cellCursor.charFormat();
+                fmt.setFontWeight(QFont::Bold);
+                cellCursor.setCharFormat(fmt);
+            } else {
+                QTextCharFormat cellFmt = qtCell.format();
+                cellFmt.setBackground(s.curRow % 2 == 1 ? color(TableOddRow)
+                                                        : color(TableEvenRow));
+                qtCell.setFormat(cellFmt);
+            }
+            m_cursor = cellCursor;
+            renderInlines(doc, cell.children);
+        }
+    }
+
+    TableState done = m_tableStack.takeLast();
+    m_cursor = done.qtTable->lastCursorPosition();
+    m_cursor.movePosition(QTextCursor::End);
 }
 
-void MarkdownParserContext::handleTableRow()
+void MarkdownRenderer::renderImage(const markus::Image &img)
 {
-    auto &ts = tableStack.last();
-    ts.curRow++;
-    ts.curCol = -1;
+    QTextImageFormat imgFmt;
+    imgFmt.setName(fromStdString(img.destination));
+    if (!img.title.empty())
+        imgFmt.setToolTip(fromStdString(img.title));
+    m_cursor.insertImage(imgFmt);
 }
 
-void MarkdownParserContext::handleTableCell(MD_BLOCK_TD_DETAIL *detail)
+// ---------------------------------------------------------------------------
+// Inline handlers
+// ---------------------------------------------------------------------------
+
+void MarkdownRenderer::handleEmph()
 {
-    auto &ts = tableStack.last();
-    ts.curCol++;
-    MarkdownOp op;
-    op.type = MarkdownOp::InsertTableCell;
-    op.charFmt = QTextCharFormat();
-    op.cellRow = ts.curRow;
-    op.cellCol = ts.curCol;
-    op.cellAlign = (detail->align == MD_ALIGN_CENTER)
-                       ? Qt::AlignHCenter
-                       : (detail->align == MD_ALIGN_RIGHT ? Qt::AlignRight : Qt::AlignLeft);
-    if (ts.curRow < 1)
-        op.charFmt->setFontWeight(QFont::Bold);
-    else
-        op.cellBgFmt.setBackground(ts.curRow % 2 == 1 ? colorMap[MarkdownRenderer::TableOddRow]
-                                                      : colorMap[MarkdownRenderer::TableEvenRow]);
-    ops.push_back(op);
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
+    fmt.setFontItalic(true);
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
 }
 
-void MarkdownParserContext::handleStrikethrough()
+void MarkdownRenderer::handleStrong()
 {
-    QTextCharFormat fmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                        : textCharFormatStack.top();
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
+    fmt.setFontWeight(QFont::Bold);
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
+}
+
+void MarkdownRenderer::handleStrikethrough()
+{
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
     fmt.setFontStrikeOut(true);
-    textCharFormatStack.push(fmt);
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
 }
 
-void MarkdownParserContext::handleHtml(const QString &html)
+void MarkdownRenderer::handleInlineCode()
 {
-    static const QRegularExpression detailsRegex(
-        R"(<details(?:\s+[^>]*)?>(?:<summary(?:\s+[^>]*)?>([\s\S]*?)<\/summary>)?([\s\S]*?)(?:<\/details>|$))",
-        QRegularExpression::CaseInsensitiveOption);
-
-    static const QRegularExpression closeDetailsRegex(R"(<\/details>)",
-                                                      QRegularExpression::CaseInsensitiveOption);
-
-    if (html.contains(QRegularExpression("<details", QRegularExpression::CaseInsensitiveOption))) {
-        QRegularExpressionMatch match = detailsRegex.match(html);
-        if (match.hasMatch()) {
-            QString summaryText = match.captured(1).trimmed();
-            QString bodyText = match.captured(2);
-
-            int secId = ++nextDetailsId;
-            QTextBlockFormat sumFmt;
-            sumFmt.setProperty(MarkdownRenderer::DetailsSectionIdProp, secId);
-            sumFmt.setProperty(MarkdownRenderer::DetailsToggleBlockProp, true);
-            sumFmt.setProperty(MarkdownRenderer::DetailsSummaryTextProp, summaryText);
-
-            MarkdownOp op{MarkdownOp::InsertDetails};
-            op.blockFmt = sumFmt;
-            op.content = summaryText.isEmpty() ? "Details" : summaryText;
-            detailsIdStack.push(secId);
-
-            ops.push_back(op);
-
-            if (!bodyText.isEmpty()) {
-                QTextBlockFormat blkFmt;
-                blkFmt.setProperty(MarkdownRenderer::DetailsSectionIdProp, secId);
-
-                MarkdownOp op{MarkdownOp::InsertBlock};
-                op.blockFmt = blkFmt;
-                ops.push_back(op);
-
-                MarkdownOp textOp{MarkdownOp::InsertText, bodyText};
-                textOp.charFmt = textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                               : textCharFormatStack.top();
-                textOp.blockFmt = blkFmt;
-                ops.push_back(textOp);
-            }
-
-            return;
-        }
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
+    fmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
+    fmt.setFontFixedPitch(true);
+    // Inside a heading, keep the heading's font size and skip the inline-code
+    // background so the code stays bold and scales with the heading.
+    if (m_headingLevel == 0) {
+        fmt.setBackground(color(InlineCodeBackground));
+        fmt.setFontPointSize(m_baseFontSize * 0.90);
     }
-
-    if (html.contains(closeDetailsRegex)) {
-        if (!detailsIdStack.isEmpty()) {
-            QString secId = QString::number(detailsIdStack.pop());
-
-            int blockQuoteLevel = blockQuoteDepth + 1;
-
-            MarkdownOp closeDetailsOp{MarkdownOp::CloseDetails};
-            closeDetailsOp.blockFmt = QTextBlockFormat();
-            closeDetailsOp.blockFmt->setProperty(MarkdownRenderer::DetailsSectionIdProp, secId);
-            ops.push_back(closeDetailsOp);
-
-            auto insertIt = std::find_if(ops.begin(), ops.end(), [secId](const MarkdownOp &op) {
-                return op.type == MarkdownOp::InsertDetails
-                       && op.blockFmt->property(MarkdownRenderer::DetailsSectionIdProp).toString()
-                              == secId;
-            });
-            auto closeIt = std::find_if(ops.begin(), ops.end(), [secId](const MarkdownOp &op) {
-                return op.type == MarkdownOp::CloseDetails
-                       && op.blockFmt->property(MarkdownRenderer::DetailsSectionIdProp).toString()
-                              == secId;
-            });
-
-            for (auto it = ++insertIt; it != closeIt; ++it) {
-                if (it->blockFmt) {
-                    QTextBlockFormat blkFmt = *it->blockFmt;
-                    blkFmt.setProperty(MarkdownRenderer::DetailsSectionIdProp, secId);
-                    blkFmt.setProperty(QTextFormat::BlockQuoteLevel, blockQuoteLevel);
-
-                    blkFmt.setTopMargin(paragraphMargin);
-                    blkFmt.setBottomMargin(paragraphMargin);
-
-                    int baseIndent = paragraphMargin;
-                    int extraPerLevel = 8;
-                    blkFmt.setLeftMargin(baseIndent + extraPerLevel * blockQuoteLevel);
-
-                    it->blockFmt = blkFmt;
-                }
-
-                if (it->charFmt)
-                    it->charFmt->setForeground(colorMap[MarkdownRenderer::BlockquoteText]);
-
-                if (it->listFmt)
-                    it->listFmt->setIndent(blockQuoteLevel);
-            }
-        }
-
-        return;
-    }
-
-    ops.push_back({MarkdownOp::InsertHtml, html});
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
 }
 
-QString MarkdownParserContext::mdAttrToString(const MD_ATTRIBUTE &attr)
+void MarkdownRenderer::handleLink(const markus::Link &link)
 {
-    return QString::fromUtf8(attr.text, attr.size);
+    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                          : m_textCharFormatStack.top();
+    fmt.setAnchor(true);
+    fmt.setAnchorHref(fromStdString(link.destination));
+    fmt.setForeground(color(Link));
+    fmt.setFontUnderline(false);
+    if (!link.title.empty())
+        fmt.setToolTip(fromStdString(link.title));
+    m_textCharFormatStack.push(fmt);
+    m_cursor.setCharFormat(fmt);
 }
+
+void MarkdownRenderer::popCharFormat()
+{
+    if (!m_textCharFormatStack.isEmpty())
+        m_textCharFormatStack.pop();
+
+    if (!m_textCharFormatStack.isEmpty())
+        m_cursor.setCharFormat(m_textCharFormatStack.top());
+    else
+        m_cursor.setCharFormat(QTextCharFormat());
+}
+
+QString MarkdownRenderer::languageFromInfoString(const markus::CodeBlock &code)
+{
+    const auto &info = code.info_string;
+    size_t end = info.find_first_of(" \t");
+    std::string_view lang = (end == std::string_view::npos) ? std::string_view(info)
+                                                            : std::string_view(info).substr(0, end);
+    return QString::fromUtf8(lang.data(), lang.size());
+}
+
+int MarkdownRenderer::getBlockQuoteMargin(int depth, int paragraphMargin)
+{
+    if (depth <= 0)
+        return 0;
+    const int extraPerLevel = 8;
+    return paragraphMargin + extraPerLevel * (depth - 1);
+}
+
+// ---------------------------------------------------------------------------
+// Details sections
+// ---------------------------------------------------------------------------
 
 void MarkdownRenderer::toggleSection(int secId)
 {
@@ -956,12 +809,16 @@ void MarkdownRenderer::toggleSection(int secId)
             // Retrieve the original summary text we stored earlier
             QString summary = blk.blockFormat().property(DetailsSummaryTextProp).toString();
             if (summary.isEmpty())
-                summary = tr("Details");
+                summary = Tr::tr("Details");
 
+            // insertHtml() clobbers the block format, so re-apply it (it
+            // carries the details section id / toggle properties).
+            const QTextBlockFormat blkFmt = blk.blockFormat();
             QTextCursor cursor(blk);
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.insertHtml(detailsHtmlLabel(summary, secId, makeVisible));
+            cursor.setBlockFormat(blkFmt);
 
             break;
         }
@@ -977,7 +834,7 @@ void MarkdownRenderer::toggleSection(int secId)
     updateGeometry();
 }
 
-QString MarkdownRenderer::detailsHtmlLabel(const QString &summary, int secId, bool isVisible)
+QString MarkdownRenderer::detailsHtmlLabel(const QString &summary, int secId, bool isVisible) const
 {
     QString icon = isVisible ? "M" : "N";
     QString label = QString(
@@ -989,6 +846,10 @@ QString MarkdownRenderer::detailsHtmlLabel(const QString &summary, int secId, bo
                         .arg(icon);
     return label;
 }
+
+// ---------------------------------------------------------------------------
+// Code block overlays
+// ---------------------------------------------------------------------------
 
 QPointF MarkdownRenderer::contentOffset() const
 {
@@ -1028,7 +889,8 @@ void MarkdownRenderer::setupDocumentSettings()
     m_baseFontSize = m_baseFont.pointSizeF();
     m_paragraphMargin = m_baseFontSize * 2 / 3;
 
-    document()->setTextWidth(viewport()->width());
+    if (viewport()->width() > 0)
+        document()->setTextWidth(viewport()->width());
     updateGeometry();
 }
 
@@ -1081,23 +943,23 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
     overlay->setStyleSheet(QString("QWidget { background: %1; }"
-                                   "QToolButton { "
-                                   "  background: %2; "
-                                   "  border: 1px solid %3; "
-                                   "  border-radius: 6px; "
-                                   "  padding: 4px -2px; "
-                                   "  font-family: heroicons_outline; "
-                                   "  font-size: 14px; "
-                                   "  color: %4; "
-                                   "} "
-                                   "QToolButton:hover { "
-                                   "  background-color: %5; "
-                                   "}")
-                               .arg(colorToRgba(color(OverlayBackground)))
-                               .arg(colorToRgba(color(OverlayButtonBackground)))
-                               .arg(color(OverlayButtonBorder).name())
-                               .arg(colorToRgba(color(TextForeground)))
-                               .arg(color(OverlayButtonBackgroundHover).name()));
+                                    "QToolButton { "
+                                    "  background: %2; "
+                                    "  border: 1px solid %3; "
+                                    "  border-radius: 6px; "
+                                    "  padding: 4px -2px; "
+                                    "  font-family: heroicons_outline; "
+                                    "  font-size: 14px; "
+                                    "  color: %4; "
+                                    "} "
+                                    "QToolButton:hover { "
+                                    "  background-color: %5; "
+                                    "}")
+                                .arg(colorToRgba(color(OverlayBackground)))
+                                .arg(colorToRgba(color(OverlayButtonBackground)))
+                                .arg(color(OverlayButtonBorder).name())
+                                .arg(colorToRgba(color(TextForeground)))
+                                .arg(color(OverlayButtonBackgroundHover).name()));
 
     QHBoxLayout *hl = new QHBoxLayout(overlay);
     hl->setContentsMargins(0, 0, 5, 0);
@@ -1139,14 +1001,17 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
     m_codeOverlays.insert(blockId, overlay);
 }
 
+// ---------------------------------------------------------------------------
+// Painting
+// ---------------------------------------------------------------------------
+
 void MarkdownRenderer::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(viewport());
     const QRectF visibleRect = viewport()->rect();
     QMap<int, QRectF> codeBlocksRects = collectBlockRects(BlockCodeIdProp);
-    const int codePadding = m_paragraphMargin;
     const int radius = 6;
-    for (const QRectF &blkRect : std::as_const(codeBlocksRects)) {
+    for (const QRectF &blkRect : codeBlocksRects) {
         QRectF viewRect = blkRect.translated(contentOffset());
         if (!viewRect.intersects(visibleRect))
             continue;
@@ -1190,8 +1055,8 @@ void MarkdownRenderer::paintEvent(QPaintEvent *ev)
     }
 
     auto drawQuoteLine = [this, visibleRect, &painter](int depth,
-                                                       const QTextBlock &segmentStart,
-                                                       const QTextBlock &lastInSegment) {
+                                                        const QTextBlock &segmentStart,
+                                                        const QTextBlock &lastInSegment) {
         QRectF startRect = blockBoundingRect(segmentStart);
         QRectF endRect = blockBoundingRect(lastInSegment);
 
@@ -1281,6 +1146,10 @@ void MarkdownRenderer::resizeEvent(QResizeEvent *event)
     updateAllOverlaysGeometry();
 }
 
+// ---------------------------------------------------------------------------
+// Code copy/save
+// ---------------------------------------------------------------------------
+
 static QString escapeHtml(QString text)
 {
     return text.replace("&", "&amp;")
@@ -1313,7 +1182,7 @@ QPair<QString, QString> MarkdownRenderer::collectCodeById(int id) const
         }
     }
 
-    // Remove the "padding" needed by the renderer
+    // Remove the invisible spacer lines used for the rounded background padding
     if (firstBlock.isValid() && firstBlock.text() == ZeroWidthSpace)
         firstBlock = firstBlock.next();
     if (lastBlock.isValid() && lastBlock.text() == ZeroWidthSpace)
@@ -1351,26 +1220,6 @@ QPair<QString, QString> MarkdownRenderer::collectCodeById(int id) const
     return {plain, html};
 }
 
-QByteArray MarkdownRenderer::buffer() const
-{
-    return m_buffer;
-}
-
-void MarkdownRenderer::setBuffer(const QByteArray &newBuffer)
-{
-    m_buffer = newBuffer;
-}
-
-bool MarkdownRenderer::expandDetailsByDefault() const
-{
-    return m_expandDetailsByDefault;
-}
-
-void MarkdownRenderer::setExpandDetailsByDefault(bool newExpandDetailsByDefault)
-{
-    m_expandDetailsByDefault = newExpandDetailsByDefault;
-}
-
 QMap<int, QRectF> MarkdownRenderer::collectBlockRects(int prop, int skipProp /*= -1*/) const
 {
     QTextDocument *doc = document();
@@ -1390,6 +1239,30 @@ QMap<int, QRectF> MarkdownRenderer::collectBlockRects(int prop, int skipProp /*=
             rects[id] = blkRect;
     }
     return rects;
+}
+
+// ---------------------------------------------------------------------------
+// Styling API
+// ---------------------------------------------------------------------------
+
+QByteArray MarkdownRenderer::buffer() const
+{
+    return m_buffer;
+}
+
+void MarkdownRenderer::setBuffer(const QByteArray &newBuffer)
+{
+    m_buffer = newBuffer;
+}
+
+bool MarkdownRenderer::expandDetailsByDefault() const
+{
+    return m_expandDetailsByDefault;
+}
+
+void MarkdownRenderer::setExpandDetailsByDefault(bool newExpandDetailsByDefault)
+{
+    m_expandDetailsByDefault = newExpandDetailsByDefault;
 }
 
 void MarkdownRenderer::setColor(ColorRole role, const QColor &color)

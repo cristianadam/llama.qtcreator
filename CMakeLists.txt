@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer)
-find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test REQUIRED)
+find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
 # You don't want your released plugin binaries to contain tests,
@@ -29,13 +29,8 @@ if (WITH_TESTS)
   enable_testing()
 endif()
 
-add_qtc_library(md4c STATIC
-  PUBLIC_INCLUDES 3rdparty/md4c/src
-  SOURCES
-    3rdparty/md4c/src/entity.c
-    3rdparty/md4c/src/md4c.c
-    3rdparty/md4c/src/md4c-html.c
-)
+add_library(markus INTERFACE)
+target_include_directories(markus INTERFACE 3rdparty/markus)
 
 add_qtc_library(LlamaSpinner STATIC
   DEFINES QT_STATICPLUGIN
@@ -57,7 +52,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::ExtensionSystem
     QtCreator::Utils
     QtCreator::KSyntaxHighlighting
-    md4c
+    markus
     LlamaSpinner
   SOURCES
     llama.qrc

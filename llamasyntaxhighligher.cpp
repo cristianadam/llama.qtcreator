@@ -1,22 +1,25 @@
 #include "llamasyntaxhighlighter.h"
-#include "markdownrenderer.h"
+
 #include <abstracthighlighter_p.h>
 #include <definition.h>
 #include <definition_p.h>
 #include <format.h>
 
+#include <coreplugin/icore.h>
 #include <repository.h>
 #include <state.h>
 #include <theme.h>
 
 #include <texteditor/fontsettings.h>
-#include <texteditor/texteditorsettings.h>
+#include <utils/filepath.h>
 #include <utils/theme/theme.h>
 
 namespace LlamaCpp {
 
+using namespace Core;
 using namespace TextEditor;
 using namespace Internal;
+using namespace Utils;
 
 // Helper to map KSyntaxHighlighting styles to our Theme/TextEditor styles
 static TextStyle categoryForTextStyle(int style, const KSyntaxHighlighting::Definition &definition)
@@ -89,9 +92,29 @@ static TextStyle categoryForTextStyle(int style, const KSyntaxHighlighting::Defi
     }
 }
 
+static KSyntaxHighlighting::Repository *highlightRepository()
+{
+    static KSyntaxHighlighting::Repository *repository = nullptr;
+    if (!repository) {
+        repository = new KSyntaxHighlighting::Repository();
+        const FilePath dir = ICore::resourcePath("generic-highlighter/syntax");
+        if (dir.exists())
+            repository->addCustomSearchPath(dir.parentDir().path());
+        const FilePath userDir = ICore::userResourcePath("generic-highlighter");
+        if (userDir.exists())
+            repository->addCustomSearchPath(userDir.path());
+    }
+    return repository;
+}
+
+KSyntaxHighlighting::Definition syntaxDefinitionForName(const QString &name)
+{
+    return highlightRepository()->definitionForName(name);
+}
+
 SyntaxHighlighter::SyntaxHighlighter()
 {
-    m_colorScheme = TextEditorSettings::fontSettings().colorScheme();
+    m_colorScheme = globalFontSettings().data().colorScheme();
 }
 
 void SyntaxHighlighter::setDefinition(const KSyntaxHighlighting::Definition &def)
@@ -115,9 +138,12 @@ void SyntaxHighlighter::applyFormat(int offset,
     m_recordedFormats.append({offset, length, charFmt});
 }
 
-void SyntaxHighlighter::processLine(const QString &line, MarkdownParserContext *ctx)
+void SyntaxHighlighter::processLine(const QString &line,
+                                    const QTextCharFormat &defaultFmt,
+                                    QVector<HighlightFragment> &fragments)
 {
     m_recordedFormats.clear();
+    m_defaultFmt = defaultFmt;
 
     // highlightLine updates m_state and calls applyFormat
     m_state = highlightLine(line, m_state);
@@ -125,72 +151,35 @@ void SyntaxHighlighter::processLine(const QString &line, MarkdownParserContext *
     int currentPos = 0;
     for (const auto &rec : std::as_const(m_recordedFormats)) {
         // Insert text from end of last format to start of this one
-        if (rec.offset > currentPos) {
-            MarkdownOp op{MarkdownOp::InsertText, line.mid(currentPos, rec.offset - currentPos)};
-            op.charFmt = m_defaultFmt;
-            op.blockFmt = m_defaultBlockFmt;
-            ctx->ops.push_back(op);
-        }
+        if (rec.offset > currentPos)
+            fragments.append({line.mid(currentPos, rec.offset - currentPos), defaultFmt});
+
         // Apply the new format
-        MarkdownOp op{MarkdownOp::InsertText, line.mid(rec.offset, rec.length)};
-        op.charFmt = rec.charFmt;
-        op.blockFmt = m_defaultBlockFmt;
-        ctx->ops.push_back(op);
+        fragments.append({line.mid(rec.offset, rec.length), rec.charFmt});
 
         currentPos = rec.offset + rec.length;
     }
 
-    // Insert remaining text
-    if (currentPos < line.length()) {
-        MarkdownOp op{MarkdownOp::InsertText, line.mid(currentPos)};
-        op.charFmt = m_defaultFmt;
-        op.blockFmt = m_defaultBlockFmt;
-        ctx->ops.push_back(op);
-    }
+    // Append remaining text
+    if (currentPos < line.length())
+        fragments.append({line.mid(currentPos), defaultFmt});
 }
 
-void SyntaxHighlighter::processChunk(const QString &chunk, MarkdownParserContext *ctx)
+void SyntaxHighlighter::highlight(const QString &content,
+                                  const QTextCharFormat &defaultFmt,
+                                  QVector<HighlightFragment> &fragments)
 {
-    QString combined = m_leftover + chunk;
-
-    // Find the last newline to see if we have a complete line
-    int lastNewline = combined.lastIndexOf('\n');
-    if (lastNewline == -1) {
-        m_leftover = combined;
+    if (content.isEmpty())
         return;
-    }
 
-    // Split into lines, keeping the newline logic in mind
-    QStringList lines = combined.split('\n');
-    // The last element is potentially a partial line for the next chunk
-    m_leftover = lines.takeLast();
+    QStringList lines = content.split('\n');
+    if (content.endsWith('\n'))
+        lines.removeLast();
 
-    // The default format for this line (usually mono font from the code block)
-    m_defaultFmt = !ctx->textCharFormatStack.isEmpty() ? ctx->textCharFormatStack.top()
-                                                       : QTextCharFormat();
-    m_defaultBlockFmt = !ctx->codeBlockFormatStack.isEmpty() ? ctx->codeBlockFormatStack.top()
-                                                             : QTextBlockFormat();
-
-    for (const QString &line : std::as_const(lines)) {
-        processLine(line, ctx);
-
-        // Push the newline character itself
-        MarkdownOp newlineOp{MarkdownOp::InsertText, "\n"};
-        newlineOp.charFmt = m_defaultFmt;
-        newlineOp.blockFmt = m_defaultBlockFmt;
-        ctx->ops.push_back(newlineOp);
-    }
-}
-
-void SyntaxHighlighter::finish(MarkdownParserContext *ctx)
-{
-    if (!m_leftover.isEmpty()) {
-        processLine(m_leftover, ctx);
-        MarkdownOp newlineOp{MarkdownOp::InsertText, "\n"};
-        newlineOp.charFmt = ctx->textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                               : ctx->textCharFormatStack.top();
-        ctx->ops.push_back(newlineOp);
-        m_leftover.clear();
+    for (int i = 0; i < lines.size(); ++i) {
+        processLine(lines[i], defaultFmt, fragments);
+        if (i != lines.size() - 1)
+            fragments.append({QStringLiteral("\n"), defaultFmt});
     }
 }
 
