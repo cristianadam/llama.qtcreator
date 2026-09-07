@@ -44,7 +44,11 @@ static void addCommonPayloadParams(QJsonObject &payload)
     payload["dry_multiplier"] = settings().dry_multiplier.value();
     payload["dry_base"] = settings().dry_base.value();
     payload["dry_allowed_length"] = settings().dry_allowed_length.value();
-    payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
+    // Newer llama.cpp servers reject negative values; the -1 default
+    // ("fall back to repeat_last_n") is what the server assumes when the
+    // field is omitted.
+    if (settings().dry_penalty_last_n.value() >= 0)
+        payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
     payload["max_tokens"] = settings().max_tokens.value();
     payload["timings_per_token"] = settings().showTokensPerSecond.value();
     payload["return_progress"] = settings().showTokensPerSecond.value();
