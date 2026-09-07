@@ -50,8 +50,11 @@ static void addCommonPayloadParams(QJsonObject &payload)
     if (settings().dry_penalty_last_n.value() >= 0)
         payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
     payload["max_tokens"] = settings().max_tokens.value();
-    payload["timings_per_token"] = settings().showTokensPerSecond.value();
-    payload["return_progress"] = settings().showTokensPerSecond.value();
+    // Progress and timings are always requested so the context-usage label in
+    // the status bar can be populated, even when "Show tokens per second" is
+    // disabled. The speed label itself is only shown when that setting is on.
+    payload["timings_per_token"] = true;
+    payload["return_progress"] = true;
 }
 
 static void addToolsToPayload(QJsonObject &payload)
@@ -676,9 +679,10 @@ void ChatManager::sendChatRequest(const QString &convId,
                 emit pendingMessageChanged(pm);
             }
 
-            if (settings().showTokensPerSecond.value() && chunk.contains("timings")) {
+            if (chunk.contains("timings")) {
                 QJsonObject t = chunk["timings"].toObject();
                 TimingReport tr;
+                tr.cache_n = t["cache_n"].toDouble();
                 tr.prompt_n = t["prompt_n"].toDouble();
                 tr.prompt_ms = t["prompt_ms"].toDouble();
                 tr.predicted_n = t["predicted_n"].toDouble();

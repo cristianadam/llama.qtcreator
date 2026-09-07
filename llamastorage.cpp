@@ -39,6 +39,7 @@ static QList<QVariantMap> deserializeExtra(const QString &json)
 static QString serialize(const TimingReport &tr)
 {
     QJsonObject obj;
+    obj["cache_n"] = tr.cache_n;
     obj["prompt_n"] = tr.prompt_n;
     obj["prompt_ms"] = tr.prompt_ms;
     obj["predicted_n"] = tr.predicted_n;
@@ -62,6 +63,7 @@ static TimingReport deserializeTimingsReport(const QString &json)
             field = obj[key].toDouble();
     };
 
+    getDouble("cache_n", result.cache_n);
     getDouble("prompt_n", result.prompt_n);
     getDouble("prompt_ms", result.prompt_ms);
     getDouble("predicted_n", result.predicted_n);

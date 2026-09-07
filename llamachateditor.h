@@ -72,6 +72,7 @@ public slots:
 
 private:
     void updateSpeedLabel(const Message &msg);
+    void updateContextLabel(const Message &msg);
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
 
@@ -86,6 +87,7 @@ private:
     QWidget *m_propsWidget{nullptr};
     QWidget *m_followUpWidget{nullptr};
     QWidget *m_statusBar{nullptr};
+    QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
     bool m_userInteracted{false};
 

@@ -11,6 +11,7 @@ namespace LlamaCpp {
 
 struct TimingReport
 {
+    double cache_n{0};
     double prompt_n{0};
     double prompt_ms{0};
     double predicted_n{0};

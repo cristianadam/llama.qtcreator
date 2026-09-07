@@ -16,6 +16,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QLocale>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -81,13 +82,21 @@ ChatEditor::ChatEditor()
     m_statusBar = new Utils::StyledBar;
     auto statusLayout = new QHBoxLayout(m_statusBar);
     statusLayout->setContentsMargins(0, 0, 0, 0);
-    statusLayout->setSpacing(0);
+    // The labels size tightly to their text, so the gap between them must
+    // come from the layout spacing rather than per-widget margins.
+    statusLayout->setSpacing(
+        widget->style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     statusLayout->addStretch();
 
     m_speedLabel = new QLabel(m_statusBar);
     m_speedLabel->setVisible(false);
     m_speedLabel->setTextFormat(Qt::PlainText);
     statusLayout->addWidget(m_speedLabel);
+
+    m_contextLabel = new QLabel(m_statusBar);
+    m_contextLabel->setVisible(false);
+    m_contextLabel->setTextFormat(Qt::PlainText);
+    statusLayout->addWidget(m_contextLabel);
 
     m_searchToolbar = new SearchToolbar(widget);
 
@@ -440,10 +449,13 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         m_messageWidgets.append(w);
     }
 
-    // Update the speed label shown in the editor status bar
+    // Update the status bar labels for the last assistant message
     if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
-        && !m_messageWidgets.last()->isTool() && settings().showTokensPerSecond.value()) {
-        updateSpeedLabel(m_messageWidgets.last()->message());
+        && !m_messageWidgets.last()->isTool()) {
+        const Message &lastMsg = m_messageWidgets.last()->message();
+        if (settings().showTokensPerSecond.value())
+            updateSpeedLabel(lastMsg);
+        updateContextLabel(lastMsg);
     }
 
     // If there were no messages, show the server props
@@ -539,6 +551,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     }
 
     updateSpeedLabel(msg);
+    updateContextLabel(msg);
 
     m_input->setIsGenerating(false);
     scrollToBottom();
@@ -578,6 +591,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     m_input->setIsGenerating(true);
 
     updateSpeedLabel(pm);
+    updateContextLabel(pm);
 
     scrollToBottom();
 }
@@ -673,6 +687,12 @@ void ChatEditor::onServerPropsUpdated()
     if (m_messageWidgets.isEmpty() && !m_propsWidget) {
         m_propsWidget = displayServerProps();
         m_messageLayout->insertWidget(0, m_propsWidget);
+    }
+
+    // Now that n_ctx is known, refresh the context-usage label
+    if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
+        && !m_messageWidgets.last()->isTool()) {
+        updateContextLabel(m_messageWidgets.last()->message());
     }
 }
 
@@ -891,6 +911,42 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
         m_speedLabel->setText(text);
         m_speedLabel->setToolTip(tooltip);
     }
+}
+
+void ChatEditor::updateContextLabel(const Message &msg)
+{
+    const int maxCtx = ChatManager::instance().serverProps().n_ctx;
+
+    // Tokens currently in the context window = cached prompt prefix +
+    // newly processed prompt tokens + generated tokens. This grows with the
+    // conversation. (prompt_n alone is only the uncached delta, so it stays
+    // small across a long, mostly-cached conversation.)
+    const auto &t = msg.timings;
+    const double timingsTotal = t.cache_n + t.prompt_n + t.predicted_n;
+
+    // Fall back to the live prompt-progress total during the prompt phase,
+    // before any timing data has arrived.
+    const int usedTokens = timingsTotal > 0
+        ? static_cast<int>(timingsTotal)
+        : msg.promptProgress.total;
+
+    if (maxCtx <= 0 || usedTokens <= 0) {
+        m_contextLabel->setVisible(false);
+        return;
+    }
+
+    double percent = (usedTokens * 100.0) / maxCtx;
+    percent = qBound(0.0, percent, 100.0);
+
+    const QString percentStr = QString::number(percent, 'f', 0);
+
+    m_contextLabel->setVisible(true);
+    m_contextLabel->setText(Tr::tr("Context: %1% used").arg(percentStr));
+    m_contextLabel->setToolTip(
+        Tr::tr("Context: %1% used.<br>  %2 tokens from %3.")
+            .arg(percentStr)
+            .arg(QLocale().toString(usedTokens))
+            .arg(QLocale().toString(maxCtx)));
 }
 
 void ChatEditor::scrollToBottom()
