@@ -85,6 +85,7 @@ private:
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
     QWidget *m_followUpWidget{nullptr};
+    QWidget *m_statusBar{nullptr};
     QLabel *m_speedLabel{nullptr};
     bool m_userInteracted{false};
 

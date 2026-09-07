@@ -7,6 +7,7 @@
 #include <utils/action.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/utilsicons.h>
+#include <utils/widgets.h>
 
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
@@ -77,17 +78,16 @@ ChatEditor::ChatEditor()
     widget->setLayout(layout);
     setWidget(widget);
 
-    m_speedLabel = new QLabel(widget);
-    m_speedLabel->setObjectName("SpeedLabel");
+    m_statusBar = new Utils::StyledBar;
+    auto statusLayout = new QHBoxLayout(m_statusBar);
+    statusLayout->setContentsMargins(0, 0, 0, 0);
+    statusLayout->setSpacing(0);
+    statusLayout->addStretch();
+
+    m_speedLabel = new QLabel(m_statusBar);
     m_speedLabel->setVisible(false);
     m_speedLabel->setTextFormat(Qt::PlainText);
-    widget->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
-        QLabel#SpeedLabel {
-           color: Token_Text_Muted;
-           margin-left: 10px;
-           font-style: italic;
-        }
-        )"));
+    statusLayout->addWidget(m_speedLabel);
 
     m_searchToolbar = new SearchToolbar(widget);
 
@@ -274,7 +274,7 @@ Core::IDocument *ChatEditor::document() const
 
 QWidget *ChatEditor::toolBar()
 {
-    return nullptr;
+    return m_statusBar;
 }
 
 bool ChatEditor::isDesignModePreferred() const
@@ -440,12 +440,9 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         m_messageWidgets.append(w);
     }
 
-    // Insert speed label after the assistant widget
+    // Update the speed label shown in the editor status bar
     if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
         && !m_messageWidgets.last()->isTool() && settings().showTokensPerSecond.value()) {
-        m_messageLayout->addWidget(m_speedLabel);
-        m_speedLabel->setVisible(true);
-
         updateSpeedLabel(m_messageWidgets.last()->message());
     }
 
@@ -530,12 +527,6 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
 
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
-
-        // Speed‑label handling for assistant messages
-        if (settings().showTokensPerSecond.value() && !w->isUser()) {
-            m_messageLayout->addWidget(m_speedLabel);
-            m_speedLabel->setVisible(true);
-        }
     } else {
         w = *it;
         w->message() = msg;
@@ -578,12 +569,6 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         connect(w, &ChatMessage::regenerateRequested, this, &ChatEditor::onRegenerateRequested);
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
         connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
-
-        // Insert speed label after the assistant widget
-        if (settings().showTokensPerSecond.value()) {
-            m_messageLayout->addWidget(m_speedLabel);
-            m_speedLabel->setVisible(true);
-        }
     } else {
         w = *it;
         w->renderMarkdown(pm.content);
@@ -854,45 +839,57 @@ void ChatEditor::jumpToResult(int idx, bool selected)
 
 void ChatEditor::updateSpeedLabel(const Message &msg)
 {
-    // Update the speed label using the latest timings
-    if (settings().showTokensPerSecond.value()) {
+    // Update the speed label (in the editor status bar) using the latest timings
+    const bool enabled = settings().showTokensPerSecond.value();
+
+    QString text;
+    QString tooltip;
+    bool hasData = false;
+
+    if (enabled) {
         if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
             double processed = msg.promptProgress.processed + msg.promptProgress.cache;
             double percent = (processed / msg.promptProgress.total) * 100.0;
 
             percent = qBound(0.0, percent, 100.0);
 
-            m_speedLabel->setText(Tr::tr("Processing: %1%").arg(percent, 0, 'f', 0));
+            text = Tr::tr("Processing: %1%").arg(percent, 0, 'f', 0);
 
-            QString labelTooltip = Tr::tr("<b>Prompt Processing:</b><br>"
-                                          "Total Tokens: %1<br>"
-                                          "Processed: %2<br>"
-                                          "Cached: %3<br>"
-                                          "Time: %4 ms")
-                                       .arg(msg.promptProgress.total)
-                                       .arg(msg.promptProgress.processed)
-                                       .arg(msg.promptProgress.cache)
-                                       .arg(msg.promptProgress.time_ms);
-            m_speedLabel->setToolTip(labelTooltip);
+            tooltip = Tr::tr("<b>Prompt Processing:</b><br>"
+                             "Total Tokens: %1<br>"
+                             "Processed: %2<br>"
+                             "Cached: %3<br>"
+                             "Time: %4 ms")
+                          .arg(msg.promptProgress.total)
+                          .arg(msg.promptProgress.processed)
+                          .arg(msg.promptProgress.cache)
+                          .arg(msg.promptProgress.time_ms);
+            hasData = true;
         } else if (!msg.content.isEmpty()) {
             const auto &t = msg.timings;
             if (t.predicted_ms > 0 && t.prompt_ms > 0) {
                 qreal tokensPerSec = (t.predicted_n + t.prompt_n) * 1000.0
                                      / (t.predicted_ms + t.prompt_ms);
-                m_speedLabel->setText(Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1));
+                text = Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1);
 
-                QString labelTooltip(
-                    Tr::tr("<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
-                           "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
-                        .arg(t.prompt_n)
-                        .arg(t.prompt_ms)
-                        .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
-                        .arg(t.predicted_n)
-                        .arg(t.predicted_ms)
-                        .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1));
-                m_speedLabel->setToolTip(labelTooltip);
+                tooltip = Tr::tr(
+                    "<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
+                    "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
+                              .arg(t.prompt_n)
+                              .arg(t.prompt_ms)
+                              .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
+                              .arg(t.predicted_n)
+                              .arg(t.predicted_ms)
+                              .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1);
+                hasData = true;
             }
         }
+    }
+
+    m_speedLabel->setVisible(enabled && hasData);
+    if (hasData) {
+        m_speedLabel->setText(text);
+        m_speedLabel->setToolTip(tooltip);
     }
 }
 
