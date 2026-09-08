@@ -22,7 +22,6 @@
 #include <QRegularExpression>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -55,12 +54,9 @@ ChatEditor::ChatEditor()
 
     auto widget = new QWidget;
 
-    m_scrollArea = new QScrollArea(widget);
+    m_scrollArea = new AutoScrollArea(widget);
     m_scrollArea->setFrameShape(QFrame::NoFrame);
-    m_scrollArea->setWidgetResizable(true);
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_scrollArea->installEventFilter(this);
-    m_scrollArea->verticalScrollBar()->installEventFilter(this);
 
     m_messageContainer = new QWidget(m_scrollArea);
     m_messageLayout = new QVBoxLayout(m_messageContainer);
@@ -358,7 +354,6 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
         // capture convId / leafNodeId / question in the lambda
         connect(btn, &QPushButton::clicked, this, [this, convId, leafNodeId, q]() {
             ChatManager::instance().sendMessage(convId, leafNodeId, q, {}, [this](qint64) {
-                m_userInteracted = false;
                 scrollToBottom();
             });
         });
@@ -617,7 +612,6 @@ void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &
                                             [this](qint64 leafId) { scrollToBottom(); });
     }
 
-    m_userInteracted = false;
     scrollToBottom();
 }
 
@@ -627,7 +621,6 @@ void ChatEditor::onStopRequested()
     ChatManager::instance().stopGenerating(conv.id);
 
     m_input->setIsGenerating(false);
-    m_userInteracted = false;
 }
 
 void ChatEditor::onFileDropped(const QStringList &files)
@@ -662,11 +655,9 @@ void ChatEditor::onRegenerateRequested(const Message &msg)
                                                       msgCopy.parent,
                                                       QString(),
                                                       msgCopy.extra,
-                                                      [this, msgCopy](qint64 leafId) {
-                                                          scrollToBottom();
-                                                      });
-
-    m_userInteracted = false;
+                                                       [this, msgCopy](qint64 leafId) {
+                                                           scrollToBottom();
+                                                       });
 }
 
 void ChatEditor::onSiblingChanged(qint64 siblingId)
@@ -951,26 +942,11 @@ void ChatEditor::updateContextLabel(const Message &msg)
 
 void ChatEditor::scrollToBottom()
 {
-    if (m_userInteracted)
-        return;
-
-    // Scroll to bottom after the layout has finished
-    QTimer::singleShot(100, this, [this] {
-        QScrollBar *sb = m_scrollArea->verticalScrollBar();
-        sb->setValue(sb->maximum());
-    });
-}
-
-bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
-{
-    if (obj == m_scrollArea || obj == m_scrollArea->verticalScrollBar()) {
-        // Mouse wheel, mouse press, key press – any user interaction
-        if (event->type() == QEvent::Wheel || event->type() == QEvent::MouseButtonPress
-            || event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::KeyPress) {
-            m_userInteracted = true;
-        }
-    }
-    return QObject::eventFilter(obj, event);
+    // Pin the viewport to the bottom and resume automatic following. The
+    // AutoScrollArea keeps the view on the newest message while the content
+    // keeps growing (streaming text, tool output) and stops following as soon
+    // as the user scrolls up.
+    m_scrollArea->followToBottom();
 }
 
 class ChatEditorFactory final : public IEditorFactory

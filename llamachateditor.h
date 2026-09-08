@@ -4,6 +4,7 @@
 #include <coreplugin/editormanager/ieditor.h>
 #include <texteditor/textdocument.h>
 
+#include "autoscrollarea.h"
 #include "llamasearchtoolbar.h"
 #include "llamatypes.h"
 
@@ -11,7 +12,6 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QVBoxLayout;
-class QScrollArea;
 
 namespace TextEditor {
 class IDocument;
@@ -34,8 +34,6 @@ public:
     QWidget *toolBar() override;
 
     bool isDesignModePreferred() const override;
-
-    bool eventFilter(QObject *obj, QEvent *event) override;
 
     void refreshMessages(const QVector<Message> &messages, qint64 leafNodeId);
     void scrollToBottom();
@@ -78,7 +76,7 @@ private:
 
 private:
     TextEditor::TextDocumentPtr m_document;
-    QScrollArea *m_scrollArea{nullptr};
+    AutoScrollArea *m_scrollArea{nullptr};
     QWidget *m_messageContainer{nullptr};
     ChatInput *m_input{nullptr};
     QVBoxLayout *m_messageLayout{nullptr};
@@ -89,7 +87,6 @@ private:
     QWidget *m_statusBar{nullptr};
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
-    bool m_userInteracted{false};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query
     int m_currentResult{0};                // index into m_searchResults

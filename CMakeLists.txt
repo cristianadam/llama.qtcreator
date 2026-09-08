@@ -56,7 +56,8 @@ add_qtc_plugin(LlamaCpp
     LlamaSpinner
   SOURCES
     llama.qrc
-    llamaicons.h    
+    llamaicons.h
+    autoscrollarea.cpp autoscrollarea.h
     llamachateditor.cpp llamachateditor.h
     llamachatinput.cpp llamachatinput.h
     llamachatmanager.cpp llamachatmanager.h
