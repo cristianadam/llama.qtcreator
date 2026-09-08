@@ -110,6 +110,13 @@ private:
     void renderInlines(const markus::Document &doc,
                        const std::pmr::vector<markus::InlineNodeId> &ids);
     void renderInline(const markus::Document &doc, markus::InlineNodeId id);
+    // Render a balanced inline-HTML element (e.g. <img .../> or <span>x</span>)
+    // with a single insertHtml so Qt keeps the element intact; reports the
+    // number of consumed nodes in outEnd. Returns false if it cannot be
+    // rendered atomically (the caller then falls back to per-node rendering).
+    bool renderInlineHtmlElement(const markus::Document &doc,
+                                 const std::pmr::vector<markus::InlineNodeId> &ids,
+                                 size_t start, size_t &outEnd);
 
     // Re-render the parser's held-back tail (the block that may still grow),
     // so in-progress paragraphs, code blocks and <details> sections stream
@@ -148,7 +155,10 @@ private:
 
     static QString languageFromInfoString(const markus::CodeBlock &code);
     static int getBlockQuoteMargin(int depth, int paragraphMargin);
-    QString detailsHtmlLabel(const QString &summary, int secId, bool isVisible) const;
+    // Expand/collapse icon rendered at the start of a <details> header. Wraps
+    // the glyph in a "details-toggle" anchor so it gets the hover tooltip and
+    // a non-link colour; the glyph itself is drawn with the icon font.
+    QString sectionIconHtml(int secId, bool isVisible) const;
 
     QPointF contentOffset() const;
     QRectF blockBoundingRect(const QTextBlock &block) const;

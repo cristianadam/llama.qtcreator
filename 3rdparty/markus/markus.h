@@ -332,12 +332,14 @@ struct CodeBlock {
 // A GitHub-style collapsible `<details>` section. Produced when a type-6 HTML
 // block starts with a `<details>` tag; the block then consumes lines until the
 // matching `</details>` line (blank lines do not terminate it, unlike other
-// type-6 HTML blocks). `summary` holds the text of the optional `<summary>`
-// child; `children` are the markdown blocks parsed from the section body
-// (the text between the end of `</summary>` (or the opening tag) and the
-// `</details>` line), stored in the document's block pool.
+// type-6 HTML blocks). `summary` holds the block nodes parsed from the optional
+// `<summary>` child (the text between the end of the opening `<summary ...>`
+// tag and the `</summary>` line); `children` are the block nodes parsed from
+// the section body (the text between the end of `</summary>` (or the opening
+// tag) and the `</details>` line). Both are markdown, stored in the document's
+// block pool, so the summary supports the same block/inline markup as the body.
 struct DetailsBlock {
-  std::pmr::string summary;
+  std::pmr::vector<BlockNodeId> summary;
   std::pmr::vector<BlockNodeId> children;
   bool closed = false;  // false when the input ended before </details>
 };
@@ -6032,7 +6034,7 @@ class BlockParser {
     if (!raw.empty() && raw.back() == '\n') raw.pop_back();
 
     // Locate the optional <summary> ... </summary> child.
-    std::pmr::string summary;
+    std::pmr::string summary_raw;
     size_t content_start = 0;
     size_t summary_open = detail::FindInsensitive(raw, "<summary");
     if (summary_open != std::string_view::npos) {
@@ -6043,8 +6045,8 @@ class BlockParser {
         if (summary_close != std::string_view::npos) {
           // Absolute range of the summary text: after the '>' of the opening
           // <summary ...> tag up to the start of the closing </summary> tag.
-          summary.assign(raw.substr(tag_end + 1, summary_close - 1));
-          summary = std::pmr::string(detail::Trim(summary));
+          summary_raw.assign(raw.substr(tag_end + 1, summary_close - 1));
+          summary_raw = std::pmr::string(detail::Trim(summary_raw));
           content_start = tag_end + summary_close +
                           std::string_view("</summary>").size();
         }
@@ -6063,6 +6065,21 @@ class BlockParser {
       last_html_end_condition_found_ = false;
       blocks.emplace_back(std::in_place_type<HtmlBlock>, std::move(raw), 6);
       return true;
+    }
+
+    // Parse the optional <summary> content as regular markdown so its block
+    // structure (headings, emphasis, ...) is preserved, like the section body.
+    std::pmr::vector<BlockNodeId> summary;
+    if (!summary_raw.empty()) {
+      BlockParser summary_parser;
+      summary_parser.enable_tables = enable_tables;
+      summary_parser.enable_tasklist = enable_tasklist;
+      std::pmr::vector<BlockNode> summary_blocks;
+      summary_parser.ParseBlocksInto(std::string_view(summary_raw), *doc_,
+                                     summary_blocks, /*input_no_nulls=*/true);
+      for (auto& node : summary_blocks) {
+        summary.push_back(doc_->AddBlock(std::move(node)));
+      }
     }
 
     std::pmr::string content;
@@ -7269,6 +7286,7 @@ class BlockParser {
               std::string_view stable_content = doc_->string_storage.back();
               node.children = parser.Parse(stable_content);
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
+              ParseInlines(node.summary, parser);
               ParseInlines(node.children, parser);
             } else if constexpr (std::is_same_v<T, BlockQuote>) {
               ParseInlines(node.children, parser);
@@ -7306,6 +7324,7 @@ class BlockParser {
               std::string_view stable_content = doc_->string_storage.back();
               node.children = parser.Parse(stable_content);
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
+              ParseInlines(node.summary, parser);
               ParseInlines(node.children, parser);
             } else if constexpr (std::is_same_v<T, BlockQuote>) {
               ParseInlines(node.children, parser);
@@ -7479,7 +7498,7 @@ class HtmlRenderer {
 
   void RenderDetailsBlock(const DetailsBlock& block, std::pmr::string& out) {
     out += "<details><summary>";
-    detail::EscapeHtmlTo(block.summary, out);
+    RenderBlockIds(block.summary, out, /*in_tight_list=*/false);
     out += "</summary>";
     RenderBlockIds(block.children, out, /*in_tight_list=*/false);
     out += "</details>\n";
@@ -8190,8 +8209,9 @@ inline std::pmr::string DebugAst(const Document& doc, int indent = 0) {
               result += "\n";
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
               result += std::format(
-                  "{}DetailsBlock (summary: \"{}\", {})\n", p, n.summary,
-                  n.closed ? "closed" : "open");
+                  "{}DetailsBlock ({} summary block(s), {})\n", p,
+                  n.summary.size(), n.closed ? "closed" : "open");
+              print_block_ids(n.summary, ind + 1);
               print_block_ids(n.children, ind + 1);
             } else if constexpr (std::is_same_v<T, HtmlBlock>) {
               result += std::format("{}HtmlBlock (type {})\n", p, n.block_type);
@@ -8247,8 +8267,9 @@ inline std::pmr::string DebugAst(const Document& doc, int indent = 0) {
               result += "\n";
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
               result += std::format(
-                  "{}DetailsBlock (summary: \"{}\", {})\n", p, n.summary,
-                  n.closed ? "closed" : "open");
+                  "{}DetailsBlock ({} summary block(s), {})\n", p,
+                  n.summary.size(), n.closed ? "closed" : "open");
+              print_block_ids(n.summary, ind + 1);
               print_block_ids(n.children, ind + 1);
             } else if constexpr (std::is_same_v<T, HtmlBlock>) {
               result += std::format("{}HtmlBlock (type {})\n", p, n.block_type);

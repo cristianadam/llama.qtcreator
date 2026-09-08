@@ -31,6 +31,9 @@ static QString fromStdString(const std::pmr::string &s)
     return QString::fromUtf8(s.data(), s.size());
 }
 
+// Escape a string for safe inclusion in an HTML snippet passed to insertHtml().
+static QString escapeHtml(QString text);
+
 MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     : QTextBrowser(parent)
 {
@@ -212,11 +215,82 @@ void MarkdownRenderer::renderBlockIds(const markus::Document &doc,
         renderBlock(doc, doc.block_nodes[id]);
 }
 
+// Net effect on tag-nesting depth of a single inline-HTML element as produced
+// by markus: -1 for a closing tag, +1 for an opening tag, 0 for a self-closing
+// tag or a self-contained construct (comment, CDATA, processing instruction,
+// declaration).
+static int inlineHtmlDepthChange(std::string_view tag)
+{
+    if (tag.size() < 2 || tag[0] != '<')
+        return 0;
+    if (tag[1] == '/')
+        return -1;  // </tag>
+    if (tag[1] == '?' || tag[1] == '!')
+        return 0;   // <?...?>, <!--...-->, <![CDATA[...]]>, <!...>
+    if (tag.back() == '>') {
+        if (tag.size() >= 3 && tag[tag.size() - 2] == '/')
+            return 0;  // <tag .../>
+        return 1;      // <tag ...>
+    }
+    return 0;
+}
+
 void MarkdownRenderer::renderInlines(const markus::Document &doc,
                                      const std::pmr::vector<markus::InlineNodeId> &ids)
 {
-    for (markus::InlineNodeId id : ids)
-        renderInline(doc, id);
+    size_t i = 0;
+    while (i < ids.size()) {
+        // Inline HTML (status icons, spinners) is split into individual tags by
+        // markus, but Qt drops a tag that is not closed within a single
+        // insertHtml call. Render a whole balanced element at once so it
+        // survives; plain text and markdown are rendered node-by-node.
+        if (std::holds_alternative<markus::HtmlInline>(doc.inline_nodes[ids[i]])) {
+            size_t end = 0;
+            if (renderInlineHtmlElement(doc, ids, i, end)) {
+                i = end;
+                continue;
+            }
+        }
+        renderInline(doc, ids[i]);
+        ++i;
+    }
+}
+
+bool MarkdownRenderer::renderInlineHtmlElement(
+    const markus::Document &doc,
+    const std::pmr::vector<markus::InlineNodeId> &ids, size_t start, size_t &outEnd)
+{
+    QString buffer;
+    int depth = 0;
+    for (size_t i = start; i < ids.size(); ++i) {
+        const markus::InlineNode &node = doc.inline_nodes[ids[i]];
+        if (const auto *html = std::get_if<markus::HtmlInline>(&node)) {
+            const std::string_view tag = html->content;
+            buffer += QString::fromUtf8(tag.data(), tag.size());
+            depth += inlineHtmlDepthChange(tag);
+            if (depth == 0) {
+                outEnd = i + 1;
+                // insertHtml() leaves the cursor's char format set to the last
+                // inserted character (e.g. an icon font); restore the previous
+                // format so the following markdown text is not rendered with it.
+                const QTextCharFormat prev = m_cursor.charFormat();
+                m_cursor.insertHtml(buffer);
+                m_cursor.setCharFormat(prev);
+                return true;
+            }
+            if (depth < 0)
+                return false;  // a closing tag without a matching open
+        } else if (depth > 0) {
+            const auto *text = std::get_if<markus::Text>(&node);
+            if (!text)
+                return false;  // non-text markup inside the element
+            buffer += escapeHtml(
+                QString::fromUtf8(text->content.data(), text->content.size()));
+        } else {
+            return false;
+        }
+    }
+    return false;  // never balanced within the available nodes
 }
 
 void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineNodeId id)
@@ -254,7 +328,9 @@ void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineN
             } else if constexpr (std::is_same_v<T, markus::Image>) {
                 renderImage(n);
             } else if constexpr (std::is_same_v<T, markus::HtmlInline>) {
-                m_cursor.insertText(QString::fromUtf8(n.content.data(), n.content.size()));
+                const QTextCharFormat prev = m_cursor.charFormat();
+                m_cursor.insertHtml(QString::fromUtf8(n.content.data(), n.content.size()));
+                m_cursor.setCharFormat(prev);
             }
         },
         node);
@@ -554,6 +630,62 @@ void MarkdownRenderer::handleItem(const markus::ListItem &item)
     }
 }
 
+// Recursively extract the markup-free plain text of a run of inline nodes.
+static QString inlinePlainText(const markus::Document &doc,
+                               const std::pmr::vector<markus::InlineNodeId> &ids)
+{
+    QString out;
+    for (markus::InlineNodeId id : ids) {
+        const markus::InlineNode &node = doc.inline_nodes[id];
+        std::visit(
+            [&](const auto &n) {
+                using T = std::decay_t<decltype(n)>;
+                if constexpr (std::is_same_v<T, markus::Text>) {
+                    out += QString::fromUtf8(n.content.data(), n.content.size());
+                } else if constexpr (std::is_same_v<T, markus::Code>) {
+                    out += fromStdString(n.content);
+                } else if constexpr (std::is_same_v<T, markus::SoftBreak>) {
+                    out += QChar::Space;
+                } else if constexpr (std::is_same_v<T, markus::HardBreak>) {
+                    out += QLatin1String("\n");
+                } else if constexpr (std::is_same_v<T, markus::Emphasis>
+                                     || std::is_same_v<T, markus::Strong>
+                                     || std::is_same_v<T, markus::Strikethrough>
+                                     || std::is_same_v<T, markus::Link>) {
+                    out += inlinePlainText(doc, n.children);
+                }
+            },
+            node);
+    }
+    return out;
+}
+
+// Markup-free plain text of a <details> <summary> (a mini block document),
+// stored on the section header so the summary is available when it is clicked.
+static QString summaryPlainText(const markus::Document &doc,
+                                const std::pmr::vector<markus::BlockNodeId> &ids)
+{
+    QString out;
+    for (markus::BlockNodeId id : ids) {
+        const markus::BlockNode &node = doc.block_nodes[id];
+        std::visit(
+            [&](const auto &n) {
+                using T = std::decay_t<decltype(n)>;
+                if constexpr (std::is_same_v<T, markus::Paragraph>
+                              || std::is_same_v<T, markus::Heading>) {
+                    out += inlinePlainText(doc, n.children);
+                } else if constexpr (std::is_same_v<T, markus::CodeBlock>) {
+                    out += fromStdString(n.content);
+                } else if constexpr (std::is_same_v<T, markus::HtmlBlock>) {
+                    out += fromStdString(n.content);
+                }
+            },
+            node);
+        out += QChar::Space;  // separate consecutive summary blocks
+    }
+    return out.trimmed();
+}
+
 void MarkdownRenderer::renderDetails(const markus::Document &doc,
                                      const markus::DetailsBlock &details)
 {
@@ -561,26 +693,56 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
     if (!m_toggleDetails.contains(secId))
         m_toggleDetails.insert(secId, m_expandDetailsByDefault);
     const bool visible = m_toggleDetails.value(secId);
-    const QString summary = fromStdString(details.summary);
 
-    // Summary (toggle) block.
-    // Note: insertHtml() on an empty block clobbers the block format, so the
-    // format with the details properties must be applied *after* the insert.
-    beginBlock();
-    m_cursor.insertHtml(detailsHtmlLabel(summary, secId, visible));
-    QTextBlockFormat sumFmt = m_cursor.blockFormat();
-    sumFmt.setProperty(DetailsSectionIdProp, secId);
-    sumFmt.setProperty(DetailsToggleBlockProp, true);
-    sumFmt.setProperty(DetailsSummaryTextProp, summary);
-    m_cursor.setBlockFormat(sumFmt);
-    QTextBlock toggleBlock = m_cursor.block();
-
-    // Content: markdown blocks that markus parsed from the section body.
-    // While rendering them, m_detailsSecId makes beginBlock() tag every inner
-    // block with the section id and the extra quote level indents the content
-    // (and makes paintEvent() draw the quote line).
     const int prevSecId = m_detailsSecId;
     m_detailsSecId = secId;
+
+    // The <summary> content is markdown; render it as the section's clickable,
+    // always-visible header. While rendering it, m_detailsSecId makes
+    // beginBlock() tag every header block with the section id.
+    const int firstTogglePos = documentEndPosition();
+    if (details.summary.empty()) {
+        beginBlock();
+        m_cursor.insertText(Tr::tr("Details"));
+    } else {
+        renderBlockIds(doc, details.summary);
+    }
+    // Capture the header block range as block references (stable across the
+    // icon append below, which only grows the last block).
+    const QTextBlock firstToggle = m_doc->findBlock(firstTogglePos);
+    const QTextBlock lastToggle = m_cursor.block();
+
+    // Append the expand/collapse direction icon at the END of the last header
+    // block, i.e. after the summary text (layout: [status icon][summary][dir]).
+    // m_cursor is already at the end of the summary, so appending here also
+    // keeps it positioned for the body rendered next. Restore the char format
+    // afterwards: insertHtml() leaves it set to the icon font, which would
+    // otherwise tint any following text.
+    const QTextCharFormat prevIconFmt = m_cursor.charFormat();
+    m_cursor.insertHtml(sectionIconHtml(secId, visible));
+    m_cursor.setCharFormat(prevIconFmt);
+
+    // Markup-free summary, stored on the first header block so the section's
+    // title is available when it is clicked.
+    const QString summaryText
+        = details.summary.empty() ? Tr::tr("Details")
+                                  : summaryPlainText(doc, details.summary);
+
+    // Mark every header block as a toggle block (clickable, never hidden).
+    for (QTextBlock blk = firstToggle; blk.isValid(); blk = blk.next()) {
+        QTextBlockFormat fmt = blk.blockFormat();
+        fmt.setProperty(DetailsSectionIdProp, secId);
+        fmt.setProperty(DetailsToggleBlockProp, true);
+        if (blk == firstToggle)
+            fmt.setProperty(DetailsSummaryTextProp, summaryText);
+        QTextCursor cursor(blk);
+        cursor.setBlockFormat(fmt);
+        if (blk == lastToggle)
+            break;
+    }
+
+    // Body: markdown blocks parsed from the section. The extra quote level
+    // indents the content and makes paintEvent() draw the quote line.
     const int prevQuoteDepth = m_blockQuoteDepth;
     m_blockQuoteDepth += 1;
 
@@ -594,9 +756,10 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
     m_blockQuoteDepth = prevQuoteDepth;
     m_detailsSecId = prevSecId;
 
-    for (QTextBlock blk = toggleBlock.next(); blk.isValid(); blk = blk.next()) {
-        // Blocks of a nested section carry their own id and were already
-        // shown/hidden by that section's renderDetails().
+    // Show/hide the body blocks: those tagged with this section id that are not
+    // toggle (header) blocks. Nested sections carry their own id and were
+    // already handled by their own renderDetails().
+    for (QTextBlock blk = firstToggle; blk.isValid(); blk = blk.next()) {
         if (blk.blockFormat().property(DetailsSectionIdProp).toInt() != secId)
             continue;
         if (!blk.blockFormat().property(DetailsToggleBlockProp).toBool())
@@ -791,37 +954,49 @@ int MarkdownRenderer::getBlockQuoteMargin(int depth, int paragraphMargin)
 // Details sections
 // ---------------------------------------------------------------------------
 
+// Replace the expand/collapse direction glyph in the section header block \a blk.
+// The glyph is identified by its "details-toggle" anchor (plus the icon font),
+// which distinguishes it from any status icon that is part of the summary text.
+// Returns true if the block carried the direction icon.
+static bool setSectionIconGlyph(QTextBlock &blk, bool visible)
+{
+    const QChar glyph = visible ? QChar('M') : QChar('N');
+    for (auto it = blk.begin(); it != blk.end(); ++it) {
+        const QTextFragment frag = it.fragment();
+        const QTextCharFormat fmt = frag.charFormat();
+        if (!frag.isValid()
+            || !fmt.anchorHref().startsWith(QLatin1String("details-toggle:")))
+            continue;
+        if (!fmt.fontFamilies().toStringList().contains(QLatin1String("heroicons_outline")))
+            continue;
+        QTextCursor cursor(blk);
+        cursor.setPosition(frag.position());
+        cursor.setPosition(frag.position() + frag.length(), QTextCursor::KeepAnchor);
+        cursor.insertText(QString(glyph), fmt);
+        return true;
+    }
+    return false;
+}
+
 void MarkdownRenderer::toggleSection(int secId)
 {
     bool makeVisible = !m_toggleDetails.value(secId);
+
+    // Show/hide the body blocks of this section (the header/toggle blocks stay).
     for (QTextBlock blk = document()->firstBlock(); blk.isValid(); blk = blk.next()) {
-        if (blk.blockFormat().property(DetailsSectionIdProp).toInt() == secId) {
-            if (blk.blockFormat().property(DetailsToggleBlockProp).toBool())
-                continue;
+        if (blk.blockFormat().property(DetailsSectionIdProp).toInt() == secId
+            && !blk.blockFormat().property(DetailsToggleBlockProp).toBool())
             blk.setVisible(makeVisible);
-        }
     }
 
+    // Flip the expand/collapse icon in the section header (the first toggle
+    // block that carries the icon).
     for (QTextBlock blk = document()->firstBlock(); blk.isValid(); blk = blk.next()) {
-        // Find the block that acts as the clickable header for this ID
-        if (blk.blockFormat().property(DetailsSectionIdProp).toInt() == secId
-            && blk.blockFormat().property(DetailsToggleBlockProp).toBool()) {
-            // Retrieve the original summary text we stored earlier
-            QString summary = blk.blockFormat().property(DetailsSummaryTextProp).toString();
-            if (summary.isEmpty())
-                summary = Tr::tr("Details");
-
-            // insertHtml() clobbers the block format, so re-apply it (it
-            // carries the details section id / toggle properties).
-            const QTextBlockFormat blkFmt = blk.blockFormat();
-            QTextCursor cursor(blk);
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.insertHtml(detailsHtmlLabel(summary, secId, makeVisible));
-            cursor.setBlockFormat(blkFmt);
-
+        if (blk.blockFormat().property(DetailsSectionIdProp).toInt() != secId
+            || !blk.blockFormat().property(DetailsToggleBlockProp).toBool())
+            continue;
+        if (setSectionIconGlyph(blk, makeVisible))
             break;
-        }
     }
 
     m_toggleDetails[secId] = makeVisible;
@@ -834,17 +1009,15 @@ void MarkdownRenderer::toggleSection(int secId)
     updateGeometry();
 }
 
-QString MarkdownRenderer::detailsHtmlLabel(const QString &summary, int secId, bool isVisible) const
+QString MarkdownRenderer::sectionIconHtml(int secId, bool isVisible) const
 {
     QString icon = isVisible ? "M" : "N";
-    QString label = QString(
-                        "<a href=\"details-toggle:%1\" style=\"text-decoration:none; color: %2\">"
-                        "%3&nbsp;<span style=\"font-family: heroicons_outline\">%4</span></a>")
-                        .arg(secId)
-                        .arg(colorToRgba(color(TextForeground)))
-                        .arg(summary)
-                        .arg(icon);
-    return label;
+    return QString(
+                   "&nbsp;<a href=\"details-toggle:%1\" style=\"text-decoration:none; color: %2\">"
+                   "<span style=\"font-family: heroicons_outline\">%3</span></a>")
+                   .arg(secId)
+                   .arg(colorToRgba(color(TextForeground)))
+                   .arg(icon);
 }
 
 // ---------------------------------------------------------------------------
