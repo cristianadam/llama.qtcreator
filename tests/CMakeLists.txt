@@ -9,6 +9,8 @@ add_qtc_test(llamatools_test
   SOURCES
     llamatools_test.cpp
     ../tools/editfile_tool.cpp
+    ../tools/writefile_tool.cpp
+    ../tools/deletefile_tool.cpp
     ../tools/tool.cpp
     ../tools/tool_utils.cpp
 )

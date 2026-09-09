@@ -83,7 +83,9 @@ add_qtc_plugin(LlamaCpp
     tools/askuser_tool.cpp tools/askuser_tool.h
     tools/build_project_tool.cpp tools/build_project_tool.h
     tools/create_directory_tool.cpp tools/create_directory_tool.h
+    tools/deletefile_tool.cpp tools/deletefile_tool.h
     tools/editfile_tool.cpp tools/editfile_tool.h
+    tools/writefile_tool.cpp tools/writefile_tool.h
     tools/factory.h
     tools/listdir_tool.cpp tools/listdir_tool.h
     tools/list_issues_tool.cpp tools/list_issues_tool.h

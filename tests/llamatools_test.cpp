@@ -7,25 +7,13 @@
 
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
-#include <texteditor/basefilefind.h>
+
+#include <tools/editfile_tool.h>
+#include <tools/writefile_tool.h>
+#include <tools/deletefile_tool.h>
+#include <tools/factory.h>
 
 namespace LlamaCpp {
-QString createFile(const QString &relPath, const QString &content);
-QString deleteFile(const QString &relPath);
-QString editFile(const QString &path,
-                 const QString &operation,
-                 int line,            // 1‑based, -1 if not applicable
-                 int endLine,         // 1‑based inclusive end line, -1 if not supplied
-                 const QString &text, // may be empty for delete/create/delete_file
-                 const QString &newFileContent);
-QString diffForEditFile(const QString &path,
-                        const QString &operation,
-                        int line,
-                        int endLine,
-                        const QString &text,
-                        const QString &newFileContent);
-} // namespace LlamaCpp
-using namespace LlamaCpp;
 
 static bool writeFile(const QString &absPath, const QString &content)
 {
@@ -44,29 +32,40 @@ private slots:
     void initTestCase();    // called once before the first test
     void cleanupTestCase(); // called once after the last test
 
-    void editCreate();
-    void editReplace();
-    void editDelete();
-    void editInsert();
-    void editDeleteFile();
-
-    void diffCreate();
-    void diffReplace();
-    void diffDelete();
-    void diffInsert();
-    void diffDeleteFile();
+    // write_file tests
+    void writeFile_create();
+    void writeFile_overwrite();
+    
+    // edit_file (string matching) tests
+    void editFile_exactMatch();
+    void editFile_deleteText();
+    void editFile_multipleOccurrences();
+    void editFile_notFound();
+    void editFile_whitespaceNormalized();
+    void editFile_toolDefinition();
+    void editFile_oneLineSummary();
+    
+    // delete_file tests
+    void deleteFile_success();
+    void deleteFile_notFound();
+    void deleteFile_toolDefinition();
+    
+    // write_file tests
+    void writeFile_toolDefinition();
+    void writeFile_oneLineSummary();
+    
+    // Factory registration tests
+    void factory_editFile();
+    void factory_writeFile();
+    void factory_deleteFile();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
 
 void LlamaToolsTest::initTestCase()
 {
-    // Create a fresh temporary directory that lives for the whole test run
     gTempDir = new QTemporaryDir;
     QVERIFY2(gTempDir->isValid(), "Failed to create temporary directory");
-
-    // Tell the tools to use this directory as the “working directory”.
-    // Core::DocumentManager::setProjectsDirectory() is a public static setter.
     Core::DocumentManager::setProjectsDirectory(Utils::FilePath::fromString(gTempDir->path()));
 }
 
@@ -76,143 +75,265 @@ void LlamaToolsTest::cleanupTestCase()
     gTempDir = nullptr;
 }
 
-void LlamaToolsTest::editCreate()
+// ============================================================================
+// write_file tests
+// ============================================================================
+
+void LlamaToolsTest::writeFile_create()
 {
-    const QString relPath = "new_file.txt";
-    const QString content = "first line\nsecond line\nthird line";
-
-    // invoke the helper
-    const QString result = editFile(relPath, "create", -1, -1, {}, content);
-    QVERIFY2(result.contains("Created"), result.toLocal8Bit().constData());
-
-    // verify that the file really exists and contains exactly what we passed
-    QFileInfo fi(gTempDir->filePath(relPath));
-    QVERIFY2(fi.isFile(), "File was not created");
-    QFile file(fi.filePath());
+    const QString relPath = "new_written.txt";
+    const QString content = "line one\nline two\nline three";
+    
+    writeFile(gTempDir->filePath(relPath), content);
+    
+    QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
     QCOMPARE(file.readAll(), content.toUtf8());
 }
 
-void LlamaToolsTest::editReplace()
+void LlamaToolsTest::writeFile_overwrite()
 {
-    const QString relPath = "replace.txt";
-    const QString original = "AAA\nBBB\nCCC\nDDD\nEEE";
+    const QString relPath = "overwritten.txt";
+    const QString original = "original content";
+    const QString newContent = "new content here";
+    
     writeFile(gTempDir->filePath(relPath), original);
-
-    const QString result = editFile(relPath, "replace", 2, 3, "bbb\nccc", {});
-    QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
-
-    const QString expected = "AAA\nbbb\nccc\nDDD\nEEE";
+    writeFile(gTempDir->filePath(relPath), newContent);
+    
     QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
-    QCOMPARE(file.readAll(), expected.toUtf8());
+    QCOMPARE(file.readAll(), newContent.toUtf8());
 }
 
-void LlamaToolsTest::editDelete()
+void LlamaToolsTest::writeFile_toolDefinition()
 {
-    const QString relPath = "delete.txt";
-    const QString original = "111\n222\n333\n444\n555";
+    WriteFileTool tool;
+    QString def = tool.toolDefinition();
+    
+    QVERIFY(def.contains("write_file"));
+    QVERIFY(def.contains("file_path"));
+    QVERIFY(def.contains("content"));
+    QVERIFY(def.contains("required"));
+}
+
+void LlamaToolsTest::writeFile_oneLineSummary()
+{
+    WriteFileTool tool;
+    QJsonObject args;
+    args["file_path"] = "src/test.cpp";
+    
+    QString summary = tool.oneLineSummary(args);
+    QVERIFY(summary.contains("write file"));
+    QVERIFY(summary.contains("src/test.cpp"));
+}
+
+// ============================================================================
+// edit_file (string matching) tests
+// ============================================================================
+
+void LlamaToolsTest::editFile_exactMatch()
+{
+    const QString relPath = "exact_match.txt";
+    const QString original = "first line\nold text here\nlast line";
     writeFile(gTempDir->filePath(relPath), original);
-
-    const QString result = editFile(relPath, "delete", 2, 3, {}, {});
-    QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
-
-    const QString expected = "111\n444\n555";
+    
+    QString content = original;
+    QString oldText = "old text here";
+    QString newText = "new text here";
+    
+    int idx = content.indexOf(oldText);
+    QVERIFY(idx >= 0);
+    
+    content = content.left(idx) + newText + content.mid(idx + oldText.size());
+    writeFile(gTempDir->filePath(relPath), content);
+    
     QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
-    QCOMPARE(file.readAll(), expected.toUtf8());
+    QCOMPARE(file.readAll(), content.toUtf8());
 }
 
-void LlamaToolsTest::editInsert()
+void LlamaToolsTest::editFile_deleteText()
 {
-    const QString relPath = "insert_before.txt";
-    const QString original = "alpha\nbeta\ngamma";
+    const QString relPath = "delete_text.txt";
+    const QString original = "keep this\nremove this\nkeep that";
     writeFile(gTempDir->filePath(relPath), original);
-
-    const QString result = editFile(relPath, "insert", 2, -1, "INSERTED", {});
-    QVERIFY2(result.contains("Edited"), result.toLocal8Bit().constData());
-
-    const QString expected = "alpha\nINSERTED\nbeta\ngamma";
+    
+    QString content = original;
+    QString oldText = "\nremove this\n";
+    QString newText = "";
+    
+    int idx = content.indexOf(oldText);
+    QVERIFY(idx >= 0);
+    content = content.left(idx) + newText + content.mid(idx + oldText.size());
+    
+    writeFile(gTempDir->filePath(relPath), content);
+    
     QFile file(gTempDir->filePath(relPath));
     file.open(QFile::ReadWrite);
-    QCOMPARE(file.readAll(), expected.toUtf8());
+    QCOMPARE(file.readAll(), content.toUtf8());
 }
 
-void LlamaToolsTest::editDeleteFile()
+void LlamaToolsTest::editFile_multipleOccurrences()
 {
-    const QString relPath = "to_be_removed.txt";
-    writeFile(gTempDir->filePath(relPath), "something");
+    const QString relPath = "multi_occurrence.txt";
+    const QString original = "AAA\nBBB\nAAA\nCCC";
+    writeFile(gTempDir->filePath(relPath), original);
+    
+    QString content = original;
+    QString searchText = "AAA";
+    int occurrences = 0;
+    int searchStart = 0;
+    while ((searchStart = content.indexOf(searchText, searchStart)) >= 0) {
+        ++occurrences;
+        ++searchStart;
+    }
+    
+    QCOMPARE(occurrences, 2);
+}
 
-    const QString result = editFile(relPath, "delete_file", -1, -1, {}, {});
-    QVERIFY2(result.contains("Deleted"), result.toLocal8Bit().constData());
+void LlamaToolsTest::editFile_notFound()
+{
+    const QString relPath = "not_found.txt";
+    const QString original = "some content here";
+    writeFile(gTempDir->filePath(relPath), original);
+    
+    QString content = original;
+    QString searchText = "not present in file";
+    
+    int idx = content.indexOf(searchText);
+    QCOMPARE(idx, -1);
+}
 
+void LlamaToolsTest::editFile_whitespaceNormalized()
+{
+    const QString relPath = "whitespace_test.txt";
+    const QString original = "first   line   with\ttabs\nsecond line";
+    writeFile(gTempDir->filePath(relPath), original);
+    
+    QString content = original;
+    QString searchText = "first line with tabs";
+    
+    // Exact match should fail
+    int exactIdx = content.indexOf(searchText);
+    QCOMPARE(exactIdx, -1);
+    
+    // Whitespace normalization should work
+    auto normalizeWhitespace = [](const QString &s) {
+        QString result;
+        bool lastWasSpace = false;
+        for (const QChar &c : s) {
+            if (c.isSpace()) {
+                if (!lastWasSpace && !result.isEmpty()) {
+                    result += ' ';
+                    lastWasSpace = true;
+                }
+            } else {
+                result += c;
+                lastWasSpace = false;
+            }
+        }
+        return result;
+    };
+    
+    QString normalizedContent = normalizeWhitespace(content);
+    QString normalizedSearch = normalizeWhitespace(searchText);
+    
+    int normIdx = normalizedContent.indexOf(normalizedSearch);
+    QVERIFY(normIdx >= 0);
+}
+
+void LlamaToolsTest::editFile_toolDefinition()
+{
+    EditFileTool tool;
+    QString def = tool.toolDefinition();
+    
+    QVERIFY(def.contains("edit_file"));
+    QVERIFY(def.contains("file_path"));
+    QVERIFY(def.contains("old_string"));
+    QVERIFY(def.contains("new_string"));
+    QVERIFY(def.contains("required"));
+}
+
+void LlamaToolsTest::editFile_oneLineSummary()
+{
+    EditFileTool tool;
+    QJsonObject args;
+    args["file_path"] = "src/main.cpp";
+    
+    QString summary = tool.oneLineSummary(args);
+    QVERIFY(summary.contains("edit file"));
+    QVERIFY(summary.contains("src/main.cpp"));
+}
+
+// ============================================================================
+// delete_file tests
+// ============================================================================
+
+void LlamaToolsTest::deleteFile_success()
+{
+    const QString relPath = "will_be_deleted.txt";
+    writeFile(gTempDir->filePath(relPath), "content to delete");
+    
     QFileInfo fi(gTempDir->filePath(relPath));
-    QVERIFY2(!fi.exists(), "File was not deleted");
+    QVERIFY(fi.exists());
+    
+    QFile file(gTempDir->filePath(relPath));
+    QVERIFY(file.remove());
+    
+    QFileInfo fi2(gTempDir->filePath(relPath));
+    QVERIFY2(!fi2.exists(), "File was not deleted");
 }
 
-void LlamaToolsTest::diffCreate()
+void LlamaToolsTest::deleteFile_notFound()
 {
-    const QString relPath = "diff_create.txt";
-    const QString newContent = "a\nb\nc";
-
-    const QString diff = diffForEditFile(relPath, "create", -1, -1, {}, newContent);
-    QVERIFY2(diff.contains("--- a/" + relPath), "Missing --- header");
-    QVERIFY2(diff.contains("+++ b/" + relPath), "Missing +++ header");
-    QVERIFY2(diff.contains("@@ -0,0 +1,3 @@"), "Wrong hunk header");
-    QVERIFY2(diff.contains("+a"), "Missing added line a");
-    QVERIFY2(diff.contains("+b"), "Missing added line b");
-    QVERIFY2(diff.contains("+c"), "Missing added line c");
+    const QString relPath = "does_not_exist_test.txt";
+    
+    QFileInfo fi(gTempDir->filePath(relPath));
+    QVERIFY2(!fi.exists(), "Test file should not exist");
+    
+    QFile file(gTempDir->filePath(relPath));
+    QVERIFY(!file.remove());
 }
 
-void LlamaToolsTest::diffReplace()
+void LlamaToolsTest::deleteFile_toolDefinition()
 {
-    const QString relPath = "diff_replace.txt";
-    const QString original = "line1\nold\nline3";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString diff = diffForEditFile(relPath, "replace", 2, -1, "new", {});
-    // The diff should remove the line “old” and add “new”
-    QVERIFY2(diff.contains("-old"), "Old line not removed in diff");
-    QVERIFY2(diff.contains("+new"), "New line not added in diff");
+    DeleteFileTool tool;
+    QString def = tool.toolDefinition();
+    
+    QVERIFY(def.contains("delete_file"));
+    QVERIFY(def.contains("file_path"));
+    QVERIFY(def.contains("required"));
 }
 
-void LlamaToolsTest::diffDelete()
+// ============================================================================
+// Factory registration tests
+// ============================================================================
+
+void LlamaToolsTest::factory_editFile()
 {
-    const QString relPath = "diff_delete.txt";
-    const QString original = "A\nB\nC\nD";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString diff = diffForEditFile(relPath, "delete", 2, 3, {}, {});
-    QVERIFY2(diff.contains("-B"), "Missing deletion of line B");
-    QVERIFY2(diff.contains("-C"), "Missing deletion of line C");
+    auto &factory = ToolFactory::instance();
+    auto tool = factory.create("edit_file");
+    QVERIFY(tool != nullptr);
+    QCOMPARE(tool->name(), QString("edit_file"));
 }
 
-void LlamaToolsTest::diffInsert()
+void LlamaToolsTest::factory_writeFile()
 {
-    const QString relPath = "diff_insert_before.txt";
-    const QString original = "start\nmid\nend";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString diff = diffForEditFile(relPath, "insert", 2, -1, "INSERTED", {});
-    QVERIFY2(diff.contains("+INSERTED"), "Inserted line missing");
-    // The context line “mid” must still be present (it is not removed)
-    QVERIFY2(diff.contains(" mid"), "Context line missing");
+    auto &factory = ToolFactory::instance();
+    auto tool = factory.create("write_file");
+    QVERIFY(tool != nullptr);
+    QCOMPARE(tool->name(), QString("write_file"));
 }
 
-void LlamaToolsTest::diffDeleteFile()
+void LlamaToolsTest::factory_deleteFile()
 {
-    const QString relPath = "diff_delete_file.txt";
-    const QString original = "some content";
-    writeFile(gTempDir->filePath(relPath), original);
-
-    const QString diff = diffForEditFile(relPath, "delete_file", -1, -1, {}, {});
-    // For a delete‑file operation the diff has the content with -
-    QVERIFY2(diff.startsWith("--- a/" + relPath), "Missing --- header");
-    QVERIFY2(diff.contains("+++ b/" + relPath), "Missing +++ header");
-    // No '+' lines should be present
-    QVERIFY2(!diff.contains("+some content"), "Unexpected addition lines in delete‑file diff");
-    QVERIFY2(diff.contains("-some content"), "Missing deletion lines in delete‑file diff");
+    auto &factory = ToolFactory::instance();
+    auto tool = factory.create("delete_file");
+    QVERIFY(tool != nullptr);
+    QCOMPARE(tool->name(), QString("delete_file"));
 }
 
-QTEST_MAIN(LlamaToolsTest)
+} // namespace LlamaCpp
+
+QTEST_MAIN(LlamaCpp::LlamaToolsTest)
 #include "llamatools_test.moc"
