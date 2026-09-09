@@ -691,18 +691,12 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
 {
     int secId = ++m_nextDetailsId;
     
-    // Determine if this is a tool call (has tool-related keywords) vs thinking section
+    // Tool calls start with a zero-width space marker; collapse them by default.
+    // Thinking sections and other details use m_expandDetailsByDefault.
     const QString summaryText
         = details.summary.empty() ? Tr::tr("Details")
                                   : summaryPlainText(doc, details.summary);
-    const bool isToolCall = !summaryText.isEmpty() 
-                         && summaryText != Tr::tr("Details")
-                         && summaryText != "Thinking"
-                         && (summaryText.contains("edited") || summaryText.contains("wrote") 
-                             || summaryText.contains("deleted") || summaryText.contains("run")
-                             || summaryText.contains("search") || summaryText.contains("list")
-                             || summaryText.contains("build") || summaryText.contains("open")
-                             || summaryText.contains("create"));
+    const bool isToolCall = !summaryText.isEmpty() && summaryText[0] == QChar(0x200B);
     
     // Tool calls are collapsed by default; thinking sections respect user setting
     bool visible = m_toggleDetails.contains(secId) 

@@ -415,10 +415,10 @@ QString ChatMessage::getToolUsageAndResult() const
             "Token_Notification_Danger_Default\">J</span>");
     }
 
-    const QString summary = statusIconHtml + "&nbsp;" + tool->oneLineSummary(args);
+    const QString summary = QChar(0x200B) + statusIconHtml + "&nbsp;" + tool->oneLineSummary(args);
     QString details = tool->detailsMarkdown(args, functionResult);
 
-    return QString("<details><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
+    return QString("<details data-tool=\"true\"><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
 }
 
 bool ChatMessage::haveToolCalls() const
