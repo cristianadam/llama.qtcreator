@@ -9,7 +9,7 @@ QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &resul
     if (result.isEmpty())
         return {};
 
-    return QString("**Result:**\n```\n%1\n```").arg(result);
+    return QString("```\n%1\n```").arg(result);
 }
 
 } // namespace LlamaCpp

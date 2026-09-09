@@ -148,9 +148,7 @@ void ShellTool::run(const QJsonObject &arguments,
 QString ShellTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
 {
     const QString command = arguments.value("command").toString();
-    return QString("```sh\n%1\n```\n\n"
-                   "**Result:**\n"
-                   "```\n%2\n```")
+    return QString("```sh\n%1\n```\n\n```\n%2\n```")
         .arg(command, result);
 }
 } // namespace LlamaCpp::Tools
