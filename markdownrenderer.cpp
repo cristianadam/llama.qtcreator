@@ -687,12 +687,23 @@ static QString summaryPlainText(const markus::Document &doc,
 }
 
 void MarkdownRenderer::renderDetails(const markus::Document &doc,
-                                     const markus::DetailsBlock &details)
+                                      const markus::DetailsBlock &details)
 {
     int secId = ++m_nextDetailsId;
+    
+    // Determine if this is a tool call (has spinner icon in summary) vs thinking section
+    const QString summaryText
+        = details.summary.empty() ? Tr::tr("Details")
+                                  : summaryPlainText(doc, details.summary);
+    const bool isToolCall = summaryText.contains("spinner://tool");
+    
+    // Tool calls are collapsed by default; thinking sections respect user setting
+    bool visible = m_toggleDetails.contains(secId) 
+                   ? m_toggleDetails.value(secId)
+                   : (isToolCall ? !m_collapseToolCallsByDefault : m_expandDetailsByDefault);
+    
     if (!m_toggleDetails.contains(secId))
-        m_toggleDetails.insert(secId, m_expandDetailsByDefault);
-    const bool visible = m_toggleDetails.value(secId);
+        m_toggleDetails.insert(secId, visible);
 
     const int prevSecId = m_detailsSecId;
     m_detailsSecId = secId;
@@ -721,12 +732,6 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
     const QTextCharFormat prevIconFmt = m_cursor.charFormat();
     m_cursor.insertHtml(sectionIconHtml(secId, visible));
     m_cursor.setCharFormat(prevIconFmt);
-
-    // Markup-free summary, stored on the first header block so the section's
-    // title is available when it is clicked.
-    const QString summaryText
-        = details.summary.empty() ? Tr::tr("Details")
-                                  : summaryPlainText(doc, details.summary);
 
     // Mark every header block as a toggle block (clickable, never hidden).
     for (QTextBlock blk = firstToggle; blk.isValid(); blk = blk.next()) {
@@ -1436,6 +1441,16 @@ bool MarkdownRenderer::expandDetailsByDefault() const
 void MarkdownRenderer::setExpandDetailsByDefault(bool newExpandDetailsByDefault)
 {
     m_expandDetailsByDefault = newExpandDetailsByDefault;
+}
+
+bool MarkdownRenderer::collapseToolCallsByDefault() const
+{
+    return m_collapseToolCallsByDefault;
+}
+
+void MarkdownRenderer::setCollapseToolCallsByDefault(bool newCollapseToolCallsByDefault)
+{
+    m_collapseToolCallsByDefault = newCollapseToolCallsByDefault;
 }
 
 void MarkdownRenderer::setColor(ColorRole role, const QColor &color)

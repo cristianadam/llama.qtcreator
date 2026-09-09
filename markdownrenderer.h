@@ -74,6 +74,9 @@ public:
     bool expandDetailsByDefault() const;
     void setExpandDetailsByDefault(bool newExpandDetailsByDefault);
 
+    bool collapseToolCallsByDefault() const;
+    void setCollapseToolCallsByDefault(bool newCollapseToolCallsByDefault);
+
     QByteArray buffer() const;
     void setBuffer(const QByteArray &newBuffer);
 
@@ -199,6 +202,7 @@ private:
     int m_paragraphMargin = 0;
     bool m_skipNextParagraphBlock = false;
     bool m_expandDetailsByDefault = true;
+    bool m_collapseToolCallsByDefault = true;
     double m_baseFontSize = 0.0;
     QFont m_baseFont;
     QFont m_monoFont;
