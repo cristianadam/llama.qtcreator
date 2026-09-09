@@ -80,7 +80,6 @@ add_qtc_plugin(LlamaCpp
     LlamaCpp.json.in
     markdownrenderer.cpp markdownrenderer.h
     README.md
-    tools/askuser_tool.cpp tools/askuser_tool.h
     tools/build_project_tool.cpp tools/build_project_tool.h
     tools/create_directory_tool.cpp tools/create_directory_tool.h
     tools/deletefile_tool.cpp tools/deletefile_tool.h
