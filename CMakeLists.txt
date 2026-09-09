@@ -90,7 +90,6 @@ add_qtc_plugin(LlamaCpp
     tools/listdir_tool.cpp tools/listdir_tool.h
     tools/list_issues_tool.cpp tools/list_issues_tool.h
     tools/list_project_tool.cpp tools/list_project_tool.h
-    tools/python_tool.cpp tools/python_tool.h
     tools/readfile_tool.cpp tools/readfile_tool.h
     tools/regexsearch_tool.cpp tools/regexsearch_tool.h
     tools/run_project_tool.cpp tools/run_project_tool.h
