@@ -165,7 +165,7 @@ void ChatManager::initServerProps()
 
 bool ChatManager::isGenerating(const QString &convId) const
 {
-    return m_pendingMessages.contains(convId);
+    return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
 }
 
 ViewingChat ChatManager::getViewingChat(const QString &convId) const
@@ -894,11 +894,16 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     }
 
     Message toolMsg = createToolMessage(assistantMsg);
+
+    // The tool runs asynchronously – keep the conversation busy (spinner
+    // spinning, no new messages accepted) until it has reported back.
+    m_runningTools[convId]++;
+
     m_storage->appendMsg(toolMsg, assistantMsg.id);
     onChunk(toolMsg.id);
 
     auto toolFinished = [this, convId, toolMsg, tool, onChunk](const QString &toolOutput,
-                                                               bool ok) mutable {
+                                                                bool ok) mutable {
         QJsonObject toolJsonMsg;
         toolJsonMsg["role"] = "tool";
         toolJsonMsg["tool_call_id"] = tool.id;
@@ -910,6 +915,9 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
         toolMsg.extra << toolResultExtra;
         m_storage->updateMessageExtra(toolMsg, toolMsg.extra);
+
+        if (m_runningTools.value(convId) > 0)
+            --m_runningTools[convId];
 
         // generate assistant reply
         generateMessage(toolMsg.convId, toolMsg.id, onChunk);

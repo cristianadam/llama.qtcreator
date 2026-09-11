@@ -475,7 +475,9 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     if (pendingId < 0) {
         refreshMessages(chat.messages, msg.id);
 
-        m_input->setIsGenerating(false);
+        // Stay in the "generating" state while a tool is still executing
+        // asynchronously (e.g. a web search in flight).
+        m_input->setIsGenerating(ChatManager::instance().isGenerating(msg.convId));
         scrollToBottom();
         return;
     }

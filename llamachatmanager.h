@@ -119,5 +119,10 @@ private:
     QHash<QString, QNetworkReply *> m_followUpReplies;
     QVector<ToolCall> m_toolCalls;
     QHash<QString, std::shared_ptr<LlamaCpp::Tool>> m_streamingTools;
+
+    //! Number of tools currently executing (per conversation).  Tools run
+    //! asynchronously, so a conversation stays "busy" until every in‑flight
+    //! tool has reported back.
+    QHash<QString, int> m_runningTools;
 };
 } // namespace LlamaCpp
