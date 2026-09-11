@@ -8,9 +8,8 @@ add_qtc_test(llamatools_test
     QtCreator::TextEditor
   SOURCES
     llamatools_test.cpp
-    ../tools/editfile_tool.cpp
-    ../tools/writefile_tool.cpp
-    ../tools/deletefile_tool.cpp
+    ../tools/apply_patch_tool.cpp
+    ../tools/patch.cpp
     ../tools/tool.cpp
     ../tools/tool_utils.cpp
 )

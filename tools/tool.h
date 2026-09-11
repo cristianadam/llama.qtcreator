@@ -11,9 +11,15 @@ class Tool
 public:
     virtual ~Tool() = default;
 
-    /*! Returns the name that appears in the JSON schema, e.g. "python",
-        "edit_file", … */
+    /*! Returns the name that appears in the JSON schema, e.g. "shell",
+        "apply_patch", … */
     virtual QString name() const = 0;
+
+    /*! Returns a short human‑readable summary of the tool call derived from
+        the (possibly incomplete) raw argument JSON that is being streamed,
+        e.g. "Add src/main.cpp".  Return an empty string when no meaningful
+        summary can be derived yet; the UI then falls back to the tool name. */
+    virtual QString streamingSummary(const QString &partialArguments) const { return {}; }
 
     /*! Returns the JSON tool defintion */
     virtual QString toolDefinition() const = 0;

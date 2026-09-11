@@ -4,11 +4,14 @@
 #include <QObject>
 #include <QVariantMap>
 
+#include <memory>
+
 #include "llamatypes.h"
 
 namespace LlamaCpp {
 
 class Storage;
+class Tool;
 
 struct ToolCall
 {
@@ -115,5 +118,6 @@ private:
     QHash<QString, QNetworkReply *> m_titleSummaryReplies;
     QHash<QString, QNetworkReply *> m_followUpReplies;
     QVector<ToolCall> m_toolCalls;
+    QHash<QString, std::shared_ptr<LlamaCpp::Tool>> m_streamingTools;
 };
 } // namespace LlamaCpp

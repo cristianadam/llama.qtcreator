@@ -559,10 +559,14 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
 
     QString content = pm.content;
     if (!pm.toolCallInProgress.isEmpty()) {
-        const QString preparing = QStringLiteral(
-                                     "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/> "
-                                     "Preparing %1 ...")
-            .arg(pm.toolCallInProgress.toHtmlEscaped());
+        // Show the concrete operation ("Add src/main.cpp") once the partial
+        // arguments reveal it, otherwise fall back to the bare tool name.
+        const QString label = pm.toolCallPreview.isEmpty()
+                                  ? QStringLiteral("Preparing %1 ...")
+                                        .arg(pm.toolCallInProgress.toHtmlEscaped())
+                                  : QStringLiteral("%1 ...").arg(pm.toolCallPreview.toHtmlEscaped());
+        const QString preparing =
+            QStringLiteral("<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/> ") + label;
         if (!content.isEmpty())
             content += QLatin1String("\n\n");
         content += preparing;

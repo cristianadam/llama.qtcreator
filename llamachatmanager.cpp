@@ -752,12 +752,21 @@ void ChatManager::sendChatRequest(const QString &convId,
 
                         if (tc.contains("function")) {
                             const QJsonObject &func = tc["function"].toObject();
-                            if (func.contains("name")) {
+                            if (func.contains("name"))
                                 tool.name = func["name"].toString();
-                                pm.toolCallInProgress = tool.name;
-                            }
                             if (func.contains("arguments"))
                                 tool.arguments += func["arguments"].toString();
+                        }
+
+                        if (!tool.name.isEmpty()) {
+                            pm.toolCallInProgress = tool.name;
+                            pm.toolCallPreview.clear();
+                            if (!m_streamingTools.contains(tool.name))
+                                m_streamingTools.insert(tool.name,
+                                                        ToolFactory::instance().create(tool.name));
+                            const auto it = m_streamingTools.find(tool.name);
+                            if (it != m_streamingTools.end() && it.value())
+                                pm.toolCallPreview = it.value()->streamingSummary(tool.arguments);
                         }
 
                         QJsonParseError err;
