@@ -65,6 +65,15 @@ public:
 
     Utils::StringListAspect enabledToolsList{this};
     Utils::BoolAspect toolsEnabled{this};
+
+    // Web search (websearch tool)
+    Utils::StringAspect webSearchProvider{this};
+    Utils::StringAspect webSearchExaUrl{this};
+    Utils::StringAspect webSearchExaApiKey{this};
+    Utils::StringAspect webSearchGoogleUrl{this};
+    Utils::StringAspect webSearchGoogleApiKey{this};
+    Utils::StringAspect webSearchGoogleCx{this};
+    Utils::StringAspect webSearchDuckDuckGoUrl{this};
 };
 
 LlamaSettings &settings();

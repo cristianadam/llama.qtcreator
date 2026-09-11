@@ -1,12 +1,24 @@
+// Test stub: keeps the tools unit test free of a full Qt Creator
+// initialization.  Provides only what the tools call on DocumentManager.
+#pragma once
+
 #include <utils/filepath.h>
 
 namespace Core {
+
 class DocumentManager
 {
 public:
-    inline static Utils::FilePath s_projectDirectory;
+    static void setProjectsDirectory(const Utils::FilePath &path)
+    {
+        projectsDirectory() = path;
+    }
 
-    static Utils::FilePath projectsDirectory() { return s_projectDirectory; }
-    static void setProjectsDirectory(const Utils::FilePath &path) { s_projectDirectory = path; }
+    static Utils::FilePath &projectsDirectory()
+    {
+        static Utils::FilePath path;
+        return path;
+    }
 };
+
 } // namespace Core

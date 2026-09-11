@@ -9,6 +9,8 @@
 #include <projectexplorer/project.h>
 #include <utils/layoutbuilder.h>
 
+#include <QComboBox>
+#include <QLabel>
 #include <QToolTip>
 
 using namespace Utils;
@@ -400,6 +402,76 @@ LlamaSettings::LlamaSettings()
     toolsEnabled.setToolTip(
         Tr::tr("If checked the chat will start with the Tools button turned on."));
 
+    //
+    // Web search (websearch tool)
+    //
+
+    webSearchProvider.setDisplayName(Tr::tr("Web Search Provider"));
+    webSearchProvider.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchProvider.setSettingsKey("WebSearchProvider");
+    webSearchProvider.setLabelText(Tr::tr("Web Search Provider:"));
+    webSearchProvider.setDefaultValue("exa");
+    webSearchProvider.setToolTip(Tr::tr(
+        "Backend used by the websearch tool: \"exa\" (default, no API key required), "
+        "\"google\" (Custom Search JSON API, requires an API key and a search engine ID) "
+        "or \"duckduckgo\" (no API key required)."));
+    webSearchProvider.setHistoryCompleter("LlamaCpp.WebSearchProvider.History");
+
+    webSearchExaUrl.setDisplayName(Tr::tr("Exa Endpoint"));
+    webSearchExaUrl.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchExaUrl.setSettingsKey("WebSearchExaUrl");
+    webSearchExaUrl.setLabelText(Tr::tr("Exa Endpoint:"));
+    webSearchExaUrl.setDefaultValue("https://mcp.exa.ai/mcp");
+    webSearchExaUrl.setToolTip(Tr::tr("URL of the Exa MCP endpoint used by the websearch tool."));
+    webSearchExaUrl.setHistoryCompleter("LlamaCpp.WebSearchExaUrl.History");
+
+    webSearchExaApiKey.setDisplayName(Tr::tr("Exa API Key"));
+    webSearchExaApiKey.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchExaApiKey.setSettingsKey("WebSearchExaApiKey");
+    webSearchExaApiKey.setLabelText(Tr::tr("Exa API Key:"));
+    webSearchExaApiKey.setDefaultValue("");
+    webSearchExaApiKey.setToolTip(Tr::tr(
+        "Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used."));
+    webSearchExaApiKey.setHistoryCompleter("LlamaCpp.WebSearchExaApiKey.History");
+
+    webSearchGoogleUrl.setDisplayName(Tr::tr("Google Endpoint"));
+    webSearchGoogleUrl.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchGoogleUrl.setSettingsKey("WebSearchGoogleUrl");
+    webSearchGoogleUrl.setLabelText(Tr::tr("Google Endpoint:"));
+    webSearchGoogleUrl.setDefaultValue("https://www.googleapis.com/customsearch/v1");
+    webSearchGoogleUrl.setToolTip(Tr::tr(
+        "URL of the Google Custom Search (customsearch/v1) endpoint used by the websearch tool."));
+    webSearchGoogleUrl.setHistoryCompleter("LlamaCpp.WebSearchGoogleUrl.History");
+
+    webSearchGoogleApiKey.setDisplayName(Tr::tr("Google API Key"));
+    webSearchGoogleApiKey.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchGoogleApiKey.setSettingsKey("WebSearchGoogleApiKey");
+    webSearchGoogleApiKey.setLabelText(Tr::tr("Google API Key:"));
+    webSearchGoogleApiKey.setDefaultValue("");
+    webSearchGoogleApiKey.setToolTip(Tr::tr(
+        "API key for the Google Custom Search JSON API (required for the \"google\" provider)."));
+    webSearchGoogleApiKey.setHistoryCompleter("LlamaCpp.WebSearchGoogleApiKey.History");
+
+    webSearchGoogleCx.setDisplayName(Tr::tr("Google Search Engine ID (cx)"));
+    webSearchGoogleCx.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchGoogleCx.setSettingsKey("WebSearchGoogleCx");
+    webSearchGoogleCx.setLabelText(Tr::tr("Google Search Engine ID (cx):"));
+    webSearchGoogleCx.setDefaultValue("");
+    webSearchGoogleCx.setToolTip(Tr::tr(
+        "The cx (search engine ID) of the Google Custom Search engine "
+        "(required for the \"google\" provider)."));
+    webSearchGoogleCx.setHistoryCompleter("LlamaCpp.WebSearchGoogleCx.History");
+
+    webSearchDuckDuckGoUrl.setDisplayName(Tr::tr("DuckDuckGo Endpoint"));
+    webSearchDuckDuckGoUrl.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchDuckDuckGoUrl.setSettingsKey("WebSearchDuckDuckGoUrl");
+    webSearchDuckDuckGoUrl.setLabelText(Tr::tr("DuckDuckGo Endpoint:"));
+    webSearchDuckDuckGoUrl.setDefaultValue("https://lite.duckduckgo.com/lite/");
+    webSearchDuckDuckGoUrl.setToolTip(Tr::tr(
+        "URL of the DuckDuckGo Lite endpoint used by the websearch tool "
+        "(the \"duckduckgo\" provider)."));
+    webSearchDuckDuckGoUrl.setHistoryCompleter("LlamaCpp.WebSearchDuckDuckGoUrl.History");
+
     initEnableAspect(enableLlamaCpp);
 
     readSettings();
@@ -446,6 +518,13 @@ LlamaSettings::LlamaSettings()
     max_tokens.setEnabler(&enableLlamaCpp);
     customJson.setEnabler(&enableLlamaCpp);
     toolsEnabled.setEnabler(&enableLlamaCpp);
+    webSearchProvider.setEnabler(&enableLlamaCpp);
+    webSearchExaUrl.setEnabler(&enableLlamaCpp);
+    webSearchExaApiKey.setEnabler(&enableLlamaCpp);
+    webSearchGoogleUrl.setEnabler(&enableLlamaCpp);
+    webSearchGoogleApiKey.setEnabler(&enableLlamaCpp);
+    webSearchGoogleCx.setEnabler(&enableLlamaCpp);
+    webSearchDuckDuckGoUrl.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {
         using namespace Layouting;
@@ -507,11 +586,40 @@ LlamaSettings::LlamaSettings()
             },
         };
 
+        auto *providerCombo = new QComboBox();
+        providerCombo->addItems({QStringLiteral("exa"),
+                                 QStringLiteral("google"),
+                                 QStringLiteral("duckduckgo")});
+        providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(webSearchProvider())));
+        connect(providerCombo,
+                &QComboBox::currentTextChanged,
+                this,
+                [this](const QString &text) { webSearchProvider.setValue(text); });
+        webSearchProvider.addOnChanged(providerCombo, [this, providerCombo]() {
+            providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(webSearchProvider())));
+        });
+
+        Group webSearch {
+            Column {
+                Row {new QLabel(webSearchProvider.labelText()), providerCombo, st}, br,
+                hr, br,
+                Row {webSearchExaUrl}, br,
+                Row {webSearchExaApiKey}, br,
+                hr, br,
+                Row {webSearchGoogleUrl}, br,
+                Row {webSearchGoogleApiKey}, br,
+                Row {webSearchGoogleCx}, br,
+                hr, br,
+                Row {webSearchDuckDuckGoUrl}, br,
+            },
+        };
+
         return Column {
             enableLlamaCpp, br,
             Row {
                 Column { fim, st },
-                Column { chat, st }
+                Column { chat, st },
+                Column { webSearch, st }
             },
             st
         };

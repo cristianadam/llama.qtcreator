@@ -1,4 +1,6 @@
 #include <QFile>
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QTemporaryDir>
 #include <QTextStream>
@@ -10,6 +12,8 @@
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/patch.h>
+#include <tools/webfetch_tool.h>
+#include <tools/websearch_tool.h>
 
 namespace LlamaCpp {
 
@@ -119,8 +123,27 @@ private slots:
     void tool_streamingSummary_firstSectionWins();
     void tool_detailsMarkdown();
 
+    // WebFetchTool
+    void webfetch_normalizeUrl();
+    void webfetch_htmlToMarkdown();
+    void webfetch_htmlToText();
+    void webfetch_toolDefinition();
+    void webfetch_summaries();
+
+    // WebSearchTool
+    void websearch_parseResults();
+    void websearch_maxResults();
+    void websearch_toolDefinition();
+    void websearch_summaries();
+    void websearch_exaEndpointUrl();
+    void websearch_parseMcpResponse();
+    void websearch_parseMcpResponseSse();
+    void websearch_parseGoogleResults();
+    void websearch_formatResults();
+
     // Factory registration
     void factory_applyPatch();
+    void factory_webTools();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -666,6 +689,272 @@ void LlamaToolsTest::tool_detailsMarkdown()
 }
 
 // ============================================================================
+// WebFetchTool
+// ============================================================================
+
+void LlamaToolsTest::webfetch_normalizeUrl()
+{
+    QCOMPARE(Tools::normalizeFetchUrl(QStringLiteral(" https://doc.qt.io/qt-6/ ")),
+             QString("https://doc.qt.io/qt-6/"));
+    QCOMPARE(Tools::normalizeFetchUrl(QStringLiteral("http://localhost:8080/api")),
+             QString("http://localhost:8080/api"));
+    QVERIFY(Tools::normalizeFetchUrl(QStringLiteral("doc.qt.io/qt-6/")).isEmpty());
+    QVERIFY(Tools::normalizeFetchUrl(QStringLiteral("ftp://example.com/x")).isEmpty());
+    QVERIFY(Tools::normalizeFetchUrl(QString()).isEmpty());
+}
+
+void LlamaToolsTest::webfetch_htmlToMarkdown()
+{
+    const QString html = QStringLiteral(
+        "<!DOCTYPE html><html><head><title>Ignored</title>"
+        "<script>var x = 1;</script><style>body { color: red }</style></head><body>"
+        "<h1>Title Here</h1>"
+        "<p>Some <a href=\"https://example.com/page\">link</a>, "
+        "<code>inline code</code> and <b>bold</b> text.</p>"
+        "<ul><li>first item</li><li>second item</li></ul>"
+        "<pre><code>int x = 1;\nint y = 2;</code></pre>"
+        "</body></html>");
+
+    const QString md = Tools::htmlToMarkdown(html);
+    QVERIFY2(md.contains(QStringLiteral("# Title Here")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("[link](https://example.com/page)")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("`inline code`")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("**bold**")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("- first item")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("- second item")), qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("```\nint x = 1;\nint y = 2;\n```")), qPrintable(md));
+
+    // Boilerplate must be stripped
+    QVERIFY(!md.contains("var x = 1"));
+    QVERIFY(!md.contains("color: red"));
+    QVERIFY(!md.contains("Ignored"));
+}
+
+void LlamaToolsTest::webfetch_htmlToText()
+{
+    const QString html = QStringLiteral(
+        "<html><head><script>secret()</script></head>"
+        "<body><h2>Heading</h2><p>Visible <b>text</b> here.</p></body></html>");
+
+    const QString text = Tools::htmlToText(html);
+    QVERIFY2(text.contains("Heading"), qPrintable(text));
+    QVERIFY2(text.contains("Visible text here."), qPrintable(text));
+    QVERIFY(!text.contains("secret()"));
+}
+
+void LlamaToolsTest::webfetch_toolDefinition()
+{
+    Tools::WebFetchTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QCOMPARE(doc.object()["function"].toObject()["name"].toString(), QString("webfetch"));
+    QVERIFY(def.contains("markdown"));
+    QVERIFY(def.contains("required"));
+}
+
+void LlamaToolsTest::webfetch_summaries()
+{
+    Tools::WebFetchTool tool;
+
+    QJsonObject args;
+    args["url"] = "https://doc.qt.io/qt-6/";
+    QCOMPARE(tool.oneLineSummary(args), QString("fetch https://doc.qt.io/qt-6/"));
+
+    // Partial argument JSON, still streaming in
+    QCOMPARE(tool.streamingSummary(QStringLiteral(
+                 "{\"url\": \"https://doc.qt.io/qt-6")),
+             QString("fetch https://doc.qt.io/qt-6"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"url\": \"")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+}
+
+// ============================================================================
+// WebSearchTool
+// ============================================================================
+
+namespace {
+
+// Fixture mirroring the real lite.duckduckgo.com markup
+const QString kDuckDuckGoFixture = QStringLiteral(
+    "<html><body><form id=\"lite\"><table>"
+    "<tr><td><a rel=\"nofollow\" "
+    "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fdoc.qt.io%2Fqt-6%2Findex.html&amp;rut=abc123\" "
+    "class='result-link'>Qt 6 Reference Docs</a></td></tr>"
+    "<tr><td class='result-snippet'>\n"
+    "    Official documentation for <b>Qt 6</b> &amp; its modules.\n"
+    "  </td></tr>"
+    "<tr><td><a rel=\"nofollow\" "
+    "href=\"https://example.org/second\" "
+    "class='result-link'>Second &amp; Third</a></td></tr>"
+    "<tr><td class='result-snippet'>Snippet for the second result.</td></tr>"
+    "<tr><td><a rel=\"nofollow\" "
+    "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Fthird&amp;rut=def456\" "
+    "class='result-link'>Third</a></td></tr>"
+    "</table></form></body></html>");
+
+} // namespace
+
+void LlamaToolsTest::websearch_parseResults()
+{
+    const auto results = Tools::parseDuckDuckGoResults(kDuckDuckGoFixture, 10);
+    QCOMPARE(results.size(), 3);
+
+    QCOMPARE(results[0].title, QString("Qt 6 Reference Docs"));
+    QCOMPARE(results[0].url, QString("https://doc.qt.io/qt-6/index.html"));
+    QCOMPARE(results[0].snippet, QString("Official documentation for Qt 6 & its modules."));
+
+    // A direct (non‑wrapped) href is used as‑is
+    QCOMPARE(results[1].title, QString("Second & Third"));
+    QCOMPARE(results[1].url, QString("https://example.org/second"));
+    QCOMPARE(results[1].snippet, QString("Snippet for the second result."));
+
+    // A result without a snippet gets an empty one
+    QCOMPARE(results[2].title, QString("Third"));
+    QCOMPARE(results[2].url, QString("https://example.org/third"));
+    QVERIFY(results[2].snippet.isEmpty());
+}
+
+void LlamaToolsTest::websearch_maxResults()
+{
+    const auto results = Tools::parseDuckDuckGoResults(kDuckDuckGoFixture, 2);
+    QCOMPARE(results.size(), 2);
+    QCOMPARE(results[1].url, QString("https://example.org/second"));
+}
+
+void LlamaToolsTest::websearch_toolDefinition()
+{
+    Tools::WebSearchTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QCOMPARE(doc.object()["function"].toObject()["name"].toString(), QString("websearch"));
+}
+
+void LlamaToolsTest::websearch_summaries()
+{
+    Tools::WebSearchTool tool;
+
+    QJsonObject args;
+    args["query"] = "qt webengine offline";
+    QCOMPARE(tool.oneLineSummary(args), QString("search qt webengine offline"));
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral(
+                  "{\"query\": \"qt webengine")),
+              QString("search qt webengine"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"query\": \"")), QString());
+}
+
+void LlamaToolsTest::websearch_exaEndpointUrl()
+{
+    // Without a key the endpoint is used as‑is
+    QCOMPARE(Tools::exaEndpointUrl(QStringLiteral("https://mcp.exa.ai/mcp"), QString()),
+              QString("https://mcp.exa.ai/mcp"));
+
+    // With a key it is appended as a query parameter
+    QCOMPARE(Tools::exaEndpointUrl(QStringLiteral("https://mcp.exa.ai/mcp"),
+                                   QStringLiteral("secret-key")),
+              QString("https://mcp.exa.ai/mcp?exaApiKey=secret-key"));
+
+    // Pre‑existing query parameters are preserved
+    QCOMPARE(Tools::exaEndpointUrl(QStringLiteral("https://mcp.exa.ai/mcp?x=1"),
+                                   QStringLiteral("k2")),
+              QString("https://mcp.exa.ai/mcp?x=1&exaApiKey=k2"));
+
+    QVERIFY(Tools::exaEndpointUrl(QString(), QStringLiteral("k")).isEmpty());
+}
+
+void LlamaToolsTest::websearch_parseMcpResponse()
+{
+    // Plain JSON body
+    const QString json = QStringLiteral(
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"content\":"
+        "[{\"type\":\"text\",\"text\":\"Title: A\\nURL: https://a.example\"}]}}");
+    QCOMPARE(Tools::parseMcpSearchResponse(json),
+              QString("Title: A\nURL: https://a.example"));
+
+    // A non‑text content item is skipped
+    const QString mixed = QStringLiteral(
+        "{\"result\":{\"content\":[{\"type\":\"image\"},{\"type\":\"text\",\"text\":\"hello\"}]}}");
+    QCOMPARE(Tools::parseMcpSearchResponse(mixed), QString("hello"));
+
+    // Garbage yields an empty string
+    QCOMPARE(Tools::parseMcpSearchResponse(QStringLiteral("not json")), QString());
+    QCOMPARE(Tools::parseMcpSearchResponse(QStringLiteral("{\"result\":{}}")), QString());
+    QCOMPARE(Tools::parseMcpSearchResponse(QString()), QString());
+}
+
+void LlamaToolsTest::websearch_parseMcpResponseSse()
+{
+    // Server‑sent‑events body, as returned by mcp.exa.ai
+    const QString sse = QStringLiteral(
+        "event: message\n"
+        "data: {\"result\":{\"content\":["
+        "{\"type\":\"text\",\"text\":\"Title: B\\nURL: https://b.example\"}]}}\n"
+        "\n");
+    QCOMPARE(Tools::parseMcpSearchResponse(sse),
+              QString("Title: B\nURL: https://b.example"));
+
+    // A leading non‑JSON data line is skipped
+    const QString sseSkipped = QStringLiteral(
+        "data: [NOTICE] synthetic\n"
+        "data: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}}\n");
+    QCOMPARE(Tools::parseMcpSearchResponse(sseSkipped), QString("ok"));
+}
+
+void LlamaToolsTest::websearch_parseGoogleResults()
+{
+    QJsonObject response;
+    QJsonArray items;
+    QJsonObject first;
+    first["title"] = "First";
+    first["link"] = "https://first.example";
+    first["snippet"] = "First snippet";
+    items.append(first);
+    QJsonObject second;
+    second["title"] = "Second";
+    second["link"] = "https://second.example";
+    items.append(second);
+    QJsonObject noLink;
+    noLink["title"] = "Dropped";
+    items.append(noLink);
+    response["items"] = items;
+
+    const auto results = Tools::parseGoogleResults(response);
+    QCOMPARE(results.size(), 2);
+    QCOMPARE(results[0].title, QString("First"));
+    QCOMPARE(results[0].url, QString("https://first.example"));
+    QCOMPARE(results[0].snippet, QString("First snippet"));
+    QCOMPARE(results[1].title, QString("Second"));
+    QVERIFY(results[1].snippet.isEmpty());
+
+    QVERIFY(Tools::parseGoogleResults(QJsonObject()).isEmpty());
+}
+
+void LlamaToolsTest::websearch_formatResults()
+{
+    QVector<Tools::SearchResult> results;
+    Tools::SearchResult a;
+    a.title = QStringLiteral("A");
+    a.url = QStringLiteral("https://a.example");
+    a.snippet = QStringLiteral("Snippet A");
+    results.append(a);
+    Tools::SearchResult b;
+    b.title = QStringLiteral("B");
+    b.url = QStringLiteral("https://b.example");
+    results.append(b);
+
+    QCOMPARE(Tools::formatResults(QStringLiteral("q"), results),
+              QString("Search results for \"q\":\n\n"
+                      "1. A\n   https://a.example\n   Snippet A\n\n"
+                      "2. B\n   https://b.example"));
+}
+
+// ============================================================================
 // Factory registration
 // ============================================================================
 
@@ -675,6 +964,16 @@ void LlamaToolsTest::factory_applyPatch()
     auto tool = factory.create("apply_patch");
     QVERIFY(tool != nullptr);
     QCOMPARE(tool->name(), QString("apply_patch"));
+}
+
+void LlamaToolsTest::factory_webTools()
+{
+    auto &factory = ToolFactory::instance();
+    for (const QString &name : {QStringLiteral("webfetch"), QStringLiteral("websearch")}) {
+        auto tool = factory.create(name);
+        QVERIFY2(tool != nullptr, qPrintable(name));
+        QCOMPARE(tool->name(), name);
+    }
 }
 
 } // namespace LlamaCpp
