@@ -557,6 +557,17 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     if (pm.convId != m_viewingConvId)
         return;
 
+    QString content = pm.content;
+    if (!pm.toolCallInProgress.isEmpty()) {
+        const QString preparing = QStringLiteral(
+                                     "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/> "
+                                     "Preparing %1 ...")
+            .arg(pm.toolCallInProgress.toHtmlEscaped());
+        if (!content.isEmpty())
+            content += QLatin1String("\n\n");
+        content += preparing;
+    }
+
     ChatMessage *w = nullptr;
 
     auto it = std::find_if(m_messageWidgets.begin(),
@@ -567,7 +578,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         Message msg;
         msg.id = pm.id;
         msg.role = "assistant";
-        msg.content = pm.content;
+        msg.content = content;
         msg.children.clear();
 
         w = new ChatMessage(msg, {}, 0, widget());
@@ -579,8 +590,8 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
     } else {
         w = *it;
-        w->renderMarkdown(pm.content);
-        w->message().content = pm.content;
+        w->renderMarkdown(content);
+        w->message().content = content;
     }
     w->messageCompleted(false);
     m_input->setIsGenerating(true);

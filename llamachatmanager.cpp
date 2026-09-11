@@ -752,8 +752,10 @@ void ChatManager::sendChatRequest(const QString &convId,
 
                         if (tc.contains("function")) {
                             const QJsonObject &func = tc["function"].toObject();
-                            if (func.contains("name"))
+                            if (func.contains("name")) {
                                 tool.name = func["name"].toString();
+                                pm.toolCallInProgress = tool.name;
+                            }
                             if (func.contains("arguments"))
                                 tool.arguments += func["arguments"].toString();
                         }

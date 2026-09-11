@@ -72,6 +72,7 @@ struct Message
     qint64 parent;
     QList<qint64> children;
     bool haveContent = false;
+    QString toolCallInProgress; // name of the tool call currently being streamed in
 };
 
 struct MessageExtraTextFile
