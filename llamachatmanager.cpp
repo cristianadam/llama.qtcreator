@@ -57,7 +57,7 @@ static void addCommonPayloadParams(QJsonObject &payload)
     payload["return_progress"] = true;
 }
 
-static void addToolsToPayload(QJsonObject &payload)
+static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTools = nullptr)
 {
     const QStringList enabledTools = settings().enabledToolsList();
 
@@ -81,6 +81,13 @@ static void addToolsToPayload(QJsonObject &payload)
         const QJsonObject root = doc.object();
         const QJsonObject functionObj = root.value(QStringLiteral("function")).toObject();
         const QString toolName = functionObj.value(QStringLiteral("name")).toString();
+
+        if (allowedTools && !allowedTools->contains(toolName)) {
+            // Not part of the conversation‑specific tool whitelist (task
+            // sub‑agent) – it must not be advertised either.  An empty
+            // whitelist means no tools at all.
+            continue;
+        }
 
         if (!enabledTools.contains(toolName)) {
             // Skip disabled tools – they must never be advertised to the server.
@@ -110,7 +117,8 @@ ChatManager::ChatManager(QObject *parent)
 
     connect(m_storage, &Storage::messageAppended, this, &ChatManager::messageAppended);
     connect(m_storage, &Storage::conversationCreated, [this](const QString &convId) {
-        m_activeConvId = convId;
+        if (!m_taskConvCreationPending && !m_taskConversations.contains(convId))
+            m_activeConvId = convId;
         emit conversationCreated(convId);
     });
     connect(m_storage, &Storage::conversationRenamed, this, &ChatManager::conversationRenamed);
@@ -267,10 +275,20 @@ void ChatManager::generateMessage(const QString &convId,
 
     sendChatRequest(
         convId,
-        [leafMsgs, this](QJsonObject &payload) {
+        [leafMsgs, convId, this](QJsonObject &payload) {
             payload["messages"] = normalizeMsgsForAPI(leafMsgs);
-            if (settings().toolsEnabled())
-                addToolsToPayload(payload);
+            if (settings().toolsEnabled()) {
+                const auto it = m_taskConfigs.constFind(convId);
+                if (it != m_taskConfigs.constEnd()) {
+                    QStringList allowed = it->allowedTools.isEmpty()
+                        ? settings().enabledToolsList()
+                        : it->allowedTools;
+                    allowed.removeAll(QStringLiteral("task")); // no recursion
+                    addToolsToPayload(payload, &allowed);
+                } else {
+                    addToolsToPayload(payload);
+                }
+            }
 
             // custom JSON from settings (if any)
             if (!settings().customJson.value().isEmpty()) {
@@ -420,6 +438,25 @@ Conversation ChatManager::createConversation(const QString &name)
     return m_storage->createConversation(name);
 }
 
+Conversation ChatManager::createTaskConversation(const QString &name)
+{
+    m_taskConvCreationPending = true;
+    Conversation conv = m_storage->createConversation(name);
+    m_taskConvCreationPending = false;
+    m_taskConversations.insert(conv.id);
+    return conv;
+}
+
+void ChatManager::configureTaskConversation(const QString &convId,
+                                            const QString &systemPrompt,
+                                            const QStringList &allowedTools)
+{
+    TaskConversationConfig config;
+    config.systemPrompt = systemPrompt;
+    config.allowedTools = allowedTools;
+    m_taskConfigs.insert(convId, config);
+}
+
 QList<Conversation> ChatManager::allConversations()
 {
     return m_storage->getAllConversations();
@@ -559,7 +596,13 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 {
     QJsonArray res;
 
-    const QString sysMsgText = LlamaCpp::settings().systemMessage.value();
+    QString sysMsgText = LlamaCpp::settings().systemMessage.value();
+    if (!msgs.isEmpty()) {
+        // Task conversations run with their own (sub‑agent) system prompt.
+        const auto it = m_taskConfigs.constFind(msgs.first().convId);
+        if (it != m_taskConfigs.constEnd() && !it->systemPrompt.trimmed().isEmpty())
+            sysMsgText = it->systemPrompt;
+    }
     if (!sysMsgText.trimmed().isEmpty()) {
         QJsonObject sys;
         sys["role"] = "system";
@@ -805,9 +848,11 @@ void ChatManager::sendChatRequest(const QString &convId,
         Message pm = m_pendingMessages.take(convId);
         m_storage->appendMsg(pm, pm.parent);
 
+        const bool isTaskConversation = m_taskConversations.contains(convId);
+
         if (pm.role == "assistant") {
             auto msgs = m_storage->getMessages(convId);
-            const bool doSummarization = msgs.size() == 3;
+            const bool doSummarization = msgs.size() == 3 && !isTaskConversation;
             bool haveToolExecution = false;
 
             for (const QVariantMap &e : pm.extra) {
@@ -837,12 +882,22 @@ void ChatManager::sendChatRequest(const QString &convId,
                 });
             }
 
-            if (!haveToolExecution)
-                followUpQuestions(convId,
-                                  pm.id,
-                                  [this, convId, leafNodeId = pm.id](const QStringList &questions) {
-                                      emit followUpQuestionsReceived(convId, leafNodeId, questions);
-                                  });
+            if (!haveToolExecution) {
+                if (isTaskConversation) {
+                    // The sub‑agent reached its final answer (or the stream
+                    // was aborted / produced nothing) – hand the result back
+                    // to the "task" tool waiting in the parent conversation.
+                    const bool ok = (reply->error() == QNetworkReply::NoError)
+                                    && !pm.content.trimmed().isEmpty();
+                    emit taskConversationFinished(convId, pm.content, ok);
+                } else {
+                    followUpQuestions(convId,
+                                      pm.id,
+                                      [this, convId, leafNodeId = pm.id](const QStringList &questions) {
+                                          emit followUpQuestionsReceived(convId, leafNodeId, questions);
+                                      });
+                }
+            }
         }
     });
 }
@@ -933,6 +988,14 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
 void ChatManager::deleteConversation(const QString &convId)
 {
+    // A task conversation deleted while its sub‑agent is still running must
+    // fail the waiting "task" tool in the parent conversation.
+    if (m_taskConversations.contains(convId)) {
+        m_taskConversations.remove(convId);
+        emit taskConversationFinished(convId, {}, false);
+    }
+    m_taskConfigs.remove(convId);
+
     m_storage->deleteConversation(convId);
 }
 

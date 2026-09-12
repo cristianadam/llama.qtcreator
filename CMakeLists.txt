@@ -91,6 +91,7 @@ add_qtc_plugin(LlamaCpp
     tools/readfile_tool.cpp tools/readfile_tool.h
     tools/regexsearch_tool.cpp tools/regexsearch_tool.h
     tools/run_project_tool.cpp tools/run_project_tool.h
+    tools/task_tool.cpp tools/task_tool.h
     tools/shell_tool.cpp tools/shell_tool.h
     tools/open_project_tool.cpp tools/open_project_tool.h
     tools/tool.cpp tools/tool.h

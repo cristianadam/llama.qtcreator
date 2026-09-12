@@ -56,6 +56,20 @@ public:
     void setCurrentConversation(const QString &convId);
 
     Conversation createConversation(const QString &name);
+
+    //! Creates a conversation used by the "task" tool as a sub‑agent session.
+    //! Unlike createConversation() it does not make the new conversation the
+    //! active one, so the UI keeps showing the parent conversation.
+    Conversation createTaskConversation(const QString &name);
+
+    //! Sets the system prompt and the whitelist of tools that may be used in
+    //! a task conversation.  When the whitelist is empty every enabled tool
+    //! is available.  "task" itself is never advertised in a sub‑conversation
+    //! (no sub‑agent recursion).
+    void configureTaskConversation(const QString &convId,
+                                   const QString &systemPrompt,
+                                   const QStringList &allowedTools);
+
     void deleteConversation(const QString &convId);
     void renameConversation(const QString &convId, const QString &name);
     void deleteMessageBranch(const QString &convId, qint64 msgId);
@@ -87,6 +101,12 @@ signals:
     void conversationCreated(const QString &convId);
     void conversationRenamed(const QString &convId);
     void conversationDeleted(const QString &convId);
+
+    //! Emitted when a task conversation has reached its end: the final
+    //! assistant message was committed and no tool call keeps the loop
+    //! alive.  @p ok is false when the stream was aborted or produced no
+    //! content at all.
+    void taskConversationFinished(const QString &convId, const QString &content, bool ok);
 
     void serverPropsUpdated();
     void followUpQuestionsReceived(const QString &convId,
@@ -124,5 +144,15 @@ private:
     //! asynchronously, so a conversation stays "busy" until every in‑flight
     //! tool has reported back.
     QHash<QString, int> m_runningTools;
+
+    // Task‑conversation (sub‑agent) state
+    struct TaskConversationConfig
+    {
+        QString systemPrompt;
+        QStringList allowedTools; // empty = every enabled tool
+    };
+    QSet<QString> m_taskConversations;
+    QHash<QString, TaskConversationConfig> m_taskConfigs;
+    bool m_taskConvCreationPending{false};
 };
 } // namespace LlamaCpp

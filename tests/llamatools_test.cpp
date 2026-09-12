@@ -9,9 +9,11 @@
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
 
+#include <llamathinkingsectionparser.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/patch.h>
+#include <tools/task_tool.h>
 #include <tools/webfetch_tool.h>
 #include <tools/websearch_tool.h>
 
@@ -141,9 +143,17 @@ private slots:
     void websearch_parseGoogleResults();
     void websearch_formatResults();
 
+    // TaskTool
+    void task_toolDefinition();
+    void task_summaries();
+    void task_toolsFor();
+    void task_systemPrompt();
+    void task_finalReport();
+
     // Factory registration
     void factory_applyPatch();
     void factory_webTools();
+    void factory_task();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -955,6 +965,100 @@ void LlamaToolsTest::websearch_formatResults()
 }
 
 // ============================================================================
+// TaskTool
+// ============================================================================
+
+void LlamaToolsTest::task_toolDefinition()
+{
+    Tools::TaskTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("task"));
+
+    const QJsonObject params = function["parameters"].toObject();
+    QStringList required;
+    for (const QJsonValue &v : params["required"].toArray())
+        required << v.toString();
+    QCOMPARE(required, (QStringList{QString("description"), QString("prompt")}));
+    const QJsonArray enumValues = params["properties"].toObject()["subagent_type"]
+                                      .toObject()["enum"].toArray();
+    QStringList enumList;
+    for (const QJsonValue &v : enumValues)
+        enumList << v.toString();
+    QCOMPARE(enumList, (QStringList{QString("explore"), QString("general")}));
+}
+
+void LlamaToolsTest::task_summaries()
+{
+    Tools::TaskTool tool;
+
+    QJsonObject args;
+    args["description"] = "Explore build system";
+    QCOMPARE(tool.oneLineSummary(args), QString("task: Explore build system"));
+
+    // The whole call must stay on a single line: when this QCOMPARE spans
+    // multiple lines the clang 21 preprocessor in this environment fails
+    // with "unterminated function‑like macro invocation".
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"description\": \"Explore build")),
+             QString("task: Explore build"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"description\": \"")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"prompt\": \"x\"")), QString());
+
+    args["prompt"] = "Find the entry point";
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Found main()"));
+    QVERIFY(md.contains("### Explore build system"));
+    QVERIFY(md.contains("Find the entry point"));
+    QVERIFY(md.contains("Found main()"));
+}
+
+void LlamaToolsTest::task_toolsFor()
+{
+    const QStringList all = {QStringLiteral("task"),
+                             QStringLiteral("ask_user"),
+                             QStringLiteral("read_file"),
+                             QStringLiteral("shell"),
+                             QStringLiteral("edit_file")};
+
+    // explore: only the read‑only subset
+    QCOMPARE(Tools::taskToolsFor(QStringLiteral("explore"), all),
+             (QStringList{QStringLiteral("read_file")}));
+
+    // general: everything except task and ask_user, original order kept
+    QCOMPARE(Tools::taskToolsFor(QStringLiteral("general"), all),
+             (QStringList{QStringLiteral("read_file"),
+                          QStringLiteral("shell"),
+                          QStringLiteral("edit_file")}));
+}
+
+void LlamaToolsTest::task_systemPrompt()
+{
+    const QString explore = Tools::taskSystemPromptFor(QStringLiteral("explore"));
+    const QString general = Tools::taskSystemPromptFor(QStringLiteral("general"));
+    QVERIFY(!explore.isEmpty());
+    QVERIFY(!general.isEmpty());
+    QVERIFY(explore.contains("explore"));
+    QVERIFY(general.contains("general"));
+    QVERIFY(explore != general);
+}
+
+void LlamaToolsTest::task_finalReport()
+{
+    const QString start = ThinkingSectionParser::startToken();
+    const QString end = ThinkingSectionParser::endToken();
+
+    QCOMPARE(Tools::taskFinalReport(QStringLiteral("plain report")),
+             QString("plain report"));
+    QCOMPARE(Tools::taskFinalReport(start + "thinking here" + end + " final answer"),
+             QString("final answer"));
+    QCOMPARE(Tools::taskFinalReport(start + "only thinking"), QString());
+    QCOMPARE(Tools::taskFinalReport(QString()), QString());
+}
+
+// ============================================================================
 // Factory registration
 // ============================================================================
 
@@ -974,6 +1078,14 @@ void LlamaToolsTest::factory_webTools()
         QVERIFY2(tool != nullptr, qPrintable(name));
         QCOMPARE(tool->name(), name);
     }
+}
+
+void LlamaToolsTest::factory_task()
+{
+    auto &factory = ToolFactory::instance();
+    auto tool = factory.create("task");
+    QVERIFY(tool != nullptr);
+    QCOMPARE(tool->name(), QString("task"));
 }
 
 } // namespace LlamaCpp
