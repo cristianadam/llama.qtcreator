@@ -307,7 +307,13 @@ void ChatManager::followUpQuestions(const QString &convId,
 {
     auto allMsgs = m_storage->getMessages(convId);
     auto leafMsgs = m_storage->filterByLeafNodeId(allMsgs, leafNodeId, false);
-    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
+
+    // Only the most recent messages are needed to suggest follow‑ups; sending
+    // the whole history is expensive for long conversations or dense models.
+    static constexpr int kFollowUpContextMessages = 6;
+    auto recentMsgs = leafMsgs.mid(qMax(0, leafMsgs.size() - kFollowUpContextMessages));
+
+    QJsonArray msgArray = normalizeMsgsForAPI(recentMsgs);
 
     QJsonArray parts;
     QJsonObject txt;
@@ -315,8 +321,8 @@ void ChatManager::followUpQuestions(const QString &convId,
     txt["text"] = "Generate up to five follow up questions in the context of the "
                   "current conversation. The questions are from the user point of view. "
                   "Only questions, no explanations. Use the language used in the conversation. "
-                  "Return the questions in the form of a JSON array as plain text strings, "
-                  "no markdown.";
+                  "Return a JSON object with a single key \"follow_ups\" containing an "
+                  "array of plain text question strings, no markdown.";
     parts.append(txt);
     QJsonObject prompt;
     prompt["role"] = "user";
@@ -329,6 +335,9 @@ void ChatManager::followUpQuestions(const QString &convId,
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
     payload["reasoning_in_content"] = "false";
+    QJsonObject responseFormat;
+    responseFormat["type"] = "json_object";
+    payload["response_format"] = responseFormat;
     addCommonPayloadParams(payload);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
@@ -367,40 +376,42 @@ void ChatManager::followUpQuestions(const QString &convId,
         if (content.isEmpty())
             return;
 
-        // Sometimes the model continues "thinking" also in the answer
-        const QString startOfArray("[\"");
-        const QString endOfArray("\"]");
-
-        if (!content.startsWith(startOfArray)) {
-            auto startOfArrayIdx = content.lastIndexOf(startOfArray);
-            if (startOfArrayIdx != -1)
-                content = content.mid(startOfArrayIdx);
+        // The response should be a JSON object {"follow_ups": [...]}, but
+        // salvage the object in case the model wraps it in extra text
+        // (e.g. leftover thinking text or markdown fences).
+        if (!content.startsWith('{')) {
+            auto idx = content.indexOf('{');
+            if (idx == -1)
+                return;
+            content = content.mid(idx);
+        }
+        if (!content.endsWith('}')) {
+            auto idx = content.lastIndexOf('}');
+            if (idx == -1)
+                return;
+            content = content.left(idx + 1);
         }
 
-        // Sometimes we have \n``` at the end
-        if (!content.endsWith(endOfArray)) {
-            auto endOfArrayIdx = content.lastIndexOf(endOfArray);
-            if (endOfArrayIdx != -1)
-                content = content.left(endOfArrayIdx + endOfArray.size());
-        }
-
-        // `content` should be a JSON array of strings (plain text).
         QJsonParseError err;
-        QJsonDocument arrDoc = QJsonDocument::fromJson(content.toUtf8(), &err);
+        QJsonDocument parsed = QJsonDocument::fromJson(content.toUtf8(), &err);
         if (err.error != QJsonParseError::NoError) {
-            qCWarning(llamaChatNetwork) << "Could not parse follow‑up array:" << err.errorString();
+            qCWarning(llamaChatNetwork) << "Could not parse follow‑up JSON:" << err.errorString();
             qCWarning(llamaChatNetwork) << "The faulty content was:" << content.toUtf8();
             return;
         }
 
-        if (!arrDoc.isArray())
-            return;
+        QJsonArray arr;
+        if (parsed.isObject())
+            arr = parsed.object().value("follow_ups").toArray();
+        else if (parsed.isArray())
+            arr = parsed.array();
 
         QStringList questions;
-        for (const QJsonValue &v : arrDoc.array())
-            questions.append(v.toString());
+        for (const QJsonValue &v : arr)
+            if (v.isString())
+                questions.append(v.toString());
 
-        if (onSuccess)
+        if (!questions.isEmpty() && onSuccess)
             onSuccess(questions);
     });
 }
@@ -890,7 +901,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                     const bool ok = (reply->error() == QNetworkReply::NoError)
                                     && !pm.content.trimmed().isEmpty();
                     emit taskConversationFinished(convId, pm.content, ok);
-                } else {
+                } else if (reply->error() == QNetworkReply::NoError
+                           && !pm.content.trimmed().isEmpty()) {
+                    // Only suggest follow‑ups for complete generations.
                     followUpQuestions(convId,
                                       pm.id,
                                       [this, convId, leafNodeId = pm.id](const QStringList &questions) {
