@@ -353,9 +353,8 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
 
         // capture convId / leafNodeId / question in the lambda
         connect(btn, &QPushButton::clicked, this, [this, convId, leafNodeId, q]() {
-            ChatManager::instance().sendMessage(convId, leafNodeId, q, {}, [this](qint64) {
-                scrollToBottom();
-            });
+            // The view jumps to the bottom when the user message is appended.
+            ChatManager::instance().sendMessage(convId, leafNodeId, q, {}, [](qint64) {});
         });
 
         lay->addWidget(btn);
@@ -379,10 +378,10 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
         )"));
 
     lay->addStretch();
-    // Append below the regular messages
+    // Append below the regular messages. No explicit scroll: the
+    // AutoScrollArea follows on its own while the user is pinned to the
+    // bottom.
     m_messageLayout->addWidget(m_followUpWidget);
-
-    scrollToBottom();
 }
 
 void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNodeId)
@@ -560,7 +559,12 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     // Stay in the "generating" state while a tool is still executing
     // asynchronously (e.g. a web search in flight).
     m_input->setIsGenerating(ChatManager::instance().isGenerating(msg.convId));
-    scrollToBottom();
+
+    // Only force the view to the bottom when the user sent a message; for
+    // assistant/tool appends the AutoScrollArea keeps following on its own
+    // while the user is pinned to the bottom.
+    if (msg.role == "user")
+        scrollToBottom();
 }
 
 void ChatEditor::onPendingMessageChanged(const Message &pm)
@@ -614,7 +618,9 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     updateSpeedLabel(pm);
     updateContextLabel(pm);
 
-    scrollToBottom();
+    // No explicit scroll: while the user is pinned to the bottom the
+    // AutoScrollArea follows the growing content, and we must not yank the
+    // view down while the user is reading further up.
 }
 
 void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &extra)
@@ -622,20 +628,19 @@ void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &
     const Conversation conv = ChatManager::instance().currentConversation();
 
     if (m_editedMessage) {
+        // The view jumps to the bottom when the new user message is appended.
         ChatManager::instance().replaceMessageAndGenerate(m_editedMessage->convId,
                                                           m_editedMessage->parent,
                                                           text,
                                                           extra,
-                                                          [this](qint64 leafId) {
-                                                              scrollToBottom();
-                                                          });
+                                                          [](qint64) {});
         m_editedMessage.reset();
     } else {
         ChatManager::instance().sendMessage(conv.id,
                                             conv.currNode,
                                             text,
                                             extra,
-                                            [this](qint64 leafId) { scrollToBottom(); });
+                                            [](qint64) {});
     }
 
     scrollToBottom();
@@ -677,13 +682,12 @@ void ChatEditor::onRegenerateRequested(const Message &msg)
     // refreshMessages will invalidate msg, which part of a ChatMessage object
     refreshMessages(chat.messages, msgCopy.parent);
 
+    // The view jumps to the bottom via the refreshMessages call above.
     ChatManager::instance().replaceMessageAndGenerate(msgCopy.convId,
                                                       msgCopy.parent,
                                                       QString(),
                                                       msgCopy.extra,
-                                                       [this, msgCopy](qint64 leafId) {
-                                                           scrollToBottom();
-                                                       });
+                                                      [](qint64) {});
 }
 
 void ChatEditor::onSiblingChanged(qint64 siblingId)
@@ -968,10 +972,11 @@ void ChatEditor::updateContextLabel(const Message &msg)
 
 void ChatEditor::scrollToBottom()
 {
-    // Pin the viewport to the bottom and resume automatic following. The
-    // AutoScrollArea keeps the view on the newest message while the content
-    // keeps growing (streaming text, tool output) and stops following as soon
-    // as the user scrolls up.
+    // Pin the viewport to the bottom and resume automatic following. Only
+    // call this for user‑initiated actions (send, regenerate, sibling
+    // switch); never for streamed data – the AutoScrollArea keeps the view
+    // on the newest message on its own while the user is pinned to the
+    // bottom and must not yank the view down while the user reads further up.
     m_scrollArea->followToBottom();
 }
 

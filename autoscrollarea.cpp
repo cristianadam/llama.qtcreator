@@ -41,6 +41,13 @@ void AutoScrollArea::maybeFollow()
         return;
 
     const int max = m_scrollbar->maximum();
+    if (max < m_max) {
+        // The content shrank (e.g. a spinner line was replaced by the final
+        // answer) and the scrollbar value was clamped to the bottom – lower
+        // the high-water mark so following resumes when it grows again.
+        m_max = max;
+        return;
+    }
     if (max <= m_max)
         return;
 

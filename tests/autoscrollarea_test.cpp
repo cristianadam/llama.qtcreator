@@ -45,6 +45,7 @@ private slots:
     void stopsFollowingAfterUserScrollUp();
     void resumesOnFollowToBottom();
     void atBottomAgainEnablesFollowing();
+    void followsAgainAfterShrink();
 };
 
 void AutoScrollAreaTest::followsGrowth()
@@ -111,6 +112,31 @@ void AutoScrollAreaTest::atBottomAgainEnablesFollowing()
     // User scrolls back down to the very bottom.
     m_area.verticalScrollBar()->setValue(m_area.verticalScrollBar()->maximum());
     pump();
+    QVERIFY(m_area.following());
+}
+
+void AutoScrollAreaTest::followsAgainAfterShrink()
+{
+    setupContent();
+    setHeight(600);
+    m_area.followToBottom();
+    QCOMPARE(value(), maximum());
+
+    // Streaming grows the content; the view stays pinned to the bottom.
+    setHeight(1200);
+    QCOMPARE(value(), maximum());
+    QVERIFY(m_area.following());
+
+    // A tool update / final answer removes content, so the range shrinks.
+    setHeight(900);
+    pump();
+    // The scrollbar value is clamped to the new bottom; we are still pinned.
+    QVERIFY(m_area.following());
+
+    // More content arrives, but the range is still below the earlier peak.
+    // Following must resume instead of being blocked by the high-water mark.
+    setHeight(1050);
+    QCOMPARE(value(), maximum());
     QVERIFY(m_area.following());
 }
 
