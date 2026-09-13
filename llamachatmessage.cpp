@@ -274,6 +274,14 @@ void ChatMessage::renderMarkdown(const QString &text, bool forceUpdate)
 
 void ChatMessage::messageCompleted(bool completed)
 {
+    // The message's extra may have changed in place (e.g. an assistant
+    // message just gained tool_calls on commit), so refresh the state.
+    m_haveToolCalls = false;
+    for (const QVariantMap &e : std::as_const(m_msg.extra)) {
+        if (e.contains("tool_calls"))
+            m_haveToolCalls = true;
+    }
+
     if (!m_isUser && !m_isTool) {
         // Normal assistant – show buttons only when the answer is finished.
         m_regenButton->setVisible(completed && !haveToolCalls());

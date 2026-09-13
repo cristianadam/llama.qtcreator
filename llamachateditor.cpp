@@ -472,11 +472,14 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         return;
 
     ViewingChat chat = ChatManager::instance().getViewingChat(msg.convId);
-    if (pendingId < 0) {
+
+    // A user/tool message that does not extend the currently shown leaf
+    // switches the visible branch (e.g. the user edited an old message) –
+    // fall back to a filtered rebuild for that case.
+    if (pendingId < 0 && !m_messageWidgets.isEmpty()
+        && m_messageWidgets.last()->message().id != msg.parent) {
         refreshMessages(chat.messages, msg.id);
 
-        // Stay in the "generating" state while a tool is still executing
-        // asynchronously (e.g. a web search in flight).
         m_input->setIsGenerating(ChatManager::instance().isGenerating(msg.convId));
         scrollToBottom();
         return;
@@ -541,16 +544,22 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         w->message() = msg;
 
         w->setSiblingIdx(siblingIdx);
-        w->setSiblingLeafIds(siblings);
+        w->setSiblingLeafIds(leafs);
 
         w->renderMarkdown(msg.content, true);
         w->messageCompleted(true);
     }
 
-    updateSpeedLabel(msg);
-    updateContextLabel(msg);
+    // Only assistant messages carry timing data; for user/tool messages the
+    // last assistant's values are kept.
+    if (msg.role == "assistant") {
+        updateSpeedLabel(msg);
+        updateContextLabel(msg);
+    }
 
-    m_input->setIsGenerating(false);
+    // Stay in the "generating" state while a tool is still executing
+    // asynchronously (e.g. a web search in flight).
+    m_input->setIsGenerating(ChatManager::instance().isGenerating(msg.convId));
     scrollToBottom();
 }
 
