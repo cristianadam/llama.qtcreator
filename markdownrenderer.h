@@ -198,6 +198,10 @@ private:
     QString m_codeBlockLanguage;
     QChar m_codeFenceChar = QChar::Null;
     int m_nextDetailsId = 0;
+    // Index of the <details> block within the in-progress tail being rendered
+    // (-1 = not rendering the tail). Gives tail sections the stable ordinal
+    // ids they will have once finalized.
+    int m_tailDetailsIndex = -1;
     int m_nextCodeBlockId = 0;
     int m_paragraphMargin = 0;
     bool m_skipNextParagraphBlock = false;

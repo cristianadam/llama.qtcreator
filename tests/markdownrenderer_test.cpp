@@ -1,3 +1,4 @@
+#include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QTimer>
 #include <QtTest/QtTest>
@@ -37,6 +38,7 @@ private slots:
     void thinkingSection();
     void detailsSummaryMarkdown();
     void detailsSummaryInlineHtml();
+    void collapsedSectionStaysCollapsed();
 };
 
 void MarkdownRendererTest::plainParagraph()
@@ -193,6 +195,85 @@ void MarkdownRendererTest::detailsSummaryInlineHtml()
             textInIconFont = true;
     }
     QVERIFY2(!textInIconFont, "summary text must not inherit the icon font");
+}
+
+void MarkdownRendererTest::collapsedSectionStaysCollapsed()
+{
+    MarkdownRenderer renderer;
+    renderer.resize(600, 400);
+    renderer.show();
+    renderer.document()->setTextWidth(500);
+    QApplication::processEvents();
+
+    const QString thinking = "Let me think...";
+    const QString answer = "The answer is 42.";
+    const QString open
+        = QStringLiteral("<details><summary>Thinking</summary>\n\n%1\n</details>\n").arg(thinking);
+    const QString closed
+        = QStringLiteral("<details><summary>Thought Process</summary>\n\n%1\n</details>\n\n%2\n")
+              .arg(thinking, answer);
+
+    // Stream the open form fully and finish, so we have a stable section.
+    for (int i = 0; i < open.size(); i += 7)
+        renderer.feed(open.left(i + 7).toUtf8());
+    renderer.feed(open.toUtf8());
+    renderer.finish();
+    QApplication::processEvents();
+
+    // Locate the header (toggle) block and a body block of the section.
+    QTextDocument *doc = renderer.document();
+    QTextBlock header;
+    int secId = -1;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (!fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            continue;
+        header = blk;
+        secId = fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt();
+        break;
+    }
+    QVERIFY2(header.isValid(), "expected a details header block");
+
+    QTextBlock body;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt() == secId
+            && !fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool()) {
+            body = blk;
+            break;
+        }
+    }
+    QVERIFY2(body.isValid(), "expected a details body block");
+    QVERIFY2(body.isVisible(), "body should be expanded by default");
+
+    // Click the header to collapse the section. Clicking the viewport is the
+    // real user path; no scrolling in this test, so viewport coordinates equal
+    // document coordinates.
+    const QRectF br = doc->documentLayout()->blockBoundingRect(header);
+    const QPoint docPos = br.topLeft().toPoint() + QPoint(5, 5);
+    QTest::mouseClick(renderer.viewport(), Qt::LeftButton, Qt::NoModifier, docPos);
+    QApplication::processEvents();
+    QVERIFY2(!body.isVisible(), "body must collapse after clicking the header");
+
+    // Feed a divergent (rewritten) buffer, which triggers a full reset and
+    // re-render. The collapse must survive: section ids are ordinal and the
+    // toggle state is preserved across reset().
+    renderer.feed(closed.toUtf8());
+    renderer.finish();
+    QApplication::processEvents();
+
+    QTextBlock body2;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            continue;
+        if (fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt() > 0) {
+            body2 = blk;
+            break;
+        }
+    }
+    QVERIFY2(body2.isValid(), "expected a re-rendered details body block");
+    QVERIFY2(!body2.isVisible(), "body must stay collapsed after a divergent re-feed");
 }
 
 int main(int argc, char **argv)

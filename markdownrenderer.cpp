@@ -134,7 +134,10 @@ void MarkdownRenderer::reset()
 
     qDeleteAll(m_codeOverlays);
     m_codeOverlays.clear();
-    m_toggleDetails.clear();
+    // Keep m_toggleDetails: section ids are ordinal, so the user's
+    // expand/collapse choices still apply to the re-rendered sections.
+    m_nextDetailsId = 0;
+    m_tailDetailsIndex = -1;
     m_listStack.clear();
     m_tableStack.clear();
     m_textCharFormatStack.clear();
@@ -364,8 +367,10 @@ void MarkdownRenderer::renderPendingTail()
         return;
 
     markus::Document tailDoc = markus::Parse(pending, m_options);
+    m_tailDetailsIndex = 0;
     for (const markus::BlockNode &block : tailDoc.children)
         renderBlock(tailDoc, block);
+    m_tailDetailsIndex = -1;
 }
 
 void MarkdownRenderer::clearTailRegion()
@@ -689,8 +694,17 @@ static QString summaryPlainText(const markus::Document &doc,
 void MarkdownRenderer::renderDetails(const markus::Document &doc,
                                       const markus::DetailsBlock &details)
 {
-    int secId = ++m_nextDetailsId;
-    
+    // Section ids are ordinal (document order). The in-progress tail is
+    // re-rendered on every feed, so its sections get the ids they will have
+    // once finalized – user expand/collapse choices survive re-renders.
+    int secId;
+    if (m_tailDetailsIndex >= 0) {
+        secId = m_nextDetailsId + m_tailDetailsIndex + 1;
+        ++m_tailDetailsIndex;
+    } else {
+        secId = ++m_nextDetailsId;
+    }
+
     // Tool calls start with a zero-width space marker; collapse them by default.
     // Thinking sections and other details use m_expandDetailsByDefault.
     const QString summaryText
