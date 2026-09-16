@@ -1,6 +1,8 @@
+#include <QAbstractTextDocumentLayout>
 #include <QBuffer>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QLayout>
 #include <QFile>
 #include <QList>
 #include <QMovie>
@@ -62,15 +64,31 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
     setReadOnly(true);
     setOpenLinks(false);
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    // Align content to the top so that when the label is taller than the
+    // document (due to heightAdjustment / contentsMargins) the extra space
+    // appears at the bottom, not split asymmetrically.
+    setAlignment(Qt::AlignTop);
 
-    auto policy = QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    policy.setHeightForWidth(true);
-    setSizePolicy(policy);
+    // Use Preferred/Preferred WITHOUT heightForWidth.  We manage heights
+    // explicitly via updateFixedHeight() connected to documentSizeChanged,
+    // so we don't need the layout system to query heightForWidth during
+    // construction (which fails because the document hasn't reflowed at
+    // the final viewport width yet).
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(document(), &QTextDocument::contentsChanged, this, &MarkdownLabel::updateGeometry);
+    // Any change to the document that can change its height must invalidate
+    // the height caches of the surrounding layouts; see notifyGeometryChanged().
+    connect(document(), &QTextDocument::contentsChanged, this, &MarkdownLabel::notifyGeometryChanged);
+    // layoutChanged() does not exist in Qt 6; documentSizeChanged() is
+    // emitted whenever a re-layout changed the document size, which is
+    // exactly the set of events that can change the required row height
+    // (including QTextBlock::setVisible() from <details> toggling, which
+    // does not emit contentsChanged()).
+    connect(document()->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this,
+            &MarkdownLabel::notifyGeometryChanged);
 
     viewport()->setMouseTracking(true);
 
@@ -131,24 +149,58 @@ void MarkdownLabel::setMarkdown(const QString &markdown, bool completed)
     if (completed)
         finish();
 
-    document()->setTextWidth(viewport()->width());
-    updateGeometry();
+    // Never lay the document out at width 0: the widget is usually not
+    // shown yet when this first runs, and a zero text width produces
+    // degenerate line wrapping (wildly wrong document height).
+    const int vw = viewport()->width();
+    if (vw > 0)
+        document()->setTextWidth(vw);
+    notifyGeometryChanged();
 }
 
 void MarkdownLabel::resizeEvent(QResizeEvent *event)
 {
     MarkdownRenderer::resizeEvent(event);          // keep normal behaviour
-    document()->setTextWidth(viewport()->width()); // re‑wrap at new width
-    updateGeometry();                              // notify layout
+    if (viewport()->width() > 0)
+        document()->setTextWidth(viewport()->width()); // re‑wrap at new width
+    notifyGeometryChanged();                       // notify layout
+}
+
+void MarkdownLabel::notifyGeometryChanged()
+{
+    // The document height just changed. Invalidate the height‑for‑width
+    // state of this widget *and* of every ancestor that has a layout.
+    //
+    // Qt 6.11 caches HFW results in two places:
+    //  - QBoxLayoutPrivate::calcHfw() stores hfwWidth/hfwHeight and returns
+    //    the cached height for every repeated query at the same width until
+    //    the layout is invalidated (qboxlayout.cpp);
+    //  - QWidgetItemV2::heightForWidth() keeps a small per‑item LRU cache of
+    //    (width, height) pairs that is only cleared by
+    //    QWidgetItemV2::invalidateSizeCache() (qlayoutitem.cpp).
+    //
+    // updateGeometry() only marks the item for re-layout but does NOT clear
+    // the HFW cache.  We must call layout()->invalidate() on every ancestor
+    // layout so that when a <details> section collapses, the cached (larger)
+    // height is cleared and the row shrinks properly instead of leaving
+    // white space.
+    updateGeometry();
+    for (QWidget *p = parentWidget(); p && p->layout(); p = p->parentWidget()) {
+        p->layout()->invalidate();
+        p->updateGeometry();
+    }
 }
 
 int MarkdownLabel::heightForWidth(int w) const
 {
-    // Ask the document what height it needs for w px
-    // (this does not change the widget’s real geometry)
-    QTextDocument *doc = const_cast<QTextDocument *>(document());
-    doc->setTextWidth(w);
-    return qRound(doc->size().height() + m_heightAdjustment);
+    // heightForWidth is disabled for layout (setHeightForWidth(false)),
+    // but the layout system may still query it.  Heights are managed
+    // explicitly via ChatMessage::updateFixedHeight(), so just report the
+    // height at the *current* text width — without reflowing the document
+    // at the queried width (a side effect that produced inconsistent
+    // results across sizing passes).
+    Q_UNUSED(w)
+    return qRound(document()->size().height() + m_heightAdjustment);
 }
 
 void MarkdownLabel::invalidate()
@@ -158,9 +210,12 @@ void MarkdownLabel::invalidate()
 
 QSize MarkdownLabel::sizeHint() const
 {
-    QSize sh = MarkdownRenderer::sizeHint();
-    sh.setWidth(minimumWidth());
-    return sh;
+    int w = width();
+    if (w <= 0 && parentWidget())
+        w = parentWidget()->width();
+    if (w <= 0)
+        w = 400;
+    return QSize(w, qRound(document()->size().height() + m_heightAdjustment));
 }
 
 void MarkdownLabel::setMovie(QMovie *movie)
@@ -229,7 +284,7 @@ void MarkdownLabel::adjustMinimumWidth(const QString &markdown)
     const int longestLineWidth = fm.horizontalAdvance(longestLine) + 20;
 
     if (minimumWidth() == 0 || (lines.size() < 5 && minimumWidth() < longestLineWidth))
-        setMinimumWidth(longestLineWidth);
+        setMinimumWidth(qMin(longestLineWidth, 600));
 }
 
 int MarkdownLabel::commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const

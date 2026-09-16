@@ -1,3 +1,4 @@
+#include <QAbstractTextDocumentLayout>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopServices>
@@ -67,21 +68,34 @@ ChatMessage::ChatMessage(const Message &msg,
     }
 
     buildUI();
+
+    // When the document size changes (details toggle, streaming), update our
+    // fixed height so the layout picks up the new size. Use a queued connection
+    // so the slot runs AFTER the document layout has finished recalculating
+    // sizes — otherwise doc->size() returns stale data and we set the wrong
+    // fixed height (causing jumps / white space on toggle).
+    connect(m_markdownLabel->document()->documentLayout(),
+            &QAbstractTextDocumentLayout::documentSizeChanged,
+            this,
+            &ChatMessage::updateFixedHeight,
+            Qt::QueuedConnection);
 }
 
 void ChatMessage::buildUI()
 {
     m_mainLayout = new QVBoxLayout(this);
     m_mainLayout->setContentsMargins(10, 0, 10, 0);
+    // Spacing between label and action row (all message types).  Gives
+    // visual breathing room so the bubble background does not touch the
+    // buttons.
+    m_mainLayout->setSpacing(8);
 
-    m_bubble = new QLabel(this);
-
+    // Parent the label directly to ChatMessage — no intermediate bubble
+    // widget.  This eliminates nested-layout height-for-width caching
+    // issues that were causing messages to be clamped at wrong heights.
     m_markdownLabel = new MarkdownLabel(this);
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
     connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
-
-    if (m_isUser)
-        m_markdownLabel->setHeightAdjustment(8);
 
     renderMarkdown(m_msg.content, true);
 
@@ -90,29 +104,19 @@ void ChatMessage::buildUI()
     m_markdownLabel->setContentsMargins(m_isUser ? QMargins(10, 10, 10, 10) : QMargins(0, 0, 0, 0));
     m_markdownLabel->installEventFilter(this);
 
-    QVBoxLayout *bubbleLayout = new QVBoxLayout;
-    bubbleLayout->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout *labelLayout = new QHBoxLayout;
-    labelLayout->setContentsMargins(0, 0, 0, 0);
-    if (m_isUser) {
-        labelLayout->addStretch();
-        labelLayout->addWidget(m_markdownLabel);
-    } else {
-        labelLayout->addWidget(m_markdownLabel);
-        labelLayout->addStretch();
-    }
-    bubbleLayout->addLayout(labelLayout);
-    m_bubble->setLayout(bubbleLayout);
+    // Align the label to the right for user messages, left for others.
+    Qt::Alignment labelAlign = m_isUser ? Qt::AlignRight : Qt::AlignLeft;
 
-    QHBoxLayout *actionLayout = new QHBoxLayout;
-    actionLayout->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
-    actionLayout->setContentsMargins(0, 0, 0, 0);
+    m_actionLayout = new QHBoxLayout;
+    m_actionLayout->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
+    m_actionLayout->setContentsMargins(0, 0, 0, 0);
+    m_actionLayout->setSpacing(8);  // space between action buttons
 
     if (m_isUser && !m_msg.extra.isEmpty()) {
         m_attachedFiles = new QToolButton(this);
         m_attachedFiles->setText("G");
         m_attachedFiles->setToolTip(Tr::tr("Attached files"));
-        actionLayout->addWidget(m_attachedFiles);
+        m_actionLayout->addWidget(m_attachedFiles);
 
         QMenu *menu = new QMenu(m_attachedFiles);
         for (const QVariantMap &e : m_msg.extra) {
@@ -194,9 +198,9 @@ void ChatMessage::buildUI()
     m_nextButton->setText("D");
     m_nextButton->setToolTip(Tr::tr("Go to next message"));
     connect(m_nextButton, &QToolButton::clicked, this, &ChatMessage::onNextSiblingClicked);
-    actionLayout->addWidget(m_prevButton);
-    actionLayout->addWidget(m_siblingLabel);
-    actionLayout->addWidget(m_nextButton);
+    m_actionLayout->addWidget(m_prevButton);
+    m_actionLayout->addWidget(m_siblingLabel);
+    m_actionLayout->addWidget(m_nextButton);
 
     updateUI();
 
@@ -205,14 +209,14 @@ void ChatMessage::buildUI()
         m_editButton->setText("H");
         m_editButton->setToolTip(Tr::tr("Edit the message"));
         connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
-        actionLayout->addWidget(m_editButton);
+        m_actionLayout->addWidget(m_editButton);
     } else {
         m_regenButton = new QToolButton(this);
         m_regenButton->setText("A");
         m_regenButton->setToolTip(Tr::tr("Re-generate the answer"));
         m_regenButton->setVisible(!m_haveToolCalls);
         connect(m_regenButton, &QToolButton::clicked, this, &ChatMessage::onRegenerateClicked);
-        actionLayout->addWidget(m_regenButton);
+        m_actionLayout->addWidget(m_regenButton);
     }
 
     m_copyButton = new QToolButton(this);
@@ -220,17 +224,18 @@ void ChatMessage::buildUI()
     m_copyButton->setToolTip(Tr::tr("Copy the message to clipboard"));
     m_copyButton->setVisible(!m_haveToolCalls);
     connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
-    actionLayout->addWidget(m_copyButton);
+    m_actionLayout->addWidget(m_copyButton);
 
     m_deleteButton = new QToolButton(this);
     m_deleteButton->setText("K");
     m_deleteButton->setToolTip(Tr::tr("Delete this message"));
     m_deleteButton->setVisible(!m_haveToolCalls);
     connect(m_deleteButton, &QToolButton::clicked, this, &ChatMessage::onDeleteClicked);
-    actionLayout->addWidget(m_deleteButton);
+    m_actionLayout->addWidget(m_deleteButton);
 
-    m_mainLayout->addWidget(m_bubble);
-    m_mainLayout->addLayout(actionLayout);
+    // Add label and action row directly — no intermediate bubble widget.
+    m_mainLayout->addWidget(m_markdownLabel, 0, labelAlign);
+    m_mainLayout->addLayout(m_actionLayout);
 
     applyStyleSheet();
 }
@@ -312,6 +317,7 @@ void ChatMessage::applyStyleSheet()
         QTextBrowser#BubbleAssistant {
             background: Token_Background_Default;
             border-radius: 8px;
+            padding: 4px 4px;
         }
         QTextBrowser#BubbleTool {
             background: Token_Background_Default;
@@ -607,6 +613,41 @@ void ChatMessage::updateUI()
     m_prevButton->setVisible(m_siblingLeafIds.size() > 1);
     m_siblingLabel->setVisible(m_siblingLeafIds.size() > 1);
     m_nextButton->setVisible(m_siblingLeafIds.size() > 1);
+}
+
+void ChatMessage::updateFixedHeight()
+{
+    // When the document size changes (details toggle, streaming), update
+    // our fixed height so the layout picks up the new size.
+    recomputeFixedHeight();
+}
+
+void ChatMessage::recomputeFixedHeight()
+{
+    if (!m_mainLayout || !m_markdownLabel)
+        return;
+
+    QTextDocument *doc = m_markdownLabel->document();
+    if (!doc)
+        return;
+
+    // Do not bake in a height derived from a document that has not yet been
+    // laid out at a real width — at width 0 the wrapping (and hence the
+    // height) is degenerate.
+    if (doc->textWidth() <= 0)
+        return;
+
+    const int docH = qRound(doc->size().height());
+    // Contents margins (10px top+bottom for user bubbles, 0 for others)
+    // plus the stylesheet padding of the bubble (4px top+bottom for
+    // user/assistant bubbles — see applyStyleSheet(); the document size
+    // does not include it) plus the layout spacing between label and
+    // action row, plus the action row height.  Forgetting any of these
+    // clipped the bubble.
+    const int marginAdj = m_markdownLabel->contentsMargins().top()
+            + m_markdownLabel->contentsMargins().bottom();
+    const int actionRowH = m_actionLayout ? m_actionLayout->sizeHint().height() : 0;
+    setFixedHeight(docH + marginAdj + m_mainLayout->spacing() + actionRowH);
 }
 
 } // namespace LlamaCpp

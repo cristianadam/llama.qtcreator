@@ -36,6 +36,9 @@ public:
     bool isDesignModePreferred() const override;
 
     void refreshMessages(const QVector<Message> &messages, qint64 leafNodeId);
+    // Explicitly set message row heights to bypass Qt's heightForWidth caching
+    // which causes long messages to be clamped at wrong heights.
+    void fixMessageHeights();
     void scrollToBottom();
     QWidget *displayServerProps();
     void createFollowUpWidget(const QString &convId,

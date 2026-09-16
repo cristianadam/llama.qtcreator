@@ -33,6 +33,11 @@ public:
     void setSiblingIdx(int newSiblingIdx);
 
     QString plainText() const;
+    // (Re)computes and applies the widget's fixed height from the current
+    // document size, contents margins, layout spacing and action row height.
+    void recomputeFixedHeight();
+    MarkdownLabel *markdownLabel() const { return m_markdownLabel; }
+    QHBoxLayout *actionLayout() const { return m_actionLayout; }
     void highlightAllMatches(const QString &query);
     void highlightMatch(int start, int length, bool selected = true);
     void clearHighlight();
@@ -55,6 +60,10 @@ private slots:
     void onSaveToDisk(const QString &fileName, const QString &verbatimCode);
     void onDeleteClicked();
 
+    // Update our fixed height when the document size changes (details toggle,
+    // streaming). This keeps our explicit height in sync with the document.
+    void updateFixedHeight();
+
 private:
     void buildUI();
     void updateUI();
@@ -72,7 +81,6 @@ private:
     bool m_isTool = false;
 
     // UI
-    QLabel *m_bubble{nullptr};
     QToolButton *m_copyButton{nullptr};
     QToolButton *m_editButton{nullptr};
     QToolButton *m_regenButton{nullptr};
@@ -83,6 +91,7 @@ private:
     QLabel *m_siblingLabel{nullptr};
     MarkdownLabel *m_markdownLabel{nullptr};
     QVBoxLayout *m_mainLayout{nullptr};
+    QHBoxLayout *m_actionLayout{nullptr};
     bool m_isToolCall{false};
     bool m_haveToolCalls{false};
 };

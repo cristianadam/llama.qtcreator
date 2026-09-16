@@ -12,7 +12,7 @@
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -30,6 +30,7 @@
 #include "llamachatinput.h"
 #include "llamachatmanager.h"
 #include "llamachatmessage.h"
+#include "llamamarkdownwidget.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
 #include "llamasettings.h"
@@ -61,6 +62,7 @@ ChatEditor::ChatEditor()
     m_messageContainer = new QWidget(m_scrollArea);
     m_messageLayout = new QVBoxLayout(m_messageContainer);
     m_messageLayout->setContentsMargins(0, 0, 0, 0);
+    m_messageLayout->setSpacing(0);           // no gap between message rows
     m_messageLayout->setAlignment(Qt::AlignTop);
     m_scrollArea->setWidget(m_messageContainer);
 
@@ -463,6 +465,37 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
         performSearch(m_searchQuery);
 
     scrollToBottom();
+
+    // Let Qt's layout system run its first sizing pass before reading the
+    // document heights (see MarkdownLabel::notifyGeometryChanged() for why
+    // the HFW caches must be invalidated, and fixMessageHeights() for the
+    // explicit-height workaround).  Only layout-related event types are
+    // dispatched — a full processEvents() could re-enter refreshMessages()
+    // through unrelated signals.
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::LayoutRequest);
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::Resize);
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::Paint);
+    fixMessageHeights();
+}
+
+// Explicitly set each message row's height to bypass Qt's heightForWidth
+// caching (see MarkdownLabel::notifyGeometryChanged() for details).
+void ChatEditor::fixMessageHeights()
+{
+    for (ChatMessage *msg : std::as_const(m_messageWidgets)) {
+        MarkdownLabel *label = msg->markdownLabel();
+        if (!label)
+            continue;
+
+        // Only set the message's fixed height.  The label sizes naturally
+        // via its sizeHint (which uses the document's current size).  We
+        // must NOT set fixed height on the label — it causes an infinite
+        // layout loop because the document reflows asynchronously.
+        msg->recomputeFixedHeight();
+    }
+
+    m_messageContainer->updateGeometry();
+    m_messageLayout->activate();
 }
 
 void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)

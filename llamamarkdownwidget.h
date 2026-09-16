@@ -29,6 +29,9 @@ public:
     void setMovie(QMovie *movie);
 
     void setHeightAdjustment(int newHeightAdjustment);
+    int heightAdjustment() const { return m_heightAdjustment; }
+
+    void notifyGeometryChanged() override;
 
 protected:
     // Called by the layout whenever an image resource is required.

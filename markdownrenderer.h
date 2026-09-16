@@ -89,6 +89,13 @@ protected:
     void mousePressEvent(QMouseEvent *ev) override;
     void resizeEvent(QResizeEvent *event) override;
 
+    // Called whenever the rendered document changed in a way that can change
+    // its height (content edit, text-width change, <details> toggle). The
+    // base implementation just requests a re-layout of this widget;
+    // MarkdownLabel overrides it to also invalidate the height-for-width
+    // caches of every ancestor layout (see the .cpp for why that is needed).
+    virtual void notifyGeometryChanged();
+
 private:
     struct ListState
     {

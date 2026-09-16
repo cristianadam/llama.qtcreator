@@ -1,6 +1,7 @@
 #include "markdownrenderer.h"
 
 #include <QAbstractTextDocumentLayout>
+#include <QLayout>
 #include <QClipboard>
 #include <QColor>
 #include <QFrame>
@@ -94,6 +95,11 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
 MarkdownRenderer::~MarkdownRenderer()
 {
     qDeleteAll(m_codeOverlays);
+}
+
+void MarkdownRenderer::notifyGeometryChanged()
+{
+    updateGeometry();
 }
 
 void MarkdownRenderer::feed(const QByteArray &buffer)
@@ -1026,7 +1032,7 @@ void MarkdownRenderer::toggleSection(int secId)
     viewport()->update();
 
     document()->setTextWidth(viewport()->width());
-    updateGeometry();
+    notifyGeometryChanged();
 }
 
 QString MarkdownRenderer::sectionIconHtml(int secId, bool isVisible) const
@@ -1084,7 +1090,7 @@ void MarkdownRenderer::setupDocumentSettings()
 
     if (viewport()->width() > 0)
         document()->setTextWidth(viewport()->width());
-    updateGeometry();
+    notifyGeometryChanged();
 }
 
 void MarkdownRenderer::updateAllOverlaysGeometry()
