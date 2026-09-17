@@ -785,11 +785,31 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
     // Show/hide the body blocks: those tagged with this section id that are not
     // toggle (header) blocks. Nested sections carry their own id and were
     // already handled by their own renderDetails().
+    QTextBlock firstBody, lastBody;
     for (QTextBlock blk = firstToggle; blk.isValid(); blk = blk.next()) {
         if (blk.blockFormat().property(DetailsSectionIdProp).toInt() != secId)
             continue;
-        if (!blk.blockFormat().property(DetailsToggleBlockProp).toBool())
-            blk.setVisible(visible);
+        if (blk.blockFormat().property(DetailsToggleBlockProp).toBool())
+            continue;
+        blk.setVisible(visible);
+        if (!firstBody.isValid())
+            firstBody = blk;
+        lastBody = blk;
+    }
+
+    // Add a small vertical gap between the header (summary) and the expanded
+    // content, and between the content and the next sibling. The extra bottom
+    // margin is only in effect while the body is visible, so collapsed
+    // sections are unaffected.
+    if (firstBody.isValid()) {
+        QTextBlockFormat fmt = firstBody.blockFormat();
+        fmt.setTopMargin(fmt.topMargin() + m_paragraphMargin);
+        QTextCursor(firstBody).setBlockFormat(fmt);
+    }
+    if (lastBody.isValid()) {
+        QTextBlockFormat fmt = lastBody.blockFormat();
+        fmt.setBottomMargin(fmt.bottomMargin() + m_paragraphMargin);
+        QTextCursor(lastBody).setBlockFormat(fmt);
     }
 }
 
