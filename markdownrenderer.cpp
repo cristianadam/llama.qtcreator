@@ -562,15 +562,23 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
     spacerFmt.setFontPointSize(1);
     m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
 
-    QVector<HighlightFragment> fragments;
-    SyntaxHighlighter highlighter;
-    highlighter.setDefinition(syntaxDefinitionForName(m_codeBlockLanguage));
-    highlighter.highlight(content, baseCharFmt, fragments);
-    if (fragments.isEmpty()) {
-        m_cursor.insertText(content);
+    // Inside a quote (e.g. a <details> body) the code is muted like the
+    // surrounding text; only top-level code gets syntax highlighting.
+    if (m_blockQuoteDepth == 0) {
+        QVector<HighlightFragment> fragments;
+        SyntaxHighlighter highlighter;
+        highlighter.setDefinition(syntaxDefinitionForName(m_codeBlockLanguage));
+        highlighter.highlight(content, baseCharFmt, fragments);
+        if (fragments.isEmpty()) {
+            m_cursor.insertText(content, baseCharFmt);
+        } else {
+            for (const HighlightFragment &fragment : fragments)
+                m_cursor.insertText(fragment.text, fragment.format);
+        }
     } else {
-        for (const HighlightFragment &fragment : fragments)
-            m_cursor.insertText(fragment.text, fragment.format);
+        // The cursor's char format still holds the 1pt spacer format; insert
+        // with the base format explicitly or the code renders at 1pt.
+        m_cursor.insertText(content, baseCharFmt);
     }
 
     // Same zero-width space for the bottom.
