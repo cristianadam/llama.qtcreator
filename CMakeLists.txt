@@ -83,7 +83,6 @@ add_qtc_plugin(LlamaCpp
     README.md
     tools/apply_patch_tool.cpp tools/apply_patch_tool.h
     tools/build_project_tool.cpp tools/build_project_tool.h
-    tools/create_directory_tool.cpp tools/create_directory_tool.h
     tools/factory.h
     tools/patch.cpp tools/patch.h
     tools/list_issues_tool.cpp tools/list_issues_tool.h
