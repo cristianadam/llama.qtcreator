@@ -5,6 +5,7 @@
 #include <utils/treemodel.h>
 
 #include <QCheckBox>
+#include <QSortFilterProxyModel>
 #include <QTextEdit>
 #include <QTreeView>
 #include <QWidget>
@@ -28,9 +29,23 @@ private:
     void showToolDefinition(const QModelIndex &current, const QModelIndex & /*previous*/);
     void syncGroupStates();
 
+    // Filter model, mirroring the one used by the MIME types settings page.
+    // A tool row matches when its name, its full description or the name of its
+    // group matches; a group row matches when its own name matches or when at
+    // least one of its children matches.
+    class ToolsFilterModel : public QSortFilterProxyModel
+    {
+    public:
+        explicit ToolsFilterModel(QObject *parent = nullptr);
+
+    protected:
+        bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    };
+
     // UI
     QTreeView *m_view = nullptr;
     Utils::TreeModel<> *m_model = nullptr;
+    ToolsFilterModel *m_filterModel = nullptr;
     QTextEdit *m_detailEdit = nullptr;
     bool m_synchronizing = false; // re-entrancy guard for check-box propagation
 

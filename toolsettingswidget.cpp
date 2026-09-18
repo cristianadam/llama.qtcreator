@@ -4,12 +4,14 @@
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 
+#include <utils/fancylineedit.h>
 #include <utils/qtcassert.h>
 
 #include <QHeaderView>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QRegularExpression>
 
 using namespace Utils;
 
@@ -42,6 +44,11 @@ QString elideForList(const QString &text, int maxLength = 100)
 
 ToolsSettingsWidget::ToolsSettingsWidget()
 {
+    // Filter line edit, same pattern as the MIME types settings page.
+    auto filterLineEdit = new FancyLineEdit(this);
+    filterLineEdit->setObjectName(QStringLiteral("filterLineEdit"));
+    filterLineEdit->setFiltering(true);
+
     m_view = new QTreeView(this);
     m_view->setUniformRowHeights(true);
     m_view->setHeaderHidden(false);
@@ -55,7 +62,12 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     m_model = new TreeModel<>(m_view);
     m_model->setHeader({Tr::tr("Tool"), Tr::tr("Description")});
 
-    m_view->setModel(m_model);
+    m_filterModel = new ToolsFilterModel(m_view);
+    m_filterModel->setSourceModel(m_model);
+    m_filterModel->setFilterRole(Qt::DisplayRole);
+    m_filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    m_view->setModel(m_filterModel);
     m_view->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     m_view->header()->setSectionResizeMode(1, QHeaderView::Stretch);
 
@@ -63,7 +75,16 @@ ToolsSettingsWidget::ToolsSettingsWidget()
 
     // layout
     using namespace Layouting;
-    Column{m_view, m_detailEdit}.attachTo(this);
+    Column{filterLineEdit, m_view, m_detailEdit}.attachTo(this);
+
+    connect(filterLineEdit,
+            &FancyLineEdit::textChanged,
+            m_filterModel,
+            &ToolsFilterModel::setFilterWildcard);
+
+    // Filtering resets the expanded state of the group rows – re-expand them so
+    // the matching tools are directly visible.
+    connect(filterLineEdit, &FancyLineEdit::textChanged, this, [this] { m_view->expandAll(); });
 
     // keep model in sync when the user toggles a check-box
     connect(m_model, &TreeModel<>::dataChanged, this, [this](const QModelIndex &top) {
@@ -328,6 +349,51 @@ bool ToolsSettingsWidget::GroupItem::setData(int column, const QVariant &value, 
             return true;
         }
     }
+    return false;
+}
+
+/* ------------------------------------------------------ ToolsFilterModel */
+
+ToolsSettingsWidget::ToolsFilterModel::ToolsFilterModel(QObject *parent)
+    : QSortFilterProxyModel(parent)
+{
+    // All columns are checked; the actual matching is done in
+    // filterAcceptsRow() (name, full description and group name are all
+    // taken into account there).
+    setFilterKeyColumn(-1);
+    setFilterCaseSensitivity(Qt::CaseInsensitive);
+}
+
+bool ToolsSettingsWidget::ToolsFilterModel::filterAcceptsRow(int source_row,
+                                                             const QModelIndex &source_parent) const
+{
+    const QRegularExpression regex = filterRegularExpression();
+    const QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+    if (sourceModel()->hasChildren(index)) {
+        // Group row: visible when the group name matches or when at least one
+        // of the children does.
+        if (regex.match(sourceModel()->data(index, Qt::DisplayRole).toString()).hasMatch())
+            return true;
+        const int childCount = sourceModel()->rowCount(index);
+        for (int row = 0; row < childCount; ++row)
+            if (filterAcceptsRow(row, index))
+                return true;
+        return false;
+    }
+
+    // Tool row: match against the name, the full (unelided) description or
+    // the name of the group the tool belongs to.
+    if (regex.match(sourceModel()->data(index, Qt::DisplayRole).toString()).hasMatch())
+        return true;
+    QString description = sourceModel()->data(index, ToolItem::DescriptionRole).toString();
+    if (description.isEmpty())
+        description = sourceModel()->data(index.siblingAtColumn(1), Qt::DisplayRole).toString();
+    if (regex.match(description).hasMatch())
+        return true;
+    if (source_parent.isValid()
+        && regex.match(sourceModel()->data(source_parent, Qt::DisplayRole).toString()).hasMatch())
+        return true;
     return false;
 }
 
