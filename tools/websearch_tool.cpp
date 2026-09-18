@@ -22,40 +22,9 @@ constexpr qint64 kMaxResponseBytes = 1 * 1024 * 1024;
 
 const char kExaDefaultUrl[] = "https://mcp.exa.ai/mcp";
 const char kGoogleDefaultUrl[] = "https://www.googleapis.com/customsearch/v1";
-const char kDuckDuckGoDefaultUrl[] = "https://lite.duckduckgo.com/lite/";
+const char kBraveDefaultUrl[] = "https://api.search.brave.com/res/v1/web/search";
+const char kTavilyDefaultUrl[] = "https://api.tavily.com/search";
 const char kExaToolName[] = "web_search_exa";
-
-QString cleanText(const QString &htmlFragment)
-{
-    QString s = htmlFragment;
-    s.replace(QRegularExpression(QStringLiteral("<[^>]*>")), QLatin1String(" "));
-    s.replace(QStringLiteral("&amp;"), QLatin1String("&"))
-        .replace(QStringLiteral("&lt;"), QLatin1String("<"))
-        .replace(QStringLiteral("&gt;"), QLatin1String(">"))
-        .replace(QStringLiteral("&quot;"), QLatin1String("\""))
-        .replace(QStringLiteral("&#x27;"), QLatin1String("'"))
-        .replace(QStringLiteral("&apos;"), QLatin1String("'"))
-        .replace(QStringLiteral("&nbsp;"), QLatin1String(" "));
-    s.replace(QRegularExpression(QStringLiteral("\\s+")), QLatin1String(" "));
-    return s.trimmed();
-}
-
-QString extractTargetUrl(const QString &href)
-{
-    // DuckDuckGo wraps external links: //duckduckgo.com/l/?uddg=<percent‑encoded>&rut=…
-    // The href attribute itself is entity‑encoded in the HTML (&amp;).
-    QString clean = href;
-    clean.replace(QStringLiteral("&amp;"), QLatin1String("&"));
-    const int queryStart = clean.indexOf(QLatin1Char('?'));
-    if (queryStart != -1) {
-        const QString query = clean.mid(queryStart + 1);
-        for (const QString &item : query.split(QLatin1Char('&'))) {
-            if (item.startsWith(QStringLiteral("uddg=")))
-                return QUrl::fromPercentEncoding(item.mid(5).toUtf8());
-        }
-    }
-    return href;
-}
 
 QString mcpTextContent(const QJsonObject &payload)
 {
@@ -125,7 +94,7 @@ QString WebSearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "websearch",
-            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. The backend (Exa, Google Custom Search or DuckDuckGo) and its endpoint/API key are configurable in the Llama.cpp settings. Use this to find documentation, news, or the right page to read; afterwards use webfetch to retrieve the full content of a promising result.",
+            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. The backend (Exa, Google Custom Search, Brave Search or Tavily) and its endpoint/API key are configurable in the Llama.cpp settings. Use this to find documentation, news, or the right page to read; afterwards use webfetch to retrieve the full content of a promising result.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -153,7 +122,10 @@ WebSearchConfig WebSearchConfig::fromSettings()
     config.googleUrl = settings().webSearchGoogleUrl().trimmed();
     config.googleApiKey = settings().webSearchGoogleApiKey().trimmed();
     config.googleCx = settings().webSearchGoogleCx().trimmed();
-    config.duckDuckGoUrl = settings().webSearchDuckDuckGoUrl().trimmed();
+    config.braveUrl = settings().webSearchBraveUrl().trimmed();
+    config.braveApiKey = settings().webSearchBraveApiKey().trimmed();
+    config.tavilyUrl = settings().webSearchTavilyUrl().trimmed();
+    config.tavilyApiKey = settings().webSearchTavilyApiKey().trimmed();
     return config;
 }
 
@@ -191,36 +163,42 @@ QVector<SearchResult> parseGoogleResults(const QJsonObject &response)
     return results;
 }
 
-QVector<SearchResult> parseDuckDuckGoResults(const QString &body, int maxResults)
+QVector<SearchResult> parseBraveResults(const QJsonObject &response)
 {
-    // Markup of lite.duckduckgo.com (verified 2026‑09):
-    //   <a rel="nofollow" href="//duckduckgo.com/l/?uddg=…&amp;rut=…" class='result-link'>Title</a>
-    //   <td class='result-snippet'> … <b>…</b> … </td>
-    static const QRegularExpression titleRe(
-        QStringLiteral(R"rx(<a[^>]*href="([^"]*)"[^>]*class=['"]result-link['"][^>]*>(.*?)</a>)rx"),
-        QRegularExpression::DotMatchesEverythingOption);
-    static const QRegularExpression snippetRe(
-        QStringLiteral(R"rx(<td[^>]*class=['"]result-snippet['"][^>]*>(.*?)</td>)rx"),
-        QRegularExpression::DotMatchesEverythingOption);
-
+    // Brave web/search response: { "web": { "results": [ { "title",
+    // "url", "description", … }, … ] } }
     QVector<SearchResult> results;
-    for (auto it = titleRe.globalMatch(body);
-         it.hasNext() && results.size() < maxResults;) {
-        const auto m = it.next();
+    const QJsonObject web = response.value(QStringLiteral("web")).toObject();
+    for (const QJsonValue &value : web.value(QStringLiteral("results")).toArray()) {
+        const QJsonObject item = value.toObject();
+        const QString url = item.value(QStringLiteral("url")).toString();
+        if (url.isEmpty())
+            continue;
         SearchResult r;
-        r.title = cleanText(m.captured(2));
-        r.url = extractTargetUrl(m.captured(1));
+        r.title = item.value(QStringLiteral("title")).toString();
+        r.url = url;
+        r.snippet = item.value(QStringLiteral("description")).toString();
         results.append(r);
     }
+    return results;
+}
 
-    QVector<QString> snippets;
-    for (auto it = snippetRe.globalMatch(body);
-         it.hasNext() && snippets.size() < maxResults;)
-        snippets.append(cleanText(it.next().captured(1)));
-
-    for (int i = 0; i < results.size() && i < snippets.size(); ++i)
-        results[i].snippet = snippets.at(i);
-
+QVector<SearchResult> parseTavilyResults(const QJsonObject &response)
+{
+    // Tavily /search response: { "results": [ { "title", "url", "content",
+    // … }, … ] }
+    QVector<SearchResult> results;
+    for (const QJsonValue &value : response.value(QStringLiteral("results")).toArray()) {
+        const QJsonObject item = value.toObject();
+        const QString url = item.value(QStringLiteral("url")).toString();
+        if (url.isEmpty())
+            continue;
+        SearchResult r;
+        r.title = item.value(QStringLiteral("title")).toString();
+        r.url = url;
+        r.snippet = item.value(QStringLiteral("content")).toString();
+        results.append(r);
+    }
     return results;
 }
 
@@ -308,26 +286,87 @@ void WebSearchTool::run(const QJsonObject &args,
                        });
     }
 
-    if (config.provider == QLatin1String("duckduckgo")) {
-        const QString base = config.duckDuckGoUrl.isEmpty() ? kDuckDuckGoDefaultUrl
-                                                            : config.duckDuckGoUrl;
-        const QString url = base + QStringLiteral("?q=") + QUrl::toPercentEncoding(query);
+    if (config.provider == QLatin1String("brave")) {
+        const QString url = config.braveUrl.isEmpty() ? kBraveDefaultUrl : config.braveUrl;
+        if (config.braveApiKey.isEmpty())
+            return done(Tr::tr("Search failed: the Brave backend is not configured. "
+                               "Set the API key in the Llama.cpp settings."),
+                        false);
+        QUrl u(url);
+        QUrlQuery q;
+        q.addQueryItem(QStringLiteral("q"), query);
+        q.addQueryItem(QStringLiteral("count"), QString::number(maxResults));
+        u.setQuery(q);
 
-        return httpGet(url,
+        // Brave authenticates via a custom header, so the GET-with-headers
+        // overload is used instead of the plain one.
+        QList<QPair<QByteArray, QByteArray>> headers;
+        headers.append({QByteArrayLiteral("Accept"), QByteArrayLiteral("application/json")});
+        headers.append({QByteArrayLiteral("X-Subscription-Token"),
+                        QByteArray::fromStdString(config.braveApiKey.toStdString())});
+
+        return httpGet(u.toString(),
+                       headers,
                        kTimeoutSec,
                        kMaxResponseBytes,
-                       [query, maxResults, done](const QByteArray &body,
-                                                 const QString &,
-                                                 const QString &error) {
+                       [query, done](const QByteArray &body,
+                                     const QString &,
+                                     const QString &error) {
                            if (!error.isEmpty())
                                return done(Tr::tr("Search failed: %1").arg(error), false);
+                           QJsonParseError parseError;
+                           const QJsonDocument doc = QJsonDocument::fromJson(body, &parseError);
+                           if (parseError.error != QJsonParseError::NoError || !doc.isObject())
+                               return done(Tr::tr("Search failed: invalid response from the "
+                                                  "search provider."),
+                                           false);
                            const QVector<SearchResult> results
-                               = parseDuckDuckGoResults(QString::fromUtf8(body), maxResults);
+                               = parseBraveResults(doc.object());
                            if (results.isEmpty())
                                return done(Tr::tr("No results found for \"%1\".").arg(query),
                                            true);
                            return done(formatResults(query, results), true);
                        });
+    }
+
+    if (config.provider == QLatin1String("tavily")) {
+        const QString url = config.tavilyUrl.isEmpty() ? kTavilyDefaultUrl : config.tavilyUrl;
+        if (config.tavilyApiKey.isEmpty())
+            return done(Tr::tr("Search failed: the Tavily backend is not configured. "
+                               "Set the API key in the Llama.cpp settings."),
+                        false);
+
+        QJsonObject request;
+        request[QStringLiteral("query")] = query;
+        request[QStringLiteral("max_results")] = maxResults;
+
+        QList<QPair<QByteArray, QByteArray>> headers;
+        headers.append({QByteArrayLiteral("Content-Type"), QByteArrayLiteral("application/json")});
+        headers.append({QByteArrayLiteral("Authorization"),
+                        QByteArrayLiteral("Bearer ")
+                            + QByteArray::fromStdString(config.tavilyApiKey.toStdString())});
+
+        return httpPost(url,
+                        QJsonDocument(request).toJson(QJsonDocument::Compact),
+                        headers,
+                        kTimeoutSec,
+                        kMaxResponseBytes,
+                        [query, done](const QByteArray &body,
+                                      const QString &,
+                                      const QString &error) {
+                          if (!error.isEmpty())
+                              return done(Tr::tr("Search failed: %1").arg(error), false);
+                          QJsonParseError parseError;
+                          const QJsonDocument doc = QJsonDocument::fromJson(body, &parseError);
+                          if (parseError.error != QJsonParseError::NoError || !doc.isObject())
+                              return done(Tr::tr("Search failed: invalid response from the "
+                                                 "search provider."),
+                                          false);
+                          const QVector<SearchResult> results = parseTavilyResults(doc.object());
+                          if (results.isEmpty())
+                              return done(Tr::tr("No results found for \"%1\".").arg(query), true);
+                          return done(formatResults(query, results), true);
+                      });
     }
 
     // Default: Exa via its hosted MCP endpoint (JSON‑RPC tools/call).

@@ -78,6 +78,21 @@ void httpGet(const QString &url,
     start(manager, manager->get(request), std::move(done), maxResponseBytes);
 }
 
+void httpGet(const QString &url,
+             const QList<QPair<QByteArray, QByteArray>> &headers,
+             int timeoutSeconds,
+             qint64 maxResponseBytes,
+             HttpResponseCallback done)
+{
+    QNetworkRequest request = makeRequest(QUrl(url));
+    request.setTransferTimeout(qMax(1, timeoutSeconds) * 1000);
+    for (const auto &header : headers)
+        request.setRawHeader(header.first, header.second);
+
+    auto *manager = new QNetworkAccessManager();
+    start(manager, manager->get(request), std::move(done), maxResponseBytes);
+}
+
 void httpPost(const QString &url,
               const QByteArray &body,
               const QList<QPair<QByteArray, QByteArray>> &headers,

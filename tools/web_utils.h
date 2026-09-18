@@ -20,6 +20,13 @@ void httpGet(const QString &url,
              qint64 maxResponseBytes,
              HttpResponseCallback done);
 
+/*! Like httpGet, but also sends the given raw headers. */
+void httpGet(const QString &url,
+             const QList<QPair<QByteArray, QByteArray>> &headers,
+             int timeoutSeconds,
+             qint64 maxResponseBytes,
+             HttpResponseCallback done);
+
 /*! Like httpGet, but POSTs \a body with the given raw headers. */
 void httpPost(const QString &url,
               const QByteArray &body,

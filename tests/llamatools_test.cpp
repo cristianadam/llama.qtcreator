@@ -171,8 +171,8 @@ private slots:
     void webfetch_summaries();
 
     // WebSearchTool
-    void websearch_parseResults();
-    void websearch_maxResults();
+    void websearch_parseBraveResults();
+    void websearch_parseTavilyResults();
     void websearch_toolDefinition();
     void websearch_summaries();
     void websearch_exaEndpointUrl();
@@ -830,53 +830,62 @@ void LlamaToolsTest::webfetch_summaries()
 // WebSearchTool
 // ============================================================================
 
-namespace {
-
-// Fixture mirroring the real lite.duckduckgo.com markup
-const QString kDuckDuckGoFixture = QStringLiteral(
-    "<html><body><form id=\"lite\"><table>"
-    "<tr><td><a rel=\"nofollow\" "
-    "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fdoc.qt.io%2Fqt-6%2Findex.html&amp;rut=abc123\" "
-    "class='result-link'>Qt 6 Reference Docs</a></td></tr>"
-    "<tr><td class='result-snippet'>\n"
-    "    Official documentation for <b>Qt 6</b> &amp; its modules.\n"
-    "  </td></tr>"
-    "<tr><td><a rel=\"nofollow\" "
-    "href=\"https://example.org/second\" "
-    "class='result-link'>Second &amp; Third</a></td></tr>"
-    "<tr><td class='result-snippet'>Snippet for the second result.</td></tr>"
-    "<tr><td><a rel=\"nofollow\" "
-    "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Fthird&amp;rut=def456\" "
-    "class='result-link'>Third</a></td></tr>"
-    "</table></form></body></html>");
-
-} // namespace
-
-void LlamaToolsTest::websearch_parseResults()
+void LlamaToolsTest::websearch_parseBraveResults()
 {
-    const auto results = Tools::parseDuckDuckGoResults(kDuckDuckGoFixture, 10);
-    QCOMPARE(results.size(), 3);
+    // Fixture mirroring the real api.search.brave.com response structure
+    const QString json = QStringLiteral(
+        "{\"type\":\"application/json\",\"web\":{\"results\":["
+        "{\"title\":\"Qt 6 Reference Docs\","
+        "\"url\":\"https://doc.qt.io/qt-6/index.html\","
+        "\"description\":\"Official documentation for Qt 6.\"},"
+        "{\"title\":\"Second\",\"url\":\"https://example.org/second\"},"
+        "{\"title\":\"Dropped\"}]},\"takeaways\":{\"results\":[]}}");
 
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+
+    const auto results = Tools::parseBraveResults(doc.object());
+    QCOMPARE(results.size(), 2);
     QCOMPARE(results[0].title, QString("Qt 6 Reference Docs"));
     QCOMPARE(results[0].url, QString("https://doc.qt.io/qt-6/index.html"));
-    QCOMPARE(results[0].snippet, QString("Official documentation for Qt 6 & its modules."));
+    QCOMPARE(results[0].snippet, QString("Official documentation for Qt 6."));
 
-    // A direct (non‑wrapped) href is used as‑is
-    QCOMPARE(results[1].title, QString("Second & Third"));
+    // A result without a description gets an empty snippet
+    QCOMPARE(results[1].title, QString("Second"));
     QCOMPARE(results[1].url, QString("https://example.org/second"));
-    QCOMPARE(results[1].snippet, QString("Snippet for the second result."));
+    QVERIFY(results[1].snippet.isEmpty());
 
-    // A result without a snippet gets an empty one
-    QCOMPARE(results[2].title, QString("Third"));
-    QCOMPARE(results[2].url, QString("https://example.org/third"));
-    QVERIFY(results[2].snippet.isEmpty());
+    QVERIFY(Tools::parseBraveResults(QJsonObject()).isEmpty());
 }
 
-void LlamaToolsTest::websearch_maxResults()
+void LlamaToolsTest::websearch_parseTavilyResults()
 {
-    const auto results = Tools::parseDuckDuckGoResults(kDuckDuckGoFixture, 2);
+    // Fixture mirroring the real api.tavily.com response structure
+    const QString json = QStringLiteral(
+        "{\"query\":\"qt 6\",\"results\":["
+        "{\"title\":\"Qt 6 Reference Docs\","
+        "\"url\":\"https://doc.qt.io/qt-6/index.html\","
+        "\"content\":\"Official documentation for Qt 6.\"},"
+        "{\"title\":\"Second\",\"url\":\"https://example.org/second\"},"
+        "{\"title\":\"Dropped\"}],\"answer\":null}");
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(json.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+
+    const auto results = Tools::parseTavilyResults(doc.object());
     QCOMPARE(results.size(), 2);
+    QCOMPARE(results[0].title, QString("Qt 6 Reference Docs"));
+    QCOMPARE(results[0].url, QString("https://doc.qt.io/qt-6/index.html"));
+    QCOMPARE(results[0].snippet, QString("Official documentation for Qt 6."));
+
+    // A result without content gets an empty snippet
+    QCOMPARE(results[1].title, QString("Second"));
     QCOMPARE(results[1].url, QString("https://example.org/second"));
+    QVERIFY(results[1].snippet.isEmpty());
+
+    QVERIFY(Tools::parseTavilyResults(QJsonObject()).isEmpty());
 }
 
 void LlamaToolsTest::websearch_toolDefinition()

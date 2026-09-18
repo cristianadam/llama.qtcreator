@@ -418,8 +418,9 @@ LlamaSettings::LlamaSettings()
     webSearchProvider.setDefaultValue("exa");
     webSearchProvider.setToolTip(Tr::tr(
         "Backend used by the websearch tool: \"exa\" (default, no API key required), "
-        "\"google\" (Custom Search JSON API, requires an API key and a search engine ID) "
-        "or \"duckduckgo\" (no API key required)."));
+        "\"google\" (Custom Search JSON API, requires an API key and a search engine ID), "
+        "\"brave\" (Brave Search API, requires an API key) or \"tavily\" "
+        "(requires an API key)."));
     webSearchProvider.setHistoryCompleter("LlamaCpp.WebSearchProvider.History");
 
     webSearchExaUrl.setDisplayName(Tr::tr("Exa Endpoint"));
@@ -467,15 +468,45 @@ LlamaSettings::LlamaSettings()
         "(required for the \"google\" provider)."));
     webSearchGoogleCx.setHistoryCompleter("LlamaCpp.WebSearchGoogleCx.History");
 
-    webSearchDuckDuckGoUrl.setDisplayName(Tr::tr("DuckDuckGo Endpoint"));
-    webSearchDuckDuckGoUrl.setDisplayStyle(StringAspect::LineEditDisplay);
-    webSearchDuckDuckGoUrl.setSettingsKey("WebSearchDuckDuckGoUrl");
-    webSearchDuckDuckGoUrl.setLabelText(Tr::tr("DuckDuckGo Endpoint:"));
-    webSearchDuckDuckGoUrl.setDefaultValue("https://lite.duckduckgo.com/lite/");
-    webSearchDuckDuckGoUrl.setToolTip(Tr::tr(
-        "URL of the DuckDuckGo Lite endpoint used by the websearch tool "
-        "(the \"duckduckgo\" provider)."));
-    webSearchDuckDuckGoUrl.setHistoryCompleter("LlamaCpp.WebSearchDuckDuckGoUrl.History");
+    webSearchBraveUrl.setDisplayName(Tr::tr("Brave Search Endpoint"));
+    webSearchBraveUrl.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchBraveUrl.setSettingsKey("WebSearchBraveUrl");
+    webSearchBraveUrl.setLabelText(Tr::tr("Brave Search Endpoint:"));
+    webSearchBraveUrl.setDefaultValue("https://api.search.brave.com/res/v1/web/search");
+    webSearchBraveUrl.setToolTip(Tr::tr(
+        "URL of the Brave Search API endpoint used by the websearch tool "
+        "(the \"brave\" provider)."));
+    webSearchBraveUrl.setHistoryCompleter("LlamaCpp.WebSearchBraveUrl.History");
+
+    webSearchBraveApiKey.setDisplayName(Tr::tr("Brave Search API Key"));
+    webSearchBraveApiKey.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchBraveApiKey.setSettingsKey("WebSearchBraveApiKey");
+    webSearchBraveApiKey.setLabelText(Tr::tr("Brave Search API Key:"));
+    webSearchBraveApiKey.setDefaultValue("");
+    webSearchBraveApiKey.setToolTip(Tr::tr(
+        "API key for the Brave Search API, get one at brave.com/search/api "
+        "(required for the \"brave\" provider)."));
+    webSearchBraveApiKey.setHistoryCompleter("LlamaCpp.WebSearchBraveApiKey.History");
+
+    webSearchTavilyUrl.setDisplayName(Tr::tr("Tavily Endpoint"));
+    webSearchTavilyUrl.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchTavilyUrl.setSettingsKey("WebSearchTavilyUrl");
+    webSearchTavilyUrl.setLabelText(Tr::tr("Tavily Endpoint:"));
+    webSearchTavilyUrl.setDefaultValue("https://api.tavily.com/search");
+    webSearchTavilyUrl.setToolTip(Tr::tr(
+        "URL of the Tavily search endpoint used by the websearch tool "
+        "(the \"tavily\" provider)."));
+    webSearchTavilyUrl.setHistoryCompleter("LlamaCpp.WebSearchTavilyUrl.History");
+
+    webSearchTavilyApiKey.setDisplayName(Tr::tr("Tavily API Key"));
+    webSearchTavilyApiKey.setDisplayStyle(StringAspect::LineEditDisplay);
+    webSearchTavilyApiKey.setSettingsKey("WebSearchTavilyApiKey");
+    webSearchTavilyApiKey.setLabelText(Tr::tr("Tavily API Key:"));
+    webSearchTavilyApiKey.setDefaultValue("");
+    webSearchTavilyApiKey.setToolTip(Tr::tr(
+        "API key for Tavily, get one at tavily.com "
+        "(required for the \"tavily\" provider)."));
+    webSearchTavilyApiKey.setHistoryCompleter("LlamaCpp.WebSearchTavilyApiKey.History");
 
     initEnableAspect(enableLlamaCpp);
 
@@ -529,7 +560,10 @@ LlamaSettings::LlamaSettings()
     webSearchGoogleUrl.setEnabler(&enableLlamaCpp);
     webSearchGoogleApiKey.setEnabler(&enableLlamaCpp);
     webSearchGoogleCx.setEnabler(&enableLlamaCpp);
-    webSearchDuckDuckGoUrl.setEnabler(&enableLlamaCpp);
+    webSearchBraveUrl.setEnabler(&enableLlamaCpp);
+    webSearchBraveApiKey.setEnabler(&enableLlamaCpp);
+    webSearchTavilyUrl.setEnabler(&enableLlamaCpp);
+    webSearchTavilyApiKey.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {
         using namespace Layouting;
@@ -594,7 +628,8 @@ LlamaSettings::LlamaSettings()
         auto *providerCombo = new QComboBox();
         providerCombo->addItems({QStringLiteral("exa"),
                                  QStringLiteral("google"),
-                                 QStringLiteral("duckduckgo")});
+                                 QStringLiteral("brave"),
+                                 QStringLiteral("tavily")});
         providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(webSearchProvider())));
         connect(providerCombo,
                 &QComboBox::currentTextChanged,
@@ -615,7 +650,11 @@ LlamaSettings::LlamaSettings()
                 Row {webSearchGoogleApiKey}, br,
                 Row {webSearchGoogleCx}, br,
                 hr, br,
-                Row {webSearchDuckDuckGoUrl}, br,
+                Row {webSearchBraveUrl}, br,
+                Row {webSearchBraveApiKey}, br,
+                hr, br,
+                Row {webSearchTavilyUrl}, br,
+                Row {webSearchTavilyApiKey}, br,
             },
         };
 

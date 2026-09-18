@@ -77,7 +77,10 @@ public:
     Utils::StringAspect webSearchGoogleUrl{this};
     Utils::StringAspect webSearchGoogleApiKey{this};
     Utils::StringAspect webSearchGoogleCx{this};
-    Utils::StringAspect webSearchDuckDuckGoUrl{this};
+    Utils::StringAspect webSearchBraveUrl{this};
+    Utils::StringAspect webSearchBraveApiKey{this};
+    Utils::StringAspect webSearchTavilyUrl{this};
+    Utils::StringAspect webSearchTavilyApiKey{this};
 };
 
 LlamaSettings &settings();
