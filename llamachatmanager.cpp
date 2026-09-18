@@ -15,6 +15,7 @@
 #include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 #include "tools/factory.h"
+#include "tools/mcpbridge.h"
 #include "tools/tool.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
@@ -57,14 +58,24 @@ static void addCommonPayloadParams(QJsonObject &payload)
     payload["return_progress"] = true;
 }
 
+// Local tools are enabled when listed in EnabledToolsList. Tools served by
+// the Qt Creator MCP server are enabled by default and only excluded when
+// the user explicitly disabled them (DisabledMcpToolsList).
+static bool isToolEnabled(const QString &toolName)
+{
+    if (McpBridge::instance().isMcpTool(toolName))
+        return !settings().disabledMcpToolsList().contains(toolName);
+    return settings().enabledToolsList().contains(toolName);
+}
+
 static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTools = nullptr)
 {
-    const QStringList enabledTools = settings().enabledToolsList();
-
     const QStringList creatorsList = ToolFactory::instance().creatorsList();
     QStringList toolDefinitions;
     for (const QString &toolName : creatorsList) {
         std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
+        if (!tool)
+            continue; // e.g. a remote tool that disappeared mid‑flight
         toolDefinitions << tool->toolDefinition();
     }
 
@@ -89,7 +100,7 @@ static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTo
             continue;
         }
 
-        if (!enabledTools.contains(toolName)) {
+        if (!isToolEnabled(toolName)) {
             // Skip disabled tools – they must never be advertised to the server.
             qCInfo(llamaChatTools).nospace()
                 << "Tool '" << toolName << "' is disabled, not adding it to payload.";
@@ -921,7 +932,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                                            std::function<void(qint64)> onChunk)
 {
     // Check whether the requested tool is enabled.
-    if (!settings().enabledToolsList().contains(tool.name)) {
+    if (!isToolEnabled(tool.name)) {
         qCWarning(llamaChatTools) << "Tool" << tool.name
                                   << "was called but is disabled – skipping.";
 

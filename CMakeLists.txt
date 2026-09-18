@@ -82,17 +82,17 @@ add_qtc_plugin(LlamaCpp
     markdownrenderer.cpp markdownrenderer.h
     README.md
     tools/apply_patch_tool.cpp tools/apply_patch_tool.h
-    tools/build_project_tool.cpp tools/build_project_tool.h
     tools/factory.h
+    tools/mcpbridge.cpp tools/mcpbridge.h
+    tools/mcpclient.cpp tools/mcpclient.h
+    tools/mcpclient_test.cpp
+    tools/mcptool.cpp tools/mcptool.h
     tools/patch.cpp tools/patch.h
     tools/list_issues_tool.cpp tools/list_issues_tool.h
-    tools/list_project_tool.cpp tools/list_project_tool.h
     tools/readfile_tool.cpp tools/readfile_tool.h
     tools/regexsearch_tool.cpp tools/regexsearch_tool.h
-    tools/run_project_tool.cpp tools/run_project_tool.h
     tools/task_tool.cpp tools/task_tool.h
     tools/shell_tool.cpp tools/shell_tool.h
-    tools/open_project_tool.cpp tools/open_project_tool.h
     tools/tool.cpp tools/tool.h
     tools/tool_utils.cpp tools/tool_utils.h
     tools/web_utils.cpp tools/web_utils.h

@@ -45,6 +45,9 @@
 #include "llamasettings.h"
 #include "llamaspinner.h"
 #include "llamatr.h"
+#include "tools/factory.h"
+#include "tools/mcpbridge.h"
+#include "tools/mcpclient.h"
 
 using namespace Core;
 using namespace TextEditor;
@@ -96,6 +99,10 @@ FilePath LlamaPlugin::getTranslationFilePath(const QString &translationFile)
 
 void LlamaPlugin::initialize()
 {
+    // Publish the tools served by the Qt Creator MCP server (building,
+    // running, opening projects, …) as chat tools.
+    ToolFactory::instance().setRemoteToolProvider(&McpBridge::instance());
+
     // Translations
     auto translator = new QTranslator(this);
     QString locale = ICore::userInterfaceLanguage();
@@ -217,6 +224,23 @@ void LlamaPlugin::initialize()
     });
 
     setupChatEditor();
+
+#ifdef WITH_TESTS
+    // Registered so the real usage (builtin Qt Creator MCP server,
+    // McpBridge, ToolFactory) can be tested from the command line:
+    //   Qt Creator -pluginpath <build dir> -test llamacpp[,McpClientTest]
+    addTestCreator(&Internal::createMcpClientTest);
+#endif
+}
+
+void LlamaPlugin::extensionsInitialized()
+{
+    // Start the connection only once all plugins are initialized: the
+    // builtin MCP server (and the plugins that contribute its tools) is
+    // fully up by then, so the handshake does not race against tool
+    // registration. (McpClient's tools/list retry covers servers that
+    // register their tools even later.)
+    McpBridge::instance().start();
 }
 
 bool LlamaPlugin::delayedInitialize()

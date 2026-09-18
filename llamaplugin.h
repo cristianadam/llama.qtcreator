@@ -39,6 +39,7 @@ public:
     ~LlamaPlugin();
 
     void initialize() override;
+    void extensionsInitialized() override;
     ShutdownFlag aboutToShutdown() override;
     bool delayedInitialize() override;
 

@@ -395,6 +395,9 @@ LlamaSettings::LlamaSettings()
     enabledToolsList.setSettingsKey("EnabledToolsList");
     enabledToolsList.setDefaultValue(creatorsList);
 
+    disabledMcpToolsList.setSettingsKey("DisabledMcpToolsList");
+    disabledMcpToolsList.setDefaultValue(QStringList());
+
     toolsEnabled.setSettingsKey("ToolsEnabled");
     toolsEnabled.setDefaultValue(false);
     toolsEnabled.setDisplayName(Tr::tr("Enable Tools in Chat"));

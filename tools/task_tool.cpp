@@ -16,11 +16,13 @@ const char kSubagentExplore[] = "explore";
 const char kSubagentGeneral[] = "general";
 
 // Tools the "explore" subagent may use (read‑only, non‑interactive).
+// "project_find_files" is provided by the Qt Creator MCP server; it is only
+// picked up when the server is actually connected.
 const QStringList kExploreTools = {
     "read_file",
     "list_directory",
     "regex_search",
-    "list_project_files",
+    "project_find_files",
     "list_issues",
     "webfetch",
     "websearch",

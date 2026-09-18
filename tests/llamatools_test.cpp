@@ -12,6 +12,7 @@
 #include <llamathinkingsectionparser.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
+#include <tools/mcptool.h>
 #include <tools/patch.h>
 #include <tools/task_tool.h>
 #include <tools/webfetch_tool.h>
@@ -74,6 +75,43 @@ std::pair<QString, bool> runTool(const QJsonObject &args)
              });
     return {output, ok};
 }
+
+// A stand‑in for a tool served by the Qt Creator MCP server.
+class FakeRemoteTool : public Tool
+{
+public:
+    explicit FakeRemoteTool(const QString &name)
+        : m_name(name)
+    {}
+
+    QString name() const override { return m_name; }
+    QString toolDefinition() const override { return QStringLiteral("{}"); }
+    QString oneLineSummary(const QJsonObject &) const override { return m_name; }
+    void run(const QJsonObject &,
+             std::function<void(const QString &, bool)> done) const override
+    {
+        done(QStringLiteral("ok"), true);
+    }
+
+private:
+    QString m_name;
+};
+
+class FakeRemoteProvider : public LlamaCpp::RemoteToolProvider
+{
+public:
+    QStringList toolNames() const override
+    {
+        return {QStringLiteral("remote_tool_a"), QStringLiteral("remote_tool_b")};
+    }
+
+    std::unique_ptr<Tool> createTool(const QString &name) const override
+    {
+        if (name == QLatin1String("remote_tool_a") || name == QLatin1String("remote_tool_b"))
+            return std::make_unique<FakeRemoteTool>(name);
+        return nullptr;
+    }
+};
 
 } // namespace
 
@@ -150,10 +188,17 @@ private slots:
     void task_systemPrompt();
     void task_finalReport();
 
+    // McpTool (Qt Creator MCP server tools)
+    void mcptool_toolDefinition();
+    void mcptool_oneLineSummary();
+    void mcptool_streamingSummary();
+    void mcptool_detailsMarkdown();
+
     // Factory registration
     void factory_applyPatch();
     void factory_webTools();
     void factory_task();
+    void factory_remoteProvider();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -1086,6 +1131,105 @@ void LlamaToolsTest::factory_task()
     auto tool = factory.create("task");
     QVERIFY(tool != nullptr);
     QCOMPARE(tool->name(), QString("task"));
+}
+
+// ============================================================================
+// McpTool / remote tool provider (Qt Creator MCP server)
+// ============================================================================
+
+void LlamaToolsTest::mcptool_toolDefinition()
+{
+    Tools::McpTool tool(QStringLiteral("some_mcp_tool"));
+    QCOMPARE(tool.name(), QString("some_mcp_tool"));
+
+    // No MCP server is connected in the test environment, so the definition
+    // must fall back to a generic (but valid) schema.
+    const QString def = tool.toolDefinition();
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("some_mcp_tool"));
+    QVERIFY(!function["description"].toString().isEmpty());
+    QCOMPARE(function["parameters"].toObject()["type"].toString(), QString("object"));
+}
+
+void LlamaToolsTest::mcptool_oneLineSummary()
+{
+    Tools::McpTool tool(QStringLiteral("build_project"));
+
+    QJsonObject args;
+    args["project_path"] = "CMakeLists.txt";
+    QCOMPARE(tool.oneLineSummary(args), QString("build_project CMakeLists.txt"));
+
+    // No arguments – just the tool name
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("build_project"));
+
+    // Non‑string arguments are stringified compactly
+    QJsonObject num;
+    num["timeout"] = 30;
+    QCOMPARE(Tools::McpTool(QStringLiteral("x")).oneLineSummary(num), QString("x {\"timeout\":30}"));
+
+    // Long values are truncated with an ellipsis
+    QJsonObject longArg;
+    longArg["path"] = QString(100, QLatin1Char('a'));
+    QVERIFY(Tools::McpTool(QStringLiteral("t")).oneLineSummary(longArg).endsWith(QLatin1String("...")));
+}
+
+void LlamaToolsTest::mcptool_streamingSummary()
+{
+    Tools::McpTool tool(QStringLiteral("project_open"));
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"~/Projects/foo")), QString("project_open ~/Projects/foo"));
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": 42}")), QString());
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+    QCOMPARE(tool.streamingSummary(QString()), QString());
+}
+
+void LlamaToolsTest::mcptool_detailsMarkdown()
+{
+    Tools::McpTool tool(QStringLiteral("build_project"));
+
+    QJsonObject args;
+    args["project_path"] = "CMakeLists.txt";
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Build succeeded"));
+    QVERIFY(md.contains("**Arguments**"));
+    QVERIFY(md.contains("CMakeLists.txt"));
+    QVERIFY(md.contains("Build succeeded"));
+    QVERIFY(md.contains("```"));
+
+    // Nothing to show
+    QCOMPARE(tool.detailsMarkdown(QJsonObject(), QString()), QString());
+}
+
+void LlamaToolsTest::factory_remoteProvider()
+{
+    auto &factory = ToolFactory::instance();
+    FakeRemoteProvider provider;
+    factory.setRemoteToolProvider(&provider);
+
+    // Local tools are unaffected.
+    QVERIFY(factory.create("apply_patch") != nullptr);
+
+    // Remote tools are available through the same factory.
+    auto remote = factory.create("remote_tool_a");
+    QVERIFY(remote != nullptr);
+    QCOMPARE(remote->name(), QString("remote_tool_a"));
+
+    // creatorsList exposes both local and remote names.
+    const QStringList list = factory.creatorsList();
+    QVERIFY(list.contains("apply_patch"));
+    QVERIFY(list.contains("remote_tool_a"));
+    QVERIFY(list.contains("remote_tool_b"));
+
+    // Without a provider the remote tools disappear again.
+    factory.setRemoteToolProvider(nullptr);
+    QVERIFY(factory.create("remote_tool_a") == nullptr);
+    QVERIFY(!factory.creatorsList().contains("remote_tool_a"));
 }
 
 } // namespace LlamaCpp

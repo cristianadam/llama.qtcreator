@@ -2,6 +2,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "tools/factory.h"
+#include "tools/mcpbridge.h"
 
 #include <utils/qtcassert.h>
 
@@ -41,6 +42,16 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // keep model in sync when user toggles a check‑box
     connect(m_model, &TreeModel<>::dataChanged, this, [this] { updateEnabledToolsFromModel(); });
 
+    // The tools served by the Qt Creator MCP server change at runtime
+    // (the server connects / disconnects) – refresh the list on that.
+    connect(&McpBridge::instance(),
+            &McpBridge::toolsChanged,
+            this,
+            [this] {
+                fillModel();
+                updateModelFromEnabledTools();
+            });
+
     connect(m_view->selectionModel(),
             &QItemSelectionModel::currentChanged,
             this,
@@ -77,6 +88,12 @@ void ToolsSettingsWidget::fillModel()
 
         if (description.isEmpty())
             description = Tr::tr("No description");
+
+        // Make tools that are served by the Qt Creator MCP server (instead of
+        // being implemented here) recognizable. The tool name itself must
+        // stay untouched – it is used to match against the settings lists.
+        if (McpBridge::instance().isMcpTool(toolName))
+            description = Tr::tr("Served by the Qt Creator MCP server. %1").arg(description);
 
         // Store both the short description and the full JSON (tooltip).
         m_model->rootItem()->appendChild(new ToolItem(toolName, description, tooltip));
@@ -164,26 +181,41 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
 {
     // Walk through all rows and collect the names whose check‑state is Checked.
     QStringList enabled;
+    QStringList disabledMcp;
     for (int row = 0; row < m_model->rowCount(); ++row) {
         const QModelIndex idx = m_model->index(row, 0);
-        const Qt::CheckState cs = static_cast<Qt::CheckState>(idx.data(Qt::CheckStateRole).toInt());
-        if (cs == Qt::Checked) {
-            const QString name = idx.data(Qt::DisplayRole).toString();
+        const QString name = idx.data(Qt::DisplayRole).toString();
+        const bool checked
+            = static_cast<Qt::CheckState>(idx.data(Qt::CheckStateRole).toInt()) == Qt::Checked;
+
+        if (McpBridge::instance().isMcpTool(name)) {
+            // MCP tools are enabled by default – only the unchecked ones are
+            // stored (in the disabled list).
+            if (!checked)
+                disabledMcp << name;
+        } else if (checked) {
             enabled << name;
         }
     }
     // Write back to the global settings object.
     settings().enabledToolsList.setValue(enabled);
+    settings().disabledMcpToolsList.setValue(disabledMcp);
 }
 
 void ToolsSettingsWidget::updateModelFromEnabledTools()
 {
     const QStringList enabled = settings().enabledToolsList();
+    const QStringList disabledMcp = settings().disabledMcpToolsList();
     for (int row = 0; row < m_model->rowCount(); ++row) {
         const QModelIndex idx = m_model->index(row, 0);
         const QString name = idx.data(Qt::DisplayRole).toString();
-        const Qt::CheckState cs = enabled.contains(name) ? Qt::Checked : Qt::Unchecked;
-        m_model->setData(idx, cs, Qt::CheckStateRole);
+
+        // Local tools are checked when enabled; MCP tools are checked unless
+        // the user explicitly disabled them.
+        const bool checked = McpBridge::instance().isMcpTool(name)
+                                 ? !disabledMcp.contains(name)
+                                 : enabled.contains(name);
+        m_model->setData(idx, checked ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
     }
 }
 
