@@ -21,9 +21,7 @@ const char kSubagentGeneral[] = "general";
 const QStringList kExploreTools = {
     "read_file",
     "list_directory",
-    "regex_search",
     "project_find_files",
-    "list_issues",
     "webfetch",
     "websearch",
 };
