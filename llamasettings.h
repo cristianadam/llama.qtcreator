@@ -64,9 +64,10 @@ public:
     Utils::BoolAspect showTokensPerSecond{this};
 
     Utils::StringListAspect enabledToolsList{this};
-    // Tools served by the Qt Creator MCP server are enabled by default;
-    // only the ones the user explicitly turned off land in this list.
-    Utils::StringListAspect disabledMcpToolsList{this};
+    // Tools served by the Qt Creator MCP server are disabled by default
+    // (they eat a lot of context); only the ones the user explicitly turned
+    // on land in this list.
+    Utils::StringListAspect enabledMcpToolsList{this};
     Utils::BoolAspect toolsEnabled{this};
 
     // Web search (websearch tool)

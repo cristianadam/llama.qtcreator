@@ -240,7 +240,7 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
 {
     // Walk through all tools and collect the names whose check-state is Checked.
     QStringList enabled;
-    QStringList disabledMcp;
+    QStringList enabledMcp;
     const int groupCount = m_model->rowCount();
     for (int groupRow = 0; groupRow < groupCount; ++groupRow) {
         const QModelIndex groupIdx = m_model->index(groupRow, 0);
@@ -252,10 +252,10 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
                     = static_cast<Qt::CheckState>(idx.data(Qt::CheckStateRole).toInt()) == Qt::Checked;
 
             if (McpBridge::instance().isMcpTool(name)) {
-                // MCP tools are enabled by default – only the unchecked ones are
-                // stored (in the disabled list).
-                if (!checked)
-                    disabledMcp << name;
+                // MCP tools are disabled by default – only the checked ones are
+                // stored (in the enabled list).
+                if (checked)
+                    enabledMcp << name;
             } else if (checked) {
                 enabled << name;
             }
@@ -263,13 +263,13 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
     }
     // Write back to the global settings object.
     settings().enabledToolsList.setValue(enabled);
-    settings().disabledMcpToolsList.setValue(disabledMcp);
+    settings().enabledMcpToolsList.setValue(enabledMcp);
 }
 
 void ToolsSettingsWidget::updateModelFromEnabledTools()
 {
     const QStringList enabled = settings().enabledToolsList();
-    const QStringList disabledMcp = settings().disabledMcpToolsList();
+    const QStringList enabledMcp = settings().enabledMcpToolsList();
     const int groupCount = m_model->rowCount();
     for (int groupRow = 0; groupRow < groupCount; ++groupRow) {
         const QModelIndex groupIdx = m_model->index(groupRow, 0);
@@ -278,10 +278,10 @@ void ToolsSettingsWidget::updateModelFromEnabledTools()
             const QModelIndex idx = m_model->index(row, 0, groupIdx);
             const QString name = idx.data(Qt::DisplayRole).toString();
 
-            // Local tools are checked when enabled; MCP tools are checked unless
-            // the user explicitly disabled them.
+            // Local tools are checked when enabled; MCP tools are only checked
+            // when the user explicitly enabled them.
             const bool checked = McpBridge::instance().isMcpTool(name)
-                                     ? !disabledMcp.contains(name)
+                                     ? enabledMcp.contains(name)
                                      : enabled.contains(name);
             m_model->setData(idx, checked ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
         }

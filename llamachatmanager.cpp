@@ -59,12 +59,12 @@ static void addCommonPayloadParams(QJsonObject &payload)
 }
 
 // Local tools are enabled when listed in EnabledToolsList. Tools served by
-// the Qt Creator MCP server are enabled by default and only excluded when
-// the user explicitly disabled them (DisabledMcpToolsList).
+// the Qt Creator MCP server are disabled by default and only included when
+// the user explicitly enabled them (EnabledMcpToolsList).
 static bool isToolEnabled(const QString &toolName)
 {
     if (McpBridge::instance().isMcpTool(toolName))
-        return !settings().disabledMcpToolsList().contains(toolName);
+        return settings().enabledMcpToolsList().contains(toolName);
     return settings().enabledToolsList().contains(toolName);
 }
 
