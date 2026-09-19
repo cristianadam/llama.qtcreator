@@ -5,11 +5,16 @@
 #include <QtTaskTree/qprocesstask.h>
 #include <QtTaskTree/qtasktree.h>
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QLoggingCategory>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QTemporaryFile>
 #include <QUuid>
 
 #include <coreplugin/documentmanager.h>
@@ -18,12 +23,15 @@
 #include <projectexplorer/projectmanager.h>
 #include <utils/environment.h>
 #include <utils/filepath.h>
+#include <utils/temporaryfile.h>
 
 using namespace ProjectExplorer;
 using namespace Utils;
 using namespace QtTaskTree;
 
 namespace LlamaCpp::Tools {
+
+Q_LOGGING_CATEGORY(shellToolLog, "llama.cpp.chat.shell", QtWarningMsg)
 
 namespace {
 
@@ -57,6 +65,41 @@ QProcessEnvironment shellEnvironment()
             env = kit->buildEnvironment().toProcessEnvironment();
     }
     return env;
+}
+
+/*! Locates Qt Creator's process stub, which wraps the shell like the
+    terminal does, so that the inferior can be killed reliably and crashes
+    are reported through the control socket. Returns an empty string when
+    the stub is not available (plain shell fallback is used then). */
+QString findProcessStub()
+{
+    QString exe = QStringLiteral("qtcreator_process_stub");
+#if defined(Q_OS_WIN)
+    exe += QStringLiteral(".exe");
+#endif
+    const QString overridePath = qEnvironmentVariable("LLAMA_SHELL_STUB");
+    const FilePath stub = overridePath.isEmpty()
+            ? FilePath::fromUserInput(QCoreApplication::applicationDirPath())
+                      .pathAppended(QLatin1String(RELATIVE_LIBEXEC_PATH))
+                      .pathAppended(exe)
+            : FilePath::fromUserInput(overridePath);
+    return stub.exists() ? stub.toFSPathString() : QString();
+}
+
+/*! Writes the environment as a NUL separated "KEY=VALUE" list file, the
+    format the process stub reads with its -e option. Returns an empty
+    string on failure. */
+QString writeEnvironmentFile(const QProcessEnvironment &env, QObject *parent)
+{
+    QTemporaryFile *file = new QTemporaryFile(parent);
+    if (!file->open()) {
+        delete file;
+        return {};
+    }
+    for (const QString &key : env.keys())
+        file->write((key + QLatin1Char('=') + env.value(key) + QLatin1Char('\0')).toUtf8());
+    file->flush();
+    return file->fileName();
 }
 
 /*! Saves \a text to a uniquely named temporary file so that truncated output
@@ -137,9 +180,23 @@ TruncatedOutput truncateOutput(const QString &text)
 
 // State shared between the task tree callbacks. All access happens on the
 // main thread, in this order: timeout handler, process done handler,
-// tree done handler.
-struct ShellState
+// tree done handler. Owns the stub's control server and temp files, which
+// are released when the state is destroyed in the tree done handler.
+class ShellState : public QObject
 {
+public:
+    explicit ShellState() = default;
+
+    QString stubPath;
+    QString socketName;
+    // Temp directory (0700) holding the stub control socket on non-Windows
+    // systems; auto-removed when the state is destroyed.
+    std::unique_ptr<Utils::TemporaryFilePath> socketDir;
+    QString envFilePath;
+    QLocalSocket *controlSocket = nullptr; // owned by the control server
+
+    bool usedStub = false;
+    bool crashed = false;
     bool timedOut = false;
     QProcess::ProcessError processError = QProcess::UnknownError;
     QString errorString;
@@ -228,14 +285,94 @@ void ShellTool::run(const QJsonObject &arguments,
     const ShellSpec spec = shellSpec();
     const QProcessEnvironment env = shellEnvironment();
 
-    auto state = std::make_shared<ShellState>();
+    auto *state = new ShellState;
 
-    const auto onSetup = [cwdString, env, spec, command](QProcess &process) {
+    // Run the command through Qt Creator's process stub when available, so
+    // the shell (the inferior) can be killed over the control socket and
+    // crashes are reported by the stub itself. The control server and the
+    // environment file are owned by the state and released with it.
+    state->stubPath = findProcessStub();
+    if (!state->stubPath.isEmpty()) {
+        QString socketName;
+#if defined(Q_OS_WIN)
+        socketName = QStringLiteral("llama-shell-%1")
+                         .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
+#else
+        // Keep the socket in a private 0700 directory, as some systems do
+        // not check socket file permissions. The full path must fit into
+        // sockaddr_un::sun_path (104 bytes on macOS).
+        // Use QDir::tempPath() rather than Utils::TemporaryDirectory's
+        // master directory, which is only initialised by Qt Creator core.
+        const Utils::FilePath templatePath =
+            Utils::FilePath::fromString(
+                QDir::tempPath() + QStringLiteral("/llama-shell-s-XXXXXX"));
+        auto dirResult = Utils::TemporaryFilePath::create(templatePath, /* directory = */ true);
+        if (dirResult)
+            socketName = (*dirResult)->filePath().pathAppended(QStringLiteral("t")).toFSPathString();
+        state->socketDir = dirResult ? std::move(*dirResult) : nullptr;
+#endif
+        if (!socketName.isEmpty()) {
+            auto *server = new QLocalServer(state);
+            if (server->listen(socketName)) {
+                state->usedStub = true;
+                state->socketName = socketName;
+                state->envFilePath = writeEnvironmentFile(env, state);
+                QObject::connect(server,
+                                 &QLocalServer::newConnection,
+                                 state,
+                                 [state, server] {
+                                     QLocalSocket *socket = server->nextPendingConnection();
+                                     if (!socket)
+                                         return;
+                                     state->controlSocket = socket;
+                                     QObject::connect(socket,
+                                                      &QIODevice::readyRead,
+                                                      state,
+                                                      [state, socket] {
+                                                          while (socket->canReadLine()) {
+                                                              const QByteArray line
+                                                                  = socket->readLine().trimmed();
+                                                              if (line.startsWith("crash "))
+                                                                  state->crashed = true;
+                                                          }
+                                                      });
+                                 });
+            } else {
+                qCWarning(shellToolLog)
+                    << "Cannot create stub control socket:" << server->errorString();
+                delete server;
+            }
+        }
+    }
+
+    const auto onSetup = [state, cwdString, env, spec, command](QProcess &process) {
         process.setWorkingDirectory(cwdString);
-        process.setProcessEnvironment(env);
         process.setProcessChannelMode(QProcess::MergedChannels);
-        process.setProgram(spec.program);
-        process.setArguments({spec.executeFlag, command});
+        if (state->usedStub) {
+            // The stub needs a plain environment; the inferior gets the
+            // environment from the file passed with -e.
+            process.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
+            process.setProgram(state->stubPath);
+            // --wait must be passed explicitly (even empty): the option has
+            // a default value, and a non-empty value makes the stub wait for
+            // a key press before exiting.
+            process.setArguments({QStringLiteral("-s"),
+                                  state->socketName,
+                                  QStringLiteral("-w"),
+                                  cwdString,
+                                  QStringLiteral("-e"),
+                                  state->envFilePath,
+                                  QStringLiteral("--wait"),
+                                  QString(),
+                                  QStringLiteral("--"),
+                                  spec.program,
+                                  spec.executeFlag,
+                                  command});
+        } else {
+            process.setProcessEnvironment(env);
+            process.setProgram(spec.program);
+            process.setArguments({spec.executeFlag, command});
+        }
     };
 
     // QCustomTask's done handler takes the task as const reference, but the
@@ -250,7 +387,15 @@ void ShellTool::run(const QJsonObject &arguments,
         state->exitCode = process.exitCode();
     };
 
-    const auto onTimeout = [state] { state->timedOut = true; };
+    const auto onTimeout = [state] {
+        state->timedOut = true;
+        // Kill the inferior (the shell) over the control socket; the stub
+        // exits once the inferior is gone.
+        if (state->controlSocket && state->controlSocket->isWritable()) {
+            state->controlSocket->write("k", 1);
+            state->controlSocket->flush();
+        }
+    };
 
     QTaskTree *tree = new QTaskTree;
     tree->setRecipe(Group{QProcessTask(onSetup, onProcessDone)
@@ -258,9 +403,7 @@ void ShellTool::run(const QJsonObject &arguments,
 
     // Builds the model-facing result from whatever the process managed to
     // produce, then reports it and cleans up.
-    const auto finish = [tree, state, done = std::move(done), timeoutMs](DoneWith) mutable {
-        tree->deleteLater();
-
+    auto finish = [state, done = std::move(done), timeoutMs](DoneWith) mutable {
         QStringList notes;
         bool ok = true;
 
@@ -269,13 +412,13 @@ void ShellTool::run(const QJsonObject &arguments,
             notes << Tr::tr("Command timed out after %1 ms. Retry with a larger "
                             "timeout if the command is expected to take longer.")
                           .arg(timeoutMs);
-        } else if (state->processError == QProcess::FailedToStart) {
+        } else if (!state->usedStub && state->processError == QProcess::FailedToStart) {
             ok = false;
             notes << Tr::tr("Failed to start the command: %1")
                           .arg(state->errorString.isEmpty()
                                    ? Tr::tr("unknown error")
                                    : state->errorString);
-        } else if (state->exitStatus == QProcess::CrashExit) {
+        } else if (state->crashed || state->exitStatus == QProcess::CrashExit) {
             ok = false;
             notes << Tr::tr("Command terminated abnormally (crashed).");
         } else if (state->exitCode != 0) {
@@ -296,12 +439,22 @@ void ShellTool::run(const QJsonObject &arguments,
         if (!notes.isEmpty())
             text += QLatin1Char('\n') + QLatin1Char('\n') + notes.join(QLatin1Char('\n'));
 
-        done(text, ok);
+        const QString result = text;
+        const bool success = ok;
+        state->deleteLater();
+
+        done(result, success);
     };
 
-    // Keep 'tree' alive until the recipe finished; the connection is
-    // destroyed together with the tree once it is deleted.
-    QObject::connect(tree, &QTaskTree::done, tree, finish);
+    // Keep the tree alive until the recipe finished, then release it
+    // together with the state.
+    QObject::connect(tree,
+                     &QTaskTree::done,
+                     state,
+                     [tree, finish](DoneWith result) mutable {
+                         finish(result);
+                         tree->deleteLater();
+                     });
     tree->start();
 }
 
