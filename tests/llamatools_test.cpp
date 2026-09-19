@@ -130,6 +130,9 @@ private slots:
     void parse_missingMarkersTolerated();
     void parse_updateWithoutChunks();
     void parse_emptyEnvelope();
+    void parse_addFileInvalidLine();
+    void parse_addFileBlankLineTolerated();
+    void parse_chunkInvalidLine();
 
     // Patch::applyUpdateChunks
     void match_exact();
@@ -143,10 +146,14 @@ private slots:
     void match_bomPreserved();
     void match_notFound();
     void match_contextNotFound();
+    void match_closestMatchHint();
+    void match_outOfOrderHint();
 
     // ApplyPatchTool::run
     void tool_fullPatch();
     void tool_move();
+    void tool_updateSameFileTwice();
+    void tool_updateNoChanges();
     void tool_emptyPatchText();
     void tool_invalidFormat();
     void tool_emptyEnvelope();
@@ -332,6 +339,58 @@ void LlamaToolsTest::parse_emptyEnvelope()
     QVERIFY(error.contains("no hunks"));
 }
 
+void LlamaToolsTest::parse_addFileInvalidLine()
+{
+    // A content line without the '+' prefix must be rejected, not silently
+    // dropped (that would "succeed" with missing file content).
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: test.txt\n"
+        "+first\n"
+        "missing plus prefix\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks;
+    const QString error = Patch::parse(patchText, hunks);
+    QVERIFY(!error.isEmpty());
+    QVERIFY(error.contains("Invalid add file line"));
+    QVERIFY(hunks.isEmpty());
+}
+
+void LlamaToolsTest::parse_addFileBlankLineTolerated()
+{
+    // An empty line in an Add File section stands for an empty file line.
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: test.txt\n"
+        "+a\n"
+        "\n"
+        "+b\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks;
+    QCOMPARE(Patch::parse(patchText, hunks), QString());
+    QCOMPARE(hunks.first().contents, QString("a\n\nb"));
+}
+
+void LlamaToolsTest::parse_chunkInvalidLine()
+{
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: test.txt\n"
+        "@@\n"
+        "-old\n"
+        "x not a valid change line\n"
+        "+new\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks;
+    const QString error = Patch::parse(patchText, hunks);
+    QVERIFY(!error.isEmpty());
+    QVERIFY(error.contains("Invalid update chunk line"));
+    QVERIFY(hunks.isEmpty());
+}
+
 // ============================================================================
 // Patch::applyUpdateChunks
 // ============================================================================
@@ -421,6 +480,31 @@ void LlamaToolsTest::match_contextNotFound()
     QVERIFY(result.contains("Failed to find context"));
 }
 
+void LlamaToolsTest::match_closestMatchHint()
+{
+    // The chunk almost matches (typo in the middle line) – the error should
+    // point at the closest match and the first differing line.
+    const QString result = applyChunks(QStringLiteral("alpha\nbeta\ngamma\ndelta\n"),
+                                       {makeChunk({"alpha", "bett", "gamma"}, {"A"})});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("Failed to find expected lines"));
+    QVERIFY(result.contains("Closest match at line 1"));
+    QVERIFY(result.contains("1 of 3 lines matched"));
+    QVERIFY(result.contains("bett"));
+    QVERIFY(result.contains("beta"));
+}
+
+void LlamaToolsTest::match_outOfOrderHint()
+{
+    // The second chunk matches, but before the first one – the error should
+    // say the hunks are out of file order instead of a bare "not found".
+    const QString result = applyChunks(QStringLiteral("first\nA\nmiddle\nB\nlast\n"),
+                                       {makeChunk({"B"}, {"2"}), makeChunk({"A"}, {"1"})});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("in file order"));
+    QVERIFY(result.contains("line 2"));
+}
+
 // ============================================================================
 // ApplyPatchTool::run
 // ============================================================================
@@ -477,6 +561,56 @@ void LlamaToolsTest::tool_move()
 
     QVERIFY(!QFile::exists(gTempDir->filePath("a.txt")));
     QCOMPARE(readTextFile(gTempDir->filePath("dir/b.txt")), QString("new content\n"));
+}
+
+void LlamaToolsTest::tool_updateSameFileTwice()
+{
+    // Two Update sections for the same file must both take effect: the second
+    // is applied on top of the first, not on the original content.
+    writeTextFile(gTempDir->filePath("multi.txt"), "l1\nl2\nl3\n");
+
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: multi.txt\n"
+        "@@\n"
+        "-l2\n"
+        "+two\n"
+        "*** Update File: multi.txt\n"
+        "@@\n"
+        "-l3\n"
+        "+three\n"
+        "*** End Patch");
+
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = patchText;
+
+    auto [output, ok] = runTool(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->filePath("multi.txt")), QString("l1\ntwo\nthree\n"));
+}
+
+void LlamaToolsTest::tool_updateNoChanges()
+{
+    // An Update whose removed and added lines are identical must be rejected
+    // instead of reporting a no-op "success".
+    writeTextFile(gTempDir->filePath("noop.txt"), "one\ntwo\n");
+
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: noop.txt\n"
+        "@@\n"
+        "-two\n"
+        "+two\n"
+        "*** End Patch");
+
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = patchText;
+
+    auto [output, ok] = runTool(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("no changes made"));
+    // The file must be left untouched.
+    QCOMPARE(readTextFile(gTempDir->filePath("noop.txt")), QString("one\ntwo\n"));
 }
 
 void LlamaToolsTest::tool_emptyPatchText()

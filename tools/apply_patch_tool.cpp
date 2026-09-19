@@ -5,6 +5,7 @@
 #include "tool_utils.h"
 
 #include <QFileInfo>
+#include <QHash>
 #include <QJsonArray>
 #include <QPair>
 #include <QJsonDocument>
@@ -199,9 +200,12 @@ Guidelines for reliable patches:
 - Include at least 3 context lines above and below each change so the location is unambiguous.
 - Keep hunks structurally coherent: when changing a function or a block, rewrite the whole unit instead of scattered line edits.
 - If the change affects most of a file, or the file is small, prefer *** Add File: with the complete new content over many hunks.
-- A hunk whose context matches the file in multiple places fails; add more context or an @@ context line.
+- Hunks are located top to bottom: each hunk is searched for starting right after where the previous hunk matched. To change a line that occurs several times, emit one hunk per occurrence in file order; to change one specific occurrence, add context lines or an @@ context line.
+- An Update section that leaves the file unchanged (removed and added lines identical) is rejected.
 - A *** End of File line anchors a hunk to the end of the file; a hunk without removed lines is inserted at the end of the file.
-- The whole patch is validated before any file is modified.
+- Multiple sections that target the same file (for example two Update sections) are applied in order, each on top of the result of the previous one.
+- Lines that do not follow the format (a missing + prefix, a malformed change line) are rejected; the patch is never applied with silently dropped lines.
+- The whole patch is validated before any file is modified. When a hunk cannot be located, the error tells where the closest match is or whether the hunks are out of file order - adjust the patch accordingly.
 )desc";
 
     QJsonObject patchTextProperty;
@@ -371,6 +375,12 @@ void ApplyPatchTool::run(const QJsonObject &args,
         QString display;  // path shown in the output
     };
     QVector<Op> ops;
+    // Content computed so far for paths that occur in several sections of the
+    // same patch (e.g. two "*** Update File:" sections for one file): each
+    // section is applied on top of the previous one instead of both being
+    // computed from the original file (the second write would then silently
+    // discard the first section's changes).
+    QHash<QString, QString> pendingContents;
 
     // Verification phase: resolve everything and compute all new contents
     // before touching the file system, so a failed patch leaves no side effects.
@@ -386,37 +396,52 @@ void ApplyPatchTool::run(const QJsonObject &args,
             op.contents = hunk.contents;
             if (!op.contents.isEmpty() && !op.contents.endsWith(QLatin1Char('\n')))
                 op.contents += QLatin1Char('\n');
+            pendingContents.insert(hunk.path, op.contents);
             break;
         }
         case Patch::HunkType::Delete: {
-            if (!op.source.isFile())
+            if (!pendingContents.contains(hunk.path) && !op.source.isFile())
                 return done(QStringLiteral("apply_patch verification failed: "
                                            "file to delete does not exist: %1")
                                 .arg(op.display),
                             false);
+            pendingContents.remove(hunk.path);
             break;
         }
         case Patch::HunkType::Update: {
-            if (!op.source.isFile())
-                return done(QStringLiteral("apply_patch verification failed: "
-                                           "Failed to read file to update: %1")
-                                .arg(op.display),
-                            false);
+            QString baseContents;
+            if (pendingContents.contains(hunk.path)) {
+                baseContents = pendingContents.value(hunk.path);
+            } else {
+                if (!op.source.isFile())
+                    return done(QStringLiteral("apply_patch verification failed: "
+                                               "Failed to read file to update: %1")
+                                    .arg(op.display),
+                                false);
 
-            const Result<QByteArray> readRes = op.source.fileContents();
-            if (!readRes)
-                return done(QStringLiteral("apply_patch verification failed: "
-                                           "Failed to read file to update: %1 (%2)")
-                                .arg(op.display, readRes.error()),
-                            false);
+                const Result<QByteArray> readRes = op.source.fileContents();
+                if (!readRes)
+                    return done(QStringLiteral("apply_patch verification failed: "
+                                               "Failed to read file to update: %1 (%2)")
+                                    .arg(op.display, readRes.error()),
+                                false);
 
-            const QString error = Patch::applyUpdateChunks(QString::fromUtf8(readRes.value()),
-                                                           hunk.chunks,
-                                                           op.display,
-                                                           op.contents);
+                baseContents = QString::fromUtf8(readRes.value());
+            }
+
+            const QString error = Patch::applyUpdateChunks(baseContents, hunk.chunks, op.display, op.contents);
             if (!error.isEmpty())
                 return done(QStringLiteral("apply_patch verification failed: %1").arg(error),
                             false);
+
+            if (op.contents == baseContents)
+                return done(QStringLiteral("apply_patch verification failed: no changes made to %1: "
+                                           "the update leaves the file unchanged (the removed and "
+                                           "added lines are identical).")
+                                .arg(op.display),
+                            false);
+
+            pendingContents.insert(hunk.path, op.contents);
 
             if (!hunk.movePath.isEmpty()) {
                 op.target = absoluteProjectPath(FilePath::fromUserInput(hunk.movePath));
@@ -431,7 +456,17 @@ void ApplyPatchTool::run(const QJsonObject &args,
         ops.append(op);
     }
 
-    // Write phase
+    // Write phase.  The contents are fully verified, but the writes are not
+    // atomic across files – if one fails, report what was already applied.
+    QStringList applied;
+    auto fail = [&applied, done](const QString &message) {
+        const QString prefix = applied.isEmpty()
+                ? QString()
+                : QStringLiteral("Patch partially applied before failing (applied: %1). ")
+                      .arg(applied.join(", "));
+        done(prefix + message, false);
+    };
+
     for (const Op &op : std::as_const(ops)) {
         switch (op.type) {
         case Patch::HunkType::Add:
@@ -440,35 +475,36 @@ void ApplyPatchTool::run(const QJsonObject &args,
             if (!parentDir.exists()) {
                 const Result<> mkRes = parentDir.ensureWritableDir();
                 if (!mkRes)
-                    return done(QStringLiteral("Failed to create parent directory \"%1\": %2")
-                                    .arg(parentDir.toUserOutput(), mkRes.error()),
-                                false);
+                    return fail(QStringLiteral("Failed to create parent directory \"%1\": %2")
+                                    .arg(parentDir.toUserOutput(), mkRes.error()));
             }
 
             const Result<qint64> writeRes = op.target.writeFileContents(op.contents.toUtf8());
             if (!writeRes)
-                return done(QStringLiteral("Cannot write \"%1\": %2")
-                                .arg(op.target.toUserOutput(), writeRes.error()),
-                            false);
+                return fail(QStringLiteral("Cannot write \"%1\": %2")
+                                .arg(op.target.toUserOutput(), writeRes.error()));
 
             if (op.type == Patch::HunkType::Update && op.target != op.source) {
                 const Result<> removeRes = op.source.removeFile();
                 if (!removeRes)
-                    return done(QStringLiteral("Failed to delete \"%1\" after move: %2")
-                                    .arg(op.source.toUserOutput(), removeRes.error()),
-                                false);
+                    return fail(QStringLiteral("Failed to delete \"%1\" after move: %2")
+                                    .arg(op.source.toUserOutput(), removeRes.error()));
             }
             break;
         }
         case Patch::HunkType::Delete: {
             const Result<> removeRes = op.source.removeFile();
             if (!removeRes)
-                return done(QStringLiteral("Failed to delete \"%1\": %2")
-                                .arg(op.source.toUserOutput(), removeRes.error()),
-                            false);
+                return fail(QStringLiteral("Failed to delete \"%1\": %2")
+                                .arg(op.source.toUserOutput(), removeRes.error()));
             break;
         }
         }
+
+        const QChar letter = op.type == Patch::HunkType::Add ? QLatin1Char('A')
+                          : op.type == Patch::HunkType::Delete ? QLatin1Char('D')
+                                                               : QLatin1Char('M');
+        applied << QStringLiteral("%1 %2").arg(letter, op.display);
     }
 
     QString output = Tr::tr("Success. Updated the following files:");

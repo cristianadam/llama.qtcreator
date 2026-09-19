@@ -48,6 +48,12 @@ struct Hunk
  *   *** Delete File: <path>
  *   *** End Patch
  *
+ * Lines that do not fit the format (a non‑'+' line inside an Add File
+ * section, a malformed change line inside a chunk) are rejected with an
+ * error instead of being silently dropped, so a malformed patch can never
+ * "succeed" with missing content.  Empty lines are tolerated in both places
+ * (they represent an empty file line / an empty context line).
+ *
  * Returns an empty string on success, otherwise a human‑readable error
  * message. On success the parsed hunks are written to \a hunksOut.
  */
@@ -73,6 +79,12 @@ int locateLines(const QStringList &lines,
  * (exact, trailing‑whitespace‑insensitive, whitespace‑insensitive, unicode
  * punctuation normalized). Chunks must appear in file order; a chunk's
  * search starts right after the previous chunk's match.
+ *
+ * When a chunk cannot be located the error message carries a hint that
+ * helps the caller (typically an LLM) fix the patch: if the chunk actually
+ * matches *earlier* than the search cursor the hunks are out of file order,
+ * otherwise the closest partial match (line number, how many lines matched,
+ * and the first expected/actual line pair) is reported.
  *
  * Returns an empty string on success, otherwise a human‑readable error
  * message.

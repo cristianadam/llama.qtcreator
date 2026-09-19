@@ -59,6 +59,45 @@ bool lineEquals(int pass, const QString &a, const QString &b)
     }
 }
 
+//! Where a pattern comes closest to matching, for use in error messages.
+struct ClosestMatch
+{
+    int pos = -1; // 0‑based line of the best offset
+    int matched = 0; // leading pattern lines that matched there
+    int total = 0; // pattern length
+    QString expected; // first pattern line that did not match
+    QString actual; // the file line found there instead
+};
+
+// Counts how many leading pattern lines match at each offset (whitespace
+// insensitive) and keeps the best offset, so a failed match can point the
+// model at the right place in the file.
+ClosestMatch closestMatch(const QStringList &lines, const QStringList &pattern, int startIndex)
+{
+    ClosestMatch best;
+    best.total = pattern.size();
+    if (pattern.isEmpty() || lines.isEmpty())
+        return best;
+
+    for (int pos = qMax(0, startIndex); pos + pattern.size() <= lines.size(); ++pos) {
+        int matched = 0;
+        while (matched < pattern.size()
+               && lineEquals(2, lines.at(pos + matched), pattern.at(matched)))
+            ++matched;
+        if (matched > best.matched) {
+            best = ClosestMatch{};
+            best.pos = pos;
+            best.matched = matched;
+            best.total = pattern.size();
+            if (matched < pattern.size()) {
+                best.expected = pattern.at(matched);
+                best.actual = lines.at(pos + matched);
+            }
+        }
+    }
+    return best;
+}
+
 int tryMatch(const QStringList &lines,
              const QStringList &pattern,
              int startIndex,
@@ -172,8 +211,17 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
 
             ++i;
             while (i < endIdx && !lines.at(i).startsWith(QLatin1Char('*'))) {
-                if (lines.at(i).startsWith(QLatin1Char('+')))
-                    hunk.contents += lines.at(i).mid(1) + QLatin1Char('\n');
+                const QString contentLine = lines.at(i);
+                if (contentLine.startsWith(QLatin1Char('+')))
+                    hunk.contents += contentLine.mid(1) + QLatin1Char('\n');
+                else if (contentLine.trimmed().isEmpty())
+                    // Tolerate a model that omits the '+' on empty lines.
+                    hunk.contents += QLatin1Char('\n');
+                else
+                    // Failing here (instead of silently dropping the line)
+                    // prevents "successful" patches with missing content.
+                    return QStringLiteral("Invalid add file line (expected a '+' prefix) in %1: %2")
+                                .arg(path, contentLine.left(80));
                 ++i;
             }
             if (hunk.contents.endsWith(QLatin1Char('\n')))
@@ -237,6 +285,15 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
                     } else if (changeLine.startsWith(QLatin1Char('+'))) {
                         chunk.newLines << changeLine.mid(1);
                         chunk.rawLines << changeLine;
+                    } else if (changeLine.trimmed().isEmpty()) {
+                        // Tolerate a model that omits the ' ' on empty context lines.
+                        chunk.oldLines << QString();
+                        chunk.newLines << QString();
+                        chunk.rawLines << QStringLiteral(" ");
+                    } else {
+                        return QStringLiteral(
+                                     "Invalid update chunk line (expected ' ', '-' or '+') in %1: %2")
+                                    .arg(hunk.path, changeLine.left(80));
                     }
                     ++i;
                 }
@@ -314,9 +371,38 @@ QString applyUpdateChunks(const QString &oldContents,
             found = locateLines(lines, pattern, lineIndex, chunk.endOfFile);
         }
 
-        if (found == -1)
-            return QStringLiteral("Failed to find expected lines in %1:\n%2")
-                        .arg(filePath, chunk.oldLines.join(QLatin1Char('\n')));
+        if (found == -1) {
+            QString message = QStringLiteral("Failed to find expected lines in %1:\n%2")
+                                  .arg(filePath, chunk.oldLines.join(QLatin1Char('\n')));
+
+            int early = -1;
+            if (lineIndex > 0)
+                early = locateLines(lines, pattern, 0, false);
+
+            if (early != -1 && early < lineIndex) {
+                // The chunk does match – just earlier than the previous chunk,
+                // i.e. the hunks are out of file order.
+                message += QStringLiteral(
+                               "\n\nThe chunk matches at line %1, but the previous chunk ended at "
+                               "line %2. Hunks of one file must appear in file order.")
+                            .arg(early + 1)
+                            .arg(lineIndex);
+            } else {
+                const ClosestMatch cm = closestMatch(lines, pattern, lineIndex);
+                if (cm.pos != -1 && cm.matched > 0) {
+                    message += QStringLiteral(
+                                   "\n\nClosest match at line %1: %2 of %3 lines matched.")
+                                .arg(cm.pos + 1)
+                                .arg(cm.matched)
+                                .arg(cm.total);
+                    if (!cm.expected.isEmpty())
+                        message += QStringLiteral(
+                                       "\nExpected:\n%1\nActual:\n%2")
+                                    .arg(cm.expected, cm.actual);
+                }
+            }
+            return message;
+        }
 
         replacements.append({found, static_cast<int>(pattern.size()), newSlice});
         lineIndex = found + static_cast<int>(pattern.size());
