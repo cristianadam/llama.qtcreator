@@ -45,6 +45,15 @@ QString normalizeUnicode(QString s)
     return s;
 }
 
+//! True when the line is a patch section marker ("*** Add File:" etc.) or
+// the end marker. Only a full "*** " prefix counts, so that file content
+// such as "* comment" or "***bold***" inside an Add File section does not
+// terminate the section.
+bool isSectionMarker(const QString &line)
+{
+    return line == QStringLiteral("***") || line.startsWith(QStringLiteral("*** "));
+}
+
 bool lineEquals(int pass, const QString &a, const QString &b)
 {
     switch (pass) {
@@ -155,6 +164,11 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
 {
     const QString text = stripHeredoc(patchText.trimmed());
     QStringList lines = text.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
+    // Tolerate CRLF input: strip a trailing carriage return from every line
+    // so it does not leak into file contents or break context matching.
+    for (auto &line : lines)
+        if (line.endsWith(QLatin1Char('\r')))
+            line.chop(1);
 
     bool hasBegin = false;
     bool hasEnd = false;
@@ -210,18 +224,17 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
             hunk.path = path;
 
             ++i;
-            while (i < endIdx && !lines.at(i).startsWith(QLatin1Char('*'))) {
+            while (i < endIdx && !isSectionMarker(lines.at(i))) {
                 const QString contentLine = lines.at(i);
-                if (contentLine.startsWith(QLatin1Char('+')))
-                    hunk.contents += contentLine.mid(1) + QLatin1Char('\n');
-                else if (contentLine.trimmed().isEmpty())
-                    // Tolerate a model that omits the '+' on empty lines.
-                    hunk.contents += QLatin1Char('\n');
-                else
-                    // Failing here (instead of silently dropping the line)
-                    // prevents "successful" patches with missing content.
-                    return QStringLiteral("Invalid add file line (expected a '+' prefix) in %1: %2")
-                                .arg(path, contentLine.left(80));
+                // Every line of an Add File section is file content. A '+'
+                // prefix is accepted and stripped, but its absence is
+                // tolerated instead of rejected: unlike opencode, a missing
+                // prefix does not silently drop the line, and unlike failing
+                // outright, the rest of the patch is not lost either.
+                const QString content = contentLine.startsWith(QLatin1Char('+'))
+                        ? contentLine.mid(1)
+                        : contentLine;
+                hunk.contents += content + QLatin1Char('\n');
                 ++i;
             }
             if (hunk.contents.endsWith(QLatin1Char('\n')))
@@ -291,9 +304,16 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
                         chunk.newLines << QString();
                         chunk.rawLines << QStringLiteral(" ");
                     } else {
+                        // A missing ' ', '-' or '+' prefix is genuinely
+                        // ambiguous here (context? addition? removal?), so
+                        // fail with an explicit format reminder.
                         return QStringLiteral(
-                                     "Invalid update chunk line (expected ' ', '-' or '+') in %1: %2")
-                                    .arg(hunk.path, changeLine.left(80));
+                                     "Invalid update chunk line in %1 (line %2): %3\n"
+                                     "Every line inside a @@ hunk must start with a space "
+                                     "(context), '-' (remove) or '+' (add).")
+                                    .arg(hunk.path)
+                                    .arg(i + 1)
+                                    .arg(rightTrim(changeLine).left(80));
                     }
                     ++i;
                 }

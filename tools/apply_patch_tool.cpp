@@ -196,7 +196,7 @@ Example:
 Guidelines for reliable patches:
 - Always include the *** Begin Patch and *** End Patch markers.
 - Always include a section header (Add File / Update File / Delete File) for every file.
-- Prefix new lines with +, even when creating a new file.
+- Prefix new lines with +, even when creating a new file. A missing + prefix in an Add File section is tolerated (the line is kept as content), but always prefix the lines anyway.
 - Include at least 3 context lines above and below each change so the location is unambiguous.
 - Keep hunks structurally coherent: when changing a function or a block, rewrite the whole unit instead of scattered line edits.
 - If the change affects most of a file, or the file is small, prefer *** Add File: with the complete new content over many hunks.
@@ -204,7 +204,7 @@ Guidelines for reliable patches:
 - An Update section that leaves the file unchanged (removed and added lines identical) is rejected.
 - A *** End of File line anchors a hunk to the end of the file; a hunk without removed lines is inserted at the end of the file.
 - Multiple sections that target the same file (for example two Update sections) are applied in order, each on top of the result of the previous one.
-- Lines that do not follow the format (a missing + prefix, a malformed change line) are rejected; the patch is never applied with silently dropped lines.
+- Inside an Update File hunk, a line that does not start with a space, - or + is rejected; the patch is never applied with silently dropped lines.
 - The whole patch is validated before any file is modified. When a hunk cannot be located, the error tells where the closest match is or whether the hunks are out of file order - adjust the patch accordingly.
 )desc";
 

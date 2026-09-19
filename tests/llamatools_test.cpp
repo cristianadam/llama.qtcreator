@@ -173,8 +173,10 @@ private slots:
     void parse_missingMarkersTolerated();
     void parse_updateWithoutChunks();
     void parse_emptyEnvelope();
-    void parse_addFileInvalidLine();
+    void parse_addFileMissingPrefixTolerated();
+    void parse_addFileStarLines();
     void parse_addFileBlankLineTolerated();
+    void parse_crlfTolerated();
     void parse_chunkInvalidLine();
 
     // Patch::applyUpdateChunks
@@ -412,22 +414,54 @@ void LlamaToolsTest::parse_emptyEnvelope()
     QVERIFY(error.contains("no hunks"));
 }
 
-void LlamaToolsTest::parse_addFileInvalidLine()
+void LlamaToolsTest::parse_addFileMissingPrefixTolerated()
 {
-    // A content line without the '+' prefix must be rejected, not silently
-    // dropped (that would "succeed" with missing file content).
+    // A content line without the '+' prefix is kept as file content rather
+    // than rejected or silently dropped.
     const QString patchText = QStringLiteral(
         "*** Begin Patch\n"
         "*** Add File: test.txt\n"
         "+first\n"
         "missing plus prefix\n"
+        "+last\n"
         "*** End Patch");
 
     QVector<Patch::Hunk> hunks;
-    const QString error = Patch::parse(patchText, hunks);
-    QVERIFY(!error.isEmpty());
-    QVERIFY(error.contains("Invalid add file line"));
-    QVERIFY(hunks.isEmpty());
+    QCOMPARE(Patch::parse(patchText, hunks), QString());
+    QCOMPARE(hunks.first().contents, QString("first\nmissing plus prefix\nlast"));
+}
+
+void LlamaToolsTest::parse_addFileStarLines()
+{
+    // Lines starting with '*' (comments, markdown emphasis) are content, not
+    // section markers; only "*** " starts a new section.
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: doc.md\n"
+        "+/**\n"
+        " * doxygen comment\n"
+        "+*/\n"
+        "***bold*** text\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks;
+    QCOMPARE(Patch::parse(patchText, hunks), QString());
+    QCOMPARE(hunks.first().contents, QString("/**\n * doxygen comment\n*/\n***bold*** text"));
+}
+
+void LlamaToolsTest::parse_crlfTolerated()
+{
+    // CRLF line endings must not leak into the content.
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\r\n"
+        "*** Add File: test.txt\r\n"
+        "+first\r\n"
+        "second\r\n"
+        "*** End Patch\r\n");
+
+    QVector<Patch::Hunk> hunks;
+    QCOMPARE(Patch::parse(patchText, hunks), QString());
+    QCOMPARE(hunks.first().contents, QString("first\nsecond"));
 }
 
 void LlamaToolsTest::parse_addFileBlankLineTolerated()
