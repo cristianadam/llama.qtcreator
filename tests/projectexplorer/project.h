@@ -10,10 +10,15 @@
 
 namespace ProjectExplorer {
 
+class Kit;
+
 class Project
 {
 public:
     Utils::FilePath projectDirectory() const { return {}; }
+
+    // No kit exists in the unit test environment.
+    Kit *activeKit() const { return nullptr; }
 
     QVariant namedSettings(const Utils::Key &name) const { return {}; }
     void setNamedSettings(const Utils::Key &name, const QVariant &value)

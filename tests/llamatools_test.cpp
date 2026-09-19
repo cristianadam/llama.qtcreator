@@ -2,8 +2,10 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QEventLoop>
 #include <QTemporaryDir>
 #include <QTextStream>
+#include <QTimer>
 #include <QtTest/QtTest>
 
 #include <coreplugin/documentmanager.h>
@@ -14,6 +16,7 @@
 #include <tools/factory.h>
 #include <tools/mcptool.h>
 #include <tools/patch.h>
+#include <tools/shell_tool.h>
 #include <tools/task_tool.h>
 #include <tools/webfetch_tool.h>
 #include <tools/edit_file_tool.h>
@@ -86,6 +89,33 @@ std::pair<QString, bool> runTool(const QJsonObject &args)
                  output = out;
                  ok = success;
              });
+    return {output, ok};
+}
+
+// Runs the (asynchronous) shell tool and spins the event loop until its
+// callback fires or waitMs is exceeded.
+std::pair<QString, bool> runShellTool(const QJsonObject &args, int waitMs = 30000)
+{
+    QString output;
+    bool ok = false;
+    bool finished = false;
+    Tools::ShellTool tool;
+    tool.run(args,
+             [&output, &ok, &finished](const QString &out, bool success) {
+                 output = out;
+                 ok = success;
+                 finished = true;
+             });
+
+    QEventLoop loop;
+    QTimer poll;
+    poll.setInterval(10);
+    QObject::connect(&poll, &QTimer::timeout, [&] { if (finished)
+                                                         loop.quit(); });
+    poll.start();
+    QTimer::singleShot(waitMs, &loop, [&] { poll.stop();
+                                            loop.quit(); });
+    loop.exec();
     return {output, ok};
 }
 
@@ -219,6 +249,17 @@ private slots:
     void websearch_parseMcpResponseSse();
     void websearch_parseGoogleResults();
     void websearch_formatResults();
+
+    // ShellTool
+    void shell_run();
+    void shell_stderrMerged();
+    void shell_nonZeroExit();
+    void shell_missingWorkdir();
+    void shell_emptyCommand();
+    void shell_timeout();
+    void shell_truncation();
+    void shell_summaries();
+    void shell_detailsMarkdown();
 
     // TaskTool
     void task_toolDefinition();
@@ -1359,6 +1400,139 @@ void LlamaToolsTest::websearch_formatResults()
               QString("Search results for \"q\":\n\n"
                       "1. A\n   https://a.example\n   Snippet A\n\n"
                       "2. B\n   https://b.example"));
+}
+
+// ============================================================================
+// ShellTool
+// ============================================================================
+
+void LlamaToolsTest::shell_run()
+{
+    QJsonObject args;
+    args["command"] = QStringLiteral("echo llama-shell-test");
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains("llama-shell-test"));
+    QVERIFY(!output.contains("truncated"));
+    QVERIFY(!output.contains("exit code"));
+}
+
+void LlamaToolsTest::shell_stderrMerged()
+{
+    QJsonObject args;
+    args["command"] = QStringLiteral("echo llama-stdout && echo llama-stderr 1>&2");
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains("llama-stdout"));
+    QVERIFY(output.contains("llama-stderr"));
+}
+
+void LlamaToolsTest::shell_nonZeroExit()
+{
+    QJsonObject args;
+    args["command"] = QStringLiteral("echo partial-output && exit 3");
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("partial-output"));
+    QVERIFY(output.contains("exited with code 3"));
+}
+
+void LlamaToolsTest::shell_missingWorkdir()
+{
+    QJsonObject args;
+    args["command"] = QStringLiteral("echo should-not-run");
+    args["workdir"] = QStringLiteral("/nonexistent/llama-shell-dir");
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("working directory does not exist"));
+}
+
+void LlamaToolsTest::shell_emptyCommand()
+{
+    QJsonObject args;
+    args["command"] = QStringLiteral("   ");
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("must not be empty"));
+}
+
+void LlamaToolsTest::shell_timeout()
+{
+    QJsonObject args;
+#if defined(Q_OS_WIN)
+    args["command"] = QStringLiteral("ping -n 30 127.0.0.1");
+#else
+    args["command"] = QStringLiteral("sleep 30");
+#endif
+    args["timeout"] = 500;
+
+    const auto [output, ok] = runShellTool(args, 30000);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("timed out after 500 ms"));
+}
+
+void LlamaToolsTest::shell_truncation()
+{
+    QJsonObject args;
+#if defined(Q_OS_WIN)
+    args["command"] = QStringLiteral("for /L %i in (1,1,3000) do @echo %i");
+#else
+    args["command"] = QStringLiteral("seq 1 3000");
+#endif
+
+    const auto [output, ok] = runShellTool(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains("[Output truncated: showing last 2000 of 3000 lines"));
+    QVERIFY(output.contains("Full output saved to: "));
+    // The tail is kept ...
+    QVERIFY(output.contains(QStringLiteral("2999\n3000\n")));
+    // ... and the head is gone.
+    QVERIFY(!output.contains(QStringLiteral("\n2\n")));
+
+    // The full output was saved to a temp file.
+    const int from = output.lastIndexOf(QStringLiteral("Full output saved to: "));
+    const QString path = output.mid(from + QStringLiteral("Full output saved to: ").size()).trimmed();
+    QFileInfo saved(path);
+    QVERIFY2(saved.exists(), qPrintable(path));
+    const QString full = readTextFile(path);
+    QVERIFY(full.startsWith("1\n"));
+    QVERIFY(full.endsWith("3000\n"));
+}
+
+void LlamaToolsTest::shell_summaries()
+{
+    Tools::ShellTool tool;
+    QCOMPARE(tool.name(), QString("shell"));
+
+    QJsonObject args;
+    args["command"] = QStringLiteral("git status");
+    QCOMPARE(tool.oneLineSummary(args), QString("running git status"));
+
+    QVERIFY(tool.toolDefinition().contains("\"shell\""));
+    QVERIFY(tool.toolDefinition().contains("120000"));
+}
+
+void LlamaToolsTest::shell_detailsMarkdown()
+{
+    Tools::ShellTool tool;
+
+    QJsonObject args;
+    args["command"] = QStringLiteral("git status");
+    args["workdir"] = QStringLiteral("/some/dir");
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"));
+    QVERIFY(md.contains("```sh\ngit status\n```"));
+    QVERIFY(md.contains("/some/dir"));
+    QVERIFY(md.contains("On branch main"));
+
+    QJsonObject noWorkdir;
+    noWorkdir["command"] = QStringLiteral("git status");
+    QVERIFY(!tool.detailsMarkdown(noWorkdir, QStringLiteral("out"))
+                 .contains("Working directory"));
 }
 
 // ============================================================================

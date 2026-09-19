@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer)
-find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer Network REQUIRED)
+find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer Network TaskTree REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
 # You don't want your released plugin binaries to contain tests,
@@ -53,6 +53,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::ExtensionSystem
     QtCreator::Utils
     QtCreator::KSyntaxHighlighting
+    Qt::TaskTree
     markus
     LlamaSpinner
   SOURCES

@@ -4,6 +4,7 @@ add_qtc_test(llamatools_test
     ${CMAKE_CURRENT_SOURCE_DIR}/..
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Network Qt::Sql Qt::Widgets
+    Qt::TaskTree
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::Core
@@ -21,6 +22,7 @@ add_qtc_test(llamatools_test
     ../tools/mcpclient.cpp
     ../tools/mcptool.cpp
     ../tools/patch.cpp
+    ../tools/shell_tool.cpp
     ../tools/task_tool.cpp
     ../tools/tool.cpp
     ../tools/tool_utils.cpp
