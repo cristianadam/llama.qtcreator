@@ -16,6 +16,7 @@ add_qtc_test(llamatools_test
     ../llamathinkingsectionparser.cpp
     ../toolsettingswidget.cpp
     ../tools/apply_patch_tool.cpp
+    ../tools/edit_file_tool.cpp
     ../tools/mcpbridge.cpp
     ../tools/mcpclient.cpp
     ../tools/mcptool.cpp

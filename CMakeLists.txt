@@ -82,6 +82,7 @@ add_qtc_plugin(LlamaCpp
     markdownrenderer.cpp markdownrenderer.h
     README.md
     tools/apply_patch_tool.cpp tools/apply_patch_tool.h
+    tools/edit_file_tool.cpp tools/edit_file_tool.h
     tools/factory.h
     tools/mcpbridge.cpp tools/mcpbridge.h
     tools/mcpclient.cpp tools/mcpclient.h

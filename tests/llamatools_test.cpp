@@ -16,6 +16,7 @@
 #include <tools/patch.h>
 #include <tools/task_tool.h>
 #include <tools/webfetch_tool.h>
+#include <tools/edit_file_tool.h>
 #include <tools/websearch_tool.h>
 
 namespace LlamaCpp {
@@ -50,6 +51,17 @@ QString applyChunks(const QString &oldContent,
     return newContent;
 }
 
+QString applyEdits(const QString &content,
+                   const QVector<QPair<QString, QString>> &edits,
+                   bool replaceAll = false)
+{
+    QString newContent;
+    const QString err = Tools::applyTextEdits(content, edits, replaceAll, newContent);
+    if (!err.isEmpty())
+        return QStringLiteral("<error: %1>").arg(err);
+    return newContent;
+}
+
 Patch::UpdateChunk makeChunk(const QStringList &oldLines,
                              const QStringList &newLines,
                              const QString &context = {},
@@ -63,11 +75,12 @@ Patch::UpdateChunk makeChunk(const QStringList &oldLines,
     return chunk;
 }
 
+template <typename ToolT = ApplyPatchTool>
 std::pair<QString, bool> runTool(const QJsonObject &args)
 {
     QString output;
     bool ok = false;
-    ApplyPatchTool tool;
+    ToolT tool;
     tool.run(args,
              [&output, &ok](const QString &out, bool success) {
                  output = out;
@@ -169,6 +182,25 @@ private slots:
     void tool_streamingSummary_deleteFile();
     void tool_streamingSummary_firstSectionWins();
     void tool_detailsMarkdown();
+
+    // EditFileTool
+    void editfile_exact();
+    void editfile_multipleEdits();
+    void editfile_multiline();
+    void editfile_uniqueError();
+    void editfile_replaceAll();
+    void editfile_notFound();
+    void editfile_noChange();
+    void editfile_emptyOldText();
+    void editfile_overlap();
+    void editfile_fuzzyUnicode();
+    void editfile_fuzzyTrailingWhitespace();
+    void editfile_crlf();
+    void editfile_bom();
+    void editfile_missingFile();
+    void editfile_emptyEdits();
+    void editfile_toolDefinition();
+    void editfile_summaries();
 
     // WebFetchTool
     void webfetch_normalizeUrl();
@@ -875,6 +907,183 @@ void LlamaToolsTest::tool_detailsMarkdown()
     // Failed patch: the error text is shown as‑is
     QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom")),
              QString("apply_patch verification failed: boom"));
+}
+
+// ============================================================================
+// EditFileTool
+// ============================================================================
+
+void LlamaToolsTest::editfile_exact()
+{
+    QCOMPARE(applyEdits(QStringLiteral("alpha\nbeta\ngamma\n"),
+                        {{QStringLiteral("beta"), QStringLiteral("B")}}),
+              QString("alpha\nB\ngamma\n"));
+}
+
+void LlamaToolsTest::editfile_multipleEdits()
+{
+    // Both edits are matched against the original content.
+    QCOMPARE(applyEdits(QStringLiteral("one\ntwo\nthree\nfour\n"),
+                        {{QStringLiteral("one"), QStringLiteral("1")},
+                         {QStringLiteral("four"), QStringLiteral("4")}}),
+              QString("1\ntwo\nthree\n4\n"));
+}
+
+void LlamaToolsTest::editfile_multiline()
+{
+    QCOMPARE(applyEdits(QStringLiteral("int main()\n{\n    return 1;\n}\n"),
+                        {{QStringLiteral("    return 1;"), QStringLiteral("    return 0;")}}),
+              QString("int main()\n{\n    return 0;\n}\n"));
+}
+
+void LlamaToolsTest::editfile_uniqueError()
+{
+    const QString result = applyEdits(QStringLiteral("x\nx\n"), {{QStringLiteral("x"), QStringLiteral("y")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("Found 2 occurrences"));
+    QVERIFY(result.contains("replace_all"));
+}
+
+void LlamaToolsTest::editfile_replaceAll()
+{
+    QString newContent;
+    int replacements = 0;
+    const QString err = Tools::applyTextEdits(QStringLiteral("x\ny\nx\n"),
+                                               {{QStringLiteral("x"), QStringLiteral("X")}},
+                                               true,
+                                               newContent,
+                                               &replacements);
+    QCOMPARE(err, QString());
+    QCOMPARE(newContent, QString("X\ny\nX\n"));
+    QCOMPARE(replacements, 2);
+}
+
+void LlamaToolsTest::editfile_notFound()
+{
+    const QString result = applyEdits(QStringLiteral("alpha\n"), {{QStringLiteral("beta"), QStringLiteral("B")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("Could not find"));
+}
+
+void LlamaToolsTest::editfile_noChange()
+{
+    const QString result = applyEdits(QStringLiteral("alpha\n"), {{QStringLiteral("alpha"), QStringLiteral("alpha")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("identical"));
+}
+
+void LlamaToolsTest::editfile_emptyOldText()
+{
+    const QString result = applyEdits(QStringLiteral("alpha\n"), {{QString(), QStringLiteral("x")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("must not be empty"));
+}
+
+void LlamaToolsTest::editfile_overlap()
+{
+    const QString result = applyEdits(QStringLiteral("a b c\n"),
+                                      {{QStringLiteral("a b"), QStringLiteral("1")},
+                                       {QStringLiteral("b c"), QStringLiteral("2")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("overlap"));
+}
+
+void LlamaToolsTest::editfile_fuzzyUnicode()
+{
+    // The file uses a smart quote the model did not reproduce – the exact
+    // match fails, the line-based fuzzy match succeeds, and the rest of the
+    // file keeps its original bytes.
+    const QString file = QStringLiteral("line1\nsay \u201Chello\u201D\nline3\n");
+    QCOMPARE(applyEdits(file, {{QStringLiteral("say \"hello\""), QStringLiteral("say goodbye")}}),
+              QString("line1\nsay goodbye\nline3\n"));
+}
+
+void LlamaToolsTest::editfile_fuzzyTrailingWhitespace()
+{
+    // The model's oldText has a trailing space, the file a trailing tab:
+    // the exact match fails, the fuzzy (trailing‑whitespace‑insensitive)
+    // line match succeeds and the whole line is replaced.
+    const QString file = QStringLiteral("int a = 1;   \nint b = 2;\t\n");
+    QCOMPARE(applyEdits(file, {{QStringLiteral("int b = 2; "), QStringLiteral("int b = 3;")}}),
+              QString("int a = 1;   \nint b = 3;\n"));
+}
+
+void LlamaToolsTest::editfile_crlf()
+{
+    QCOMPARE(applyEdits(QStringLiteral("a\r\nb\r\nc\r\n"),
+                        {{QStringLiteral("b"), QStringLiteral("B")}}),
+              QString("a\r\nB\r\nc\r\n"));
+}
+
+void LlamaToolsTest::editfile_bom()
+{
+    QCOMPARE(applyEdits(QString(QChar(0xFEFF)) + QStringLiteral("a\nb\n"),
+                        {{QStringLiteral("b"), QStringLiteral("B")}}),
+              QString(QChar(0xFEFF)) + QString("a\nB\n"));
+}
+
+void LlamaToolsTest::editfile_missingFile()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("does_not_exist.txt");
+    QJsonArray edits;
+    QJsonObject edit;
+    edit[QStringLiteral("oldText")] = QStringLiteral("x");
+    edit[QStringLiteral("newText")] = QStringLiteral("y");
+    edits.append(edit);
+    args[QStringLiteral("edits")] = edits;
+
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("file not found"));
+}
+
+void LlamaToolsTest::editfile_emptyEdits()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("x.txt");
+    args[QStringLiteral("edits")] = QJsonArray{};
+
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("at least one replacement"));
+}
+
+void LlamaToolsTest::editfile_toolDefinition()
+{
+    Tools::EditFileTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QCOMPARE(doc.object()["function"].toObject()["name"].toString(), QString("edit_file"));
+}
+
+void LlamaToolsTest::editfile_summaries()
+{
+    Tools::EditFileTool tool;
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("src/main.cpp");
+    QJsonArray edits;
+    QJsonObject edit;
+    edit[QStringLiteral("oldText")] = QStringLiteral("a");
+    edit[QStringLiteral("newText")] = QStringLiteral("b");
+    edits.append(edit);
+    args[QStringLiteral("edits")] = edits;
+
+    QCOMPARE(tool.oneLineSummary(args), QString("edit src/main.cpp"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src/main.cpp\"")),
+              QString("edit src/main.cpp"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+
+    // On success the details markdown shows the replacement as a diff.
+    args[QStringLiteral("path")] = QStringLiteral("f.txt");
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 1 block(s) in f.txt."));
+    QVERIFY(md.contains("```diff"));
+    QVERIFY(md.contains("-a"));
+    QVERIFY(md.contains("+b"));
 }
 
 // ============================================================================
