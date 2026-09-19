@@ -20,9 +20,11 @@ public:
     // FIM
     Utils::StringAspect endpoint{this};
     Utils::StringAspect apiKey{this};
+    Utils::StringAspect modelFim{this};
     Utils::IntegerAspect nPrefix{this};
     Utils::IntegerAspect nSuffix{this};
     Utils::IntegerAspect nPredict{this};
+    Utils::IntegerAspect nCmpl{this};
     Utils::StringAspect stopStrings{this};
     Utils::IntegerAspect tMaxPromptMs{this};
     Utils::IntegerAspect tMaxPredictMs{this};

@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QToolButton>
 #include <QTranslator>
+#include <QUrl>
 
 #include "llamachateditor.h"
 #include "llamachatmanager.h"
@@ -62,6 +63,10 @@ Q_IMPORT_PLUGIN(SpinnerPlugin);
 namespace LlamaCpp {
 
 QRegularExpression LlamaPlugin::s_whitespace_regex("^\\s*$");
+QRegularExpression LlamaPlugin::s_indent_regex("^[ \\t]*");
+
+// the ring-buffer chunks are only processed once the user has been idle for this long
+constexpr int kRingIdleDelayMs = 3000;
 
 LlamaPlugin::LlamaPlugin()
     : m_ringUpdateTimer(new QTimer(this))
@@ -176,12 +181,35 @@ void LlamaPlugin::initialize()
     });
     toggleAutoFimCmd->setDefaultKeySequence(Tr::tr("Ctrl+Shift+G"));
 
+    Core::Command *nextCompletionCmd =
+        ActionManager::registerAction(&m_nextCompletionAction, Constants::LLAMACPP_NEXT_COMPLETION);
+    m_nextCompletionAction.setToolTip(Tr::tr(
+        "Cycle to the next cached completion candidate at the current position (press Ctrl+G, "
+        "then Down)."));
+    connect(&m_nextCompletionAction, &QAction::triggered, this, [this] { fim_cycle(1); });
+    nextCompletionCmd->setDefaultKeySequence(Tr::tr("Ctrl+G Down"));
+
+    Core::Command *prevCompletionCmd = ActionManager::registerAction(&m_prevCompletionAction,
+                                                                     Constants::LLAMACPP_PREV_COMPLETION);
+    m_prevCompletionAction.setToolTip(Tr::tr(
+        "Cycle to the previous cached completion candidate at the current position (press Ctrl+G, "
+        "then Up)."));
+    connect(&m_prevCompletionAction, &QAction::triggered, this, [this] { fim_cycle(-1); });
+    prevCompletionCmd->setDefaultKeySequence(Tr::tr("Ctrl+G Up"));
+
+    Core::Command *statusCmd
+        = ActionManager::registerAction(&m_statusAction, Constants::LLAMACPP_SHOW_SERVER_STATUS);
+    m_statusAction.setToolTip(
+        Tr::tr("Query the llama.cpp servers and report which models are loaded."));
+    connect(&m_statusAction, &QAction::triggered, this, [this] { checkServerStatus(); });
+
     auto menuContainer = ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID);
     menuContainer->addAction(newConversationCmd);
     menuContainer->addSeparator();
     menuContainer->addAction(requestCmd);
     menuContainer->addAction(toggleCmd);
     menuContainer->addAction(toggleAutoFimCmd);
+    menuContainer->addAction(statusCmd);
 
     auto updateActions = [this] {
         const bool enabled = settings().enableLlamaCpp();
@@ -189,6 +217,8 @@ void LlamaPlugin::initialize()
         m_toggleAction.setChecked(enabled);
         m_requestAction.setEnabled(enabled);
         m_toogleAutoFimAction.setEnabled(enabled);
+        m_nextCompletionAction.setEnabled(enabled);
+        m_prevCompletionAction.setEnabled(enabled);
     };
 
     settings().enableLlamaCpp.addOnChanged(this, updateActions);
@@ -253,6 +283,23 @@ bool LlamaPlugin::delayedInitialize()
 
 void LlamaPlugin::settingsUpdated()
 {
+    // The cached completions and the in-flight request are tied to the previous
+    // endpoint/model and must not be reused once any of them changes.
+    const bool endpointChanged = m_lastEndpoint != settings().endpoint.value()
+                                 || m_lastApiKey != settings().apiKey.value()
+                                 || m_lastModel != settings().modelFim.value();
+    m_lastEndpoint = settings().endpoint.value();
+    m_lastApiKey = settings().apiKey.value();
+    m_lastModel = settings().modelFim.value();
+
+    if (endpointChanged) {
+        m_cacheData.clear();
+        m_suggestionResponses.clear();
+        m_selectedCompletion = 0;
+        if (m_fimReply && m_fimReply->isRunning())
+            m_fimReply->abort();
+    }
+
     // Set up timer for context gathering
     if (settings().ringNChunks.value() > 0 && !m_ringUpdateTimer->isActive()) {
         m_ringUpdateTimer->start(settings().ringUpdateMs.value());
@@ -324,6 +371,8 @@ void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
 
 void LlamaPlugin::handleCursorPositionChanged()
 {
+    m_lastUserActivity.restart();
+
     if (!settings().enableLlamaCpp())
         return;
 
@@ -372,29 +421,6 @@ void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
     pick_chunk_at_cursor(editor);
 }
 
-// compute how similar two chunks of text are
-// 0 - no similarity, 1 - high similarity
-// TODO: figure out something better
-static double chunk_sim(const QStringList &c0, const QStringList &c1)
-{
-    if (c0.isEmpty() && c1.isEmpty())
-        return 0.0;
-
-    int common = 0;
-
-    // Count common lines
-    for (const auto &line0 : c0) {
-        for (const auto &line1 : c1) {
-            if (line0 == line1) {
-                common++;
-                break;
-            }
-        }
-    }
-
-    return 2.0 * common / (c0.size() + c1.size());
-}
-
 void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
@@ -426,40 +452,24 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
     }
 
     // Get local context
-    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix]
+    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix, indent]
         = fim_ctx_local(editor, pos_x, pos_y, prev);
 
     if (isAuto && line_cur_suffix.size() > settings().maxLineSuffix.value())
         return;
 
-    // Check cache first
-    const QByteArray hash = QCryptographicHash::hash((prefix + middle + "Î" + suffix).toUtf8(),
-                                                     QCryptographicHash::Sha256)
-                                .toHex();
-
-    QByteArrayList hashes{hash};
+    m_indentLast = indent;
 
     // compute multiple hashes that can be used to generate a completion for which the first few lines
     // are missing. this happens when we have scrolled down a bit from where the original generation was done
-    static QRegularExpression re("^[^\n]*\n");
-    QString prefix_trim = prefix;
-    for (int i = 0; i < 3; ++i) {
-        prefix_trim = prefix_trim.replace(re, "");
-        if (prefix_trim.isEmpty())
-            break;
-        hashes << QCryptographicHash::hash((prefix_trim + middle + "Î" + suffix).toUtf8(),
-                                           QCryptographicHash::Sha256)
-                      .toHex();
-    }
+    const QByteArrayList hashes = Fim::contextHashes(prefix, middle, suffix);
 
     // if we already have a cached completion for one of the hashes, don't send a request
-    for (const QByteArray &h : std::as_const(hashes)) {
-        if (m_cacheData.contains(h)) {
-            // On explicit Ctrl+G fim call, display the suggestion
-            if (!isAuto)
-                fim_try_hint(pos_x, pos_y);
-            return;
-        }
+    if (m_cacheData.containsAny(hashes)) {
+        // On explicit Ctrl+G fim call, display the suggestion
+        if (!isAuto)
+            fim_try_hint(pos_x, pos_y);
+        return;
     }
 
     // Create JSON request
@@ -471,6 +481,10 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
     request["prompt"] = middle;
     request["n_predict"] = settings().nPredict.value();
     request["stop"] = QJsonArray::fromStringList(stopStrings);
+    request["n_cmpl"] = settings().nCmpl.value();
+    request["n_indent"] = indent;
+    if (!settings().modelFim.value().isEmpty())
+        request["model"] = settings().modelFim.value();
     request["top_k"] = 40;
     request["top_p"] = 0.9;
     request["stream"] = false;
@@ -491,9 +505,6 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
                                                              "truncated",
                                                              "tokens_cached"});
 
-    // evict chunks that are very similar to the current context
-    // this is needed because such chunks usually distort the completion to repeat what was already there
-
     int startLine = 1;
     int endLine = currentDocument->lineCount();
     if (currentDocument->lineCount() > settings().ringChunkSize.value()) {
@@ -501,8 +512,6 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
         endLine = qMin(endLine, pos_y + settings().ringChunkSize.value() / 2);
     }
     const QStringList lines = getlines(editor, startLine, endLine);
-    if (lines.size() < 3)
-        return;
 
     QStringList chunk;
     if (currentDocument->lineCount() > settings().ringChunkSize.value()) {
@@ -518,12 +527,13 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
 
     // evict chunks that are very similar to the current context
     // this is needed because such chunks usually distort the completion to repeat what was already there
-    // for (int i = m_ringChunks.size() - 1; i >= 0; --i) {
-    //     if (chunk_sim(m_ringChunks[i].data, chunk) > 0.5) {
-    //         m_ringChunks.removeAt(i);
-    //         m_ringNEvict++;
-    //     }
-    // }
+    // (like llama.vim, the oldest chunk at index 0 is not considered here)
+    for (int i = m_ringChunks.size() - 1; i > 0; --i) {
+        if (Fim::chunkSim(m_ringChunks[i].data, chunk) > 0.5) {
+            m_ringChunks.removeAt(i);
+            m_ringNEvict++;
+        }
+    }
 
     // Add extra context
     QJsonArray extraContext;
@@ -557,19 +567,21 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
     m_fimReply.reset(m_networkManager->post(req, jsonData));
 
     // Connect to response
-    connect(m_fimReply.get(), &QNetworkReply::finished, [this, hash, pos_x, pos_y, replyTimer]() {
-        qCInfo(llamaLog) << "fim_on_response: received reply after:" << replyTimer.elapsed()
-                         << "ms";
-        if (m_fimReply->error() == QNetworkReply::NoError) {
-            fim_on_response(pos_x, pos_y, hash, m_fimReply->readAll());
-        } else {
-            Core::MessageManager::writeSilently(
-                Tr::tr("[llama.cpp] Error fetching fim completion from %1: %2")
-                    .arg(settings().endpoint.value())
-                    .arg(m_fimReply->errorString()));
-        }
-        m_fimReply.release()->deleteLater();
-    });
+    connect(m_fimReply.get(),
+            &QNetworkReply::finished,
+            [this, hashes, pos_x, pos_y, replyTimer]() {
+                qCInfo(llamaLog) << "fim_on_response: received reply after:"
+                                 << replyTimer.elapsed() << "ms";
+                if (m_fimReply->error() == QNetworkReply::NoError) {
+                    fim_on_response(pos_x, pos_y, hashes, m_fimReply->readAll());
+                } else {
+                    Core::MessageManager::writeSilently(
+                        Tr::tr("[llama.cpp] Error fetching fim completion from %1: %2")
+                            .arg(settings().endpoint.value())
+                            .arg(m_fimReply->errorString()));
+                }
+                m_fimReply.release()->deleteLater();
+            });
 
     // gather some extra context nearby and process it in the background
     // only gather chunks if the cursor has moved a lot
@@ -597,13 +609,15 @@ void LlamaPlugin::fim(int pos_x, int pos_y, bool isAuto, const QStringList &prev
 
 void LlamaPlugin::fim_on_response(int pos_x,
                                   int pos_y,
-                                  const QByteArray &hash,
+                                  const QByteArrayList &hashes,
                                   const QByteArray &response)
 {
     qCInfo(llamaLog) << "fim_on_response:" << pos_x << pos_y;
 
-    // Cache the result
-    m_cacheData.insert(hash, new QByteArray(response));
+    // Cache the results: each key maps to a ring buffer of up to nCmpl entries.
+    // Insert under all hashes, so that a lookup with a slightly shorter prefix
+    // (cursor moved up a few lines) hits the cache instead of re-requesting.
+    m_cacheData.insert(hashes, response, settings().nCmpl.value());
 
     // if nothing is currently displayed - show the hint directly
     if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
@@ -611,12 +625,12 @@ void LlamaPlugin::fim_on_response(int pos_x,
         int cursor_pos_x = cursor.positionInBlock();
         int cursor_pos_y = cursor.blockNumber() + 1;
 
-        if (cursor_pos_x == pos_x && cursor_pos_y == pos_y) {
+        if (cursor_pos_x == pos_x && cursor_pos_y == pos_y && !editor->suggestionVisible()) {
             fim_try_hint(pos_x, pos_y);
         } else {
             qCInfo(llamaLog) << "fim_on_response:" << "Received response for:" << pos_x << pos_y
                              << "and the cursor is at" << cursor_pos_x << cursor_pos_y
-                             << "ignoring.";
+                             << "or a suggestion is already displayed, ignoring.";
         }
     }
 }
@@ -624,7 +638,16 @@ void LlamaPlugin::fim_on_response(int pos_x,
 LlamaPlugin::ThreeQStrings LlamaPlugin::getShowInfoStats(const QJsonObject &response)
 {
     int n_cached = response["tokens_cached"].toInt();
-    bool truncated = response["truncated"].toBool();
+    // the server reports truncation under "timings", accept the top-level
+    // field and the flat "timings/truncated" field (as returned when
+    // response_fields filtering is used) as well
+    bool truncated = response.value("timings").toObject().value("truncated").toBool()
+                     || response["truncated"].toBool();
+    if (!truncated) {
+        const QJsonValue v = response["timings/truncated"];
+        truncated = v.isBool() ? v.toBool()
+                  : v.toString() == QLatin1String("true");
+    }
 
     int n_prompt = response["timings/prompt_n"].toInt();
     double t_prompt_ms = response["timings/prompt_ms"].toDouble(1.0);
@@ -671,31 +694,45 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
     if (!isValid(editor))
         return;
 
-    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix]
+    auto [prefix, middle, suffix, line_cur, line_cur_prefix, line_cur_suffix, indent]
         = fim_ctx_local(editor, pos_x, pos_y);
 
-    QString context = prefix + middle + "Î" + suffix;
-    QByteArray hash = QCryptographicHash::hash(context.toUtf8(), QCryptographicHash::Sha256).toHex();
+    // Phase 1: exact match at the current position
+    const QByteArray hash = Fim::contextHashes(prefix, middle, suffix).first();
+    QList<QByteArray> *cached = m_cacheData.lookup(hash);
 
-    QByteArray raw;
-    if (m_cacheData.contains(hash)) {
-        raw = *m_cacheData[hash];
-    } else {
-        QString pm = prefix + middle;
-        int best = 0;
-        QByteArray best_raw;
+    if (cached && !cached->isEmpty()) {
+        const QList<QByteArray> &responses = *cached;
+        // keep the cycling position when the same set of completions is re-displayed
+        if (m_suggestionPos != QPoint(pos_x, pos_y) || m_suggestionResponses != responses)
+            m_selectedCompletion = 0;
+        m_selectedCompletion = qBound(0, m_selectedCompletion, responses.size() - 1);
+        fim_render(editor, pos_x, pos_y, responses, m_selectedCompletion);
 
-        for (int i = 0; i < 128; ++i) {
-            if (pm.length() <= i)
-                break;
+        if (editor->suggestionVisible()) {
+            // Call speculative FIM
+            fim(pos_x, pos_y, true, m_suggestionContent);
+        }
+        return;
+    }
 
-            QString removed = pm.mid(pm.length() - (1 + i)); // last i+1 chars
-            QString ctx_new = pm.left(pm.length() - (2 + i)) + "Î" + suffix;
-            QByteArray hash_new
-                = QCryptographicHash::hash(ctx_new.toUtf8(), QCryptographicHash::Sha256).toHex();
+    // Phase 2: nearby match - search for a cached completion whose start matches what was typed
+    // only pick the single best match, no cycling
+    QString pm = prefix + middle;
+    int best = 0;
+    QByteArray best_raw;
 
-            if (m_cacheData.contains(hash_new)) {
-                QByteArray response_cached = *m_cacheData[hash_new];
+    for (int i = 0; i < 128; ++i) {
+        if (pm.length() <= i)
+            break;
+
+        const QString removed = pm.mid(pm.length() - (1 + i)); // last i+1 chars
+        const QString ctx_new = pm.left(pm.length() - (2 + i)) + Fim::kContextSeparator + suffix;
+        const QByteArray hash_new
+            = QCryptographicHash::hash(ctx_new.toUtf8(), QCryptographicHash::Sha256).toHex();
+
+        if (QList<QByteArray> *cached = m_cacheData.lookup(hash_new)) {
+            for (const QByteArray &response_cached : std::as_const(*cached)) {
                 if (response_cached.isEmpty())
                     continue;
 
@@ -716,19 +753,18 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 
                 QString remaining_content = content.mid(i + 1);
                 if (!remaining_content.isEmpty()) {
-                    if (raw.isNull() || remaining_content.length() > best) {
+                    if (best_raw.isNull() || remaining_content.length() > best) {
                         best = remaining_content.length();
                         best_raw = response_cached;
                     }
                 }
             }
         }
-
-        raw = best_raw;
     }
 
-    if (!raw.isNull() && !raw.isEmpty()) {
-        fim_render(editor, pos_x, pos_y, raw);
+    if (!best_raw.isNull() && !best_raw.isEmpty()) {
+        m_selectedCompletion = 0;
+        fim_render(editor, pos_x, pos_y, {best_raw}, 0);
 
         if (editor->suggestionVisible()) {
             // Call speculative FIM
@@ -741,15 +777,21 @@ void LlamaPlugin::fim_try_hint(int pos_x, int pos_y)
 void LlamaPlugin::fim_render(TextEditorWidget *editor,
                              int pos_x,
                              int pos_y,
-                             const QByteArray &response)
+                             const QList<QByteArray> &responses,
+                             int selected)
 {
     // do not show a suggestion if we have a selection
     if (!editor->selectedText().isEmpty())
         return;
 
+    if (responses.isEmpty())
+        return;
+    if (selected < 0 || selected >= responses.size())
+        selected = 0;
+
     // Parse JSON response
     QJsonParseError error;
-    QJsonDocument doc = QJsonDocument::fromJson(response, &error);
+    QJsonDocument doc = QJsonDocument::fromJson(responses[selected], &error);
 
     if (error.error != QJsonParseError::NoError) {
         qDebug() << "JSON parse error:" << error.errorString();
@@ -889,6 +931,14 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
         }
     }
 
+    // remember the current suggestion so we can cycle through the completions;
+    // the state is kept even if this candidate was not rendered (e.g. it is
+    // whitespace-only or repeats existing text), so the user can still cycle
+    // back to a renderable one
+    m_suggestionResponses = responses;
+    m_selectedCompletion = selected;
+    m_suggestionPos = QPoint(pos_x, pos_y);
+
     if (settings().showInfo.value() > 0) {
         m_textMark = std::make_unique<TextEditor::TextMark>(
             TextEditorWidget::currentTextEditorWidget()->textDocument(),
@@ -896,6 +946,8 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
             TextMarkCategory{"llama", "llama.cpp"});
 
         auto [label, tooltip, warningTooltip] = getShowInfoStats(obj);
+        if (responses.size() > 1)
+            label += QStringLiteral(" [%1/%2]").arg(selected + 1).arg(responses.size());
         m_textMark->setLineAnnotation(label);
         m_textMark->setToolTip(warningTooltip.isEmpty() ? tooltip : warningTooltip);
         m_textMark->setColor(warningTooltip.isEmpty()
@@ -904,9 +956,36 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
     }
 }
 
+// cycle to the next/previous completion candidate
+void LlamaPlugin::fim_cycle(int direction)
+{
+    if (m_suggestionResponses.size() <= 1)
+        return;
+
+    auto *editor = TextEditor::TextEditorWidget::currentTextEditorWidget();
+
+    // only cycle if the suggestion is still visible in the current editor and the
+    // remembered position is still valid in its document
+    if (!editor || !editor->suggestionVisible() || !editor->document() || m_suggestionPos.y() < 1
+        || m_suggestionPos.y() > editor->document()->lineCount())
+        return;
+
+    const int n = m_suggestionResponses.size();
+    m_selectedCompletion = (m_selectedCompletion + direction + n) % n;
+
+    fim_render(editor,
+               m_suggestionPos.x(),
+               m_suggestionPos.y(),
+               m_suggestionResponses,
+               m_selectedCompletion);
+}
+
 void LlamaPlugin::hideCompletionHint()
 {
     m_textMark.reset({});
+
+    m_suggestionResponses.clear();
+    m_selectedCompletion = 0;
 
     if (auto editor = TextEditor::TextEditorWidget::currentTextEditorWidget()) {
         editor->clearSuggestion();
@@ -934,6 +1013,7 @@ LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
     QString lineCurSuffix;
     QStringList linesPrefix;
     QStringList linesSuffix;
+    int indent = 0;
 
     if (prev.isEmpty()) {
         // No previous completion
@@ -941,6 +1021,16 @@ LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
 
         lineCurPrefix = lineCur.left(pos_x);
         lineCurSuffix = lineCur.mid(pos_x);
+
+        // special handling of lines full of whitespaces - start from the beginning of the line
+        if (s_whitespace_regex.match(lineCur).hasMatch()) {
+            indent = 0;
+            lineCurPrefix.clear();
+            lineCurSuffix.clear();
+        } else {
+            // the indentation of the current line
+            indent = s_indent_regex.match(lineCur).capturedLength(0);
+        }
 
         int startLine = qMax(1, pos_y - settings().nPrefix.value());
         for (int i = startLine; i < pos_y; ++i)
@@ -974,6 +1064,9 @@ LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
         int endLine = qMin(max_y, pos_y + settings().nSuffix.value());
         for (int i = pos_y + 1; i <= endLine; ++i)
             linesSuffix << getline(editor, i - 1);
+
+        // keep the indentation consistent with the previously accepted completion
+        indent = m_indentLast;
     }
 
     const QString prefix = linesPrefix.join("\n") + "\n";
@@ -987,6 +1080,7 @@ LlamaPlugin::FimContext LlamaPlugin::fim_ctx_local(TextEditorWidget *editor,
     res.line_cur = lineCur;
     res.line_cur_prefix = lineCurPrefix;
     res.line_cur_suffix = lineCurSuffix;
+    res.indent = indent;
 
     return res;
 }
@@ -1046,9 +1140,10 @@ void LlamaPlugin::pick_chunk(const QStringList &text, bool noModifiedState, bool
             return;
     }
 
-    // Evict similar chunks
-    for (int i = m_ringQueued.size() - 1; i >= 0; --i) {
-        if (chunk_sim(m_ringQueued[i].data, chunk) > 0.9) {
+    // Evict similar chunks (like llama.vim, the oldest element at index 0 is
+    // not considered here)
+    for (int i = m_ringQueued.size() - 1; i > 0; --i) {
+        if (Fim::chunkSim(m_ringQueued[i].data, chunk) > 0.9) {
             if (doEviction) {
                 m_ringQueued.removeAt(i);
                 m_ringNEvict++;
@@ -1057,8 +1152,8 @@ void LlamaPlugin::pick_chunk(const QStringList &text, bool noModifiedState, bool
             }
         }
     }
-    for (int i = m_ringChunks.size() - 1; i >= 0; --i) {
-        if (chunk_sim(m_ringChunks[i].data, chunk) > 0.9) {
+    for (int i = m_ringChunks.size() - 1; i > 0; --i) {
+        if (Fim::chunkSim(m_ringChunks[i].data, chunk) > 0.9) {
             if (doEviction) {
                 m_ringChunks.removeAt(i);
                 m_ringNEvict++;
@@ -1082,6 +1177,11 @@ void LlamaPlugin::pick_chunk(const QStringList &text, bool noModifiedState, bool
 
 void LlamaPlugin::ring_update()
 {
+    // skip processing while the user is actively typing or moving the cursor,
+    // so we don't burn server prompt-processing time (ref: llama.vim s:ring_update)
+    if (m_lastUserActivity.isValid() && m_lastUserActivity.elapsed() < kRingIdleDelayMs)
+        return;
+
     if (m_ringQueued.isEmpty())
         return;
 
@@ -1133,6 +1233,110 @@ void LlamaPlugin::ring_update()
     }
 
     m_networkManager->post(req, jsonData);
+}
+
+// query the /v1/models endpoint and report which models are loaded
+// (ported from the :LlamaStatus command in llama.vim)
+void LlamaPlugin::checkServerStatus()
+{
+    auto check = [this](const QString &endpoint,
+                        const QString &apiKey,
+                        const QString &modelName,
+                        const QString &label) {
+        const QUrl endpointUrl(endpoint);
+        if (endpointUrl.isRelative() || (endpointUrl.scheme() != QLatin1String("http")
+                                          && endpointUrl.scheme() != QLatin1String("https"))) {
+            Core::MessageManager::writeDisrupting(
+                Tr::tr("llama.cpp %1 server (model: %2): invalid endpoint %3")
+                    .arg(label)
+                    .arg(modelName.isEmpty() ? Tr::tr("default") : modelName)
+                    .arg(endpoint));
+            return;
+        }
+
+        QString base = endpoint;
+        for (const char *suffix : {"/infill", "/v1/chat/completions"}) {
+            const QString s = QLatin1String(suffix);
+            if (base.endsWith(s))
+                base.chop(s.size());
+        }
+        while (base.endsWith('/'))
+            base.chop(1);
+
+        QNetworkRequest req(QUrl(base + "/v1/models"));
+        req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        if (!apiKey.isEmpty())
+            req.setRawHeader("Authorization", "Bearer " + apiKey.toUtf8());
+
+        auto *reply = m_networkManager->get(req);
+        connect(reply,
+                &QNetworkReply::finished,
+                [this, reply, modelName, label, endpoint]() {
+                    const bool ok = (reply->error() == QNetworkReply::NoError);
+                    const QByteArray data = reply->readAll();
+                    reply->deleteLater();
+
+                    QString status;
+                    if (!ok) {
+                        status = Tr::tr("not reachable");
+                    } else {
+                        const QJsonDocument doc = QJsonDocument::fromJson(data);
+                        const QJsonArray models = doc.object().value("data").toArray();
+
+                        QJsonObject match;
+                        bool found = false;
+                        if (!modelName.isEmpty()) {
+                            for (const QJsonValue &value : std::as_const(models)) {
+                                const QJsonObject model = value.toObject();
+                                if (model.value("id").toString() == modelName
+                                    || model.value("tags").toArray().contains(QJsonValue(modelName))
+                                    || model.value("aliases").toArray().contains(QJsonValue(modelName))) {
+                                    match = model;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        } else if (models.size() == 1) {
+                            match = models.first().toObject();
+                            found = true;
+                        }
+
+                        if (!found) {
+                            if (modelName.isEmpty())
+                                status
+                                    = models.isEmpty() ? Tr::tr("no models loaded")
+                                                       : Tr::tr("multiple models loaded");
+                            else
+                                status = Tr::tr("model %1 is not loaded").arg(modelName);
+                        } else {
+                            const QJsonValue statusValue = match.value("status");
+                            QString value = statusValue.isObject()
+                                                ? statusValue.toObject().value("value").toString()
+                                                : statusValue.toString();
+                            if (value.isEmpty())
+                                value = QStringLiteral("loaded");
+                            status = (value == QStringLiteral("loaded")) ? Tr::tr("ready") : value;
+                        }
+                    }
+
+                    // the user explicitly asked for the status - surface it in the UI
+                    Core::MessageManager::writeDisrupting(
+                        Tr::tr("llama.cpp %1 server (%2, model: %3): %4")
+                            .arg(label)
+                            .arg(endpoint)
+                            .arg(modelName.isEmpty() ? Tr::tr("default") : modelName)
+                            .arg(status));
+                });
+    };
+
+    check(settings().endpoint.value(),
+          settings().apiKey.value(),
+          settings().modelFim.value(),
+          Tr::tr("FIM"));
+    check(settings().chatEndpoint.value(),
+          settings().chatApiKey.value(),
+          QString(),
+          Tr::tr("Chat"));
 }
 
 } // namespace LlamaCpp

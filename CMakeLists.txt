@@ -60,6 +60,7 @@ add_qtc_plugin(LlamaCpp
     llama.qrc
     llamaicons.h
     autoscrollarea.cpp autoscrollarea.h
+    fimcache.cpp fimcache.h
     llamachateditor.cpp llamachateditor.h
     llamachatinput.cpp llamachatinput.h
     llamachatmanager.cpp llamachatmanager.h

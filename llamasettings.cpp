@@ -70,6 +70,16 @@ LlamaSettings::LlamaSettings()
     apiKey.setToolTip(Tr::tr("llama.cpp server api key (optional)"));
     apiKey.setHistoryCompleter("LlamaCpp.ApiKey.History");
 
+    modelFim.setDisplayName(Tr::tr("FIM Model"));
+    modelFim.setDisplayStyle(StringAspect::LineEditDisplay);
+    modelFim.setSettingsKey("ModelFim");
+    modelFim.setLabelText(Tr::tr("FIM Model:"));
+    modelFim.setDefaultValue("");
+    modelFim.setToolTip(
+        Tr::tr("Model name to use for FIM completion in case when multiple models are loaded "
+               "on the server (optional, recommended: Qwen3 Coder)."));
+    modelFim.setHistoryCompleter("LlamaCpp.ModelFim.History");
+
     nPrefix.setDisplayName(Tr::tr("Prefix Code Lines"));
     nPrefix.setSettingsKey("NPrefix");
     nPrefix.setLabelText(Tr::tr("Prefix Code Lines:"));
@@ -92,6 +102,15 @@ LlamaSettings::LlamaSettings()
     nPredict.setDefaultValue(128);
     nPredict.setToolTip(Tr::tr("Max number of tokens to predict."));
     nPredict.setRange(0, 65535);
+
+    nCmpl.setDisplayName(Tr::tr("Completions per Position"));
+    nCmpl.setSettingsKey("NCmpl");
+    nCmpl.setLabelText(Tr::tr("Completions per Position:"));
+    nCmpl.setDefaultValue(1);
+    nCmpl.setToolTip(Tr::tr("Number of completions to cache per position (ring buffer). "
+                            "Use the Next/Previous Completion shortcuts (Ctrl+G then Down/Up) "
+                            "to cycle through them."));
+    nCmpl.setRange(1, 32);
 
     stopStrings.setDisplayName(Tr::tr("Stop Strings"));
     stopStrings.setDisplayStyle(StringAspect::LineEditDisplay);
@@ -145,7 +164,9 @@ LlamaSettings::LlamaSettings()
     maxCacheKeys.setSettingsKey("MaxCacheKeys");
     maxCacheKeys.setLabelText(Tr::tr("Max Cache Keys:"));
     maxCacheKeys.setDefaultValue(250);
-    maxCacheKeys.setToolTip(Tr::tr("Max number of cached completions to keep in result_cache."));
+    maxCacheKeys.setToolTip(Tr::tr("Max number of cached context keys to keep in the result "
+                                   "cache. Each key can hold up to 'Completions per Position' "
+                                   "individual completions."));
     maxCacheKeys.setRange(0, 65535);
 
     ringNChunks.setDisplayName(Tr::tr("Ring Chunks"));
@@ -573,9 +594,11 @@ LlamaSettings::LlamaSettings()
             Column {
                 endpoint, br,
                 Row {apiKey}, br,
+                Row {modelFim}, br,
                 Row {nPrefix}, br,
                 Row {nSuffix}, br,
                 Row {nPredict}, br,
+                Row {nCmpl}, br,
                 Row {stopStrings}, br,
                 Row {tMaxPromptMs}, br,
                 Row {tMaxPredictMs}, br,

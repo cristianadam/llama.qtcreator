@@ -40,6 +40,17 @@ if (TARGET llamatools_test)
   qt_wrap_cpp(llamatools_test_moc llamatools_test.cpp TARGET llamatools_test)
 endif()
 
+add_qtc_test(fimcache_test
+  INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+  DEPENDS
+    Qt::Test Qt::Core
+  SOURCES
+    fimcache_test.cpp
+    ../fimcache.cpp
+)
+
 add_qtc_test(autoscrollarea_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}
