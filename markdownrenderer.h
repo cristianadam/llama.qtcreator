@@ -53,6 +53,9 @@ public:
     static const int DetailsSummaryTextProp = QTextFormat::UserProperty + 2;
     static const int BlockCodeIdProp = QTextFormat::UserProperty + 3;
     static const int HorizontalRulerIdProp = QTextFormat::UserProperty + 4;
+    // Indent level of a non-quoted <details> body (tool output). Used by the
+    // code-block overlay geometry, mirroring the BlockQuoteLevel adjustment.
+    static const int DetailsBodyIndentProp = QTextFormat::UserProperty + 5;
 
     static constexpr QChar ZeroWidthSpace = QChar(L'\u200b');
 
@@ -165,6 +168,7 @@ private:
 
     static QString languageFromInfoString(const markus::CodeBlock &code);
     static int getBlockQuoteMargin(int depth, int paragraphMargin);
+    static int getDetailsBodyMargin(int depth);
     // Expand/collapse icon rendered at the start of a <details> header. Wraps
     // the glyph in a "details-toggle" anchor so it gets the hover tooltip and
     // a non-link colour; the glyph itself is drawn with the icon font.
@@ -197,6 +201,12 @@ private:
 
     QHash<int, QFrame *> m_codeOverlays;
     int m_blockQuoteDepth = 0;
+    // Indent level of a <details> body that is not a block quote (tool-call
+    // output). Indents the body so it reads as sub-content, but paintEvent()
+    // only draws the vertical line for BlockQuoteLevel blocks, so there is no
+    // quote line, no muted text color, and code blocks keep their syntax
+    // highlighting.
+    int m_detailsBodyDepth = 0;
     // Level of the heading currently being rendered (0 = none). While non-zero,
     // inline markup (e.g. `code`) inherits the heading's font instead of the
     // inline-code "chip" styling.

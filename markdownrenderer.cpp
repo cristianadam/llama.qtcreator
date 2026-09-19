@@ -148,6 +148,7 @@ void MarkdownRenderer::reset()
     m_tableStack.clear();
     m_textCharFormatStack.clear();
     m_blockQuoteDepth = 0;
+    m_detailsBodyDepth = 0;
     m_headingLevel = 0;
     m_codeBlock = false;
     m_codeBlockLanguage.clear();
@@ -420,6 +421,11 @@ void MarkdownRenderer::beginBlock()
     if (m_blockQuoteDepth) {
         blkFmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
         blkFmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin));
+    } else if (m_detailsBodyDepth) {
+        // Indent the non-quoted <details> body (tool output); no quote level,
+        // so paintEvent() draws no vertical line.
+        blkFmt.setProperty(DetailsBodyIndentProp, m_detailsBodyDepth);
+        blkFmt.setLeftMargin(getDetailsBodyMargin(m_detailsBodyDepth));
     }
     if (m_codeBlock) {
         blkFmt.setProperty(QTextFormat::BlockCodeLanguage, m_codeBlockLanguage);
@@ -535,6 +541,10 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
         fmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
         fmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin)
                           + m_paragraphMargin);
+    } else if (m_detailsBodyDepth > 0) {
+        // Indent like a quote body, minus the vertical line (tool output).
+        fmt.setProperty(DetailsBodyIndentProp, m_detailsBodyDepth);
+        fmt.setLeftMargin(getDetailsBodyMargin(m_detailsBodyDepth) + m_paragraphMargin);
     } else {
         fmt.setLeftMargin(m_paragraphMargin);
     }
@@ -562,8 +572,8 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
     spacerFmt.setFontPointSize(1);
     m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
 
-    // Inside a quote (e.g. a <details> body) the code is muted like the
-    // surrounding text; only top-level code gets syntax highlighting.
+    // Inside a quote (e.g. a thinking section body) the code is muted like
+    // the surrounding text; only unquoted code gets syntax highlighting.
     if (m_blockQuoteDepth == 0) {
         QVector<HighlightFragment> fragments;
         SyntaxHighlighter highlighter;
@@ -775,19 +785,31 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
             break;
     }
 
-    // Body: markdown blocks parsed from the section. The extra quote level
-    // indents the content and makes paintEvent() draw the quote line.
+    // Body: markdown blocks parsed from the section. Thinking sections and
+    // other details get an extra quote level, which indents the content and
+    // makes paintEvent() draw the quote line. Tool-call output is only
+    // indented (m_detailsBodyDepth): no quote line, normal text color, and
+    // its code blocks still get syntax highlighting (see handleCodeBlock()).
+    const bool quoted = !isToolCall;
     const int prevQuoteDepth = m_blockQuoteDepth;
-    m_blockQuoteDepth += 1;
-
-    QTextCharFormat quoteCharFmt;
-    quoteCharFmt.setForeground(color(BlockquoteText));
-    m_textCharFormatStack.push(quoteCharFmt);
+    const int prevBodyDepth = m_detailsBodyDepth;
+    if (quoted) {
+        m_blockQuoteDepth += 1;
+        QTextCharFormat quoteCharFmt;
+        quoteCharFmt.setForeground(color(BlockquoteText));
+        m_textCharFormatStack.push(quoteCharFmt);
+    } else {
+        m_detailsBodyDepth += 1;
+    }
 
     renderBlockIds(doc, details.children);
 
-    m_textCharFormatStack.pop();
-    m_blockQuoteDepth = prevQuoteDepth;
+    if (quoted) {
+        m_textCharFormatStack.pop();
+        m_blockQuoteDepth = prevQuoteDepth;
+    } else {
+        m_detailsBodyDepth = prevBodyDepth;
+    }
     m_detailsSecId = prevSecId;
 
     // Show/hide the body blocks: those tagged with this section id that are not
@@ -1004,6 +1026,16 @@ int MarkdownRenderer::getBlockQuoteMargin(int depth, int paragraphMargin)
     return paragraphMargin + extraPerLevel * (depth - 1);
 }
 
+// Left margin for a non-quoted <details> body (tool output). A flat, clearly
+// visible step per level – unlike getBlockQuoteMargin(), whose first level is
+// only a single paragraph margin.
+int MarkdownRenderer::getDetailsBodyMargin(int depth)
+{
+    if (depth <= 0)
+        return 0;
+    return 16 * depth;
+}
+
 // ---------------------------------------------------------------------------
 // Details sections
 // ---------------------------------------------------------------------------
@@ -1093,6 +1125,11 @@ QRectF MarkdownRenderer::blockBoundingRect(const QTextBlock &block) const
         qreal dx = block.blockFormat().indent() * document()->indentWidth();
         if (block.blockFormat().hasProperty(QTextFormat::BlockQuoteLevel))
             dx += m_paragraphMargin;
+        else
+            // Non-quoted <details> body (tool output): shift the overlay by
+            // the extra left margin (the base paragraph margin is already
+            // part of the block's bounding rect).
+            dx += getDetailsBodyMargin(block.blockFormat().property(DetailsBodyIndentProp).toInt());
         blockRect.adjust(dx, 0, dx, 0);
     }
 
