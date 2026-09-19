@@ -1539,7 +1539,15 @@ void LlamaToolsTest::bash_summaries()
 
     QJsonObject args;
     args["command"] = QStringLiteral("git status");
-    QCOMPARE(tool.oneLineSummary(args), QString("running git status"));
+    QCOMPARE(tool.oneLineSummary(args), QString("running `git status`"));
+
+    // Multi‑line commands (heredocs etc.) are shortened to the first line.
+    args["command"] = QStringLiteral("cat <<'EOF'\nhello\nEOF");
+    QCOMPARE(tool.oneLineSummary(args), QString("running `cat <<'EOF' …`"));
+
+    // Backticks in the command need a double‑backtick code span.
+    args["command"] = QStringLiteral("echo \"`date`\"");
+    QCOMPARE(tool.oneLineSummary(args), QString("running ``echo \"`date`\"``"));
 
     QVERIFY(tool.toolDefinition().contains("\"bash\""));
     QVERIFY(tool.toolDefinition().contains("120000"));
