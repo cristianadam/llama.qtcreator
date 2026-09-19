@@ -819,18 +819,23 @@ void LlamaPlugin::fim_render(TextEditorWidget *editor,
 
     QString line_cur = getline(editor, pos_y - 1);
 
-    // if the current has too much whitespace, more than the current indent, trim
-    // so that we don't have double indentation.
-    auto line_cur_match = s_whitespace_regex.match(line_cur);
-    if (line_cur_match.hasMatch()) {
-        int lead = qMin(line_cur_match.capturedLength(), line_cur.size());
-        if (lead > pos_x) {
-            line_cur = line_cur.left(pos_x);
-            content[0] = content[0].mid(pos_x);
-        }
+    // if the current line is full of whitespaces, trim as much whitespace as
+    // possible from the suggestion (but no more than the line itself has) so
+    // that we don't end up with double indentation
+    if (s_whitespace_regex.match(line_cur).hasMatch()) {
+        const int lead
+            = qMin(s_indent_regex.match(content.at(0)).capturedLength(0), line_cur.size());
+        line_cur = content.at(0).left(lead);
+        content[0] = content.at(0).mid(lead);
     }
     QString line_cur_prefix = line_cur.left(pos_x);
     QString line_cur_suffix = line_cur.mid(pos_x);
+
+    // the model sometimes re-generates text that is already on the line
+    // (e.g. the // of a comment): drop the repeated copy from the suggestion,
+    // the accepted text is the same, the ghost text is less confusing
+    if (!line_cur_prefix.isEmpty() && content.at(0).startsWith(line_cur_prefix))
+        content[0] = content.at(0).mid(line_cur_prefix.size());
 
     // Logic for discarding predictions that repeat existing text
     // truncate the suggestion if the first line is empty
