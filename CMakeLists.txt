@@ -92,7 +92,7 @@ add_qtc_plugin(LlamaCpp
     tools/patch.cpp tools/patch.h
     tools/readfile_tool.cpp tools/readfile_tool.h
     tools/task_tool.cpp tools/task_tool.h
-    tools/shell_tool.cpp tools/shell_tool.h
+    tools/bash_tool.cpp tools/bash_tool.h
     tools/tool.cpp tools/tool.h
     tools/tool_utils.cpp tools/tool_utils.h
     tools/web_utils.cpp tools/web_utils.h

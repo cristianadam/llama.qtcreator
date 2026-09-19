@@ -3,7 +3,7 @@
 
 namespace LlamaCpp::Tools {
 
-class ShellTool : public Tool
+class BashTool : public Tool
 {
 public:
     QString name() const override;

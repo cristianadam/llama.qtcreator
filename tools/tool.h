@@ -11,7 +11,7 @@ class Tool
 public:
     virtual ~Tool() = default;
 
-    /*! Returns the name that appears in the JSON schema, e.g. "shell",
+    /*! Returns the name that appears in the JSON schema, e.g. "bash",
         "apply_patch", … */
     virtual QString name() const = 0;
 

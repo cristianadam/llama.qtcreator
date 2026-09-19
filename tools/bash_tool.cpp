@@ -1,4 +1,4 @@
-#include "shell_tool.h"
+#include "bash_tool.h"
 #include "factory.h"
 #include "llamatr.h"
 
@@ -14,6 +14,7 @@
 #include <QLoggingCategory>
 #include <QProcess>
 #include <QProcessEnvironment>
+#include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QUuid>
 
@@ -31,7 +32,7 @@ using namespace QtTaskTree;
 
 namespace LlamaCpp::Tools {
 
-Q_LOGGING_CATEGORY(shellToolLog, "llama.cpp.chat.shell", QtWarningMsg)
+Q_LOGGING_CATEGORY(bashToolLog, "llama.cpp.chat.bash", QtWarningMsg)
 
 namespace {
 
@@ -40,20 +41,66 @@ constexpr int kMaxTimeoutMs = 10 * 60 * 1000;
 constexpr int kMaxOutputLines = 2000;
 constexpr int kMaxOutputBytes = 50 * 1024; // 50 KB
 
-struct ShellSpec
+struct BashSpec
 {
     QString program;
     QString executeFlag;
+    QString error; // non-empty when no usable bash was found
 };
 
-ShellSpec shellSpec()
+#if defined(Q_OS_WIN)
+
+/*! Locates the bash shipped with Git for Windows, mirroring how the
+    terminal plugin finds it: next to the git executable, then in the
+    default Program Files installation directories. */
+QString findGitBash()
+{
+    const FilePath git = FilePath::fromUserInput(QStandardPaths::findExecutable("git.exe"));
+    if (git.exists()) {
+        const FilePath gitBash = git.parentDir().parentDir().pathAppended(QStringLiteral("bin/bash.exe"));
+        if (gitBash.exists())
+            return gitBash.toUserOutput();
+    }
+    const QStringList programFiles = {qEnvironmentVariable("ProgramFiles"),
+                                      qEnvironmentVariable("ProgramFiles(x86)")};
+    for (const QString &dir : programFiles) {
+        if (dir.isEmpty())
+            continue;
+        const FilePath gitBash =
+            FilePath::fromString(dir + QStringLiteral("/Git/bin/bash.exe"));
+        if (gitBash.exists())
+            return gitBash.toUserOutput();
+    }
+    return {};
+}
+
+#endif
+
+/*! Resolves a bash executable on all platforms so that commands behave
+    identically for the model: /bin/bash on Unix, Git Bash on Windows.
+    Never uses $SHELL or cmd.exe. */
+BashSpec bashSpec()
 {
 #if defined(Q_OS_WIN)
-    const FilePath cmd = FilePath{}.findCmdExe();
-    return { cmd.toUserOutput(), QStringLiteral("/c") };
+    const FilePath onPath =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("bash.exe"));
+    if (onPath.exists())
+        return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
+    const QString gitBash = findGitBash();
+    if (!gitBash.isEmpty())
+        return { gitBash, QStringLiteral("-c"), {} };
+    return { {}, {},
+             Tr::tr("No bash shell found. Install Git for Windows "
+                    "(https://git-scm.com/download/win) or add a bash to PATH.") };
 #else
-    const QString shell = qEnvironmentVariable("SHELL");
-    return { shell.isEmpty() ? QStringLiteral("/bin/sh") : shell, QStringLiteral("-c") };
+    const FilePath binBash = FilePath::fromString(QStringLiteral("/bin/bash"));
+    if (binBash.exists())
+        return { binBash.toUserOutput(), QStringLiteral("-c"), {} };
+    const FilePath onPath =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("bash"));
+    if (onPath.exists())
+        return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
+    return { QStringLiteral("/bin/sh"), QStringLiteral("-c"), {} };
 #endif
 }
 
@@ -107,7 +154,7 @@ QString writeEnvironmentFile(const QProcessEnvironment &env, QObject *parent)
 QString saveFullOutput(const QString &text)
 {
     const QString path
-        = QDir::tempPath() + QStringLiteral("/llama-shell-")
+        = QDir::tempPath() + QStringLiteral("/llama-bash-")
           + QUuid::createUuid().toString(QUuid::WithoutBraces) + QStringLiteral(".log");
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly))
@@ -182,10 +229,10 @@ TruncatedOutput truncateOutput(const QString &text)
 // main thread, in this order: timeout handler, process done handler,
 // tree done handler. Owns the stub's control server and temp files, which
 // are released when the state is destroyed in the tree done handler.
-class ShellState : public QObject
+class BashState : public QObject
 {
 public:
-    explicit ShellState() = default;
+    explicit BashState() = default;
 
     QString stubPath;
     QString socketName;
@@ -208,24 +255,24 @@ public:
 } // namespace
 
 const bool registered = [] {
-    ToolFactory::instance().registerCreator(ShellTool{}.name(),
-                                            []() { return std::make_unique<ShellTool>(); });
+    ToolFactory::instance().registerCreator(BashTool{}.name(),
+                                            []() { return std::make_unique<BashTool>(); });
     return true;
 }();
 
-QString ShellTool::name() const
+QString BashTool::name() const
 {
-    return QStringLiteral("shell");
+    return QStringLiteral("bash");
 }
 
-QString ShellTool::toolDefinition() const
+QString BashTool::toolDefinition() const
 {
     return R"raw(
     {
         "type": "function",
         "function": {
-            "name": "shell",
-            "description": "Executes a shell command and returns its combined output (stdout and stderr). Use this for terminal operations like git, npm, docker, running builds or tests. Do not use it for reading, writing, editing or searching files - use the dedicated tools for that instead. Output is limited to the last 2000 lines or 50 KB; if it is truncated, the full output is saved to a temporary file and its path is reported. Non-zero exit codes, crashes and timeouts are reported as failures together with the output produced so far.",
+            "name": "bash",
+            "description": "Executes a command in a bash shell and returns its combined output (stdout and stderr). Commands use bash/POSIX syntax on all platforms (Windows uses Git Bash). Use this for terminal operations like git, npm, docker, running builds or tests. Do not use it for reading, writing, editing or searching files - use the dedicated tools for that instead. Output is limited to the last 2000 lines or 50 KB; if it is truncated, the full output is saved to a temporary file and its path is reported. Non-zero exit codes, crashes and timeouts are reported as failures together with the output produced so far.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -249,13 +296,13 @@ QString ShellTool::toolDefinition() const
     })raw";
 }
 
-QString ShellTool::oneLineSummary(const QJsonObject &arguments) const
+QString BashTool::oneLineSummary(const QJsonObject &arguments) const
 {
     return Tr::tr("running %1").arg(arguments.value("command").toString());
 }
 
-void ShellTool::run(const QJsonObject &arguments,
-                    std::function<void(const QString &, bool)> done) const
+void BashTool::run(const QJsonObject &arguments,
+                   std::function<void(const QString &, bool)> done) const
 {
     const QString command = arguments.value("command").toString().trimmed();
     if (command.isEmpty()) {
@@ -282,10 +329,15 @@ void ShellTool::run(const QJsonObject &arguments,
     int timeoutMs = arguments.value("timeout").toInt(kDefaultTimeoutMs);
     timeoutMs = qBound(1, timeoutMs, kMaxTimeoutMs);
 
-    const ShellSpec spec = shellSpec();
+    const BashSpec spec = bashSpec();
+    if (!spec.error.isEmpty()) {
+        done(Tr::tr("Error: %1").arg(spec.error), false);
+        return;
+    }
+
     const QProcessEnvironment env = shellEnvironment();
 
-    auto *state = new ShellState;
+    auto *state = new BashState;
 
     // Run the command through Qt Creator's process stub when available, so
     // the shell (the inferior) can be killed over the control socket and
@@ -295,7 +347,7 @@ void ShellTool::run(const QJsonObject &arguments,
     if (!state->stubPath.isEmpty()) {
         QString socketName;
 #if defined(Q_OS_WIN)
-        socketName = QStringLiteral("llama-shell-%1")
+        socketName = QStringLiteral("llama-bash-%1")
                          .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
 #else
         // Keep the socket in a private 0700 directory, as some systems do
@@ -305,7 +357,7 @@ void ShellTool::run(const QJsonObject &arguments,
         // master directory, which is only initialised by Qt Creator core.
         const Utils::FilePath templatePath =
             Utils::FilePath::fromString(
-                QDir::tempPath() + QStringLiteral("/llama-shell-s-XXXXXX"));
+                QDir::tempPath() + QStringLiteral("/llama-bash-s-XXXXXX"));
         auto dirResult = Utils::TemporaryFilePath::create(templatePath, /* directory = */ true);
         if (dirResult)
             socketName = (*dirResult)->filePath().pathAppended(QStringLiteral("t")).toFSPathString();
@@ -338,7 +390,7 @@ void ShellTool::run(const QJsonObject &arguments,
                                                       });
                                  });
             } else {
-                qCWarning(shellToolLog)
+                qCWarning(bashToolLog)
                     << "Cannot create stub control socket:" << server->errorString();
                 delete server;
             }
@@ -458,10 +510,10 @@ void ShellTool::run(const QJsonObject &arguments,
     tree->start();
 }
 
-QString ShellTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
 {
     const QString command = arguments.value("command").toString();
-    QString md = QStringLiteral("```sh\n%1\n```\n").arg(command);
+    QString md = QStringLiteral("```bash\n%1\n```\n").arg(command);
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty())
         md += Tr::tr("Working directory: %1\n").arg(workdir);

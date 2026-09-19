@@ -22,7 +22,7 @@ add_qtc_test(llamatools_test
     ../tools/mcpclient.cpp
     ../tools/mcptool.cpp
     ../tools/patch.cpp
-    ../tools/shell_tool.cpp
+    ../tools/bash_tool.cpp
     ../tools/task_tool.cpp
     ../tools/tool.cpp
     ../tools/tool_utils.cpp
