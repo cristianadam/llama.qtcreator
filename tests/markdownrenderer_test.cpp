@@ -38,6 +38,7 @@ private slots:
     void thinkingSection();
     void detailsSummaryMarkdown();
     void detailsSummaryInlineHtml();
+    void toolCallCollapsedByDataToolAttribute();
     void collapsedSectionStaysCollapsed();
 };
 
@@ -195,6 +196,45 @@ void MarkdownRendererTest::detailsSummaryInlineHtml()
             textInIconFont = true;
     }
     QVERIFY2(!textInIconFont, "summary text must not inherit the icon font");
+}
+
+void MarkdownRendererTest::toolCallCollapsedByDataToolAttribute()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+
+    // Tool calls are marked with a data-tool attribute on the <details> tag
+    // (no zero-width-space workaround in the summary) and are collapsed by
+    // default; plain details sections stay expanded.
+    const QString text
+        = "<details data-tool=\"true\"><summary>running mkdir -p out</summary>\n\n"
+          "tool body\n</details>\n\n"
+          "<details><summary>Thought Process</summary>\n\nother body\n</details>\n";
+    renderer.feed(text.toUtf8());
+    renderer.finish();
+
+    QTextDocument *doc = renderer.document();
+    bool toolHeaderFound = false;
+    bool toolBodyHidden = false;
+    bool otherBodyVisible = false;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        // The header also carries the expand/collapse icon glyph at the end.
+        if (blk.text().startsWith(QStringLiteral("running mkdir -p out"))) {
+            toolHeaderFound = true;
+            // The stored summary text must be the plain text, without any
+            // zero-width space prefix.
+            QCOMPARE(fmt.property(MarkdownRenderer::DetailsSummaryTextProp).toString(),
+                     QStringLiteral("running mkdir -p out"));
+        }
+        if (blk.text() == QStringLiteral("tool body"))
+            toolBodyHidden = !blk.isVisible();
+        if (blk.text() == QStringLiteral("other body"))
+            otherBodyVisible = blk.isVisible();
+    }
+    QVERIFY2(toolHeaderFound, "tool call header must be present");
+    QVERIFY2(toolBodyHidden, "tool call body must be collapsed by default");
+    QVERIFY2(otherBodyVisible, "plain details body must be expanded by default");
 }
 
 void MarkdownRendererTest::collapsedSectionStaysCollapsed()

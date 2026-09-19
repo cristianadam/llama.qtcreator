@@ -337,11 +337,16 @@ struct CodeBlock {
 // tag and the `</summary>` line); `children` are the block nodes parsed from
 // the section body (the text between the end of `</summary>` (or the opening
 // tag) and the `</details>` line). Both are markdown, stored in the document's
-// block pool, so the summary supports the same block/inline markup as the body.
+// block pool, so the summary supports the same block/inline markup as the
+// body. `attributes` are the (name, value) pairs of the opening
+// `<details ...>` tag in document order (boolean attributes have an empty
+// value), so consumers can react to markup like `<details data-tool>` without
+// lossy workarounds.
 struct DetailsBlock {
   std::pmr::vector<BlockNodeId> summary;
   std::pmr::vector<BlockNodeId> children;
   bool closed = false;  // false when the input ended before </details>
+  std::pmr::vector<std::pair<std::pmr::string, std::pmr::string>> attributes;
 };
 
 struct HtmlBlock {
@@ -1644,6 +1649,49 @@ inline size_t FindInsensitive(std::string_view hay, std::string_view needle) {
     if (StartsWithInsensitive(hay.substr(i, needle.size()), needle)) return i;
   }
   return std::string_view::npos;
+}
+
+// Parse the attributes of an opening HTML tag, e.g.
+// `<details data-tool="true" class='x' hidden>` yields
+// (data-tool, "true"), (class, "x"), (hidden, ""). Pairs are kept in document
+// order; boolean attributes have an empty value. Malformed input (a value
+// without a name, an unterminated quote) simply stops the parse.
+inline std::pmr::vector<std::pair<std::pmr::string, std::pmr::string>>
+ParseTagAttributes(std::string_view tag) {
+  std::pmr::vector<std::pair<std::pmr::string, std::pmr::string>> attrs;
+  auto is_space = [](char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; };
+  size_t pos = 0;
+  // Skip the leading '<' and the tag name.
+  while (pos < tag.size() && !is_space(tag[pos]) && tag[pos] != '>') ++pos;
+  while (pos < tag.size()) {
+    while (pos < tag.size() && is_space(tag[pos])) ++pos;
+    if (pos >= tag.size() || tag[pos] == '>') break;
+    size_t name_start = pos;
+    while (pos < tag.size() && tag[pos] != '=' && tag[pos] != '>'
+           && !is_space(tag[pos]))
+      ++pos;
+    std::string_view name = tag.substr(name_start, pos - name_start);
+    if (name.empty()) break;  // Malformed: no attribute name.
+    std::string_view value;
+    if (pos < tag.size() && tag[pos] == '=') {
+      ++pos;
+      if (pos < tag.size() && (tag[pos] == '"' || tag[pos] == '\'')) {
+        char quote = tag[pos];
+        ++pos;
+        size_t value_start = pos;
+        while (pos < tag.size() && tag[pos] != quote) ++pos;
+        value = tag.substr(value_start, pos - value_start);
+        if (pos < tag.size()) ++pos;  // Skip the closing quote.
+      } else {
+        size_t value_start = pos;
+        while (pos < tag.size() && !is_space(tag[pos]) && tag[pos] != '>')
+          ++pos;
+        value = tag.substr(value_start, pos - value_start);
+      }
+    }
+    attrs.emplace_back(std::pmr::string(name), std::pmr::string(value));
+  }
+  return attrs;
 }
 
 // Count leading spaces (tabs count as 4 spaces to next tab stop)
@@ -6033,6 +6081,13 @@ class BlockParser {
     // Drop the trailing newline of the final line.
     if (!raw.empty() && raw.back() == '\n') raw.pop_back();
 
+    // Attributes of the opening <details ...> tag (up to its first '>').
+    std::pmr::vector<std::pair<std::pmr::string, std::pmr::string>> attributes;
+    size_t details_tag_end = raw.find('>');
+    if (details_tag_end != std::string_view::npos)
+      attributes = detail::ParseTagAttributes(
+          std::string_view(raw.data(), details_tag_end + 1));
+
     // Locate the optional <summary> ... </summary> child.
     std::pmr::string summary_raw;
     size_t content_start = 0;
@@ -6103,7 +6158,7 @@ class BlockParser {
     }
 
     blocks.emplace_back(std::in_place_type<DetailsBlock>, std::move(summary),
-                        std::move(children), closed);
+                        std::move(children), closed, std::move(attributes));
     return true;
   }
 
@@ -7497,7 +7552,23 @@ class HtmlRenderer {
   }
 
   void RenderDetailsBlock(const DetailsBlock& block, std::pmr::string& out) {
-    out += "<details><summary>";
+    out += "<details";
+    for (const auto& [name, value] : block.attributes) {
+      out += ' ';
+      out += name;
+      if (!value.empty()) {
+        out += "=\"";
+        for (char c : value) {
+          // Keep the attribute parseable on the next round trip.
+          if (c == '"') out += "&quot;";
+          else if (c == '<') out += "&lt;";
+          else if (c == '>') out += "&gt;";
+          else out += c;
+        }
+        out += '"';
+      }
+    }
+    out += "><summary>";
     RenderBlockIds(block.summary, out, /*in_tight_list=*/false);
     out += "</summary>";
     RenderBlockIds(block.children, out, /*in_tight_list=*/false);

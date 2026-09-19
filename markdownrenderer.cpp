@@ -729,12 +729,23 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
         secId = ++m_nextDetailsId;
     }
 
-    // Tool calls start with a zero-width space marker; collapse them by default.
-    // Thinking sections and other details use m_expandDetailsByDefault.
     const QString summaryText
         = details.summary.empty() ? Tr::tr("Details")
                                   : summaryPlainText(doc, details.summary);
-    const bool isToolCall = !summaryText.isEmpty() && summaryText[0] == QChar(0x200B);
+    // Tool calls are marked with a data-tool attribute on the <details> tag
+    // (markus keeps the opening tag's attributes); collapse them by default.
+    // Thinking sections and other details use m_expandDetailsByDefault.
+    bool isToolCall = false;
+    for (const auto &attribute : details.attributes) {
+        const QString name = fromStdString(attribute.first);
+        if (name == QLatin1String("data-tool")) {
+            const QString value = fromStdString(attribute.second);
+            if (value.isEmpty() || value == QLatin1String("true")) {
+                isToolCall = true;
+                break;
+            }
+        }
+    }
     
     // Tool calls are collapsed by default; thinking sections respect user setting
     bool visible = m_toggleDetails.contains(secId) 
