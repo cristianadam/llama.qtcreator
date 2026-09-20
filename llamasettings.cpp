@@ -1,6 +1,7 @@
 #include "llamasettings.h"
 #include "llamaconstants.h"
 #include "llamatr.h"
+#include "promptssettingswidget.h"
 #include "tools/factory.h"
 #include "tools/tool.h"
 #include "toolsettingswidget.h"
@@ -16,6 +17,31 @@
 using namespace Utils;
 
 namespace LlamaCpp {
+
+QString defaultTitlePrompt()
+{
+    return Tr::tr("Summarize the title of the conversation in a few words including one emoji. "
+                  "Use the language used in the conversation. Use plain text, no markdown.");
+}
+
+QString defaultFollowUpPrompt()
+{
+    return Tr::tr("Generate up to five follow up questions in the context of the "
+                  "current conversation. The questions are from the user point of view. "
+                  "Only questions, no explanations. Use the language used in the conversation. "
+                  "Return a JSON object with a single key \"follow_ups\" containing an "
+                  "array of plain text question strings, no markdown.");
+}
+
+QStringList defaultLocatorPrompts()
+{
+    return {Tr::tr("Create a summary of {selection}"),
+            Tr::tr("Create a commit message for {selection}"),
+            Tr::tr("Explain the code in {selection}"),
+            Tr::tr("Do spell checking and fix any typos in {selection}"),
+            Tr::tr("Generate test cases for {selection}. Output only code. No explanations"),
+            Tr::tr("Update translation in {selection}. Provide the full translation file as output")};
+}
 
 ToolsSettingsPage::ToolsSettingsPage()
 {
@@ -430,6 +456,28 @@ LlamaSettings::LlamaSettings()
                "model free. Leave empty to use the active chat model."));
     utilityModel.setHistoryCompleter("LlamaCpp.UtilityModel.History");
 
+    titlePrompt.setDisplayName(Tr::tr("Conversation Title Prompt"));
+    titlePrompt.setSettingsKey("TitlePrompt");
+    titlePrompt.setDefaultValue(defaultTitlePrompt());
+    titlePrompt.setToolTip(
+        Tr::tr("Prompt sent to the model to generate a short conversation title "
+               "after the first reply."));
+
+    followUpPrompt.setDisplayName(Tr::tr("Follow-Up Questions Prompt"));
+    followUpPrompt.setSettingsKey("FollowUpPrompt");
+    followUpPrompt.setDefaultValue(defaultFollowUpPrompt());
+    followUpPrompt.setToolTip(
+        Tr::tr("Prompt sent to the model to generate follow-up questions after a "
+               "complete reply."));
+
+    locatorPrompts.setDisplayName(Tr::tr("Locator Prompts"));
+    locatorPrompts.setSettingsKey("LocatorPrompts");
+    locatorPrompts.setDefaultValue(defaultLocatorPrompts());
+    locatorPrompts.setToolTip(
+        Tr::tr("Built-in prompts of the \"ll\" locator. Only the first line of a "
+               "prompt is shown in the menu; the full text is sent to the model. "
+               "\"{selection}\" is replaced with the selected text."));
+
     //
     // Tools
     //
@@ -606,6 +654,9 @@ LlamaSettings::LlamaSettings()
     webSearchBraveApiKey.setEnabler(&enableLlamaCpp);
     webSearchTavilyUrl.setEnabler(&enableLlamaCpp);
     webSearchTavilyApiKey.setEnabler(&enableLlamaCpp);
+    titlePrompt.setEnabler(&enableLlamaCpp);
+    followUpPrompt.setEnabler(&enableLlamaCpp);
+    locatorPrompts.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {
         using namespace Layouting;
@@ -766,5 +817,20 @@ public:
 };
 
 const LlamaCppSettingsPage settingsPage;
+
+class LlamaPromptsPage : public Core::IOptionsPage
+{
+public:
+    LlamaPromptsPage()
+    {
+        setId(Constants::LLAMACPP_PROMPTS_OPTIONS_ID);
+        setDisplayName(Tr::tr("Prompts"));
+        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+        setSettingsProvider([] { return &settings(); });
+        setWidgetCreator([] { return new PromptsSettingsWidget; });
+    }
+};
+
+const LlamaPromptsPage promptsPage;
 
 } // namespace LlamaCpp

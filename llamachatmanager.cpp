@@ -548,11 +548,10 @@ void ChatManager::followUpQuestions(const QString &convId,
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
-    txt["text"] = "Generate up to five follow up questions in the context of the "
-                  "current conversation. The questions are from the user point of view. "
-                  "Only questions, no explanations. Use the language used in the conversation. "
-                  "Return a JSON object with a single key \"follow_ups\" containing an "
-                  "array of plain text question strings, no markdown.";
+    // User-editable prompt ("Prompts" settings page); fall back to the
+    // built-in default if it was cleared.
+    const QString followUpPrompt = settings().followUpPrompt.value().trimmed();
+    txt["text"] = followUpPrompt.isEmpty() ? defaultFollowUpPrompt() : followUpPrompt;
     parts.append(txt);
     QJsonObject prompt;
     prompt["role"] = "user";
@@ -717,8 +716,10 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
-    txt["text"] = "Summarize the title of the conversation in a few words including one emoji. Use "
-                  "the language used in the conversation. Use plain text, no markdown.";
+    // User-editable prompt ("Prompts" settings page); fall back to the
+    // built-in default if it was cleared.
+    const QString titlePrompt = settings().titlePrompt.value().trimmed();
+    txt["text"] = titlePrompt.isEmpty() ? defaultTitlePrompt() : titlePrompt;
     parts.append(txt);
     QJsonObject prompt;
     prompt["role"] = "user";

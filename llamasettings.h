@@ -79,6 +79,13 @@ public:
     Utils::StringListAspect enabledMcpToolsList{this};
     Utils::BoolAspect toolsEnabled{this};
 
+    // Editable prompts (see the "Prompts" settings page)
+    Utils::StringAspect titlePrompt{this};
+    Utils::StringAspect followUpPrompt{this};
+    // "ll" locator prompts: only the first line of a prompt is shown in the
+    // menu, the full text is sent to the model.
+    Utils::StringListAspect locatorPrompts{this};
+
     // Web search (websearch tool)
     Utils::StringAspect webSearchProvider{this};
     Utils::StringAspect webSearchExaUrl{this};
@@ -93,6 +100,12 @@ public:
 };
 
 LlamaSettings &settings();
+
+//! Built-in default prompts, shown on the "Prompts" settings page and used
+//! by the "Reset to Default" button there.
+QString defaultTitlePrompt();
+QString defaultFollowUpPrompt();
+QStringList defaultLocatorPrompts();
 
 class LlamaProjectSettings : public Utils::AspectContainer
 {

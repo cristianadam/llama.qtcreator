@@ -16,6 +16,7 @@
 #include "llamachatmanager.h"
 #include "llamaconstants.h"
 #include "llamalocatorfilter.h"
+#include "llamasettings.h"
 #include "llamatr.h"
 #include "llamatypes.h"
 
@@ -39,19 +40,22 @@ public:
 private:
     void acceptPrompt(const QString &prompt);
 
-    // built‑in prompts – keep them in a list to generate the menu
-    const QList<QString> m_predefined
-        = {Tr::tr("Create a summary of {selection}"),
-           Tr::tr("Create a commit message for {selection}"),
-           Tr::tr("Explain the code in {selection}"),
-           Tr::tr("Do spell checking and fix any typos in {selection}"),
-           Tr::tr("Generate test cases for {selection}. Output only code. No explanations"),
-           Tr::tr(
-               "Update translation in {selection}. Provide the full translation file as output")};
+    // built‑in prompts – keep them in a list to generate the menu.
+    // User‑editable through the "Prompts" settings page.
+    static QStringList builtInPrompts();
+    const QList<QString> m_predefined = builtInPrompts();
 
     QList<QString> m_history;
     static constexpr int MaxHistory = 50;
 };
+
+QStringList LocatorFilter::builtInPrompts()
+{
+    const QStringList fromSettings = settings().locatorPrompts.value();
+    if (!fromSettings.isEmpty())
+        return fromSettings;
+    return defaultLocatorPrompts();
+}
 
 LocatorFilter::LocatorFilter()
 {
@@ -60,7 +64,11 @@ LocatorFilter::LocatorFilter()
     setDescription(Tr::tr("Send the current selection to llama.cpp with a prompt.\n"
                           "Built‑in prompts: %1\n"
                           "You can type any other prompt – they are remembered for next time.")
-                       .arg(m_predefined.join(", ")));
+                       .arg(transform(m_predefined,
+                                      [](const QString &p) {
+                                          return p.section(QLatin1Char('\n'), 0, 0).trimmed();
+                                      })
+                                .join(", ")));
     setDefaultShortcutString("ll");
     setPriority(High);
     setHidden(false);
@@ -81,13 +89,15 @@ LocatorMatcherTasks LocatorFilter::matchers()
 
         auto addEntry = [&](const QString &prompt) {
             LocatorFilterEntry e;
-            e.displayName = prompt;
+            // Only the top line is displayed in the menu; the full prompt is
+            // what gets sent to the model (see the "Prompts" settings page).
+            e.displayName = prompt.section(QLatin1Char('\n'), 0, 0).trimmed();
             e.acceptor = [this, prompt] {
                 acceptPrompt(prompt);
                 return AcceptResult();
             };
 
-            const QRegularExpressionMatch match = regexp.match(prompt);
+            const QRegularExpressionMatch match = regexp.match(e.displayName);
             if (match.hasMatch()) {
                 e.highlightInfo = ILocatorFilter::highlightInfo(match);
                 if (match.capturedStart() == 0)
