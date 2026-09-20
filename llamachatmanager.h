@@ -147,6 +147,13 @@ private:
                          const std::function<void(QJsonObject &payload)> &payloadBuilder,
                          std::function<void(qint64)> onChunk);
 
+    // Fills the payload for auxiliary requests (conversation title, follow‑up
+    // suggestions). Unlike addCommonPayloadParams() it does NOT apply the
+    // user's sampling settings and max_tokens: the token budget is capped at
+    // @p maxTokens and thinking is turned off, so these housekeeping calls
+    // stay short and do not starve real chat generations on the server.
+    void addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens) const;
+
     // internal state
     Storage *m_storage;
     bool m_showSettings{false};

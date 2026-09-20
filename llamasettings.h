@@ -64,6 +64,10 @@ public:
     Utils::IntegerAspect max_tokens{this};
     Utils::StringAspect customJson{this};
     Utils::BoolAspect showTokensPerSecond{this};
+    // Optional (typically smaller) model used for auxiliary requests –
+    // conversation titles and follow‑up suggestions. Empty means: use the
+    // active chat model.
+    Utils::StringAspect utilityModel{this};
     // "default", "off", "low", "medium", "high" or "max" (sent to the
     // server as the OAI "reasoning_effort" field).
     Utils::StringAspect thinkingLevel{this};

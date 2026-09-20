@@ -74,6 +74,32 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
         payload["model"] = model;
 }
 
+// Auxiliary requests (conversation title, follow‑up suggestions) are
+// short housekeeping calls that fire right after every chat completion.
+// Sending them with the full chat settings – especially an uncapped
+// max_tokens and a high reasoning level – makes them occupy the server's
+// slot for a long time and delays the user's next prompt. Keep them cheap:
+// - no user sampling settings (a low temperature is enough here)
+// - a hard max_tokens cap
+// - thinking disabled when the chat template supports it (see the
+//   title generation in llama.cpp's tools/ui, which sends
+//   chat_template_kwargs: {enable_thinking: false})
+void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens) const
+{
+    payload["max_tokens"] = maxTokens;
+    payload["temperature"] = 0.2;
+    payload["top_p"] = 0.9;
+    if (serverSupportsThinking())
+        payload["chat_template_kwargs"] = QJsonObject{{"enable_thinking", false}};
+
+    // An optional dedicated (typically smaller) model for these tasks, cf.
+    // the "task model" in Open WebUI. Empty falls back to the chat model.
+    const QString model =
+        settings().utilityModel.value().isEmpty() ? m_selectedModel : settings().utilityModel.value();
+    if (!model.isEmpty())
+        payload["model"] = model;
+}
+
 // Local tools are enabled when listed in EnabledToolsList. Tools served by
 // the Qt Creator MCP server are disabled by default and only included when
 // the user explicitly enabled them (EnabledMcpToolsList).
@@ -542,7 +568,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     QJsonObject responseFormat;
     responseFormat["type"] = "json_object";
     payload["response_format"] = responseFormat;
-    addCommonPayloadParams(payload, m_selectedModel);
+    addAuxiliaryPayloadParams(payload, /*maxTokens=*/512);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -701,12 +727,12 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     msgArray.append(prompt);
     payload["messages"] = msgArray;
 
-    // Use the same generation settings – but no streaming
+    // Short housekeeping request – capped token budget, no streaming
     payload["stream"] = false;
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
     payload["reasoning_in_content"] = "false";
-    addCommonPayloadParams(payload, m_selectedModel);
+    addAuxiliaryPayloadParams(payload, /*maxTokens=*/64);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

@@ -418,6 +418,18 @@ LlamaSettings::LlamaSettings()
         "Thinking (reasoning) level for thinking-capable models: "
         "\"default\", \"off\", \"low\", \"medium\", \"high\" or \"max\"."));
 
+    utilityModel.setDisplayName(Tr::tr("Utility Model"));
+    utilityModel.setSettingsKey("UtilityModel");
+    utilityModel.setLabelText(Tr::tr("Utility Model:"));
+    utilityModel.setDefaultValue("");
+    utilityModel.setPlaceHolderText(Tr::tr("Default: chat model"));
+    utilityModel.setDisplayStyle(StringAspect::LineEditDisplay);
+    utilityModel.setToolTip(
+        Tr::tr("Model used for auxiliary requests such as conversation titles and "
+               "follow‑up suggestions. Use a small model to keep the main chat "
+               "model free. Leave empty to use the active chat model."));
+    utilityModel.setHistoryCompleter("LlamaCpp.UtilityModel.History");
+
     //
     // Tools
     //
@@ -628,6 +640,7 @@ LlamaSettings::LlamaSettings()
                 chatEndpoint, br,
                 Row {chatApiKey}, br,
                 systemMessage, br,
+                Row {utilityModel}, br,
                 Row {temperature}, br,
                 Row {top_k}, br,
                 Row {top_p}, br,
