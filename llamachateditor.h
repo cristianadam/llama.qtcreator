@@ -8,6 +8,7 @@
 #include "llamasearchtoolbar.h"
 #include "llamatypes.h"
 
+class QComboBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -64,6 +65,7 @@ public slots:
     void onRegenerateRequested(const LlamaCpp::Message &msg);
     void onSiblingChanged(qint64 siblingId);
     void onServerPropsUpdated();
+    void onModelsUpdated();
     void onDeleteMessageRequested(const LlamaCpp::Message &msg);
 
     void startSearch();
@@ -76,6 +78,7 @@ private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
     void updateThinkingButtonLabel();
+    void updateModelCombo();
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
 
@@ -93,6 +96,7 @@ private:
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
+    QComboBox *m_modelCombo{nullptr};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query
     int m_currentResult{0};                // index into m_searchResults

@@ -17,6 +17,7 @@
 #include <QHash>
 #include <QActionGroup>
 #include <QHBoxLayout>
+#include <QComboBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QLocale>
@@ -88,6 +89,12 @@ ChatEditor::ChatEditor()
     // come from the layout spacing rather than per-widget margins.
     statusLayout->setSpacing(
         widget->style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
+
+    // Model selector: lists the models served by the llama.cpp server
+    // (router mode) or the single loaded model as a one-entry combo.
+    m_modelCombo = new QComboBox(m_statusBar);
+    m_modelCombo->setToolTip(Tr::tr("LLM model"));
+    statusLayout->addWidget(m_modelCombo);
     statusLayout->addStretch();
 
     m_speedLabel = new QLabel(m_statusBar);
@@ -140,6 +147,8 @@ ChatEditor::ChatEditor()
     updateThinkingButtonLabel();
     statusLayout->addWidget(m_thinkingButton);
 
+    updateModelCombo();
+
     m_searchToolbar = new SearchToolbar(widget);
 
     connect(m_searchToolbar,
@@ -164,6 +173,10 @@ ChatEditor::ChatEditor()
     });
 
     ChatManager &chatManager = ChatManager::instance();
+    connect(m_modelCombo, qOverload<int>(&QComboBox::activated), this, [this](int idx) {
+        ChatManager::instance().selectModel(m_modelCombo->itemData(idx).toString());
+    });
+    connect(&chatManager, &ChatManager::modelsUpdated, this, &ChatEditor::onModelsUpdated);
     connect(&chatManager, &ChatManager::messageAppended, this, &ChatEditor::onMessageAppended);
     connect(&chatManager,
             &ChatManager::pendingMessageChanged,
@@ -791,6 +804,37 @@ void ChatEditor::updateThinkingButtonLabel()
     m_thinkingButton->setText(QStringLiteral("T: ") + label);
     m_thinkingButton->setToolTip(
         Tr::tr("Thinking level: %1 (applies to new messages)").arg(label));
+}
+
+void ChatEditor::onModelsUpdated()
+{
+    updateModelCombo();
+}
+
+void ChatEditor::updateModelCombo()
+{
+    const QList<ChatManager::ModelEntry> models = ChatManager::instance().models();
+    const QString selected = ChatManager::instance().selectedModel();
+
+    m_modelCombo->blockSignals(true);
+    m_modelCombo->clear();
+    if (models.isEmpty()) {
+        // Model list unavailable: show the current model from the server
+        // props as a single entry.
+        const QString name =
+            FilePath::fromUserInput(ChatManager::instance().serverProps().model_path).fileName();
+        m_modelCombo->addItem(name.isEmpty() ? QStringLiteral("model") : name);
+    } else {
+        for (const auto &m : models) {
+            QString text = m.id;
+            if (!m.status.isEmpty() && m.status != QLatin1String("loaded"))
+                text += QStringLiteral(" (%1)").arg(m.status);
+            m_modelCombo->addItem(text, m.id);
+        }
+    }
+    const int idx = m_modelCombo->findData(selected);
+    m_modelCombo->setCurrentIndex(idx >= 0 ? idx : 0);
+    m_modelCombo->blockSignals(false);
 }
 
 void ChatEditor::onServerPropsUpdated()

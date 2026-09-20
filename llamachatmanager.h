@@ -2,6 +2,7 @@
 
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QTimer>
 #include <QVariantMap>
 
 #include <memory>
@@ -52,6 +53,20 @@ public:
     //! thinking/reasoning control (same heuristics as the llama.cpp web UI).
     bool serverSupportsThinking() const;
 
+    struct ModelEntry
+    {
+        QString id;
+        QString status; // "loaded"/"loading"/"unloaded"/...; empty in single-model mode
+    };
+
+    //! Models reported by the server's /models endpoint.
+    QList<ModelEntry> models() const;
+    QString selectedModel() const;
+    void refreshModels();
+    //! Switches the active model; in router mode this also asks the server
+    //! to load the model when it is not loaded yet.
+    void selectModel(const QString &id);
+
     void generateMessage(const QString &convId,
                          qint64 leafNodeId,
                          std::function<void(qint64)> onChunk);
@@ -98,6 +113,8 @@ public:
                                   std::function<void(qint64)> onChunk);
 
 signals:
+    void modelsUpdated();
+
     // emitted when the active conversation changes – UI can react
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void pendingMessageChanged(const LlamaCpp::Message &msg);
@@ -122,6 +139,7 @@ signals:
 private:
     explicit ChatManager(QObject *parent = nullptr);
     void initServerProps();
+    void updateModelPolling();
 
     QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
 
@@ -135,6 +153,10 @@ private:
 
     QNetworkAccessManager m_network;
     LlamaCppServerProps m_serverProps;
+
+    QList<ModelEntry> m_models;
+    QString m_selectedModel;
+    QTimer *m_modelPollTimer{nullptr}; // polls /models while a model is loading
     QString m_activeConvId;
 
     QHash<QString, Message> m_pendingMessages;

@@ -3,6 +3,7 @@
 #include <QLoggingCategory>
 #include <QNetworkReply>
 #include <QProcess>
+#include <QTimer>
 
 #include <optional>
 
@@ -28,7 +29,7 @@ using namespace Utils;
 
 namespace LlamaCpp {
 
-static void addCommonPayloadParams(QJsonObject &payload)
+static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
 {
     payload["samplers"] = settings().samplers.value();
     payload["temperature"] = settings().temperature.value();
@@ -67,6 +68,10 @@ static void addCommonPayloadParams(QJsonObject &payload)
         payload["reasoning_effort"] = QStringLiteral("none");
     else if (thinkingLevel != QLatin1String("default") && !thinkingLevel.isEmpty())
         payload["reasoning_effort"] = thinkingLevel;
+    // Select the active model; required by router-mode servers, ignored by
+    // single-model ones.
+    if (!model.isEmpty())
+        payload["model"] = model;
 }
 
 // Local tools are enabled when listed in EnabledToolsList. Tools served by
@@ -136,6 +141,7 @@ ChatManager::ChatManager(QObject *parent)
     , m_storage(&Storage::instance())
 {
     initServerProps();
+    refreshModels();
 
     connect(m_storage, &Storage::messageAppended, this, &ChatManager::messageAppended);
     connect(m_storage, &Storage::conversationCreated, [this](const QString &convId) {
@@ -252,6 +258,121 @@ static bool chatTemplateSupportsThinking(const QString &tmpl)
 bool ChatManager::serverSupportsThinking() const
 {
     return chatTemplateSupportsThinking(m_serverProps.chat_template);
+}
+
+QList<ChatManager::ModelEntry> ChatManager::models() const
+{
+    return m_models;
+}
+
+QString ChatManager::selectedModel() const
+{
+    return m_selectedModel;
+}
+
+void ChatManager::refreshModels()
+{
+    QUrl url(settings().chatEndpoint.value() + "/models");
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+
+    QNetworkReply *reply = m_network.get(req);
+    connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            const QJsonArray arr = QJsonDocument::fromJson(reply->readAll())
+                                       .object()
+                                       .value("data")
+                                       .toArray();
+            QList<ModelEntry> entries;
+            for (const auto &v : arr) {
+                const QJsonObject obj = v.toObject();
+                const ModelEntry entry{obj.value("id").toString(),
+                                       obj.value("status").toObject().value("value").toString()};
+                if (!entry.id.isEmpty())
+                    entries.append(entry);
+            }
+            m_models = entries;
+            if (!m_models.isEmpty()) {
+                bool selected = false;
+                for (const auto &m : std::as_const(m_models))
+                    if (m.id == m_selectedModel)
+                        selected = true;
+                if (!selected) {
+                    // Fall back to the loaded model, or the first one if none
+                    // is loaded yet.
+                    m_selectedModel = m_models.first().id;
+                    for (const auto &m : std::as_const(m_models))
+                        if (m.status == QLatin1String("loaded")) {
+                            m_selectedModel = m.id;
+                            break;
+                        }
+                }
+            }
+        } else {
+            qCWarning(llamaChatNetwork) << "Failed to fetch model list:" << reply->errorString();
+        }
+        reply->deleteLater();
+
+        emit modelsUpdated();
+        updateModelPolling();
+    });
+}
+
+void ChatManager::selectModel(const QString &id)
+{
+    if (id.isEmpty() || id == m_selectedModel)
+        return;
+    m_selectedModel = id;
+
+    // Router mode: ask the server to load the model when it is not loaded
+    // yet. The load endpoint returns before loading completes, so the
+    // polling started by updateModelPolling() tracks the progress.
+    for (const auto &m : std::as_const(m_models)) {
+        if (m.id != id || m.status.isEmpty()
+            || m.status == QLatin1String("loaded") || m.status == QLatin1String("loading"))
+            continue;
+        QUrl url(settings().chatEndpoint.value() + "/models/load");
+        QNetworkRequest req(url);
+        req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+        if (!settings().chatApiKey.value().isEmpty())
+            req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+        QJsonObject body;
+        body["model"] = id;
+        QNetworkReply *reply = m_network.post(req, QJsonDocument(body).toJson());
+        connect(reply, &QNetworkReply::finished, [reply]() {
+            if (reply->error() != QNetworkReply::NoError)
+                qCWarning(llamaChatNetwork) << "Failed to load model:" << reply->errorString();
+            reply->deleteLater();
+        });
+        break;
+    }
+
+    emit modelsUpdated();
+    updateModelPolling();
+}
+
+void ChatManager::updateModelPolling()
+{
+    bool anyLoading = false;
+    for (const auto &m : std::as_const(m_models))
+        if (m.status == QLatin1String("loading")) {
+            anyLoading = true;
+            break;
+        }
+
+    if (anyLoading && !m_modelPollTimer) {
+        m_modelPollTimer = new QTimer(this);
+        m_modelPollTimer->setInterval(1000);
+        connect(m_modelPollTimer, &QTimer::timeout, this, [this]() { refreshModels(); });
+    }
+    if (m_modelPollTimer) {
+        if (anyLoading && !m_modelPollTimer->isActive())
+            m_modelPollTimer->start();
+        else if (!anyLoading && m_modelPollTimer->isActive())
+            m_modelPollTimer->stop();
+    }
 }
 
 bool ChatManager::isGenerating(const QString &convId) const
@@ -421,7 +542,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     QJsonObject responseFormat;
     responseFormat["type"] = "json_object";
     payload["response_format"] = responseFormat;
-    addCommonPayloadParams(payload);
+    addCommonPayloadParams(payload, m_selectedModel);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -585,7 +706,7 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
     payload["reasoning_in_content"] = "false";
-    addCommonPayloadParams(payload);
+    addCommonPayloadParams(payload, m_selectedModel);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -784,7 +905,7 @@ void ChatManager::sendChatRequest(const QString &convId,
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
     payload["reasoning_in_content"] = "false";
-    addCommonPayloadParams(payload);
+    addCommonPayloadParams(payload, m_selectedModel);
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
