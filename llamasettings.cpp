@@ -409,6 +409,15 @@ LlamaSettings::LlamaSettings()
     showTokensPerSecond.setDefaultValue(false);
     showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
 
+    // Only exposed through the thinking-level dropdown in the chat status
+    // bar, so no options-page entry is needed.
+    thinkingLevel.setDisplayName(Tr::tr("Thinking Level"));
+    thinkingLevel.setSettingsKey("ThinkingLevel");
+    thinkingLevel.setDefaultValue("default");
+    thinkingLevel.setToolTip(Tr::tr(
+        "Thinking (reasoning) level for thinking-capable models: "
+        "\"default\", \"off\", \"low\", \"medium\", \"high\" or \"max\"."));
+
     //
     // Tools
     //

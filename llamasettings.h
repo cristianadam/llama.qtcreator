@@ -64,6 +64,9 @@ public:
     Utils::IntegerAspect max_tokens{this};
     Utils::StringAspect customJson{this};
     Utils::BoolAspect showTokensPerSecond{this};
+    // "default", "off", "low", "medium", "high" or "max" (sent to the
+    // server as the OAI "reasoning_effort" field).
+    Utils::StringAspect thinkingLevel{this};
 
     Utils::StringListAspect enabledToolsList{this};
     // Tools served by the Qt Creator MCP server are disabled by default

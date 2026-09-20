@@ -132,6 +132,7 @@ struct LlamaCppServerProps
     QString build_info;
     QString model_path;
     int n_ctx = 0;
+    QString chat_template;
 
     struct Modalities
     {

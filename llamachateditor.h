@@ -11,6 +11,7 @@
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QToolButton;
 class QVBoxLayout;
 
 namespace TextEditor {
@@ -74,6 +75,7 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
+    void updateThinkingButtonLabel();
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
 
@@ -90,6 +92,7 @@ private:
     QWidget *m_statusBar{nullptr};
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
+    QToolButton *m_thinkingButton{nullptr};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query
     int m_currentResult{0};                // index into m_searchResults

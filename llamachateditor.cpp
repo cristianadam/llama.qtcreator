@@ -13,10 +13,14 @@
 #include <texteditor/texteditor.h>
 
 #include <QCoreApplication>
+#include <QAction>
+#include <QHash>
+#include <QActionGroup>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QLocale>
+#include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -95,6 +99,46 @@ ChatEditor::ChatEditor()
     m_contextLabel->setVisible(false);
     m_contextLabel->setTextFormat(Qt::PlainText);
     statusLayout->addWidget(m_contextLabel);
+
+    // Thinking-level dropdown (only shown when the model's chat template
+    // supports thinking/reasoning control, see onServerPropsUpdated()).
+    m_thinkingButton = new QToolButton(m_statusBar);
+    m_thinkingButton->setPopupMode(QToolButton::InstantPopup);
+    m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
+    m_thinkingButton->setVisible(false);
+    auto *menu = new QMenu(m_thinkingButton);
+    auto *actionGroup = new QActionGroup(m_thinkingButton);
+    actionGroup->setExclusive(true);
+    const QList<QPair<QString, QString>> levelDisplay{
+        {QStringLiteral("default"), Tr::tr("Default")},
+        {QStringLiteral("off"), Tr::tr("Off")},
+        {QStringLiteral("low"), Tr::tr("Low")},
+        {QStringLiteral("medium"), Tr::tr("Medium")},
+        {QStringLiteral("high"), Tr::tr("High")},
+        {QStringLiteral("max"), Tr::tr("Max")},
+    };
+    const auto applyLevel = [this, menu](const QString &level) {
+        settings().thinkingLevel.setValue(level);
+        settings().writeSettings();
+        const QList<QAction *> actions = menu->actions();
+        for (QAction *a : std::as_const(actions))
+            a->setChecked(a->data().toString() == level);
+        updateThinkingButtonLabel();
+    };
+    for (const auto &[key, display] : levelDisplay) {
+        auto *action = menu->addAction(display);
+        action->setCheckable(true);
+        action->setData(key);
+        action->setChecked(settings().thinkingLevel.value() == key);
+        actionGroup->addAction(action);
+        connect(action,
+                &QAction::triggered,
+                this,
+                [applyLevel, level = key]() { applyLevel(level); });
+    }
+    m_thinkingButton->setMenu(menu);
+    updateThinkingButtonLabel();
+    statusLayout->addWidget(m_thinkingButton);
 
     m_searchToolbar = new SearchToolbar(widget);
 
@@ -731,8 +775,30 @@ void ChatEditor::onSiblingChanged(qint64 siblingId)
     refreshMessages(chat.messages, siblingId);
 }
 
+void ChatEditor::updateThinkingButtonLabel()
+{
+    const QString level = settings().thinkingLevel.value();
+    static const QHash<QString, QString> levelDisplay{
+        {QStringLiteral("default"), Tr::tr("Default")},
+        {QStringLiteral("off"), Tr::tr("Off")},
+        {QStringLiteral("low"), Tr::tr("Low")},
+        {QStringLiteral("medium"), Tr::tr("Medium")},
+        {QStringLiteral("high"), Tr::tr("High")},
+        {QStringLiteral("max"), Tr::tr("Max")},
+    };
+    const QString label =
+        levelDisplay.value(level, levelDisplay.value(QStringLiteral("default")));
+    m_thinkingButton->setText(QStringLiteral("T: ") + label);
+    m_thinkingButton->setToolTip(
+        Tr::tr("Thinking level: %1 (applies to new messages)").arg(label));
+}
+
 void ChatEditor::onServerPropsUpdated()
 {
+    // Show the thinking-level dropdown only for models whose chat template
+    // supports thinking/reasoning control.
+    m_thinkingButton->setVisible(ChatManager::instance().serverSupportsThinking());
+
     if (m_propsWidget) {
         m_propsWidget->deleteLater();
         m_propsWidget = nullptr;

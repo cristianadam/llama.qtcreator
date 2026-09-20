@@ -48,6 +48,10 @@ public:
 
     LlamaCppServerProps serverProps() const;
 
+    //! True if the current model's chat template looks like it supports
+    //! thinking/reasoning control (same heuristics as the llama.cpp web UI).
+    bool serverSupportsThinking() const;
+
     void generateMessage(const QString &convId,
                          qint64 leafNodeId,
                          std::function<void(qint64)> onChunk);

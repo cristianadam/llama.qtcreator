@@ -4,6 +4,8 @@
 #include <QNetworkReply>
 #include <QProcess>
 
+#include <optional>
+
 #include <coreplugin/documentmanager.h>
 
 #include <projectexplorer/project.h>
@@ -56,6 +58,15 @@ static void addCommonPayloadParams(QJsonObject &payload)
     // disabled. The speed label itself is only shown when that setting is on.
     payload["timings_per_token"] = true;
     payload["return_progress"] = true;
+    // Thinking level for reasoning models, sent as the OAI "reasoning_effort"
+    // field (the llama.cpp server maps it onto the chat template kwargs).
+    // "off" maps to "none"; "default" (or empty) omits the field entirely so
+    // the server/model default applies.
+    const QString thinkingLevel = settings().thinkingLevel.value();
+    if (thinkingLevel == QLatin1String("off"))
+        payload["reasoning_effort"] = QStringLiteral("none");
+    else if (thinkingLevel != QLatin1String("default") && !thinkingLevel.isEmpty())
+        payload["reasoning_effort"] = thinkingLevel;
 }
 
 // Local tools are enabled when listed in EnabledToolsList. Tools served by
@@ -176,10 +187,71 @@ void ChatManager::initServerProps()
         QJsonObject mod = obj.value("modalities").toObject();
         m_serverProps.modalities.vision = mod.value("vision").toBool();
         m_serverProps.modalities.audio = mod.value("audio").toBool();
+        m_serverProps.chat_template = obj.value("chat_template").toString();
         reply->deleteLater();
 
         emit serverPropsUpdated();
     });
+}
+
+// Heuristics mirroring the llama.cpp web UI's chat-template thinking detector:
+// look for thinking-control Jinja variables, thinking conditionals and paired
+// thinking tag markers in the model's chat template.
+static bool chatTemplateSupportsThinking(const QString &tmpl)
+{
+    if (tmpl.isEmpty())
+        return false;
+
+    static const QStringList kwargVars{QLatin1String("enable_thinking"),
+                                       QLatin1String("reasoning_effort"),
+                                       QLatin1String("thinking_budget")};
+    for (const QString &kwarg : std::as_const(kwargVars)) {
+        const QRegularExpression re(
+            QStringLiteral("(\\{\\{[^{}]*\\b%1\\b[^{}]*\\}\\}|\\{%[^{}]*\\b%1\\b[^{}]*%\\})")
+                .arg(QRegularExpression::escape(kwarg)),
+            QRegularExpression::CaseInsensitiveOption);
+        if (re.match(tmpl).hasMatch())
+            return true;
+    }
+
+    static const QRegularExpression conditionals[] = {
+        QRegularExpression(QStringLiteral("\\{%-?\\s*if\\s+\\(?\\s*\\w*enable[\\s_]+\\w*(thinking|think|reasoning)"),
+                           QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("\\{%-?\\s*if\\s+\\w*(thinking|reasoning)\\s*(is not|==|!=)"),
+                           QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("\\{%-?\\s*if\\s+not\\s+\\w*enable"),
+                           QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression(QStringLiteral("\\{%-?\\s*if\\s+ns\\.enable_thinking"),
+                           QRegularExpression::CaseInsensitiveOption),
+    };
+    for (const auto &re : conditionals) {
+        if (re.match(tmpl).hasMatch())
+            return true;
+    }
+
+    struct TagPair
+    {
+        QString start;
+        std::optional<QString> end; // self-closing tag when unset
+    };
+    static const TagPair tagPatterns[] = {
+        {QLatin1String("<think"), QStringLiteral("</think")},
+        {QLatin1String("<|channel>thought"), QStringLiteral("<|channel|>")},
+        {QLatin1String("<|think|>"), std::nullopt},
+        {QLatin1String("<seed:think|>"), std::nullopt},
+    };
+    for (const auto &pair : tagPatterns) {
+        if (tmpl.contains(pair.start)
+            && (!pair.end.has_value() || tmpl.contains(*pair.end)))
+            return true;
+    }
+
+    return false;
+}
+
+bool ChatManager::serverSupportsThinking() const
+{
+    return chatTemplateSupportsThinking(m_serverProps.chat_template);
 }
 
 bool ChatManager::isGenerating(const QString &convId) const
