@@ -49,6 +49,33 @@ using namespace Utils;
 
 namespace LlamaCpp {
 
+namespace {
+
+// The thinking levels and their display names, shared by the status bar
+// dropdown menu and the button label.
+const QList<QPair<QString, QString>> &thinkingLevels()
+{
+    static const QList<QPair<QString, QString>> levels{
+        {QStringLiteral("default"), Tr::tr("Default")},
+        {QStringLiteral("off"), Tr::tr("Off")},
+        {QStringLiteral("low"), Tr::tr("Low")},
+        {QStringLiteral("medium"), Tr::tr("Medium")},
+        {QStringLiteral("high"), Tr::tr("High")},
+        {QStringLiteral("max"), Tr::tr("Max")},
+    };
+    return levels;
+}
+
+QString thinkingLevelDisplay(const QString &level)
+{
+    for (const auto &entry : thinkingLevels())
+        if (entry.first == level)
+            return entry.second;
+    return thinkingLevels().front().second;
+}
+
+} // namespace
+
 ChatEditor::ChatEditor()
     : m_document(new TextDocument())
 {
@@ -114,25 +141,10 @@ ChatEditor::ChatEditor()
     m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
     m_thinkingButton->setVisible(false);
     auto *menu = new QMenu(m_thinkingButton);
+    m_thinkingMenu = menu;
     auto *actionGroup = new QActionGroup(m_thinkingButton);
     actionGroup->setExclusive(true);
-    const QList<QPair<QString, QString>> levelDisplay{
-        {QStringLiteral("default"), Tr::tr("Default")},
-        {QStringLiteral("off"), Tr::tr("Off")},
-        {QStringLiteral("low"), Tr::tr("Low")},
-        {QStringLiteral("medium"), Tr::tr("Medium")},
-        {QStringLiteral("high"), Tr::tr("High")},
-        {QStringLiteral("max"), Tr::tr("Max")},
-    };
-    const auto applyLevel = [this, menu](const QString &level) {
-        settings().thinkingLevel.setValue(level);
-        settings().writeSettings();
-        const QList<QAction *> actions = menu->actions();
-        for (QAction *a : std::as_const(actions))
-            a->setChecked(a->data().toString() == level);
-        updateThinkingButtonLabel();
-    };
-    for (const auto &[key, display] : levelDisplay) {
+    for (const auto &[key, display] : thinkingLevels()) {
         auto *action = menu->addAction(display);
         action->setCheckable(true);
         action->setData(key);
@@ -141,10 +153,16 @@ ChatEditor::ChatEditor()
         connect(action,
                 &QAction::triggered,
                 this,
-                [applyLevel, level = key]() { applyLevel(level); });
+                [this, level = key]() {
+                    settings().thinkingLevel.setValue(level);
+                    settings().writeSettings();
+                });
     }
     m_thinkingButton->setMenu(menu);
-    updateThinkingButtonLabel();
+    syncThinkingLevel();
+    // Keep the menu check and the button label in sync when the level
+    // changes elsewhere (another chat editor, the settings, …).
+    settings().thinkingLevel.addOnChanged(this, [this] { syncThinkingLevel(); });
     statusLayout->addWidget(m_thinkingButton);
 
     updateModelCombo();
@@ -788,19 +806,15 @@ void ChatEditor::onSiblingChanged(qint64 siblingId)
     refreshMessages(chat.messages, siblingId);
 }
 
-void ChatEditor::updateThinkingButtonLabel()
+void ChatEditor::syncThinkingLevel()
 {
     const QString level = settings().thinkingLevel.value();
-    static const QHash<QString, QString> levelDisplay{
-        {QStringLiteral("default"), Tr::tr("Default")},
-        {QStringLiteral("off"), Tr::tr("Off")},
-        {QStringLiteral("low"), Tr::tr("Low")},
-        {QStringLiteral("medium"), Tr::tr("Medium")},
-        {QStringLiteral("high"), Tr::tr("High")},
-        {QStringLiteral("max"), Tr::tr("Max")},
-    };
-    const QString label =
-        levelDisplay.value(level, levelDisplay.value(QStringLiteral("default")));
+    const QString label = thinkingLevelDisplay(level);
+    if (m_thinkingMenu) {
+        const QList<QAction *> actions = m_thinkingMenu->actions();
+        for (QAction *a : std::as_const(actions))
+            a->setChecked(a->data().toString() == level);
+    }
     m_thinkingButton->setText(QStringLiteral("T: ") + label);
     m_thinkingButton->setToolTip(
         Tr::tr("Thinking level: %1 (applies to new messages)").arg(label));

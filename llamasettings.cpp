@@ -622,6 +622,7 @@ LlamaSettings::LlamaSettings()
     chatEndpoint.setEnabler(&enableLlamaCpp);
     chatApiKey.setEnabler(&enableLlamaCpp);
     systemMessage.setEnabler(&enableLlamaCpp);
+    utilityModel.setEnabler(&enableLlamaCpp);
     pasteLongTextToFileLen.setEnabler(&enableLlamaCpp);
     samplers.setEnabler(&enableLlamaCpp);
     temperature.setEnabler(&enableLlamaCpp);

@@ -29,6 +29,29 @@ using namespace Utils;
 
 namespace LlamaCpp {
 
+// Returns the thinking‑control kwarg of the chat template
+// ("enable_thinking", "reasoning_effort" or "thinking"), or an empty string
+// when the template does not expose a known one (or does not support
+// thinking at all, see chatTemplateSupportsThinking()).
+static QString chatTemplateThinkingKwarg(const QString &tmpl)
+{
+    if (tmpl.isEmpty())
+        return QString();
+
+    static const QStringList kwargs{QLatin1String("enable_thinking"),
+                                    QLatin1String("reasoning_effort"),
+                                    QLatin1String("thinking")};
+    for (const QString &kwarg : std::as_const(kwargs)) {
+        const QRegularExpression re(
+            QStringLiteral("(\\{\\{[^{}]*\\b%1\\b[^{}]*\\}\\}|\\{%[^{}]*\\b%1\\b[^{}]*%\\})")
+                .arg(QRegularExpression::escape(kwarg)),
+            QRegularExpression::CaseInsensitiveOption);
+        if (re.match(tmpl).hasMatch())
+            return kwarg;
+    }
+    return QString();
+}
+
 static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
 {
     payload["samplers"] = settings().samplers.value();
@@ -62,12 +85,18 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
     // Thinking level for reasoning models, sent as the OAI "reasoning_effort"
     // field (the llama.cpp server maps it onto the chat template kwargs).
     // "off" maps to "none"; "default" (or empty) omits the field entirely so
-    // the server/model default applies.
+    // the server/model default applies. Unknown values are ignored and the
+    // field is not sent for templates without thinking support.
     const QString thinkingLevel = settings().thinkingLevel.value();
-    if (thinkingLevel == QLatin1String("off"))
-        payload["reasoning_effort"] = QStringLiteral("none");
-    else if (thinkingLevel != QLatin1String("default") && !thinkingLevel.isEmpty())
-        payload["reasoning_effort"] = thinkingLevel;
+    static const QStringList knownLevels{QLatin1String("off"),
+                                         QLatin1String("low"),
+                                         QLatin1String("medium"),
+                                         QLatin1String("high"),
+                                         QLatin1String("max")};
+    if (knownLevels.contains(thinkingLevel) && ChatManager::instance().serverSupportsThinking()) {
+        payload["reasoning_effort"] =
+            thinkingLevel == QLatin1String("off") ? QStringLiteral("none") : thinkingLevel;
+    }
     // Select the active model; required by router-mode servers, ignored by
     // single-model ones.
     if (!model.isEmpty())
@@ -89,8 +118,17 @@ void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens)
     payload["max_tokens"] = maxTokens;
     payload["temperature"] = 0.2;
     payload["top_p"] = 0.9;
-    if (serverSupportsThinking())
-        payload["chat_template_kwargs"] = QJsonObject{{"enable_thinking", false}};
+    // Disable thinking in the way the template understands it: boolean
+    // kwargs (Qwen‑style "enable_thinking", DeepSeek‑0528‑style "thinking")
+    // go into chat_template_kwargs, while "reasoning_effort" templates take
+    // the OAI field with the value "none" (cf. the title generation in
+    // llama.cpp's tools/ui, which sends chat_template_kwargs with
+    // enable_thinking: false).
+    const QString thinkingKwarg = chatTemplateThinkingKwarg(m_serverProps.chat_template);
+    if (thinkingKwarg == QLatin1String("reasoning_effort"))
+        payload["reasoning_effort"] = QStringLiteral("none");
+    else if (!thinkingKwarg.isEmpty())
+        payload["chat_template_kwargs"] = QJsonObject{{thinkingKwarg, false}};
 
     // An optional dedicated (typically smaller) model for these tasks, cf.
     // the "task model" in Open WebUI. Empty falls back to the chat model.

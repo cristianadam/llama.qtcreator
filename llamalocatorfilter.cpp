@@ -40,16 +40,16 @@ public:
 private:
     void acceptPrompt(const QString &prompt);
 
-    // built‑in prompts – keep them in a list to generate the menu.
-    // User‑editable through the "Prompts" settings page.
-    static QStringList builtInPrompts();
-    const QList<QString> m_predefined = builtInPrompts();
+    // Built‑in prompts, user‑editable through the "Prompts" settings page.
+    // Read from the settings on every call so that changes made on that page
+    // take effect without a restart.
+    QStringList predefinedPrompts() const;
 
     QList<QString> m_history;
     static constexpr int MaxHistory = 50;
 };
 
-QStringList LocatorFilter::builtInPrompts()
+QStringList LocatorFilter::predefinedPrompts() const
 {
     const QStringList fromSettings = settings().locatorPrompts.value();
     if (!fromSettings.isEmpty())
@@ -64,7 +64,7 @@ LocatorFilter::LocatorFilter()
     setDescription(Tr::tr("Send the current selection to llama.cpp with a prompt.\n"
                           "Built‑in prompts: %1\n"
                           "You can type any other prompt – they are remembered for next time.")
-                       .arg(transform(m_predefined,
+                       .arg(transform(predefinedPrompts(),
                                       [](const QString &p) {
                                           return p.section(QLatin1Char('\n'), 0, 0).trimmed();
                                       })
@@ -109,7 +109,7 @@ LocatorMatcherTasks LocatorFilter::matchers()
             }
         };
 
-        for (const QString &p : m_predefined)
+        for (const QString &p : predefinedPrompts())
             addEntry(p);
         for (const QString &p : m_history)
             addEntry(p);
@@ -144,7 +144,10 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
 
     message.replace("{selection}", QString("\n```%1\n%2\n```\n").arg(language, text));
 
-    Conversation c = ChatManager::instance().createConversation(prompt.left(250));
+    // The conversation is named after the (single‑line) prompt as displayed
+    // in the locator menu, not after the full multi‑line prompt text.
+    Conversation c = ChatManager::instance().createConversation(
+        prompt.section(QLatin1Char('\n'), 0, 0).trimmed().left(250));
     ChatManager::instance().sendMessage(c.id, c.currNode, message, {}, [](qint64 leafId) {});
 
     Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
@@ -152,7 +155,7 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
                                                 c.id.toUtf8(),
                                                 c.id);
 
-    if (!m_predefined.contains(prompt)) {
+    if (!predefinedPrompts().contains(prompt)) {
         m_history.removeAll(prompt);
         m_history.prepend(prompt);
         while (m_history.size() > MaxHistory)

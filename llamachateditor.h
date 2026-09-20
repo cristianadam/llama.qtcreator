@@ -11,6 +11,7 @@
 class QComboBox;
 class QLabel;
 class QLineEdit;
+class QMenu;
 class QPushButton;
 class QToolButton;
 class QVBoxLayout;
@@ -77,7 +78,7 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
-    void updateThinkingButtonLabel();
+    void syncThinkingLevel();
     void updateModelCombo();
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
@@ -96,6 +97,7 @@ private:
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
+    QMenu *m_thinkingMenu{nullptr};
     QComboBox *m_modelCombo{nullptr};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query
