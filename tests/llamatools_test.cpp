@@ -1,6 +1,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHostAddress>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -8,6 +9,8 @@
 #include <QTemporaryDir>
 #include <QTextStream>
 #include <QTimer>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QtTest/QtTest>
 
 #include <coreplugin/documentmanager.h>
@@ -28,6 +31,7 @@
 #include <tools/webfetch_tool.h>
 #include <tools/edit_file_tool.h>
 #include <tools/websearch_tool.h>
+#include <tools/web_utils.h>
 
 namespace LlamaCpp {
 
@@ -177,6 +181,120 @@ public:
     }
 };
 
+// A minimal HTTP/1.1 server for the web_utils round‑trip tests. It answers
+// any request with \a body, except POST requests, where it echoes the
+// request body back (so the tests can verify that posted data arrived).
+class MiniHttpServer : public QTcpServer
+{
+public:
+    MiniHttpServer(const QByteArray &body, const QByteArray &contentType,
+                   QObject *parent = nullptr)
+        : QTcpServer(parent)
+        , m_body(body)
+        , m_contentType(contentType)
+    {}
+
+    bool start(quint16 &port)
+    {
+        if (!listen(QHostAddress::LocalHost, 0))
+            return false;
+        port = serverPort();
+        return true;
+    }
+
+protected:
+    void incomingConnection(qintptr handle) override
+    {
+        auto *socket = new QTcpSocket(this);
+        socket->setSocketDescriptor(handle);
+
+        struct Pending : QObject
+        {
+            explicit Pending(QObject *parent) : QObject(parent) {}
+            QByteArray data;
+        };
+        auto *pending = new Pending(socket);
+
+        QObject::connect(socket,
+                         &QTcpSocket::readyRead,
+                         this,
+                         [this, socket, pending]() {
+                             pending->data.append(socket->readAll());
+                             const int headerEnd = pending->data.indexOf("\r\n\r\n");
+                             if (headerEnd < 0)
+                                 return; // Headers not complete yet.
+
+                             const QByteArray headers = pending->data.left(headerEnd);
+                             const QByteArray request = pending->data.mid(headerEnd + 4);
+
+                             qint64 contentLength = 0;
+                             for (const QByteArray &line : headers.split('\n'))
+                                 if (const QByteArray trimmed = line.trimmed();
+                                      trimmed.toLower().startsWith("content-length:"))
+                                     contentLength = trimmed.mid(15).trimmed().toLongLong();
+                             if (request.size() < contentLength)
+                                 return; // Body not complete yet.
+
+                             const bool isPost = headers.startsWith("POST");
+                             const QByteArray body =
+                                 isPost ? request.left(contentLength) : m_body;
+                             const QByteArray response =
+                                 QStringLiteral("HTTP/1.1 200 OK\r\n"
+                                                "Content-Type: %1\r\n"
+                                                "Content-Length: %2\r\n"
+                                                "Connection: close\r\n"
+                                                "\r\n")
+                                     .arg(isPost ? QStringLiteral("text/plain")
+                                                : QString::fromLatin1(m_contentType),
+                                          QString::number(body.size()))
+                                     .toUtf8()
+                                 + body;
+                             socket->write(response);
+                             socket->disconnectFromHost();
+                         });
+    }
+
+private:
+    QByteArray m_body;
+    QByteArray m_contentType;
+};
+
+struct WebResult
+{
+    QByteArray body;
+    QString contentType;
+    QString error;
+    bool finished = false;
+};
+
+// Launches an httpGet/httpPost call and spins the event loop until its
+// callback fires or waitMs is exceeded.
+WebResult runHttpCall(std::function<void(Tools::HttpResponseCallback)> launch, int waitMs = 10000)
+{
+    WebResult result;
+    launch([&result](const QByteArray &body, const QString &contentType, const QString &error) {
+        result.body = body;
+        result.contentType = contentType;
+        result.error = error;
+        result.finished = true;
+    });
+
+    QEventLoop loop;
+    QTimer poll;
+    poll.setInterval(10);
+    QObject::connect(&poll, &QTimer::timeout, [&] {
+        if (result.finished)
+            loop.quit();
+    });
+    poll.start();
+    QTimer::singleShot(waitMs, &loop, [&] {
+        poll.stop();
+        loop.quit();
+    });
+    loop.exec();
+    return result;
+}
+
 } // namespace
 
 class LlamaToolsTest : public QObject
@@ -261,6 +379,11 @@ private slots:
     void webfetch_htmlToText();
     void webfetch_toolDefinition();
     void webfetch_summaries();
+
+    // WebUtils (task‑tree based HTTP)
+    void webutils_httpGet();
+    void webutils_httpPost();
+    void webutils_httpGetTooLarge();
 
     // WebSearchTool
     void websearch_parseBraveResults();
@@ -2259,6 +2382,74 @@ void LlamaToolsTest::factory_remoteProvider()
     factory.setRemoteToolProvider(nullptr);
     QVERIFY(factory.create("remote_tool_a") == nullptr);
     QVERIFY(!factory.creatorsList().contains("remote_tool_a"));
+}
+
+// WebUtils (task‑tree based HTTP)
+
+void LlamaToolsTest::webutils_httpGet()
+{
+    quint16 port = 0;
+    {
+        MiniHttpServer server(QByteArrayLiteral("hello world"),
+                              QByteArrayLiteral("text/plain; charset=utf-8"));
+        QVERIFY(server.start(port));
+
+        const WebResult result = runHttpCall([&](Tools::HttpResponseCallback callback) {
+            Tools::httpGet(QStringLiteral("http://127.0.0.1:%1/greet").arg(port),
+                           10,
+                           1024 * 1024,
+                           std::move(callback));
+        });
+        QVERIFY2(result.finished, "httpGet callback was not invoked");
+        QCOMPARE(result.error, QString());
+        QCOMPARE(result.body, QByteArrayLiteral("hello world"));
+        QCOMPARE(result.contentType, QString("text/plain; charset=utf-8"));
+    }
+}
+
+void LlamaToolsTest::webutils_httpPost()
+{
+    quint16 port = 0;
+    {
+        MiniHttpServer server({}, {}); // Echoes the POST body.
+        QVERIFY(server.start(port));
+
+        QList<QPair<QByteArray, QByteArray>> headers;
+        headers.append({QByteArrayLiteral("X-Test"), QByteArrayLiteral("1")});
+
+        const WebResult result = runHttpCall([&](Tools::HttpResponseCallback callback) {
+            Tools::httpPost(QStringLiteral("http://127.0.0.1:%1/echo").arg(port),
+                            QByteArrayLiteral("the-payload"),
+                            headers,
+                            10,
+                            1024 * 1024,
+                            std::move(callback));
+        });
+        QVERIFY2(result.finished, "httpPost callback was not invoked");
+        QCOMPARE(result.error, QString());
+        QCOMPARE(result.body, QByteArrayLiteral("the-payload"));
+        QCOMPARE(result.contentType, QString("text/plain"));
+    }
+}
+
+void LlamaToolsTest::webutils_httpGetTooLarge()
+{
+    quint16 port = 0;
+    {
+        const QByteArray largeBody(256 * 1024, 'x');
+        MiniHttpServer server(largeBody, QByteArrayLiteral("application/octet-stream"));
+        QVERIFY(server.start(port));
+
+        const WebResult result = runHttpCall([&](Tools::HttpResponseCallback callback) {
+            Tools::httpGet(QStringLiteral("http://127.0.0.1:%1/large").arg(port),
+                           10,
+                           64 * 1024,
+                           std::move(callback));
+        });
+        QVERIFY2(result.finished, "httpGet callback was not invoked");
+        QVERIFY(result.error.contains(QLatin1String("size limit")));
+        QVERIFY(result.body.isEmpty());
+    }
 }
 
 } // namespace LlamaCpp
