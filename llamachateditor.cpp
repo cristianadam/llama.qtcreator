@@ -27,6 +27,7 @@
 #include <QRegularExpression>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QSignalBlocker>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -133,6 +134,24 @@ ChatEditor::ChatEditor()
     m_contextLabel->setVisible(false);
     m_contextLabel->setTextFormat(Qt::PlainText);
     statusLayout->addWidget(m_contextLabel);
+
+    // "Follow up" toggle: when checked, follow-up question suggestions are
+    // generated after each complete assistant reply.
+    m_followUpButton = new QToolButton(m_statusBar);
+    m_followUpButton->setCheckable(true);
+    m_followUpButton->setText(Tr::tr("Follow up"));
+    m_followUpButton->setToolTip(Tr::tr("Generate follow-up questions after each reply"));
+    m_followUpButton->setChecked(settings().followUpEnabled.value());
+    connect(m_followUpButton, &QToolButton::toggled, this, [this](bool checked) {
+        settings().followUpEnabled.setValue(checked);
+        settings().writeSettings();
+    });
+    // Keep the button state in sync when the setting changes elsewhere.
+    settings().followUpEnabled.addOnChanged(this, [this] {
+        QSignalBlocker blocker(m_followUpButton);
+        m_followUpButton->setChecked(settings().followUpEnabled.value());
+    });
+    statusLayout->addWidget(m_followUpButton);
 
     // Thinking-level dropdown (only shown when the model's chat template
     // supports thinking/reasoning control, see onServerPropsUpdated()).

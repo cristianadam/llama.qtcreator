@@ -573,6 +573,11 @@ void ChatManager::followUpQuestions(const QString &convId,
                                     qint64 leafNodeId,
                                     std::function<void(const QStringList &)> onSuccess)
 {
+    // The "Follow up" status bar button can be used to switch the
+    // suggestions off without having to change the settings page.
+    if (!settings().followUpEnabled.value())
+        return;
+
     auto allMsgs = m_storage->getMessages(convId);
     auto leafMsgs = m_storage->filterByLeafNodeId(allMsgs, leafNodeId, false);
 

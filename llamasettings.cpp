@@ -470,6 +470,15 @@ LlamaSettings::LlamaSettings()
         Tr::tr("Prompt sent to the model to generate follow-up questions after a "
                "complete reply."));
 
+    // Only exposed through the "Follow up" toggle button in the chat status
+    // bar, so no options-page entry is needed.
+    followUpEnabled.setDisplayName(Tr::tr("Follow-Up Questions"));
+    followUpEnabled.setSettingsKey("FollowUpEnabled");
+    followUpEnabled.setDefaultValue(true);
+    followUpEnabled.setToolTip(
+        Tr::tr("When enabled, follow-up question suggestions are generated after "
+               "each complete assistant reply."));
+
     locatorPrompts.setDisplayName(Tr::tr("Locator Prompts"));
     locatorPrompts.setSettingsKey("LocatorPrompts");
     locatorPrompts.setDefaultValue(defaultLocatorPrompts());

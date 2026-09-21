@@ -82,6 +82,9 @@ public:
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};
     Utils::StringAspect followUpPrompt{this};
+    // Toggled by the "Follow up" button in the chat status bar: when on,
+    // follow-up question suggestions are generated after each complete reply.
+    Utils::BoolAspect followUpEnabled{this};
     // "ll" locator prompts: only the first line of a prompt is shown in the
     // menu, the full text is sent to the model.
     Utils::StringListAspect locatorPrompts{this};

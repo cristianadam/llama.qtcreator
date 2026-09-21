@@ -98,6 +98,7 @@ private:
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
     QMenu *m_thinkingMenu{nullptr};
+    QToolButton *m_followUpButton{nullptr};
     QComboBox *m_modelCombo{nullptr};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query
