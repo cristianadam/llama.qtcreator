@@ -20,6 +20,8 @@ const char kSubagentGeneral[] = "general";
 // picked up when the server is actually connected.
 const QStringList kExploreTools = {
     "read_file",
+    "search",
+    "find",
     "fs_list_directory",
     "search_file",
     "search_directory",
@@ -34,12 +36,14 @@ QString taskSystemPromptFor(const QString &type)
     if (type == QLatin1String(kSubagentExplore))
         return Tr::tr("You are the \"explore\" subagent, running in a separate conversation "
                       "that is isolated from the main one. Explore the codebase and answer "
-                      "the task with the read‑only tools available to you. Do not modify "
-                      "any file and do not run commands that change anything. Work "
-                      "autonomously; you cannot ask the user questions. When you are done, "
-                      "reply with a single concise report containing the key findings, "
-                      "relevant file paths with line numbers, and everything the main "
-                      "conversation needs to continue the work.");
+                      "the task with the read‑only tools available to you: use \"find\" to "
+                      "locate files by name, \"search\" to search file contents, and "
+                      "\"read_file\" to read the relevant sections. Do not modify any file "
+                      "and do not run commands that change anything. Work autonomously; you "
+                      "cannot ask the user questions. When you are done, reply with a single "
+                      "concise report containing the key findings, relevant file paths with "
+                      "line numbers, and everything the main conversation needs to continue "
+                      "the work.");
     return Tr::tr("You are the \"general\" subagent, running in a separate conversation "
                   "that is isolated from the main one. Work autonomously with the available "
                   "tools until the task is complete; you cannot ask the user questions. "

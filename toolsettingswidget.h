@@ -5,6 +5,8 @@
 #include <utils/treemodel.h>
 
 #include <QCheckBox>
+#include <QLabel>
+#include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <QTextEdit>
 #include <QTreeView>
@@ -28,6 +30,7 @@ private:
     void updateModelFromEnabledTools();
     void showToolDefinition(const QModelIndex &current, const QModelIndex & /*previous*/);
     void syncGroupStates();
+    void updateRipgrepStatus();
 
     // Filter model, mirroring the one used by the MIME types settings page.
     // A tool row matches when its name, its full description or the name of its
@@ -47,6 +50,8 @@ private:
     Utils::TreeModel<> *m_model = nullptr;
     ToolsFilterModel *m_filterModel = nullptr;
     QTextEdit *m_detailEdit = nullptr;
+    QLabel *m_ripgrepLabel = nullptr;
+    QPushButton *m_ripgrepButton = nullptr;
     bool m_synchronizing = false; // re-entrancy guard for check-box propagation
 
     // Top-level group row (e.g. "Internal", "Qt Creator MCP"). Checkable:

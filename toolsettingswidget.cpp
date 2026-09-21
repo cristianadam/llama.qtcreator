@@ -3,10 +3,15 @@
 #include "llamatr.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
+#include "tools/ripgrep.h"
+
+#include <QtTaskTree/QTaskTree>
+#include <QtTaskTree/qtasktreerunner.h>
 
 #include <utils/fancylineedit.h>
 #include <utils/qtcassert.h>
 
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -73,9 +78,38 @@ ToolsSettingsWidget::ToolsSettingsWidget()
 
     fillModel();
 
+    // The search and find tools run ripgrep, which is not always installed.
+    // Offer to download a pinned release, the way the terminal plugin does for
+    // its console host.
+    m_ripgrepLabel = new QLabel(this);
+    m_ripgrepButton = new QPushButton(
+        Tr::tr("Download ripgrep %1").arg(Tools::Ripgrep::version()), this);
+    m_ripgrepButton->setVisible(false);
+    const auto downloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
+    connect(m_ripgrepButton,
+            &QPushButton::clicked,
+            this,
+            [this, downloader] {
+                if (downloader->isRunning())
+                    return;
+                m_ripgrepButton->setEnabled(false);
+                downloader->start({Tools::Ripgrep::downloadRecipe()}, {},
+                                  [this, downloader](QtTaskTree::DoneWith) {
+                                      m_ripgrepButton->setEnabled(true);
+                                      updateRipgrepStatus();
+                                  });
+            });
+    auto *ripgrepRow = new QWidget(this);
+    auto *ripgrepLayout = new QHBoxLayout(ripgrepRow);
+    ripgrepLayout->setContentsMargins(0, 0, 0, 0);
+    ripgrepLayout->addWidget(m_ripgrepLabel);
+    ripgrepLayout->addStretch();
+    ripgrepLayout->addWidget(m_ripgrepButton);
+    updateRipgrepStatus();
+
     // layout
     using namespace Layouting;
-    Column{filterLineEdit, m_view, m_detailEdit}.attachTo(this);
+    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow}.attachTo(this);
 
     connect(filterLineEdit,
             &FancyLineEdit::textChanged,
@@ -184,6 +218,19 @@ void ToolsSettingsWidget::fillModel()
     // Initialise the check-states from the stored settings
     updateModelFromEnabledTools();
     m_view->expandAll();
+}
+
+void ToolsSettingsWidget::updateRipgrepStatus()
+{
+    const Utils::FilePath rg = Tools::Ripgrep::resolvedPath();
+    if (rg.isEmpty()) {
+        m_ripgrepLabel->setText(Tr::tr("The search and find tools use ripgrep, which is not "
+                                       "installed on this system."));
+        m_ripgrepButton->setVisible(true);
+    } else {
+        m_ripgrepLabel->setText(Tr::tr("ripgrep: %1").arg(rg.toUserOutput()));
+        m_ripgrepButton->setVisible(false);
+    }
 }
 
 void ToolsSettingsWidget::showToolDefinition(const QModelIndex &current,

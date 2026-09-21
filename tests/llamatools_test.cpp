@@ -1,4 +1,6 @@
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -11,12 +13,17 @@
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
 
+#include <utils/filepath.h>
+
 #include <llamathinkingsectionparser.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/mcptool.h>
 #include <tools/patch.h>
 #include <tools/bash_tool.h>
+#include <tools/find_tool.h>
+#include <tools/ripgrep.h>
+#include <tools/search_tool.h>
 #include <tools/task_tool.h>
 #include <tools/webfetch_tool.h>
 #include <tools/edit_file_tool.h>
@@ -92,14 +99,14 @@ std::pair<QString, bool> runTool(const QJsonObject &args)
     return {output, ok};
 }
 
-// Runs the (asynchronous) bash tool and spins the event loop until its
-// callback fires or waitMs is exceeded.
-std::pair<QString, bool> runBashTool(const QJsonObject &args, int waitMs = 30000)
+// Runs an asynchronous (process‑backed) tool such as bash / search / find
+// and spins the event loop until its callback fires or waitMs is exceeded.
+template <typename ToolT>
+std::pair<QString, bool> runAsyncTool(ToolT &tool, const QJsonObject &args, int waitMs = 30000)
 {
     QString output;
     bool ok = false;
     bool finished = false;
-    Tools::BashTool tool;
     tool.run(args,
              [&output, &ok, &finished](const QString &out, bool success) {
                  output = out;
@@ -117,6 +124,20 @@ std::pair<QString, bool> runBashTool(const QJsonObject &args, int waitMs = 30000
                                             loop.quit(); });
     loop.exec();
     return {output, ok};
+}
+
+// Runs the (asynchronous) bash tool, spinning the event loop until done.
+std::pair<QString, bool> runBashTool(const QJsonObject &args, int waitMs = 30000)
+{
+    Tools::BashTool tool;
+    return runAsyncTool(tool, args, waitMs);
+}
+
+// The search / find tools spawn ripgrep; the process‑based test cases only
+// make sense when a ripgrep (system or downloaded) is available.
+bool ripgrepAvailable()
+{
+    return !Tools::Ripgrep::resolvedPath().isEmpty();
 }
 
 // A stand‑in for a tool served by the Qt Creator MCP server.
@@ -270,6 +291,30 @@ private slots:
     void task_systemPrompt();
     void task_finalReport();
 
+    // SearchTool
+    void search_toolDefinition();
+    void search_run();
+    void search_noMatches();
+    void search_limit();
+    void search_context();
+    void search_ignoresGitDir();
+    void search_findsDotfiles();
+    void search_badPath();
+    void search_summaries();
+
+    // FindTool
+    void find_toolDefinition();
+    void find_run();
+    void find_noMatches();
+    void find_limit();
+    void find_dotfiles();
+    void find_badPath();
+    void find_summaries();
+
+    // Ripgrep (download module)
+    void ripgrep_metadata();
+    void ripgrep_resolvedPath();
+
     // McpTool (Qt Creator MCP server tools)
     void mcptool_toolDefinition();
     void mcptool_oneLineSummary();
@@ -280,6 +325,7 @@ private slots:
     void factory_applyPatch();
     void factory_webTools();
     void factory_task();
+    void factory_searchFind();
     void factory_remoteProvider();
 };
 
@@ -1666,6 +1712,417 @@ void LlamaToolsTest::task_finalReport()
 }
 
 // ============================================================================
+// SearchTool
+// ============================================================================
+
+void LlamaToolsTest::search_toolDefinition()
+{
+    Tools::SearchTool tool;
+    QCOMPARE(tool.name(), QString("search"));
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(tool.toolDefinition().toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QVERIFY(doc.isObject());
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("search"));
+    QVERIFY(!function["description"].toString().isEmpty());
+
+    const QJsonObject parameters = function["parameters"].toObject();
+    QCOMPARE(parameters["type"].toString(), QString("object"));
+    QVERIFY(parameters["strict"].toBool());
+    const QJsonObject properties = parameters["properties"].toObject();
+    for (const QString &name : {QStringLiteral("pattern"), QStringLiteral("path"),
+                                 QStringLiteral("glob"), QStringLiteral("ignore_case"),
+                                 QStringLiteral("literal"), QStringLiteral("context"),
+                                 QStringLiteral("limit")})
+        QVERIFY2(properties.contains(name), qPrintable(name));
+    const QJsonArray required = parameters["required"].toArray();
+    QCOMPARE(required.size(), 1);
+    QCOMPARE(required.first().toString(), QString("pattern"));
+}
+
+void LlamaToolsTest::search_run()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_run");
+    QDir().mkpath(root + QStringLiteral("/sub"));
+    writeTextFile(root + QStringLiteral("/alpha.cpp"), "int alpha() { return 1; }\n");
+    writeTextFile(root + QStringLiteral("/sub/beta.cpp"), "int beta() { return 2; }\n");
+    writeTextFile(root + QStringLiteral("/notes.txt"), "alpha beta gamma\n");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("alpha");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    // Matches carry a path relative to the search root, a line number, the text.
+    QVERIFY(output.contains(QStringLiteral("alpha.cpp:1: int alpha() { return 1; }")));
+    QVERIFY(output.contains(QStringLiteral("notes.txt:1: alpha beta gamma")));
+    // beta.cpp holds no "alpha".
+    QVERIFY(!output.contains("beta.cpp"));
+}
+
+void LlamaToolsTest::search_noMatches()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_none");
+    QDir().mkpath(root);
+    writeTextFile(root + QStringLiteral("/a.txt"), "hello\n");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("zorgy_no_such_match");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY(ok);
+    QCOMPARE(output, QString("No matches found."));
+}
+
+void LlamaToolsTest::search_limit()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_limit");
+    QDir().mkpath(root);
+    QString content;
+    for (int i = 1; i <= 30; ++i)
+        content += QStringLiteral("needle line %1\n").arg(i);
+    writeTextFile(root + QStringLiteral("/many.txt"), content);
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("needle");
+    args["path"] = root;
+    args["limit"] = 5;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(output.count("needle line "), 5);
+    QVERIFY(output.contains("5 matches limit reached. Use limit=10"));
+}
+
+void LlamaToolsTest::search_context()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_ctx");
+    QDir().mkpath(root);
+    writeTextFile(root + QStringLiteral("/ctx.txt"), "line1\nMATCH\nline3\nline4\n");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("MATCH");
+    args["path"] = root;
+    args["context"] = 1;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(output.contains(QStringLiteral("ctx.txt-1- line1")));
+    QVERIFY(output.contains(QStringLiteral("ctx.txt:2: MATCH")));
+    QVERIFY(output.contains(QStringLiteral("ctx.txt-3- line3")));
+    // line4 lies outside the context window.
+    QVERIFY(!output.contains("line4"));
+}
+
+void LlamaToolsTest::search_ignoresGitDir()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_git");
+    QDir().mkpath(root + QStringLiteral("/.git"));
+    // ".git" holds a line with the pattern; it must never be reported.
+    writeTextFile(root + QStringLiteral("/.git/config"), "[core]\n\tno_match_needle = 1\n");
+    writeTextFile(root + QStringLiteral("/a.cpp"), "needle in code\n");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("needle");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(output.contains(QStringLiteral("a.cpp:1: needle in code")));
+    // The .git directory is never searched.
+    QVERIFY(!output.contains(".git/"));
+}
+
+void LlamaToolsTest::search_findsDotfiles()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/search_dot");
+    QDir().mkpath(root + QStringLiteral("/.github/workflows"));
+    writeTextFile(root + QStringLiteral("/.github/workflows/ci.yml"), "jobs: build-needle\n");
+    writeTextFile(root + QStringLiteral("/a.cpp"), "other\n");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("build-needle");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    // Hidden files (e.g. GitHub workflows) are still searched.
+    QVERIFY(output.contains(QStringLiteral(".github/workflows/ci.yml:1: jobs: build-needle")));
+}
+
+void LlamaToolsTest::search_badPath()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    Tools::SearchTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("x");
+    args["path"] = QStringLiteral("/nonexistent/llama-search-dir");
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("path does not exist"));
+}
+
+void LlamaToolsTest::search_summaries()
+{
+    Tools::SearchTool tool;
+    QCOMPARE(tool.name(), QString("search"));
+
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("foo bar");
+    QCOMPARE(tool.oneLineSummary(args), QString("search for `foo bar`"));
+
+    // Backticks in the pattern need a double‑backtick code span.
+    args["pattern"] = QStringLiteral("a`b");
+    QCOMPARE(tool.oneLineSummary(args), QString("search for ``a`b``"));
+
+    // No pattern yet.
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString());
+
+    // Streaming: the pattern is summarised only once its closing quote arrives.
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"pattern\": \"abc\"}")),
+             QString("search for `abc`"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"pattern\": \"abc")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"x\"}")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+
+    // detailsMarkdown shows the pattern, the glob and the raw result.
+    QJsonObject mdArgs;
+    mdArgs["pattern"] = QStringLiteral("alpha");
+    mdArgs["glob"] = QStringLiteral("*.cpp");
+    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("alpha.cpp:1: x"));
+    QVERIFY(md.contains("Pattern: `alpha`"));
+    QVERIFY(md.contains("Glob: `*.cpp`"));
+    QVERIFY(md.contains("alpha.cpp:1: x"));
+}
+
+// ============================================================================
+// FindTool
+// ============================================================================
+
+void LlamaToolsTest::find_toolDefinition()
+{
+    Tools::FindTool tool;
+    QCOMPARE(tool.name(), QString("find"));
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(tool.toolDefinition().toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QVERIFY(doc.isObject());
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("find"));
+    QVERIFY(!function["description"].toString().isEmpty());
+
+    const QJsonObject parameters = function["parameters"].toObject();
+    QCOMPARE(parameters["type"].toString(), QString("object"));
+    QVERIFY(parameters["strict"].toBool());
+    const QJsonObject properties = parameters["properties"].toObject();
+    for (const QString &name : {QStringLiteral("pattern"), QStringLiteral("path"),
+                                 QStringLiteral("limit")})
+        QVERIFY2(properties.contains(name), qPrintable(name));
+    const QJsonArray required = parameters["required"].toArray();
+    QCOMPARE(required.size(), 1);
+    QCOMPARE(required.first().toString(), QString("pattern"));
+}
+
+void LlamaToolsTest::find_run()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/find_run");
+    QDir().mkpath(root + QStringLiteral("/sub"));
+    writeTextFile(root + QStringLiteral("/a.cpp"), "a\n");
+    writeTextFile(root + QStringLiteral("/sub/b.cpp"), "b\n");
+    writeTextFile(root + QStringLiteral("/c.h"), "c\n");
+
+    Tools::FindTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("*.cpp");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    // Paths are relative to the search root; *.cpp matches nested files too.
+    QVERIFY(output.contains("a.cpp"));
+    QVERIFY(output.contains("sub/b.cpp"));
+    QVERIFY(!output.contains("c.h"));
+}
+
+void LlamaToolsTest::find_noMatches()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/find_none");
+    QDir().mkpath(root);
+    writeTextFile(root + QStringLiteral("/a.txt"), "a\n");
+
+    Tools::FindTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("zzz_no_such_*");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY(ok);
+    QCOMPARE(output, QString("No files found."));
+}
+
+void LlamaToolsTest::find_limit()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/find_limit");
+    QDir().mkpath(root);
+    for (int i = 1; i <= 30; ++i)
+        writeTextFile(root + QStringLiteral("/file_%1.txt").arg(i), QStringLiteral("x\n"));
+
+    Tools::FindTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("*.txt");
+    args["path"] = root;
+    args["limit"] = 5;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(output.count("file_"), 5);
+    QVERIFY(output.contains("5 results limit reached. Use limit=10"));
+}
+
+void LlamaToolsTest::find_dotfiles()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    const QString root = gTempDir->path() + QStringLiteral("/find_dot");
+    QDir().mkpath(root + QStringLiteral("/.github/workflows"));
+    QDir().mkpath(root + QStringLiteral("/.git"));
+    writeTextFile(root + QStringLiteral("/.github/workflows/ci.yml"), "jobs: b\n");
+    writeTextFile(root + QStringLiteral("/.git/config"), "x\n");
+    writeTextFile(root + QStringLiteral("/config"), "x\n");
+
+    Tools::FindTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("*");
+    args["path"] = root;
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY2(ok, qPrintable(output));
+    // Dotfiles are listed ... but never the .git directory.
+    QVERIFY(output.contains(".github/workflows/ci.yml"));
+    QVERIFY(output.contains("config"));
+    QVERIFY(!output.contains(".git/")); // "\.git" alone would also match ".github"
+    QVERIFY(!output.contains(".git/config"));
+}
+
+void LlamaToolsTest::find_badPath()
+{
+    if (!ripgrepAvailable())
+        QSKIP("ripgrep is not available in this environment");
+
+    Tools::FindTool tool;
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("*.txt");
+    args["path"] = QStringLiteral("/nonexistent/llama-find-dir");
+
+    const auto [output, ok] = runAsyncTool(tool, args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("not a directory"));
+}
+
+void LlamaToolsTest::find_summaries()
+{
+    Tools::FindTool tool;
+    QCOMPARE(tool.name(), QString("find"));
+
+    QJsonObject args;
+    args["pattern"] = QStringLiteral("*.cpp");
+    QCOMPARE(tool.oneLineSummary(args), QString("find files `*.cpp`"));
+
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString());
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"pattern\": \"*.ts\"}")),
+             QString("find files `*.ts`"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"pattern\": \"*.ts")), QString());
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+
+    QJsonObject mdArgs;
+    mdArgs["pattern"] = QStringLiteral("*.json");
+    mdArgs["path"] = QStringLiteral("/some/dir");
+    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("x.json"));
+    QVERIFY(md.contains("Pattern: `*.json`"));
+    QVERIFY(md.contains("Path: /some/dir"));
+    QVERIFY(md.contains("x.json"));
+}
+
+// ============================================================================
+// Ripgrep (download module)
+// ============================================================================
+
+void LlamaToolsTest::ripgrep_metadata()
+{
+    QCOMPARE(Tools::Ripgrep::version(), QString("15.2.0"));
+    QCOMPARE(Tools::Ripgrep::dialogTitle(), QString("Download ripgrep"));
+    // This build targets a supported desktop platform.
+    QVERIFY(Tools::Ripgrep::isSupportedPlatform());
+    // The downloaded copy lives under a per‑version user resource directory.
+    const Utils::FilePath dir = Tools::Ripgrep::downloadDirectory();
+    const QString dirString = dir.toUserOutput();
+    QVERIFY2(dirString.endsWith(Tools::Ripgrep::version()), qPrintable(dirString));
+}
+
+void LlamaToolsTest::ripgrep_resolvedPath()
+{
+    const Utils::FilePath resolved = Tools::Ripgrep::resolvedPath();
+    if (resolved.isEmpty()) {
+        // Neither a system nor a downloaded copy exists.
+        QVERIFY(!Tools::Ripgrep::isDownloaded());
+        // The search tool then points at the settings‑page download.
+        Tools::SearchTool tool;
+        QJsonObject args;
+        args["pattern"] = QStringLiteral("x");
+        const auto [output, ok] = runAsyncTool(tool, args);
+        QVERIFY(!ok);
+        QVERIFY(output.contains("tools settings page"));
+    } else {
+        QVERIFY(resolved.isFile());
+    }
+}
+
+// ============================================================================
 // Factory registration
 // ============================================================================
 
@@ -1693,6 +2150,16 @@ void LlamaToolsTest::factory_task()
     auto tool = factory.create("task");
     QVERIFY(tool != nullptr);
     QCOMPARE(tool->name(), QString("task"));
+}
+
+void LlamaToolsTest::factory_searchFind()
+{
+    auto &factory = ToolFactory::instance();
+    for (const QString &name : {QStringLiteral("search"), QStringLiteral("find")}) {
+        auto tool = factory.create(name);
+        QVERIFY2(tool != nullptr, qPrintable(name));
+        QCOMPARE(tool->name(), name);
+    }
 }
 
 // ============================================================================

@@ -31,6 +31,9 @@ add_qtc_test(llamatools_test
     ../tools/web_utils.cpp
     ../tools/webfetch_tool.cpp
     ../tools/websearch_tool.cpp
+    ../tools/search_tool.cpp
+    ../tools/find_tool.cpp
+    ../tools/ripgrep.cpp
 )
 
 # The AUTOMOC scanner (dep‑file mode) chokes on llamatools_test.cpp in this
