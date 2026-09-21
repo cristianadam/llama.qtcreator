@@ -73,6 +73,9 @@ private:
     void applyStyleSheet();
     QString getToolUsageAndResult() const;
     bool haveToolCalls() const;
+    // True for assistant messages that consist of nothing but tool calls –
+    // their tool bubble renders the call, so the empty bubble is hidden.
+    bool shouldCollapse() const;
 
     Message m_msg;
     QVector<qint64> m_siblingLeafIds;

@@ -78,6 +78,10 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
+    // Pre‑wrap a freshly created message's document at its final label width
+    // so its first size hint is already correct (call before adding the
+    // widget to m_messageWidgets / the layout).
+    void preWrapDocument(ChatMessage *w);
     void syncThinkingLevel();
     void updateModelCombo();
     void performSearch(const QString &query);

@@ -663,6 +663,8 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         connect(w, &ChatMessage::siblingChanged, this, &ChatEditor::onSiblingChanged);
         connect(w, &ChatMessage::deleteRequested, this, &ChatEditor::onDeleteMessageRequested);
 
+        preWrapDocument(w);
+
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
     } else {
@@ -692,6 +694,36 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     // while the user is pinned to the bottom.
     if (msg.role == "user")
         scrollToBottom();
+
+    // Settle layout and heights synchronously (the same technique
+    // refreshMessages() uses).  This matters for the "Preparing ..." ->
+    // tool‑bubble transition: the assistant bubble's shrink and the tool
+    // bubble's insertion then land in a single paint instead of two
+    // separate frames, and the freshly added bubble is measured at its
+    // real width right away instead of the 300 px default of an unshown
+    // QTextDocument (both previously caused a visible flicker/jump).
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::LayoutRequest);
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::Resize);
+    fixMessageHeights();
+}
+
+// Pre‑wrap the document of a freshly created message widget at the width
+// its label will end up with.  An unshown QTextDocument wraps at its 300 px
+// default, so without this the first layout pass reports a wrong height
+// (usually too tall) – with the viewport pinned to the bottom that reads as
+// the whole conversation jumping up and then back down.  Setting the real
+// width before the widget is laid out makes the very first size hint already
+// correct.
+void ChatEditor::preWrapDocument(ChatMessage *w)
+{
+    int refWidth = 0;
+    if (!m_messageWidgets.isEmpty())
+        refWidth = m_messageWidgets.last()->width();
+    if (refWidth <= 0)
+        refWidth = m_messageContainer->width();
+    if (refWidth > 0)
+        // 20 px = the ChatMessage's left+right contents margins.
+        w->markdownLabel()->document()->setTextWidth(qMax(refWidth - 20, 100));
 }
 
 void ChatEditor::onPendingMessageChanged(const Message &pm)
@@ -719,6 +751,19 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
     auto it = std::find_if(m_messageWidgets.begin(),
                            m_messageWidgets.end(),
                            [this, pm](ChatMessage *cm) { return cm->message().id == pm.id; });
+    if (it == m_messageWidgets.end() && content.trimmed().isEmpty()) {
+        // The first SSE events (prompt progress, timings) arrive before any
+        // content exists.  Do not create the bubble for those: an empty
+        // bubble would push the pinned viewport up for a blank strip, and
+        // the real content (thinking section, text, or the tool line)
+        // arriving a moment later would push it up again – the visible
+        // "up and then down" wobble after a tool call.  The status bar
+        // still receives the progress/timing updates below.
+        m_input->setIsGenerating(true);
+        updateSpeedLabel(pm);
+        updateContextLabel(pm);
+        return;
+    }
     if (it == m_messageWidgets.end()) {
         // Add a “loading” bubble
         Message msg;
@@ -728,6 +773,8 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         msg.children.clear();
 
         w = new ChatMessage(msg, {}, 0, widget());
+        preWrapDocument(w);
+
         m_messageLayout->addWidget(w);
         m_messageWidgets.append(w);
         connect(w, &ChatMessage::editRequested, this, &ChatEditor::onEditRequested);
@@ -984,6 +1031,10 @@ void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantM
         ChatMessage *w = *it;
         w->message().extra = newExtra;
         w->messageCompleted(true);
+        // Apply the (grown) height in the same frame instead of waiting for
+        // the queued documentSizeChanged fixup – avoids a one‑frame jump
+        // when the tool result appears.
+        w->recomputeFixedHeight();
     }
 }
 

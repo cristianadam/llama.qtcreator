@@ -238,6 +238,8 @@ void ChatMessage::buildUI()
     m_mainLayout->addLayout(m_actionLayout);
 
     applyStyleSheet();
+
+    setVisible(!shouldCollapse());
 }
 
 void ChatMessage::resizeEvent(QResizeEvent *ev)
@@ -297,6 +299,31 @@ void ChatMessage::messageCompleted(bool completed)
     } else if (m_isTool) {
         renderMarkdown(m_msg.content, true);
     }
+
+    setVisible(!shouldCollapse());
+}
+
+bool ChatMessage::shouldCollapse() const
+{
+    if (m_isUser || m_isTool)
+        return false;
+
+    bool hasToolCalls = false;
+    for (const QVariantMap &e : std::as_const(m_msg.extra)) {
+        if (e.contains("tool_calls")) {
+            hasToolCalls = true;
+            break;
+        }
+    }
+
+    // A tool‑call‑only assistant message carries no text of its own – the
+    // tool bubble below renders the call.  Hide the empty bubble so that
+    // when the streamed "Preparing ..." line is replaced by the tool
+    // bubble, the line appears in exactly the same spot (a plain in‑place
+    // replacement) instead of an erase‑then‑insert transition.
+    // Note: while the message is still pending, the preparing suffix is part
+    // of m_msg.content, so it never collapses mid‑stream.
+    return hasToolCalls && m_msg.content.trimmed().isEmpty();
 }
 
 bool ChatMessage::isUser() const
@@ -429,7 +456,19 @@ QString ChatMessage::getToolUsageAndResult() const
             "Token_Notification_Danger_Default\">J</span>");
     }
 
-    const QString summary = statusIconHtml + "&nbsp;" + tool->oneLineSummary(args);
+    QString summaryText;
+    if (toolStatus.isEmpty()) {
+        // Still running – show the same text the streaming "Preparing ..."
+        // line used, so the tool bubble reads as the same line continuing
+        // in place rather than a brand‑new block appearing.
+        summaryText = tool->streamingSummary(argumentsJson);
+        if (summaryText.isEmpty())
+            summaryText = tool->oneLineSummary(args);
+        summaryText += QStringLiteral(" ...");
+    } else {
+        summaryText = tool->oneLineSummary(args);
+    }
+    const QString summary = statusIconHtml + "&nbsp;" + summaryText;
     QString details = tool->detailsMarkdown(args, functionResult);
 
     return QString("<details data-tool=\"true\"><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
