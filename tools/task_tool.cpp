@@ -143,8 +143,9 @@ QString TaskTool::oneLineSummary(const QJsonObject &arguments) const
     return Tr::tr("task: %1").arg(arguments.value("description").toString());
 }
 
-QString TaskTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString TaskTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     QString md;
     const QString description = arguments.value("description").toString();
     if (!description.isEmpty())

@@ -199,8 +199,9 @@ QString SearchTool::oneLineSummary(const QJsonObject &args) const
     return Tr::tr("search for %1").arg(code);
 }
 
-QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     const QString pattern = arguments.value("pattern").toString();
     const QString glob = arguments.value("glob").toString();
     QString md = Tr::tr("Pattern: `%1`").arg(pattern);

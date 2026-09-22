@@ -140,8 +140,9 @@ QString FindTool::oneLineSummary(const QJsonObject &args) const
     return Tr::tr("find files %1").arg(code);
 }
 
-QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     const QString pattern = arguments.value("pattern").toString();
     const QString path = arguments.value("path").toString();
     QString md = Tr::tr("Pattern: `%1`").arg(pattern);

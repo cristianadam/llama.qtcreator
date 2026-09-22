@@ -523,8 +523,9 @@ void BashTool::run(const QJsonObject &arguments,
     tree->start();
 }
 
-QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     const QString command = arguments.value("command").toString();
     QString md = QStringLiteral("```bash\n%1\n```\n").arg(command);
     const QString workdir = arguments.value("workdir").toString();

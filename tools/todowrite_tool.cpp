@@ -112,9 +112,11 @@ QString TodoWriteTool::streamingSummary(const QString &partialArguments) const
     return Tr::tr("update task list");
 }
 
-QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &result) const
+QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
-    Q_UNUSED(result);
+    // On failure show the error, not the rejected list.
+    if (!ok)
+        return result;
     QString md;
     for (const QJsonValue &value : args.value("todos").toArray()) {
         const QJsonObject todo = value.toObject();

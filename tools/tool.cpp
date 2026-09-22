@@ -2,9 +2,10 @@
 
 namespace LlamaCpp {
 
-QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
     Q_UNUSED(arguments);
+    Q_UNUSED(ok);
     // Generic fallback – just show the raw result.
     if (result.isEmpty())
         return {};

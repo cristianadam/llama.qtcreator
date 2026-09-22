@@ -76,8 +76,9 @@ QString McpTool::streamingSummary(const QString &partialArguments) const
     return m_name + QLatin1Char(' ') + value;
 }
 
-QString McpTool::detailsMarkdown(const QJsonObject &arguments, const QString &result) const
+QString McpTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     QString md;
     if (!arguments.isEmpty()) {
         md += QStringLiteral("**Arguments**\n\n```json\n")

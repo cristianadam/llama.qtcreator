@@ -30,9 +30,13 @@ public:
     virtual QString oneLineSummary(const QJsonObject &arguments) const = 0;
 
     /*! Full markdown that will be placed **inside** the <details> block.
-        The default implementation can be overridden when the tool wants a
-        custom view (diff, code block, table, …). */
-    virtual QString detailsMarkdown(const QJsonObject &arguments, const QString &result) const;
+        \a ok tells whether the tool run succeeded; pass it on to tools
+        whose presentation depends on the outcome.  The default
+        implementation can be overridden when the tool wants a custom view
+        (diff, code block, table, …). */
+    virtual QString detailsMarkdown(const QJsonObject &arguments,
+                                    const QString &result,
+                                    bool ok) const;
 
     /*! Executes the tool.  The concrete class may delegate to the old free
         function (runPython, editFile, …) or implement a new algorithm.

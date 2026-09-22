@@ -306,9 +306,9 @@ QString EditFileTool::streamingSummary(const QString &partialArgs) const
     return Tr::tr("edit %1").arg(path);
 }
 
-QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &result) const
+QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
-    if (!result.startsWith(QStringLiteral("Successfully replaced")))
+    if (!ok)
         return result;
 
     const QString path = args.value("path").toString();

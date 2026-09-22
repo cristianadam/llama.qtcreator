@@ -469,7 +469,7 @@ QString ChatMessage::getToolUsageAndResult() const
         summaryText = tool->oneLineSummary(args);
     }
     const QString summary = statusIconHtml + "&nbsp;" + summaryText;
-    QString details = tool->detailsMarkdown(args, functionResult);
+    QString details = tool->detailsMarkdown(args, functionResult, toolStatus == QLatin1String("success"));
 
     return QString("<details data-tool=\"true\"><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
 }

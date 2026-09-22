@@ -337,6 +337,7 @@ private slots:
 
     // ApplyPatchTool::run
     void tool_fullPatch();
+    void tool_addFileInStartupProject();
     void tool_move();
     void tool_updateSameFileTwice();
     void tool_updateNoChanges();
@@ -377,6 +378,7 @@ private slots:
 
     // WriteTool
     void write_newFile();
+    void write_relativePathInStartupProject();
     void write_nestedDirs();
     void write_overwrite();
     void write_missingPath();
@@ -484,6 +486,7 @@ void LlamaToolsTest::initTestCase()
 
 void LlamaToolsTest::cleanupTestCase()
 {
+    ProjectExplorer::ProjectManager::resetStartupProject();
     delete gTempDir;
     gTempDir = nullptr;
 }
@@ -805,6 +808,31 @@ void LlamaToolsTest::match_outOfOrderHint()
 // ============================================================================
 // ApplyPatchTool::run
 // ============================================================================
+
+void LlamaToolsTest::tool_addFileInStartupProject()
+{
+    // Same resolution rule as write: a patch that adds a file with a
+    // relative path must create it inside the startup project.
+    const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("myproject"));
+    QVERIFY(projectDir.ensureWritableDir());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toString());
+
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: src/added.txt\n"
+        "+added\n"
+        "*** End Patch");
+
+    auto [output, ok] = runTool(args);
+    QVERIFY2(ok, qPrintable(output));
+
+    QCOMPARE(readTextFile(projectDir.pathAppended("src/added.txt").toString()),
+             QString("added\n"));
+    QVERIFY(!QFile::exists(gTempDir->filePath("src/added.txt")));
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
 
 void LlamaToolsTest::tool_fullPatch()
 {
@@ -1144,7 +1172,7 @@ void LlamaToolsTest::tool_detailsMarkdown()
         "+int main() { return 0; }\n"
         "*** End Patch");
     const QString addDetails
-        = tool.detailsMarkdown(addArgs, QStringLiteral("Success. Updated the following files:\nA src/main.cpp"));
+        = tool.detailsMarkdown(addArgs, QStringLiteral("Success. Updated the following files:\nA src/main.cpp"), true);
     QVERIFY(addDetails.contains("created"));
     QVERIFY(addDetails.contains("```cpp"));
     QVERIFY(addDetails.contains("int main() { return 0; }"));
@@ -1162,7 +1190,7 @@ void LlamaToolsTest::tool_detailsMarkdown()
         "*** End Patch");
     auto [output, ok] = runTool(editArgs);
     QVERIFY2(ok, qPrintable(output));
-    const QString editDetails = tool.detailsMarkdown(editArgs, output);
+    const QString editDetails = tool.detailsMarkdown(editArgs, output, ok);
     QVERIFY(editDetails.contains("edited"));
     QVERIFY(editDetails.contains("@@ -2,1 +2,1 @@"));
     QVERIFY(editDetails.contains("-line2"));
@@ -1170,7 +1198,7 @@ void LlamaToolsTest::tool_detailsMarkdown()
     QVERIFY(editDetails.contains("```diff"));
 
     // Failed patch: the error text is shown as‑is
-    QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom")),
+    QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom"), false),
              QString("apply_patch verification failed: boom"));
 }
 
@@ -1345,7 +1373,7 @@ void LlamaToolsTest::editfile_summaries()
 
     // On success the details markdown shows the replacement as a diff.
     args[QStringLiteral("path")] = QStringLiteral("f.txt");
-    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 1 block(s) in f.txt."));
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 1 block(s) in f.txt."), true);
     QVERIFY(md.contains("```diff"));
     QVERIFY(md.contains("-a"));
     QVERIFY(md.contains("+b"));
@@ -1354,6 +1382,29 @@ void LlamaToolsTest::editfile_summaries()
 // ============================================================================
 // WriteTool
 // ============================================================================
+
+void LlamaToolsTest::write_relativePathInStartupProject()
+{
+    // A startup project in its own directory, distinct from the general
+    // project directory (gTempDir).  A relative path to a new file must be
+    // resolved against the project directory, not the general one.
+    const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("myproject"));
+    QVERIFY(projectDir.ensureWritableDir());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toString());
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("src/newfile.txt");
+    args[QStringLiteral("content")] = QStringLiteral("in the project\n");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+
+    QCOMPARE(readTextFile(projectDir.pathAppended("src/newfile.txt").toString()),
+             QString("in the project\n"));
+    QVERIFY(!QFile::exists(gTempDir->filePath("src/newfile.txt")));
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
 
 void LlamaToolsTest::write_newFile()
 {
@@ -1453,7 +1504,7 @@ void LlamaToolsTest::write_summaries()
     QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
 
     // On success the details markdown shows the written content as a code block.
-    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully wrote 16 bytes to src/main.cpp."));
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully wrote 16 bytes to src/main.cpp."), true);
     QVERIFY(md.contains("```"));
     QVERIFY(md.contains("int main() {}"));
 }
@@ -1486,7 +1537,7 @@ void LlamaToolsTest::todowrite_ok()
     QVERIFY2(ok, qPrintable(output));
     QVERIFY(output.contains("1 of 3 completed"));
 
-    const QString md = todo.detailsMarkdown(args, output);
+    const QString md = todo.detailsMarkdown(args, output, ok);
     QVERIFY(md.contains("- [x] Plan the work"));
     QVERIFY(md.contains("- [~] Implement it"));
     QVERIFY(md.contains("- [ ] Test it"));
@@ -1530,6 +1581,10 @@ void LlamaToolsTest::todowrite_unknownStatus()
     auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
     QVERIFY(!ok);
     QVERIFY(output.contains("unknown status"));
+
+    // A failed run shows the error text, not the rejected list.
+    Tools::TodoWriteTool tool;
+    QCOMPARE(tool.detailsMarkdown(args, output, false), output);
 }
 
 void LlamaToolsTest::todowrite_twoInProgress()
@@ -1981,14 +2036,14 @@ void LlamaToolsTest::bash_detailsMarkdown()
     QJsonObject args;
     args["command"] = QStringLiteral("git status");
     args["workdir"] = QStringLiteral("/some/dir");
-    const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"));
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"), true);
     QVERIFY(md.contains("```bash\ngit status\n```"));
     QVERIFY(md.contains("/some/dir"));
     QVERIFY(md.contains("On branch main"));
 
     QJsonObject noWorkdir;
     noWorkdir["command"] = QStringLiteral("git status");
-    QVERIFY(!tool.detailsMarkdown(noWorkdir, QStringLiteral("out"))
+    QVERIFY(!tool.detailsMarkdown(noWorkdir, QStringLiteral("out"), true)
                  .contains("Working directory"));
 }
 
@@ -2037,7 +2092,7 @@ void LlamaToolsTest::task_summaries()
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"prompt\": \"x\"")), QString());
 
     args["prompt"] = "Find the entry point";
-    const QString md = tool.detailsMarkdown(args, QStringLiteral("Found main()"));
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Found main()"), true);
     QVERIFY(md.contains("### Explore build system"));
     QVERIFY(md.contains("Find the entry point"));
     QVERIFY(md.contains("Found main()"));
@@ -2296,7 +2351,7 @@ void LlamaToolsTest::search_summaries()
     QJsonObject mdArgs;
     mdArgs["pattern"] = QStringLiteral("alpha");
     mdArgs["glob"] = QStringLiteral("*.cpp");
-    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("alpha.cpp:1: x"));
+    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("alpha.cpp:1: x"), true);
     QVERIFY(md.contains("Pattern: `alpha`"));
     QVERIFY(md.contains("Glob: `*.cpp`"));
     QVERIFY(md.contains("alpha.cpp:1: x"));
@@ -2457,7 +2512,7 @@ void LlamaToolsTest::find_summaries()
     QJsonObject mdArgs;
     mdArgs["pattern"] = QStringLiteral("*.json");
     mdArgs["path"] = QStringLiteral("/some/dir");
-    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("x.json"));
+    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("x.json"), true);
     QVERIFY(md.contains("Pattern: `*.json`"));
     QVERIFY(md.contains("Path: /some/dir"));
     QVERIFY(md.contains("x.json"));
@@ -2600,14 +2655,14 @@ void LlamaToolsTest::mcptool_detailsMarkdown()
 
     QJsonObject args;
     args["project_path"] = "CMakeLists.txt";
-    const QString md = tool.detailsMarkdown(args, QStringLiteral("Build succeeded"));
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Build succeeded"), true);
     QVERIFY(md.contains("**Arguments**"));
     QVERIFY(md.contains("CMakeLists.txt"));
     QVERIFY(md.contains("Build succeeded"));
     QVERIFY(md.contains("```"));
 
     // Nothing to show
-    QCOMPARE(tool.detailsMarkdown(QJsonObject(), QString()), QString());
+    QCOMPARE(tool.detailsMarkdown(QJsonObject(), QString(), true), QString());
 }
 
 void LlamaToolsTest::factory_remoteProvider()

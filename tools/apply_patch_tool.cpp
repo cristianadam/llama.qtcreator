@@ -321,9 +321,9 @@ QString ApplyPatchTool::streamingSummary(const QString &partialArgs) const
     return hunkSummary(type, path, movePath);
 }
 
-QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &result) const
+QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
-    if (!result.startsWith(QLatin1String("Success.")))
+    if (!ok)
         return result;
 
     QVector<Patch::Hunk> hunks;
@@ -392,7 +392,10 @@ void ApplyPatchTool::run(const QJsonObject &args,
 
         switch (hunk.type) {
         case Patch::HunkType::Add: {
-            op.target = op.source;
+            // The file does not exist yet; resolve without an existence probe
+            // so it lands in the project directory, not the general one.
+            op.target = absoluteProjectPath(FilePath::fromUserInput(hunk.path), /*mustExist=*/false);
+            op.source = op.target;
             op.contents = hunk.contents;
             if (!op.contents.isEmpty() && !op.contents.endsWith(QLatin1Char('\n')))
                 op.contents += QLatin1Char('\n');
@@ -444,7 +447,8 @@ void ApplyPatchTool::run(const QJsonObject &args,
             pendingContents.insert(hunk.path, op.contents);
 
             if (!hunk.movePath.isEmpty()) {
-                op.target = absoluteProjectPath(FilePath::fromUserInput(hunk.movePath));
+                op.target =
+                        absoluteProjectPath(FilePath::fromUserInput(hunk.movePath), /*mustExist=*/false);
                 op.display = hunk.movePath;
             } else {
                 op.target = op.source;

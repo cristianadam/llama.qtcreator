@@ -106,9 +106,9 @@ QString WriteTool::streamingSummary(const QString &partialArgs) const
     return Tr::tr("write %1").arg(path);
 }
 
-QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &result) const
+QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
-    if (!result.startsWith(QStringLiteral("Successfully wrote")))
+    if (!ok)
         return result;
 
     const QString path = args.value("path").toString();
@@ -129,7 +129,7 @@ void WriteTool::run(const QJsonObject &args,
         return done(Tr::tr("Tool error: \"content\" is required."), false);
     const QString content = args.value("content").toString();
 
-    const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
+    const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path), /*mustExist=*/false);
     if (target.parentDir().isFile())
         return done(Tr::tr("Cannot write \"%1\": a parent path is a file.").arg(path), false);
 
