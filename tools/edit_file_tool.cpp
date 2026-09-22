@@ -312,19 +312,18 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
         return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
 
     const QString path = args.value("path").toString();
-    QString md = QStringLiteral("**%1** `%2`\n\n").arg(Tr::tr("edited"), path);
-
-    int n = 1;
+    // One combined diff for the whole file – per-edit numbering adds no
+    // information (the tool targets a single file) and clutters the view.
+    QString diff;
     for (const QJsonValue &value : args.value("edits").toArray()) {
         const QJsonObject edit = value.toObject();
-        QString diff;
         for (const QString &line : edit.value("oldText").toString().split(QLatin1Char('\n')))
             diff += QLatin1Char('-') + line + QLatin1Char('\n');
         for (const QString &line : edit.value("newText").toString().split(QLatin1Char('\n')))
             diff += QLatin1Char('+') + line + QLatin1Char('\n');
-        md += QStringLiteral("**%1**\n\n").arg(n++) + codeFence(diff, QStringLiteral("diff")) + QStringLiteral("\n\n");
     }
-    return md.trimmed();
+
+    return QStringLiteral("**%1** `%2`\n\n").arg(Tr::tr("edited"), path) + codeFence(diff, QStringLiteral("diff"));
 }
 
 QString EditFileTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const

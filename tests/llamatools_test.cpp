@@ -1381,12 +1381,25 @@ void LlamaToolsTest::editfile_summaries()
               QString("edit src/main.cpp"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
 
-    // On success the details markdown shows the replacement as a diff.
+    // On success the details markdown shows the replacement as a diff,
+    // without per-edit numbering.
     args[QStringLiteral("path")] = QStringLiteral("f.txt");
     const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 1 block(s) in f.txt."), true);
     QVERIFY(md.contains("```diff"));
     QVERIFY(md.contains("-a"));
     QVERIFY(md.contains("+b"));
+    QVERIFY(!md.contains(QStringLiteral("**1**")));
+
+    // Multiple edits still produce a single combined diff block.
+    QJsonObject edit2;
+    edit2[QStringLiteral("oldText")] = QStringLiteral("c");
+    edit2[QStringLiteral("newText")] = QStringLiteral("d");
+    edits.append(edit2);
+    args[QStringLiteral("edits")] = edits; // QJsonObject copies – refresh
+    const QString md2 = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 2 block(s) in f.txt."), true);
+    QCOMPARE(md2.count(QStringLiteral("```diff")), 1);
+    QVERIFY(md2.contains(QStringLiteral("-c")));
+    QVERIFY(md2.contains(QStringLiteral("+d")));
 }
 
 // ============================================================================
