@@ -111,12 +111,11 @@ QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &resul
     if (!ok)
         return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
 
-    const QString path = args.value("path").toString();
+    // No header: the summary already says "write <path>".
     const QString content = args.value("content").toString();
-    QString md = QStringLiteral("**%1** `%2`\n\n").arg(Tr::tr("wrote"), path);
-    if (!content.isEmpty())
-        md += codeFence(content) + QLatin1Char('\n');
-    return md.trimmed();
+    if (content.isEmpty())
+        return {};
+    return codeFence(content);
 }
 
 void WriteTool::run(const QJsonObject &args,

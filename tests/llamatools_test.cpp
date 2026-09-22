@@ -1183,8 +1183,10 @@ void LlamaToolsTest::tool_detailsMarkdown()
         "*** End Patch");
     const QString addDetails
         = tool.detailsMarkdown(addArgs, QStringLiteral("Success. Updated the following files:\nA src/main.cpp"), true);
-    QVERIFY(addDetails.contains("created"));
-    QVERIFY(addDetails.contains("```cpp"));
+    // Single-file patch: no per-file header (the summary already says
+    // "Add src/main.cpp").
+    QVERIFY(!addDetails.contains("created"));
+    QVERIFY(addDetails.startsWith("```cpp"));
     QVERIFY(addDetails.contains("int main() { return 0; }"));
     QVERIFY(!addDetails.contains("@@"));
 
@@ -1201,11 +1203,24 @@ void LlamaToolsTest::tool_detailsMarkdown()
     auto [output, ok] = runTool(editArgs);
     QVERIFY2(ok, qPrintable(output));
     const QString editDetails = tool.detailsMarkdown(editArgs, output, ok);
-    QVERIFY(editDetails.contains("edited"));
+    QVERIFY(!editDetails.contains("edited"));
     QVERIFY(editDetails.contains("@@ -2,1 +2,1 @@"));
     QVERIFY(editDetails.contains("-line2"));
     QVERIFY(editDetails.contains("+changed"));
-    QVERIFY(editDetails.contains("```diff"));
+    QVERIFY(editDetails.startsWith("```diff"));
+
+    // Multi-file patches keep per-file headers to tell the sections apart
+    // (the summary only says "Apply patch to N files" there).
+    QJsonObject multiArgs;
+    multiArgs[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: a.txt\n"
+        "+one\n"
+        "*** Delete File: b.txt\n"
+        "*** End Patch");
+    const QString multiDetails = tool.detailsMarkdown(multiArgs, QStringLiteral("Success"), true);
+    QVERIFY(multiDetails.contains(QStringLiteral("**created** `a.txt`")));
+    QVERIFY(multiDetails.contains(QStringLiteral("**deleted** `b.txt`")));
 
     // Failed patch: the error text is shown, flagged with an error header
     QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom"), false),

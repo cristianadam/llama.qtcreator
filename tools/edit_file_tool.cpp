@@ -311,9 +311,8 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
     if (!ok)
         return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
 
-    const QString path = args.value("path").toString();
-    // One combined diff for the whole file – per-edit numbering adds no
-    // information (the tool targets a single file) and clutters the view.
+    // One combined diff for the whole file.  No header: the summary already
+    // says "edit <path>".
     QString diff;
     for (const QJsonValue &value : args.value("edits").toArray()) {
         const QJsonObject edit = value.toObject();
@@ -323,7 +322,7 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
             diff += QLatin1Char('+') + line + QLatin1Char('\n');
     }
 
-    return QStringLiteral("**%1** `%2`\n\n").arg(Tr::tr("edited"), path) + codeFence(diff, QStringLiteral("diff"));
+    return codeFence(diff, QStringLiteral("diff"));
 }
 
 QString EditFileTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
