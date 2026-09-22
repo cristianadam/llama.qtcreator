@@ -387,6 +387,13 @@ private slots:
     void write_toolDefinition();
     void write_summaries();
 
+    // summaryPreview / truncatedPreview
+    void preview_truncatedPreview();
+    void preview_bashTail();
+    void preview_bashShort();
+    void preview_editDiff();
+    void preview_todoBase();
+
     // TodoWriteTool
     void todowrite_ok();
     void todowrite_emptyList();
@@ -1512,6 +1519,108 @@ void LlamaToolsTest::write_summaries()
     // A failed run shows the error, flagged with an error header.
     QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Cannot write \"src/main.cpp\": boom"), false)
                 .startsWith(QStringLiteral("**Error**\n\nCannot write")));
+}
+
+// ============================================================================
+// summaryPreview / truncatedPreview
+// ============================================================================
+
+void LlamaToolsTest::preview_truncatedPreview()
+{
+    // Empty input stays empty.
+    QCOMPARE(truncatedPreview(QString(), 3), QString());
+
+    // Short text passes through untouched (no ellipsis).
+    QCOMPARE(truncatedPreview(QStringLiteral("a\nb\nc"), 3), QString("a\nb\nc"));
+
+    // Line overflow: cut to maxLines, an open fence is closed, no ellipsis
+    // (the expand icon in the header signals more content).
+    const QString longMd = QStringLiteral("```\nline1\nline2\nline3\nline4\nline5");
+    QCOMPARE(truncatedPreview(longMd, 3), QString("```\nline1\nline2\n```"));
+
+    // An already balanced fence is not double-closed.
+    const QString balanced = QStringLiteral("```\nx\n```\nmore\neven more");
+    QCOMPARE(truncatedPreview(balanced, 2), QString("```\nx\n```"));
+
+    // Character overflow also truncates and keeps the fence closed.
+    const QString wide = QStringLiteral("```\n") + QString(500, QLatin1Char('x'));
+    const QString wideCut = truncatedPreview(wide, 10);
+    QVERIFY(wideCut.size() <= 300 + 10); // cut + fence close
+    QVERIFY(wideCut.endsWith(QStringLiteral("\n```")));
+
+    // Fenceless text is just cut.
+    QCOMPARE(truncatedPreview(QStringLiteral("a\nb\nc\nd"), 2), QString("a\nb"));
+}
+
+void LlamaToolsTest::preview_bashTail()
+{
+    Tools::BashTool tool;
+
+    // Long output: the *tail* is shown, prefixed with an ellipsis line.
+    const QString output = QStringLiteral("l1\nl2\nl3\nl4\nl5");
+    const QString preview = tool.summaryPreview(QJsonObject(), output, true);
+    QCOMPARE(preview, QString("```\n…\nl4\nl5\n```"));
+    QVERIFY(!preview.contains("l1"));
+
+    // Short output passes through, still fenced.
+    const QString shortPreview = tool.summaryPreview(QJsonObject(), QStringLiteral("ok"), true);
+    QCOMPARE(shortPreview, QString("```\nok\n```"));
+
+    // Empty output: no preview.
+    QCOMPARE(tool.summaryPreview(QJsonObject(), QString(), true), QString());
+}
+
+void LlamaToolsTest::preview_bashShort()
+{
+    // A single long line is character‑capped.
+    Tools::BashTool tool;
+    const QString preview = tool.summaryPreview(QJsonObject(), QString(500, QLatin1Char('y')), true);
+    QVERIFY(preview.size() < 300);
+    // The fence stays clean; no trailing ellipsis.
+    QVERIFY(preview.endsWith(QStringLiteral("\n```")));
+}
+
+void LlamaToolsTest::preview_editDiff()
+{
+    Tools::EditFileTool tool;
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("f.txt");
+    QJsonArray edits;
+    QJsonObject edit;
+    edit[QStringLiteral("oldText")] = QStringLiteral("a");
+    edit[QStringLiteral("newText")] = QStringLiteral("b");
+    edits.append(edit);
+    args[QStringLiteral("edits")] = edits;
+
+    const QString preview = tool.summaryPreview(
+        args, QStringLiteral("Successfully replaced 1 block(s) in f.txt."), true);
+    // The diff lines make it into the summary preview.
+    QVERIFY(preview.contains("-a"));
+    QVERIFY(preview.contains("+b"));
+    QVERIFY(preview.contains("```diff"));
+}
+
+void LlamaToolsTest::preview_todoBase()
+{
+    // The base implementation truncates the details markdown (the
+    // checklist for todo_write).
+    Tools::TodoWriteTool tool;
+
+    QJsonObject args;
+    QJsonArray todos;
+    for (int i = 0; i < 5; ++i) {
+        QJsonObject t;
+        t[QStringLiteral("content")] = QStringLiteral("task %1").arg(i);
+        t[QStringLiteral("status")] = QStringLiteral("pending");
+        todos.append(t);
+    }
+    args[QStringLiteral("todos")] = todos;
+
+    const QString preview = tool.summaryPreview(args, QStringLiteral("Task list updated: 0 of 5 completed."), true);
+    QVERIFY(preview.contains("- [ ] task 0"));
+    QVERIFY(!preview.contains("task 4")); // cut by the line limit
+    QVERIFY(preview.endsWith(QStringLiteral("- [ ] task 2")));
 }
 
 // ============================================================================

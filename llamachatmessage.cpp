@@ -467,6 +467,13 @@ QString ChatMessage::getToolUsageAndResult() const
         summaryText += QStringLiteral(" ...");
     } else {
         summaryText = tool->oneLineSummary(args);
+        // Show a few lines of the outcome directly in the summary, like pi
+        // and opencode do on collapsed tool calls, so the result is visible
+        // without expanding the details.
+        const bool ok = toolStatus == QLatin1String("success");
+        const QString preview = tool->summaryPreview(args, functionResult, ok);
+        if (!preview.isEmpty())
+            summaryText += QStringLiteral("\n\n") + preview;
     }
     const QString summary = statusIconHtml + "&nbsp;" + summaryText;
     QString details = tool->detailsMarkdown(args, functionResult, toolStatus == QLatin1String("success"));

@@ -14,6 +14,9 @@ public:
     QString detailsMarkdown(const QJsonObject &arguments,
                                     const QString &result,
                                     bool ok) const override;
+    QString summaryPreview(const QJsonObject &arguments,
+                           const QString &result,
+                           bool ok) const override;
 };
 
 } // namespace LlamaCpp::Tools

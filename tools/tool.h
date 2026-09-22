@@ -38,6 +38,16 @@ public:
                                     const QString &result,
                                     bool ok) const;
 
+    /*! Returns a short markdown preview of the outcome that is shown in the
+        tool call's summary (below the one‑line description), so the result
+        is visible without expanding the details – like pi and opencode show
+        a few output lines on a collapsed tool call.  The preview must stay
+        small (a few lines); return an empty string to show nothing.  The
+        default derives it from detailsMarkdown(). */
+    virtual QString summaryPreview(const QJsonObject &arguments,
+                                   const QString &result,
+                                   bool ok) const;
+
     /*! Executes the tool.  The concrete class may delegate to the old free
         function (runPython, editFile, …) or implement a new algorithm.
         done is a callback that **must** be called exactly once when the
@@ -47,5 +57,12 @@ public:
                      std::function<void(const QString &output, bool ok)> done) const
         = 0;
 };
+
+//! Truncates \a text for inline display: at most \a maxLines lines and 300
+//! characters.  A code fence left open by the cut is closed so the markdown
+//! stays well‑formed.  No ellipsis is appended: the details header already
+//! gets the expand icon, which signals more content.  Returns an empty
+//! string for empty input.
+QString truncatedPreview(const QString &text, int maxLines);
 
 } // namespace LlamaCpp

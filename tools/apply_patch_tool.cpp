@@ -354,6 +354,13 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
     return md.trimmed();
 }
 
+QString ApplyPatchTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
+{
+    // The per‑file diff is the interesting part; give it a couple of extra
+    // lines.
+    return truncatedPreview(detailsMarkdown(args, result, ok), 8);
+}
+
 void ApplyPatchTool::run(const QJsonObject &args,
                          std::function<void(const QString &, bool)> done) const
 {

@@ -537,4 +537,25 @@ QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     return md;
 }
 
+QString BashTool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
+{
+    Q_UNUSED(arguments);
+    Q_UNUSED(ok);
+    if (result.isEmpty())
+        return {};
+
+    // Show the *tail* of the output: the last lines usually carry the
+    // outcome of a command (summary lines, errors, final status).
+    constexpr int kMaxLines = 3;
+    const QStringList lines = result.split(QLatin1Char('\n'));
+    QString tail = result;
+    if (lines.size() > kMaxLines)
+        // The … marks the earlier, omitted lines; the expand icon marks
+        // that more details are available.
+        tail = QStringLiteral("…\n") + lines.mid(lines.size() - kMaxLines + 1).join(QLatin1Char('\n'));
+    if (tail.size() > 240)
+        tail = tail.left(237);
+    return QStringLiteral("```\n%1\n```").arg(tail);
+}
+
 } // namespace LlamaCpp::Tools

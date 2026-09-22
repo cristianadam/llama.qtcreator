@@ -327,6 +327,12 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
     return md.trimmed();
 }
 
+QString EditFileTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
+{
+    // The diff is the interesting part; give it a couple of extra lines.
+    return truncatedPreview(detailsMarkdown(args, result, ok), 8);
+}
+
 void EditFileTool::run(const QJsonObject &args,
                        std::function<void(const QString &, bool)> done) const
 {

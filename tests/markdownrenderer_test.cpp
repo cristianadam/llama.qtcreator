@@ -39,6 +39,7 @@ private slots:
     void detailsSummaryMarkdown();
     void detailsSummaryInlineHtml();
     void toolCallCollapsedByDataToolAttribute();
+    void toolCallSummaryWithOutputPreview();
     void collapsedSectionStaysCollapsed();
 };
 
@@ -235,6 +236,51 @@ void MarkdownRendererTest::toolCallCollapsedByDataToolAttribute()
     QVERIFY2(toolHeaderFound, "tool call header must be present");
     QVERIFY2(toolBodyHidden, "tool call body must be collapsed by default");
     QVERIFY2(otherBodyVisible, "plain details body must be expanded by default");
+}
+
+void MarkdownRendererTest::toolCallSummaryWithOutputPreview()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+
+    // Finished tool calls carry a few lines of output in the summary itself
+    // (one-line description, blank line, fenced preview), like pi and
+    // opencode show on collapsed tool calls.
+    const QString text
+        = "<details data-tool=\"true\"><summary>bash ls -la\n\n```\nl4\nl5\n…\n```</summary>\n\n"
+          "full output body\n</details>\n";
+    renderer.feed(text.toUtf8());
+    renderer.finish();
+
+    QTextDocument *doc = renderer.document();
+    bool headerFound = false;
+    bool previewInHeader = false;
+    bool previewVisible = false;
+    bool bodyHidden = false;
+    bool rawFence = false;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        const bool isToggle = fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool();
+        // The body is a non‑toggle block, so check it before skipping those.
+        if (blk.text() == QStringLiteral("full output body"))
+            bodyHidden = !blk.isVisible();
+        // The fence must be interpreted, never rendered as raw backticks.
+        if (blk.text().contains(QStringLiteral("```")))
+            rawFence = true;
+        if (!isToggle)
+            continue;
+        if (blk.text().startsWith(QStringLiteral("bash ls -la")))
+            headerFound = true;
+        if (blk.text().contains(QStringLiteral("l5"))) {
+            previewInHeader = isToggle;
+            previewVisible = blk.isVisible();
+        }
+    }
+    QVERIFY2(headerFound, "tool call header must be present");
+    QVERIFY2(previewInHeader, "output preview must be part of the (toggle) header");
+    QVERIFY2(previewVisible, "output preview must be visible while collapsed");
+    QVERIFY2(bodyHidden, "tool call body must stay collapsed");
+    QVERIFY2(!rawFence, "code fences must not be rendered as raw backticks");
 }
 
 void MarkdownRendererTest::collapsedSectionStaysCollapsed()
