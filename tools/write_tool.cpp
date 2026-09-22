@@ -109,7 +109,7 @@ QString WriteTool::streamingSummary(const QString &partialArgs) const
 QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
     if (!ok)
-        return result;
+        return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
 
     const QString path = args.value("path").toString();
     const QString content = args.value("content").toString();

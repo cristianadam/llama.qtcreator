@@ -525,9 +525,11 @@ void BashTool::run(const QJsonObject &arguments,
 
 QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
-    Q_UNUSED(ok);
     const QString command = arguments.value("command").toString();
-    QString md = QStringLiteral("```bash\n%1\n```\n").arg(command);
+    QString md;
+    if (!ok)
+        md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
+    md += QStringLiteral("```bash\n%1\n```\n").arg(command);
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty())
         md += Tr::tr("Working directory: %1\n").arg(workdir);

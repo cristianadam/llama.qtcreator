@@ -1197,9 +1197,9 @@ void LlamaToolsTest::tool_detailsMarkdown()
     QVERIFY(editDetails.contains("+changed"));
     QVERIFY(editDetails.contains("```diff"));
 
-    // Failed patch: the error text is shown as‑is
+    // Failed patch: the error text is shown, flagged with an error header
     QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom"), false),
-             QString("apply_patch verification failed: boom"));
+             QString("**Error**\n\napply_patch verification failed: boom"));
 }
 
 // ============================================================================
@@ -1507,6 +1507,11 @@ void LlamaToolsTest::write_summaries()
     const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully wrote 16 bytes to src/main.cpp."), true);
     QVERIFY(md.contains("```"));
     QVERIFY(md.contains("int main() {}"));
+    QVERIFY(!md.startsWith(QStringLiteral("**Error**")));
+
+    // A failed run shows the error, flagged with an error header.
+    QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Cannot write \"src/main.cpp\": boom"), false)
+                .startsWith(QStringLiteral("**Error**\n\nCannot write")));
 }
 
 // ============================================================================
@@ -1584,7 +1589,8 @@ void LlamaToolsTest::todowrite_unknownStatus()
 
     // A failed run shows the error text, not the rejected list.
     Tools::TodoWriteTool tool;
-    QCOMPARE(tool.detailsMarkdown(args, output, false), output);
+    QCOMPARE(tool.detailsMarkdown(args, output, false),
+             QStringLiteral("**Error**\n\n%1").arg(output));
 }
 
 void LlamaToolsTest::todowrite_twoInProgress()
@@ -2045,6 +2051,11 @@ void LlamaToolsTest::bash_detailsMarkdown()
     noWorkdir["command"] = QStringLiteral("git status");
     QVERIFY(!tool.detailsMarkdown(noWorkdir, QStringLiteral("out"), true)
                  .contains("Working directory"));
+
+    // A failed run is flagged with an error header
+    QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Command exited with code 1."), false)
+                .startsWith(QStringLiteral("**Error**")));
+    QVERIFY(!md.startsWith(QStringLiteral("**Error**")));
 }
 
 // ============================================================================
@@ -2663,6 +2674,11 @@ void LlamaToolsTest::mcptool_detailsMarkdown()
 
     // Nothing to show
     QCOMPARE(tool.detailsMarkdown(QJsonObject(), QString(), true), QString());
+
+    // A failed call is flagged with an error header
+    QVERIFY(tool.detailsMarkdown(args, QStringLiteral("MCP tool failed: boom"), false)
+                .startsWith(QStringLiteral("**Error**")));
+    QVERIFY(!md.startsWith(QStringLiteral("**Error**")));
 }
 
 void LlamaToolsTest::factory_remoteProvider()

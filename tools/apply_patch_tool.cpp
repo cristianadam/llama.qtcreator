@@ -324,7 +324,7 @@ QString ApplyPatchTool::streamingSummary(const QString &partialArgs) const
 QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
     if (!ok)
-        return result;
+        return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
 
     QVector<Patch::Hunk> hunks;
     if (!Patch::parse(args.value("patchText").toString(), hunks).isEmpty())
