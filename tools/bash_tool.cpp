@@ -525,15 +525,22 @@ void BashTool::run(const QJsonObject &arguments,
 
 QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     const QString command = arguments.value("command").toString();
+    // The command and its output go into a single code block with a "$ "
+    // prompt in front of the command, so the expanded details read like a
+    // terminal transcript.  Failures are visible in the output itself and
+    // via the ✗ icon in the summary, so no separate error header.
+    QString block = QStringLiteral("$ ") + command;
+    if (!block.endsWith(QLatin1Char('\n')))
+        block += QLatin1Char('\n');
+    block += result;
+
     QString md;
-    if (!ok)
-        md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
-    md += codeFence(command, QStringLiteral("bash")) + QLatin1Char('\n');
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty())
-        md += Tr::tr("Working directory: %1\n").arg(workdir);
-    md += QLatin1Char('\n') + codeFence(result);
+        md = Tr::tr("Working directory: %1\n\n").arg(workdir);
+    md += codeFence(block, QStringLiteral("bash"));
     return md;
 }
 

@@ -2256,19 +2256,20 @@ void LlamaToolsTest::bash_detailsMarkdown()
     args["command"] = QStringLiteral("git status");
     args["workdir"] = QStringLiteral("/some/dir");
     const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"), true);
-    QVERIFY(md.contains("```bash\ngit status\n```"));
+    // The command and its output appear in a single terminal‑style block:
+    // the command with a "$ " prompt, the output directly below it.
+    QVERIFY(md.contains("```bash\n$ git status\nOn branch main\n```"));
     QVERIFY(md.contains("/some/dir"));
-    QVERIFY(md.contains("On branch main"));
 
     QJsonObject noWorkdir;
     noWorkdir["command"] = QStringLiteral("git status");
     QVERIFY(!tool.detailsMarkdown(noWorkdir, QStringLiteral("out"), true)
                  .contains("Working directory"));
 
-    // A failed run is flagged with an error header
-    QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Command exited with code 1."), false)
-                .startsWith(QStringLiteral("**Error**")));
-    QVERIFY(!md.startsWith(QStringLiteral("**Error**")));
+    // A failed run has no error header: the output carries the error and
+    // the ✗ icon in the summary marks the failure.
+    QVERIFY(!tool.detailsMarkdown(args, QStringLiteral("Command exited with code 1."), false)
+                 .contains(QStringLiteral("**Error**")));
 }
 
 // ============================================================================
