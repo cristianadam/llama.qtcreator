@@ -317,18 +317,6 @@ void MarkdownLabel::updateColorPalette()
     newPalette[MarkdownRenderer::InlineCodeBackground] = creatorColor(
         Theme::Token_Background_Muted);
 
-    // Overlays (the copy button)
-    // Overlay background is usually transparent
-    QColor overlayBg = creatorColor(Theme::Token_Background_Default);
-    overlayBg.setAlpha(0);
-    newPalette[MarkdownRenderer::OverlayBackground] = overlayBg;
-
-    newPalette[MarkdownRenderer::OverlayButtonBackground] = creatorColor(
-        Theme::Token_Background_Default);
-    newPalette[MarkdownRenderer::OverlayButtonBackgroundHover] = creatorColor(
-        Theme::Token_Foreground_Muted);
-    newPalette[MarkdownRenderer::OverlayButtonBorder] = creatorColor(Theme::Token_Foreground_Muted);
-
     setColorPalette(newPalette);
 
     // Also update the standard Qt Palette for the Text color

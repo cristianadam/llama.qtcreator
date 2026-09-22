@@ -42,10 +42,6 @@ public:
         CodeBlockBorder,
         InlineCodeBackground,
         Link,
-        OverlayBackground,
-        OverlayButtonBackground,
-        OverlayButtonBackgroundHover,
-        OverlayButtonBorder,
     };
 
     static const int DetailsSectionIdProp = QTextFormat::UserProperty;

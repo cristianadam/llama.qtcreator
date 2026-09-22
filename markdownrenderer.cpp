@@ -52,10 +52,6 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     m_colorMap[CodeBlockBorder] = m_colorMap[TableBorder];
     m_colorMap[InlineCodeBackground] = QColor(0xf6f8fa);
     m_colorMap[Link] = QColor(0x0969da);
-    m_colorMap[OverlayBackground] = QColor(255, 255, 255, 0);
-    m_colorMap[OverlayButtonBackground] = QColor(240, 240, 240, 200);
-    m_colorMap[OverlayButtonBackgroundHover] = QColor(220, 220, 220, 200);
-    m_colorMap[OverlayButtonBorder] = m_colorMap[TableBorder];
 
     m_baseFont = QFont("SF Pro", 14);
     setFont(m_baseFont);
@@ -1217,24 +1213,18 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
     overlay->setObjectName(QStringLiteral("CodeOverlay"));
     overlay->setAttribute(Qt::WA_TransparentForMouseEvents, false);
 
-    overlay->setStyleSheet(QString("QWidget { background: %1; }"
-                                    "QToolButton { "
-                                    "  background: %2; "
-                                    "  border: 1px solid %3; "
-                                    "  border-radius: 6px; "
-                                    "  padding: 4px -2px; "
+    overlay->setStyleSheet(QString("QToolButton { "
+                                    "  background: none; "
+                                    "  border: none; "
+                                    "  padding: 2px;"
                                     "  font-family: heroicons_outline; "
-                                    "  font-size: 14px; "
-                                    "  color: %4; "
+                                    "  font-size: 15px; "
+                                    "  color: %1; "
                                     "} "
                                     "QToolButton:hover { "
-                                    "  background-color: %5; "
+                                    "  font-size: 17px; "
                                     "}")
-                                .arg(colorToRgba(color(OverlayBackground)))
-                                .arg(colorToRgba(color(OverlayButtonBackground)))
-                                .arg(color(OverlayButtonBorder).name())
-                                .arg(colorToRgba(color(TextForeground)))
-                                .arg(color(OverlayButtonBackgroundHover).name()));
+                                .arg(colorToRgba(color(TextForeground))));
 
     QHBoxLayout *hl = new QHBoxLayout(overlay);
     hl->setContentsMargins(0, 0, 5, 0);
