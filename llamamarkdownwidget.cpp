@@ -125,9 +125,6 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
     });
 
     connect(this, &MarkdownRenderer::copyClicked, this, &MarkdownLabel::copyToClipboard);
-    connect(this, &MarkdownRenderer::saveClicked, this, [this](const QString &code) {
-        emit saveToFile(QString(), code);
-    });
 }
 
 void MarkdownLabel::setMarkdown(const QString &markdown, bool completed)
@@ -320,7 +317,7 @@ void MarkdownLabel::updateColorPalette()
     newPalette[MarkdownRenderer::InlineCodeBackground] = creatorColor(
         Theme::Token_Background_Muted);
 
-    // Overlays (the copy/save buttons)
+    // Overlays (the copy button)
     // Overlay background is usually transparent
     QColor overlayBg = creatorColor(Theme::Token_Background_Default);
     overlayBg.setAlpha(0);

@@ -57,7 +57,6 @@ private slots:
     void onPrevSiblingClicked();
     void onNextSiblingClicked();
     void onCopyToClipboard(const QString &verbatimCode, const QString &highlightedCode);
-    void onSaveToDisk(const QString &fileName, const QString &verbatimCode);
     void onDeleteClicked();
 
     // Update our fixed height when the document size changes (details toggle,

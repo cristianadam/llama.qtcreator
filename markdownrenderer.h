@@ -85,7 +85,6 @@ public:
 
 signals:
     void copyClicked(const QString &verbatim, const QString &formattedCode);
-    void saveClicked(const QString &code);
 
 protected:
     void paintEvent(QPaintEvent *ev) override;

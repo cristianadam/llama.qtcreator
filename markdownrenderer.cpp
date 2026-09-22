@@ -1245,11 +1245,6 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
     copyBtn->setToolTip(Tr::tr("Copy the code below to Clipboard"));
     hl->addWidget(copyBtn);
 
-    QToolButton *saveBtn = new QToolButton(overlay);
-    saveBtn->setText("F"); // Heroicon character for save
-    saveBtn->setToolTip(Tr::tr("Save the code below into a file on disk"));
-    hl->addWidget(saveBtn);
-
     overlay->setLayout(hl);
     overlay->hide();
 
@@ -1263,14 +1258,6 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
         const QString tip = Tr::tr("Copied to clipboard");
         QPoint globalPos = copyBtn->mapToGlobal(QPoint(0, copyBtn->height()));
         QToolTip::showText(globalPos, tip, copyBtn);
-    });
-
-    connect(saveBtn, &QToolButton::clicked, this, [this, blockId] {
-        auto [code, formattedCode] = collectCodeById(blockId);
-        if (code.isEmpty())
-            return;
-
-        emit saveClicked(code);
     });
 
     m_codeOverlays.insert(blockId, overlay);

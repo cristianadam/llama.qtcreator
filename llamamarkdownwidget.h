@@ -42,7 +42,6 @@ private slots:
 
 signals:
     void copyToClipboard(const QString &verbatimText, const QString &highlightedText);
-    void saveToFile(const QString &fileName, const QString &verbatimText);
 
 private:
     void adjustMinimumWidth(const QString &markdown);

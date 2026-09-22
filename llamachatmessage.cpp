@@ -2,7 +2,6 @@
 #include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopServices>
-#include <QFileDialog>
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QInputDialog>
@@ -10,7 +9,6 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QMenu>
-#include <QMessageBox>
 #include <QMimeData>
 #include <QPlainTextEdit>
 #include <QProcess>
@@ -27,8 +25,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/messagemanager.h>
 #include <projectexplorer/buildconfiguration.h>
-#include <projectexplorer/project.h>
-#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/theme/theme.h>
@@ -95,7 +91,6 @@ void ChatMessage::buildUI()
     // issues that were causing messages to be clamped at wrong heights.
     m_markdownLabel = new MarkdownLabel(this);
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
-    connect(m_markdownLabel, &MarkdownLabel::saveToFile, this, &ChatMessage::onSaveToDisk);
 
     renderMarkdown(m_msg.content, true);
 
@@ -601,48 +596,6 @@ void ChatMessage::onCopyToClipboard(const QString &verbatimCode, const QString &
     md->setText(verbatimCode);
     md->setHtml("<pre><code>" + highlightedCode + "</code></pre>");
     QGuiApplication::clipboard()->setMimeData(md);
-}
-
-void ChatMessage::onSaveToDisk(const QString &fileName, const QString &verbatimCode)
-{
-    FilePath sourceFile;
-
-    auto askOverwrite = [this](const FilePath &filePath) -> bool {
-        if (!filePath.exists())
-            return true;
-
-        QMessageBox::StandardButton result
-            = QMessageBox::question(window(),
-                                    Tr::tr("Overwrite File?"),
-                                    Tr::tr("The file \"%1\" already exists.\n\n"
-                                           "Do you want to overwrite it?")
-                                        .arg(filePath.fileName()),
-                                    QMessageBox::Yes | QMessageBox::No,
-                                    QMessageBox::No);
-
-        return (result == QMessageBox::Yes);
-    };
-
-    const Project *project = ProjectManager::startupProject();
-    if (project && !fileName.isEmpty()) {
-        FilePath projDir = project->projectDirectory();
-        sourceFile = projDir.pathAppended(fileName);
-
-        if (!askOverwrite(sourceFile))
-            return;
-    } else {
-        // Below the operating system file save dialog will ask if you want to overwrite
-        // an existing file. No need to ask twice.
-        QString fileNameWithPath
-            = QFileDialog::getSaveFileName(this,
-                                           Tr::tr("Save File"),
-                                           project ? project->projectDirectory().toFSPathString()
-                                                   : fileName,
-                                           Tr::tr("All Files (*)"));
-        sourceFile = FilePath::fromUserInput(fileNameWithPath);
-    }
-
-    sourceFile.writeFileContents(verbatimCode.toUtf8());
 }
 
 void ChatMessage::onDeleteClicked()
