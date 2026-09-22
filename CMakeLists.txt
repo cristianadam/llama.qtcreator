@@ -99,6 +99,8 @@ add_qtc_plugin(LlamaCpp
     tools/bash_tool.cpp tools/bash_tool.h
     tools/tool.cpp tools/tool.h
     tools/tool_utils.cpp tools/tool_utils.h
+    tools/todowrite_tool.cpp tools/todowrite_tool.h
+    tools/write_tool.cpp tools/write_tool.h
     tools/web_utils.cpp tools/web_utils.h
     tools/webfetch_tool.cpp tools/webfetch_tool.h
     tools/websearch_tool.cpp tools/websearch_tool.h

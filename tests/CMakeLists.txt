@@ -27,6 +27,8 @@ add_qtc_test(llamatools_test
     ../tools/bash_tool.cpp
     ../tools/task_tool.cpp
     ../tools/tool.cpp
+    ../tools/todowrite_tool.cpp
+    ../tools/write_tool.cpp
     ../tools/tool_utils.cpp
     ../tools/web_utils.cpp
     ../tools/webfetch_tool.cpp

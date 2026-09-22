@@ -28,7 +28,9 @@
 #include <tools/ripgrep.h>
 #include <tools/search_tool.h>
 #include <tools/task_tool.h>
+#include <tools/todowrite_tool.h>
 #include <tools/webfetch_tool.h>
+#include <tools/write_tool.h>
 #include <tools/edit_file_tool.h>
 #include <tools/websearch_tool.h>
 #include <tools/web_utils.h>
@@ -372,6 +374,25 @@ private slots:
     void editfile_emptyEdits();
     void editfile_toolDefinition();
     void editfile_summaries();
+
+    // WriteTool
+    void write_newFile();
+    void write_nestedDirs();
+    void write_overwrite();
+    void write_missingPath();
+    void write_missingContent();
+    void write_parentIsFile();
+    void write_toolDefinition();
+    void write_summaries();
+
+    // TodoWriteTool
+    void todowrite_ok();
+    void todowrite_emptyList();
+    void todowrite_emptyContent();
+    void todowrite_unknownStatus();
+    void todowrite_twoInProgress();
+    void todowrite_toolDefinition();
+    void todowrite_summaries();
 
     // WebFetchTool
     void webfetch_normalizeUrl();
@@ -1328,6 +1349,237 @@ void LlamaToolsTest::editfile_summaries()
     QVERIFY(md.contains("```diff"));
     QVERIFY(md.contains("-a"));
     QVERIFY(md.contains("+b"));
+}
+
+// ============================================================================
+// WriteTool
+// ============================================================================
+
+void LlamaToolsTest::write_newFile()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("hello.txt");
+    args[QStringLiteral("content")] = QStringLiteral("world\n");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(output.startsWith("Successfully wrote"));
+    QCOMPARE(readTextFile(gTempDir->filePath("hello.txt")), QString("world\n"));
+}
+
+void LlamaToolsTest::write_nestedDirs()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("a/b/c/deep.txt");
+    args[QStringLiteral("content")] = QStringLiteral("deep\n");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->filePath("a/b/c/deep.txt")), QString("deep\n"));
+}
+
+void LlamaToolsTest::write_overwrite()
+{
+    writeTextFile(gTempDir->filePath("old.txt"), QStringLiteral("old content\n"));
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("old.txt");
+    args[QStringLiteral("content")] = QStringLiteral("new content\n");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->filePath("old.txt")), QString("new content\n"));
+}
+
+void LlamaToolsTest::write_missingPath()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QString();
+    args[QStringLiteral("content")] = QStringLiteral("x");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("non-empty"));
+}
+
+void LlamaToolsTest::write_missingContent()
+{
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("nocontent.txt");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("content"));
+}
+
+void LlamaToolsTest::write_parentIsFile()
+{
+    writeTextFile(gTempDir->filePath("plainfile"), QStringLiteral("not a dir\n"));
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("plainfile/inner.txt");
+    args[QStringLiteral("content")] = QStringLiteral("x\n");
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("parent path is a file"));
+}
+
+void LlamaToolsTest::write_toolDefinition()
+{
+    Tools::WriteTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    const QJsonObject fn = doc.object()[QStringLiteral("function")].toObject();
+    QCOMPARE(fn[QStringLiteral("name")].toString(), QString("write"));
+    const QJsonObject params = fn[QStringLiteral("parameters")].toObject();
+    QCOMPARE(params[QStringLiteral("required")].toArray().size(), 2);
+}
+
+void LlamaToolsTest::write_summaries()
+{
+    Tools::WriteTool tool;
+
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("src/main.cpp");
+    args[QStringLiteral("content")] = QStringLiteral("int main() {}\n");
+
+    QCOMPARE(tool.oneLineSummary(args), QString("write src/main.cpp"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src/main.cpp\"")),
+              QString("write src/main.cpp"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
+
+    // On success the details markdown shows the written content as a code block.
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("Successfully wrote 16 bytes to src/main.cpp."));
+    QVERIFY(md.contains("```"));
+    QVERIFY(md.contains("int main() {}"));
+}
+
+// ============================================================================
+// TodoWriteTool
+// ============================================================================
+
+void LlamaToolsTest::todowrite_ok()
+{
+    Tools::TodoWriteTool todo;
+
+    QJsonObject args;
+    QJsonArray todos;
+    QJsonObject t1;
+    t1[QStringLiteral("content")] = QStringLiteral("Plan the work");
+    t1[QStringLiteral("status")] = QStringLiteral("completed");
+    QJsonObject t2;
+    t2[QStringLiteral("content")] = QStringLiteral("Implement it");
+    t2[QStringLiteral("status")] = QStringLiteral("in_progress");
+    QJsonObject t3;
+    t3[QStringLiteral("content")] = QStringLiteral("Test it");
+    t3[QStringLiteral("status")] = QStringLiteral("pending");
+    todos.append(t1);
+    todos.append(t2);
+    todos.append(t3);
+    args[QStringLiteral("todos")] = todos;
+
+    auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(output.contains("1 of 3 completed"));
+
+    const QString md = todo.detailsMarkdown(args, output);
+    QVERIFY(md.contains("- [x] Plan the work"));
+    QVERIFY(md.contains("- [~] Implement it"));
+    QVERIFY(md.contains("- [ ] Test it"));
+}
+
+void LlamaToolsTest::todowrite_emptyList()
+{
+    QJsonObject args;
+    args[QStringLiteral("todos")] = QJsonArray{};
+
+    auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("at least one task"));
+}
+
+void LlamaToolsTest::todowrite_emptyContent()
+{
+    QJsonObject args;
+    QJsonArray todos;
+    QJsonObject t;
+    t[QStringLiteral("content")] = QStringLiteral("  ");
+    t[QStringLiteral("status")] = QStringLiteral("pending");
+    todos.append(t);
+    args[QStringLiteral("todos")] = todos;
+
+    auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("empty"));
+}
+
+void LlamaToolsTest::todowrite_unknownStatus()
+{
+    QJsonObject args;
+    QJsonArray todos;
+    QJsonObject t;
+    t[QStringLiteral("content")] = QStringLiteral("x");
+    t[QStringLiteral("status")] = QStringLiteral("done");
+    todos.append(t);
+    args[QStringLiteral("todos")] = todos;
+
+    auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("unknown status"));
+}
+
+void LlamaToolsTest::todowrite_twoInProgress()
+{
+    QJsonObject args;
+    QJsonArray todos;
+    for (int i = 0; i < 2; ++i) {
+        QJsonObject t;
+        t[QStringLiteral("content")] = QStringLiteral("task %1").arg(i);
+        t[QStringLiteral("status")] = QStringLiteral("in_progress");
+        todos.append(t);
+    }
+    args[QStringLiteral("todos")] = todos;
+
+    auto [output, ok] = runTool<Tools::TodoWriteTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("only one task"));
+}
+
+void LlamaToolsTest::todowrite_toolDefinition()
+{
+    Tools::TodoWriteTool tool;
+    const QString def = tool.toolDefinition();
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(def.toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    const QJsonObject fn = doc.object()[QStringLiteral("function")].toObject();
+    QCOMPARE(fn[QStringLiteral("name")].toString(), QString("todo_write"));
+}
+
+void LlamaToolsTest::todowrite_summaries()
+{
+    Tools::TodoWriteTool tool;
+
+    QJsonObject args;
+    QJsonArray todos;
+    QJsonObject t1;
+    t1[QStringLiteral("content")] = QStringLiteral("a");
+    t1[QStringLiteral("status")] = QStringLiteral("pending");
+    QJsonObject t2;
+    t2[QStringLiteral("content")] = QStringLiteral("b");
+    t2[QStringLiteral("status")] = QStringLiteral("pending");
+    todos.append(t1);
+    todos.append(t2);
+    args[QStringLiteral("todos")] = todos;
+
+    QCOMPARE(tool.oneLineSummary(args), QString("update task list (2 tasks)"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"todos\": []")),
+              QString("update task list"));
 }
 
 // ============================================================================

@@ -27,6 +27,7 @@ const QStringList kExploreTools = {
     "search_directory",
     "webfetch",
     "websearch",
+    "todo_write",
 };
 
 } // namespace

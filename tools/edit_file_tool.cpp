@@ -352,7 +352,7 @@ void EditFileTool::run(const QJsonObject &args,
     const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
     if (!target.isFile())
         return done(Tr::tr("Cannot edit \"%1\": file not found. Use read_file to verify the "
-                           "path, or apply_patch to create the file.")
+                           "path, or write to create the file.")
                         .arg(path),
                     false);
 
