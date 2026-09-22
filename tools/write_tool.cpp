@@ -115,7 +115,7 @@ QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &resul
     const QString content = args.value("content").toString();
     QString md = QStringLiteral("**%1** `%2`\n\n").arg(Tr::tr("wrote"), path);
     if (!content.isEmpty())
-        md += QStringLiteral("```\n%1\n```\n").arg(content);
+        md += codeFence(content) + QLatin1Char('\n');
     return md.trimmed();
 }
 

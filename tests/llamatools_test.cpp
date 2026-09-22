@@ -338,6 +338,7 @@ private slots:
     // ApplyPatchTool::run
     void tool_fullPatch();
     void tool_addFileInStartupProject();
+    void tool_addMarkdownFile();
     void tool_move();
     void tool_updateSameFileTwice();
     void tool_updateNoChanges();
@@ -383,11 +384,13 @@ private slots:
     void write_overwrite();
     void write_missingPath();
     void write_missingContent();
+    void write_markdownContent();
     void write_parentIsFile();
     void write_toolDefinition();
     void write_summaries();
 
-    // summaryPreview / truncatedPreview
+    // codeFence / summaryPreview / truncatedPreview
+    void codeFence_escaping();
     void preview_truncatedPreview();
     void preview_bashTail();
     void preview_bashShort();
@@ -1519,6 +1522,79 @@ void LlamaToolsTest::write_summaries()
     // A failed run shows the error, flagged with an error header.
     QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Cannot write \"src/main.cpp\": boom"), false)
                 .startsWith(QStringLiteral("**Error**\n\nCannot write")));
+}
+
+// ============================================================================
+// codeFence / summaryPreview / truncatedPreview
+// ============================================================================
+
+void LlamaToolsTest::codeFence_escaping()
+{
+    // Plain content gets a normal fence.
+    QCOMPARE(codeFence(QStringLiteral("plain")), QString("```\nplain\n```"));
+
+    // Content with triple backticks needs a longer fence, or it would close
+    // the block early and the inner markdown would render live.
+    QCOMPARE(codeFence(QStringLiteral("# T\n\n```cpp\ncode\n```")),
+             QString("````\n# T\n\n```cpp\ncode\n```\n````"));
+    QCOMPARE(codeFence(QStringLiteral("a ``` b"), QStringLiteral("json")),
+             QString("````json\na ``` b\n````"));
+
+    // Content with quadruple backticks needs five.
+    QCOMPARE(codeFence(QStringLiteral("x ```` y")),
+             QString("`````\nx ```` y\n`````"));
+
+    // Empty content is fine.
+    QCOMPARE(codeFence(QString()), QString("```\n\n```"));
+}
+
+void LlamaToolsTest::write_markdownContent()
+{
+    // Writing a markdown file that contains code fences must not leak the
+    // inner fences into the details view (they would render as live
+    // markdown).
+    const QString content = QStringLiteral("# Title\n\n```cpp\nint main() {}\n```\n");
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("README.md");
+    args[QStringLiteral("content")] = content;
+
+    auto [output, ok] = runTool<Tools::WriteTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+
+    Tools::WriteTool tool;
+    const QString md = tool.detailsMarkdown(args, output, true);
+    QVERIFY(md.contains(QStringLiteral("````\n# Title")));
+    QVERIFY(md.contains(QStringLiteral("```cpp\nint main() {}\n```")));
+    // The outer fence is closed by a quadruple fence, not a triple one.
+    QVERIFY(md.endsWith(QStringLiteral("````")));
+
+    // The preview inherits the longer fence as well.
+    const QString preview = tool.summaryPreview(args, output, true);
+    QVERIFY(preview.contains(QStringLiteral("````")));
+}
+
+void LlamaToolsTest::tool_addMarkdownFile()
+{
+    // Same for apply_patch: a patch that adds a markdown file with code
+    // blocks must fence the content with more than three backticks.
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: docs/notes.md\n"
+        "+# Hello\n"
+        "+```python\n"
+        "+print(1)\n"
+        "+```\n"
+        "*** End Patch");
+
+    auto [output, ok] = runTool(args);
+    QVERIFY2(ok, qPrintable(output));
+
+    ApplyPatchTool tool;
+    const QString md = tool.detailsMarkdown(args, output, true);
+    QVERIFY(md.contains(QStringLiteral("````markdown\n# Hello")));
+    QVERIFY(md.contains(QStringLiteral("```python\nprint(1)\n```")));
+    QVERIFY(md.endsWith(QStringLiteral("````")));
 }
 
 // ============================================================================

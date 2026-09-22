@@ -529,11 +529,11 @@ QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     QString md;
     if (!ok)
         md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
-    md += QStringLiteral("```bash\n%1\n```\n").arg(command);
+    md += codeFence(command, QStringLiteral("bash")) + QLatin1Char('\n');
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty())
         md += Tr::tr("Working directory: %1\n").arg(workdir);
-    md += QStringLiteral("\n```\n%1\n```").arg(result);
+    md += QLatin1Char('\n') + codeFence(result);
     return md;
 }
 
@@ -555,7 +555,7 @@ QString BashTool::summaryPreview(const QJsonObject &arguments, const QString &re
         tail = QStringLiteral("…\n") + lines.mid(lines.size() - kMaxLines + 1).join(QLatin1Char('\n'));
     if (tail.size() > 240)
         tail = tail.left(237);
-    return QStringLiteral("```\n%1\n```").arg(tail);
+    return codeFence(tail);
 }
 
 } // namespace LlamaCpp::Tools

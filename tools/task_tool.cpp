@@ -153,7 +153,7 @@ QString TaskTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
 
     const QString prompt = arguments.value("prompt").toString();
     if (!prompt.isEmpty())
-        md += QStringLiteral("```\n%1\n```\n\n").arg(prompt);
+        md += codeFence(prompt) + QStringLiteral("\n\n");
 
     if (!result.isEmpty())
         md += QStringLiteral("### Result\n\n%1").arg(result);

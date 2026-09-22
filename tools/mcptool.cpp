@@ -83,14 +83,14 @@ QString McpTool::detailsMarkdown(const QJsonObject &arguments, const QString &re
     if (!ok)
         md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
     if (!arguments.isEmpty()) {
-        md += QStringLiteral("**Arguments**\n\n```json\n")
-              + QString::fromUtf8(QJsonDocument(arguments).toJson(QJsonDocument::Indented))
-              + QStringLiteral("\n```");
+        md += QStringLiteral("**Arguments**\n\n")
+              + codeFence(QString::fromUtf8(QJsonDocument(arguments).toJson(QJsonDocument::Indented)),
+                          QStringLiteral("json"));
     }
     if (!result.isEmpty()) {
         if (!md.isEmpty())
             md += QLatin1Char('\n');
-        md += QStringLiteral("\n```\n") + result + QLatin1Char('\n') + QStringLiteral("```");
+        md += QLatin1Char('\n') + codeFence(result);
     }
     return md;
 }

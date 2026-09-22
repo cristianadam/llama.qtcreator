@@ -16,12 +16,27 @@ QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &resul
     QString md;
     if (!ok)
         md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
-    return md + QStringLiteral("```\n%1\n```").arg(result);
+    return md + codeFence(result);
 }
 
 QString Tool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
 {
     return truncatedPreview(detailsMarkdown(arguments, result, ok), 3);
+}
+
+QString codeFence(const QString &content, const QString &info)
+{
+    // Longest run of consecutive backticks in the content.
+    int maxRun = 0;
+    int run = 0;
+    for (const QChar c : content) {
+        run = (c == QLatin1Char('`')) ? run + 1 : 0;
+        if (run > maxRun)
+            maxRun = run;
+    }
+    const int length = qMax(3, maxRun + 1);
+    const QString fence(QString(length, QLatin1Char('`')));
+    return QStringLiteral("%1%2\n%3\n%1").arg(fence, info, content);
 }
 
 QString truncatedPreview(const QString &text, int maxLines)
@@ -46,11 +61,19 @@ QString truncatedPreview(const QString &text, int maxLines)
     // well‑formed.  No trailing ellipsis: the details header already gets
     // the expand (down) icon appended, which signals more content.
     int fences = 0;
-    for (const QString &line : std::as_const(preview).split(QLatin1Char('\n')))
-        if (line.trimmed().startsWith(QStringLiteral("```")))
+    int fenceLength = 3;
+    for (const QString &line : std::as_const(preview).split(QLatin1Char('\n'))) {
+        const QString trimmed = line.trimmed();
+        int length = 0;
+        while (length < trimmed.size() && trimmed.at(length) == QLatin1Char('`'))
+            ++length;
+        if (length >= 3) {
             ++fences;
+            fenceLength = qMax(fenceLength, length);
+        }
+    }
     if (fences % 2 == 1)
-        preview += QStringLiteral("\n```");
+        preview += QLatin1Char('\n') + QString(fenceLength, QLatin1Char('`'));
     return preview;
 }
 

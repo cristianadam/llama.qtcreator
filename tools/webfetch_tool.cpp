@@ -270,7 +270,7 @@ QString htmlToMarkdown(const QString &html)
     for (int i = 0; i < codeBlocks.size(); ++i) {
         const QString marker = QString(QChar(0x01)) + QStringLiteral("PRE") + QString::number(i)
                              + QString(QChar(0x01));
-        s.replace(marker, QStringLiteral("```\n%1\n```").arg(codeBlocks.at(i)));
+        s.replace(marker, codeFence(codeBlocks.at(i)));
     }
 
     return s;

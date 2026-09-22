@@ -210,7 +210,7 @@ QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString 
     const QString path = arguments.value("path").toString();
     if (!path.isEmpty())
         md += Tr::tr("  Path: %1").arg(path);
-    md += QStringLiteral("\n\n```\n") + result + QStringLiteral("\n```");
+    md += QStringLiteral("\n\n") + codeFence(result);
     return md;
 }
 

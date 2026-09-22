@@ -58,6 +58,14 @@ public:
         = 0;
 };
 
+//! Wraps \a content in a markdown code fence (optionally with an \a info
+//! string, e.g. "diff").  The fence is made of at least one backtick more
+//! than the longest backtick run in \a content, so content that itself
+//! contains triple backticks (markdown source files, code snippets in
+//! command output) cannot close the fence early and be rendered as live
+//! markdown.
+QString codeFence(const QString &content, const QString &info = {});
+
 //! Truncates \a text for inline display: at most \a maxLines lines and 300
 //! characters.  A code fence left open by the cut is closed so the markdown
 //! stays well‑formed.  No ellipsis is appended: the details header already

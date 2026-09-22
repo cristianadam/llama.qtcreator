@@ -148,7 +148,7 @@ QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     QString md = Tr::tr("Pattern: `%1`").arg(pattern);
     if (!path.isEmpty())
         md += Tr::tr("  Path: %1").arg(path);
-    md += QStringLiteral("\n\n```\n") + result + QStringLiteral("\n```");
+    md += QStringLiteral("\n\n") + codeFence(result);
     return md;
 }
 

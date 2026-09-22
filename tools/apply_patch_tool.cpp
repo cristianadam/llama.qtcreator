@@ -334,15 +334,18 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
     for (const Patch::Hunk &hunk : std::as_const(hunks)) {
         switch (hunk.type) {
         case Patch::HunkType::Add:
-            md += QString("**%1** `%2`\n\n```%3\n%4\n```\n\n")
-                      .arg(Tr::tr("created"), hunk.path, codeLanguageFor(hunk.path), hunk.contents);
+            md += QString("**%1** `%2`\n\n").arg(Tr::tr("created"), hunk.path)
+                    + codeFence(hunk.contents, codeLanguageFor(hunk.path))
+                    + QStringLiteral("\n\n");
             break;
         case Patch::HunkType::Update: {
             const QString title = hunk.movePath.isEmpty()
                     ? QString("**%1** `%2`").arg(Tr::tr("edited"), hunk.path)
                     : QString("**%1** `%2` \u2192 `%3`")
                           .arg(Tr::tr("moved"), hunk.path, hunk.movePath);
-            md += title + QLatin1String("\n\n```diff\n") + unifiedDiffFor(hunk) + QLatin1String("\n```\n\n");
+            md += title + QLatin1String("\n\n")
+                    + codeFence(unifiedDiffFor(hunk), QStringLiteral("diff"))
+                    + QLatin1String("\n\n");
             break;
         }
         case Patch::HunkType::Delete:
