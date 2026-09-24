@@ -1,6 +1,7 @@
 #include "markdownrenderer.h"
 
 #include <QAbstractTextDocumentLayout>
+#include <QCryptographicHash>
 #include <QLayout>
 #include <QClipboard>
 #include <QColor>
@@ -14,6 +15,7 @@
 #include <QPalette>
 #include <QResizeEvent>
 #include <QScrollBar>
+#include <QSvgRenderer>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -517,9 +519,22 @@ void MarkdownRenderer::leaveBlockQuote()
 
 void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
 {
+    m_codeBlockLanguage = languageFromInfoString(code);
+
+    // SVG blocks are shown as a picture (a <details> section: the image in
+    // the collapsed header, the source in the body).
+    if (renderSvgCodeBlock(code))
+        return;
+
+    renderCodeBlockText(code);
+}
+
+void MarkdownRenderer::renderCodeBlockText(const markus::CodeBlock &code)
+{
     m_codeBlock = true;
     m_codeBlockLanguage = languageFromInfoString(code);
     m_codeFenceChar = code.fence_char ? QChar::fromLatin1(code.fence_char) : QChar::Null;
+
     beginBlock();
 
     int blockId = ++m_nextCodeBlockId;
@@ -533,19 +548,7 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
     fmt.setTopMargin(m_paragraphMargin);
     fmt.setBottomMargin(m_paragraphMargin);
     fmt.setProperty(QTextFormat::BlockCodeLanguage, m_codeBlockLanguage);
-    if (m_blockQuoteDepth > 0) {
-        fmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
-        fmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin)
-                          + m_paragraphMargin);
-    } else if (m_detailsBodyDepth > 0) {
-        // Indent like a quote body, minus the vertical line (tool output).
-        fmt.setProperty(DetailsBodyIndentProp, m_detailsBodyDepth);
-        fmt.setLeftMargin(getDetailsBodyMargin(m_detailsBodyDepth) + m_paragraphMargin);
-    } else {
-        fmt.setLeftMargin(m_paragraphMargin);
-    }
-    if (!m_listStack.isEmpty())
-        fmt.setIndent(m_listStack.size());
+    applyHorizontalIndent(fmt);
     if (!m_codeFenceChar.isNull()) {
         fmt.setNonBreakableLines(true);
         fmt.setProperty(QTextFormat::BlockCodeFence, QString(m_codeFenceChar));
@@ -585,6 +588,154 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
     m_codeFenceChar = QChar::Null;
 
     createOverlayForCodeBlock(blockId);
+}
+
+bool MarkdownRenderer::renderSvgCodeBlock(const markus::CodeBlock &code)
+{
+    // Only *complete* SVGs are rendered as images: while the block is still
+    // streaming (no closing tag yet) it is shown as plain code, and a broken
+    // SVG falls back to the code view so the source stays available.
+    //
+    // Detection is by content, not by the fence language: models (and the
+    // write/apply_patch tool views) frequently show SVG source in unlabeled
+    // fences, and any fenced block that *is* an SVG document is better shown
+    // as a picture.
+    const QByteArray bytes(code.content.data(), int(code.content.size()));
+    const QString text = QString::fromUtf8(bytes).trimmed();
+    if (!text.startsWith(QLatin1String("<svg"), Qt::CaseInsensitive)
+        || !text.contains(QLatin1String("</svg>"), Qt::CaseInsensitive))
+        return false;
+
+    QSvgRenderer renderer(bytes);
+    if (!renderer.isValid()) {
+        qWarning() << "MarkdownRenderer: SVG code block is not a renderable SVG, "
+                    << "showing it as code instead";
+        return false;
+    }
+
+    // The URL derives from the content, so re-rendering the in-progress tail
+    // reuses the same resource once the content stops changing.
+    const QString key = QString::fromLatin1(
+            QCryptographicHash::hash(bytes, QCryptographicHash::Md5).toHex().left(16));
+    m_svgStore.insert(key, bytes);
+
+    const QString summaryText = Tr::tr("SVG image");
+
+    // Render as a <details> section: the picture in the (collapsed by
+    // default) header, the source in the body.  Section ids are ordinal, so
+    // the user's expand/collapse choice survives tail re-renders.
+    const int prevSecId = m_detailsSecId;
+    m_detailsSecId = nextDetailsId();
+    const int secId = m_detailsSecId;
+
+    bool visible = m_toggleDetails.contains(secId) ? m_toggleDetails.value(secId)
+                                                   : false;
+    m_toggleDetails.insert(secId, visible);
+
+    // Header, two lines, in their own paragraphs after the surrounding
+    // text: the picture centered on its own line, the label with the
+    // direction icon below it.  Both blocks become clickable toggle blocks,
+    // so clicking the picture expands the source, too.
+    beginBlock();
+    const int headerPos = documentEndPosition();
+    QTextBlockFormat imgBlockFmt = m_cursor.blockFormat();
+    imgBlockFmt.setAlignment(Qt::AlignHCenter);
+    imgBlockFmt.setTopMargin(m_paragraphMargin);
+    imgBlockFmt.setBottomMargin(0);
+    applyHorizontalIndent(imgBlockFmt);
+    m_cursor.setBlockFormat(imgBlockFmt);
+
+    QTextImageFormat imgFmt;
+    imgFmt.setName(QStringLiteral("llamasvg://") + key);
+    m_cursor.insertImage(imgFmt);
+
+    beginBlock();
+    QTextBlockFormat labelBlockFmt = m_cursor.blockFormat();
+    labelBlockFmt.setAlignment(Qt::AlignHCenter);
+    labelBlockFmt.setTopMargin(0);
+    labelBlockFmt.setBottomMargin(m_paragraphMargin);
+    applyHorizontalIndent(labelBlockFmt);
+    m_cursor.setBlockFormat(labelBlockFmt);
+    // insertImage() may leave the cursor's char format set to the image
+    // format; the label text must not inherit it.
+    m_cursor.setCharFormat(m_textCharFormatStack.isEmpty() ? QTextCharFormat()
+                                                           : m_textCharFormatStack.top());
+    m_cursor.insertText(summaryText);
+    // The direction icon goes last, like in regular details headers; restore
+    // the char format afterwards (insertHtml leaves it set to the icon font).
+    const QTextCharFormat prevIconFmt = m_cursor.charFormat();
+    m_cursor.insertHtml(sectionIconHtml(secId, visible));
+    m_cursor.setCharFormat(prevIconFmt);
+
+    // Tag both header blocks as the section's clickable toggle blocks
+    // (always visible, click toggles the body).
+    const QTextBlock firstHeader = m_doc->findBlock(headerPos);
+    const QTextBlock labelHeader = firstHeader.next();
+    for (QTextBlock blk = firstHeader; blk.isValid() && blk != labelHeader.next();
+         blk = blk.next()) {
+        QTextBlockFormat hfmt = blk.blockFormat();
+        hfmt.setProperty(DetailsSectionIdProp, secId);
+        hfmt.setProperty(DetailsToggleBlockProp, true);
+        if (blk == firstHeader)
+            hfmt.setProperty(DetailsSummaryTextProp, summaryText);
+        QTextCursor(blk).setBlockFormat(hfmt);
+    }
+
+    // Body: the SVG source as a regular code block (syntax highlighting and
+    // the copy overlay included); m_detailsSecId makes beginBlock() tag its
+    // blocks with the section id.
+    markus::CodeBlock source = code;
+    // XML highlighting: there is no dedicated SVG syntax definition.
+    source.info_string = "xml";
+    renderCodeBlockText(source);
+
+    // Show/hide the body blocks (they directly follow the header and carry
+    // the section id; the header itself is a toggle block and is skipped by
+    // toggleSection()).
+    for (QTextBlock blk = m_doc->findBlock(headerPos);
+         blk.isValid() && blk.blockFormat().property(DetailsSectionIdProp).toInt() == secId;
+         blk = blk.next()) {
+        if (blk.blockFormat().property(DetailsToggleBlockProp).toBool())
+            continue;
+        blk.setVisible(visible);
+    }
+
+    m_detailsSecId = prevSecId;
+    return true;
+}
+
+int MarkdownRenderer::nextDetailsId()
+{
+    if (m_tailDetailsIndex >= 0) {
+        const int id = m_nextDetailsId + m_tailDetailsIndex + 1;
+        ++m_tailDetailsIndex;
+        return id;
+    }
+    return ++m_nextDetailsId;
+}
+
+void MarkdownRenderer::applyHorizontalIndent(QTextBlockFormat &fmt) const
+{
+    if (m_blockQuoteDepth > 0) {
+        fmt.setProperty(QTextFormat::BlockQuoteLevel, m_blockQuoteDepth);
+        fmt.setLeftMargin(getBlockQuoteMargin(m_blockQuoteDepth, m_paragraphMargin)
+                          + m_paragraphMargin);
+    } else if (m_detailsBodyDepth > 0) {
+        // Indent like a quote body, minus the vertical line (tool output).
+        fmt.setProperty(DetailsBodyIndentProp, m_detailsBodyDepth);
+        fmt.setLeftMargin(getDetailsBodyMargin(m_detailsBodyDepth) + m_paragraphMargin);
+    } else {
+        fmt.setLeftMargin(m_paragraphMargin);
+    }
+    if (!m_listStack.isEmpty())
+        fmt.setIndent(m_listStack.size());
+}
+
+QByteArray MarkdownRenderer::svgContentForUrl(const QUrl &url) const
+{
+    if (url.scheme() != QLatin1String("llamasvg"))
+        return {};
+    return m_svgStore.value(url.authority());
 }
 
 void MarkdownRenderer::handleThematicBreak()
@@ -707,13 +858,7 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
     // Section ids are ordinal (document order). The in-progress tail is
     // re-rendered on every feed, so its sections get the ids they will have
     // once finalized – user expand/collapse choices survive re-renders.
-    int secId;
-    if (m_tailDetailsIndex >= 0) {
-        secId = m_nextDetailsId + m_tailDetailsIndex + 1;
-        ++m_tailDetailsIndex;
-    } else {
-        secId = ++m_nextDetailsId;
-    }
+    const int secId = nextDetailsId();
 
     const QString summaryText
         = details.summary.empty() ? Tr::tr("Details")

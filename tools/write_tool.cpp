@@ -112,10 +112,11 @@ QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &resul
         return result;
 
     // No header: the summary already says "write <path>".
+    const QString path = args.value("path").toString();
     const QString content = args.value("content").toString();
     if (content.isEmpty())
         return {};
-    return codeFence(content);
+    return codeFence(content, codeLanguageFor(path));
 }
 
 void WriteTool::run(const QJsonObject &args,

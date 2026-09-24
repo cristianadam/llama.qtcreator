@@ -74,7 +74,7 @@ add_qtc_test(markdownrenderer_test
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
   DEPENDS
-    Qt::Test Qt::Core Qt::Gui Qt::Widgets
+    Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Svg
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::KSyntaxHighlighting

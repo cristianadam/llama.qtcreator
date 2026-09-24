@@ -47,11 +47,13 @@ private:
     void adjustMinimumWidth(const QString &markdown);
     int commonPrefixLength(const QList<QByteArray> &a, const QList<QByteArray> &b) const;
     void updateColorPalette();
-
+    QVariant renderSvgResource(const QUrl &name);
+    void refreshSvgResources();
 
     QElapsedTimer m_markdownConversionTimer;
     QMovie *m_spinner = nullptr;
     QSet<QUrl> m_spinnerUrls;
+    QSet<QUrl> m_svgUrls;
     int m_heightAdjustment{0};
 };
 } // namespace LlamaCpp

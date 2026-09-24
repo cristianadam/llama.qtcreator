@@ -1598,7 +1598,7 @@ void LlamaToolsTest::write_markdownContent()
 
     Tools::WriteTool tool;
     const QString md = tool.detailsMarkdown(args, output, true);
-    QVERIFY(md.contains(QStringLiteral("````\n# Title")));
+    QVERIFY(md.contains(QStringLiteral("````markdown\n# Title")));
     QVERIFY(md.contains(QStringLiteral("```cpp\nint main() {}\n```")));
     // The outer fence is closed by a quadruple fence, not a triple one.
     QVERIFY(md.endsWith(QStringLiteral("````")));

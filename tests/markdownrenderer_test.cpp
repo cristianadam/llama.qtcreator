@@ -1,5 +1,6 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
+#include <QTextImageFormat>
 #include <QTimer>
 #include <QtTest/QtTest>
 
@@ -41,6 +42,9 @@ private slots:
     void toolCallCollapsedByDataToolAttribute();
     void toolCallSummaryWithOutputPreview();
     void collapsedSectionStaysCollapsed();
+    void svgCodeBlockRendersAsImage();
+    void svgCodeBlockWithoutLanguageTag();
+    void brokenSvgFallsBackToCode();
 };
 
 void MarkdownRendererTest::plainParagraph()
@@ -360,6 +364,107 @@ void MarkdownRendererTest::collapsedSectionStaysCollapsed()
     }
     QVERIFY2(body2.isValid(), "expected a re-rendered details body block");
     QVERIFY2(!body2.isVisible(), "body must stay collapsed after a divergent re-feed");
+}
+
+void MarkdownRendererTest::svgCodeBlockRendersAsImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text
+        = QStringLiteral("Here you go:\n\n```svg\n"
+                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"60\">\n"
+                         "  <rect width=\"120\" height=\"60\" fill=\"#f00\"/>\n"
+                         "</svg>\n```");
+    streamText(renderer, text);
+
+    // The block must be an image, not source text: scan the document for an
+    // image char format.
+    QString imageUrl;
+    for (int p = 0; p < renderer.document()->characterCount() && imageUrl.isEmpty();
+         ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        if (cursor.charFormat().isImageFormat())
+            imageUrl = cursor.charFormat().toImageFormat().name();
+    }
+    QVERIFY2(!imageUrl.isEmpty(), "expected an image in the document");
+    QVERIFY2(imageUrl.startsWith(QLatin1String("llamasvg://")), qPrintable(imageUrl));
+    QVERIFY(renderer.svgContentForUrl(QUrl(imageUrl)).contains("<rect"));
+
+    // The picture lives in a <details> header; the source is in the body,
+    // collapsed by default.
+    QTextDocument *doc = renderer.document();
+    int secId = 0;
+    bool headerFound = false;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid() && !headerFound;
+         blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (!fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            continue;
+        if (fmt.property(MarkdownRenderer::DetailsSummaryTextProp).toString()
+            != QStringLiteral("SVG image"))
+            continue;
+        secId = fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt();
+        headerFound = true;
+    }
+    QVERIFY2(headerFound, "expected a details header with an SVG image summary");
+
+    // The header is two toggle blocks: the centered picture, and the label
+    // line below it (clicking either expands the source).
+    QTextBlock imageBlock;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid() && !imageBlock.isValid();
+         blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt() == secId
+            && fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            imageBlock = blk;
+    }
+    const QTextBlockFormat labelFmt = imageBlock.next().blockFormat();
+    QCOMPARE(labelFmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt(), secId);
+    QVERIFY2(labelFmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool(),
+             "the label line must be a toggle block, too");
+
+    QTextBlock body;
+    for (QTextBlock blk = doc->firstBlock(); blk.isValid() && !body.isValid();
+         blk = blk.next()) {
+        const QTextBlockFormat fmt = blk.blockFormat();
+        if (fmt.property(MarkdownRenderer::DetailsSectionIdProp).toInt() == secId
+            && !fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            body = blk;
+    }
+    QVERIFY2(body.isValid(), "expected a details body carrying the SVG source");
+    QVERIFY2(!body.isVisible(), "the source body must be collapsed by default");
+    QVERIFY(renderer.toPlainText().contains("<rect"));
+}
+
+void MarkdownRendererTest::svgCodeBlockWithoutLanguageTag()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // No language on the fence (the write/apply_patch tool views and many
+    // models emit SVG this way) – detection must work from the content.
+    const QString text
+        = QStringLiteral("```\n"
+                         "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\">\n"
+                         "  <circle cx=\"5\" cy=\"5\" r=\"4\"/>\n"
+                         "</svg>\n```");
+    streamText(renderer, text);
+    QVERIFY(renderer.toPlainText().contains(QChar(0xFFFC)));
+    QVERIFY(renderer.toPlainText().contains(QLatin1String("<circle")));
+}
+
+void MarkdownRendererTest::brokenSvgFallsBackToCode()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // Contains the closing tag, but is not well-formed XML, so QSvgRenderer
+    // rejects it and the block must stay a regular code block.
+    const QString text
+        = QStringLiteral("```svg\n<svg xmlns=\"http://www.w3.org/2000/svg\"><broken\n</svg>\n```");
+    const QString out = streamText(renderer, text);
+    QVERIFY2(out.contains(QStringLiteral("<broken")), qPrintable(out));
+    QVERIFY2(!renderer.toPlainText().contains(QChar(0xFFFC)),
+             "a broken SVG must not produce an image");
 }
 
 int main(int argc, char **argv)

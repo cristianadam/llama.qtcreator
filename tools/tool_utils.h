@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QString>
+
 namespace Utils {
 class FilePath;
 }
@@ -15,3 +17,9 @@ class FilePath;
     new files (write, apply_patch add) need: an existence probe would always
     fail for a fresh file and misplace it in the general project directory. */
 Utils::FilePath absoluteProjectPath(const Utils::FilePath &relPath, bool mustExist = true);
+
+//! Returns the syntax‑highlighting language name for a fenced code block
+//! showing the contents of \a filePath, derived from the file suffix.
+//! SVG maps to "xml" (there is no dedicated SVG definition, and XML
+//! highlighting reads fine for it).
+QString codeLanguageFor(const QString &filePath);

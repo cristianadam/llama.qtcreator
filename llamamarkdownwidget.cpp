@@ -6,7 +6,9 @@
 #include <QFile>
 #include <QList>
 #include <QMovie>
+#include <QPainter>
 #include <QResizeEvent>
+#include <QSvgRenderer>
 #include <QTextBlock>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -160,6 +162,10 @@ void MarkdownLabel::resizeEvent(QResizeEvent *event)
     MarkdownRenderer::resizeEvent(event);          // keep normal behaviour
     if (viewport()->width() > 0)
         document()->setTextWidth(viewport()->width()); // re‑wrap at new width
+    // SVG images were rasterized at the old text width; re-serve them so
+    // they track the new column width (loadResource() is not called again
+    // for URLs the document has already fetched).
+    refreshSvgResources();
     notifyGeometryChanged();                       // notify layout
 }
 
@@ -260,8 +266,55 @@ QVariant MarkdownLabel::loadResource(int type, const QUrl &name)
         return frame;
     }
 
+    if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("llamasvg")) {
+        m_svgUrls.insert(name);
+        return renderSvgResource(name);
+    }
+
     // Default handling for everything else (e.g. normal file URLs).
     return MarkdownRenderer::loadResource(type, name);
+}
+
+QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
+{
+    const QByteArray svg = svgContentForUrl(name);
+    QSvgRenderer renderer(svg);
+    if (!renderer.isValid())
+        return {};
+
+    // Render at the document's text width so the drawing fills the chat
+    // column; smaller SVGs keep their native size (no up-scaling).
+    double width = document()->textWidth();
+    if (width <= 0)
+        width = 600;
+    const QSizeF defaultSize = renderer.defaultSize();
+    double w = defaultSize.width() > 0 ? defaultSize.width() : width;
+    double h = defaultSize.height() > 0 ? defaultSize.height() : w * 0.6;
+    const double scale = qMin(1.0, width / w);
+    w *= scale;
+    h *= scale;
+    constexpr double kMaxHeight = 600.0; // keep tall drawings from dominating the chat
+    if (h > kMaxHeight) {
+        const double factor = kMaxHeight / h;
+        w *= factor;
+        h *= factor;
+    }
+
+    // Render at device resolution so the picture stays crisp on HiDPI.
+    const qreal dpr = devicePixelRatioF();
+    QImage image(QSize(qCeil(w * dpr), qCeil(h * dpr)), QImage::Format_ARGB32_Premultiplied);
+    image.setDevicePixelRatio(dpr);
+    QPainter painter(&image);
+    renderer.render(&painter, QRectF(0, 0, w, h));
+    return image;
+}
+
+void MarkdownLabel::refreshSvgResources()
+{
+    if (m_svgUrls.isEmpty())
+        return;
+    for (const QUrl &url : m_svgUrls)
+        document()->addResource(QTextDocument::ImageResource, url, renderSvgResource(url));
 }
 
 void MarkdownLabel::onSpinnerFrameChanged(int)

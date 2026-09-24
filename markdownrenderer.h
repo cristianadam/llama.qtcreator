@@ -79,6 +79,11 @@ public:
     QByteArray buffer() const;
     void setBuffer(const QByteArray &newBuffer);
 
+    // Raw SVG stored for a "llamasvg://" image URL (see renderSvgCodeBlock);
+    // empty for unknown or foreign URLs.  MarkdownLabel::loadResource() turns
+    // it into pixels.
+    QByteArray svgContentForUrl(const QUrl &url) const;
+
 signals:
     void copyClicked(const QString &verbatim, const QString &formattedCode);
 
@@ -141,6 +146,21 @@ private:
     void handleBlockQuote();
     void leaveBlockQuote();
     void handleCodeBlock(const markus::CodeBlock &code);
+    // Renders a code block as (optionally highlighted) source text, i.e. the
+    // regular code view.
+    void renderCodeBlockText(const markus::CodeBlock &code);
+    // Renders a complete SVG code block as a <details> section: the rendered
+    // picture in the (collapsed by default) header, the source in the body.
+    // Returns false when the block should fall back to the regular code view
+    // (still streaming or invalid SVG).
+    bool renderSvgCodeBlock(const markus::CodeBlock &code);
+    // The ordinal id of the next <details> section; tail sections get the
+    // stable ids they will have once finalized, so user expand/collapse
+    // choices survive tail re-renders.
+    int nextDetailsId();
+    // Sets the left margin/indent (and quote/details/list tags) on \a fmt so
+    // the block lines up with the surrounding code blocks.
+    void applyHorizontalIndent(QTextBlockFormat &fmt) const;
     void handleThematicBreak();
     void handleList(const markus::List &list);
     void leaveList();
@@ -215,6 +235,9 @@ private:
     // ids they will have once finalized.
     int m_tailDetailsIndex = -1;
     int m_nextCodeBlockId = 0;
+    // SVG source for llamasvg:// image URLs, keyed by a hash of the content
+    // so tail re-renders of the same block reuse the same resource.
+    QHash<QString, QByteArray> m_svgStore;
     int m_paragraphMargin = 0;
     bool m_skipNextParagraphBlock = false;
     bool m_expandDetailsByDefault = true;

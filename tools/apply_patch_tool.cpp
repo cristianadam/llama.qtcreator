@@ -25,59 +25,6 @@ const bool registered = [] {
     return true;
 }();
 
-QString codeLanguageFor(const QString &filePath)
-{
-    const QString fileName = QFileInfo(filePath).fileName().toLower();
-    const QString suffix = QFileInfo(filePath).suffix().toLower();
-    if (fileName == "cmakelists.txt" || suffix == "cmake")
-        return QStringLiteral("cmake");
-    if (suffix == "cpp" || suffix == "cc" || suffix == "cxx" || suffix == "c++")
-        return QStringLiteral("cpp");
-    if (suffix == "h" || suffix == "hpp" || suffix == "hxx")
-        return QStringLiteral("cpp");
-    if (suffix == "py")
-        return QStringLiteral("python");
-    if (suffix == "js" || suffix == "jsx")
-        return QStringLiteral("javascript");
-    if (suffix == "ts" || suffix == "tsx")
-        return QStringLiteral("typescript");
-    if (suffix == "json")
-        return QStringLiteral("json");
-    if (suffix == "xml")
-        return QStringLiteral("xml");
-    if (suffix == "yaml" || suffix == "yml")
-        return QStringLiteral("yaml");
-    if (suffix == "md")
-        return QStringLiteral("markdown");
-    if (suffix == "html")
-        return QStringLiteral("html");
-    if (suffix == "css")
-        return QStringLiteral("css");
-    if (suffix == "sh" || suffix == "bash")
-        return QStringLiteral("bash");
-    if (suffix == "pro")
-        return QStringLiteral("text");
-    if (suffix == "qml")
-        return QStringLiteral("javascript");
-    if (suffix == "sql")
-        return QStringLiteral("sql");
-    if (suffix == "rs")
-        return QStringLiteral("rust");
-    if (suffix == "go")
-        return QStringLiteral("go");
-    if (suffix == "java")
-        return QStringLiteral("java");
-    if (suffix == "rb")
-        return QStringLiteral("ruby");
-    if (suffix == "php")
-        return QStringLiteral("php");
-    if (suffix == "swift")
-        return QStringLiteral("swift");
-    if (suffix == "kt" || suffix == "kts")
-        return QStringLiteral("kotlin");
-    return QStringLiteral("text");
-}
-
 QString readPatchedLines(const QString &path)
 {
     const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
