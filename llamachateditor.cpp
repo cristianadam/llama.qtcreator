@@ -41,7 +41,6 @@
 #include "llamaicons.h"
 #include "llamasettings.h"
 #include "llamatheme.h"
-#include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 
 using namespace TextEditor;
@@ -305,26 +304,11 @@ ChatEditor::ChatEditor()
             this,
             [this](const Core::IDocument *document) {
                 if (document == static_cast<Core::IDocument *>(m_document.get())) {
+                    // Tool calls are exported as <details> blocks
                     QByteArray content;
 
-                    for (ChatMessage *chat : std::as_const(m_messageWidgets)) {
-                        if (chat->isUser()) {
-                            content.append("### User\n\n");
-                            content.append(chat->message().content.toUtf8());
-                            content.append("\n\n");
-                        } else {
-                            content.append("### Assistant\n\n");
-
-                            QString processedContent = chat->message().content;
-                            processedContent.replace(ThinkingSectionParser::startToken(),
-                                                     "<details><summary>Thought</summary>\n");
-                            processedContent.replace(ThinkingSectionParser::endToken(),
-                                                     "\n</details>\n\n");
-
-                            content.append(processedContent.toUtf8());
-                            content.append("\n\n");
-                        }
-                    }
+                    for (ChatMessage *chat : std::as_const(m_messageWidgets))
+                        content.append(ChatManager::messageToMarkdown(chat->message()).toUtf8());
 
                     m_document->setContents(content);
                 }

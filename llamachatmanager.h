@@ -31,6 +31,14 @@ public:
 
     bool isGenerating(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
+    //! Renders a single message as Markdown for the conversation export
+    //! ("Save as Markdown" in the conversations view and the editor's save
+    //! path).  Tool messages render their tool call and result as a
+    //! collapsible <details> block.  Returns an empty string for messages
+    //! that have nothing to show (e.g. a tool‑call‑only assistant wrapper,
+    //! whose tool call is exported with the tool message instead).
+    static QString messageToMarkdown(const Message &msg);
+
     QVector<Message> filterByLeafNodeId(const QVector<Message> &messages,
                                         qint64 leafNodeId,
                                         bool includeRoot);

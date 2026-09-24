@@ -320,26 +320,10 @@ bool ConversationsView::saveConversationAsMarkdown()
     const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
     ViewingChat chat = ChatManager::instance().getViewingChat(convId);
 
-    // Build markdown content
+    // Build markdown content (tool calls are exported as <details> blocks)
     QByteArray content;
-    for (const Message &msg : chat.messages) {
-        if (msg.role == "user") {
-            content.append("### User\n\n");
-            content.append(msg.content.toUtf8());
-            content.append("\n\n");
-        } else {
-            content.append("### Assistant\n\n");
-
-            QString processedContent = msg.content;
-            processedContent.replace(ThinkingSectionParser::startToken(),
-                                     "<details><summary>Thought</summary>\n");
-            processedContent.replace(ThinkingSectionParser::endToken(),
-                                     "\n</details>\n\n");
-
-            content.append(processedContent.toUtf8());
-            content.append("\n\n");
-        }
-    }
+    for (const Message &msg : chat.messages)
+        content.append(ChatManager::messageToMarkdown(msg).toUtf8());
 
     // Default filename
     QString defaultFileName = QString("%1.md").arg(selected.data().toString());

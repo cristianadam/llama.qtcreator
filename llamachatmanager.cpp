@@ -1,5 +1,6 @@
 #include <QCoreApplication>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QLoggingCategory>
 #include <QNetworkReply>
 #include <QProcess>
@@ -448,6 +449,92 @@ ViewingChat ChatManager::getViewingChat(const QString &convId) const
 {
     ViewingChat vc{m_storage->getOneConversation(convId), m_storage->getMessages(convId)};
     return vc;
+}
+
+// Renders a tool call and its result as a collapsible Markdown block,
+// mirroring the tool bubble shown in the chat UI.  Returns an empty
+// string when the message carries no tool call.
+static QString toolCallToMarkdown(const Message &msg)
+{
+    QString functionName;
+    QString argumentsJson;
+    QString functionResult;
+    QString toolStatus;
+
+    for (const QVariantMap &e : msg.extra) {
+        if (e.contains("tool_calls")) {
+            const QJsonArray calls = e.value("tool_calls").toJsonArray();
+            if (!calls.isEmpty()) {
+                const QJsonObject callObj = calls.first().toObject();
+                functionName = callObj.value("function").toObject().value("name").toString();
+                argumentsJson
+                    = callObj.value("function").toObject().value("arguments").toString();
+            }
+        }
+        if (e.contains("tool_result"))
+            functionResult = e.value("tool_result").toJsonObject().value("content").toString();
+        if (e.contains("tool_status"))
+            toolStatus = e.value("tool_status").toString(); // "success" / "failed"
+        // NB: tool_calls, tool_result and tool_status may live in the same
+        // extra entry, so these must be independent checks.
+    }
+
+    if (functionName.isEmpty())
+        return {};
+
+    QJsonObject args;
+    QString formattedArgs = argumentsJson;
+    const QJsonDocument argDoc = QJsonDocument::fromJson(argumentsJson.toUtf8());
+    if (argDoc.isObject()) {
+        args = argDoc.object();
+        formattedArgs = QString::fromUtf8(QJsonDocument(args).toJson(QJsonDocument::Indented));
+    }
+
+    // Reuse the tool's one‑line summary so the export matches what the UI
+    // shows in the collapsed tool bubble.
+    QString summary = QStringLiteral("Tool: %1").arg(functionName);
+    if (const std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName))
+        summary = tool->oneLineSummary(args);
+    if (!toolStatus.isEmpty())
+        summary += QStringLiteral(" (%1)").arg(toolStatus);
+
+    if (functionResult.endsWith('\n'))
+        functionResult.chop(1);
+
+    QString md = QStringLiteral("<details>\n<summary>%1</summary>\n").arg(summary);
+    md += QStringLiteral("\n**Arguments**\n\n```json\n") + formattedArgs + QStringLiteral("\n```\n");
+    if (!functionResult.isEmpty())
+        md += QStringLiteral("\n**Result**\n\n```\n") + functionResult + QStringLiteral("\n```\n");
+    md += QStringLiteral("\n</details>\n\n");
+
+    return md;
+}
+
+QString ChatManager::messageToMarkdown(const Message &msg)
+{
+    if (msg.role == "tool")
+        return toolCallToMarkdown(msg);
+
+    if (msg.role == "user")
+        return QStringLiteral("### User\n\n") + msg.content + QStringLiteral("\n\n");
+
+    // Assistant (or anything else).
+    QString processedContent = msg.content;
+    processedContent.replace(ThinkingSectionParser::startToken(),
+                             "<details><summary>Thought</summary>\n");
+    processedContent.replace(ThinkingSectionParser::endToken(),
+                             "\n</details>\n\n");
+
+    // A tool‑call‑only assistant message renders through its tool bubble,
+    // whose call + result are exported with the tool message instead.
+    if (processedContent.trimmed().isEmpty()) {
+        for (const QVariantMap &e : msg.extra) {
+            if (e.contains("tool_calls"))
+                return {};
+        }
+    }
+
+    return QStringLiteral("### Assistant\n\n") + processedContent + QStringLiteral("\n\n");
 }
 
 QVector<Message> ChatManager::filterByLeafNodeId(const QVector<Message> &messages,

@@ -18,6 +18,7 @@
 
 #include <utils/filepath.h>
 
+#include <llamachatmanager.h>
 #include <llamathinkingsectionparser.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
@@ -483,6 +484,12 @@ private slots:
     void factory_task();
     void factory_searchFind();
     void factory_remoteProvider();
+
+    // ChatManager::messageToMarkdown
+    void messageToMarkdown_userAssistant();
+    void messageToMarkdown_thinkingSection();
+    void messageToMarkdown_toolCall();
+    void messageToMarkdown_toolOnlyAssistant();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -2993,6 +3000,104 @@ void LlamaToolsTest::webutils_httpGetTooLarge()
         QVERIFY(result.error.contains(QLatin1String("size limit")));
         QVERIFY(result.body.isEmpty());
     }
+}
+
+void LlamaToolsTest::messageToMarkdown_userAssistant()
+{
+    Message user;
+    user.role = "user";
+    user.content = "What is 2+2?";
+
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = "It is 4.";
+
+    QCOMPARE(ChatManager::messageToMarkdown(user),
+             QStringLiteral("### User\n\nWhat is 2+2?\n\n"));
+    QCOMPARE(ChatManager::messageToMarkdown(assistant),
+             QStringLiteral("### Assistant\n\nIt is 4.\n\n"));
+}
+
+void LlamaToolsTest::messageToMarkdown_thinkingSection()
+{
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = ThinkingSectionParser::startToken() + "\nlet me think\n"
+                        + ThinkingSectionParser::endToken() + "\n4";
+
+    const QString md = ChatManager::messageToMarkdown(assistant);
+    QVERIFY2(md.contains(QStringLiteral("<details><summary>Thought</summary>\n")),
+             qPrintable(md));
+    QVERIFY(md.contains(QStringLiteral("let me think")));
+    QVERIFY(md.contains(QStringLiteral("</details>")));
+    QVERIFY(md.contains(QStringLiteral("4")));
+}
+
+void LlamaToolsTest::messageToMarkdown_toolCall()
+{
+    Message toolMsg;
+    toolMsg.role = "tool";
+
+    QJsonObject fn;
+    fn[QStringLiteral("name")] = QStringLiteral("bash");
+    fn[QStringLiteral("arguments")]
+        = QStringLiteral("{\"command\":\"ls -la\"}");
+    QJsonObject call;
+    call[QStringLiteral("function")] = fn;
+    QJsonArray calls;
+    calls.append(call);
+
+    QVariantMap callExtra;
+    callExtra[QStringLiteral("tool_calls")] = calls;
+    toolMsg.extra.append(callExtra);
+
+    QJsonObject result;
+    result[QStringLiteral("content")] = QStringLiteral("total 0\n");
+    QVariantMap resultExtra;
+    resultExtra[QStringLiteral("tool_result")] = result;
+    resultExtra[QStringLiteral("tool_status")] = QStringLiteral("success");
+    toolMsg.extra.append(resultExtra);
+
+    const QString md = ChatManager::messageToMarkdown(toolMsg);
+    QVERIFY2(md.startsWith(QStringLiteral("<details>\n<summary>")), qPrintable(md));
+    // one-line summary of the bash tool, plus the status
+    QVERIFY(md.contains(QStringLiteral("`ls -la`")));
+    QVERIFY(md.contains(QStringLiteral("(success)")));
+    QVERIFY(md.contains(QStringLiteral("**Arguments**")));
+    QVERIFY(md.contains(QStringLiteral("\"command\"")));
+    QVERIFY(md.contains(QStringLiteral("**Result**")));
+    QVERIFY(md.contains(QStringLiteral("total 0")));
+    QVERIFY(md.endsWith(QStringLiteral("\n</details>\n\n")));
+}
+
+void LlamaToolsTest::messageToMarkdown_toolOnlyAssistant()
+{
+    // An assistant message that only carries the tool call has no content of
+    // its own – it renders through the tool bubble and exports as nothing.
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QString();
+
+    QJsonObject fn;
+    fn[QStringLiteral("name")] = QStringLiteral("bash");
+    fn[QStringLiteral("arguments")] = QStringLiteral("{\"command\":\"ls\"}");
+    QJsonObject call;
+    call[QStringLiteral("function")] = fn;
+    QJsonArray calls;
+    calls.append(call);
+
+    QVariantMap callExtra;
+    callExtra[QStringLiteral("tool_calls")] = calls;
+    assistant.extra.append(callExtra);
+
+    QVERIFY(ChatManager::messageToMarkdown(assistant).isEmpty());
+
+    // …while an empty assistant message without tool calls keeps its header
+    // (previous export behaviour).
+    Message emptyAssistant;
+    emptyAssistant.role = "assistant";
+    QVERIFY(ChatManager::messageToMarkdown(emptyAssistant)
+                .startsWith(QStringLiteral("### Assistant")));
 }
 
 } // namespace LlamaCpp
