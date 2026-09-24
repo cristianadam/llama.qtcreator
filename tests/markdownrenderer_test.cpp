@@ -45,6 +45,8 @@ private slots:
     void svgCodeBlockRendersAsImage();
     void svgCodeBlockWithoutLanguageTag();
     void brokenSvgFallsBackToCode();
+    void mermaidCodeBlockRendersAsImage();
+    void invalidMermaidFallsBackToCode();
 };
 
 void MarkdownRendererTest::plainParagraph()
@@ -465,6 +467,49 @@ void MarkdownRendererTest::brokenSvgFallsBackToCode()
     QVERIFY2(out.contains(QStringLiteral("<broken")), qPrintable(out));
     QVERIFY2(!renderer.toPlainText().contains(QChar(0xFFFC)),
              "a broken SVG must not produce an image");
+}
+
+void MarkdownRendererTest::mermaidCodeBlockRendersAsImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text
+        = QStringLiteral("```mermaid\n"
+                         "flowchart LR\n"
+                         "  A[Start] --> B[End]\n"
+                         "```");
+    streamText(renderer, text);
+
+    // The finalized block must be an image, not source text.
+    QString imageUrl;
+    for (int p = 0; p < renderer.document()->characterCount() && imageUrl.isEmpty();
+         ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        if (cursor.charFormat().isImageFormat())
+            imageUrl = cursor.charFormat().toImageFormat().name();
+    }
+    QVERIFY2(!imageUrl.isEmpty(), "expected an image in the document");
+    QVERIFY2(imageUrl.startsWith(QLatin1String("llamasvg://")), qPrintable(imageUrl));
+    QVERIFY(renderer.svgContentForUrl(QUrl(imageUrl)).contains("<svg"));
+    // The SVG is sanitized for Qt (no unsupported filters).
+    QVERIFY(!renderer.svgContentForUrl(QUrl(imageUrl)).contains("<filter"));
+}
+
+void MarkdownRendererTest::invalidMermaidFallsBackToCode()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text
+        = QStringLiteral("```mermaid\n"
+                         "flowchart LR\n"
+                         "  A -->\n"
+                         "```");
+    const QString out = streamText(renderer, text);
+    // Invalid diagram: no image, the source stays visible as a code block.
+    QVERIFY2(out.contains(QStringLiteral("A -->")), qPrintable(out));
+    QVERIFY2(!renderer.toPlainText().contains(QChar(0xFFFC)),
+             "an invalid mermaid diagram must not produce an image");
 }
 
 int main(int argc, char **argv)

@@ -78,9 +78,12 @@ add_qtc_test(markdownrenderer_test
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::KSyntaxHighlighting
+    QtCreator::quickjsng
     markus
   SOURCES
     markdownrenderer_test.cpp
     ../markdownrenderer.cpp
+    ../mermaidengine.cpp
     ../llamasyntaxhighligher.cpp
+    ../llama.qrc
 )

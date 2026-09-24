@@ -21,6 +21,7 @@
 
 #include "llamasyntaxhighlighter.h"
 #include "llamatr.h"
+#include "mermaidengine.h"
 
 using namespace LlamaCpp;
 
@@ -373,8 +374,10 @@ void MarkdownRenderer::renderPendingTail()
 
     markus::Document tailDoc = markus::Parse(pending, m_options);
     m_tailDetailsIndex = 0;
+    m_renderingTail = true;
     for (const markus::BlockNode &block : tailDoc.children)
         renderBlock(tailDoc, block);
+    m_renderingTail = false;
     m_tailDetailsIndex = -1;
 }
 
@@ -521,9 +524,11 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
 {
     m_codeBlockLanguage = languageFromInfoString(code);
 
-    // SVG blocks are shown as a picture (a <details> section: the image in
-    // the collapsed header, the source in the body).
+    // Diagram blocks are shown as a picture (a <details> section: the image
+    // in the collapsed header, the source in the body).
     if (renderSvgCodeBlock(code))
+        return;
+    if (renderMermaidCodeBlock(code))
         return;
 
     renderCodeBlockText(code);
@@ -612,14 +617,44 @@ bool MarkdownRenderer::renderSvgCodeBlock(const markus::CodeBlock &code)
                     << "showing it as code instead";
         return false;
     }
+    return renderDiagramAsDetails(code, bytes, Tr::tr("SVG image"));
+}
 
+bool MarkdownRenderer::renderMermaidCodeBlock(const markus::CodeBlock &code)
+{
+    if (m_renderingTail)
+        return false; // still streaming: show the source, render on finalize
+    const QString lang = languageFromInfoString(code).toLower();
+    if (lang != QLatin1String("mermaid") && lang != QLatin1String("mmd"))
+        return false;
+
+    const QString source(fromStdString(code.content));
+    if (source.trimmed().isEmpty())
+        return false;
+
+    // Match the diagram to the UI theme: mermaid's "dark" theme uses light
+    // text on dark shapes, "default" the other way around. Dark *foreground*
+    // text means a light UI.
+    const QString theme = color(TextForeground).lightness() < 128 ? QStringLiteral("default")
+                                                                  : QStringLiteral("dark");
+    const QByteArray svg = MermaidEngine::instance()->render(source, theme);
+    if (svg.isEmpty())
+        return false; // invalid diagram: fall back to the code view
+    // Keep the "mermaid" language on the body code block (highlighting,
+    // copy behavior).
+    return renderDiagramAsDetails(code, svg, Tr::tr("Mermaid diagram"), "mermaid");
+}
+
+bool MarkdownRenderer::renderDiagramAsDetails(const markus::CodeBlock &code,
+                                              const QByteArray &svg,
+                                              const QString &summaryText,
+                                              const std::string &bodyInfoString)
+{
     // The URL derives from the content, so re-rendering the in-progress tail
     // reuses the same resource once the content stops changing.
     const QString key = QString::fromLatin1(
-            QCryptographicHash::hash(bytes, QCryptographicHash::Md5).toHex().left(16));
-    m_svgStore.insert(key, bytes);
-
-    const QString summaryText = Tr::tr("SVG image");
+            QCryptographicHash::hash(svg, QCryptographicHash::Md5).toHex().left(16));
+    m_svgStore.insert(key, svg);
 
     // Render as a <details> section: the picture in the (collapsed by
     // default) header, the source in the body.  Section ids are ordinal, so
@@ -681,12 +716,13 @@ bool MarkdownRenderer::renderSvgCodeBlock(const markus::CodeBlock &code)
         QTextCursor(blk).setBlockFormat(hfmt);
     }
 
-    // Body: the SVG source as a regular code block (syntax highlighting and
-    // the copy overlay included); m_detailsSecId makes beginBlock() tag its
+    // Body: the source as a regular code block (syntax highlighting and the
+    // copy overlay included); m_detailsSecId makes beginBlock() tag its
     // blocks with the section id.
     markus::CodeBlock source = code;
-    // XML highlighting: there is no dedicated SVG syntax definition.
-    source.info_string = "xml";
+    // There is no dedicated SVG syntax definition; unlabeled SVG source is
+    // highlighted as XML.
+    source.info_string = bodyInfoString;
     renderCodeBlockText(source);
 
     // Show/hide the body blocks (they directly follow the header and carry

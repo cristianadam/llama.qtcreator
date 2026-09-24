@@ -54,6 +54,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::ExtensionSystem
     QtCreator::Utils
     QtCreator::KSyntaxHighlighting
+    QtCreator::quickjsng
     Qt::TaskTree
     Qt::Svg
     markus
@@ -84,6 +85,7 @@ add_qtc_plugin(LlamaCpp
     llamatypes.h
     LlamaCpp.json.in
     markdownrenderer.cpp markdownrenderer.h
+    mermaidengine.cpp mermaidengine.h
     README.md
     tools/apply_patch_tool.cpp tools/apply_patch_tool.h
     tools/edit_file_tool.cpp tools/edit_file_tool.h
@@ -91,6 +93,7 @@ add_qtc_plugin(LlamaCpp
     tools/mcpbridge.cpp tools/mcpbridge.h
     tools/mcpclient.cpp tools/mcpclient.h
     tools/mcpclient_test.cpp
+    tools/mermaidengine_test.cpp
     tools/mcptool.cpp tools/mcptool.h
     tools/patch.cpp tools/patch.h
     tools/readfile_tool.cpp tools/readfile_tool.h

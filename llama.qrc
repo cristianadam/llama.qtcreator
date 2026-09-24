@@ -5,5 +5,7 @@
         <file>images/llama.png</file>
         <file>images/llama@2x.png</file>
         <file>images/heroicons_outline.ttf</file>
+        <file>mermaid/mermaid.min.js</file>
+        <file>mermaid/domshim.js</file>
     </qresource>
 </RCC>

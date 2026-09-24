@@ -154,6 +154,16 @@ private:
     // Returns false when the block should fall back to the regular code view
     // (still streaming or invalid SVG).
     bool renderSvgCodeBlock(const markus::CodeBlock &code);
+    // Same for a complete ```mermaid code block, rendered through the
+    // MermaidEngine (QuickJS + mermaid.js). Returns false while the block is
+    // still streaming or when the diagram is invalid.
+    bool renderMermaidCodeBlock(const markus::CodeBlock &code);
+    // Shared layout of renderSvgCodeBlock()/renderMermaidCodeBlock(): a
+    // <details> section with the rendered picture in the (collapsed by
+    // default) header and the source as a code block in the body.
+    bool renderDiagramAsDetails(const markus::CodeBlock &code, const QByteArray &svg,
+                                const QString &summaryText,
+                                const std::string &bodyInfoString = "xml");
     // The ordinal id of the next <details> section; tail sections get the
     // stable ids they will have once finalized, so user expand/collapse
     // choices survive tail re-renders.
@@ -235,6 +245,12 @@ private:
     // ids they will have once finalized.
     int m_tailDetailsIndex = -1;
     int m_nextCodeBlockId = 0;
+    // True while renderPendingTail() is re-rendering the in-progress tail.
+    // Diagrams (mermaid) are only rendered for finalized blocks: rendering
+    // is comparatively expensive and the tail changes on every feed, so a
+    // streaming ```mermaid block shows its source and switches to the picture
+    // once the fence is closed.
+    bool m_renderingTail = false;
     // SVG source for llamasvg:// image URLs, keyed by a hash of the content
     // so tail re-renders of the same block reuse the same resource.
     QHash<QString, QByteArray> m_svgStore;

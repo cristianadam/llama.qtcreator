@@ -46,6 +46,7 @@
 #include "llamasettings.h"
 #include "llamaspinner.h"
 #include "llamatr.h"
+#include "mermaidengine.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/mcpclient.h"
@@ -260,6 +261,7 @@ void LlamaPlugin::initialize()
     // McpBridge, ToolFactory) can be tested from the command line:
     //   Qt Creator -pluginpath <build dir> -test llamacpp[,McpClientTest]
     addTestCreator(&Internal::createMcpClientTest);
+    addTestCreator(&Internal::createMermaidEngineTest);
 #endif
 }
 
@@ -271,6 +273,11 @@ void LlamaPlugin::extensionsInitialized()
     // registration. (McpClient's tools/list retry covers servers that
     // register their tools even later.)
     McpBridge::instance().start();
+
+    // Warm up the mermaid render engine in the background: evaluating the
+    // bundled mermaid.js takes well over a second, and paying it on the
+    // first diagram render (GUI thread) shows up as a UI freeze.
+    MermaidEngine::instance()->warmUp();
 }
 
 bool LlamaPlugin::delayedInitialize()

@@ -22,7 +22,7 @@ Local LLM-assisted text completion for Qt Creator.
 - Speculative FIM support
 - Speculative Decoding support
 - Display performance stats
-- Chat support
+- Chat support (including [Mermaid](https://mermaid.js.org/) diagrams, rendered to SVG with a bundled QuickJS runtime - no browser required)
 - Source and Image drag & drop support
 - Current editor selection predefined and custom LLM prompts
 - [Tools usage](https://github.com/cristianadam/llama.qtcreator/wiki/Tools)
