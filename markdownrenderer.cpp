@@ -1175,7 +1175,6 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
     if (m_codeOverlays.isEmpty())
         return;
     const int margin = m_paragraphMargin / 2;
-    const int topAdjust = 0;
     const QPointF offset = contentOffset();
     for (auto it = m_codeOverlays.constBegin(); it != m_codeOverlays.constEnd(); ++it) {
         int blockId = it.key();
@@ -1189,6 +1188,7 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
         }
         QRectF rect = blockBoundingRect(blk);
         QTextBlock last = blk;
+        int lineCount = 1;
         while (true) {
             QTextBlock nxt = last.next();
             if (!nxt.isValid())
@@ -1196,6 +1196,7 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
             if (nxt.blockFormat().property(BlockCodeIdProp).toInt() != blockId)
                 break;
             last = nxt;
+            ++lineCount;
         }
         if (last != blk) {
             QRectF lastRect = blockBoundingRect(last);
@@ -1204,7 +1205,12 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
         rect = codeBlockBackgroundRect(rect, m_paragraphMargin);
         QRectF viewRect = rect.translated(offset);
         int x = static_cast<int>(viewRect.right() - overlay->width() - margin);
-        int y = static_cast<int>(viewRect.top() + margin + topAdjust);
+        // One-line blocks are barely taller than the button, so the fixed top
+        // margin would push the button off-centre; centre it vertically there.
+        const int topOffset = (lineCount == 1)
+                                  ? qMax<qreal>(0.0, (viewRect.height() - overlay->height()) / 2)
+                                  : margin;
+        int y = static_cast<int>(viewRect.top() + topOffset);
         overlay->move(x, y);
         overlay->show();
     }
