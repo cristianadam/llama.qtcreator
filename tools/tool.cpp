@@ -34,9 +34,16 @@ QString codeFence(const QString &content, const QString &info)
         if (run > maxRun)
             maxRun = run;
     }
+    // File contents and command output usually end with a newline, and the
+    // fence template below adds its own before the closing fence; without
+    // this the rendered block shows a spurious empty last line.
+    QString body = content;
+    if (body.endsWith(QLatin1Char('\n')))
+        body.chop(1);
+
     const int length = qMax(3, maxRun + 1);
     const QString fence(QString(length, QLatin1Char('`')));
-    return QStringLiteral("%1%2\n%3\n%1").arg(fence, info, content);
+    return QStringLiteral("%1%2\n%3\n%1").arg(fence, info, body);
 }
 
 QString truncatedPreview(const QString &text, int maxLines)

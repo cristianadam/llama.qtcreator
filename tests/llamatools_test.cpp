@@ -1574,6 +1574,11 @@ void LlamaToolsTest::codeFence_escaping()
 
     // Empty content is fine.
     QCOMPARE(codeFence(QString()), QString("```\n\n```"));
+
+    // Content that already ends with a newline (file content, command
+    // output) must not gain a spurious empty last line in the fence body.
+    QCOMPARE(codeFence(QStringLiteral("a\nb\n")), QString("```\na\nb\n```"));
+    QCOMPARE(codeFence(QStringLiteral("a\nb\n\n")), QString("```\na\nb\n\n```"));
 }
 
 void LlamaToolsTest::write_markdownContent()
