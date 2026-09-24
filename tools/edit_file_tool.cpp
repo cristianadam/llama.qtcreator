@@ -309,7 +309,7 @@ QString EditFileTool::streamingSummary(const QString &partialArgs) const
 QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
     if (!ok)
-        return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
+        return result;
 
     // One combined diff for the whole file.  No header: the summary already
     // says "edit <path>".
@@ -328,7 +328,9 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
 QString EditFileTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
     // The diff is the interesting part; give it a couple of extra lines.
-    return truncatedPreview(detailsMarkdown(args, result, ok), 8);
+    // On failure the ✗ icon suffices in the collapsed view; the error text
+    // is only shown in the expanded details.
+    return ok ? truncatedPreview(detailsMarkdown(args, result, ok), 8) : QString();
 }
 
 void EditFileTool::run(const QJsonObject &args,

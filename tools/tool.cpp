@@ -9,18 +9,20 @@ namespace LlamaCpp {
 QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
     Q_UNUSED(arguments);
-    // Generic fallback – just show the raw result.
+    Q_UNUSED(ok);
+    // Generic fallback – just show the raw result.  Failures need no error
+    // header: the ✗ icon in the summary already marks the call as failed.
     if (result.isEmpty())
         return {};
-
-    QString md;
-    if (!ok)
-        md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
-    return md + codeFence(result);
+    return codeFence(result);
 }
 
 QString Tool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    // On failure the ✗ icon plus the one‑line summary are enough in the
+    // collapsed view; the error text is only shown in the expanded details.
+    if (!ok)
+        return {};
     return truncatedPreview(detailsMarkdown(arguments, result, ok), 3);
 }
 

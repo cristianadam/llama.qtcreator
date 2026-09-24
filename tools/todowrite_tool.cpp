@@ -116,7 +116,7 @@ QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &r
 {
     // On failure show the error, not the rejected list.
     if (!ok)
-        return QStringLiteral("**%1**\n\n%2").arg(Tr::tr("Error"), result);
+        return result;
     QString md;
     for (const QJsonValue &value : args.value("todos").toArray()) {
         const QJsonObject todo = value.toObject();

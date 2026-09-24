@@ -43,7 +43,9 @@ public:
         is visible without expanding the details – like pi and opencode show
         a few output lines on a collapsed tool call.  The preview must stay
         small (a few lines); return an empty string to show nothing.  The
-        default derives it from detailsMarkdown(). */
+        default derives it from detailsMarkdown() and is empty on failure:
+        the ✗ icon in the summary marks the call as failed, and the error
+        text is only shown in the expanded details. */
     virtual QString summaryPreview(const QJsonObject &arguments,
                                    const QString &result,
                                    bool ok) const;

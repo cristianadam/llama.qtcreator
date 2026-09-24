@@ -79,9 +79,8 @@ QString McpTool::streamingSummary(const QString &partialArguments) const
 
 QString McpTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
+    Q_UNUSED(ok);
     QString md;
-    if (!ok)
-        md = QStringLiteral("**%1**\n\n").arg(Tr::tr("Error"));
     if (!arguments.isEmpty()) {
         md += QStringLiteral("**Arguments**\n\n")
               + codeFence(QString::fromUtf8(QJsonDocument(arguments).toJson(QJsonDocument::Indented)),
