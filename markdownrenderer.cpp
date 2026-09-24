@@ -560,16 +560,11 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
 
     const QString content = fromStdString(code.content);
 
-    // Invisible 1pt zero-width spacer lines at the top and bottom of the
-    // block keep the code away from the edges of the rounded background.
-    // They are part of the code block (same block id) and are stripped from
-    // copies by collectCodeById().
-    QTextCharFormat spacerFmt = baseCharFmt;
-    spacerFmt.setFontPointSize(1);
-    m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
-
     // Inside a quote (e.g. a thinking section body) the code is muted like
     // the surrounding text; only unquoted code gets syntax highlighting.
+    // The "rounded margin" around the code is not created with invisible
+    // spacer lines but by expanding the block's bounding rect when the
+    // background is painted (see codeBlockBackgroundRect()).
     if (m_blockQuoteDepth == 0) {
         QVector<HighlightFragment> fragments;
         SyntaxHighlighter highlighter;
@@ -582,13 +577,8 @@ void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
                 m_cursor.insertText(fragment.text, fragment.format);
         }
     } else {
-        // The cursor's char format still holds the 1pt spacer format; insert
-        // with the base format explicitly or the code renders at 1pt.
         m_cursor.insertText(content, baseCharFmt);
     }
-
-    // Same zero-width space for the bottom.
-    m_cursor.insertText(ZeroWidthSpace + QLatin1String("\n"), spacerFmt);
 
     m_codeBlock = false;
     m_codeBlockLanguage.clear();
@@ -1117,6 +1107,21 @@ QString MarkdownRenderer::sectionIconHtml(int secId, bool isVisible) const
 // Code block overlays
 // ---------------------------------------------------------------------------
 
+// The "rounded margin" (padding) of the rounded code-block background around
+// the code. blockBoundingRect() hugs the code text vertically (block margins
+// are not part of it), so the background rect is expanded by this much above
+// and below; the horizontal margin already exists as the code block's left
+// margin (m_paragraphMargin), keeping the padding even on all sides. The
+// expansion replaces the old invisible zero-width spacer lines. It stays
+// within the inter-block margins (each code line carries a
+// m_paragraphMargin top/bottom margin), so it never overlaps neighbouring
+// text.
+static QRectF codeBlockBackgroundRect(const QRectF &rect, int paragraphMargin)
+{
+    const qreal pad = qMax(0, paragraphMargin - 6);
+    return rect.adjusted(0, -pad, 0, pad);
+}
+
 QPointF MarkdownRenderer::contentOffset() const
 {
     return QPointF(-horizontalScrollBar()->value(), -verticalScrollBar()->value());
@@ -1196,6 +1201,7 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
             QRectF lastRect = blockBoundingRect(last);
             rect.setBottom(lastRect.bottom());
         }
+        rect = codeBlockBackgroundRect(rect, m_paragraphMargin);
         QRectF viewRect = rect.translated(offset);
         int x = static_cast<int>(viewRect.right() - overlay->width() - margin);
         int y = static_cast<int>(viewRect.top() + margin + topAdjust);
@@ -1264,7 +1270,7 @@ void MarkdownRenderer::paintEvent(QPaintEvent *ev)
     QMap<int, QRectF> codeBlocksRects = collectBlockRects(BlockCodeIdProp);
     const int radius = 6;
     for (const QRectF &blkRect : codeBlocksRects) {
-        QRectF viewRect = blkRect.translated(contentOffset());
+        QRectF viewRect = codeBlockBackgroundRect(blkRect, m_paragraphMargin).translated(contentOffset());
         if (!viewRect.intersects(visibleRect))
             continue;
 
@@ -1433,12 +1439,6 @@ QPair<QString, QString> MarkdownRenderer::collectCodeById(int id) const
             lastBlock = blk;
         }
     }
-
-    // Remove the invisible spacer lines used for the rounded background padding
-    if (firstBlock.isValid() && firstBlock.text() == ZeroWidthSpace)
-        firstBlock = firstBlock.next();
-    if (lastBlock.isValid() && lastBlock.text() == ZeroWidthSpace)
-        lastBlock = lastBlock.previous();
 
     if (found) {
         // Iterate through blocks and their fragments
