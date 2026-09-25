@@ -7,6 +7,7 @@
 #include <QList>
 #include <QMovie>
 #include <QPainter>
+#include <QRectF>
 #include <QResizeEvent>
 #include <QSvgRenderer>
 #include <QTextBlock>
@@ -287,9 +288,27 @@ QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
     double width = document()->textWidth();
     if (width <= 0)
         width = 600;
-    const QSizeF defaultSize = renderer.defaultSize();
-    double w = defaultSize.width() > 0 ? defaultSize.width() : width;
-    double h = defaultSize.height() > 0 ? defaultSize.height() : w * 0.6;
+    double w = 0, h = 0;
+    if (renderer.isValid()) {
+        // Mermaid emits the root as width="100%" without a height
+        // attribute, for which defaultSize() is unreliable (it can report
+        // 0x0 or Wx0, squashing the drawing to a wrong aspect ratio).
+        // The viewBox is the stable source of truth for it.
+        const QSizeF defaultSize = renderer.defaultSize();
+        w = defaultSize.width();
+        h = defaultSize.height();
+        if (w <= 0 || h <= 0) {
+            const QRectF viewBox = renderer.viewBoxF();
+            if (viewBox.width() > 0 && viewBox.height() > 0) {
+                w = viewBox.width();
+                h = viewBox.height();
+            }
+        }
+    }
+    if (w <= 0)
+        w = width;
+    if (h <= 0)
+        h = w * 0.6;
     const double scale = qMin(1.0, width / w);
     w *= scale;
     h *= scale;
