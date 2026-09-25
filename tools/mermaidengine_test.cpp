@@ -20,6 +20,8 @@
 #include <QRegularExpression>
 #include <QSvgRenderer>
 
+#include <cstdlib>
+#include <cstring>
 #include <limits>
 
 namespace LlamaCpp {
@@ -36,7 +38,11 @@ private slots:
     void testSecondRenderIsCachedAndConsistent();
     void testInvalidDiagramFallsBack();
     void testRenderedSvgHasCompleteViewBox();
+    void testViewBoxTightAroundContent();
     void testClassLabelsStayInsideBoxes();
+    void testClassDividersStayInsideBoxes();
+    void testEdgeLabelTextSitsOnBackground();
+    void testArrowMarkersHaveNoCenteringViewBox();
     void testRasterizedSvgBackgroundIsTransparent();
 
 private:
@@ -85,10 +91,13 @@ void MermaidEngineTest::testGanttDiagramHasNonZeroWidth()
     // viewBox width means the DOM shim reported a zero-size container.
     const int vb = svg.indexOf("viewBox=");
     QVERIFY2(vb >= 0, "the SVG must have a viewBox");
-    const QRegularExpression re(QStringLiteral("viewBox=\"0 0 (\\d+) (\\d+)\""));
+    // The engine tightens the viewBox origin to the content, so only the
+    // width/height (3rd/4th field) are asserted; the origin may be nonzero.
+    const QRegularExpression re(QStringLiteral(
+        "viewBox=\"[-0-9.e]+ [-0-9.e]+ ([0-9.e]+) ([0-9.e]+)\""));
     const QRegularExpressionMatch m = re.match(QString::fromUtf8(svg));
     QVERIFY2(m.hasMatch(), qPrintable(QString::fromUtf8(svg.left(200))));
-    QVERIFY2(m.captured(1).toInt() > 0,
+    QVERIFY2(m.captured(1).toDouble() > 0,
              qPrintable(QStringLiteral("the gantt viewBox width must be non-zero, got ")
                             + m.captured(1)));
 }
@@ -122,10 +131,10 @@ QString MermaidEngineTest::diamondSource()
            "    class B { +B() +bMethod() }\n"
            "    class C { +C() +cMethod() }\n"
            "    class D { +D() +dMethod() }\n"
-           "    A <|-- B\n"
-           "    A <|-- C\n"
-           "    B <|-- D\n"
-           "    C <|-- D");
+           "    A <|-- B : inherits\n"
+           "    A <|-- C : inherits\n"
+           "    B <|-- D : inherits\n"
+           "    C <|-- D : inherits");
 }
 
 void MermaidEngineTest::testRenderedSvgHasCompleteViewBox()
@@ -145,6 +154,103 @@ void MermaidEngineTest::testRenderedSvgHasCompleteViewBox()
     QVERIFY2(m.captured(4).toDouble() > 0, "the viewBox height must be positive");
 }
 
+void MermaidEngineTest::testViewBoxTightAroundContent()
+{
+    QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
+    const QByteArray svg
+        = MermaidEngine::instance()->render(diamondSource(), "default");
+    const QString text = QString::fromUtf8(svg);
+    QVERIFY2(!svg.isEmpty(), "the diamond class diagram must render to SVG");
+
+    // The chat canvas is sized from the viewBox and the diagram is centered
+    // in it. Mermaid's own viewBox is its *layout*'s bounding box (node
+    // groups are drawn around their centers and dagre reserves column and
+    // label space), so without the engine tightening it the canvas comes
+    // out several times the size of the drawing and the diagram floats
+    // off-center in the chat. Assert the viewBox is close to the drawn
+    // content (the class boxes, which bound the edges and labels here).
+    const QRegularExpression vbRe(QStringLiteral(
+        "viewBox=\"([-0-9.e]+) ([-0-9.e]+) ([0-9.e]+) ([0-9.e]+)\""));
+    const QRegularExpressionMatch vb = vbRe.match(text);
+    QVERIFY2(vb.hasMatch(), "the SVG root must carry a viewBox");
+    const double vbW = vb.captured(3).toDouble();
+    const double vbH = vb.captured(4).toDouble();
+
+    // Node centers: transform="translate(cx, cy)".
+    const QRegularExpression nodeRe(QStringLiteral(
+        "<g class=\"node[^\"]*\" id=\"[^\"]*classId-[^\"]*\"[^>]*transform=\"translate[(]([-0-9.e]+),\\s*([-0-9.e]+)[)]"));
+    // The box outline: a four-corner rect path in node-local coordinates.
+    const QRegularExpression boxRe(QStringLiteral(
+        "M[-0-9.e ]+L[-0-9.e ]+L[-0-9.e ]+L[-0-9.e ]+"));
+    const QRegularExpression numRe(QStringLiteral("[-0-9.e]+"));
+
+    QVector<QRegularExpressionMatch> nodes;
+    for (auto it = nodeRe.globalMatch(text); it.hasNext();)
+        nodes.append(it.next());
+    QVERIFY2(nodes.size() == 4, "the diamond diagram has four class nodes");
+
+    bool first = true;
+    double contentTop = 0;
+    double contentBottom = 0;
+    double contentLeft = 0;
+    double contentRight = 0;
+    for (int i = 0; i < nodes.size(); ++i) {
+        const QRegularExpressionMatch node = nodes.at(i);
+        const double cx = node.captured(1).toDouble();
+        const double cy = node.captured(2).toDouble();
+        const int start = node.capturedStart();
+        const int end = i + 1 < nodes.size() ? nodes.at(i + 1).capturedStart() : text.size();
+        const QRegularExpressionMatch box = boxRe.match(text.mid(start, end - start));
+        QVERIFY2(box.hasMatch(), "each class node must draw its box path");
+        QVector<double> nums;
+        for (auto nIt = numRe.globalMatch(box.captured(0)); nIt.hasNext();)
+            nums.append(nIt.next().captured().toDouble());
+        QVERIFY2(nums.size() == 8, "the box path has four corners");
+        double x1 = 0;
+        double x2 = 0;
+        double y1 = 0;
+        double y2 = 0;
+        for (int k = 0; k < nums.size(); k += 2) {
+            // Node-local corner, offset to the node center.
+            const double x = cx + nums.at(k);
+            const double y = cy + nums.at(k + 1);
+            if (k == 0) {
+                x1 = x2 = x;
+                y1 = y2 = y;
+            } else {
+                x1 = qMin(x1, x);
+                x2 = qMax(x2, x);
+                y1 = qMin(y1, y);
+                y2 = qMax(y2, y);
+            }
+        }
+        if (first) {
+            contentTop = y1;
+            contentBottom = y2;
+            contentLeft = x1;
+            contentRight = x2;
+            first = false;
+        } else {
+            contentTop = qMin(contentTop, y1);
+            contentBottom = qMax(contentBottom, y2);
+            contentLeft = qMin(contentLeft, x1);
+            contentRight = qMax(contentRight, x2);
+        }
+    }
+    // The edges and the edge labels of the diamond stay inside the range of
+    // the node boxes, so the boxes bound the drawn content. The viewBox
+    // must fit that range tightly (the engine adds a small fixed padding);
+    // a layout-sized viewBox is far larger.
+    const double contentW = contentRight - contentLeft;
+    const double contentH = contentBottom - contentTop;
+    QVERIFY2(qAbs(vbW - contentW) <= 40.0,
+             qPrintable(QStringLiteral("viewBox width %1 does not fit the content width %2")
+                            .arg(vbW, 0, 'f', 1).arg(contentW, 0, 'f', 1)));
+    QVERIFY2(qAbs(vbH - contentH) <= 40.0,
+             qPrintable(QStringLiteral("viewBox height %1 does not fit the content height %2")
+                            .arg(vbH, 0, 'f', 1).arg(contentH, 0, 'f', 1)));
+}
+
 void MermaidEngineTest::testClassLabelsStayInsideBoxes()
 {
     QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
@@ -157,13 +263,24 @@ void MermaidEngineTest::testClassLabelsStayInsideBoxes()
     // translate()) must sit inside the box's own y range. A box sized from
     // a stale or truncated getBBox() leaves the rows outside, i.e. the
     // classic "labels floating beside their box" regression.
-    const QRegularExpression nodeRe(QStringLiteral(
-        R"qc(<g class="node[^"]*" id="[^"]*classId-[^"]*"[^>]*transform="translate\()qc"));
+    // NOTE: the patterns in this file are plain (escaped) string literals,
+    // not C++11 raw strings: Qt 6.11's moc mis-tokenizes a file containing
+    // several R"(...)" raw strings with embedded quotes and bails out with
+    // a bogus "missing ')' in macro usage" (see testClassDividers... below,
+    // which used to trigger it at build time).
+    // NOTE: the patterns in this file are plain (escaped) string literals,
+    // not C++11 raw strings: Qt 6.11's moc mis-tokenizes a file containing
+    // several R"(...)" raw strings with embedded quotes and bails out with
+    // a bogus "missing ')' in macro usage". Likewise the literal parens
+    // are matched as [(] / [)] rather than \( / \): Qt 6.11's QRegularExpression
+    // (PCRE2 JIT) intermittently fails to match long literal prefixes
+    // followed by an escaped paren, reporting 0 hits for patterns that
+    // PCRE agrees on.
+    const QRegularExpression nodeRe(QStringLiteral("<g class=\"node[^\"]*\" id=\"[^\"]*classId-[^\"]*\"[^>]*transform=\"translate[(]"));
     // The box's fill path is the first stroke-less path in the node group.
-    const QRegularExpression boxPathRe(QStringLiteral(
-        R"qc(<path d="M\s*-?[\d.]+\s+(-?[\d.]+)\s+L[\d. -]+L[\d. -]+L[\d. -]+" stroke="none")qc"));
+    const QRegularExpression boxPathRe(QStringLiteral("<path d=\"M\\s*-?[\\d.]+\\s+(-?[\\d.]+)\\s+L[\\d. -]+L[\\d. -]+L[\\d. -]+\" stroke=\"none\""));
     const QRegularExpression rowRe(QStringLiteral(
-        R"qc(class="(label-group|members-group|methods-group) text" transform="translate\([^,]+,\s*(-?[\d.e]+)\))qc"));
+        "class=\"(label-group|members-group|methods-group) text\" transform=\"translate[(][^,]+,\\s*(-?[\\d.e]+)\\)\""));
 
     QVector<QRegularExpressionMatch> nodes;
     for (auto it = nodeRe.globalMatch(text); it.hasNext();)
@@ -210,6 +327,152 @@ void MermaidEngineTest::testClassLabelsStayInsideBoxes()
     }
 }
 
+void MermaidEngineTest::testClassDividersStayInsideBoxes()
+{
+    QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
+    const QByteArray svg
+        = MermaidEngine::instance()->render(diamondSource(), "default");
+    const QString text = QString::fromUtf8(svg);
+    QVERIFY2(!svg.isEmpty(), "the diamond class diagram must render to SVG");
+
+    // mermaid's neo renderer draws the section dividers of a class with no
+    // member rows using the box's *height* as width, so the lines stick out
+    // of the box on both sides (mermaid's own degenerate no-members math);
+    // the engine clamps them to the box x range (clampDividersToBoxes).
+    const QRegularExpression nodeRe(QStringLiteral("<g class=\"node[^\"]*\" id=\"[^\"]*classId-[^\"]*\"[^>]*>"));
+    const QRegularExpression pathRe(QStringLiteral("<path\\b[^>]*\\bd=\"([^\"]*)\"[^>]*>"));
+    const QRegularExpression dividerRe(QStringLiteral("<g class=\"divider[^\"]*\"[^>]*>\\s*<path\\b[^>]*\\bd=\"([^\"]*)\"[^>]*>"));
+
+    QVector<QRegularExpressionMatch> nodes;
+    for (auto it = nodeRe.globalMatch(text); it.hasNext();)
+        nodes.append(it.next());
+    QVERIFY2(nodes.size() == 4, "the diamond diagram has four class nodes");
+
+    for (int i = 0; i < nodes.size(); ++i) {
+        const int start = nodes.at(i).capturedStart();
+        const int end = i + 1 < nodes.size() ? nodes.at(i + 1).capturedStart() : text.size();
+        const QString node = text.mid(start, end - start);
+
+        double x1 = 0;
+        double x2 = 0;
+        bool haveBox = false;
+        for (auto it = pathRe.globalMatch(node); it.hasNext();) {
+            const QString d = it.next().captured(1);
+            bool straight = true;
+            for (auto cIt = QRegularExpression(QStringLiteral("[A-Za-z]")).globalMatch(d); cIt.hasNext();) {
+                const QChar c = cIt.next().captured().at(0);
+                if (!QStringLiteral("MmLlZz").contains(c)) {
+                    straight = false;
+                    break;
+                }
+            }
+            if (!straight)
+                continue;
+            QVector<double> nums;
+            for (auto nIt = QRegularExpression(QStringLiteral("-?[\\d.]+")).globalMatch(d); nIt.hasNext();)
+                nums.append(nIt.next().captured().toDouble());
+            if (nums.size() < 4 || nums.size() % 2 != 0)
+                continue;
+            x1 = x2 = nums.first();
+            for (int k = 0; k < nums.size(); k += 2) {
+                x1 = qMin(x1, nums.at(k));
+                x2 = qMax(x2, nums.at(k));
+            }
+            if (x2 > x1) {
+                haveBox = true;
+                break;
+            }
+        }
+        QVERIFY2(haveBox, "each class node must draw its box path");
+
+        int dividers = 0;
+        for (auto it = dividerRe.globalMatch(node); it.hasNext();) {
+            const QString d = it.next().captured(1);
+            QVector<double> nums;
+            for (auto nIt = QRegularExpression(QStringLiteral("-?[\\d.]+")).globalMatch(d); nIt.hasNext();)
+                nums.append(nIt.next().captured().toDouble());
+            if (nums.size() < 2)
+                continue;
+            ++dividers;
+            // x coordinates sit at the even indices of the number list
+            // (M/L/C are all x,y pairs in a divider path).
+            double dx1 = std::numeric_limits<double>::max();
+            double dx2 = std::numeric_limits<double>::lowest();
+            int k = 0;
+            for (auto nIt = QRegularExpression(QStringLiteral("-?[\\d.]+")).globalMatch(d); nIt.hasNext();) {
+                const double v = nIt.next().captured().toDouble();
+                if (k % 2 == 0) {
+                    dx1 = qMin(dx1, v);
+                    dx2 = qMax(dx2, v);
+                }
+                ++k;
+            }
+            QVERIFY2(dx1 >= x1 - 0.5 && dx2 <= x2 + 0.5,
+                     qPrintable(QStringLiteral("divider x=[%1, %2] sticks out of the box x=[%3, %4]")
+                                    .arg(dx1, 0, 'f', 1).arg(dx2, 0, 'f', 1)
+                                    .arg(x1, 0, 'f', 1).arg(x2, 0, 'f', 1)));
+        }
+        QVERIFY2(dividers == 2, "each class node draws two section dividers");
+    }
+}
+
+void MermaidEngineTest::testEdgeLabelTextSitsOnBackground()
+{
+    QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
+    const QByteArray svg
+        = MermaidEngine::instance()->render(diamondSource(), "default");
+    const QString text = QString::fromUtf8(svg);
+    QVERIFY2(!svg.isEmpty(), "the diamond class diagram must render to SVG");
+
+    // Qt SVG ignores tspan x/y and honors the <text> text-anchor: the label
+    // text therefore renders centered on its own x attribute (0 when
+    // absent), while mermaid places the background rect from the text's
+    // getBBox(). If the shim's bbox disagrees with the anchor (it used to
+    // report a left-anchored box for middle-anchored text), the text ends
+    // up a half-label away from its background rect in the chat.
+    const QRegularExpression labelRe(QStringLiteral("<g class=\"label\" data-id=\"id_[^\"]*\"[^>]*>\\s*<g>\\s*<rect class=\"background\"[^>]*\\bx=\"(-?[\\d.e]+)\"[^>]*\\bwidth=\"([\\d.e]+)\"[^>]*/>\\s*<text\\b([^>]*)>"));
+    int labels = 0;
+    for (auto it = labelRe.globalMatch(text); it.hasNext();) {
+        const QRegularExpressionMatch m = it.next();
+        const double rectCenter = m.captured(1).toDouble() + m.captured(2).toDouble() / 2.0;
+        const QString attrs = m.captured(3);
+        double textX = 0.0; // no x attribute: Qt starts the text at 0
+        const QRegularExpression xRe(QStringLiteral("\\bx=\"(-?[\\d.e]+)\""));
+        const QRegularExpressionMatch xm = xRe.match(attrs);
+        if (xm.hasMatch())
+            textX = xm.captured(1).toDouble();
+        QVERIFY2(qAbs(textX - rectCenter) < 1.0,
+                 qPrintable(QStringLiteral("edge label text at x=%1 but its background rect is centered at %2")
+                                .arg(textX, 0, 'f', 1).arg(rectCenter, 0, 'f', 1)));
+        ++labels;
+    }
+    QVERIFY2(labels == 4, "the diamond diagram has four edge labels");
+}
+
+void MermaidEngineTest::testArrowMarkersHaveNoCenteringViewBox()
+{
+    QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
+    const QByteArray svg
+        = MermaidEngine::instance()->render(diamondSource(), "default");
+    const QString text = QString::fromUtf8(svg);
+    QVERIFY2(!svg.isEmpty(), "the diamond class diagram must render to SVG");
+
+    // Qt 6.11's QSvgRenderer misplaces <marker>s that carry a viewBox
+    // (the content is dropped at the viewBox center and refX/refY are
+    // lost), shifting the arrowheads off their edges. The DOM shim skips
+    // storing the pure-vertical-centering viewBoxes mermaid adds to its
+    // "-margin" arrowhead markers; assert they are gone from the output.
+    const QRegularExpression markerRe(QStringLiteral("<marker\\b[^>]*\\bid=\"[^\"]*-extension(Start|End)-margin\"[^>]*>"));
+    int markers = 0;
+    for (auto it = markerRe.globalMatch(text); it.hasNext();) {
+        const QString tag = it.next().captured(0);
+        QVERIFY2(!tag.contains(QStringLiteral("viewBox=")),
+                 qPrintable(QStringLiteral("arrowhead marker must not carry a centering viewBox: ") + tag.left(160)));
+        ++markers;
+    }
+    QVERIFY2(markers == 2, "the inheritance arrows use the extension -margin markers");
+}
+
 void MermaidEngineTest::testRasterizedSvgBackgroundIsTransparent()
 {
     QTRY_VERIFY_WITH_TIMEOUT(MermaidEngine::instance()->isInitialized(), 60000);
@@ -233,7 +496,21 @@ void MermaidEngineTest::testRasterizedSvgBackgroundIsTransparent()
     const double scale = targetWidth / vb.width();
     const double w = targetWidth;
     const double h = vb.height() * scale;
+    // Dirty the heap first: the mermaid engine (or QuickJS in a full IDE
+    // session) has allocated and freed a lot of memory, so a fresh QImage
+    // buffer is usually reused dirty pages. Without an explicit
+    // fill(Qt::transparent) in renderSvgResource, that garbage is exactly
+    // what the user saw as a noisy background behind the diagram.
+    {
+        const int dirtyBytes = 1 << 20;
+        void *dirty = malloc(dirtyBytes);
+        if (dirty) {
+            std::memset(dirty, 0xA5, dirtyBytes);
+            free(dirty);
+        }
+    }
     QImage image(QSize(qCeil(w * dpr), qCeil(h * dpr)), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent); // must mirror renderSvgResource()
     image.setDevicePixelRatio(dpr);
     QPainter painter(&image);
     renderer.render(&painter, QRectF(0, 0, w, h));

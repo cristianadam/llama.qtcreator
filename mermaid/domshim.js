@@ -174,7 +174,28 @@ class DomNode {
   }
 
   // ---- attributes ----
-  setAttribute(name, value) { this._attributes.set(name, String(value)); }
+  setAttribute(name, value) {
+    if (name === 'viewBox' && this.localName === 'marker') {
+      // Qt 6.11's QSvgRenderer misplaces <marker>s that carry a viewBox:
+      // the content is dropped at the viewBox center and refX/refY (and
+      // the aspect-ratio centering) are lost, so arrowheads render shifted
+      // off their edges. Markers *without* a viewBox anchor correctly.
+      // Mermaid's "-margin" arrowhead markers use a viewBox whose origin
+      // is 0,0 and whose width equals markerWidth — pure vertical
+      // centering of 1:1 content (20x14 in a 28-tall viewport) — so
+      // dropping the attribute changes nothing else: skip storing it.
+      const vb = String(value).trim().split(/[\s,]+/).map(Number);
+      const mw = Number(this.getAttribute('markerWidth') || 0);
+      const mh = Number(this.getAttribute('markerHeight') || 0);
+      if (vb.length === 4 && vb[0] === 0 && vb[1] === 0
+          && mw > 0 && vb[2] === mw && vb[3] <= mh)
+        return;
+    }
+    // Divider-line clamping happens in the engine's SVG sanitizer
+    // (mermaidengine.cpp clampDividersToBoxes): mermaid sets a divider's
+    // d before the node's box path exists, so it cannot be fixed here.
+    this._attributes.set(name, String(value));
+  }
   getAttribute(name) { return this._attributes.has(name) ? this._attributes.get(name) : null; }
   hasAttribute(name) { return this._attributes.has(name); }
   removeAttribute(name) { this._attributes.delete(name); }
@@ -262,6 +283,22 @@ class DomNode {
     if (db === 'text-after-edge') return y - m.descent;
     return y - m.ascent;
   }
+  // text-anchor (inherited in SVG). Qt SVG honors it, so the measured box
+  // must too: a left-anchored box for middle-anchored text makes mermaid
+  // build the edge-label background and the label centering a half-label
+  // away from where the text actually renders.
+  _textAnchor(el) {
+    for (let n = el; n && n.nodeType === 1; n = n.parentNode) {
+      const a = n.getAttribute('text-anchor');
+      if (a === 'start' || a === 'middle' || a === 'end') return a;
+    }
+    return 'start';
+  }
+  _anchorX(anchor, x, w) {
+    if (anchor === 'middle') return x - w / 2;
+    if (anchor === 'end') return x - w;
+    return x;
+  }
   // Mermaid builds multi-line labels (class boxes, etc.) as a <text> with
   // <tspan> rows positioned via x/y/dx/dy. getBBox() must report the union
   // of the individual rows, tracking the SVG text cursor — sizing the whole
@@ -284,7 +321,8 @@ class DomNode {
         if (!text.trim()) continue;
         const f = this._fontProps();
         const m = __qtMeasureText(text, f.family, f.size, f.weight, f.style);
-        union(curX, this._rowTop(curY, m, this), m.width, m.height);
+        union(this._anchorX(this._textAnchor(this), curX, m.width),
+              this._rowTop(curY, m, this), m.width, m.height);
         curX += m.width;
       } else if (c.nodeType === 1 && c.localName === 'tspan') {
         if (c.hasAttribute('x')) curX = c._length(c.getAttribute('x'), 0);
@@ -292,7 +330,8 @@ class DomNode {
         if (c.hasAttribute('y')) curY = c._length(c.getAttribute('y'), 0);
         curY += c._length(c.getAttribute('dy'), 0);
         const m = c._textSize();
-        union(curX, this._rowTop(curY, m, c), m.width, m.height);
+        union(this._anchorX(this._textAnchor(c), curX, m.width),
+              this._rowTop(curY, m, c), m.width, m.height);
         curX += m.width;
       }
     }
@@ -316,7 +355,8 @@ class DomNode {
         const m = this._textSize();
         const x = this._length(this.getAttribute('x'), 0);
         const y = this._length(this.getAttribute('y'), 0);
-        return { x, y: this._rowTop(y, m, this), width: m.width, height: m.height };
+        return { x: this._anchorX(this._textAnchor(this), x, m.width),
+                 y: this._rowTop(y, m, this), width: m.width, height: m.height };
       }
       return this._multiLineTextBBox();
     }

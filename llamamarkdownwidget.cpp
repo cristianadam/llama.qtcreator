@@ -322,6 +322,8 @@ QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
     // Render at device resolution so the picture stays crisp on HiDPI.
     const qreal dpr = devicePixelRatioF();
     QImage image(QSize(qCeil(w * dpr), qCeil(h * dpr)), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent); // QImage(size, format) leaves pixels uninitialized;
+                                 // QSvgRenderer draws over them without clearing
     image.setDevicePixelRatio(dpr);
     QPainter painter(&image);
     renderer.render(&painter, QRectF(0, 0, w, h));
