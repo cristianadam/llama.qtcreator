@@ -142,26 +142,55 @@ QByteArray stripFilters(const QByteArray &svg)
 // incorrect"), which leaves mermaid's node labels detached from their boxes.
 // Mermaid emits exactly this shape for class/flowchart labels:
 //   <tspan x=.. y=.. dy=.. class="text-outer-tspan row" font-weight="">
-//     <tspan class="text-inner-tspan" font-weight="normal">LABEL</tspan>
+//     <tspan class="text-inner-tspan" font-weight="normal">+name:</tspan>
+//     <tspan class="text-inner-tspan" font-weight="normal"> string</tspan>
 //   </tspan>
-// Flatten the pair into a single <tspan> (outer attributes win; the inner
-// font-* attributes are carried over when the outer does not set them).
-// Pairs whose inner element carries its own positioning are left alone -
-// flattening those would move the text.
+// (one inner tspan per word fragment). Flatten the outer tspan into a single
+// <tspan> whose text is the concatenation of the inner texts; the outer
+// positioning attributes win, and the inner font-* attributes are carried
+// over when the outer does not set them. Structures that would lose
+// positioning are left alone.
 QByteArray flattenNestedTspans(const QByteArray &svg)
 {
     QString out(QString::fromUtf8(svg));
+    // An outer tspan whose entire content is a sequence of inner tspans
+    // (mermaid's word fragments; no interleaved bare text).
     const QRegularExpression re(QStringLiteral(
-            "<tspan\\b([^>]*)>\\s*<tspan\\b([^>]*)>([^<]*)</tspan>\\s*</tspan>"));
+            "<tspan\\b([^>]*)>(\\s*<tspan\\b[^>]*>[^<]*</tspan>(?:\\s*<tspan\\b[^>]*>[^<]*</tspan>)*)\\s*</tspan>"));
+    const QRegularExpression innerRe(QStringLiteral("<tspan\\b([^>]*)>([^<]*)</tspan>"));
     static const QStringList kPositioning
         = {QStringLiteral("x"), QStringLiteral("y"), QStringLiteral("dx"),
            QStringLiteral("dy"), QStringLiteral("rotate"), QStringLiteral("startOffset")};
     static const QStringList kFontAttrs = {QStringLiteral("font-weight"),
                                            QStringLiteral("font-style")};
     auto attrValue = [](const QString &attrs, const QString &name) -> QString {
-        const QRegularExpression re(name + QStringLiteral("\\s*=\\s*\"([^\"]*)\""));
-        const QRegularExpressionMatch m = re.match(attrs);
-        return m.hasMatch() ? m.captured(1) : QString();
+        const QString needle = name + QLatin1Char('=');
+        int start = 0;
+        while (true) {
+            const int i = attrs.indexOf(needle, start);
+            if (i < 0)
+                return QString();
+            // Attribute names are whitespace-separated: reject partial hits.
+            if (i > 0 && !attrs.at(i - 1).isSpace()) {
+                start = i + 1;
+                continue;
+            }
+            int j = i + needle.size();
+            while (j < attrs.size() && attrs.at(j).isSpace())
+                ++j;
+            if (j < attrs.size() && attrs.at(j) == QLatin1Char('"')) {
+                const int e = attrs.indexOf(QLatin1Char('"'), j + 1);
+                if (e > j)
+                    return attrs.mid(j + 1, e - j - 1);
+            }
+            return QString();
+        }
+    };
+    const auto hasPositioning = [&](const QString &attrs) {
+        for (const QString &p : kPositioning)
+            if (!attrValue(attrs, p).isEmpty())
+                return true;
+        return false;
     };
     for (int guard = 0; guard < 10; ++guard) {
         QString result;
@@ -171,36 +200,73 @@ QByteArray flattenNestedTspans(const QByteArray &svg)
         while (it.hasNext()) {
             const QRegularExpressionMatch m = it.next();
             const QString outer = m.captured(1);
-            const QString inner = m.captured(2);
-            const QString text = m.captured(3);
+            const QString inners = m.captured(2);
+            const QString original = out.mid(m.capturedStart(0), m.capturedLength(0));
+
+            // Collect the inner tspans.
+            QStringList innerAttrs;
+            QStringList innerTexts;
+            QRegularExpressionMatchIterator innerIt = innerRe.globalMatch(inners);
+            while (innerIt.hasNext()) {
+                const QRegularExpressionMatch im = innerIt.next();
+                innerAttrs.append(im.captured(1));
+                innerTexts.append(im.captured(2));
+            }
+            if (innerAttrs.isEmpty() || innerAttrs.size() != innerTexts.size())
+                continue;
 
             QString replacement;
-            bool keep = false;
-            for (const QString &p : kPositioning) {
-                if (!attrValue(inner, p).isEmpty()) {
-                    keep = true; // flattening would lose positioning
+            bool flatten = true;
+            for (const QString &attrs : innerAttrs) {
+                if (hasPositioning(attrs)) {
+                    // Merging would lose the inner's positioning. The single-
+                    // inner case is safe when the outer does not position
+                    // either (the inner attributes then take over 1:1).
+                    flatten = !(innerAttrs.size() == 1 && !hasPositioning(outer));
                     break;
                 }
             }
-            if (keep)
-                replacement = out.mid(m.capturedStart(0), m.capturedLength(0));
-            else {
-                QString merged = outer;
-                for (const QString &f : kFontAttrs) {
-                    const QString innerValue = attrValue(inner, f);
-                    const QString outerValue = attrValue(outer, f);
-                    if (innerValue.isEmpty() || innerValue == outerValue)
-                        continue;
-                    if (outerValue.isEmpty())
-                        merged.replace(f + QStringLiteral("=\"\""),
-                                       f + QStringLiteral("=\"") + innerValue + QStringLiteral("\""));
-                    else
-                        merged += QStringLiteral(" ") + f + QStringLiteral("=\"")
-                                + innerValue + QStringLiteral("\"");
-                }
-                replacement = QStringLiteral("<tspan") + merged + '>' + text + "</tspan>";
-                changed = true;
+            if (!flatten) {
+                result += out.mid(lastEnd, m.capturedStart(0) - lastEnd) + original;
+                lastEnd = m.capturedEnd(0);
+                continue;
             }
+
+            QString merged = outer;
+            for (const QString &f : kFontAttrs) {
+                QString innerValue;
+                for (const QString &attrs : innerAttrs) {
+                    innerValue = attrValue(attrs, f);
+                    if (!innerValue.isEmpty())
+                        break;
+                }
+                const QString outerValue = attrValue(outer, f);
+                if (innerValue.isEmpty() || innerValue == outerValue)
+                    continue;
+                if (outerValue.isEmpty())
+                    merged.replace(f + QStringLiteral("=\"\""),
+                                   f + QStringLiteral("=\"") + innerValue + QStringLiteral("\""));
+                else
+                    merged += QStringLiteral(" ") + f + QStringLiteral("=\"")
+                            + innerValue + QStringLiteral("\"");
+            }
+            if (innerAttrs.size() == 1 && hasPositioning(innerAttrs.first())) {
+                // Carry the single inner's positioning over to the merged
+                // tspan (the outer does not set any of it itself).
+                for (const QString &p : kPositioning) {
+                    const QString v = attrValue(innerAttrs.first(), p);
+                    if (v.isEmpty())
+                        continue;
+                    if (merged.contains(p + QLatin1Char('=')))
+                        continue;
+                    merged += QStringLiteral(" ") + p + QStringLiteral("=\"") + v + QStringLiteral("\"");
+                }
+            }
+            QString text;
+            for (const QString &t : innerTexts)
+                text += t;
+            replacement = QStringLiteral("<tspan") + merged + '>' + text + "</tspan>";
+            changed = true;
 
             result += out.mid(lastEnd, m.capturedStart(0) - lastEnd) + replacement;
             lastEnd = m.capturedEnd(0);

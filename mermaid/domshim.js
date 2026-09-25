@@ -237,19 +237,88 @@ class DomNode {
     const f = this._fontProps();
     return __qtMeasureText(text, f.family, f.size, f.weight, f.style);
   }
+  // Like parseLength(), but resolves em/rem against this element's font-size
+  // (mermaid positions text rows with y="-0.1em" dy="1.1em").
+  _length(v, dflt = 0) {
+    if (v == null) return dflt;
+    if (typeof v === 'number') return v;
+    const m = String(v).trim().match(/^(-?[\d.]+)(px|em|rem)?/);
+    if (!m) return dflt;
+    const n = parseFloat(m[1]);
+    if (m[2]) return n * this._fontProps().size;
+    return n;
+  }
+  // Baseline-relative top edge of a text row, honoring dominant-baseline
+  // (inherited in SVG). Mermaid centers class/edge labels with it, so
+  // ignoring it shifts the measured row by ~half a line height.
+  _rowTop(y, m, el) {
+    let db = null;
+    for (let n = el; n && n.nodeType === 1; n = n.parentNode) {
+      db = n.getAttribute('dominant-baseline') || n.style.getPropertyValue('dominant-baseline');
+      if (db) break;
+    }
+    if (db === 'middle' || db === 'central') return y - m.height / 2;
+    if (db === 'hanging') return y;
+    if (db === 'text-after-edge') return y - m.descent;
+    return y - m.ascent;
+  }
+  // Mermaid builds multi-line labels (class boxes, etc.) as a <text> with
+  // <tspan> rows positioned via x/y/dx/dy. getBBox() must report the union
+  // of the individual rows, tracking the SVG text cursor — sizing the whole
+  // textContent as one line made mermaid lay out a one-line-tall box while
+  // the tspans then rendered as N rows, detaching labels from their boxes.
+  _multiLineTextBBox() {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    const union = (x, top, w, h) => {
+      if (w < 0 && h < 0) return;
+      if (x < minX) minX = x;
+      if (top < minY) minY = top;
+      if (x + w > maxX) maxX = x + w;
+      if (top + h > maxY) maxY = top + h;
+    };
+    let curX = this._length(this.getAttribute('x'), 0);
+    let curY = this._length(this.getAttribute('y'), 0);
+    for (const c of this.childNodes) {
+      if (c.nodeType === 3) {
+        const text = c._data || '';
+        if (!text.trim()) continue;
+        const f = this._fontProps();
+        const m = __qtMeasureText(text, f.family, f.size, f.weight, f.style);
+        union(curX, this._rowTop(curY, m, this), m.width, m.height);
+        curX += m.width;
+      } else if (c.nodeType === 1 && c.localName === 'tspan') {
+        if (c.hasAttribute('x')) curX = c._length(c.getAttribute('x'), 0);
+        curX += c._length(c.getAttribute('dx'), 0);
+        if (c.hasAttribute('y')) curY = c._length(c.getAttribute('y'), 0);
+        curY += c._length(c.getAttribute('dy'), 0);
+        const m = c._textSize();
+        union(curX, this._rowTop(curY, m, c), m.width, m.height);
+        curX += m.width;
+      }
+    }
+    if (!isFinite(minX)) return { x: 0, y: 0, width: 0, height: 0 };
+    return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+  }
   getBBox() {
     if (this.localName === 'style' || this.localName === 'metadata' || this.localName === 'script')
       return { x: 0, y: 0, width: 0, height: 0 };
     if (this.nodeType === 3) {
-      const m = this.parentNode ? this.parentNode._textSize() : { width: 0, ascent: 0, descent: 0, height: 14 };
+      const f = this.parentNode ? this.parentNode._fontProps() : { family: 'sans-serif', size: 14, weight: 400, style: 'normal' };
+      const m = this.parentNode
+        ? __qtMeasureText(this._data || '', f.family, f.size, f.weight, f.style)
+        : { width: 0, ascent: 0, descent: 0, height: 14 };
       return { x: 0, y: -m.ascent, width: m.width, height: m.height };
     }
     const tag = this.localName;
     if (tag === 'text' || tag === 'tspan' || tag === 'title') {
-      const m = this._textSize();
-      const x = parseLength(this.getAttribute('x'), 0);
-      const y = parseLength(this.getAttribute('y'), 0);
-      return { x, y: y - m.ascent, width: m.width, height: m.height };
+      const hasTspanChild = this.childNodes.some(c => c.nodeType === 1 && c.localName === 'tspan');
+      if (!hasTspanChild) {
+        const m = this._textSize();
+        const x = this._length(this.getAttribute('x'), 0);
+        const y = this._length(this.getAttribute('y'), 0);
+        return { x, y: this._rowTop(y, m, this), width: m.width, height: m.height };
+      }
+      return this._multiLineTextBBox();
     }
     if (tag === 'rect' || tag === 'image' || tag === 'foreignObject') {
       const x = parseLength(this.getAttribute('x'), 0);
@@ -286,11 +355,24 @@ class DomNode {
       }
       return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
     }
-    // group/other: union of children
+    // group/other: union of children, with each child's transform applied
+    // (browsers include descendant transforms in a group's bbox — mermaid
+    // positions its label rows with translate(), so ignoring this detaches
+    // the measured box from the rendered rows)
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (const c of this.childNodes) {
-      const b = c.getBBox();
+      let b = c.getBBox();
       if (b.width < 0 && b.height < 0) continue;
+      const tr = c.getAttribute('transform');
+      if (tr) {
+        const t = tr.match(/translate\(\s*([-\d.e]+)[,\s]+([-\d.e]+)/);
+        const sc = tr.match(/scale\(\s*([-\d.e]+)(?:[,\s]+([-\d.e]+))?/);
+        const sx = sc ? parseFloat(sc[1]) : 1;
+        const sy = sc ? (sc[2] != null ? parseFloat(sc[2]) : sx) : 1;
+        const tx = t ? parseFloat(t[1]) : 0;
+        const ty = t ? parseFloat(t[2]) : 0;
+        b = { x: b.x * sx + tx, y: b.y * sy + ty, width: Math.abs(b.width * sx), height: Math.abs(b.height * sy) };
+      }
       if (b.x < minX) minX = b.x;
       if (b.y < minY) minY = b.y;
       if (b.x + b.width > maxX) maxX = b.x + b.width;
@@ -340,8 +422,75 @@ class DomNode {
 
   // ---- serialization ----
   _escape(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  // Qt's SVG module discards every positioning attribute on <tspan> (x, y,
+  // dx, dy) and concatenates all tspans of a <text> into a single line, and
+  // it rejects tspans nested in tspans. Mermaid, however, builds its labels
+  // as <text> elements with <tspan> rows positioned via x/y/dx/dy. Emit each
+  // positioned tspan row as its own <text> element with the resolved
+  // absolute x/y (em units included) instead, carrying over the tspan's
+  // class/font attributes. <text> elements without tspan children (or whose
+  // tspans carry no positioning) serialize as-is: Qt reads their x/y.
+  _textRowOut() {
+    if (!this.childNodes.some(c => c.nodeType === 1 && c.localName === 'tspan'))
+      return null;
+    const kCarry = ['class', 'style', 'text-anchor', 'font-weight', 'font-style',
+                    'font-size', 'font-family', 'fill'];
+    const round = v => Math.round(v * 100) / 100;
+    const rows = [];
+    let cur = null;
+    let curX = this._length(this.getAttribute('x'), 0);
+    let curY = this._length(this.getAttribute('y'), 0);
+    const newRow = (x, y, src) => {
+      const attrs = [];
+      const seen = new Set(['x', 'y', 'dx', 'dy']);
+      for (const el of [this, src]) {
+        if (!el) continue;
+        for (const k of kCarry) {
+          if (seen.has(k)) continue;
+          const v = el.getAttribute(k) || (k === 'style' ? el.style.cssText : '');
+          if (v == null || v === '') continue;
+          attrs.push([k, v]);
+          seen.add(k);
+        }
+      }
+      cur = { x, y, attrs, parts: [] };
+      rows.push(cur);
+    };
+    for (const c of this.childNodes) {
+      if (c.nodeType === 3) {
+        const t = c._data || '';
+        if (!cur) newRow(curX, curY, null);
+        cur.parts.push(t);
+        const f = this._fontProps();
+        curX += __qtMeasureText(t, f.family, f.size, f.weight, f.style).width;
+      } else if (c.nodeType === 1 && c.localName === 'tspan') {
+        let x = curX, y = curY;
+        let positioned = false;
+        if (c.hasAttribute('x')) { x = c._length(c.getAttribute('x'), 0); positioned = true; }
+        x += c._length(c.getAttribute('dx'), 0);
+        if (c.hasAttribute('y')) { y = c._length(c.getAttribute('y'), 0); positioned = true; }
+        y += c._length(c.getAttribute('dy'), 0);
+        if (positioned || !cur) newRow(x, y, c);
+        cur.parts.push(c.textContent);
+        curX = x + c._textSize().width;
+        curY = y;
+      }
+    }
+    if (!rows.length) return null;
+    return rows.map(r => {
+      const attrs = r.attrs.map(([k, v]) => ' ' + k + '="' + this._escape(v) + '"').join('')
+                  + ' x="' + round(r.x) + '" y="' + round(r.y) + '"';
+      const text = r.parts.join('');
+      if (!text.trim()) return '';
+      return '<text' + attrs + '>' + this._escape(text) + '</text>';
+    }).join('');
+  }
   serialize() {
     if (this.nodeType === 3) return this._escape(this._data || '');
+    if (this.localName === 'text') {
+      const rows = this._textRowOut();
+      if (rows) return rows;
+    }
     let out = '<' + this.localName;
     for (const [k, v] of this._attributes) {
       out += ' ' + k + '="' + this._escape(v) + '"';
@@ -606,10 +755,88 @@ const document = {
   }
 };
 
+// ---- :nth-child( <an+b> ) : returns true if the 1-based index matches ----
+function _nthChildMatch(arg, index) {
+  arg = arg.trim().toLowerCase();
+  if (arg === 'n') return true;
+  const m = arg.match(/^(?:(-?\d*)n\s*([+-]\s*\d+)?)?$/);
+  if (m) {
+    let a = m[1];
+    a = a === '' || a === '+' ? 1 : a === '-' ? -1 : parseInt(a, 10);
+    const b = m[2] ? parseInt(m[2].replace(/\s+/g, ''), 10) : 0;
+    if (a === 0) return index === b;
+    const diff = index - b;
+    return diff % a === 0 && diff / a >= 0;
+  }
+  if (/^-?\d+$/.test(arg)) return index === parseInt(arg, 10);
+  return false;
+}
+
+// Evaluate a single pseudo-class against `this`. Returns false for any
+// pseudo-class we do not implement (so it never accidentally matches).
+DomNode.prototype._matchesPseudo = function (pseudo) {
+  const p = pseudo.trim();
+  const par = this.parentNode;
+  if (p === 'first-child')
+    return !par || par.childNodes.length === 0 || par.childNodes[0] === this;
+  if (p === 'last-child')
+    return !par || par.childNodes.length === 0 || par.childNodes[par.childNodes.length - 1] === this;
+  if (p === 'only-child')
+    return !par || par.childNodes.length === 1;
+  if (p === 'empty')
+    return this.childNodes.length === 0;
+  if (p.startsWith('nth-child('))
+    return _nthChildMatch(p.slice(10, -1),
+      par ? par.childNodes.indexOf(this) + 1 : 1);
+  if (p.startsWith('not(')) {
+    const inner = p.slice(4, -1);
+    return !inner.split(',').some(s => this._matches(s.trim()));
+  }
+  return false;
+};
+
+// Split a simple selector into its non-pseudo base and a list of
+// ":name" / ":name(args)" pseudo-classes (args may contain commas/parens).
+DomNode.prototype._splitPseudos = function (sel) {
+  const pseudos = [];
+  let base = '';
+  let i = 0;
+  while (i < sel.length) {
+    if (sel[i] === ':') {
+      let j = i + 1;
+      let name = '';
+      while (j < sel.length && sel[j] !== '(' && sel[j] !== ':' && sel[j] !== ' ')
+        { name += sel[j]; j++; }
+      let arg = null;
+      if (j < sel.length && sel[j] === '(') {
+        let depth = 1, k = j + 1, argStr = '';
+        while (k < sel.length && depth > 0) {
+          if (sel[k] === '(') depth++;
+          else if (sel[k] === ')') { depth--; if (depth === 0) break; }
+          argStr += sel[k]; k++;
+        }
+        arg = argStr; j = k + 1;
+      }
+      pseudos.push(name + (arg != null ? '(' + arg + ')' : ''));
+      i = j;
+    } else { base += sel[i]; i++; }
+  }
+  return { base, pseudos };
+};
+
 // simple selector matching: #id, tag, .class, [attr], [attr="v"], tag[attr="v"], .a.b,
+// pseudo-classes (:first-child, :last-child, :only-child, :empty, :nth-child(), :not()),
 // plus descendant combinators ("a b c")
 DomNode.prototype._matchesSimple = function (sel) {
   sel = sel.trim();
+  if (!sel) return false;
+  const { base, pseudos } = this._splitPseudos(sel);
+  if (base && !this._matchesBase(base)) return false;
+  for (const p of pseudos) if (!this._matchesPseudo(p)) return false;
+  return true;
+};
+
+DomNode.prototype._matchesBase = function (sel) {
   if (sel.startsWith('#')) return this.getAttribute('id') === sel.slice(1);
   let rest = sel;
   const m = rest.match(/^([a-zA-Z][\w-]*)/);
