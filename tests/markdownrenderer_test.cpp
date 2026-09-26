@@ -99,6 +99,18 @@ static QString firstImageUrl(MarkdownRenderer &renderer)
     return {};
 }
 
+static double imageFormatHeight(MarkdownRenderer &renderer, const QString &url)
+{
+    for (int p = 0; p < renderer.document()->characterCount(); ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        const QTextCharFormat cf = cursor.charFormat();
+        if (cf.isImageFormat() && cf.toImageFormat().name() == url)
+            return cf.toImageFormat().height();
+    }
+    return -1;
+}
+
 void MarkdownRendererTest::plainParagraph()
 {
     MarkdownRenderer renderer;
@@ -651,6 +663,22 @@ void MarkdownRendererTest::displayMathRendersAsImage()
     const QString url = firstImageUrl(renderer);
     QVERIFY2(url.startsWith(QLatin1String("llamasvg://ktx-")), qPrintable(url));
     QVERIFY(renderer.svgContentForUrl(QUrl(url)).contains("<svg"));
+
+    // Free-standing math is scaled up (displayScale) relative to the same
+    // formula inline, which stays at the surrounding text size.
+    const double displayHeight = imageFormatHeight(renderer, url);
+    MarkdownRenderer inlineRenderer;
+    inlineRenderer.document()->setTextWidth(500);
+    streamText(inlineRenderer,
+               QStringLiteral("$\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}$"));
+    const double inlineHeight = imageFormatHeight(
+            inlineRenderer, firstImageUrl(inlineRenderer));
+    QVERIFY2(inlineHeight > 0, "inline math image must have a height");
+    QVERIFY2(displayHeight > 1.15 * inlineHeight,
+             qPrintable(QStringLiteral("display math (%1) must be clearly "
+                                       "larger than inline math (%2)")
+                             .arg(displayHeight)
+                             .arg(inlineHeight)));
 }
 
 void MarkdownRendererTest::radicalSvgHasNoClipPath()

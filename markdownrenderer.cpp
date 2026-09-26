@@ -1244,11 +1244,13 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
     // formula (tail re-renders, conversations reopens) hit the engine cache.
     // (Render at 1x: scaling a larger vector *down* into the raster averages
     // the stroke coverage and makes the glyphs look thin and washed out.)
+    // Free-standing display math is scaled up so the formula reads as its
+    // own line rather than blending into the text size.
+    const double displayScale = math.display ? 1.25 : 1.0;
     const int fontSize = qMax(1, QFontInfo(m_baseFont).pixelSize());
-    constexpr double kSupersample = 1.0;
     const QString mathColor = color(TextForeground).name();
     const KaTeXEngine::Rendered rendered = KaTeXEngine::instance()->render(
-            tex, math.display, mathColor, int(fontSize * kSupersample));
+            tex, math.display, mathColor, int(fontSize * displayScale));
     if (rendered.svg.isEmpty()) {
         // Invalid math: keep the source visible, with its delimiters.
         const QString delim = math.display ? QStringLiteral("$") : QString();
@@ -1267,7 +1269,7 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
     // (the box is scaled back to 1x for the image format below).
     const QFontMetricsF textMetrics(m_baseFont);
     const double depth = rendered.height - rendered.baseline; // content below baseline
-    const double bottomSpace = qMax(textMetrics.descent() * kSupersample, depth);
+    const double bottomSpace = qMax(textMetrics.descent() * displayScale, depth);
     const double boxHeight = rendered.baseline + bottomSpace;
     const QString reboxed = reboxSvgHeight(rendered.svg, boxHeight);
 
@@ -1287,8 +1289,8 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
 
     QTextImageFormat imgFmt;
     imgFmt.setName(QStringLiteral("llamasvg://") + key);
-    imgFmt.setWidth(rendered.width / kSupersample);
-    imgFmt.setHeight(boxHeight / kSupersample);
+    imgFmt.setWidth(rendered.width);
+    imgFmt.setHeight(boxHeight);
     imgFmt.setVerticalAlignment(QTextCharFormat::AlignBottom);
     // insertImage() may leave the cursor's char format set to the image
     // format; the following text must not inherit it.
