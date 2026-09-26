@@ -52,6 +52,10 @@ public:
     // Indent level of a non-quoted <details> body (tool output). Used by the
     // code-block overlay geometry, mirroring the BlockQuoteLevel adjustment.
     static const int DetailsBodyIndentProp = QTextFormat::UserProperty + 5;
+    // Set on the placeholder block of a mermaid diagram that is still being
+    // rendered: holds the pending key that onMermaidRendered() looks up to
+    // swap the spinner for the finished picture (or to remove it on error).
+    static const int MermaidPendingKeyProp = QTextFormat::UserProperty + 6;
 
     static constexpr QChar ZeroWidthSpace = QChar(L'\u200b');
 
@@ -159,11 +163,21 @@ private:
     // still streaming or when the diagram is invalid.
     bool renderMermaidCodeBlock(const markus::CodeBlock &code);
     // Shared layout of renderSvgCodeBlock()/renderMermaidCodeBlock(): a
-    // <details> section with the rendered picture in the (collapsed by
-    // default) header and the source as a code block in the body.
+    // <details> section with the picture (\a imageUrl, e.g. "llamasvg://..."
+    // or the "spinner://..." busy placeholder while a mermaid render is in
+    // flight) in the (collapsed by default) header and the source as a code
+    // block in the body. \a svg is the image content to serve from
+    // svgContentForUrl(); pass an empty one for the spinner placeholder.
+    // \a pendingKey (mermaid only) tags the picture block as in-flight.
     bool renderDiagramAsDetails(const markus::CodeBlock &code, const QByteArray &svg,
-                                const QString &summaryText,
-                                const std::string &bodyInfoString = "xml");
+                                const QString &imageUrl, const QString &summaryText,
+                                const std::string &bodyInfoString = "xml",
+                                const QString &pendingKey = QString());
+    // The async render finished for the in-flight diagram \a key: \a svg is
+    // the rendered picture, or empty on failure. Swaps the spinner
+    // placeholder for the picture, or removes the placeholder line on
+    // failure (the source stays available in the details body).
+    void onMermaidRendered(const QString &key, const QByteArray &svg);
     // The ordinal id of the next <details> section; tail sections get the
     // stable ids they will have once finalized, so user expand/collapse
     // choices survive tail re-renders.
@@ -252,8 +266,11 @@ private:
     // once the fence is closed.
     bool m_renderingTail = false;
     // SVG source for llamasvg:// image URLs, keyed by a hash of the content
-    // so tail re-renders of the same block reuse the same resource.
+    // (SVG blocks) or by the pending key (mermaid blocks, which get it as
+    // soon as the async render finishes).
     QHash<QString, QByteArray> m_svgStore;
+    // Ordinal counter for pending mermaid diagram keys ("mmd-<n>").
+    int m_nextMermaidKey = 0;
     int m_paragraphMargin = 0;
     bool m_skipNextParagraphBlock = false;
     bool m_expandDetailsByDefault = true;

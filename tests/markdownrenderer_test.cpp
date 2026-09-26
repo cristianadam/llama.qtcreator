@@ -1,5 +1,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
+#include <QElapsedTimer>
+#include <QEventLoop>
 #include <QTextImageFormat>
 #include <QTimer>
 #include <QtTest/QtTest>
@@ -26,6 +28,32 @@ static bool containsAll(const QString &text, const QStringList &lines)
         if (!text.contains(line))
             return false;
     return true;
+}
+
+// Mermaid diagrams render asynchronously on the engine's worker thread:
+// after a finalized block is rendered, its placeholder block carries
+// MermaidPendingKeyProp until the queued completion callback (which swaps the
+// spinner for the picture, or removes it on failure) has run. Pump the event
+// loop until no pending block remains, or report a timeout.
+static bool waitForPendingMermaid(MarkdownRenderer &renderer, int timeoutMs = 60'000)
+{
+    QElapsedTimer timer;
+    timer.start();
+    while (timer.elapsed() < timeoutMs) {
+        bool pending = false;
+        for (QTextBlock blk = renderer.document()->firstBlock(); blk.isValid();
+             blk = blk.next()) {
+            if (!blk.blockFormat()
+                     .property(MarkdownRenderer::MermaidPendingKeyProp)
+                     .toString()
+                     .isEmpty())
+                pending = true;
+        }
+        if (!pending)
+            return true;
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 50);
+    }
+    return false;
 }
 
 class MarkdownRendererTest : public QObject
@@ -480,6 +508,11 @@ void MarkdownRendererTest::mermaidCodeBlockRendersAsImage()
                          "```");
     streamText(renderer, text);
 
+    // The diagram renders asynchronously: wait for the placeholder to be
+    // swapped for the picture.
+    QVERIFY2(waitForPendingMermaid(renderer),
+             "timed out waiting for the async mermaid render");
+
     // The finalized block must be an image, not source text.
     QString imageUrl;
     for (int p = 0; p < renderer.document()->characterCount() && imageUrl.isEmpty();
@@ -494,6 +527,27 @@ void MarkdownRendererTest::mermaidCodeBlockRendersAsImage()
     QVERIFY(renderer.svgContentForUrl(QUrl(imageUrl)).contains("<svg"));
     // The SVG is sanitized for Qt (no unsupported filters).
     QVERIFY(!renderer.svgContentForUrl(QUrl(imageUrl)).contains("<filter"));
+
+    // The picture must sit in its own (centered) block; the caption line
+    // stays below it, not appended to the picture's paragraph (regression:
+    // the async swap used to eat the paragraph separator).
+    QTextBlock imageBlock;
+    for (QTextBlock blk = renderer.document()->firstBlock(); blk.isValid();
+         blk = blk.next()) {
+        if (!blk.blockFormat().property(MarkdownRenderer::DetailsToggleBlockProp).toBool())
+            continue;
+        for (auto it = blk.begin(); it != blk.end(); ++it)
+            if (it.fragment().charFormat().isImageFormat())
+                imageBlock = blk;
+        if (imageBlock.isValid())
+            break;
+    }
+    QVERIFY2(imageBlock.isValid(), "expected the picture in a details header block");
+    QVERIFY2(!imageBlock.text().contains(QStringLiteral("Mermaid diagram")),
+             "the caption must stay in its own block below the picture");
+    const QTextBlockFormat captionFmt = imageBlock.next().blockFormat();
+    QVERIFY2(captionFmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool(),
+             "the caption line must directly follow the picture");
 }
 
 void MarkdownRendererTest::invalidMermaidFallsBackToCode()
@@ -506,10 +560,18 @@ void MarkdownRendererTest::invalidMermaidFallsBackToCode()
                          "  A -->\n"
                          "```");
     const QString out = streamText(renderer, text);
+
+    // The render runs asynchronously: wait for the failure to arrive and the
+    // spinner placeholder to be removed.
+    QVERIFY2(waitForPendingMermaid(renderer),
+             "timed out waiting for the async mermaid render");
     // Invalid diagram: no image, the source stays visible as a code block.
     QVERIFY2(out.contains(QStringLiteral("A -->")), qPrintable(out));
     QVERIFY2(!renderer.toPlainText().contains(QChar(0xFFFC)),
              "an invalid mermaid diagram must not produce an image");
+    // Removing the placeholder must not eat into the caption line below it.
+    QVERIFY2(renderer.toPlainText().contains(QStringLiteral("Mermaid diagram")),
+             "the caption must survive the placeholder removal");
 }
 
 int main(int argc, char **argv)

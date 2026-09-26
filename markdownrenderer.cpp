@@ -16,6 +16,7 @@
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QSvgRenderer>
+#include <QTextFragment>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -617,7 +618,12 @@ bool MarkdownRenderer::renderSvgCodeBlock(const markus::CodeBlock &code)
                     << "showing it as code instead";
         return false;
     }
-    return renderDiagramAsDetails(code, bytes, Tr::tr("SVG image"));
+    // The URL derives from the content, so re-rendering the in-progress tail
+    // reuses the same resource once the content stops changing.
+    const QString key = QString::fromLatin1(
+            QCryptographicHash::hash(bytes, QCryptographicHash::Md5).toHex().left(16));
+    return renderDiagramAsDetails(code, bytes, QStringLiteral("llamasvg://") + key,
+                                  Tr::tr("SVG image"));
 }
 
 bool MarkdownRenderer::renderMermaidCodeBlock(const markus::CodeBlock &code)
@@ -637,24 +643,30 @@ bool MarkdownRenderer::renderMermaidCodeBlock(const markus::CodeBlock &code)
     // text means a light UI.
     const QString theme = color(TextForeground).lightness() < 128 ? QStringLiteral("default")
                                                                   : QStringLiteral("dark");
-    const QByteArray svg = MermaidEngine::instance()->render(source, theme);
-    if (svg.isEmpty())
-        return false; // invalid diagram: fall back to the code view
-    // Keep the "mermaid" language on the body code block (highlighting,
-    // copy behavior).
-    return renderDiagramAsDetails(code, svg, Tr::tr("Mermaid diagram"), "mermaid");
+    // The render runs on the engine's worker thread; the block shows a busy
+    // spinner until the SVG arrives (onMermaidRendered swaps it in), so a
+    // heavy diagram never blocks the UI while a conversation is opened or
+    // streamed.
+    const QString key = QStringLiteral("mmd-") + QString::number(++m_nextMermaidKey);
+    if (!renderDiagramAsDetails(code, QByteArray(), QStringLiteral("spinner://mermaid-") + key,
+                                Tr::tr("Mermaid diagram"), "mermaid", key))
+        return false;
+    MermaidEngine::instance()->renderAsync(source, theme, this,
+                                           [this, key](const QByteArray &svg) {
+                                               onMermaidRendered(key, svg);
+                                           });
+    return true;
 }
 
 bool MarkdownRenderer::renderDiagramAsDetails(const markus::CodeBlock &code,
                                               const QByteArray &svg,
+                                              const QString &imageUrl,
                                               const QString &summaryText,
-                                              const std::string &bodyInfoString)
+                                              const std::string &bodyInfoString,
+                                              const QString &pendingKey)
 {
-    // The URL derives from the content, so re-rendering the in-progress tail
-    // reuses the same resource once the content stops changing.
-    const QString key = QString::fromLatin1(
-            QCryptographicHash::hash(svg, QCryptographicHash::Md5).toHex().left(16));
-    m_svgStore.insert(key, svg);
+    if (!svg.isEmpty())
+        m_svgStore.insert(imageUrl.section(QLatin1String("://"), 1, 1), svg);
 
     // Render as a <details> section: the picture in the (collapsed by
     // default) header, the source in the body.  Section ids are ordinal, so
@@ -678,10 +690,12 @@ bool MarkdownRenderer::renderDiagramAsDetails(const markus::CodeBlock &code,
     imgBlockFmt.setTopMargin(m_paragraphMargin);
     imgBlockFmt.setBottomMargin(0);
     applyHorizontalIndent(imgBlockFmt);
+    if (!pendingKey.isEmpty())
+        imgBlockFmt.setProperty(MermaidPendingKeyProp, pendingKey);
     m_cursor.setBlockFormat(imgBlockFmt);
 
     QTextImageFormat imgFmt;
-    imgFmt.setName(QStringLiteral("llamasvg://") + key);
+    imgFmt.setName(imageUrl);
     m_cursor.insertImage(imgFmt);
 
     beginBlock();
@@ -772,6 +786,72 @@ QByteArray MarkdownRenderer::svgContentForUrl(const QUrl &url) const
     if (url.scheme() != QLatin1String("llamasvg"))
         return {};
     return m_svgStore.value(url.authority());
+}
+
+void MarkdownRenderer::onMermaidRendered(const QString &key, const QByteArray &svg)
+{
+    // The spinner placeholder block carries the pending key; a missing block
+    // means the document was reset/re-fed since the render was requested.
+    QTextBlock pendingBlock;
+    for (QTextBlock blk = m_doc->firstBlock(); blk.isValid(); blk = blk.next()) {
+        if (blk.blockFormat().property(MermaidPendingKeyProp).toString() == key) {
+            pendingBlock = blk;
+            break;
+        }
+    }
+    if (!pendingBlock.isValid())
+        return;
+
+    // The spinner block is addressed by explicit position ranges: the
+    // image character is counted inconsistently by QTextBlock::length() and
+    // select(BlockUnderCursor) leaves a dangling character behind, so the
+    // content extent is derived from the fragments instead.
+    const int pos = pendingBlock.position();
+    int contentEnd = pos;
+    for (auto it = pendingBlock.begin(); it != pendingBlock.end(); ++it)
+        contentEnd = qMax(contentEnd, it.fragment().position() + it.fragment().length());
+    QTextCursor cur(m_doc);
+    cur.setPosition(pos);
+    m_cursor.beginEditBlock();
+    if (svg.isEmpty()) {
+        // Invalid diagram: drop the spinner line; the source stays available
+        // in the (collapsed) details body. Select the block's content plus
+        // its paragraph separator (clamped for the document's last block).
+        const int sepEnd = pendingBlock.next().isValid()
+                                ? pendingBlock.next().position()
+                                : m_doc->characterCount() - 1;
+        cur.setPosition(sepEnd, QTextCursor::KeepAnchor);
+        cur.removeSelectedText();
+        // The document's final block cannot be deleted; if its shell
+        // survives, make sure it is no longer tagged as pending.
+        const QTextBlock shell = m_doc->findBlock(qMin(pos, m_doc->characterCount() - 1));
+        if (shell.isValid()
+            && shell.blockFormat().property(MermaidPendingKeyProp).toString() == key) {
+            QTextBlockFormat fmt = shell.blockFormat();
+            fmt.clearProperty(MermaidPendingKeyProp);
+            cur.setPosition(qMin(pos, m_doc->characterCount() - 1));
+            cur.setBlockFormat(fmt);
+        }
+    } else {
+        m_svgStore.insert(key, svg);
+        // Swap the spinner (just its content, the paragraph separator stays)
+        // for the picture; the document fetches "llamasvg://key" lazily via
+        // loadResource() on the next paint.
+        QTextImageFormat imgFmt;
+        imgFmt.setName(QStringLiteral("llamasvg://") + key);
+        cur.setPosition(contentEnd, QTextCursor::KeepAnchor);
+        cur.insertText(QString(QChar(0xFFFC)), imgFmt);
+        // No longer in flight: clear the pending marker.
+        const QTextBlock blk = m_doc->findBlock(pos);
+        if (blk.isValid()) {
+            QTextBlockFormat fmt = blk.blockFormat();
+            fmt.clearProperty(MermaidPendingKeyProp);
+            cur.setPosition(pos);
+            cur.setBlockFormat(fmt);
+        }
+    }
+    m_cursor.endEditBlock();
+    updateAllOverlaysGeometry();
 }
 
 void MarkdownRenderer::handleThematicBreak()

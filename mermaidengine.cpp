@@ -976,6 +976,36 @@ QByteArray MermaidEngine::render(const QString &source, const QString &theme)
     return svg;
 }
 
+void MermaidEngine::renderAsync(const QString &source, const QString &theme,
+                                QObject *context,
+                                const std::function<void(const QByteArray &svg)> &callback)
+{
+    const QByteArray keySource = source.toUtf8();
+    const QByteArray cacheInput = keySource + '\0' + theme.toUtf8();
+    const QString cacheKey = QString::fromLatin1(
+            QCryptographicHash::hash(cacheInput, QCryptographicHash::Md5).toHex().left(16));
+
+    QMutexLocker locker(&m_mutex);
+    if (m_cache.contains(cacheKey)) {
+        const QByteArray svg = m_cache.value(cacheKey);
+        // Queued (never inline): the callback may mutate a document that is
+        // being edited on this very thread, and the edit must not be
+        // interrupted mid-flight.
+        QMetaObject::invokeMethod(context, [callback, svg]() mutable { callback(svg); },
+                                  Qt::QueuedConnection);
+        return;
+    }
+    if (!m_worker->isRunning())
+        m_worker->start();
+    RenderJob *job = new RenderJob;
+    job->source = source;
+    job->theme = theme;
+    job->context = context;
+    job->callback = callback;
+    m_jobs.push(job);
+    m_jobAvailable.wakeOne();
+}
+
 void MermaidEngine::workerMain()
 {
     bool ready = ensureInitialized();
@@ -998,10 +1028,34 @@ void MermaidEngine::workerMain()
             continue;
 
         job->result = ready ? workerRender(job->source, job->theme) : QByteArray();
-        job->done.release();
-        // Hand the job back to the reader; it may have timed out and given up
-        // (in which case this is the only owner and frees it after a while).
-        job->consumed.tryAcquire(1, 5'000);
+        if (job->context) {
+            // Async job: cache the result and deliver it on the context's
+            // thread (queued, so the callback never runs while the worker is
+            // holding this job).
+            if (!job->result.isEmpty()) {
+                QMutexLocker locker(&m_mutex);
+                const QByteArray cacheInput = job->source.toUtf8() + '\0'
+                                              + job->theme.toUtf8();
+                const QString cacheKey = QString::fromLatin1(
+                        QCryptographicHash::hash(cacheInput, QCryptographicHash::Md5)
+                                .toHex()
+                                .left(16));
+                if (m_cache.size() >= kMaxCacheEntries)
+                    m_cache.clear();
+                m_cache.insert(cacheKey, job->result);
+            }
+            QMetaObject::invokeMethod(job->context,
+                                      [cb = std::move(job->callback),
+                                       svg = std::move(job->result)]() mutable {
+                                          cb(svg);
+                                      },
+                                      Qt::QueuedConnection);
+        } else {
+            job->done.release();
+            // Hand the job back to the reader; it may have timed out and given
+            // up (in which case this is the only owner and frees it later).
+            job->consumed.tryAcquire(1, 5'000);
+        }
         delete job;
     }
     deinit();

@@ -8,6 +8,7 @@
 #include <QString>
 #include <QWaitCondition>
 
+#include <functional>
 #include <queue>
 
 extern "C" {
@@ -43,8 +44,21 @@ public:
     // invalid or rendering times out; the caller should fall back to showing
     // the source as a regular code block.
     //
+    // Blocks the calling thread until the worker is done: use renderAsync()
+    // from the GUI thread so the UI stays responsive.
+    //
     // \a theme is a mermaid theme name ("default", "dark", ...).
     QByteArray render(const QString &source, const QString &theme);
+
+    // Asynchronous counterpart of render(): the render runs on the worker
+    // thread and \a callback is invoked on the thread of \a context (queued,
+    // never inline) with the resulting SVG, or with an empty QByteArray when
+    // the diagram is invalid or the render times out. A cached result is
+    // delivered immediately (still queued, so the callback can never reenter
+    // a document edit in flight). \a context must outlive the render and live
+    // on a thread with a running event loop.
+    void renderAsync(const QString &source, const QString &theme, QObject *context,
+                     const std::function<void(const QByteArray &svg)> &callback);
 
     // Starts the worker thread and evaluates the mermaid bundle in the
     // background. Cheap and idempotent; call it at plugin startup so the
@@ -74,6 +88,10 @@ private:
         QByteArray result;
         QSemaphore done;      // released by the worker once result is filled
         QSemaphore consumed;  // released by the reader (skipped on timeout)
+        // Async jobs: the worker invokes the callback on the context's thread
+        // (done/consumed are unused for those).
+        QObject *context = nullptr;
+        std::function<void(const QByteArray &svg)> callback;
     };
 
     QThread *m_worker = nullptr;
