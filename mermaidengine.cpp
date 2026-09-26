@@ -1173,7 +1173,10 @@ QByteArray MermaidEngine::workerRender(const QString &source, const QString &the
             qCWarning(llamaChatMermaid) << "render timed out after" << kRenderTimeoutMs << "ms";
             return {};
         }
-        if (JS_ExecutePendingJob(m_rt, &m_ctx) <= 0)
+        // Note: JS_ExecutePendingJob() sets *pctx to NULL when the queue is
+        // empty, so hand it a local, never &m_ctx.
+        JSContext *jobCtx = nullptr;
+        if (JS_ExecutePendingJob(m_rt, &jobCtx) <= 0)
             QThread::msleep(1);
 
         JSValue g = JS_GetGlobalObject(m_ctx);

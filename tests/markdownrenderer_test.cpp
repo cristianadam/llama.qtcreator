@@ -1,9 +1,12 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QElapsedTimer>
+#include <QPainter>
 #include <QEventLoop>
+#include <QRegularExpression>
 #include <QTextImageFormat>
 #include <QTimer>
+#include <QtSvg/QSvgRenderer>
 #include <QtTest/QtTest>
 
 #include <markdownrenderer.h>
@@ -75,7 +78,26 @@ private slots:
     void brokenSvgFallsBackToCode();
     void mermaidCodeBlockRendersAsImage();
     void invalidMermaidFallsBackToCode();
+    void inlineMathRendersAsImage();
+    void displayMathRendersAsImage();
+    void radicalSvgHasNoClipPath();
+    void radicalHookClearsRadicand();
+    void invalidMathShowsSource();
+    void plainDollarsStayText();
 };
+
+// The math renders synchronously (KaTeX is fast); find the first image URL
+// in the document, if any.
+static QString firstImageUrl(MarkdownRenderer &renderer)
+{
+    for (int p = 0; p < renderer.document()->characterCount(); ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        if (cursor.charFormat().isImageFormat())
+            return cursor.charFormat().toImageFormat().name();
+    }
+    return {};
+}
 
 void MarkdownRendererTest::plainParagraph()
 {
@@ -572,6 +594,178 @@ void MarkdownRendererTest::invalidMermaidFallsBackToCode()
     // Removing the placeholder must not eat into the caption line below it.
     QVERIFY2(renderer.toPlainText().contains(QStringLiteral("Mermaid diagram")),
              "the caption must survive the placeholder removal");
+}
+
+void MarkdownRendererTest::inlineMathRendersAsImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text
+        = QStringLiteral("The answer is $e^{i\\pi}+1=0$, which is nice.");
+    const QString out = streamText(renderer, text);
+
+    // The formula renders synchronously as an inline SVG image.
+    const QString url = firstImageUrl(renderer);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://ktx-")), qPrintable(url));
+    QVERIFY(renderer.svgContentForUrl(QUrl(url)).contains("<svg"));
+    // The image is pinned to the line bottom (AlignBottom) with a re-boxed
+    // SVG whose bottom sits one font descent below the math baseline, so the
+    // formula's baseline lands on the text baseline (regression: the
+    // tightly-cropped SVG used to float above the line).
+    for (int p = 0; p < renderer.document()->characterCount(); ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        const QTextCharFormat cf = cursor.charFormat();
+        if (!cf.isImageFormat())
+            continue;
+        QCOMPARE(cf.toImageFormat().verticalAlignment(),
+                 QTextCharFormat::AlignBottom);
+        // The served SVG must be at least as tall as baseline + descent:
+        // parse the root height and compare against the image format height.
+        const QByteArray svg = renderer.svgContentForUrl(
+                QUrl(cf.toImageFormat().name()));
+        const int hAttr = svg.indexOf("height=\"");
+        QVERIFY2(hAttr >= 0, qPrintable(svg.left(120)));
+        const double svgHeight = QString::fromLatin1(
+                svg.mid(hAttr + 8).split('"').first()).toDouble();
+        const double imgHeight = cf.toImageFormat().height();
+        QVERIFY2(qAbs(svgHeight - imgHeight) < 0.01,
+                 qPrintable(QStringLiteral("svg height %1 vs image height %2")
+                                 .arg(svgHeight)
+                                 .arg(imgHeight)));
+        break;
+    }
+    // The surrounding text survives.
+    QVERIFY2(out.contains(QStringLiteral("The answer is")), qPrintable(out));
+    QVERIFY2(out.contains(QStringLiteral("which is nice.")), qPrintable(out));
+}
+
+void MarkdownRendererTest::displayMathRendersAsImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text
+        = QStringLiteral("$$\n\\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}\n$$");
+    streamText(renderer, text);
+
+    const QString url = firstImageUrl(renderer);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://ktx-")), qPrintable(url));
+    QVERIFY(renderer.svgContentForUrl(QUrl(url)).contains("<svg"));
+}
+
+void MarkdownRendererTest::radicalSvgHasNoClipPath()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // Regression: the radical tail used to be emitted as an <svg> fragment
+    // relying on `preserveAspectRatio="slice"` + clip-path. Qt's QSvgRenderer
+    // mishandles clip-path (it fills the entire clip rect), so the tail
+    // rendered as a solid black box. katex2svg.js now clips the flattened
+    // path in JS and emits plain M/L/Z paths, so no clip-path may appear.
+    const QString text = QStringLiteral("$$\n\\sqrt{b^2-4ac}\n$$");
+    streamText(renderer, text);
+
+    const QString url = firstImageUrl(renderer);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://ktx-")), qPrintable(url));
+    const QString svg = renderer.svgContentForUrl(QUrl(url));
+    QVERIFY2(svg.contains(QLatin1String("<svg")), qPrintable(svg.left(200)));
+    QVERIFY2(!svg.contains(QLatin1String("clipPath")),
+             "radical SVG must not use clipPath (Qt renders it as a black box)");
+    QVERIFY2(!svg.contains(QLatin1String("clip-path")),
+             "radical SVG must not use clip-path (Qt renders it as a black box)");
+
+    // Sanity-check the rasterized ink: with the old bug the radical tail's
+    // clip rect was filled solid, so a large fraction of the bounding box
+    // would be dark. Count dark pixels and require the fill fraction to be
+    // low (the radical is a thin stroke).
+    QSvgRenderer svgRenderer(svg.toUtf8());
+    QVERIFY2(svgRenderer.isValid(), "the math SVG must parse for QSvgRenderer");
+    // Render at a fixed size with a white background (the document paints it
+    // on white; transparency would skew the dark-pixel count).
+    const QSize size(300, 60);
+    QImage image(size, QImage::Format_ARGB32);
+    image.fill(Qt::white);
+    {
+        QPainter painter(&image);
+        svgRenderer.render(&painter);
+    }
+    int dark = 0;
+    const QImage mono = image.convertToFormat(QImage::Format_Grayscale8);
+    for (int y = 0; y < mono.height(); ++y)
+        for (int x = 0; x < mono.width(); ++x)
+            if (qGray(mono.pixel(x, y)) < 128)
+                ++dark;
+    const double fillFraction = double(dark) / (mono.width() * mono.height());
+    QVERIFY2(fillFraction < 0.5,
+             qPrintable(QStringLiteral("ink fraction %1 is too high for a "
+                                       "radical (black-box regression)")
+                             .arg(fillFraction)));
+}
+
+void MarkdownRendererTest::radicalHookClearsRadicand()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // Regression: the radicand span's padding-left:1em was dropped for
+    // elements with children, so the radical's hook was drawn over the
+    // first glyph of the radicand. The hook (a path) must start to the
+    // left of the radicand's first glyph (a <text> element).
+    const QString text = QStringLiteral("$$\\sqrt{a^2 + b^2}$$");
+    streamText(renderer, text);
+
+    const QString url = firstImageUrl(renderer);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://ktx-")), qPrintable(url));
+    const QString svg = renderer.svgContentForUrl(QUrl(url));
+
+    // The first <path> is the radical hook (+ vinculum); its smallest x
+    // coordinate must be left of the radicand's first glyph.
+    double pathMinX = 1e9;
+    const int dStart = svg.indexOf(QLatin1String("<path d=\""));
+    if (dStart >= 0) {
+        const int dEnd = svg.indexOf(QLatin1Char('"'), dStart + 9);
+        // "M x y L x y ...": x coordinates are the even-indexed numbers.
+        const QStringList nums = svg.mid(dStart + 9, dEnd - (dStart + 9))
+                                     .split(QRegularExpression("[^-\\d.]+"),
+                                            Qt::SkipEmptyParts);
+        for (int i = 0; i + 1 < nums.size(); i += 2)
+            pathMinX = qMin(pathMinX, nums.at(i).toDouble());
+    }
+    const QRegularExpression textRe(QStringLiteral(
+            "<text x=\"([\\d.]+)\" y=\"([\\d.]+)\""));
+    const QRegularExpressionMatch tm = textRe.match(svg);
+    QVERIFY2(tm.hasMatch(), qPrintable(svg.left(200)));
+    QVERIFY2(pathMinX < 1e9, "expected a radical path in the SVG");
+    QVERIFY2(pathMinX < tm.captured(1).toDouble(),
+             qPrintable(QStringLiteral("hook starts at %1, first glyph at %2 "
+                                       "(the hook must clear the radicand)")
+                             .arg(pathMinX)
+                             .arg(tm.captured(1))));
+}
+
+void MarkdownRendererTest::invalidMathShowsSource()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text = QStringLiteral("Broken: $\\nonsense{$ here.");
+    const QString out = streamText(renderer, text);
+
+    // No image: the source (with its delimiters) stays visible.
+    QVERIFY2(firstImageUrl(renderer).isEmpty(),
+             "invalid math must not produce an image");
+    QVERIFY2(out.contains(QStringLiteral("\\nonsense{")), qPrintable(out));
+}
+
+void MarkdownRendererTest::plainDollarsStayText()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // No matched $...$ pair (the second $ cannot close: a digit follows):
+    // the text must come through verbatim, with no math image.
+    const QString text = QStringLiteral("The ticket costs $5 and shipping is $10.");
+    const QString out = streamText(renderer, text);
+
+    QCOMPARE(out.trimmed(), text);
+    QVERIFY2(firstImageUrl(renderer).isEmpty(), "no math image expected");
 }
 
 int main(int argc, char **argv)

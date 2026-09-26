@@ -6,6 +6,8 @@
 #include <QClipboard>
 #include <QColor>
 #include <QFrame>
+#include <QFontInfo>
+#include <QFontMetricsF>
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QIcon>
@@ -20,6 +22,7 @@
 #include <QToolButton>
 #include <QToolTip>
 
+#include "katexengine.h"
 #include "llamasyntaxhighlighter.h"
 #include "llamatr.h"
 #include "mermaidengine.h"
@@ -38,6 +41,40 @@ static QString fromStdString(const std::pmr::string &s)
 
 // Escape a string for safe inclusion in an HTML snippet passed to insertHtml().
 static QString escapeHtml(QString text);
+
+// Rewrite the root <svg> height/viewBox of the tightly-cropped SVGs emitted
+// by katex2svg.js to \a newHeight. The content keeps its top anchoring, so
+// the math baseline stays at the same offset from the top of the box.
+static QString reboxSvgHeight(const QByteArray &svg, double newHeight)
+{
+    const QString s = QString::fromUtf8(svg);
+    const int openEnd = s.indexOf('>');
+    const int closeStart = s.lastIndexOf(QLatin1String("</svg>"));
+    if (openEnd < 0 || closeStart <= openEnd)
+        return s;
+    const QString h = QString::number(newHeight, 'g', 10);
+    QString head = s.left(openEnd);
+    const int hAttr = head.indexOf(QLatin1String("height=\""));
+    if (hAttr < 0)
+        return s;
+    const int hEnd = head.indexOf(QLatin1Char('"'), hAttr + 8);
+    if (hEnd < 0)
+        return s;
+    head.replace(hAttr + 8, hEnd - (hAttr + 8), h);
+    const int vb = head.indexOf(QLatin1String("viewBox=\""));
+    if (vb >= 0) {
+        const int vbEnd = head.indexOf(QLatin1Char('"'), vb + 9);
+        if (vbEnd > 0) {
+            QString vbStr = head.mid(vb + 9, vbEnd - (vb + 9));
+            const int lastSpace = vbStr.lastIndexOf(QLatin1Char(' '));
+            if (lastSpace >= 0)
+                vbStr = vbStr.left(lastSpace) + QLatin1Char(' ') + h;
+            head.replace(vb + 9, vbEnd - (vb + 9), vbStr);
+        }
+    }
+    return head + QLatin1Char('>') + s.mid(openEnd + 1, closeStart - (openEnd + 1))
+           + QLatin1String("</svg>");
+}
 
 MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     : QTextBrowser(parent)
@@ -76,6 +113,7 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     m_options.enable_autolink = true;
     m_options.enable_strikethrough = true;
     m_options.enable_tasklist = true;
+    m_options.enable_latex_math = true;
     m_streamParser.SetOptions(m_options);
     m_streamParser.setBlockCallback(
         [this](const markus::Document &doc, size_t first, size_t last) {
@@ -337,6 +375,8 @@ void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineN
                 popCharFormat();
             } else if constexpr (std::is_same_v<T, markus::Image>) {
                 renderImage(n);
+            } else if constexpr (std::is_same_v<T, markus::Math>) {
+                renderMath(n);
             } else if constexpr (std::is_same_v<T, markus::HtmlInline>) {
                 const QTextCharFormat prev = m_cursor.charFormat();
                 m_cursor.insertHtml(QString::fromUtf8(n.content.data(), n.content.size()));
@@ -1193,6 +1233,68 @@ void MarkdownRenderer::renderImage(const markus::Image &img)
     if (!img.title.empty())
         imgFmt.setToolTip(fromStdString(img.title));
     m_cursor.insertImage(imgFmt);
+}
+
+void MarkdownRenderer::renderMath(const markus::Math &math)
+{
+    const QString tex = fromStdString(math.content);
+
+    // Render at the surrounding text size and colour; the SVG's own padding
+    // keeps it clear of the neighbouring glyphs. Re-renders of the same
+    // formula (tail re-renders, conversations reopens) hit the engine cache.
+    // (Render at 1x: scaling a larger vector *down* into the raster averages
+    // the stroke coverage and makes the glyphs look thin and washed out.)
+    const int fontSize = qMax(1, QFontInfo(m_baseFont).pixelSize());
+    constexpr double kSupersample = 1.0;
+    const QString mathColor = color(TextForeground).name();
+    const KaTeXEngine::Rendered rendered = KaTeXEngine::instance()->render(
+            tex, math.display, mathColor, int(fontSize * kSupersample));
+    if (rendered.svg.isEmpty()) {
+        // Invalid math: keep the source visible, with its delimiters.
+        const QString delim = math.display ? QStringLiteral("$") : QString();
+        m_cursor.insertText(delim + tex + delim);
+        return;
+    }
+
+    // Re-box the tightly-cropped SVG so the math baseline lands on the
+    // surrounding text's baseline. Qt places an inline image's bottom edge
+    // on the text baseline by default (qtextlayout.cpp), and honours
+    // verticalAlignment() = AlignBottom (bottom on the line's bottom edge).
+    // So: extend the box below the content until its bottom sits one font
+    // descent below the math baseline, and pin the image to the line bottom
+    // -> math baseline == line bottom - descent == text baseline, even when
+    // the line grows to fit a tall formula. All in the supersampled space
+    // (the box is scaled back to 1x for the image format below).
+    const QFontMetricsF textMetrics(m_baseFont);
+    const double depth = rendered.height - rendered.baseline; // content below baseline
+    const double bottomSpace = qMax(textMetrics.descent() * kSupersample, depth);
+    const double boxHeight = rendered.baseline + bottomSpace;
+    const QString reboxed = reboxSvgHeight(rendered.svg, boxHeight);
+
+    // The URL derives from the rendered content, so re-rendering the
+    // in-progress tail reuses the same resource (svgContentForUrl serves it).
+    const QString key = QStringLiteral("ktx-") + QString::fromLatin1(
+            QCryptographicHash::hash(rendered.svg, QCryptographicHash::Md5).toHex().left(16));
+    m_svgStore.insert(key, reboxed.toUtf8());
+
+    if (math.display) {
+        // Display math arrives as a paragraph holding the single math span:
+        // centre that block so the formula reads as its own line.
+        QTextBlockFormat blkFmt = m_cursor.blockFormat();
+        blkFmt.setAlignment(Qt::AlignHCenter);
+        m_cursor.setBlockFormat(blkFmt);
+    }
+
+    QTextImageFormat imgFmt;
+    imgFmt.setName(QStringLiteral("llamasvg://") + key);
+    imgFmt.setWidth(rendered.width / kSupersample);
+    imgFmt.setHeight(boxHeight / kSupersample);
+    imgFmt.setVerticalAlignment(QTextCharFormat::AlignBottom);
+    // insertImage() may leave the cursor's char format set to the image
+    // format; the following text must not inherit it.
+    const QTextCharFormat prev = m_cursor.charFormat();
+    m_cursor.insertImage(imgFmt);
+    m_cursor.setCharFormat(prev);
 }
 
 // ---------------------------------------------------------------------------

@@ -83,6 +83,7 @@ add_qtc_test(markdownrenderer_test
   SOURCES
     markdownrenderer_test.cpp
     ../markdownrenderer.cpp
+    ../katexengine.cpp
     ../mermaidengine.cpp
     ../llamasyntaxhighligher.cpp
     ../llama.qrc

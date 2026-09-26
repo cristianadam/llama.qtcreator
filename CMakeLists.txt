@@ -84,6 +84,7 @@ add_qtc_plugin(LlamaCpp
     llamatr.h
     llamatypes.h
     LlamaCpp.json.in
+    katexengine.cpp katexengine.h
     markdownrenderer.cpp markdownrenderer.h
     mermaidengine.cpp mermaidengine.h
     README.md
@@ -92,6 +93,7 @@ add_qtc_plugin(LlamaCpp
     tools/factory.h
     tools/mcpbridge.cpp tools/mcpbridge.h
     tools/mcpclient.cpp tools/mcpclient.h
+    tools/katexengine_test.cpp
     tools/mcpclient_test.cpp
     tools/mermaidengine_test.cpp
     tools/mcptool.cpp tools/mcptool.h

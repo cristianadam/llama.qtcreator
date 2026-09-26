@@ -168,6 +168,7 @@ enum class NodeType {
   kEmphasis,
   kStrong,
   kStrikethrough,
+  kMath,
   kLink,
   kImage,
   kHtmlInline,
@@ -212,6 +213,8 @@ inline std::string_view NodeTypeToString(NodeType type) {
       return "Strong";
     case NodeType::kStrikethrough:
       return "Strikethrough";
+    case NodeType::kMath:
+      return "Math";
     case NodeType::kLink:
       return "Link";
     case NodeType::kImage:
@@ -268,6 +271,21 @@ struct Strikethrough {
   std::pmr::vector<InlineNodeId> children;
 };
 
+// LaTeX math span (the `latexmath` extension, mirroring md4c's
+// MD_FLAG_LATEXMATHSPANS): text wrapped in `$...$` (inline math) or
+// `$$...$$` (display math). The content is verbatim - no inline parsing
+// (emphasis, code spans, links, ...) happens inside a math span. `content`
+// holds the raw text between the delimiters with every run of whitespace
+// collapsed to a single space (a soft line break becomes a space, as for
+// regular text). `display` is true when the span was delimited by `$$`.
+struct Math {
+  std::pmr::string content;
+  bool display = false;
+
+  Math() = default;
+  Math(std::pmr::string c, bool d) : content(std::move(c)), display(d) {}
+};
+
 struct Link {
   std::pmr::string destination;
   std::pmr::string title;
@@ -291,7 +309,8 @@ struct HtmlInline {
 
 // Variant type for inline content
 using InlineNode = std::variant<Text, SoftBreak, HardBreak, Code, Emphasis,
-                                Strong, Strikethrough, Link, Image, HtmlInline>;
+                                Strong, Strikethrough, Math, Link, Image,
+                                HtmlInline>;
 
 // =============================================================================
 // Block Node Definitions
@@ -2439,6 +2458,7 @@ inline constexpr auto MakeInlineSpecialTable() {
   table['*'] = 1;   // Emphasis / strong
   table['_'] = 1;   // Emphasis / strong
   table['~'] = 1;   // GFM strikethrough (only when the extension is enabled)
+  table['$'] = 1;   // LaTeX math (only when the extension is enabled)
   table['['] = 1;   // Link open
   table[']'] = 1;   // Link close
   table['!'] = 1;   // Image prefix
@@ -3182,6 +3202,12 @@ class InlineParser {
   // plain text under plain CommonMark behaviour.
   bool enable_strikethrough = false;
 
+  // `latexmath` extension (mirrors md4c's MD_FLAG_LATEXMATHSPANS). When true,
+  // `$...$` and `$$...$$` runs are recognised as LaTeX math spans with
+  // verbatim content. Off by default so `$` is plain text under plain
+  // CommonMark behaviour.
+  bool enable_latex_math = false;
+
  private:
   std::string_view text_;
   size_t pos_ = 0;
@@ -3233,6 +3259,30 @@ class InlineParser {
     bool can_close;
     bool active;
   };
+
+  // `latexmath` extension: a `$` run can be a math span opener only when it is
+  // not preceded by an alphanumeric character (i.e. it is at the start of the
+  // text or preceded by Unicode whitespace or punctuation), mirroring md4c.
+  bool MathCanOpen(size_t run_start) const {
+    if (run_start == 0) return true;
+    size_t before_start = FindPrevCharStart(run_start);
+    auto [before_cp, before_len] = detail::DecodeUtf8At(text_, before_start);
+    (void)before_len;
+    return detail::IsUnicodeWhitespaceCodepoint(before_cp) ||
+           detail::IsUnicodePunctuation(before_cp);
+  }
+
+  // `latexmath` extension: a `$` run can be a math span closer only when it is
+  // not followed by an alphanumeric character (i.e. it is at the end of the
+  // text or followed by Unicode whitespace or punctuation), mirroring md4c.
+  bool MathCanClose(size_t run_start, size_t run_length) const {
+    size_t after_pos = run_start + run_length;
+    if (after_pos >= text_.size()) return true;
+    auto [after_cp, after_len] = detail::DecodeUtf8At(text_, after_pos);
+    (void)after_len;
+    return detail::IsUnicodeWhitespaceCodepoint(after_cp) ||
+           detail::IsUnicodePunctuation(after_cp);
+  }
 
   // Check if brackets are balanced in text between start and end (exclusive)
   bool AreBracketsBalanced(size_t start, size_t end) {
@@ -3436,6 +3486,38 @@ class InlineParser {
             delimiter_stack.emplace_back(result.size() - 1, pos_, run_length,
                                          '~', left_flanking, right_flanking,
                                          true);
+          }
+        }
+
+        pos_ += run_length;
+        continue;
+      }
+
+      // Check for `latexmath` markers (only when the extension is on).
+      // Mirrors md4c's MD_FLAG_LATEXMATHSPANS: a run of 1 or 2 dollar signs
+      // that can open or close a math span becomes a delimiter; longer runs
+      // and runs that can do neither are plain text. Matching (same run
+      // length, no nesting, verbatim content) happens in ProcessEmphasis.
+      if (c == '$' && enable_latex_math) {
+        size_t run_start = pos_;
+        size_t run_length = 0;
+        while (pos_ + run_length < text_.size() &&
+               text_[pos_ + run_length] == '$') {
+          ++run_length;
+        }
+
+        flush_text();
+
+        // Add the dollar run as text - view into input
+        result.emplace_back(std::in_place_type<Text>,
+                            text_.substr(pos_, run_length));
+
+        if (run_length <= 2) {
+          bool can_open = MathCanOpen(run_start);
+          bool can_close = MathCanClose(run_start, run_length);
+          if (can_open || can_close) {
+            delimiter_stack.emplace_back(result.size() - 1, pos_, run_length,
+                                         '$', can_open, can_close, true);
           }
         }
 
@@ -4393,6 +4475,8 @@ class InlineParser {
               result += GetAltTextFromIds(arg.children);
             } else if constexpr (std::is_same_v<T, Strikethrough>) {
               result += GetAltTextFromIds(arg.children);
+            } else if constexpr (std::is_same_v<T, Math>) {
+              result += arg.content;
             } else if constexpr (std::is_same_v<T, Link>) {
               result += GetAltTextFromIds(arg.children);
             } else if constexpr (std::is_same_v<T, Image>) {
@@ -4426,6 +4510,8 @@ class InlineParser {
               result += GetAltTextFromIds(arg.children);
             } else if constexpr (std::is_same_v<T, Strikethrough>) {
               result += GetAltTextFromIds(arg.children);
+            } else if constexpr (std::is_same_v<T, Math>) {
+              result += arg.content;
             } else if constexpr (std::is_same_v<T, Link>) {
               result += GetAltTextFromIds(arg.children);
             } else if constexpr (std::is_same_v<T, Image>) {
@@ -4442,9 +4528,78 @@ class InlineParser {
     if (delimiters.empty()) [[unlikely]]
       return;
 
+    // `latexmath` extension: stack of pending `$` delimiter indices (mirrors
+    // md4c's DOLLAR_OPENERS). A closer matches only the TOP opener and the run
+    // lengths must be equal; on a match all pending openers are discarded
+    // because math spans do not nest.
+    std::pmr::vector<size_t> math_openers;
+
     size_t closer_idx = 0;
     while (closer_idx < delimiters.size()) {
       auto& closer = delimiters[closer_idx];
+
+      if (closer.delimiter == '$') {
+        // Drop openers deactivated by an inner span resolution (no crossing
+        // ranges, mirroring md4c's md_pop_openers) so an older opener can
+        // still match.
+        while (!math_openers.empty() &&
+               !delimiters[math_openers.back()].active) {
+          math_openers.pop_back();
+        }
+        if (closer.can_close && closer.active && !math_openers.empty() &&
+            delimiters[math_openers.back()].count == closer.count) {
+          auto& opener = delimiters[math_openers.back()];
+          size_t opener_pos = opener.pos;
+          size_t closer_pos = closer.pos;
+
+          // The math content is verbatim: take the raw text between the two
+          // runs (whatever inlines were parsed in it are discarded) and turn
+          // it into text the same way md4c does - line breaks become a
+          // single space, everything else (including multiple spaces) is
+          // kept as-is.
+          std::pmr::string content;
+          size_t text_begin = opener.text_pos + opener.count;
+          size_t text_end = closer.text_pos;
+          for (size_t i = text_begin; i < text_end; ++i) {
+            content.push_back(text_[i] == '\n' ? ' ' : text_[i]);
+          }
+
+          Math math(std::move(content), closer.count == 2);
+
+          nodes[opener_pos] = Text("");
+          opener.active = false;
+          nodes[closer_pos] = Text("");
+          closer.active = false;
+
+          // Remove the content nodes and insert the math node after the
+          // (now empty) opener text node.
+          size_t content_count = closer_pos - opener_pos - 1;
+          nodes.erase(nodes.begin() + opener_pos + 1,
+                      nodes.begin() + closer_pos);
+          nodes.insert(nodes.begin() + opener_pos + 1, std::move(math));
+
+          // Adjust positions in the delimiter stack (same as strikethrough).
+          int64_t net_shift = 1 - static_cast<int64_t>(content_count);
+          for (auto& d : delimiters) {
+            if (d.pos > opener_pos && d.pos < closer_pos) {
+              d.active = false;
+            } else if (d.pos >= closer_pos) {
+              d.pos = static_cast<size_t>(static_cast<int64_t>(d.pos) +
+                                          net_shift);
+            }
+          }
+
+          // Discard all pending openers: math spans do not nest.
+          for (size_t oi : math_openers) {
+            delimiters[oi].active = false;
+          }
+          math_openers.clear();
+        } else if (closer.can_open && closer.active) {
+          math_openers.push_back(closer_idx);
+        }
+        ++closer_idx;
+        continue;
+      }
 
       if (!closer.can_close || !closer.active ||
           (closer.delimiter != '*' && closer.delimiter != '_' &&
@@ -5002,6 +5157,11 @@ class BlockParser {
   // wrapped in a <del> node. Off by default for plain CommonMark behaviour.
   bool enable_strikethrough = false;
 
+  // `latexmath` extension (mirrors md4c's MD_FLAG_LATEXMATHSPANS). When true,
+  // `$...$` and `$$...$$` runs are recognised as LaTeX math spans. Off by
+  // default for plain CommonMark behaviour.
+  bool enable_latex_math = false;
+
   // GFM `tasklist` extension. When true, a list item whose first line begins
   // with a `[ ]`, `[x]` or `[X]` marker (followed by a space) is treated as a
   // task list item and rendered with a checkbox. Off by default for plain
@@ -5028,6 +5188,7 @@ class BlockParser {
                                &doc.inline_nodes);
     inline_parser.enable_autolink = enable_autolink;
     inline_parser.enable_strikethrough = enable_strikethrough;
+    inline_parser.enable_latex_math = enable_latex_math;
     ParseInlines(doc.children, inline_parser);
 
     return doc;
@@ -5052,6 +5213,7 @@ class BlockParser {
                                &doc.inline_nodes);
     inline_parser.enable_autolink = enable_autolink;
     inline_parser.enable_strikethrough = enable_strikethrough;
+    inline_parser.enable_latex_math = enable_latex_math;
     ParseInlines(doc.children, inline_parser);
 
     return doc;
@@ -7715,6 +7877,18 @@ class HtmlRenderer {
               out += "<del>";
               RenderInlines(n.children, out);
               out += "</del>";
+            } else if constexpr (std::is_same_v<T, Math>) {
+              // KaTeX-style wrappers (the convention used by cmark's math
+              // extension and most renderers).
+              if (n.display) {
+                out += "<span class=\"math display\">\\[";
+                detail::EscapeHtmlTo(n.content, out);
+                out += "\\]</span>";
+              } else {
+                out += "<span class=\"math inline\">\\(";
+                detail::EscapeHtmlTo(n.content, out);
+                out += "\\)</span>";
+              }
             } else if constexpr (std::is_same_v<T, Link>) {
               out += "<a href=\"";
               detail::EscapeHtmlTo(n.destination, out);
@@ -7769,13 +7943,16 @@ class HtmlRenderer {
 // HTML" extension, which escapes the leading '<' of a fixed set of HTML tags
 // such as <title>, <style>, <script> and <xmp> in raw HTML output; it does not
 // filter URL schemes such as `javascript:` - that is a consumer/sanitiser
-// concern, matching cmark-gfm/GFM).
+// concern, matching cmark-gfm/GFM). `enable_latex_math` (the `latexmath`
+// extension, mirroring md4c's MD_FLAG_LATEXMATHSPANS) recognises `$...$`
+// (inline) and `$$...$$` (display) LaTeX math spans with verbatim content.
 struct Options {
   bool enable_tables = false;
   bool enable_autolink = false;
   bool enable_strikethrough = false;
   bool enable_tasklist = false;
   bool enable_tagfilter = false;
+  bool enable_latex_math = false;
 };
 
 // Parse Markdown input and return an AST
@@ -7791,6 +7968,7 @@ inline Document Parse(std::string_view input, const Options& options) {
   parser.enable_autolink = options.enable_autolink;
   parser.enable_strikethrough = options.enable_strikethrough;
   parser.enable_tasklist = options.enable_tasklist;
+  parser.enable_latex_math = options.enable_latex_math;
   return parser.Parse(input);
 }
 
@@ -7904,6 +8082,7 @@ class StreamingMarkdownParser {
     parser_.enable_autolink = options.enable_autolink;
     parser_.enable_strikethrough = options.enable_strikethrough;
     parser_.enable_tasklist = options.enable_tasklist;
+    parser_.enable_latex_math = options.enable_latex_math;
   }
 
   const Options& options() const { return options_; }
@@ -8069,6 +8248,7 @@ class StreamingBlockParser {
     parser_.enable_autolink = options.enable_autolink;
     parser_.enable_strikethrough = options.enable_strikethrough;
     parser_.enable_tasklist = options.enable_tasklist;
+    parser_.enable_latex_math = options.enable_latex_math;
   }
 
   const Options& options() const { return options_; }
@@ -8240,6 +8420,11 @@ inline std::pmr::string DebugAst(const Document& doc, int indent = 0) {
             } else if constexpr (std::is_same_v<T, Strikethrough>) {
               result += p + "Strikethrough\n";
               print_inlines(n.children, ind + 1);
+            } else if constexpr (std::is_same_v<T, Math>) {
+              result += p;
+              result += n.display ? "MathDisplay: \"" : "Math: \"";
+              result += n.content;
+              result += "\"\n";
             } else if constexpr (std::is_same_v<T, Link>) {
               result += p + "Link: " + n.destination + "\n";
               print_inlines(n.children, ind + 1);

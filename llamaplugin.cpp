@@ -46,6 +46,7 @@
 #include "llamasettings.h"
 #include "llamaspinner.h"
 #include "llamatr.h"
+#include "katexengine.h"
 #include "mermaidengine.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
@@ -261,6 +262,7 @@ void LlamaPlugin::initialize()
     // McpBridge, ToolFactory) can be tested from the command line:
     //   Qt Creator -pluginpath <build dir> -test llamacpp[,McpClientTest]
     addTestCreator(&Internal::createMcpClientTest);
+    addTestCreator(&Internal::createKaTeXEngineTest);
     addTestCreator(&Internal::createMermaidEngineTest);
 #endif
 }
@@ -278,6 +280,9 @@ void LlamaPlugin::extensionsInitialized()
     // bundled mermaid.js takes well over a second, and paying it on the
     // first diagram render (GUI thread) shows up as a UI freeze.
     MermaidEngine::instance()->warmUp();
+
+    // Same for the KaTeX math engine (smaller bundle, same pattern).
+    KaTeXEngine::instance()->warmUp();
 }
 
 bool LlamaPlugin::delayedInitialize()

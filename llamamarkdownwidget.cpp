@@ -320,7 +320,10 @@ QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
     }
 
     // Render at device resolution so the picture stays crisp on HiDPI.
-    const qreal dpr = devicePixelRatioF();
+    // Floor at 2x: loadResource() is often first called while the widget is
+    // still hidden (devicePixelRatioF() == 1), and the raster is cached
+    // until the next resize – a 1x raster then shows pixelated on Retina.
+    const qreal dpr = qMax(devicePixelRatioF(), 2.0);
     QImage image(QSize(qCeil(w * dpr), qCeil(h * dpr)), QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent); // QImage(size, format) leaves pixels uninitialized;
                                  // QSvgRenderer draws over them without clearing

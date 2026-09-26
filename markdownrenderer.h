@@ -193,6 +193,9 @@ private:
     void renderGenericHtmlBlock(const markus::HtmlBlock &block);
     void renderTable(const markus::Document &doc, const markus::Table &table);
     void renderImage(const markus::Image &img);
+    // Renders a LaTeX math span ($...$ or $$...$$) as an inline SVG image
+    // via the KaTeXEngine; falls back to the verbatim source on failure.
+    void renderMath(const markus::Math &math);
     void handleEmph();
     void handleStrong();
     void handleStrikethrough();

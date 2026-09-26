@@ -7,5 +7,27 @@
         <file>images/heroicons_outline.ttf</file>
         <file>mermaid/mermaid.min.js</file>
         <file>mermaid/domshim.js</file>
+        <file>katex/katex.min.js</file>
+        <file>katex/katex2svg.js</file>
+        <file>katex/fonts/KaTeX_AMS-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Caligraphic-Bold.ttf</file>
+        <file>katex/fonts/KaTeX_Caligraphic-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Fraktur-Bold.ttf</file>
+        <file>katex/fonts/KaTeX_Fraktur-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Main-Bold.ttf</file>
+        <file>katex/fonts/KaTeX_Main-BoldItalic.ttf</file>
+        <file>katex/fonts/KaTeX_Main-Italic.ttf</file>
+        <file>katex/fonts/KaTeX_Main-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Math-BoldItalic.ttf</file>
+        <file>katex/fonts/KaTeX_Math-Italic.ttf</file>
+        <file>katex/fonts/KaTeX_SansSerif-Bold.ttf</file>
+        <file>katex/fonts/KaTeX_SansSerif-Italic.ttf</file>
+        <file>katex/fonts/KaTeX_SansSerif-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Script-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Size1-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Size2-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Size3-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Size4-Regular.ttf</file>
+        <file>katex/fonts/KaTeX_Typewriter-Regular.ttf</file>
     </qresource>
 </RCC>
