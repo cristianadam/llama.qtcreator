@@ -25,7 +25,8 @@ namespace {
 
 QByteArray readResource(const QString &path)
 {
-    QFile file(path); // ":/..." resource paths; a real file of the same name wins
+    QFile file(path); // ":/..." Qt resource path (resources only; a same-named
+                      // file on disk is not consulted)
     if (file.open(QIODevice::ReadOnly))
         return file.readAll();
     return {};
@@ -33,6 +34,11 @@ QByteArray readResource(const QString &path)
 
 constexpr int kMaxCacheEntries = 256;
 constexpr qint64 kRenderTimeoutMs = 10'000;
+// render() blocks the calling (GUI) thread; while the bundles are still
+// being evaluated (warmUp() not finished) cap the wait so a slow first
+// launch degrades to the verbatim-source fallback instead of freezing the
+// UI. Ready engines get the full timeout.
+constexpr qint64 kNotReadyTimeoutMs = 2'000;
 
 // The KaTeX font faces bundled in katex/fonts/ (MIT, see katex/ATTRIBUTION.md).
 // The family names match the @font-face names of KaTeX's own stylesheet
@@ -93,8 +99,9 @@ JSValue hostMeasureText(JSContext *ctx, JSValueConst this_val, int argc, JSValue
         height = metrics.height();
     } else {
         // No GUI application (should not happen in the IDE): approximate so
-        // the layout is at least deterministic.
-        width = double(t.size()) * sizePx * 0.5;
+        // the layout is at least deterministic. Keep the factors in sync
+        // with MermaidEngine's hostMeasureText fallback.
+        width = double(t.size()) * sizePx * 0.6;
         ascent = sizePx * 0.75;
         descent = sizePx * 0.25;
         height = sizePx;
@@ -235,8 +242,9 @@ KaTeXEngine::Rendered KaTeXEngine::render(const QString &source, bool display,
         m_jobAvailable.wakeOne();
     }
 
-    if (!job->done.tryAcquire(1, kRenderTimeoutMs)) {
-        qCWarning(llamaChatKatex) << "render timed out after" << kRenderTimeoutMs << "ms";
+    const qint64 timeout = m_ready.loadRelaxed() ? kRenderTimeoutMs : kNotReadyTimeoutMs;
+    if (!job->done.tryAcquire(1, timeout)) {
+        qCWarning(llamaChatKatex) << "render timed out after" << timeout << "ms";
         return {}; // the worker frees the job once it notices the reader gave up
     }
     const Rendered rendered = job->result;

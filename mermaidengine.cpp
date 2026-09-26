@@ -28,7 +28,8 @@ namespace {
 
 QByteArray readResource(const QString &path)
 {
-    QFile file(path); // ":/..." resource paths; a real file of the same name wins
+    QFile file(path); // ":/..." Qt resource path (resources only; a same-named
+                      // file on disk is not consulted)
     if (file.open(QIODevice::ReadOnly))
         return file.readAll();
     return {};
@@ -1136,6 +1137,10 @@ QByteArray MermaidEngine::workerRender(const QString &source, const QString &the
     // The script runs in the global scope, so the const declarations are
     // wrapped in a block: re-declaring a top-level const on the next render
     // would be a SyntaxError.
+    // securityLevel 'loose' is safe here: there is no live DOM (the shim
+    // discards event handlers) and QSvgRenderer never executes SVG scripts,
+    // so mermaid's loose-mode extras (click callbacks, foreign HTML labels
+    // are off via htmlLabels: false) cannot do anything with the output.
     const QByteArray script =
         "{\n"
         "const p0 = (async () => {\n"

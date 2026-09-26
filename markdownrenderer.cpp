@@ -193,6 +193,11 @@ void MarkdownRenderer::reset()
     m_codeFenceChar = QChar::Null;
     m_skipNextParagraphBlock = false;
     m_tailStart = -1;
+    // The document is cleared below, which invalidates every image URL, so
+    // the stored SVGs (mermaid diagrams, math) can go with it: without this
+    // the store would grow for the whole session (mermaid keys are unique
+    // per render and never reused).
+    m_svgStore.clear();
 
     if (m_doc) {
         m_doc->clear();
@@ -1253,7 +1258,7 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
             tex, math.display, mathColor, int(fontSize * displayScale));
     if (rendered.svg.isEmpty()) {
         // Invalid math: keep the source visible, with its delimiters.
-        const QString delim = math.display ? QStringLiteral("$") : QString();
+        const QString delim = math.display ? QStringLiteral("$$") : QString();
         m_cursor.insertText(delim + tex + delim);
         return;
     }
@@ -1928,6 +1933,7 @@ void MarkdownRenderer::setBaseFontFamily(const QString &f)
 }
 void MarkdownRenderer::setBaseFontSize(int s)
 {
+    m_baseFont.setPointSize(s);
     m_baseFontSize = s;
     setFont(m_baseFont);
 }

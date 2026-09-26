@@ -145,6 +145,11 @@
         }
         var el = { type: 'el', name: name, attrs: attrs, children: [] };
         stack[stack.length - 1].children.push(el);
+        // KaTeX always self-closes <path> ("<path .../>"). It is excluded
+        // from the stack so that a stray non-self-closing <path> cannot
+        // desync it: its "</path>" would then pop the wrong element. (A bare
+        // "</path>" in the input is dropped by the stack-length guard above,
+        // which is the lesser evil.)
         if (!selfClose && name !== 'path')
           stack.push(el);
       }

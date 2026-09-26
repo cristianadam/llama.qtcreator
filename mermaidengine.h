@@ -55,8 +55,11 @@ public:
     // never inline) with the resulting SVG, or with an empty QByteArray when
     // the diagram is invalid or the render times out. A cached result is
     // delivered immediately (still queued, so the callback can never reenter
-    // a document edit in flight). \a context must outlive the render and live
-    // on a thread with a running event loop.
+    // a document edit in flight). \a context must live on a thread with a
+    // running event loop; if it is destroyed before the render finishes the
+    // queued invocation is simply dropped (callers should treat a missing
+    // callback as "the document moved on", as
+    // MarkdownRenderer::onMermaidRendered does).
     void renderAsync(const QString &source, const QString &theme, QObject *context,
                      const std::function<void(const QByteArray &svg)> &callback);
 
