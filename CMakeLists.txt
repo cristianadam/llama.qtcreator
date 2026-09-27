@@ -72,6 +72,7 @@ add_qtc_plugin(LlamaCpp
     llamaconversationsmodel.cpp llamaconversationsmodel.h
     llamaconversationsview.cpp llamaconversationsview.h
     llamaconstants.h
+    llamahtmlexporter.cpp llamahtmlexporter.h
     llamasyntaxhighligher.cpp llamasyntaxhighlighter.h
     llamamarkdownwidget.cpp llamamarkdownwidget.h
     llamaplugin.cpp llamaplugin.h

@@ -574,23 +574,6 @@ static QString toolCallToMarkdown(const Message &msg)
     return md;
 }
 
-// The diagram SVGs (mermaid diagrams, math) persisted with a message
-// ("diagram" entries in its extra field), keyed as the renderer keys them.
-static QMap<QString, MarkdownRenderer::DiagramSvg> messageDiagramSvgs(const Message &msg)
-{
-    QMap<QString, MarkdownRenderer::DiagramSvg> diagrams;
-    for (const QVariantMap &e : msg.extra) {
-        if (e.value("type").toString() != QLatin1String("diagram"))
-            continue;
-        MarkdownRenderer::DiagramSvg svg;
-        svg.svg = QByteArray::fromBase64(e.value("svg").toString().toLatin1());
-        svg.context = e.value("context").toString();
-        if (!svg.svg.isEmpty())
-            diagrams.insert(e.value("key").toString(), svg);
-    }
-    return diagrams;
-}
-
 QString ChatManager::messageToMarkdown(const Message &msg)
 {
     if (msg.role == "tool")
@@ -599,7 +582,8 @@ QString ChatManager::messageToMarkdown(const Message &msg)
     // Embed the persisted diagram SVGs so the export shows the rendered
     // pictures instead of re-computing them (or losing them in viewers
     // without mermaid/KaTeX support).
-    const QMap<QString, MarkdownRenderer::DiagramSvg> diagrams = messageDiagramSvgs(msg);
+    const QMap<QString, MarkdownRenderer::DiagramSvg> diagrams
+        = MarkdownRenderer::diagramSvgsFromExtra(msg.extra);
 
     if (msg.role == "user")
         return QStringLiteral("### User\n\n")

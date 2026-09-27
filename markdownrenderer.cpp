@@ -887,6 +887,22 @@ void MarkdownRenderer::seedDiagramCache(const QString &key, const DiagramSvg &en
         m_diagramCache.insert(key, entry);
 }
 
+QMap<QString, MarkdownRenderer::DiagramSvg> MarkdownRenderer::diagramSvgsFromExtra(
+    const QList<QVariantMap> &extra)
+{
+    QMap<QString, DiagramSvg> diagrams;
+    for (const QVariantMap &e : extra) {
+        if (e.value("type").toString() != QLatin1String("diagram"))
+            continue;
+        DiagramSvg svg;
+        svg.svg = QByteArray::fromBase64(e.value("svg").toString().toLatin1());
+        svg.context = e.value("context").toString();
+        if (!svg.svg.isEmpty())
+            diagrams.insert(e.value("key").toString(), svg);
+    }
+    return diagrams;
+}
+
 QString MarkdownRenderer::embedDiagramSvgs(QString content, const QMap<QString, DiagramSvg> &diagrams)
 {
     if (diagrams.isEmpty())

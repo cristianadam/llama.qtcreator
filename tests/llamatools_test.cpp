@@ -21,6 +21,7 @@
 #include <utils/filepath.h>
 
 #include <llamachatmanager.h>
+#include <llamahtmlexporter.h>
 #include <llamasettings.h>
 #include <llamathinkingsectionparser.h>
 #include <markdownrenderer.h>
@@ -504,6 +505,14 @@ private slots:
     void messageToMarkdown_embedsCachedMermaidSvg();
     void messageToMarkdown_embedsCachedMathSvg();
     void messageToMarkdown_leavesUncachedDiagramsAlone();
+
+    // HtmlExporter
+    void htmlExport_conversationDocument();
+    void htmlExport_userAssistant();
+    void htmlExport_codeBlockHighlighted();
+    void htmlExport_toolCall();
+    void htmlExport_thinkingSection();
+    void htmlExport_embedsCachedDiagrams();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -3565,6 +3574,215 @@ void LlamaToolsTest::messageToMarkdown_leavesUncachedDiagramsAlone()
 
     const QString md = ChatManager::messageToMarkdown(assistant);
     QCOMPARE(md, QStringLiteral("### Assistant\n\n```mermaid\nA --> B\n```\n\nand $x$.\n\n"));
+}
+
+void LlamaToolsTest::htmlExport_conversationDocument()
+{
+    Message user;
+    user.role = "user";
+    user.content = "Hello";
+
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = "Hi!";
+
+    const QString html = HtmlExporter::conversationHtml("My Chat", {user, assistant});
+    QVERIFY2(html.startsWith("<!DOCTYPE html>"), qPrintable(html.left(100)));
+    QVERIFY(html.contains(QStringLiteral("<title>My Chat</title>")));
+    QVERIFY(html.contains(QStringLiteral("<style>")));
+    // Theme colours were resolved to hex values, no token names left behind.
+    QVERIFY(html.contains(QStringLiteral("background: #")));
+    QVERIFY(!html.contains(QStringLiteral("Token_")));
+    QVERIFY(html.contains(QStringLiteral("<div class=\"msg user\">")));
+    QVERIFY(html.contains(QStringLiteral("<div class=\"msg assistant\">")));
+    QVERIFY(html.contains(QStringLiteral("<p>Hello</p>")));
+    QVERIFY(html.contains(QStringLiteral("<p>Hi!</p>")));
+    // Tables get the chat renderer's alternating row shading.
+    QVERIFY(html.contains(QStringLiteral("tbody tr:nth-child(odd)")));
+}
+
+void LlamaToolsTest::htmlExport_userAssistant()
+{
+    Message user;
+    user.role = "user";
+    user.content = QStringLiteral("See [the docs](https://example.com) and note 1 < 2.");
+
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QStringLiteral("**bold** and `inline code`\n\n- one\n- two");
+
+    const QString userHtml = HtmlExporter::messageToHtml(user);
+    QVERIFY2(userHtml.contains(QStringLiteral("<div class=\"msg user\">")), qPrintable(userHtml));
+    QVERIFY2(userHtml.contains(QStringLiteral("<a href=\"https://example.com\">the docs</a>")),
+             qPrintable(userHtml));
+    // The literal < in the text is escaped, not a real element.
+    QVERIFY(userHtml.contains(QStringLiteral("1 &lt; 2")));
+
+    const QString assistantHtml = HtmlExporter::messageToHtml(assistant);
+    QVERIFY2(assistantHtml.contains(QStringLiteral("<strong>bold</strong>")),
+             qPrintable(assistantHtml));
+    QVERIFY2(assistantHtml.contains(QStringLiteral("<code>inline code</code>")),
+             qPrintable(assistantHtml));
+    QVERIFY2(assistantHtml.contains(QStringLiteral("<li>one</li>")), qPrintable(assistantHtml));
+}
+
+void LlamaToolsTest::htmlExport_codeBlockHighlighted()
+{
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QStringLiteral("```cpp\nint main() { return 0; }\n```");
+
+    const QString html = HtmlExporter::messageToHtml(assistant);
+    QVERIFY2(html.contains(QStringLiteral("<pre><code>")), qPrintable(html));
+    // The C++ definition produced coloured runs (the keyword "int" at least).
+    QVERIFY2(html.contains(QStringLiteral("<span style=\"color:#")), qPrintable(html));
+    // The runs may be split across spans, so check the pieces.
+    QVERIFY2(html.contains(QStringLiteral("int")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("return")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("0;")), qPrintable(html));
+
+    // An untagged block is plain escaped text, no spans.
+    Message plain;
+    plain.role = "assistant";
+    plain.content = QStringLiteral("```\na < b && c > d\n```");
+    const QString plainHtml = HtmlExporter::messageToHtml(plain);
+    QVERIFY2(plainHtml.contains(QStringLiteral("a &lt; b &amp;&amp; c &gt; d")),
+             qPrintable(plainHtml));
+    QVERIFY(!plainHtml.contains(QStringLiteral("<span")));
+}
+
+void LlamaToolsTest::htmlExport_toolCall()
+{
+    Message toolMsg;
+    toolMsg.role = "tool";
+
+    QJsonObject fn;
+    fn[QStringLiteral("name")] = QStringLiteral("bash");
+    fn[QStringLiteral("arguments")] = QStringLiteral("{\"command\":\"ls -la\"}");
+    QJsonObject call;
+    call[QStringLiteral("function")] = fn;
+    QJsonArray calls;
+    calls.append(call);
+
+    QVariantMap callExtra;
+    callExtra[QStringLiteral("tool_calls")] = calls;
+    toolMsg.extra.append(callExtra);
+
+    QJsonObject result;
+    result[QStringLiteral("content")] = QStringLiteral("total 0\n");
+    QVariantMap resultExtra;
+    resultExtra[QStringLiteral("tool_result")] = result;
+    resultExtra[QStringLiteral("tool_status")] = QStringLiteral("success");
+    toolMsg.extra.append(resultExtra);
+
+    const QString html = HtmlExporter::messageToHtml(toolMsg);
+    QVERIFY2(html.contains(QStringLiteral("<div class=\"msg tool\">")), qPrintable(html));
+    // one-line summary of the bash tool (backticks as <code>), plus the status
+    QVERIFY2(html.contains(QStringLiteral("<code>ls -la</code>")), qPrintable(html));
+    QVERIFY(html.contains(QStringLiteral("(success)")));
+    QVERIFY(html.contains(QStringLiteral("<strong>Arguments</strong>")));
+    // JSON quotes are HTML-escaped inside the code block.
+    QVERIFY2(html.contains(QStringLiteral("&quot;command&quot;")), qPrintable(html));
+    QVERIFY(html.contains(QStringLiteral("<strong>Result</strong>")));
+    QVERIFY(html.contains(QStringLiteral("total 0")));
+    QVERIFY(html.contains(QStringLiteral("</details>")));
+
+    // A tool message without a call exports as nothing, and a tool‑call‑only
+    // assistant message renders through the tool bubble.
+    Message emptyTool;
+    emptyTool.role = "tool";
+    QVERIFY(HtmlExporter::messageToHtml(emptyTool).isEmpty());
+
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QString();
+    QVariantMap assistantExtra;
+    assistantExtra[QStringLiteral("tool_calls")] = calls;
+    assistant.extra.append(assistantExtra);
+    QVERIFY(HtmlExporter::messageToHtml(assistant).isEmpty());
+}
+
+void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
+{
+    const QString source = QStringLiteral("flowchart LR\n  A[Start] --> B[End]");
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content
+        = QStringLiteral("```mermaid\n%1\n```\n\nInline $e^2$ here.").arg(source);
+
+    const QByteArray svg = QByteArray("<svg xmlns=\"http://www.w3.org/2000/svg\">cached</svg>");
+    const QString b64 = QString::fromLatin1(svg.toBase64());
+
+    QVariantMap entry;
+    entry[QStringLiteral("type")] = QStringLiteral("diagram");
+    entry[QStringLiteral("key")] = MarkdownRenderer::mermaidDiagramKey(source);
+    entry[QStringLiteral("svg")] = b64;
+    assistant.extra.append(entry);
+
+    QVariantMap mathEntry;
+    mathEntry[QStringLiteral("type")] = QStringLiteral("diagram");
+    mathEntry[QStringLiteral("key")] = MarkdownRenderer::katexDiagramKey(QStringLiteral("e^2"), false);
+    mathEntry[QStringLiteral("svg")] = b64;
+    assistant.extra.append(mathEntry);
+
+    const QString html = HtmlExporter::messageToHtml(assistant);
+    // The cached mermaid block becomes a section with a base64 image and the
+    // source below it...
+    QVERIFY2(html.contains(QStringLiteral("<summary>Mermaid diagram</summary>")),
+             qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("data:image/svg+xml;base64,") + b64),
+             qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("A[Start]")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("--&gt; B[End]")), qPrintable(html));
+    // ...and the cached math span an inline image, aligned like the chat
+    // view (re-boxed SVGs pin to the line bottom, display math is centred).
+    QVERIFY2(html.contains(QStringLiteral("<img class=\"math\" src=\"data:image/svg+xml;base64,")),
+             qPrintable(html));
+
+    // Display math gets the centred block variant. Mixed with inline math in
+    // the same message: the display pass must not leave a $...$ that the
+    // inline pass matches inside the generated markup.
+    QVariantMap displayEntry;
+    displayEntry[QStringLiteral("type")] = QStringLiteral("diagram");
+    displayEntry[QStringLiteral("key")]
+        = MarkdownRenderer::katexDiagramKey(QStringLiteral("e^2"), true);
+    displayEntry[QStringLiteral("svg")] = b64;
+    assistant.extra.append(displayEntry);
+    Message displayMsg = assistant;
+    displayMsg.content = QStringLiteral("And $$e^2$$ overall, like $e^2$ inline.");
+    const QString displayHtml = HtmlExporter::messageToHtml(displayMsg);
+    QVERIFY2(displayHtml.contains(QStringLiteral("<img class=\"math display\"")),
+             qPrintable(displayHtml));
+    QVERIFY2(displayHtml.contains(QStringLiteral("<img class=\"math\" src=")),
+             qPrintable(displayHtml));
+    // No escaped img tags (that is what a corrupted attribute looks like).
+    QVERIFY(!displayHtml.contains(QLatin1String("&lt;img")));
+
+    // User messages carry their diagram SVGs too.
+    Message user;
+    user.role = "user";
+    user.content = QStringLiteral("Look: $e^2$");
+    user.extra.append(mathEntry);
+    const QString userHtml = HtmlExporter::messageToHtml(user);
+    QVERIFY2(userHtml.contains(QStringLiteral("<img class=\"math\" src=\"data:image/svg+xml;base64,")),
+             qPrintable(userHtml));
+}
+
+void LlamaToolsTest::htmlExport_thinkingSection()
+{
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content
+        = ThinkingSectionParser::startToken() + QStringLiteral("let me think")
+        + ThinkingSectionParser::endToken() + QStringLiteral("The answer is 42.");
+
+    const QString html = HtmlExporter::messageToHtml(assistant);
+    // The thinking section becomes a collapsible <details> section whose
+    // summary is not wrapped in a <p> (not valid phrasing content).
+    QVERIFY2(html.contains(QStringLiteral("<summary>Thought</summary>")), qPrintable(html));
+    QVERIFY(html.contains(QStringLiteral("let me think")));
+    QVERIFY(html.contains(QStringLiteral("The answer is 42.")));
+    QVERIFY(!html.contains(QStringLiteral("<summary><p>")));
 }
 
 } // namespace LlamaCpp

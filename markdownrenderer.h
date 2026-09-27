@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QFont>
 #include <QHash>
+#include <QList>
 #include <QMap>
 #include <QStack>
 #include <QTextBlock>
@@ -79,6 +80,11 @@ public:
     // the message is re-rendered or exported.
     static QString mermaidDiagramKey(const QString &source);
     static QString katexDiagramKey(const QString &tex, bool display);
+
+    // The diagram SVGs (mermaid diagrams, math) persisted with a message
+    // ("diagram" entries in its extra field), keyed as the renderer keys
+    // them.
+    static QMap<QString, DiagramSvg> diagramSvgsFromExtra(const QList<QVariantMap> &extra);
 
     // Embeds the persisted diagram SVGs into a Markdown export: ```mermaid
     // blocks become <details> sections with the rendered picture in the

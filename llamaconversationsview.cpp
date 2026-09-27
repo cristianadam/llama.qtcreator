@@ -26,6 +26,7 @@
 #include "llamaconstants.h"
 #include "llamaconversationsmodel.h"
 #include "llamaconversationsview.h"
+#include "llamahtmlexporter.h"
 #include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 
@@ -78,6 +79,7 @@ private:
     bool renameConversation();
     bool summarizeConversation();
     bool saveConversationAsMarkdown();
+    bool saveConversationAsHtml();
 
     QAction *m_addAction{nullptr};
     QAction *m_refreshAction{nullptr};
@@ -232,6 +234,7 @@ void ConversationsView::contextMenuAtPoint(const QPoint &point)
     contextMenu.addAction(Tr::tr("Save as Markdown"),
                           this,
                           &ConversationsView::saveConversationAsMarkdown);
+    contextMenu.addAction(Tr::tr("Save as HTML"), this, &ConversationsView::saveConversationAsHtml);
 
     contextMenu.exec(m_conversationsView->viewport()->mapToGlobal(point));
 }
@@ -334,6 +337,46 @@ bool ConversationsView::saveConversationAsMarkdown()
                                          QStandardPaths::DocumentsLocation)
                                          + QDir::separator() + defaultFileName,
                                      "Markdown Files (*.md)"));
+
+    if (filePath.isEmpty())
+        return false;
+
+    auto result = filePath.writeFileContents(content);
+    if (!result) {
+        QMessageBox::warning(this,
+                             Tr::tr("Error"),
+                             Tr::tr("Cannot write file:\n%1").arg(result.error()));
+        return false;
+    }
+
+    EditorManager::openEditor(filePath);
+
+    return true;
+}
+
+bool ConversationsView::saveConversationAsHtml()
+{
+    const QModelIndex selected = selectedIndex();
+    if (!selected.isValid())
+        return false;
+
+    const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
+    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+
+    // Self‑contained HTML document (styles in a <style> block), matching
+    // the chat view's look.
+    const QString title = selected.data().toString();
+    const QByteArray content = HtmlExporter::conversationHtml(title, chat.messages).toUtf8();
+
+    // Default filename
+    QString defaultFileName = QString("%1.html").arg(title);
+    FilePath filePath = FilePath::fromUserInput(
+        QFileDialog::getSaveFileName(this,
+                                     Tr::tr("Save Conversation as HTML"),
+                                     QStandardPaths::writableLocation(
+                                         QStandardPaths::DocumentsLocation)
+                                         + QDir::separator() + defaultFileName,
+                                     "HTML Files (*.html)"));
 
     if (filePath.isEmpty())
         return false;

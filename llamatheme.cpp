@@ -11,7 +11,8 @@ namespace LlamaCpp {
 
 #define STRING_TO_ENUM(x) colormap[#x] = Theme::x
 
-QString replaceThemeColorNamesWithRGBNames(const QString &styleSheet)
+QString replaceThemeColorNamesWithRGBNames(const QString &styleSheet,
+                                           const QMap<QString, QString> &fallbacks)
 {
     static QMap<QString, Theme::Color> colormap;
     if (colormap.isEmpty()) {
@@ -53,8 +54,12 @@ QString replaceThemeColorNamesWithRGBNames(const QString &styleSheet)
     }
 
     QString result = styleSheet;
-    for (const auto &k : colormap.keys())
-        result.replace(k, creatorColor(colormap[k]).name(QColor::HexRgb));
+    for (const auto &k : colormap.keys()) {
+        // CMYK-space theme colors report isValid() == false; name() still
+        // converts them to a hex string (empty only when truly unset).
+        const QString hex = creatorColor(colormap[k]).name(QColor::HexRgb);
+        result.replace(k, !hex.isEmpty() ? hex : fallbacks.value(k));
+    }
 
     return result;
 }

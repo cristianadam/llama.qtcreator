@@ -22,6 +22,8 @@ add_qtc_test(llamatools_test
     ../mermaidengine.cpp
     ../llamasettings.cpp
     ../llamastorage.cpp
+    ../llamahtmlexporter.cpp
+    ../llamatheme.cpp
     ../llamathinkingsectionparser.cpp
     ../promptssettingswidget.cpp
     ../promptssettingswidget.h
