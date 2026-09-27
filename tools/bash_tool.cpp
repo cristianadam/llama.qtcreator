@@ -213,6 +213,12 @@ QString macSandboxProfile(const QString &cwd)
                    "(deny file-write* (literal \"/dev/disk*\") "
                    "(literal \"/dev/rdisk*\") "
                    "(literal \"/dev/bpf*\") (literal \"/dev/apple*\"))\n");
+    // No network access. network* is the only valid spelling (there are no
+    // individual network-out/in symbols) and it also covers Unix domain
+    // sockets; the process stub connects to its control socket before
+    // exec'ing the wrapper, so it is unaffected. Web access is available
+    // through the webfetch/websearch tools, which run outside the sandbox.
+    profile += QStringLiteral("(deny network*)\n");
     if (!writeDenies.isEmpty())
         profile += QStringLiteral("(deny file-write*\n") + writeDenies.join(QLatin1Char('\n'))
                  + QStringLiteral("\n)\n");
@@ -266,6 +272,7 @@ SandboxSpec sandboxSpec(const QString &cwd)
         << QStringLiteral("--unshare-pid")
         << QStringLiteral("--unshare-ipc")
         << QStringLiteral("--unshare-uts")
+        << QStringLiteral("--unshare-net")
         << QStringLiteral("--die-with-parent");
     // Hide the credential locations - the read equivalent of the macOS
     // deny-read rules: empty tmpfses over the directories, /dev/null over
@@ -466,7 +473,8 @@ QString BashTool::toolDefinition() const
             "read credentials. The workdir must be inside the project "
             "directory or a temporary location. On Linux, /tmp is a fresh "
             "empty directory for each command, so files do not persist "
-            "there between commands.");
+            "there between commands. Commands have no network access; use "
+            "the webfetch and websearch tools for web access.");
     return QString::fromUtf8(R"raw(
     {
         "type": "function",

@@ -516,8 +516,9 @@ LlamaSettings::LlamaSettings()
         "(bubblewrap/bwrap on Linux, sandbox-exec on macOS), and the file "
         "tools may only write inside the project directory and temporary "
         "locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, "
-        "~/.kube, ~/.netrc) are not readable by any tool. Not supported on "
-        "Windows."));
+        "~/.kube, ~/.netrc) are not readable by any tool, and sandboxed "
+        "commands have no network access (the webfetch and websearch tools "
+        "are not affected). Not supported on Windows."));
 
     //
     // Web search (websearch tool)

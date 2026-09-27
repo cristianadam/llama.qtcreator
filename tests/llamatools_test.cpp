@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QEventLoop>
+#include <QHostAddress>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTextStream>
@@ -443,6 +444,7 @@ private slots:
     void bash_sandbox();
     void bash_sandboxWithStub();
     void bash_sandboxDenyRead();
+    void bash_sandboxNetwork();
     void sandboxFileTools();
     void projectSandboxOverride();
     void bash_truncation();
@@ -2378,6 +2380,51 @@ void LlamaToolsTest::bash_sandboxDenyRead()
 
     QVERIFY(!ok);
     QVERIFY(!output.contains("llama-secret-key"));
+}
+
+// Sandboxed commands have no network access: a connection to a local
+// listener that succeeds without the sandbox must fail inside it. The
+// listener makes the test deterministic (a refused connection to a closed
+// port would fail with or without the sandbox).
+void LlamaToolsTest::bash_sandboxNetwork()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("Sandboxing is not supported on Windows");
+#elif defined(Q_OS_MACOS)
+    if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
+        QSKIP("sandbox-exec is not available on this system");
+#else
+    if (QStandardPaths::findExecutable(QStringLiteral("bwrap")).isEmpty())
+        QSKIP("bubblewrap (bwrap) is not installed");
+#endif
+
+    QTcpServer server;
+    QVERIFY(server.listen(QHostAddress::LocalHost));
+    const quint16 port = server.serverPort();
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+
+    const SandboxTestEnv env;
+    QJsonObject args;
+    // /dev/tcp is a bash builtin, so the test has no external dependencies.
+    args["command"] = QStringLiteral("echo probe > /dev/tcp/127.0.0.1/%1")
+                          .arg(port);
+    args["workdir"] = workdir.path();
+
+    // Control: the same connection works without the sandbox, so a failure
+    // below is the sandbox's doing.
+    settings().sandboxCommands.setValue(false);
+    const auto control = runBashTool(args);
+    settings().sandboxCommands.setValue(true);
+    QVERIFY(control.second);
+
+    const auto denied = runBashTool(args);
+    QVERIFY(!denied.second);
+    // sandbox-exec: EPERM from connect(); bwrap (empty network namespace,
+    // loopback down): ENETUNREACH.
+    QVERIFY(denied.first.contains("Operation not permitted")
+            || denied.first.contains("Network is unreachable"));
 }
 
 // The file tools run in-process and must honor the same sandbox rules as
