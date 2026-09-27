@@ -23,6 +23,7 @@
 #include <llamachatmanager.h>
 #include <llamahtmlexporter.h>
 #include <llamasettings.h>
+#include <projectinstructions.h>
 #include <llamathinkingsectionparser.h>
 #include <markdownrenderer.h>
 #include <tools/apply_patch_tool.h>
@@ -513,6 +514,14 @@ private slots:
     void htmlExport_toolCall();
     void htmlExport_thinkingSection();
     void htmlExport_embedsCachedDiagrams();
+
+    // Project instructions (AGENTS.md / CLAUDE.md)
+    void projectInstructions_candidatePriority();
+    void projectInstructions_walksToGitRoot();
+    void projectInstructions_stopsAtGitRoot();
+    void projectInstructions_noGitOnlyProjectDir();
+    void projectInstructions_content();
+    void projectInstructions_truncation();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -3783,6 +3792,129 @@ void LlamaToolsTest::htmlExport_thinkingSection()
     QVERIFY(html.contains(QStringLiteral("let me think")));
     QVERIFY(html.contains(QStringLiteral("The answer is 42.")));
     QVERIFY(!html.contains(QStringLiteral("<summary><p>")));
+}
+
+void LlamaToolsTest::projectInstructions_candidatePriority()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath root = Utils::FilePath::fromString(dir.path());
+    writeTextFile(root.pathAppended("AGENTS.md").path(), "agents");
+    writeTextFile(root.pathAppended("CLAUDE.md").path(), "claude");
+
+    // AGENTS.md wins over CLAUDE.md in the same directory...
+    QCOMPARE(findProjectInstructionsFile(root).fileName(), QString("AGENTS.md"));
+    // ...and CLAUDE.md is the fallback once AGENTS.md is gone.
+    QFile agentsFile(root.pathAppended("AGENTS.md").path());
+    QVERIFY(agentsFile.remove());
+    QCOMPARE(findProjectInstructionsFile(root).fileName(), QString("CLAUDE.md"));
+    // No candidate at all: empty path.
+    QFile claudeFile(root.pathAppended("CLAUDE.md").path());
+    QVERIFY(claudeFile.remove());
+    QVERIFY(findProjectInstructionsFile(root).isEmpty());
+}
+
+void LlamaToolsTest::projectInstructions_walksToGitRoot()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath root = Utils::FilePath::fromString(dir.path());
+    // The project is a subdirectory of the repo; the instructions live at
+    // the repo root.
+    QVERIFY(QDir(root.path()).mkdir(QStringLiteral(".git")));
+    writeTextFile(root.pathAppended("AGENTS.md").path(), "root instructions");
+    const Utils::FilePath project = root.pathAppended("sub").pathAppended("proj");
+    QVERIFY(QDir().mkpath(project.path()));
+
+    QCOMPARE(findProjectInstructionsFile(project), root.pathAppended("AGENTS.md"));
+}
+
+void LlamaToolsTest::projectInstructions_stopsAtGitRoot()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath outer = Utils::FilePath::fromString(dir.path());
+    // An instructions file above the git root must not be picked up (in a
+    // real check-out that would be e.g. $HOME/AGENTS.md).
+    writeTextFile(outer.pathAppended("AGENTS.md").path(), "outer");
+    const Utils::FilePath repo = outer.pathAppended("repo");
+    QVERIFY(QDir().mkpath(repo.path()));
+    QVERIFY(QDir(repo.path()).mkdir(QStringLiteral(".git")));
+    const Utils::FilePath project = repo.pathAppended("sub");
+    QVERIFY(QDir().mkpath(project.path()));
+
+    QVERIFY(findProjectInstructionsFile(project).isEmpty());
+}
+
+void LlamaToolsTest::projectInstructions_noGitOnlyProjectDir()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath outer = Utils::FilePath::fromString(dir.path());
+    writeTextFile(outer.pathAppended("AGENTS.md").path(), "outer");
+    const Utils::FilePath project = outer.pathAppended("proj");
+    QVERIFY(QDir().mkpath(project.path()));
+
+    // Without a git root only the project directory itself is searched.
+    QVERIFY(findProjectInstructionsFile(project).isEmpty());
+    writeTextFile(project.pathAppended("CLAUDE.md").path(), "inner");
+    QCOMPARE(findProjectInstructionsFile(project), project.pathAppended("CLAUDE.md"));
+}
+
+void LlamaToolsTest::projectInstructions_content()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath root = Utils::FilePath::fromString(dir.path());
+    // BOM must be stripped from the loaded content.
+    writeTextFile(root.pathAppended("AGENTS.md").path(),
+                  QString(QChar(0xFEFF)) + QStringLiteral("Use tabs.\n"));
+
+    const QString text = loadProjectInstructions(root);
+    QVERIFY2(text.startsWith(QStringLiteral("Project instructions from ")),
+             qPrintable(text));
+    QVERIFY2(text.contains(QStringLiteral("AGENTS.md")), qPrintable(text));
+    QVERIFY2(text.endsWith(QStringLiteral("Use tabs.\n")), qPrintable(text));
+    QVERIFY(!text.contains(QChar(0xFEFF)));
+
+    // An empty (or whitespace-only) file yields no instructions at all.
+    writeTextFile(root.pathAppended("AGENTS.md").path(), QStringLiteral("  \n"));
+    QVERIFY(loadProjectInstructions(root).isEmpty());
+}
+
+void LlamaToolsTest::projectInstructions_truncation()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const Utils::FilePath root = Utils::FilePath::fromString(dir.path());
+    // Multi‑byte content: the 32 KB cut must land on a character boundary.
+    const QString content = QStringLiteral("é").repeated(20000); // 40 KB
+    writeTextFile(root.pathAppended("AGENTS.md").path(), content);
+
+    const QString text = loadProjectInstructions(root);
+    QVERIFY2(text.contains(QStringLiteral("[... truncated ...]")), qPrintable(text));
+    // The truncated body (after the header line) is valid UTF‑8 (fromUtf8
+    // would insert U+FFFD for a split sequence).
+    QVERIFY(!text.contains(QChar(0xFFFD)));
+    QByteArray body = text.mid(text.indexOf(QLatin1Char('\n')) + 1).toUtf8();
+    const QByteArray marker = QStringLiteral("\n\n[... truncated ...]").toUtf8();
+    QVERIFY(body.endsWith(marker));
+    body.chop(marker.size());
+    // The cut lands exactly on a character boundary (32768 bytes = 16384 ×
+    // é): nothing beyond the cap is dropped, nothing of it kept.
+    QCOMPARE(body.size(), 32 * 1024);
+    const QByteArray expected = QByteArray::fromHex(QByteArray("c3a9")).repeated(16384);
+    QCOMPARE(body, expected);
+
+    // A cut on an ASCII boundary must not eat the last byte either.
+    const QString ascii = QStringLiteral("a").repeated(40000);
+    writeTextFile(root.pathAppended("AGENTS.md").path(), ascii);
+    const QString asciiText = loadProjectInstructions(root);
+    QVERIFY(asciiText.contains(QStringLiteral("[... truncated ...]")));
+    body = asciiText.mid(asciiText.indexOf(QLatin1Char('\n')) + 1).toUtf8();
+    QVERIFY(body.endsWith(marker));
+    body.chop(marker.size());
+    QCOMPARE(body.size(), 32 * 1024);
 }
 
 } // namespace LlamaCpp

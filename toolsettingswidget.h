@@ -53,6 +53,7 @@ private:
     QLabel *m_ripgrepLabel = nullptr;
     QPushButton *m_ripgrepButton = nullptr;
     QCheckBox *m_sandboxCheck = nullptr;
+    QCheckBox *m_loadInstructionsCheck = nullptr;
     bool m_synchronizing = false; // re-entrancy guard for check-box propagation
 
     // Top-level group row (e.g. "Internal", "Qt Creator MCP"). Checkable:

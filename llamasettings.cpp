@@ -520,6 +520,18 @@ LlamaSettings::LlamaSettings()
         "commands have no network access (the webfetch and websearch tools "
         "are not affected). Not supported on Windows."));
 
+    loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
+    loadProjectInstructions.setDefaultValue(false);
+    loadProjectInstructions.setDisplayName(Tr::tr("Load project instructions"));
+    loadProjectInstructions.setLabelText(Tr::tr("Load project instructions"));
+    loadProjectInstructions.setToolTip(Tr::tr(
+        "If checked, the project instructions file of the current project is "
+        "appended to the chat system message. The file is AGENTS.md, "
+        "falling back to CLAUDE.md, and is looked up in the project "
+        "directory and walked up to the git repository root, so a monorepo "
+        "can keep a single instructions file for all of its projects. "
+        "Files larger than 32 KB are truncated."));
+
     //
     // Web search (websearch tool)
     //
@@ -669,6 +681,7 @@ LlamaSettings::LlamaSettings()
     customJson.setEnabler(&enableLlamaCpp);
     toolsEnabled.setEnabler(&enableLlamaCpp);
     sandboxCommands.setEnabler(&enableLlamaCpp);
+    loadProjectInstructions.setEnabler(&enableLlamaCpp);
     webSearchProvider.setEnabler(&enableLlamaCpp);
     webSearchExaUrl.setEnabler(&enableLlamaCpp);
     webSearchExaApiKey.setEnabler(&enableLlamaCpp);
@@ -815,7 +828,17 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
 
     enableLlamaCpp.addOnChanged(this, [this, project] { save(project); });
     useGlobalSettings.addOnChanged(this, [this, project] { save(project); });
+    loadProjectInstructions.setSettingsKey(Constants::LLAMACPP_PROJECT_LOAD_PROJECT_INSTRUCTIONS);
+    loadProjectInstructions.setDefaultValue(false);
+    loadProjectInstructions.setDisplayName(Tr::tr("Load project instructions"));
+    loadProjectInstructions.setLabelText(Tr::tr("Load project instructions"));
+    loadProjectInstructions.setToolTip(
+        Tr::tr("Overrides the global 'Load project instructions' setting for "
+               "this project. See the global setting on the Llama Tools page "
+               "for what is loaded."));
+
     sandboxCommands.addOnChanged(this, [this, project] { save(project); });
+    loadProjectInstructions.addOnChanged(this, [this, project] { save(project); });
 }
 
 bool LlamaProjectSettings::isSandboxEnabled() const
@@ -823,6 +846,13 @@ bool LlamaProjectSettings::isSandboxEnabled() const
     if (useGlobalSettings())
         return settings().sandboxCommands();
     return sandboxCommands();
+}
+
+bool LlamaProjectSettings::isLoadProjectInstructionsEnabled() const
+{
+    if (useGlobalSettings())
+        return settings().loadProjectInstructions();
+    return loadProjectInstructions();
 }
 
 void LlamaProjectSettings::setUseGlobalSettings(bool useGlobal)

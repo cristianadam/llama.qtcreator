@@ -27,6 +27,7 @@ add_qtc_test(llamatools_test
     ../llamathinkingsectionparser.cpp
     ../promptssettingswidget.cpp
     ../promptssettingswidget.h
+    ../projectinstructions.cpp
     ../toolsettingswidget.cpp
     ../tools/apply_patch_tool.cpp
     ../tools/edit_file_tool.cpp

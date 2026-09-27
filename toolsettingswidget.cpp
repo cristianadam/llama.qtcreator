@@ -122,9 +122,20 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             this,
             [](bool checked) { settings().sandboxCommands.setValue(checked); });
 
+    // Project instructions (AGENTS.md / CLAUDE.md) appended to the chat
+    // system message.
+    m_loadInstructionsCheck = new QCheckBox(settings().loadProjectInstructions.displayName(), this);
+    m_loadInstructionsCheck->setToolTip(settings().loadProjectInstructions.toolTip());
+    m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
+    connect(m_loadInstructionsCheck,
+            &QCheckBox::toggled,
+            this,
+            [](bool checked) { settings().loadProjectInstructions.setValue(checked); });
+
     // layout
     using namespace Layouting;
-    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow, m_sandboxCheck}
+    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow,
+           m_sandboxCheck, m_loadInstructionsCheck}
         .attachTo(this);
 
     connect(filterLineEdit,
@@ -363,7 +374,9 @@ void ToolsSettingsWidget::apply()
 void ToolsSettingsWidget::cancel()
 {
     // Re‑load the stored value – this discards any UI changes.
-    settings().readSettings();     // reload from .ini
+    settings().readSettings(); // reload from .ini
+    m_sandboxCheck->setChecked(settings().sandboxCommands());
+    m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
     updateModelFromEnabledTools(); // reflect the stored state in the UI
 }
 

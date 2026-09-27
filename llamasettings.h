@@ -83,6 +83,9 @@ public:
     // Windows), and the file tools restricted to the project directory and
     // the temporary locations.
     Utils::BoolAspect sandboxCommands{this};
+    // Load the project's instructions file (AGENTS.md, falling back to
+    // CLAUDE.md) and append it to the chat system message.
+    Utils::BoolAspect loadProjectInstructions{this};
 
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};
@@ -129,10 +132,17 @@ public:
     ProjectExplorer::UseGlobalAspect useGlobalSettings{Utils::Id(), this};
     // Per-project override for the global "Sandbox commands" setting.
     Utils::BoolAspect sandboxCommands{this};
+    // Per-project override for the global "Load project instructions"
+    // setting.
+    Utils::BoolAspect loadProjectInstructions{this};
 
     //! The effective sandbox setting: the global value when
     //! \c useGlobalSettings is on, the project value otherwise.
     bool isSandboxEnabled() const;
+
+    //! The effective project-instructions setting: the global value when
+    //! \c useGlobalSettings is on, the project value otherwise.
+    bool isLoadProjectInstructionsEnabled() const;
 };
 
 class ToolsSettingsPage : public Core::IOptionsPage

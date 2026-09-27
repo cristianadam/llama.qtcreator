@@ -19,6 +19,7 @@
 #include "llamachatmanager.h"
 #include "llamaconstants.h"
 #include "llamasettings.h"
+#include "projectinstructions.h"
 #include "llamastorage.h"
 #include "markdownrenderer.h"
 #include "llamathinkingsectionparser.h"
@@ -1161,11 +1162,26 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     QJsonArray res;
 
     QString sysMsgText = LlamaCpp::settings().systemMessage.value();
+    const bool isTaskConversation = !msgs.isEmpty()
+            && m_taskConversations.contains(msgs.first().convId);
     if (!msgs.isEmpty()) {
         // Task conversations run with their own (sub‑agent) system prompt.
         const auto it = m_taskConfigs.constFind(msgs.first().convId);
         if (it != m_taskConfigs.constEnd() && !it->systemPrompt.trimmed().isEmpty())
             sysMsgText = it->systemPrompt;
+    }
+    if (!isTaskConversation) {
+        // Append the project instructions (AGENTS.md / CLAUDE.md) for
+        // regular conversations; task conversations get their own sub‑agent
+        // system prompt and no ambient project context.
+        Project *project = ProjectManager::startupProject();
+        if (project && projectInstructionsEnabled(project)) {
+            const QString instructions = loadProjectInstructions(project->projectDirectory());
+            if (!instructions.isEmpty())
+                sysMsgText = sysMsgText.trimmed().isEmpty()
+                        ? instructions
+                        : sysMsgText + QStringLiteral("\n\n") + instructions;
+        }
     }
     if (!sysMsgText.trimmed().isEmpty()) {
         QJsonObject sys;

@@ -29,6 +29,7 @@ public:
             m_settings->useGlobalSettings,
             m_settings->enableLlamaCpp,
             m_settings->sandboxCommands,
+            m_settings->loadProjectInstructions,
             st,
         }.attachTo(this);
 
@@ -42,6 +43,7 @@ private:
         const bool useGlobal = m_settings->useGlobalSettings();
         m_settings->enableLlamaCpp.setEnabled(!useGlobal);
         m_settings->sandboxCommands.setEnabled(!useGlobal);
+        m_settings->loadProjectInstructions.setEnabled(!useGlobal);
     }
 
     LlamaProjectSettings *m_settings = nullptr;
