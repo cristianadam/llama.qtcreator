@@ -12,6 +12,7 @@
 #include <format>
 #include <functional>
 #include <list>
+#include <map>
 #include <memory>
 #include <memory_resource>
 #include <ranges>
@@ -33,6 +34,10 @@ namespace markus {
 // (std::pmr::get_default_resource(), i.e. new/delete). Every allocation is
 // owned by the Document (or the returned std::pmr::string) and is freed when
 // that object is destroyed - memory does not accumulate across Parse() calls.
+// The one exception is transient parse state (container contents re-parsed by
+// nested parsers, their line tables, paragraph text awaiting inline parsing):
+// Parse() bump-allocates it from a std::pmr::monotonic_buffer_resource that is
+// released before Parse() returns; nothing in the Document refers to it.
 //
 // A Document is self-contained: every string_view it exposes (Text and
 // HtmlInline nodes, decoded entities) refers to storage owned by the Document
@@ -448,27 +453,13 @@ using BlockNode = std::variant<Paragraph, Heading, ThematicBreak, CodeBlock,
                                DetailsBlock, HtmlBlock, BlockQuote, List,
                                ListItem, Table>;
 
-// Type alias for link references - sorted vector with binary search
-// Much faster than unordered_map for typical document sizes (< 50 refs)
-using LinkRefMap = std::pmr::vector<
-    std::pair<std::pmr::string, std::pair<std::pmr::string, std::pmr::string>>>;
-
-// Comparator for link reference binary search - works with both (elem, key) and
-// (key, elem)
-struct LinkRefComparator {
-  bool operator()(
-      const std::pair<std::pmr::string,
-                      std::pair<std::pmr::string, std::pmr::string>>& a,
-      std::string_view key) const {
-    return a.first < key;
-  }
-  bool operator()(
-      std::string_view key,
-      const std::pair<std::pmr::string,
-                      std::pair<std::pmr::string, std::pmr::string>>& a) const {
-    return key < a.first;
-  }
-};
+// Link reference definitions: normalized label -> (destination, title).
+// An ordered map (with transparent string_view lookup) keeps both insertion
+// and lookup O(log n); a sorted vector made each insertion O(n), so many
+// definitions parsed quadratically.
+using LinkRefMap =
+    std::pmr::map<std::pmr::string,
+                  std::pair<std::pmr::string, std::pmr::string>, std::less<>>;
 
 // Parsed Markdown AST.
 //
@@ -487,15 +478,92 @@ struct Document {
   // Using deque to avoid reference invalidation on growth
   std::deque<std::pmr::string> string_storage;
 
-  // Node pools for compact storage - nodes are referenced by ID (index)
+  // Node pools for compact storage - nodes are referenced by ID (index).
+  // inline_nodes may also hold a few unreferenced slots (nodes dropped while
+  // resolving emphasis, links and math); walk the tree from the block nodes
+  // rather than iterating the pool.
   std::pmr::vector<InlineNode> inline_nodes;
   std::pmr::vector<BlockNode> block_nodes;
+
+  Document() = default;
+  Document(Document&&) = default;
+  Document& operator=(Document&&) = default;
+
+  // Copying is a deep copy: the Text/HtmlInline views of the copy are
+  // re-pointed into the copy's own string_storage, so the copy stays valid
+  // after the original is destroyed. (A member-wise copy would leave them
+  // viewing the original's storage.) Moving keeps the views valid as is,
+  // since a deque move does not relocate its elements.
+  Document(const Document& other)
+      : children(other.children),
+        link_references(other.link_references),
+        string_storage(other.string_storage),
+        inline_nodes(other.inline_nodes),
+        block_nodes(other.block_nodes) {
+    RebaseViews(other);
+  }
+
+  Document& operator=(const Document& other) {
+    if (this != &other) *this = Document(other);
+    return *this;
+  }
 
   // Add a block to the pool and return its ID
   BlockNodeId AddBlock(BlockNode&& node) {
     BlockNodeId id = static_cast<BlockNodeId>(block_nodes.size());
     block_nodes.push_back(std::move(node));
     return id;
+  }
+
+ private:
+  // After copying `source`, re-point every inline view that refers into one
+  // of source's storage strings at the same offset of the corresponding copy.
+  void RebaseViews(const Document& source) {
+    struct Chunk {
+      const char* begin;
+      size_t size;
+      size_t index;
+    };
+    std::vector<Chunk> chunks;
+    chunks.reserve(source.string_storage.size());
+    for (size_t i = 0; i < source.string_storage.size(); ++i) {
+      const std::pmr::string& str = source.string_storage[i];
+      if (!str.empty()) chunks.push_back({str.data(), str.size(), i});
+    }
+    std::sort(chunks.begin(), chunks.end(), [](const Chunk& a, const Chunk& b) {
+      return std::less<const char*>()(a.begin, b.begin);
+    });
+    auto rebase = [&](std::string_view& view) {
+      if (view.empty()) {
+        view = std::string_view();
+        return;
+      }
+      // Last chunk starting at or before the view.
+      auto it = std::upper_bound(chunks.begin(), chunks.end(), view.data(),
+                                 [](const char* p, const Chunk& c) {
+                                   return std::less<const char*>()(p, c.begin);
+                                 });
+      if (it != chunks.begin()) {
+        const Chunk& c = *std::prev(it);
+        uintptr_t p = reinterpret_cast<uintptr_t>(view.data());
+        uintptr_t b = reinterpret_cast<uintptr_t>(c.begin);
+        size_t offset = static_cast<size_t>(p - b);
+        if (p >= b && offset <= c.size && view.size() <= c.size - offset) {
+          view = std::string_view(string_storage[c.index].data() + offset,
+                                  view.size());
+          return;
+        }
+      }
+      // Not in the source's storage (not expected): give the copy its own.
+      view = string_storage.emplace_back(view);
+    };
+    for (InlineNode& node : inline_nodes) {
+      if (auto* text = std::get_if<Text>(&node)) {
+        rebase(text->content);
+      } else if (auto* html = std::get_if<HtmlInline>(&node)) {
+        rebase(html->content);
+      }
+    }
   }
 };
 
@@ -506,6 +574,39 @@ struct Document {
 namespace detail {
 
 using namespace std::literals;
+
+// =============================================================================
+// Resource Limits
+// =============================================================================
+
+// Maximum nesting depth of container blocks (block quotes, list items,
+// <details> sections). Each level is parsed, inline-parsed and rendered
+// recursively, so unbounded nesting lets a few KB of input such as `>>>>...`
+// overflow the stack. Content nested deeper than this is kept as literal
+// paragraph text instead of being parsed as further blocks.
+inline constexpr int kMaxBlockNesting = 64;
+
+// Maximum nesting depth of inline containers (emphasis, strong,
+// strikethrough, links, images). Delimiters that would nest deeper are left
+// as literal text, bounding the recursion of the inline parser, the renderer
+// and the AST printer.
+inline constexpr int kMaxInlineNesting = 128;
+
+// Container blocks are parsed by copying their content (minus the container
+// markers) and re-parsing the copy, so deeply nested input is copied once per
+// level. The total copied during one parse is limited to this multiple of the
+// input size (plus kNestedContentSlack); past it, container content is kept
+// as literal paragraph text, as beyond kMaxBlockNesting. Ordinary documents
+// copy only a few times their size.
+inline constexpr size_t kMaxNestedContentFactor = 16;
+inline constexpr size_t kNestedContentSlack = 64u << 10;
+
+// Maximum number of empty cells a GFM table may add to pad short body rows
+// out to the header's column count. A tiny input with a wide header and many
+// one-cell rows otherwise expands into millions of cells (cmark-gfm limits
+// this the same way). Once exceeded, the table ends and the remaining lines
+// are parsed as ordinary blocks.
+inline constexpr size_t kMaxTableAutoCompletedCells = 1u << 16;
 
 // =============================================================================
 // Compile-Time Utilities
@@ -555,65 +656,35 @@ inline constexpr auto kEscapeLens = MakeEscapeLens();
 // =============================================================================
 
 // Writes escaped HTML directly to output buffer - eliminates temp string
-// allocation. Uses uint64_t loads for 8-wide scanning.
+// allocation. Scans 8 bytes at a time with a SWAR test for the four special
+// characters ('&', '<', '>', '"'), then locates the exact byte with a short
+// loop (endian-independent).
 inline void EscapeHtmlTo(std::string_view text, std::pmr::string& out) {
   const size_t len = text.size();
   if (len == 0) return;
   const char* data = text.data();
+  constexpr uint64_t kOnes = 0x0101010101010101ULL;
+  constexpr uint64_t kHighs = 0x8080808080808080ULL;
+  auto has_byte = [](uint64_t word, char c) {
+    uint64_t v = word ^ (kOnes * static_cast<unsigned char>(c));
+    return (v - kOnes) & ~v & kHighs;
+  };
   size_t i = 0;
 
   while (i < len) {
     size_t start = i;
-    // Find next special char using 8-wide uint64_t scan
+    // Skip whole 8-byte words that contain no special character
     while (i + 8 <= len) {
-      uint64_t chunk;
-      std::memcpy(&chunk, data + i, 8);
-      // Build a bitmask of which bytes are special
-      uint64_t mask = 0;
-      if (kEscapeTableV2[chunk & 0xFF]) mask |= 1;
-      if (kEscapeTableV2[(chunk >> 8) & 0xFF]) mask |= 2;
-      if (kEscapeTableV2[(chunk >> 16) & 0xFF]) mask |= 4;
-      if (kEscapeTableV2[(chunk >> 24) & 0xFF]) mask |= 8;
-      if (kEscapeTableV2[(chunk >> 32) & 0xFF]) mask |= 16;
-      if (kEscapeTableV2[(chunk >> 40) & 0xFF]) mask |= 32;
-      if (kEscapeTableV2[(chunk >> 48) & 0xFF]) mask |= 64;
-      if (kEscapeTableV2[(chunk >> 56) & 0xFF]) mask |= 128;
-      if (mask == 0) {
-        i += 8;
-        continue;
-      }
-      // Find which byte in this group is special
-      if (mask & 1) break;
-      if (mask & 2) {
-        i += 1;
+      uint64_t word;
+      std::memcpy(&word, data + i, sizeof(word));
+      if (has_byte(word, '&') | has_byte(word, '<') | has_byte(word, '>') |
+          has_byte(word, '"')) {
         break;
       }
-      if (mask & 4) {
-        i += 2;
-        break;
-      }
-      if (mask & 8) {
-        i += 3;
-        break;
-      }
-      if (mask & 16) {
-        i += 4;
-        break;
-      }
-      if (mask & 32) {
-        i += 5;
-        break;
-      }
-      if (mask & 64) {
-        i += 6;
-        break;
-      }
-      i += 7;
-      break;
+      i += 8;
     }
-    // Scalar fallback for remaining < 8 bytes
-    while (i < len) {
-      if (kEscapeTableV2[static_cast<unsigned char>(data[i])]) break;
+    // Locate the special character (within the flagged word, or in the tail)
+    while (i < len && !kEscapeTableV2[static_cast<unsigned char>(data[i])]) {
       ++i;
     }
 
@@ -1402,8 +1473,10 @@ inline std::pmr::string CodePointToUtf8(uint32_t cp) {
   char buf[4];
   size_t len;
 
-  if (cp == 0 || cp >= 0x110000) [[unlikely]] {
-    // Null or invalid code point - use replacement character U+FFFD
+  if (cp == 0 || cp >= 0x110000 || (cp >= 0xD800 && cp <= 0xDFFF))
+      [[unlikely]] {
+    // Null, out-of-range or surrogate (not encodable in valid UTF-8) code
+    // point - use replacement character U+FFFD
     return "\xEF\xBF\xBD";
   } else if (cp < 0x80) {
     buf[0] = static_cast<char>(cp);
@@ -1501,36 +1574,39 @@ inline uint32_t UnicodeCaseFold(uint32_t cp) {
 // Normalize a link label (case-fold and collapse whitespace)
 // Uses Unicode-aware case folding for CommonMark compliance
 // C++20: optimized with fast path for ASCII-only labels using ranges::any_of
-inline std::pmr::string NormalizeLinkLabel(std::string_view label) {
+// Writes the normalized label into `result` (replacing its contents), so
+// callers can reuse one buffer across lookups.
+inline void NormalizeLinkLabelInto(std::string_view label,
+                                   std::pmr::string& result) {
   // Fast path: check if label is ASCII-only (common case) using ranges::any_of
   bool all_ascii =
       !std::ranges::any_of(label, [](unsigned char c) { return c >= 0x80; });
 
-  std::pmr::string result;
-  result.reserve(label.size());
+  result.clear();
 
   if (all_ascii) {
-    // Fast ASCII-only path: simple lowercase + whitespace collapse
+    // Fast ASCII-only path: simple lowercase + whitespace collapse, written
+    // straight into a buffer sized for the worst case (no collapsing).
+    result.resize(label.size());
+    char* out = result.data();
+    size_t n = 0;
     bool in_whitespace = false;
     bool first = true;
     for (char c : label) {
       if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f') {
         if (!first && !in_whitespace) {
-          result += ' ';
+          out[n++] = ' ';
           in_whitespace = true;
         }
       } else {
-        // ASCII lowercase: 'A'-'Z' (0x41-0x5A) -> 'a'-'z' (0x61-0x7A)
-        if (c >= 'A' && c <= 'Z') {
-          result += static_cast<char>(c + 32);
-        } else {
-          result += c;
-        }
+        out[n++] = static_cast<char>(CaseFold(static_cast<uint8_t>(c)));
         in_whitespace = false;
         first = false;
       }
     }
+    result.resize(n);
   } else {
+    result.reserve(label.size());
     // Slow path: full Unicode handling
     bool in_whitespace = false;
     bool first = true;
@@ -1576,7 +1652,29 @@ inline std::pmr::string NormalizeLinkLabel(std::string_view label) {
   if (!result.empty() && result.back() == ' ') {
     result.pop_back();
   }
+}
 
+// True when NormalizeLinkLabel(label) == label, i.e. the label is ASCII with
+// no uppercase letters, no whitespace other than single interior spaces.
+// Lets lookups use the label as-is (the common case) without copying it.
+inline bool IsNormalizedLinkLabel(std::string_view label) {
+  if (label.empty()) return true;
+  if (label.front() == ' ' || label.back() == ' ') return false;
+  char prev = 0;
+  for (char c : label) {
+    unsigned char u = static_cast<unsigned char>(c);
+    if (u >= 0x80 || (u >= 'A' && u <= 'Z') || c == '\t' || c == '\n' ||
+        c == '\r' || c == '\f' || (c == ' ' && prev == ' ')) {
+      return false;
+    }
+    prev = c;
+  }
+  return true;
+}
+
+inline std::pmr::string NormalizeLinkLabel(std::string_view label) {
+  std::pmr::string result;
+  NormalizeLinkLabelInto(label, result);
   return result;
 }
 
@@ -1625,8 +1723,8 @@ inline bool StartsWithInsensitive(std::string_view str,
                                   std::string_view prefix) {
   if (str.size() < prefix.size()) return false;
   for (size_t i = 0; i < prefix.size(); ++i) {
-    if (std::tolower(static_cast<unsigned char>(str[i])) !=
-        std::tolower(static_cast<unsigned char>(prefix[i]))) {
+    if (detail::CaseFold(static_cast<unsigned char>(str[i])) !=
+        detail::CaseFold(static_cast<unsigned char>(prefix[i]))) {
       return false;
     }
   }
@@ -1638,18 +1736,18 @@ inline bool StringContainsInsensitive(std::string_view str,
                                       std::string_view substr) {
   if (substr.empty() || str.size() < substr.size()) return false;
   // Fast path: find first character of substr in str
-  char first =
-      static_cast<char>(std::tolower(static_cast<unsigned char>(substr[0])));
+  char first = static_cast<char>(
+      detail::CaseFold(static_cast<unsigned char>(substr[0])));
   for (size_t i = 0; i <= str.size() - substr.size(); ++i) {
-    if (static_cast<char>(std::tolower(static_cast<unsigned char>(str[i]))) !=
-        first)
+    if (static_cast<char>(
+            detail::CaseFold(static_cast<unsigned char>(str[i]))) != first)
       continue;
     bool match = true;
     for (size_t j = 1; j < substr.size(); ++j) {
       if (static_cast<char>(
-              std::tolower(static_cast<unsigned char>(str[i + j]))) !=
+              detail::CaseFold(static_cast<unsigned char>(str[i + j]))) !=
           static_cast<char>(
-              std::tolower(static_cast<unsigned char>(substr[j])))) {
+              detail::CaseFold(static_cast<unsigned char>(substr[j])))) {
         match = false;
         break;
       }
@@ -2355,10 +2453,10 @@ inline bool IsTableRowLine(std::string_view line) {
   // List item
   if (t.starts_with("- ") || t.starts_with("+ ") || t.starts_with("* "))
     return false;
-  if (std::isdigit(static_cast<unsigned char>(t[0]))) {
+  if (detail::IsDigit(static_cast<unsigned char>(t[0]))) {
     size_t num_end = 0;
     while (num_end < t.size() &&
-           std::isdigit(static_cast<unsigned char>(t[num_end])))
+           detail::IsDigit(static_cast<unsigned char>(t[num_end])))
       ++num_end;
     if (num_end + 1 < t.size() && (t[num_end] == '.' || t[num_end] == ')') &&
         (t[num_end + 1] == ' ' || t[num_end + 1] == '\t')) {
@@ -2418,7 +2516,7 @@ inline bool IsTableRowLine(std::string_view line) {
     size_t tag_start = is_closing ? 2 : 1;
     size_t tag_end = tag_start;
     while (tag_end < t.size() &&
-           (std::isalnum(static_cast<unsigned char>(t[tag_end])) ||
+           (detail::IsAlnum(static_cast<unsigned char>(t[tag_end])) ||
             t[tag_end] == '-')) {
       ++tag_end;
     }
@@ -2449,8 +2547,9 @@ inline constexpr auto MakeInlineSpecialTable() {
   // Characters that trigger special inline parsing logic:
   // backslash (escape), ampersand (entity), backtick (code span),
   // less-than (autolink/HTML), asterisk/underscore (emphasis),
-  // brackets (links), exclamation (image), space (hard break),
-  // newline (soft break)
+  // brackets (links), exclamation (image), newline (soft/hard break).
+  // Space is deliberately not special (it would stop the scan at every
+  // word); a hard break's trailing spaces are found from the newline.
   table['\\'] = 1;  // Escape character
   table['&'] = 1;   // Entity reference
   table['`'] = 1;   // Code span
@@ -2462,7 +2561,6 @@ inline constexpr auto MakeInlineSpecialTable() {
   table['['] = 1;   // Link open
   table[']'] = 1;   // Link close
   table['!'] = 1;   // Image prefix
-  table[' '] = 1;   // Hard break (2+ spaces before newline)
   table['\n'] = 1;  // Soft break
   return table;
 }
@@ -2520,99 +2618,68 @@ class LineBuffer {
  public:
   LineBuffer() = default;
 
+  // Empty buffer whose storage comes from `resource`.
+  explicit LineBuffer(std::pmr::memory_resource* resource)
+      : line_offsets_(resource), buffer_(resource) {}
+
   explicit LineBuffer(std::string_view input, bool no_nulls = false) {
+    Reset(input, no_nulls);
+  }
+
+  // Not copyable. Moves re-point data_ptr_ when it refers to buffer_, whose
+  // characters may live in the object itself (SSO) and so move with it.
+  LineBuffer(const LineBuffer&) = delete;
+  LineBuffer& operator=(const LineBuffer&) = delete;
+  LineBuffer(LineBuffer&& other) { *this = std::move(other); }
+  LineBuffer& operator=(LineBuffer&& other) {
+    if (this != &other) {
+      bool owns = other.data_ptr_ != nullptr &&
+                  other.data_ptr_ == other.buffer_.data();
+      line_offsets_ = std::move(other.line_offsets_);
+      buffer_ = std::move(other.buffer_);
+      data_ptr_ = owns ? buffer_.data() : other.data_ptr_;
+      other.data_ptr_ = nullptr;
+    }
+    return *this;
+  }
+
+  // Split `input` into lines, replacing any previous contents.
+  void Reset(std::string_view input, bool no_nulls = false) {
+    line_offsets_.clear();
+    buffer_.clear();
+    data_ptr_ = nullptr;
     if (input.empty()) [[unlikely]] {
       return;
     }
 
-    if (no_nulls) [[unlikely]] {
-      // Fast path for content we built ourselves (guaranteed null-free, e.g.
-      // nested blockquote/list buffers). Build the offsets in a single pass,
-      // skipping the separate null-detection / line-count pass.
-      data_ptr_ = input.data();
-      line_offsets_.reserve(16);
-      size_t line_start = 0;
-      for (size_t i = 0; i < input.size(); ++i) {
-        char c = input[i];
-        if (c == '\n') {
-          line_offsets_.emplace_back(line_start, i - line_start);
-          line_start = i + 1;
-        } else if (c == '\r') {
-          line_offsets_.emplace_back(line_start, i - line_start);
-          if (i + 1 < input.size() && input[i + 1] == '\n') ++i;
-          line_start = i + 1;
+    // Single pass: split on line terminators, scanning 8 bytes at a time.
+    // A NUL (which must be replaced) sends us to the copying slow path;
+    // `no_nulls` marks content we built ourselves (guaranteed NUL-free, e.g.
+    // nested blockquote/list buffers), for which NULs need no handling.
+    const char* data = input.data();
+    const size_t len = input.size();
+    line_offsets_.reserve(len / 32 + 4);
+    size_t line_start = 0;
+    size_t i = 0;
+    while ((i = FindLineBreakOrNul(data, i, len)) < len) {
+      char c = data[i];
+      if (c == '\0') [[unlikely]] {
+        if (!no_nulls) {
+          BuildReplacingNulls(input);
+          return;
         }
+        ++i;
+        continue;
       }
-      if (input.size() > line_start ||
-          (input.back() == '\n' || input.back() == '\r')) {
-        line_offsets_.emplace_back(line_start, input.size() - line_start);
-      }
-      return;
+      line_offsets_.emplace_back(line_start, i - line_start);
+      if (c == '\r' && i + 1 < len && data[i + 1] == '\n') ++i;
+      line_start = ++i;
     }
-
-    // First pass: check for nulls and count lines
-    bool has_nulls = false;
-    size_t line_count = 1;
-    for (size_t i = 0; i < input.size(); ++i) {
-      if (input[i] == '\0') has_nulls = true;
-      if (input[i] == '\n')
-        ++line_count;
-      else if (input[i] == '\r') {
-        ++line_count;
-        if (i + 1 < input.size() && input[i + 1] == '\n') ++i;
-      }
+    // Add final line
+    if (len > line_start || (input.back() == '\n' || input.back() == '\r')) {
+      line_offsets_.emplace_back(line_start, len - line_start);
     }
-
-    // Reserve space for line offsets (cache-friendly contiguous array)
-    line_offsets_.reserve(line_count + 1);
-
-    if (has_nulls) [[unlikely]] {
-      // Slow path: copy and replace nulls
-      buffer_.reserve(input.size() +
-                      line_count);  // Extra for replacement chars
-      size_t line_start = 0;
-      for (size_t i = 0; i < input.size(); ++i) {
-        char c = input[i];
-        if (c == '\n') {
-          line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
-          line_start = buffer_.size();
-        } else if (c == '\r') {
-          line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
-          if (i + 1 < input.size() && input[i + 1] == '\n') ++i;
-          line_start = buffer_.size();
-        } else if (c == '\0') {
-          buffer_ += "\xEF\xBF\xBD";  // UTF-8 replacement character
-        } else {
-          buffer_ += c;
-        }
-      }
-      // Add final line
-      if (buffer_.size() > line_start ||
-          (input.back() == '\n' || input.back() == '\r')) {
-        line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
-      }
-      data_ptr_ = buffer_.data();
-    } else {
-      // Fast path: just store offsets into original input (zero-copy)
-      data_ptr_ = input.data();
-      size_t line_start = 0;
-      for (size_t i = 0; i < input.size(); ++i) {
-        char c = input[i];
-        if (c == '\n') {
-          line_offsets_.emplace_back(line_start, i - line_start);
-          line_start = i + 1;
-        } else if (c == '\r') {
-          line_offsets_.emplace_back(line_start, i - line_start);
-          if (i + 1 < input.size() && input[i + 1] == '\n') ++i;
-          line_start = i + 1;
-        }
-      }
-      // Add final line
-      if (input.size() > line_start ||
-          (input.back() == '\n' || input.back() == '\r')) {
-        line_offsets_.emplace_back(line_start, input.size() - line_start);
-      }
-    }
+    data_ptr_ = data;
   }
 
   size_t size() const { return line_offsets_.size(); }
@@ -2627,6 +2694,56 @@ class LineBuffer {
   size_t OffsetOf(size_t idx) const { return line_offsets_[idx].offset; }
 
  private:
+  // Index of the first '\n', '\r' or NUL in data[i, len), or len. Checks a
+  // word at a time with the classic SWAR "has zero byte" test, falling back
+  // to a byte loop to locate the exact match (endian-independent).
+  static size_t FindLineBreakOrNul(const char* data, size_t i, size_t len) {
+    constexpr uint64_t kOnes = 0x0101010101010101ULL;
+    constexpr uint64_t kHighs = 0x8080808080808080ULL;
+    auto has_zero = [](uint64_t v) { return (v - kOnes) & ~v & kHighs; };
+    for (; i + 8 <= len; i += 8) {
+      uint64_t word;
+      std::memcpy(&word, data + i, sizeof(word));
+      if (has_zero(word) | has_zero(word ^ (kOnes * '\n')) |
+          has_zero(word ^ (kOnes * '\r'))) {
+        break;
+      }
+    }
+    for (; i < len; ++i) {
+      char c = data[i];
+      if (c == '\n' || c == '\r' || c == '\0') return i;
+    }
+    return len;
+  }
+
+  // Slow path: copy the input, replacing each NUL with U+FFFD.
+  void BuildReplacingNulls(std::string_view input) {
+    line_offsets_.clear();
+    buffer_.reserve(input.size() + 16);
+    size_t line_start = 0;
+    for (size_t i = 0; i < input.size(); ++i) {
+      char c = input[i];
+      if (c == '\n') {
+        line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
+        line_start = buffer_.size();
+      } else if (c == '\r') {
+        line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
+        if (i + 1 < input.size() && input[i + 1] == '\n') ++i;
+        line_start = buffer_.size();
+      } else if (c == '\0') {
+        buffer_ += "\xEF\xBF\xBD";  // UTF-8 replacement character
+      } else {
+        buffer_ += c;
+      }
+    }
+    // Add final line
+    if (buffer_.size() > line_start ||
+        (input.back() == '\n' || input.back() == '\r')) {
+      line_offsets_.emplace_back(line_start, buffer_.size() - line_start);
+    }
+    data_ptr_ = buffer_.data();
+  }
+
   struct LineOffset {
     size_t offset;
     size_t length;
@@ -2808,19 +2925,21 @@ inline std::pmr::string DecodeEscapesAndEntities(std::string_view text) {
         size_t num_end = num_start;
         if (is_hex) {
           while (num_end < text.size() &&
-                 std::isxdigit(static_cast<unsigned char>(text[num_end]))) {
+                 detail::IsXDigit(static_cast<unsigned char>(text[num_end]))) {
             ++num_end;
           }
         } else {
           while (num_end < text.size() &&
-                 std::isdigit(static_cast<unsigned char>(text[num_end]))) {
+                 detail::IsDigit(static_cast<unsigned char>(text[num_end]))) {
             ++num_end;
           }
         }
 
-        if (num_end > num_start && num_end < text.size() &&
-            text[num_end] == ';') {
-          std::string_view num_sv(text.data() + num_start, num_end - num_start);
+        // CommonMark allows 1-7 decimal or 1-6 hexadecimal digits.
+        size_t digits = num_end - num_start;
+        if (digits > 0 && digits <= (is_hex ? 6u : 7u) &&
+            num_end < text.size() && text[num_end] == ';') {
+          std::string_view num_sv(text.data() + num_start, digits);
           uint32_t code_point;
           if (ParseUint(num_sv, code_point, is_hex ? 16 : 10)) {
             result += CodePointToUtf8(code_point);
@@ -2832,7 +2951,7 @@ inline std::pmr::string DecodeEscapesAndEntities(std::string_view text) {
         // Named entity
         size_t name_end = start;
         while (name_end < text.size() &&
-               std::isalnum(static_cast<unsigned char>(text[name_end]))) {
+               detail::IsAlnum(static_cast<unsigned char>(text[name_end]))) {
           ++name_end;
         }
 
@@ -2930,19 +3049,13 @@ inline std::pair<int, std::string_view> ClassifyHtmlBlock(
     }
   }
 
-  // Type 2: <!-- comment --> (text after <!-- cannot start with > or ->)
+  // Type 2: <!-- comment -->. CommonMark 0.31 starts the block on any line
+  // beginning with `<!--` (including `<!-->` and `<!--->`). This must agree
+  // with the paragraph-interruption checks, which also accept any `<!--`;
+  // a mismatch leaves the block parser unable to consume the line.
   if (block_type == 0 && trimmed.starts_with("<!--")) {
-    if (trimmed.size() > 4) {
-      char next = trimmed[4];
-      if (next != '>' &&
-          !(next == '-' && trimmed.size() > 5 && trimmed[5] == '>')) {
-        block_type = 2;
-        end_condition = "-->";
-      }
-    } else if (trimmed.size() == 4) {
-      block_type = 2;
-      end_condition = "-->";
-    }
+    block_type = 2;
+    end_condition = "-->";
   }
 
   // Type 3: <? processing instruction ?>
@@ -3002,7 +3115,7 @@ inline std::pair<int, std::string_view> ClassifyHtmlBlock(
 
     size_t tag_end = tag_start;
     while (tag_end < trimmed.size() &&
-           (std::isalnum(static_cast<unsigned char>(trimmed[tag_end])) ||
+           (detail::IsAlnum(static_cast<unsigned char>(trimmed[tag_end])) ||
             trimmed[tag_end] == '-')) {
       ++tag_end;
     }
@@ -3034,10 +3147,10 @@ inline std::pair<int, std::string_view> ClassifyHtmlBlock(
     size_t tag_start = is_closing ? 2 : 1;
 
     if (tag_start < trimmed.size() &&
-        std::isalpha(static_cast<unsigned char>(trimmed[tag_start]))) {
+        detail::IsAlpha(static_cast<unsigned char>(trimmed[tag_start]))) {
       size_t tag_end = tag_start + 1;
       while (tag_end < trimmed.size() &&
-             (std::isalnum(static_cast<unsigned char>(trimmed[tag_end])) ||
+             (detail::IsAlnum(static_cast<unsigned char>(trimmed[tag_end])) ||
               trimmed[tag_end] == '-')) {
         ++tag_end;
       }
@@ -3086,13 +3199,15 @@ inline std::pair<int, std::string_view> ClassifyHtmlBlock(
               ++search_pos;
               need_whitespace = false;
             } else if (!need_whitespace &&
-                       (std::isalpha(static_cast<unsigned char>(c)) || c == '_' ||
-                        c == ':')) {
+                       (detail::IsAlpha(static_cast<unsigned char>(c)) ||
+                        c == '_' || c == ':')) {
               ++search_pos;
-              while (search_pos < trimmed.size() &&
-                     (std::isalnum(static_cast<unsigned char>(trimmed[search_pos])) ||
-                      trimmed[search_pos] == '_' || trimmed[search_pos] == ':' ||
-                      trimmed[search_pos] == '.' || trimmed[search_pos] == '-')) {
+              while (
+                  search_pos < trimmed.size() &&
+                  (detail::IsAlnum(
+                       static_cast<unsigned char>(trimmed[search_pos])) ||
+                   trimmed[search_pos] == '_' || trimmed[search_pos] == ':' ||
+                   trimmed[search_pos] == '.' || trimmed[search_pos] == '-')) {
                 ++search_pos;
               }
               while (search_pos < trimmed.size() &&
@@ -3189,7 +3304,31 @@ class InlineParser {
   std::pmr::vector<InlineNodeId> Parse(std::string_view text) {
     text_ = text;
     pos_ = 0;
+    // The scan caches below describe the previous text; start afresh.
+    backtick_cache_.clear();
+    comment_miss_ = cdata_miss_ = pi_miss_ = decl_miss_ =
+        std::string_view::npos;
+    dquote_miss_ = squote_miss_ = std::string_view::npos;
     return ParseInlines();
+  }
+
+  // Copy `s` into Document-owned storage and return a stable view of it.
+  // Strings are packed into chunks (each one a string_storage entry that is
+  // never appended past its reserved capacity, so it never reallocates and
+  // earlier views stay valid) instead of one string_storage entry apiece.
+  std::string_view StoreString(std::string_view s) {
+    if (!chunk_ || chunk_->capacity() - chunk_->size() < s.size()) {
+      ReserveStorage(s.size() > kMinStorageChunk ? s.size() : kMinStorageChunk);
+    }
+    size_t offset = chunk_->size();
+    chunk_->append(s);
+    return std::string_view(chunk_->data() + offset, s.size());
+  }
+
+  // Start a new storage chunk able to hold at least `n` bytes.
+  void ReserveStorage(size_t n) {
+    string_storage_->emplace_back().reserve(n);
+    chunk_ = &string_storage_->back();
   }
 
   // GFM `autolink` extension. When true, www/url/email autolinks are recognised
@@ -3213,11 +3352,14 @@ class InlineParser {
   size_t pos_ = 0;
   const LinkRefMap* link_references_ = nullptr;
   std::deque<std::pmr::string>* string_storage_ = nullptr;
+  std::pmr::string* chunk_ = nullptr;  // Current StoreString() chunk
+  static constexpr size_t kMinStorageChunk = 1024;
   std::pmr::vector<InlineNode>* inline_pool_ = nullptr;
 
-  // Backtick position cache (cmark optimization): caches positions of closing
-  // backtick sequences by length to avoid rescanning. When a backtick length
-  // has been scanned and no closer found, subsequent scans return immediately.
+  // Backtick position cache (cmark optimization): remembers, per backtick run
+  // length, the earliest position from which a scan found no closer. A later
+  // opener of the same length cannot find one either, so it fails at once.
+  // Reset for every Parse() call (positions refer to the current text).
   static constexpr size_t kMaxBacktickLength = 1000;
   struct BacktickCache {
     size_t position = 0;
@@ -3225,30 +3367,164 @@ class InlineParser {
   };
   std::pmr::vector<BacktickCache> backtick_cache_;
 
-  // Store a string in persistent storage and return a view into it
-  std::string_view StoreString(std::pmr::string s) {
-    string_storage_->push_back(std::move(s));
-    return string_storage_->back();
+  // Raw-HTML scan caches: the earliest position from which a search for the
+  // terminator of a comment (`-->`), CDATA section (`]]>`), processing
+  // instruction (`?>`), declaration (`>`) or quoted attribute value failed.
+  // A search from any later position fails too, so it is skipped; otherwise
+  // every unclosed `<!--` would rescan to the end of the text (quadratic).
+  size_t comment_miss_ = std::string_view::npos;
+  size_t cdata_miss_ = std::string_view::npos;
+  size_t pi_miss_ = std::string_view::npos;
+  size_t decl_miss_ = std::string_view::npos;
+  size_t dquote_miss_ = std::string_view::npos;
+  size_t squote_miss_ = std::string_view::npos;
+
+  // Find `needle` in the text at or after `from`, using and updating the
+  // negative cache `miss` described above.
+  size_t FindCached(std::string_view needle, size_t from, size_t& miss) const {
+    if (from >= miss) return std::string_view::npos;
+    size_t found = text_.find(needle, from);
+    if (found == std::string_view::npos) miss = from;
+    return found;
+  }
+
+  // Maximum number of characters inside the brackets of a link label.
+  static constexpr size_t kMaxLinkLabelLength = 999;
+  // Maximum nesting of unescaped parentheses in a link destination.
+  static constexpr int kMaxLinkDestinationParens = 32;
+
+  // Nesting depth of each pool node (0 for leaves, 1 + the deepest child for
+  // containers), indexed by node ID; used to enforce kMaxInlineNesting. IDs
+  // past the end have depth 0.
+  std::pmr::vector<uint16_t> node_depth_;
+
+  uint16_t Depth(InlineNodeId id) const {
+    return id < node_depth_.size() ? node_depth_[id] : 0;
+  }
+
+  void SetDepth(InlineNodeId id, uint16_t depth) {
+    if (id < node_depth_.size()) {
+      node_depth_[id] = depth;
+    } else if (depth != 0) {
+      node_depth_.resize(static_cast<size_t>(id) + 1, 0);
+      node_depth_[id] = depth;
+    }
+  }
+
+  // Deepest node among ids[begin, end).
+  uint16_t MaxDepth(const std::pmr::vector<InlineNodeId>& ids, size_t begin,
+                    size_t end) const {
+    uint16_t depth = 0;
+    for (size_t i = begin; i < end; ++i) {
+      uint16_t d = Depth(ids[i]);
+      if (d > depth) depth = d;
+    }
+    return depth;
+  }
+
+  // Depth of a container node holding `children`.
+  uint16_t ContainerDepth(
+      const std::pmr::vector<InlineNodeId>& children) const {
+    return static_cast<uint16_t>(MaxDepth(children, 0, children.size()) + 1);
+  }
+
+  uint16_t NodeDepth(const InlineNode& node) const {
+    return std::visit(
+        [this](const auto& n) -> uint16_t {
+          if constexpr (requires { n.children; }) {
+            return ContainerDepth(n.children);
+          } else {
+            return 0;
+          }
+        },
+        node);
   }
 
   // Add a node to the pool and return its ID
   InlineNodeId AddToPool(InlineNode node) {
-    InlineNodeId id = static_cast<InlineNodeId>(inline_pool_->size());
-    inline_pool_->push_back(std::move(node));
+    uint16_t depth = NodeDepth(node);
+    InlineNodeId id;
+    if (!free_ids_.empty()) {
+      id = free_ids_.back();
+      free_ids_.pop_back();
+      Node(id) = std::move(node);
+    } else {
+      id = static_cast<InlineNodeId>(inline_pool_->size());
+      inline_pool_->push_back(std::move(node));
+    }
+    SetDepth(id, depth);
     return id;
   }
 
-  // Convert a vector of nodes to IDs by adding them all to the pool.
-  std::pmr::vector<InlineNodeId> NodesToIds(
-      std::pmr::vector<InlineNode>& nodes) {
-    std::pmr::vector<InlineNodeId> ids;
-    ids.reserve(nodes.size());
-    for (auto& node : nodes) {
-      ids.push_back(AddToPool(std::move(node)));
+  // Access a pool node by ID. The reference is invalidated by the next pool
+  // insertion.
+  InlineNode& Node(InlineNodeId id) { return (*inline_pool_)[id]; }
+
+  // Construct a node directly in the pool and append its ID to `ids`. Nodes
+  // are created in the pool up front and the parser then works on 4-byte IDs,
+  // so wrapping content in emphasis/links never moves the (large) nodes.
+  template <typename T, typename... Args>
+  void Emit(std::pmr::vector<InlineNodeId>& ids, Args&&... args) {
+    InlineNodeId id;
+    if (!free_ids_.empty()) {
+      id = free_ids_.back();
+      free_ids_.pop_back();
+      Node(id).template emplace<T>(std::forward<Args>(args)...);
+    } else {
+      id = static_cast<InlineNodeId>(inline_pool_->size());
+      inline_pool_->emplace_back(std::in_place_type<T>,
+                                 std::forward<Args>(args)...);
     }
-    nodes.clear();
-    return ids;
+    ids.push_back(id);
+    if constexpr (requires(T& t) { t.children; }) {
+      SetDepth(id, ContainerDepth(std::get<T>(Node(id)).children));
+    } else {
+      SetDepth(id, 0);
+    }
   }
+
+  // Mark a node that is no longer referenced (e.g. the verbatim content of a
+  // math span, a consumed delimiter) and, recursively, its children as free
+  // so Emit()/AddToPool() reuse their slots instead of growing the pool.
+  void Release(InlineNodeId id) {
+    InlineNode& node = Node(id);
+    std::visit(
+        [this](auto& n) {
+          if constexpr (requires { n.children; }) {
+            for (InlineNodeId child : n.children) Release(child);
+          }
+        },
+        node);
+    node = Text();
+    free_ids_.push_back(id);
+  }
+
+  // Copy ids[begin, end) into a new child list.
+  static std::pmr::vector<InlineNodeId> Slice(
+      const std::pmr::vector<InlineNodeId>& ids, size_t begin, size_t end) {
+    return std::pmr::vector<InlineNodeId>(ids.begin() + begin,
+                                          ids.begin() + end);
+  }
+
+  // Scratch buffers reused across Parse() calls so each inline container does
+  // not pay for fresh allocations. ParseInlines() does not recurse, and link
+  // content is fully consumed before the next link can form, so one buffer of
+  // each kind suffices.
+  std::pmr::vector<InlineNodeId> result_scratch_;
+  std::pmr::vector<InlineNodeId> link_scratch_;
+  std::pmr::vector<InlineNodeId> autolink_scratch_;
+  std::pmr::vector<InlineNodeId> emphasis_scratch_;
+  // Pending `[` / `![` openers: the index of the opener in the delimiter
+  // stack and the depth of the deepest node emitted after it (maintained
+  // incrementally, so the nesting check does not rescan the result).
+  struct BracketEntry {
+    size_t delimiter_index;
+    uint16_t max_depth;
+  };
+  std::pmr::vector<BracketEntry> bracket_scratch_;
+  // Pool slots of released (unreferenced) nodes, reused before the pool grows.
+  std::pmr::vector<InlineNodeId> free_ids_;
+  std::pmr::string label_scratch_;
 
   struct DelimiterNode {
     size_t pos;       // Index in result vector
@@ -3259,6 +3535,8 @@ class InlineParser {
     bool can_close;
     bool active;
   };
+  std::pmr::vector<DelimiterNode> delimiter_scratch_;
+  std::pmr::vector<DelimiterNode> link_delimiter_scratch_;
 
   // `latexmath` extension: a `$` run can be a math span opener only when it is
   // not preceded by an alphanumeric character (i.e. it is at the start of the
@@ -3284,29 +3562,28 @@ class InlineParser {
            detail::IsUnicodePunctuation(after_cp);
   }
 
-  // Check if brackets are balanced in text between start and end (exclusive)
-  bool AreBracketsBalanced(size_t start, size_t end) {
-    int depth = 0;
-    for (size_t i = start; i < end && i < text_.size(); ++i) {
-      if (text_[i] == '\\' && i + 1 < end) {
-        ++i;  // Skip escaped character
-        continue;
-      }
-      if (text_[i] == '[') ++depth;
-      if (text_[i] == ']') --depth;
-      if (depth < 0) [[unlikely]]
-        return false;  // More closes than opens
-    }
-    return depth == 0;
-  }
-
   std::pmr::vector<InlineNodeId> ParseInlines() {
     // Use vector for cache locality - for typical document sizes the O(n)
     // shift cost is negligible compared to list's pointer-chasing overhead.
-    std::pmr::vector<InlineNode> result;
-    result.reserve(32);
+    std::pmr::vector<InlineNodeId>& result = result_scratch_;
+    result.clear();
 
-    std::pmr::vector<DelimiterNode> delimiter_stack;
+    std::pmr::vector<DelimiterNode>& delimiter_stack = delimiter_scratch_;
+    delimiter_stack.clear();
+
+    // Pending bracket openers (indices into delimiter_stack). The `[` openers
+    // among the first `link_floor` of them were deactivated by a link formed
+    // after them (links cannot contain links); `![` openers stay active.
+    std::pmr::vector<BracketEntry>& brackets = bracket_scratch_;
+    brackets.clear();
+    size_t link_floor = 0;
+    // Record a container node (link, image) just appended to `result` in the
+    // innermost pending bracket's content depth.
+    auto note_container = [&]() {
+      if (brackets.empty()) return;
+      uint16_t d = Depth(result.back());
+      if (d > brackets.back().max_depth) brackets.back().max_depth = d;
+    };
 
     // Track spans instead of accumulating text
     size_t text_start = 0;
@@ -3314,8 +3591,7 @@ class InlineParser {
 
     auto flush_text = [&]() {
       if (in_span && text_start < pos_) {
-        result.emplace_back(std::in_place_type<Text>,
-                            text_.substr(text_start, pos_ - text_start));
+        Emit<Text>(result, text_.substr(text_start, pos_ - text_start));
         in_span = false;
       }
     };
@@ -3328,8 +3604,7 @@ class InlineParser {
           --end;
         }
         if (end > text_start) {
-          result.emplace_back(std::in_place_type<Text>,
-                              text_.substr(text_start, end - text_start));
+          Emit<Text>(result, text_.substr(text_start, end - text_start));
         }
         in_span = false;
       }
@@ -3350,13 +3625,12 @@ class InlineParser {
         char next = text_[pos_ + 1];
         if (detail::IsAsciiPunctuation(next)) {
           flush_text();
-          result.emplace_back(std::in_place_type<Text>,
-                              text_.substr(pos_ + 1, 1));
+          Emit<Text>(result, text_.substr(pos_ + 1, 1));
           pos_ += 2;
           continue;
         } else if (next == '\n') {
           flush_text();
-          result.emplace_back(std::in_place_type<HardBreak>);
+          Emit<HardBreak>(result);
           pos_ += 2;
           continue;
         }
@@ -3367,8 +3641,7 @@ class InlineParser {
         flush_text();
         auto entity_result = TryParseEntity();
         if (entity_result) {
-          result.emplace_back(std::in_place_type<Text>,
-                              StoreString(std::move(*entity_result)));
+          Emit<Text>(result, StoreString(*entity_result));
           continue;
         }
         start_span();
@@ -3381,8 +3654,7 @@ class InlineParser {
         flush_text();
         auto code_span = TryParseCodeSpan();
         if (code_span) {
-          result.emplace_back(std::in_place_type<Code>,
-                              std::move(code_span->content));
+          Emit<Code>(result, std::move(code_span->content));
           continue;
         }
         // Code span didn't match - include backticks in current text span
@@ -3403,14 +3675,15 @@ class InlineParser {
         flush_text();
         auto autolink = TryParseAutolink();
         if (autolink) {
-          result.emplace_back(std::in_place_type<Link>, std::move(*autolink));
+          Emit<Link>(result, std::move(*autolink));
+          note_container();
           continue;
         }
 
         // Check for HTML tag
         auto html = TryParseHtmlInline();
         if (html) {
-          result.emplace_back(std::in_place_type<HtmlInline>, html->content);
+          Emit<HtmlInline>(result, html->content);
           continue;
         }
         // Neither autolink nor HTML - treat '<' as regular text
@@ -3447,8 +3720,7 @@ class InlineParser {
         flush_text();
 
         // Add the delimiter characters as text - view into input
-        result.emplace_back(std::in_place_type<Text>,
-                            text_.substr(pos_, run_length));
+        Emit<Text>(result, text_.substr(pos_, run_length));
 
         // Add delimiter to stack
         delimiter_stack.emplace_back(result.size() - 1, pos_, run_length, c,
@@ -3476,8 +3748,7 @@ class InlineParser {
         flush_text();
 
         // Add the tilde run as text - view into input
-        result.emplace_back(std::in_place_type<Text>,
-                            text_.substr(pos_, run_length));
+        Emit<Text>(result, text_.substr(pos_, run_length));
 
         if (run_length <= 2) {
           bool left_flanking = IsLeftFlanking(run_start, run_length);
@@ -3509,8 +3780,7 @@ class InlineParser {
         flush_text();
 
         // Add the dollar run as text - view into input
-        result.emplace_back(std::in_place_type<Text>,
-                            text_.substr(pos_, run_length));
+        Emit<Text>(result, text_.substr(pos_, run_length));
 
         if (run_length <= 2) {
           bool can_open = MathCanOpen(run_start);
@@ -3532,262 +3802,161 @@ class InlineParser {
         flush_text();
 
         size_t bracket_text_pos = pos_;  // Position in original text
-
-        if (is_image) {
-          result.emplace_back(std::in_place_type<Text>,
-                              text_.substr(pos_, 2));  // "!["
-          delimiter_stack.emplace_back(result.size() - 1, bracket_text_pos, 1,
-                                       '!', true, false, true);
-          pos_ += 2;
-        } else {
-          result.emplace_back(std::in_place_type<Text>,
-                              text_.substr(pos_, 1));  // "["
-          delimiter_stack.emplace_back(result.size() - 1, bracket_text_pos, 1,
-                                       '[', true, false, true);
-          pos_ += 1;
-        }
+        size_t len = is_image ? 2 : 1;
+        Emit<Text>(result, text_.substr(pos_, len));  // "![" or "["
+        delimiter_stack.emplace_back(result.size() - 1, bracket_text_pos, 1,
+                                     is_image ? '!' : '[', true, false, true);
+        brackets.push_back({delimiter_stack.size() - 1, 0});
+        pos_ += len;
         continue;
       }
 
-      // Check for link close
+      // Check for link close. As in cmark, only the most recent bracket
+      // opener is considered: when it is inactive or no link can be formed,
+      // it is dropped and the ']' is literal text.
       if (c == ']') {
         flush_text();
 
-        // Look for matching opener - try multiple if brackets unbalanced
-        auto opener = delimiter_stack.end();
-        for (auto it = delimiter_stack.rbegin(); it != delimiter_stack.rend();
-             ++it) {
-          if ((it->delimiter == '[' || it->delimiter == '!') && it->active) {
-            // Check if brackets are balanced between this opener and closer
-            size_t content_start =
-                it->text_pos + (it->delimiter == '!' ? 2 : 1);
-            if (AreBracketsBalanced(content_start, pos_)) {
-              opener = std::prev(it.base());
-              break;
-            }
-            // Unbalanced - skip this opener, try earlier ones
+        auto literal_bracket = [&]() {
+          Emit<Text>(result, text_.substr(pos_, 1));  // "]"
+          ++pos_;
+        };
+        // Pop the innermost bracket; its content now belongs to the next one.
+        auto pop_bracket = [&]() {
+          uint16_t d = brackets.back().max_depth;
+          brackets.pop_back();
+          if (link_floor > brackets.size()) link_floor = brackets.size();
+          if (!brackets.empty() && d > brackets.back().max_depth) {
+            brackets.back().max_depth = d;
           }
+        };
+
+        if (brackets.empty()) {
+          literal_bracket();
+          continue;
+        }
+        auto opener =
+            delimiter_stack.begin() +
+            static_cast<std::ptrdiff_t>(brackets.back().delimiter_index);
+        bool is_image = (opener->delimiter == '!');
+        bool active =
+            opener->active && (is_image || brackets.size() > link_floor);
+        // Bound the nesting of links and images (an image's alt text also
+        // embeds the alt text of the images nested in it).
+        if (brackets.back().max_depth >= detail::kMaxInlineNesting) {
+          active = false;
+        }
+        if (!active) {
+          pop_bracket();
+          literal_bracket();
+          continue;
         }
 
-        if (opener != delimiter_stack.end()) {
-          // Try to parse link destination
-          size_t saved_pos = pos_;
-          ++pos_;  // Skip ']'
+        size_t saved_pos = pos_;
+        ++pos_;  // Skip ']'
 
-          auto link_result = TryParseLinkTail();
-          if (link_result) {
-            // Build the link/image
-            bool is_image = (opener->delimiter == '!');
-
-            // Save original result size before extraction (for delimiter
-            // filtering)
-            size_t original_result_size = result.size();
-
-            // Extract inline content between opener and end
-            size_t opener_idx = opener->pos;
-            std::pmr::vector<InlineNode> link_content;
-            link_content.reserve(original_result_size - opener_idx - 1);
-            for (size_t i = opener_idx + 1; i < original_result_size; ++i) {
-              link_content.push_back(std::move(result[i]));
-            }
-            result.resize(opener_idx + 1);
-
-            // Extract delimiters that belong to link content and process
-            // emphasis
-            size_t content_offset = opener->pos + 1;
-            std::pmr::vector<DelimiterNode> link_delimiters;
-            for (auto it = opener + 1; it != delimiter_stack.end(); ++it) {
-              if (it->pos > opener->pos && it->pos < original_result_size) {
-                DelimiterNode d = *it;
-                d.pos -= content_offset;  // Adjust to link_content indices
-                link_delimiters.emplace_back(d);
-              }
-            }
-            ProcessEmphasis(link_content, link_delimiters);
-
-            // Sync active flags back to main delimiter_stack
-            for (auto& ld : link_delimiters) {
-              for (auto it = opener + 1; it != delimiter_stack.end(); ++it) {
-                if (it->pos == ld.pos + content_offset &&
-                    it->active != ld.active) {
-                  it->active = ld.active;
-                  break;
-                }
-              }
-            }
-
-            // Remove opener
-            result.resize(opener_idx);
-
-            if (is_image) {
-              Image img;
-              img.destination = std::move(link_result->first);
-              img.title = std::move(link_result->second);
-              img.alt_text = GetAltText(link_content);
-              result.push_back(std::move(img));
-            } else {
-              Link link;
-              link.destination = std::move(link_result->first);
-              link.title = std::move(link_result->second);
-              link.children = NodesToIds(link_content);
-              result.push_back(std::move(link));
-            }
-
-            // Deactivate openers - when a link (not image) is formed,
-            // all preceding [ openers are also deactivated (no nested links)
-            if (!is_image) {
-              for (auto& d : delimiter_stack) {
-                if (d.delimiter == '[') {
-                  d.active = false;
-                }
-              }
-            }
-            delimiter_stack.erase(opener, delimiter_stack.end());
-            continue;
-          }
-
-          // Try shortcut/collapsed reference link
-          // Check if TryParseLinkTail consumed a collapsed reference []
+        // Inline link `(dest "title")` or full reference `[label]`.
+        auto target = TryParseLinkTail();
+        if (!target) {
+          // Collapsed `[]` (consumed by TryParseLinkTail) or shortcut
+          // reference: look up the bracket text itself. When a full reference
+          // `[foo][bar]` failed because `bar` is undefined, there is no
+          // fallback to the shortcut `[foo]` (per the CommonMark spec).
           bool is_collapsed_ref =
               (pos_ == saved_pos + 3 && saved_pos + 2 < text_.size() &&
                text_[saved_pos + 1] == '[' && text_[saved_pos + 2] == ']');
-
-          // Check if there was a full reference [label] that failed lookup
-          // In that case, don't try shortcut reference - per CommonMark spec,
-          // if a full reference [foo][bar] fails because bar is undefined,
-          // we don't fall back to shortcut [foo]
           bool had_full_ref_attempt =
               (saved_pos + 1 < text_.size() && text_[saved_pos + 1] == '[' &&
                !is_collapsed_ref);
-          if (had_full_ref_attempt) {
-            // Full reference was attempted but failed - don't try shortcut
-            pos_ = saved_pos;
-            opener->active = false;
-            result.emplace_back(std::in_place_type<Text>,
-                                text_.substr(pos_, 1));  // "]"
-            ++pos_;
-            continue;
+          if (!had_full_ref_attempt) {
+            if (!is_collapsed_ref) pos_ = saved_pos + 1;
+            // Use the raw text (escapes preserved) as the label.
+            size_t label_start = opener->text_pos + (is_image ? 2 : 1);
+            size_t label_len = saved_pos - label_start;
+            if (label_len <= kMaxLinkLabelLength) {
+              target = LookupReference(text_.substr(label_start, label_len));
+            }
           }
-
-          // Only reset pos_ if not a collapsed reference - in that case
-          // TryParseLinkTail correctly consumed the [] but returned nullopt
-          if (!is_collapsed_ref) {
-            pos_ = saved_pos + 1;
-          }
-
-          // Look up the text inside brackets as a reference label
-          // IMPORTANT: Use raw text from text_ to preserve escapes for matching
-          // (Text nodes have already decoded escapes like \! to !)
-          size_t label_start =
-              opener->text_pos + (opener->delimiter == '!' ? 2 : 1);
-          size_t label_end = saved_pos;  // Position of ']'
-          std::string_view label_text =
-              text_.substr(label_start, label_end - label_start);
-
-          auto ref_result = LookupReference(label_text);
-          if (ref_result) {
-            bool is_image = (opener->delimiter == '!');
-
-            // Save original result size before extraction
-            size_t original_result_size = result.size();
-
-            // Extract inline content between opener and end
-            size_t opener_idx = opener->pos;
-            std::pmr::vector<InlineNode> link_content;
-            link_content.reserve(original_result_size - opener_idx - 1);
-            for (size_t i = opener_idx + 1; i < original_result_size; ++i) {
-              link_content.push_back(std::move(result[i]));
-            }
-            result.resize(opener_idx + 1);
-
-            // Extract delimiters that belong to link content and process
-            // emphasis
-            size_t content_offset = opener->pos + 1;
-            std::pmr::vector<DelimiterNode> link_delimiters;
-            for (auto it = opener + 1; it != delimiter_stack.end(); ++it) {
-              if (it->pos > opener->pos && it->pos < original_result_size) {
-                DelimiterNode d = *it;
-                d.pos -= content_offset;  // Adjust to link_content indices
-                link_delimiters.emplace_back(d);
-              }
-            }
-            ProcessEmphasis(link_content, link_delimiters);
-
-            // Sync active flags back to main delimiter_stack
-            for (auto& ld : link_delimiters) {
-              for (auto it = opener + 1; it != delimiter_stack.end(); ++it) {
-                if (it->pos == ld.pos + content_offset &&
-                    it->active != ld.active) {
-                  it->active = ld.active;
-                  break;
-                }
-              }
-            }
-
-            // Remove opener
-            result.resize(opener_idx);
-
-            if (is_image) {
-              Image img;
-              img.destination = std::move(ref_result->first);
-              img.title = std::move(ref_result->second);
-              img.alt_text = GetAltText(link_content);
-              result.push_back(std::move(img));
-            } else {
-              Link link;
-              link.destination = std::move(ref_result->first);
-              link.title = std::move(ref_result->second);
-              link.children = NodesToIds(link_content);
-              result.push_back(std::move(link));
-            }
-
-            // Deactivate openers - when a link (not image) is formed,
-            // all preceding [ openers are also deactivated (no nested links)
-            if (!is_image) {
-              for (auto& d : delimiter_stack) {
-                if (d.delimiter == '[') {
-                  d.active = false;
-                }
-              }
-            }
-            delimiter_stack.erase(opener, delimiter_stack.end());
-            continue;
-          }
-
+        }
+        if (!target) {
           pos_ = saved_pos;
-          // Deactivate this opener since it couldn't form a link
-          opener->active = false;
+          pop_bracket();
+          literal_bracket();
+          continue;
         }
 
-        result.emplace_back(std::in_place_type<Text>,
-                            text_.substr(pos_, 1));  // "]"
-        ++pos_;
+        // Build the link/image from the nodes after the opener.
+        size_t opener_idx = opener->pos;
+        size_t original_result_size = result.size();
+        std::pmr::vector<InlineNodeId>& link_content = link_scratch_;
+        link_content.assign(
+            result.begin() + static_cast<std::ptrdiff_t>(opener_idx) + 1,
+            result.end());
+        result.resize(opener_idx + 1);
+
+        // Resolve emphasis among the delimiters inside the link content.
+        size_t content_offset = opener_idx + 1;
+        std::pmr::vector<DelimiterNode>& link_delimiters =
+            link_delimiter_scratch_;
+        link_delimiters.clear();
+        for (auto it = opener + 1; it != delimiter_stack.end(); ++it) {
+          if (it->pos > opener_idx && it->pos < original_result_size) {
+            DelimiterNode d = *it;
+            d.pos -= content_offset;  // Adjust to link_content indices
+            link_delimiters.emplace_back(d);
+          }
+        }
+        ProcessEmphasis(link_content, link_delimiters);
+
+        // Remove the opener text node.
+        Release(result[opener_idx]);
+        result.resize(opener_idx);
+
+        if (is_image) {
+          Image img;
+          img.destination = std::move(target->first);
+          img.title = std::move(target->second);
+          AppendAltText(link_content, img.alt_text);
+          uint16_t depth = ContainerDepth(link_content);
+          for (InlineNodeId id : link_content) Release(id);
+          Emit<Image>(result, std::move(img));
+          SetDepth(result.back(), depth);
+        } else {
+          Link link;
+          link.destination = std::move(target->first);
+          link.title = std::move(target->second);
+          link.children = Slice(link_content, 0, link_content.size());
+          Emit<Link>(result, std::move(link));
+        }
+
+        // The delimiters inside the link were consumed with its content.
+        delimiter_stack.erase(opener, delimiter_stack.end());
+        brackets.pop_back();
+        if (!is_image) {
+          // No links inside links: deactivate every earlier `[` opener.
+          link_floor = brackets.size();
+        } else if (link_floor > brackets.size()) {
+          link_floor = brackets.size();
+        }
+        note_container();
         continue;
       }
 
-      // Check for hard break (two spaces at end of line)
-      if (c == ' ') {
+      // Line break: a hard break when the line ends in two or more spaces,
+      // otherwise a soft break. Those trailing spaces are always the tail of
+      // the current text span (every inline construct ends in a non-space
+      // character), so they are dropped by the trimmed flush either way.
+      if (c == '\n') {
         size_t space_count = 0;
-        while (pos_ + space_count < text_.size() &&
-               text_[pos_ + space_count] == ' ') {
+        while (space_count < pos_ && text_[pos_ - 1 - space_count] == ' ') {
           ++space_count;
         }
-        if (pos_ + space_count < text_.size() &&
-            text_[pos_ + space_count] == '\n') {
-          if (space_count >= 2) {
-            flush_text();
-            result.emplace_back(std::in_place_type<HardBreak>);
-            pos_ += space_count + 1;
-            continue;
-          }
-        }
-      }
-
-      // Check for soft break
-      if (c == '\n') {
-        // Trim trailing spaces from text span
         flush_text_trimmed();
-        result.emplace_back(std::in_place_type<SoftBreak>);
+        if (space_count >= 2) {
+          Emit<HardBreak>(result);
+        } else {
+          Emit<SoftBreak>(result);
+        }
         ++pos_;
         continue;
       }
@@ -3813,8 +3982,7 @@ class InlineParser {
       PostprocessAutolinks(result);
     }
 
-    // Convert local nodes to pool IDs
-    return NodesToIds(result);
+    return Slice(result, 0, result.size());
   }
 
   // Find the start position of the UTF-8 character before the given position
@@ -3875,16 +4043,6 @@ class InlineParser {
            detail::IsUnicodePunctuation(after_cp);
   }
 
-  std::pmr::vector<DelimiterNode>::iterator FindLinkOpener(
-      std::pmr::vector<DelimiterNode>& stack) {
-    for (auto it = stack.rbegin(); it != stack.rend(); ++it) {
-      if ((it->delimiter == '[' || it->delimiter == '!') && it->active) {
-        return std::prev(it.base());
-      }
-    }
-    return stack.end();
-  }
-
   Result<Code> TryParseCodeSpan() {
     size_t start = pos_;
     size_t backtick_count = 0;
@@ -3899,8 +4057,8 @@ class InlineParser {
         backtick_cache_.size() > backtick_count &&
         backtick_cache_[backtick_count].scanned) {
       size_t cached_pos = backtick_cache_[backtick_count].position;
-      if (cached_pos >= pos_) {
-        // Already know there's no matching closer at or after this position
+      if (cached_pos <= pos_) {
+        // A scan from an earlier position found no closer of this length
         pos_ = start;
         return {};
       }
@@ -3976,12 +4134,12 @@ class InlineParser {
 
     // Check for URI autolink: [a-zA-Z][a-zA-Z0-9+.-]{1,31}:
     // Manual parsing replaces std::regex for massive speedup
-    if (std::isalpha(static_cast<unsigned char>(content[0]))) {
+    if (detail::IsAlpha(static_cast<unsigned char>(content[0]))) {
       size_t i = 1;
       // Consume 1-31 chars of [a-zA-Z0-9+.-]
       while (i < content.size() && i - 1 < 32) {
         unsigned char c = static_cast<unsigned char>(content[i]);
-        if (std::isalnum(c) || c == '+' || c == '.' || c == '-') {
+        if (detail::IsAlnum(c) || c == '+' || c == '.' || c == '-') {
           ++i;
         } else {
           break;
@@ -4037,23 +4195,23 @@ class InlineParser {
         size_t d = at_pos + 1;
         bool valid_domain = true;
         if (d < content.size() &&
-            std::isalnum(static_cast<unsigned char>(content[d]))) {
+            detail::IsAlnum(static_cast<unsigned char>(content[d]))) {
           while (d < content.size()) {
             // Label start
             size_t label_start = d;
-            if (!std::isalnum(static_cast<unsigned char>(content[d]))) {
+            if (!detail::IsAlnum(static_cast<unsigned char>(content[d]))) {
               valid_domain = false;
               break;
             }
             ++d;
             while (d < content.size() &&
-                   (std::isalnum(static_cast<unsigned char>(content[d])) ||
+                   (detail::IsAlnum(static_cast<unsigned char>(content[d])) ||
                     content[d] == '-')) {
               ++d;
             }
             // Label end must be alphanumeric
             if (d > label_start + 1 &&
-                !std::isalnum(static_cast<unsigned char>(content[d - 1]))) {
+                !detail::IsAlnum(static_cast<unsigned char>(content[d - 1]))) {
               valid_domain = false;
               break;
             }
@@ -4066,7 +4224,7 @@ class InlineParser {
               ++d;
               // Next label must start with alnum
               if (d >= content.size() ||
-                  !std::isalnum(static_cast<unsigned char>(content[d]))) {
+                  !detail::IsAlnum(static_cast<unsigned char>(content[d]))) {
                 valid_domain = false;
                 break;
               }
@@ -4109,22 +4267,24 @@ class InlineParser {
       size_t num_end = num_start;
       if (is_hex) {
         while (num_end < text_.size() &&
-               std::isxdigit(static_cast<unsigned char>(text_[num_end]))) {
+               detail::IsXDigit(static_cast<unsigned char>(text_[num_end]))) {
           ++num_end;
         }
       } else {
         while (num_end < text_.size() &&
-               std::isdigit(static_cast<unsigned char>(text_[num_end]))) {
+               detail::IsDigit(static_cast<unsigned char>(text_[num_end]))) {
           ++num_end;
         }
       }
 
-      if (num_end > num_start && num_end < text_.size() &&
-          text_[num_end] == ';') {
-        std::string_view num_sv(text_.data() + num_start, num_end - num_start);
+      // CommonMark allows 1-7 decimal or 1-6 hexadecimal digits; invalid
+      // code points (out of range, surrogates, U+0000) become U+FFFD.
+      size_t digits = num_end - num_start;
+      if (digits > 0 && digits <= (is_hex ? 6u : 7u) &&
+          num_end < text_.size() && text_[num_end] == ';') {
+        std::string_view num_sv(text_.data() + num_start, digits);
         uint32_t code_point;
-        if (ParseUint(num_sv, code_point, is_hex ? 16 : 10) &&
-            code_point <= 0x10FFFF) {
+        if (ParseUint(num_sv, code_point, is_hex ? 16 : 10)) {
           pos_ = num_end + 1;
           return detail::CodePointToUtf8(code_point);
         }
@@ -4133,7 +4293,7 @@ class InlineParser {
       // Named entity
       size_t name_end = start;
       while (name_end < text_.size() &&
-             std::isalnum(static_cast<unsigned char>(text_[name_end]))) {
+             detail::IsAlnum(static_cast<unsigned char>(text_[name_end]))) {
         ++name_end;
       }
 
@@ -4167,7 +4327,7 @@ class InlineParser {
 
     // Check for valid tag name start
     if (end >= text_.size() ||
-        !std::isalpha(static_cast<unsigned char>(text_[end]))) {
+        !detail::IsAlpha(static_cast<unsigned char>(text_[end]))) {
       // Check for comment, CDATA, processing instruction, or declaration
       if (text_.substr(pos_).starts_with("<!--")) {
         // Per CommonMark spec: <!--> and <!---> are valid (immediately closed)
@@ -4186,7 +4346,7 @@ class InlineParser {
             return HtmlInline(text_.substr(start, pos_ - start));
           }
           // Normal comment: find -->
-          end = text_.find("-->", pos_ + 4);
+          end = FindCached("-->", pos_ + 4, comment_miss_);
           if (end != std::string_view::npos) {
             pos_ = end + 3;
             return HtmlInline(text_.substr(start, pos_ - start));
@@ -4196,14 +4356,14 @@ class InlineParser {
         }
       }
       if (text_.substr(pos_).starts_with("<![CDATA[")) {
-        end = text_.find("]]>", pos_ + 9);
+        end = FindCached("]]>", pos_ + 9, cdata_miss_);
         if (end != std::string_view::npos) {
           pos_ = end + 3;
           return HtmlInline(text_.substr(start, pos_ - start));
         }
       }
       if (text_.substr(pos_).starts_with("<?")) {
-        end = text_.find("?>", pos_ + 2);
+        end = FindCached("?>", pos_ + 2, pi_miss_);
         if (end != std::string_view::npos) {
           pos_ = end + 2;
           return HtmlInline(text_.substr(start, pos_ - start));
@@ -4211,7 +4371,7 @@ class InlineParser {
       }
       if (text_.substr(pos_).starts_with("<!") && end + 1 < text_.size() &&
           std::isupper(static_cast<unsigned char>(text_[end + 1]))) {
-        end = text_.find('>', pos_ + 2);
+        end = FindCached(">", pos_ + 2, decl_miss_);
         if (end != std::string_view::npos) {
           pos_ = end + 1;
           return HtmlInline(text_.substr(start, pos_ - start));
@@ -4222,7 +4382,7 @@ class InlineParser {
 
     // Parse tag name
     while (end < text_.size() &&
-           (std::isalnum(static_cast<unsigned char>(text_[end])) ||
+           (detail::IsAlnum(static_cast<unsigned char>(text_[end])) ||
             text_[end] == '-')) {
       ++end;
     }
@@ -4254,14 +4414,14 @@ class InlineParser {
         seen_whitespace = true;
         ++end;
       } else if (seen_whitespace &&
-                 (std::isalpha(static_cast<unsigned char>(c)) || c == '_' ||
+                 (detail::IsAlpha(static_cast<unsigned char>(c)) || c == '_' ||
                   c == ':')) {
         // Start of attribute name (must be preceded by whitespace)
         seen_whitespace = false;  // Reset - need whitespace before next attr
         ++end;
         while (end < text_.size()) {
           char ac = text_[end];
-          if (std::isalnum(static_cast<unsigned char>(ac)) || ac == '_' ||
+          if (detail::IsAlnum(static_cast<unsigned char>(ac)) || ac == '_' ||
               ac == ':' || ac == '.' || ac == '-') {
             ++end;
           } else {
@@ -4286,12 +4446,10 @@ class InlineParser {
           if (end >= text_.size()) [[unlikely]]
             return {};
           if (text_[end] == '"' || text_[end] == '\'') {
-            char quote = text_[end];
-            ++end;
-            while (end < text_.size() && text_[end] != quote) {
-              ++end;
-            }
-            if (end >= text_.size()) [[unlikely]]
+            bool double_quoted = text_[end] == '"';
+            end = FindCached(double_quoted ? "\"" : "'", end + 1,
+                             double_quoted ? dquote_miss_ : squote_miss_);
+            if (end == std::string_view::npos) [[unlikely]]
               return {};
             ++end;
           } else {
@@ -4330,11 +4488,11 @@ class InlineParser {
 
       // Parse destination
       if (pos_ < text_.size() && text_[pos_] == '<') {
-        // Angle-bracketed destination
+        // Angle-bracketed destination (no line endings or unescaped '<')
         ++pos_;
         size_t dest_start = pos_;
         while (pos_ < text_.size() && text_[pos_] != '>' &&
-               text_[pos_] != '\n') {
+               text_[pos_] != '\n' && text_[pos_] != '<') {
           if (text_[pos_] == '\\' && pos_ + 1 < text_.size()) {
             ++pos_;
           }
@@ -4346,14 +4504,16 @@ class InlineParser {
             text_.substr(dest_start, pos_ - dest_start));
         ++pos_;
       } else if (pos_ < text_.size() && text_[pos_] != ')') {
-        // Regular destination - only ASCII space/tab/newline are separators
+        // Regular destination - only ASCII space/tab/newline are separators.
+        // Parenthesis nesting is limited (as the spec allows, and cmark does)
+        // so a run of unbalanced '(' cannot make every ']' rescan the text.
         size_t dest_start = pos_;
         int paren_depth = 0;
         while (pos_ < text_.size() && text_[pos_] != ' ' &&
                text_[pos_] != '\t' && text_[pos_] != '\n' &&
                text_[pos_] != '\r') {
           if (text_[pos_] == '(') {
-            ++paren_depth;
+            if (++paren_depth > kMaxLinkDestinationParens) return {};
           } else if (text_[pos_] == ')') {
             if (paren_depth == 0) break;
             --paren_depth;
@@ -4371,10 +4531,13 @@ class InlineParser {
       // Parse optional title
       if (pos_ < text_.size() &&
           (text_[pos_] == '"' || text_[pos_] == '\'' || text_[pos_] == '(')) {
-        char close_char = text_[pos_] == '(' ? ')' : text_[pos_];
+        char open_char = text_[pos_];
+        char close_char = open_char == '(' ? ')' : open_char;
         ++pos_;
         size_t title_start = pos_;
         while (pos_ < text_.size() && text_[pos_] != close_char) {
+          // A parenthesized title cannot contain an unescaped '('.
+          if (open_char == '(' && text_[pos_] == '(') return {};
           if (text_[pos_] == '\\' && pos_ + 1 < text_.size()) {
             ++pos_;
           }
@@ -4397,18 +4560,17 @@ class InlineParser {
 
     // Reference link: [label] or []
     if (text_[pos_] == '[') {
+      // A label ends at the first unescaped ']', cannot contain an unescaped
+      // '[' and holds at most kMaxLinkLabelLength characters.
       ++pos_;
       size_t label_start = pos_;
-      int bracket_depth = 1;
-      while (pos_ < text_.size() && bracket_depth > 0) {
-        if (text_[pos_] == '[') {
-          ++bracket_depth;
-        } else if (text_[pos_] == ']') {
-          --bracket_depth;
-        } else if (text_[pos_] == '\\' && pos_ + 1 < text_.size()) {
+      while (pos_ < text_.size() && text_[pos_] != ']') {
+        if (text_[pos_] == '[') return {};
+        if (text_[pos_] == '\\' && pos_ + 1 < text_.size()) {
           ++pos_;
         }
-        if (bracket_depth > 0) ++pos_;
+        ++pos_;
+        if (pos_ - label_start > kMaxLinkLabelLength) return {};
       }
 
       if (pos_ >= text_.size()) [[unlikely]]
@@ -4430,14 +4592,15 @@ class InlineParser {
 
   Result<std::pair<std::pmr::string, std::pmr::string>> LookupReference(
       std::string_view label) {
-    if (!link_references_) [[unlikely]]
-      return {};
+    if (!link_references_ || link_references_->empty()) return {};
 
-    std::pmr::string normalized = detail::NormalizeLinkLabel(label);
-    auto it =
-        std::lower_bound(link_references_->begin(), link_references_->end(),
-                         normalized, LinkRefComparator{});
-    if (it != link_references_->end() && !(normalized < it->first)) {
+    std::string_view normalized = label;
+    if (!detail::IsNormalizedLinkLabel(label)) {
+      detail::NormalizeLinkLabelInto(label, label_scratch_);
+      normalized = label_scratch_;
+    }
+    auto it = link_references_->find(normalized);
+    if (it != link_references_->end()) {
       return Result<std::pair<std::pmr::string, std::pmr::string>>::emplace(
           it->second);
     }
@@ -4452,105 +4615,105 @@ class InlineParser {
     }
   }
 
-  // Get alt text from a vector of InlineNodeIds (nodes already in pool)
-  std::pmr::string GetAltTextFromIds(
-      const std::pmr::vector<InlineNodeId>& node_ids) {
-    std::pmr::string result;
+  // Append the plain-text rendering of `node_ids` (an image's alt text) to
+  // `out`. Recursion depth is bounded by kMaxInlineNesting.
+  void AppendAltText(const std::pmr::vector<InlineNodeId>& node_ids,
+                     std::pmr::string& out) {
     for (InlineNodeId id : node_ids) {
-      const auto& node = (*inline_pool_)[id];
       std::visit(
-          [&result, this](auto&& arg) {
+          [&out, this](const auto& arg) {
             using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_same_v<T, Text>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, Code>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, SoftBreak>) {
-              result += ' ';
-            } else if constexpr (std::is_same_v<T, HardBreak>) {
-              result += ' ';
-            } else if constexpr (std::is_same_v<T, Emphasis>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Strong>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Strikethrough>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Math>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, Link>) {
-              result += GetAltTextFromIds(arg.children);
+            if constexpr (std::is_same_v<T, Text> || std::is_same_v<T, Code> ||
+                          std::is_same_v<T, Math>) {
+              out += arg.content;
+            } else if constexpr (std::is_same_v<T, SoftBreak> ||
+                                 std::is_same_v<T, HardBreak>) {
+              out += ' ';
+            } else if constexpr (std::is_same_v<T, Emphasis> ||
+                                 std::is_same_v<T, Strong> ||
+                                 std::is_same_v<T, Strikethrough> ||
+                                 std::is_same_v<T, Link>) {
+              AppendAltText(arg.children, out);
             } else if constexpr (std::is_same_v<T, Image>) {
-              result += arg.alt_text;
+              out += arg.alt_text;
             }
           },
-          node);
+          (*inline_pool_)[id]);
     }
-    return result;
   }
 
-  // Get alt text from a vector of local InlineNodes (not yet in pool)
-  template <typename Container>
-  std::pmr::string GetAltText(const Container& nodes) {
-    std::pmr::string result;
-    for (const auto& node : nodes) {
-      std::visit(
-          [&result, this](auto&& arg) {
-            using T = std::decay_t<decltype(arg)>;
-            if constexpr (std::is_same_v<T, Text>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, Code>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, SoftBreak>) {
-              result += ' ';
-            } else if constexpr (std::is_same_v<T, HardBreak>) {
-              result += ' ';
-            } else if constexpr (std::is_same_v<T, Emphasis>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Strong>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Strikethrough>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Math>) {
-              result += arg.content;
-            } else if constexpr (std::is_same_v<T, Link>) {
-              result += GetAltTextFromIds(arg.children);
-            } else if constexpr (std::is_same_v<T, Image>) {
-              result += arg.alt_text;
-            }
-          },
-          node);
-    }
-    return result;
-  }
-
-  void ProcessEmphasis(std::pmr::vector<InlineNode>& nodes,
+  // Resolve emphasis, strong emphasis, strikethrough and math spans among
+  // `delimiters` (in text order; `pos` indexes `nodes`), replacing `nodes`
+  // with the resulting node list.
+  //
+  // Mirrors cmark's process_emphasis in a single left-to-right pass: nodes
+  // are copied to an output list as the delimiters are visited, and a match
+  // collapses the output tail (the content after its opener) into a new
+  // container node. Potential openers wait on a stack; a match removes the
+  // openers between the opener and the closer (they can no longer match),
+  // and `openers_bottom` remembers, per closer kind, below which point a
+  // search already failed. Together these keep the pass linear in the
+  // number of nodes and delimiters.
+  void ProcessEmphasis(std::pmr::vector<InlineNodeId>& nodes,
                        std::pmr::vector<DelimiterNode>& delimiters) {
     if (delimiters.empty()) [[unlikely]]
       return;
 
-    // `latexmath` extension: stack of pending `$` delimiter indices (mirrors
-    // md4c's DOLLAR_OPENERS). A closer matches only the TOP opener and the run
-    // lengths must be equal; on a match all pending openers are discarded
-    // because math spans do not nest.
-    std::pmr::vector<size_t> math_openers;
+    std::pmr::vector<InlineNodeId>& out = emphasis_scratch_;
+    out.clear();
+    out.reserve(nodes.size());
 
-    size_t closer_idx = 0;
-    while (closer_idx < delimiters.size()) {
-      auto& closer = delimiters[closer_idx];
+    // Pending openers: a delimiter index and the out position of its text.
+    struct Opener {
+      size_t index;
+      size_t out_pos;
+    };
+    std::pmr::vector<Opener> openers;
+    // `latexmath` extension: indices into `openers` of the pending `$`
+    // openers (mirrors md4c's DOLLAR_OPENERS). A closer matches only the TOP
+    // one, with an equal run length; math spans do not nest.
+    std::pmr::vector<size_t> math_openers;
+    auto truncate_openers = [&](size_t n) {
+      openers.resize(n);
+      while (!math_openers.empty() && math_openers.back() >= n) {
+        math_openers.pop_back();
+      }
+    };
+
+    // openers_bottom: per closer kind (delimiter character, whether the
+    // closer can open, run length mod 3), the delimiter index below which no
+    // opener was found.
+    size_t openers_bottom[3][2][3] = {};
+    auto kind_of = [](char c) { return c == '*' ? 0 : (c == '_' ? 1 : 2); };
+
+    // Collapse out[opener_pos + 1, closer_pos) into `node`, keeping the
+    // opener and closer text nodes; returns the closer's new out position.
+    auto collapse = [&](size_t opener_pos, size_t closer_pos,
+                        InlineNode&& node) {
+      InlineNodeId closer_id = out[closer_pos];
+      InlineNodeId id = AddToPool(std::move(node));
+      out.resize(opener_pos + 1);
+      out.push_back(id);
+      out.push_back(closer_id);
+      return out.size() - 1;
+    };
+
+    size_t in = 0;
+    for (size_t di = 0; di < delimiters.size(); ++di) {
+      DelimiterNode& closer = delimiters[di];
+      if (closer.pos < in || closer.pos >= nodes.size()) [[unlikely]]
+        continue;
+      while (in <= closer.pos) out.push_back(nodes[in++]);
+      size_t closer_pos = out.size() - 1;
+      if (!closer.active) continue;
 
       if (closer.delimiter == '$') {
-        // Drop openers deactivated by an inner span resolution (no crossing
-        // ranges, mirroring md4c's md_pop_openers) so an older opener can
-        // still match.
-        while (!math_openers.empty() &&
-               !delimiters[math_openers.back()].active) {
-          math_openers.pop_back();
-        }
-        if (closer.can_close && closer.active && !math_openers.empty() &&
-            delimiters[math_openers.back()].count == closer.count) {
-          auto& opener = delimiters[math_openers.back()];
-          size_t opener_pos = opener.pos;
-          size_t closer_pos = closer.pos;
+        if (closer.can_close && !math_openers.empty() &&
+            delimiters[openers[math_openers.back()].index].count ==
+                closer.count) {
+          size_t stack_idx = math_openers.back();
+          Opener o = openers[stack_idx];
+          DelimiterNode& opener = delimiters[o.index];
 
           // The math content is verbatim: take the raw text between the two
           // runs (whatever inlines were parsed in it are discarded) and turn
@@ -4564,212 +4727,149 @@ class InlineParser {
             content.push_back(text_[i] == '\n' ? ' ' : text_[i]);
           }
 
-          Math math(std::move(content), closer.count == 2);
-
-          nodes[opener_pos] = Text("");
+          Node(out[o.out_pos]) = Text("");
           opener.active = false;
-          nodes[closer_pos] = Text("");
+          Node(out[closer_pos]) = Text("");
           closer.active = false;
+          for (size_t i = o.out_pos + 1; i < closer_pos; ++i) Release(out[i]);
+          collapse(o.out_pos, closer_pos,
+                   Math(std::move(content), closer.count == 2));
 
-          // Remove the content nodes and insert the math node after the
-          // (now empty) opener text node.
-          size_t content_count = closer_pos - opener_pos - 1;
-          nodes.erase(nodes.begin() + opener_pos + 1,
-                      nodes.begin() + closer_pos);
-          nodes.insert(nodes.begin() + opener_pos + 1, std::move(math));
-
-          // Adjust positions in the delimiter stack (same as strikethrough).
-          int64_t net_shift = 1 - static_cast<int64_t>(content_count);
-          for (auto& d : delimiters) {
-            if (d.pos > opener_pos && d.pos < closer_pos) {
-              d.active = false;
-            } else if (d.pos >= closer_pos) {
-              d.pos = static_cast<size_t>(static_cast<int64_t>(d.pos) +
-                                          net_shift);
-            }
-          }
-
-          // Discard all pending openers: math spans do not nest.
-          for (size_t oi : math_openers) {
-            delimiters[oi].active = false;
-          }
+          // The opener and everything above it are consumed; discard all
+          // other pending math openers too, as math spans do not nest.
+          truncate_openers(stack_idx);
+          for (size_t mi : math_openers)
+            delimiters[openers[mi].index].active = false;
           math_openers.clear();
-        } else if (closer.can_open && closer.active) {
-          math_openers.push_back(closer_idx);
+        } else if (closer.can_open) {
+          openers.push_back({di, closer_pos});
+          math_openers.push_back(openers.size() - 1);
         }
-        ++closer_idx;
         continue;
       }
 
-      if (!closer.can_close || !closer.active ||
-          (closer.delimiter != '*' && closer.delimiter != '_' &&
-           closer.delimiter != '~')) {
-        ++closer_idx;
+      if (closer.delimiter != '*' && closer.delimiter != '_' &&
+          closer.delimiter != '~') {
         continue;
       }
 
-      // Find opener
-      bool found_opener = false;
-      for (size_t opener_idx = closer_idx; opener_idx > 0; --opener_idx) {
-        auto& opener = delimiters[opener_idx - 1];
-
-        if (!opener.can_open || !opener.active ||
-            opener.delimiter != closer.delimiter) {
-          continue;
-        }
-
-        // Check if sum of counts is multiple of 3 (special rule)
-        if ((opener.can_open && opener.can_close) ||
-            (closer.can_open && closer.can_close)) {
-          if ((opener.count + closer.count) % 3 == 0 && opener.count % 3 != 0 &&
-              closer.count % 3 != 0) {
-            continue;
-          }
-        }
-
-        found_opener = true;
-        size_t opener_pos = opener.pos;
-        size_t closer_pos = closer.pos;
-
-        // GFM `strikethrough`: the opener and closer must have the SAME number
-        // of tildes, and both whole runs are consumed. When the counts differ,
-        // cmark-gfm still drops the two delimiters (and any between them) from
-        // the stack without producing a node; the tildes remain in the text and
-        // later closers can no longer match against them.
-        if (closer.delimiter == '~') {
-          if (opener.count == closer.count) {
-            // Collect content nodes between opener and closer
-            std::pmr::vector<InlineNode> content;
-            size_t content_size = closer_pos - opener_pos - 1;
-            content.reserve(content_size);
-            for (size_t i = opener_pos + 1; i < closer_pos; ++i) {
-              content.push_back(std::move(nodes[i]));
-            }
-
-            Strikethrough strike;
-            strike.children = NodesToIds(content);
-
-            // Consume both whole runs (the tildes are replaced by the node).
-            nodes[opener_pos] = Text("");
-            opener.active = false;
-            nodes[closer_pos] = Text("");
-            closer.active = false;
-
-            // Remove the content nodes and insert the strikethrough node after
-            // the (now empty) opener text node.
-            size_t content_count = closer_pos - opener_pos - 1;
-            nodes.erase(nodes.begin() + opener_pos + 1,
-                        nodes.begin() + closer_pos);
-            nodes.insert(nodes.begin() + opener_pos + 1, std::move(strike));
-
-            // Adjust positions in the delimiter stack (same as emphasis).
-            int64_t net_shift = 1 - static_cast<int64_t>(content_count);
-            for (auto& d : delimiters) {
-              if (d.pos > opener_pos && d.pos < closer_pos) {
-                d.active = false;
-              } else if (d.pos >= closer_pos) {
-                d.pos = static_cast<size_t>(static_cast<int64_t>(d.pos) +
-                                            net_shift);
-              }
-            }
-          } else {
-            // Mismatch: drop the delimiters without creating a node.
-            opener.active = false;
-            closer.active = false;
-            for (auto& d : delimiters) {
-              if (d.pos > opener_pos && d.pos < closer_pos) {
-                d.active = false;
-              }
+      while (closer.can_close && closer.active) {
+        size_t& bottom =
+            openers_bottom[kind_of(closer.delimiter)][closer.can_open ? 1 : 0]
+                          [closer.count % 3];
+        // Find the nearest eligible opener.
+        size_t k = openers.size();
+        bool found = false;
+        while (k > 0) {
+          const Opener& o = openers[k - 1];
+          if (o.index < bottom) break;
+          const DelimiterNode& opener = delimiters[o.index];
+          if (opener.active && opener.delimiter == closer.delimiter) {
+            // Rule of 3: when either run can both open and close, the sum
+            // of the run lengths must not be a multiple of 3 unless both
+            // lengths are.
+            bool rule_of_3 = ((opener.can_open && opener.can_close) ||
+                              (closer.can_open && closer.can_close)) &&
+                             (opener.count + closer.count) % 3 == 0 &&
+                             opener.count % 3 != 0 && closer.count % 3 != 0;
+            if (!rule_of_3) {
+              found = true;
+              break;
             }
           }
+          --k;
+        }
+        // Past kMaxInlineNesting the delimiters stay literal text.
+        if (found && MaxDepth(out, openers[k - 1].out_pos + 1, closer_pos) >=
+                         detail::kMaxInlineNesting) {
+          found = false;
+        }
+        if (!found) {
+          bottom = di;
           break;
         }
 
-        // Determine emphasis type
-        bool is_strong = opener.count >= 2 && closer.count >= 2;
-        size_t delim_count = is_strong ? 2 : 1;
+        size_t stack_idx = k - 1;
+        Opener o = openers[stack_idx];
+        DelimiterNode& opener = delimiters[o.index];
+        std::pmr::vector<InlineNodeId> children(
+            out.begin() + static_cast<std::ptrdiff_t>(o.out_pos) + 1,
+            out.begin() + static_cast<std::ptrdiff_t>(closer_pos));
 
-        // Collect content nodes between opener and closer
-        std::pmr::vector<InlineNode> content;
-        size_t content_size = closer_pos - opener_pos - 1;
-        content.reserve(content_size);
-        for (size_t i = opener_pos + 1; i < closer_pos; ++i) {
-          content.push_back(std::move(nodes[i]));
+        // GFM `strikethrough`: the opener and closer must have the SAME
+        // number of tildes, and both whole runs are consumed. When the
+        // counts differ, cmark-gfm still drops the two delimiters (and any
+        // between them) without producing a node; the tildes remain in the
+        // text and later closers can no longer match against them.
+        if (closer.delimiter == '~') {
+          if (opener.count == closer.count) {
+            Node(out[o.out_pos]) = Text("");
+            Node(out[closer_pos]) = Text("");
+            Strikethrough strike;
+            strike.children = std::move(children);
+            closer_pos = collapse(o.out_pos, closer_pos, std::move(strike));
+          }
+          opener.active = false;
+          closer.active = false;
+          truncate_openers(stack_idx);
+          break;
         }
 
-        // Create emphasis node - convert children to pool IDs
+        bool is_strong = opener.count >= 2 && closer.count >= 2;
+        size_t delim_count = is_strong ? 2 : 1;
         InlineNode emph_node;
         if (is_strong) {
           Strong strong;
-          strong.children = NodesToIds(content);
+          strong.children = std::move(children);
           emph_node = std::move(strong);
         } else {
           Emphasis em;
-          em.children = NodesToIds(content);
+          em.children = std::move(children);
           emph_node = std::move(em);
         }
 
-        // Update opener text - delimiters consumed from the END of opener run
+        // Delimiters are consumed from the END of the opener run and the
+        // BEGINNING of the closer run.
         if (opener.count > delim_count) {
-          auto& opener_content = std::get<Text>(nodes[opener_pos]).content;
+          auto& opener_content = std::get<Text>(Node(out[o.out_pos])).content;
           opener_content = opener_content.substr(0, opener.count - delim_count);
           opener.count -= delim_count;
         } else {
-          nodes[opener_pos] = Text("");
+          Node(out[o.out_pos]) = Text("");
           opener.active = false;
         }
-
-        // Update closer text - delimiters consumed from the BEGINNING of closer
         if (closer.count > delim_count) {
-          auto& closer_content = std::get<Text>(nodes[closer_pos]).content;
+          auto& closer_content = std::get<Text>(Node(out[closer_pos])).content;
           closer_content = closer_content.substr(delim_count);
           closer.count -= delim_count;
         } else {
-          nodes[closer_pos] = Text("");
+          Node(out[closer_pos]) = Text("");
           closer.active = false;
         }
 
-        // Remove the content nodes (opener/closer text nodes stay in place)
-        // and insert the emphasis node after the opener.
-        size_t content_count = closer_pos - opener_pos - 1;
-        nodes.erase(nodes.begin() + opener_pos + 1, nodes.begin() + closer_pos);
-        nodes.insert(nodes.begin() + opener_pos + 1, std::move(emph_node));
-
-        // Adjust positions in delimiter stack:
-        // - delimiters inside (opener_pos, closer_pos) are now wrapped
-        // - delimiters at/after closer_pos shift by 1 - content_count
-        //   (one emphasis node added, content_count nodes removed)
-        int64_t net_shift = 1 - static_cast<int64_t>(content_count);
-        for (auto& d : delimiters) {
-          if (d.pos > opener_pos && d.pos < closer_pos) {
-            d.active = false;
-          } else if (d.pos >= closer_pos) {
-            d.pos =
-                static_cast<size_t>(static_cast<int64_t>(d.pos) + net_shift);
-          }
-        }
-
-        break;
+        closer_pos = collapse(o.out_pos, closer_pos, std::move(emph_node));
+        // Openers between the two runs can no longer match; neither can an
+        // exhausted opener.
+        truncate_openers(opener.active ? stack_idx + 1 : stack_idx);
       }
 
-      if (!found_opener) {
-        ++closer_idx;
+      if (closer.active && closer.can_open) {
+        openers.push_back({di, closer_pos});
       }
     }
+    while (in < nodes.size()) out.push_back(nodes[in++]);
 
-    // Remove empty text nodes in-place (compact)
-    size_t write = 0;
-    for (size_t read = 0; read < nodes.size(); ++read) {
-      if (std::holds_alternative<Text>(nodes[read]) &&
-          std::get<Text>(nodes[read]).content.empty()) {
+    // Drop the text nodes of fully consumed delimiter runs.
+    nodes.clear();
+    for (InlineNodeId id : out) {
+      const InlineNode& node = Node(id);
+      if (std::holds_alternative<Text>(node) &&
+          std::get<Text>(node).content.empty()) {
+        Release(id);
         continue;
       }
-      if (write != read) {
-        nodes[write] = std::move(nodes[read]);
-      }
-      ++write;
+      nodes.push_back(id);
     }
-    nodes.resize(write);
   }
 
   // ===========================================================================
@@ -4807,7 +4907,7 @@ class InlineParser {
 
   // A character allowed in the local part of an email address.
   static bool IsEmailLocalPartChar(char c) {
-    return std::isalnum(static_cast<unsigned char>(c)) || c == '.' ||
+    return detail::IsAlnum(static_cast<unsigned char>(c)) || c == '.' ||
            c == '-' || c == '_' || c == '+';
   }
 
@@ -4818,7 +4918,7 @@ class InlineParser {
       size_t n = std::char_traits<char>::length(scheme);
       if (pos + n > text.size()) return false;
       for (size_t i = 0; i < n; ++i) {
-        if (std::tolower(static_cast<unsigned char>(text[pos + i])) !=
+        if (detail::CaseFold(static_cast<unsigned char>(text[pos + i])) !=
             scheme[i]) {
           return false;
         }
@@ -4839,6 +4939,9 @@ class InlineParser {
                             bool allow_short) {
     size_t size = data.size() - start;
     if (size < 1) return 0;
+    // The first character must be a valid host character too (e.g. not the
+    // quote in `http://"x` or the space in `http:// x`).
+    if (!IsValidHostChar(data[start])) return 0;
     int np = 0;
     int uscore1 = 0;
     int uscore2 = 0;
@@ -4911,7 +5014,7 @@ class InlineParser {
         case ';': {
           size_t rel_end = link_end - base;
           size_t new_end = (rel_end >= 2) ? rel_end - 2 : 0;
-          while (new_end > 0 && std::isalpha(static_cast<unsigned char>(
+          while (new_end > 0 && detail::IsAlpha(static_cast<unsigned char>(
                                     text[base + new_end]))) {
             --new_end;
           }
@@ -4959,7 +5062,7 @@ class InlineParser {
   size_t TryMatchUrl(std::string_view text, size_t pos) const {
     // The scheme must not be preceded by an alphanumeric, otherwise it is part
     // of a longer word (e.g. `xhttp://`).
-    if (pos > 0 && std::isalnum(static_cast<unsigned char>(text[pos - 1]))) {
+    if (pos > 0 && detail::IsAlnum(static_cast<unsigned char>(text[pos - 1]))) {
       return 0;
     }
     size_t scheme_len = MatchScheme(text, pos);
@@ -4993,12 +5096,12 @@ class InlineParser {
     int np = 0;
     while (d < text.size()) {
       unsigned char c = static_cast<unsigned char>(text[d]);
-      if (std::isalnum(c)) {
+      if (detail::IsAlnum(c)) {
         ++d;
       } else if (c == '@') {
         return 0;  // a second '@' cannot appear in an email address
       } else if (c == '.' && d + 1 < text.size() &&
-                 std::isalnum(static_cast<unsigned char>(text[d + 1]))) {
+                 detail::IsAlnum(static_cast<unsigned char>(text[d + 1]))) {
         ++np;
         ++d;
       } else if (c == '-' || c == '_') {
@@ -5010,7 +5113,7 @@ class InlineParser {
     size_t domain_len = d - (at + 1);
     if (domain_len < 2 || np == 0) return 0;
     char last = text[d - 1];
-    if (!(std::isalpha(static_cast<unsigned char>(last)) || last == '.')) {
+    if (!(detail::IsAlpha(static_cast<unsigned char>(last)) || last == '.')) {
       return 0;
     }
     size_t link_end = AutolinkDelim(text, at, d);
@@ -5036,7 +5139,7 @@ class InlineParser {
         return len;
       }
     }
-    if (std::isalnum(c)) {
+    if (detail::IsAlnum(c)) {
       // An email autolink can only begin at the start of a local-part run.
       bool run_start = (pos == 0) || !IsEmailLocalPartChar(text[pos - 1]);
       if (run_start) {
@@ -5053,26 +5156,31 @@ class InlineParser {
 
   std::pmr::string MakeAutolinkDestination(std::string_view matched,
                                            AutolinkKind kind) const {
+    // Percent-encode like every other link destination.
     if (kind == AutolinkKind::Www) {
-      return std::pmr::string("http://") + std::pmr::string(matched);
+      return detail::EncodeUrl(std::pmr::string("http://") +
+                               std::pmr::string(matched));
     }
     if (kind == AutolinkKind::Email) {
-      return std::pmr::string("mailto:") + std::pmr::string(matched);
+      return detail::EncodeUrl(std::pmr::string("mailto:") +
+                               std::pmr::string(matched));
     }
-    return std::pmr::string(matched);
+    return detail::EncodeUrl(matched);
   }
 
   // Splits a single text span into Text/Link nodes, replacing any extended
   // autolinks with Link nodes (the matched text becomes the link label and the
   // scheme-appropriate URI becomes the destination).
-  void SplitAutolinks(std::string_view text,
-                      std::pmr::vector<InlineNode>& out) {
+  // `id` is a Text node; when it contains no autolink it is kept as is.
+  void SplitAutolinks(InlineNodeId id, std::pmr::vector<InlineNodeId>& out) {
+    std::string_view text = std::get<Text>(Node(id)).content;
+    if (text.empty()) return;
     size_t text_start = 0;
     size_t pos = 0;
+    bool matched_any = false;
     auto flush = [&](size_t upto) {
       if (text_start < upto) {
-        out.emplace_back(std::in_place_type<Text>,
-                         text.substr(text_start, upto - text_start));
+        Emit<Text>(out, text.substr(text_start, upto - text_start));
       }
       text_start = upto;
     };
@@ -5085,17 +5193,23 @@ class InlineParser {
         Link link;
         link.destination = MakeAutolinkDestination(matched, kind);
         link.children.push_back(AddToPool(Text(matched)));
-        out.push_back(std::move(link));
+        Emit<Link>(out, std::move(link));
         pos += match;
         text_start = pos;
+        matched_any = true;
       } else {
         ++pos;
       }
     }
+    if (!matched_any) {
+      out.push_back(id);
+      return;
+    }
     flush(text.size());
+    Release(id);
   }
 
-  void PostprocessAutolinks(std::pmr::vector<InlineNode>& nodes) {
+  void PostprocessAutolinks(std::pmr::vector<InlineNodeId>& nodes) {
     // First consolidate adjacent text nodes. The inline parser splits text at
     // special characters (e.g. `_` emphasis markers that do not form emphasis),
     // which can fragment an autolink such as `a.b-c_d@a.b`. Merging the runs
@@ -5103,38 +5217,59 @@ class InlineParser {
     // are normally contiguous slices of the input, so the common case is a
     // cheap view extension; a persistent copy is only needed for the rare
     // non-contiguous run.
-    std::pmr::vector<InlineNode> consolidated;
-    consolidated.reserve(nodes.size());
-    for (auto& node : nodes) {
-      if (std::holds_alternative<Text>(node) && !consolidated.empty() &&
-          std::holds_alternative<Text>(consolidated.back())) {
-        auto& last_view = std::get<Text>(consolidated.back()).content;
-        std::string_view cur = std::get<Text>(node).content;
-        if (cur.data() == last_view.data() + last_view.size()) {
-          last_view =
-              std::string_view(last_view.data(), last_view.size() + cur.size());
-        } else {
-          std::pmr::string merged(last_view);
-          merged.append(cur);
-          std::get<Text>(consolidated.back()).content =
-              StoreString(std::move(merged));
-        }
-      } else {
-        consolidated.push_back(std::move(node));
+    // Each run of adjacent text nodes is merged at once (a single copy for a
+    // non-contiguous run), keeping this linear in the text size.
+    std::pmr::vector<InlineNodeId>& consolidated = autolink_scratch_;
+    consolidated.clear();
+    auto is_text = [this](InlineNodeId id) {
+      return std::holds_alternative<Text>(Node(id));
+    };
+    for (size_t i = 0; i < nodes.size();) {
+      InlineNodeId first = nodes[i];
+      consolidated.push_back(first);
+      size_t run_end = i + 1;
+      if (!is_text(first)) {
+        i = run_end;
+        continue;
       }
+      bool contiguous = true;
+      size_t run_size = std::get<Text>(Node(first)).content.size();
+      while (run_end < nodes.size() && is_text(nodes[run_end])) {
+        std::string_view prev =
+            std::get<Text>(Node(nodes[run_end - 1])).content;
+        std::string_view cur = std::get<Text>(Node(nodes[run_end])).content;
+        if (cur.data() != prev.data() + prev.size()) contiguous = false;
+        run_size += cur.size();
+        ++run_end;
+      }
+      if (run_end - i > 1) {
+        std::string_view head = std::get<Text>(Node(first)).content;
+        std::string_view merged_view;
+        if (contiguous) {
+          merged_view = std::string_view(head.data(), run_size);
+        } else {
+          std::pmr::string merged;
+          merged.reserve(run_size);
+          for (size_t j = i; j < run_end; ++j) {
+            merged.append(std::get<Text>(Node(nodes[j])).content);
+          }
+          merged_view = StoreString(merged);
+        }
+        std::get<Text>(Node(first)).content = merged_view;
+        for (size_t j = i + 1; j < run_end; ++j) Release(nodes[j]);
+      }
+      i = run_end;
     }
 
     // Then split any text nodes that contain extended autolinks.
-    std::pmr::vector<InlineNode> out;
-    out.reserve(consolidated.size());
-    for (auto& node : consolidated) {
-      if (std::holds_alternative<Text>(node)) {
-        SplitAutolinks(std::get<Text>(node).content, out);
+    nodes.clear();
+    for (InlineNodeId id : consolidated) {
+      if (std::holds_alternative<Text>(Node(id))) {
+        SplitAutolinks(id, nodes);
       } else {
-        out.push_back(std::move(node));
+        nodes.push_back(id);
       }
     }
-    nodes = std::move(out);
   }
 };
 
@@ -5177,53 +5312,119 @@ class BlockParser {
   size_t last_top_block_end_line = 0;    // exclusive
   bool last_top_block_terminated = true;  // cannot absorb a further line
 
-  Document Parse(std::string_view input) {
-    Document doc;
-    std::pmr::vector<BlockNode> top_blocks;
-    ParseBlocksInto(input, doc, top_blocks);
-    doc.children = std::move(top_blocks);
+  // Bytes of container content re-parsed by nested parsers during the most
+  // recent Parse()/ParseBlocksInto() (a measure of its cost beyond the input
+  // size, used by the streaming parsers to pace re-parsing).
+  size_t nested_content_bytes() const { return nested_bytes_owned_; }
 
-    // Third pass: parse inlines
-    InlineParser inline_parser(&doc.link_references, &doc.string_storage,
-                               &doc.inline_nodes);
-    inline_parser.enable_autolink = enable_autolink;
-    inline_parser.enable_strikethrough = enable_strikethrough;
-    inline_parser.enable_latex_math = enable_latex_math;
-    ParseInlines(doc.children, inline_parser);
+  BlockParser() = default;
 
-    return doc;
-  }
+  // Parser whose transient buffers (line offsets, paragraph line lists) come
+  // from `scratch`; used for the nested parsers of container blocks so they
+  // share the enclosing Parse()'s scratch arena.
+  explicit BlockParser(std::pmr::memory_resource* scratch)
+      : lines_(OrDefault(scratch)),
+        para_lines_(OrDefault(scratch)),
+        scratch_(scratch) {}
+
+  Document Parse(std::string_view input) { return Parse(input, LinkRefMap()); }
 
   // Parse input as a fresh document, but pre-seed its link reference map with
   // `initial_refs` (references defined earlier, e.g. in a previous streaming
   // chunk). Already-defined labels win over later duplicates (first definition
   // wins), so seeding preserves document order across chunks.
   Document Parse(std::string_view input, const LinkRefMap& initial_refs) {
+    return Parse(input, LinkRefMap(initial_refs));
+  }
+
+  // As above, taking ownership of `initial_refs` (no copy). The returned
+  // Document's link_references holds them plus the definitions in `input`.
+  Document Parse(std::string_view input, LinkRefMap&& initial_refs) {
+    // Transient parse buffers (container contents re-parsed by nested
+    // parsers, their line tables, paragraph text awaiting inline parsing) are
+    // bump-allocated from an arena released when the parse ends. Declared
+    // before `doc` so it outlives the Document if an exception unwinds.
+    std::pmr::monotonic_buffer_resource arena(input.size() / 2 + 1024);
+    ScratchScope scratch_scope(this, &arena);
     Document doc;
-    if (!initial_refs.empty()) {
-      doc.link_references.insert(doc.link_references.end(),
-                                 initial_refs.begin(), initial_refs.end());
-    }
+    doc.link_references = std::move(initial_refs);
     std::pmr::vector<BlockNode> top_blocks;
     ParseBlocksInto(input, doc, top_blocks);
     doc.children = std::move(top_blocks);
 
-    // Third pass: parse inlines
+    ParseAllInlines(doc, input.size());
+
+    return doc;
+  }
+
+  // Third pass: parse the inline content of every paragraph, heading and
+  // table cell.
+  void ParseAllInlines(Document& doc, size_t input_size) {
+    // Pre-size the node pool from the input length (inline-heavy text yields
+    // roughly one node per 10 bytes) so it rarely has to grow, as every growth
+    // step moves each node.
+    doc.inline_nodes.reserve(input_size / 10 + 16);
     InlineParser inline_parser(&doc.link_references, &doc.string_storage,
                                &doc.inline_nodes);
     inline_parser.enable_autolink = enable_autolink;
     inline_parser.enable_strikethrough = enable_strikethrough;
     inline_parser.enable_latex_math = enable_latex_math;
+
+    // Inline nodes view their text in Document-owned storage. Size the first
+    // storage chunk to hold all block text at once (every block lives in
+    // either doc.children or doc.block_nodes).
+    size_t total = 0;
+    auto count = [&total](const BlockNode& block) {
+      if (auto* para = std::get_if<Paragraph>(&block)) {
+        total += para->raw_content.size();
+      } else if (auto* heading = std::get_if<Heading>(&block)) {
+        total += heading->raw_content.size();
+      } else if (auto* table = std::get_if<Table>(&block)) {
+        for (const auto& row : table->rows) {
+          for (const auto& cell : row.cells) total += cell.raw_content.size();
+        }
+      }
+    };
+    for (const auto& block : doc.children) count(block);
+    for (const auto& block : doc.block_nodes) count(block);
+    if (total > 0) inline_parser.ReserveStorage(total);
+
     ParseInlines(doc.children, inline_parser);
 
-    return doc;
+    // No string in the returned Document may refer to the scratch arena,
+    // which dies with the Parse() call (every raw_content reached above has
+    // already been reset; this catches any that were not).
+    if (scratch_) {
+      auto release = [this](BlockNode& block) {
+        std::pmr::string* raw = nullptr;
+        if (auto* para = std::get_if<Paragraph>(&block)) {
+          raw = &para->raw_content;
+        } else if (auto* heading = std::get_if<Heading>(&block)) {
+          raw = &heading->raw_content;
+        }
+        if (raw && raw->get_allocator().resource() == scratch_) {
+          ResetString(*raw);
+        }
+      };
+      for (auto& block : doc.children) release(block);
+      for (auto& block : doc.block_nodes) release(block);
+    }
+  }
+
+  // Copy a block's raw text into Document storage and release the original
+  // (raw_content is only needed until inlines are parsed).
+  static std::string_view StableText(std::pmr::string& raw,
+                                     InlineParser& parser) {
+    std::string_view stable = parser.StoreString(raw);
+    ResetString(raw);
+    return stable;
   }
 
   // Extract only the link reference definitions from `input` into `out`,
   // without building blocks or inlines. First definition wins for duplicates.
   void ExtractLinkRefs(std::string_view input, LinkRefMap& out) {
     if (input.find('[') == std::string_view::npos) return;
-    lines_ = std::make_unique<detail::LineBuffer>(input);
+    lines_.Reset(input);
     line_idx_ = 0;
     ExtractLinkReferences(out);
   }
@@ -5231,14 +5432,33 @@ class BlockParser {
   void ParseBlocksInto(std::string_view input, Document& doc,
                        std::pmr::vector<BlockNode>& blocks,
                        bool input_no_nulls = false) {
+    if (depth_ == 0) {
+      // A new document: reset the nested content budget.
+      nested_bytes_owned_ = 0;
+      nested_bytes_ = &nested_bytes_owned_;
+      nested_budget_ = input.size() > (static_cast<size_t>(-1) -
+                                       detail::kNestedContentSlack) /
+                                          detail::kMaxNestedContentFactor
+                           ? static_cast<size_t>(-1)
+                           : input.size() * detail::kMaxNestedContentFactor +
+                                 detail::kNestedContentSlack;
+    }
     doc_ = &doc;
-    lines_ = std::make_unique<detail::LineBuffer>(input, input_no_nulls);
+    lines_.Reset(input, input_no_nulls);
     line_idx_ = 0;
     parent_link_refs_ = &doc.link_references;
 
+    // The top-level parse reaches this point before any nested parser, so
+    // size the pools for nested blocks and top-level blocks from its line
+    // count (every growth step moves each block).
+    if (doc.block_nodes.capacity() == 0) {
+      doc.block_nodes.reserve(lines_.size() / 4 + 8);
+      blocks.reserve(blocks.size() + lines_.size() / 8 + 8);
+    }
+
     // Number of real lines: LineBuffer appends one empty artifact line when
     // the input ends with a line terminator; that artifact is not content.
-    real_line_count_ = lines_->size();
+    real_line_count_ = lines_.size();
     if (!input.empty() && (input.back() == '\n' || input.back() == '\r')) {
       --real_line_count_;
     }
@@ -5259,7 +5479,7 @@ class BlockParser {
  private:
   // LineBuffer provides cache-friendly storage: contiguous offset array
   // pointing into single buffer, vs vector<string> with many allocations
-  std::unique_ptr<detail::LineBuffer> lines_;
+  detail::LineBuffer lines_;
   size_t line_idx_ = 0;
   LinkRefMap* parent_link_refs_ = nullptr;
   Document* doc_ = nullptr;
@@ -5271,6 +5491,105 @@ class BlockParser {
   bool last_fence_found_closing_ = true;
   bool last_html_end_condition_found_ = true;
   size_t last_table_start_line_ = 0;
+
+  // Scratch line list reused by ParseParagraph.
+  std::pmr::vector<std::string_view> para_lines_;
+
+  // Arena for transient parse buffers (see Parse()); null when parsing
+  // through ParseBlocksInto() directly, in which case the default resource
+  // is used.
+  std::pmr::memory_resource* scratch_ = nullptr;
+
+  static std::pmr::memory_resource* OrDefault(
+      std::pmr::memory_resource* resource) {
+    return resource ? resource : std::pmr::get_default_resource();
+  }
+
+  std::pmr::memory_resource* Scratch() const { return OrDefault(scratch_); }
+
+  // Container nesting depth of this parser (0 for the top-level document).
+  int depth_ = 0;
+
+  // Bytes of container content handed to nested parsers so far in this parse
+  // (shared by all nested parsers through `nested_bytes_`) and the limit
+  // (see kMaxNestedContentFactor).
+  // (Set by ParseBlocksInto on the top-level parser before any use.)
+  size_t nested_bytes_owned_ = 0;
+  size_t* nested_bytes_ = nullptr;
+  size_t nested_budget_ = 0;
+
+  // Parse the content of a container block (block quote, list item, details
+  // section) into `out` with a nested parser that inherits this parser's
+  // settings. Past kMaxBlockNesting (each level recurses) or the nested
+  // content budget, the content is not parsed as blocks but kept as one
+  // paragraph of literal text.
+  void ParseNestedInto(std::string_view content,
+                       std::pmr::vector<BlockNode>& out) {
+    bool flatten =
+        depth_ + 1 >= detail::kMaxBlockNesting ||
+        (nested_bytes_ && content.size() > nested_budget_ - *nested_bytes_);
+    if (!flatten && nested_bytes_) *nested_bytes_ += content.size();
+    if (flatten) [[unlikely]] {
+      std::pmr::string raw(Scratch());
+      raw.reserve(content.size());
+      size_t pos = 0;
+      while (pos < content.size()) {
+        size_t end = content.find('\n', pos);
+        if (end == std::string_view::npos) end = content.size();
+        std::string_view line = detail::Trim(content.substr(pos, end - pos));
+        if (!line.empty() && line[0] == '\x01') line.remove_prefix(1);
+        if (!line.empty()) {
+          if (!raw.empty()) raw += '\n';
+          raw.append(line);
+        }
+        pos = end + 1;
+      }
+      if (raw.empty()) return;
+      Paragraph para;
+      para.raw_content = std::move(raw);
+      out.emplace_back(std::in_place_type<Paragraph>, std::move(para));
+      return;
+    }
+    BlockParser nested(scratch_);
+    nested.enable_tables = enable_tables;
+    nested.enable_autolink = enable_autolink;
+    nested.enable_strikethrough = enable_strikethrough;
+    nested.enable_latex_math = enable_latex_math;
+    nested.enable_tasklist = enable_tasklist;
+    nested.depth_ = depth_ + 1;
+    nested.nested_bytes_ = nested_bytes_;
+    nested.nested_budget_ = nested_budget_;
+    nested.ParseBlocksInto(content, *doc_, out, /*input_no_nulls=*/true);
+  }
+
+  // Installs `arena` as the scratch resource for the duration of a Parse().
+  struct ScratchScope {
+    ScratchScope(BlockParser* parser, std::pmr::memory_resource* arena)
+        : parser_(parser), saved_(parser->scratch_) {
+      parser->scratch_ = arena;
+    }
+    ~ScratchScope() { parser_->scratch_ = saved_; }
+    ScratchScope(const ScratchScope&) = delete;
+    ScratchScope& operator=(const ScratchScope&) = delete;
+    BlockParser* parser_;
+    std::pmr::memory_resource* saved_;
+  };
+
+  // Replace `s` with an empty string on the default resource (plain
+  // assignment would keep an arena allocator, as polymorphic_allocator does
+  // not propagate on assignment).
+  static void ResetString(std::pmr::string& s) {
+    std::destroy_at(&s);
+    std::construct_at(&s);
+  }
+
+  // Set a block's raw_content to `lines` joined, allocated from the scratch
+  // arena (it is only needed until inlines are parsed).
+  void SetRawContent(std::pmr::string& raw,
+                     const std::pmr::vector<std::string_view>& lines) {
+    std::destroy_at(&raw);
+    std::construct_at(&raw, JoinLines(lines, Scratch()));
+  }
 
   // Record the block just pushed onto `blocks` as the last top-level block.
   // `iter_start_line` is the line on which the producing loop iteration began;
@@ -5325,11 +5644,11 @@ class BlockParser {
     has_last_top_block = true;
   }
 
-  bool AtEnd() const { return !lines_ || line_idx_ >= lines_->size(); }
+  bool AtEnd() const { return line_idx_ >= lines_.size(); }
 
   std::string_view CurrentLine() const {
     if (AtEnd()) return "";
-    return (*lines_)[line_idx_];
+    return lines_[line_idx_];
   }
 
   void Advance() {
@@ -5762,12 +6081,9 @@ class BlockParser {
         continue;
       }
 
-      // Only add if not already defined (sorted insertion)
-      auto ref_it = std::lower_bound(refs.begin(), refs.end(), normalized,
-                                     LinkRefComparator{});
-      if (ref_it == refs.end() || ref_it->first != normalized) {
-        // Insert in sorted position
-        refs.emplace(ref_it, std::move(normalized),
+      // Only add if not already defined (first definition wins)
+      if (refs.find(normalized) == refs.end()) {
+        refs.emplace(std::move(normalized),
                      std::pair{detail::EncodeUrl(destination), title});
       }
       // After successful link ref extraction, next line starts fresh
@@ -6084,37 +6400,26 @@ class BlockParser {
       ++i;
     }
 
-    // Get content (strip trailing #'s)
-    std::pmr::string content(trimmed.substr(i));
-
-    // Remove trailing #'s (preceded by spaces)
-    while (!content.empty()) {
-      size_t last_non_space = content.find_last_not_of(" \t");
-      if (last_non_space == std::string::npos) {
-        content.clear();
-        break;
-      }
-      if (content[last_non_space] == '#') {
-        // Check if preceded by space or at beginning
-        size_t hash_start = last_non_space;
-        while (hash_start > 0 && content[hash_start - 1] == '#') {
-          --hash_start;
-        }
-        if (hash_start == 0 || content[hash_start - 1] == ' ' ||
-            content[hash_start - 1] == '\t') {
-          content = content.substr(0, hash_start);
-          // Trim trailing spaces
-          while (!content.empty() &&
-                 (content.back() == ' ' || content.back() == '\t')) {
-            content.pop_back();
-          }
-        } else {
-          break;
-        }
-      } else {
-        break;
+    // Get content, stripping the optional closing sequence: one run of '#'s
+    // that is preceded by a space or tab (or is the whole content) and
+    // followed only by spaces or tabs. Only a single run is removed, so
+    // `# foo # #` keeps `foo #`.
+    std::string_view rest = trimmed.substr(i);
+    size_t end = rest.find_last_not_of(" \t");
+    rest = (end == std::string_view::npos) ? std::string_view()
+                                           : rest.substr(0, end + 1);
+    if (!rest.empty() && rest.back() == '#') {
+      size_t hash_start = rest.find_last_not_of('#');
+      if (hash_start == std::string_view::npos) {
+        rest = std::string_view();
+      } else if (rest[hash_start] == ' ' || rest[hash_start] == '\t') {
+        rest = rest.substr(0, hash_start);
+        end = rest.find_last_not_of(" \t");
+        rest = (end == std::string_view::npos) ? std::string_view()
+                                               : rest.substr(0, end + 1);
       }
     }
+    std::pmr::string content(rest);
 
     Advance();
 
@@ -6288,12 +6593,8 @@ class BlockParser {
     // structure (headings, emphasis, ...) is preserved, like the section body.
     std::pmr::vector<BlockNodeId> summary;
     if (!summary_raw.empty()) {
-      BlockParser summary_parser;
-      summary_parser.enable_tables = enable_tables;
-      summary_parser.enable_tasklist = enable_tasklist;
       std::pmr::vector<BlockNode> summary_blocks;
-      summary_parser.ParseBlocksInto(std::string_view(summary_raw), *doc_,
-                                     summary_blocks, /*input_no_nulls=*/true);
+      ParseNestedInto(summary_raw, summary_blocks);
       for (auto& node : summary_blocks) {
         summary.push_back(doc_->AddBlock(std::move(node)));
       }
@@ -6308,12 +6609,8 @@ class BlockParser {
     // (paragraphs, code blocks, lists, ...) is preserved.
     std::pmr::vector<BlockNodeId> children;
     if (!content.empty()) {
-      BlockParser body_parser;
-      body_parser.enable_tables = enable_tables;
-      body_parser.enable_tasklist = enable_tasklist;
       std::pmr::vector<BlockNode> body_blocks;
-      body_parser.ParseBlocksInto(std::string_view(content), *doc_,
-                                  body_blocks, /*input_no_nulls=*/true);
+      ParseNestedInto(content, body_blocks);
       for (auto& node : body_blocks) {
         children.push_back(doc_->AddBlock(std::move(node)));
       }
@@ -6388,7 +6685,7 @@ class BlockParser {
       return false;
 
     // Build a single contiguous buffer for nested content
-    std::pmr::string nested_buf;
+    std::pmr::string nested_buf(Scratch());
     // Reserve a reasonable amount to reduce reallocations
     nested_buf.reserve(256);
 
@@ -6509,7 +6806,7 @@ class BlockParser {
               bq_trimmed.starts_with("- ") || bq_trimmed.starts_with("* ") ||
               bq_trimmed.starts_with("+ ") || bq_trimmed.starts_with(">") ||
               (bq_trimmed.size() >= 2 &&
-               std::isdigit(static_cast<unsigned char>(bq_trimmed[0])))) {
+               detail::IsDigit(static_cast<unsigned char>(bq_trimmed[0])))) {
             is_continuation = false;
           }
         }
@@ -6540,11 +6837,8 @@ class BlockParser {
     if (nested_buf.empty()) [[unlikely]]
       return false;
 
-    BlockParser nested_parser;
-    nested_parser.enable_tables = enable_tables;
-    std::pmr::vector<BlockNode> nested_blocks;
-    nested_parser.ParseBlocksInto(std::string_view(nested_buf), *doc_,
-                                  nested_blocks, /*input_no_nulls=*/true);
+    std::pmr::vector<BlockNode> nested_blocks(Scratch());
+    ParseNestedInto(nested_buf, nested_blocks);
 
     BlockQuote bq;
     for (auto& node : nested_blocks) {
@@ -6580,12 +6874,12 @@ class BlockParser {
       } else {
         return false;  // Not a list marker
       }
-    } else if (std::isdigit(static_cast<unsigned char>(trimmed[0]))) {
+    } else if (detail::IsDigit(static_cast<unsigned char>(trimmed[0]))) {
       // Ordered list
       is_ordered = true;
       size_t num_end = 0;
       while (num_end < trimmed.size() &&
-             std::isdigit(static_cast<unsigned char>(trimmed[num_end]))) {
+             detail::IsDigit(static_cast<unsigned char>(trimmed[num_end]))) {
         ++num_end;
       }
       if (num_end == 0 || num_end > 9) [[unlikely]]
@@ -6616,6 +6910,7 @@ class BlockParser {
 
     // Parse list items
     List list;
+    list.items.reserve(4);  // Most lists are short
     list.is_ordered = is_ordered;
     list.start = start;
     list.delimiter = delimiter;
@@ -6662,11 +6957,11 @@ class BlockParser {
       bool is_new_item = false;
       if (is_ordered) {
         if (item_indent < 4 && !item_trimmed.empty() &&
-            std::isdigit(static_cast<unsigned char>(item_trimmed[0]))) {
+            detail::IsDigit(static_cast<unsigned char>(item_trimmed[0]))) {
           size_t num_end = 0;
-          while (
-              num_end < item_trimmed.size() &&
-              std::isdigit(static_cast<unsigned char>(item_trimmed[num_end]))) {
+          while (num_end < item_trimmed.size() &&
+                 detail::IsDigit(
+                     static_cast<unsigned char>(item_trimmed[num_end]))) {
             ++num_end;
           }
           if (num_end > 0 && num_end <= 9 && num_end < item_trimmed.size() &&
@@ -6704,7 +6999,7 @@ class BlockParser {
 
         ListItem item;
         // Build a single contiguous buffer for item content
-        std::pmr::string item_buf;
+        std::pmr::string item_buf(Scratch());
 
         // Get first line content with proper tab handling. Only materialize an
         // expanded copy when the line actually contains a tab; otherwise reuse
@@ -6730,7 +7025,7 @@ class BlockParser {
         size_t marker_end = 0;
         if (is_ordered) {
           while (marker_end < expanded_trimmed.size() &&
-                 std::isdigit(static_cast<unsigned char>(
+                 detail::IsDigit(static_cast<unsigned char>(
                      expanded_trimmed[marker_end]))) {
             ++marker_end;
           }
@@ -6767,8 +7062,7 @@ class BlockParser {
           skip = content_pos;  // Skip to actual content
         }
 
-        std::pmr::string first_content =
-            std::pmr::string(expanded_trimmed.substr(skip));
+        std::string_view first_content = expanded_trimmed.substr(skip);
 
         // GFM `tasklist` extension: if the first line of the item begins with a
         // `[ ]`, `[x]` or `[X]` marker followed by a space or tab, it is a task
@@ -6792,7 +7086,7 @@ class BlockParser {
                   first_content[content_after_marker] == '\t')) {
             ++content_after_marker;
           }
-          first_content.erase(0, content_after_marker);
+          first_content.remove_prefix(content_after_marker);
         }
 
         item_buf += first_content;
@@ -6869,10 +7163,10 @@ class BlockParser {
           bool is_another_item = false;
           if (cont_indent < required_indent && cont_indent < 4) {
             if (is_ordered && !cont_trimmed.empty() &&
-                std::isdigit(static_cast<unsigned char>(cont_trimmed[0]))) {
+                detail::IsDigit(static_cast<unsigned char>(cont_trimmed[0]))) {
               size_t num_end = 0;
               while (num_end < cont_trimmed.size() &&
-                     std::isdigit(
+                     detail::IsDigit(
                          static_cast<unsigned char>(cont_trimmed[num_end]))) {
                 ++num_end;
               }
@@ -6911,10 +7205,11 @@ class BlockParser {
                 }
               }
               if (!cont_trimmed.empty() &&
-                  std::isdigit(static_cast<unsigned char>(cont_trimmed[0]))) {
+                  detail::IsDigit(
+                      static_cast<unsigned char>(cont_trimmed[0]))) {
                 size_t ne = 0;
                 while (ne < cont_trimmed.size() &&
-                       std::isdigit(
+                       detail::IsDigit(
                            static_cast<unsigned char>(cont_trimmed[ne]))) {
                   ++ne;
                 }
@@ -7023,10 +7318,10 @@ class BlockParser {
                     dedented_trimmed[1] == ' ' || dedented_trimmed[1] == '\t') {
                   has_nested_list = true;
                 }
-              } else if (std::isdigit(static_cast<unsigned char>(fc))) {
+              } else if (detail::IsDigit(static_cast<unsigned char>(fc))) {
                 size_t ne = 0;
                 while (ne < dedented_trimmed.size() &&
-                       std::isdigit(
+                       detail::IsDigit(
                            static_cast<unsigned char>(dedented_trimmed[ne]))) {
                   ++ne;
                 }
@@ -7065,13 +7360,10 @@ class BlockParser {
 
         // Parse item content
         if (!item_buf.empty()) {
-          BlockParser item_parser;
-          item_parser.enable_tables = enable_tables;
-          item_parser.enable_tasklist = enable_tasklist;
-          std::pmr::vector<BlockNode> item_blocks;
-          item_parser.ParseBlocksInto(std::string_view(item_buf), *doc_,
-                                      item_blocks, /*input_no_nulls=*/true);
+          std::pmr::vector<BlockNode> item_blocks(Scratch());
+          ParseNestedInto(item_buf, item_blocks);
 
+          item.children.reserve(item_blocks.size());
           for (auto& node : item_blocks) {
             item.children.push_back(doc_->AddBlock(std::move(node)));
           }
@@ -7154,8 +7446,8 @@ class BlockParser {
     // Table (which may be pushed after a leading Paragraph) reports its real
     // start line.
     last_table_start_line_ = line_idx_;
-    if (line_idx_ + 1 >= lines_->size()) return false;
-    std::string_view next_raw = (*lines_)[line_idx_ + 1];
+    if (line_idx_ + 1 >= lines_.size()) return false;
+    std::string_view next_raw = lines_[line_idx_ + 1];
     std::string_view next_line = detail::TrimLeft(next_raw);
 
     // A setext underline following a one-line paragraph is a heading, not a
@@ -7199,11 +7491,17 @@ class BlockParser {
     Advance();
     Advance();
 
-    // Body rows: consume while the line continues the table.
+    // Body rows: consume while the line continues the table. Short rows are
+    // padded with empty cells up to kMaxTableAutoCompletedCells in total.
+    size_t auto_completed_cells = 0;
     while (!AtEnd()) {
       std::string_view body_line = CurrentLine();
       if (!detail::IsTableRowLine(body_line)) break;
       auto body_cells = detail::SplitTableRow(detail::TrimLeft(body_line));
+      if (body_cells.size() < static_cast<size_t>(ncols)) {
+        auto_completed_cells += static_cast<size_t>(ncols) - body_cells.size();
+        if (auto_completed_cells > detail::kMaxTableAutoCompletedCells) break;
+      }
       TableRow body_row;
       body_row.is_header = false;
       body_row.cells.reserve(ncols);
@@ -7221,11 +7519,29 @@ class BlockParser {
     return true;
   }
 
+  // Join `lines` with '\n' into a single string sized up front.
+  static std::pmr::string JoinLines(
+      const std::pmr::vector<std::string_view>& lines,
+      std::pmr::memory_resource* resource) {
+    size_t total = lines.empty() ? 0 : lines.size() - 1;
+    for (std::string_view l : lines) total += l.size();
+    std::pmr::string out(resource);
+    out.reserve(total);
+    for (size_t j = 0; j < lines.size(); ++j) {
+      if (j > 0) out += '\n';
+      out += lines[j];
+    }
+    return out;
+  }
+
   void ParseParagraph(std::pmr::vector<BlockNode>& blocks) {
     // Store non-owning views into the LineBuffer (which stays valid for the
     // duration of this call) instead of copying each line into its own
     // string. The single join into raw_content at the end is the only copy.
-    std::pmr::vector<std::string_view> para_lines;
+    // The vector is a member so its capacity is reused across paragraphs
+    // (ParseParagraph never re-enters itself on the same parser).
+    std::pmr::vector<std::string_view>& para_lines = para_lines_;
+    para_lines.clear();
 
     while (!AtEnd()) {
       std::string_view line = CurrentLine();
@@ -7262,13 +7578,8 @@ class BlockParser {
               Heading heading;
               heading.level = (underline_char == '=') ? 1 : 2;
 
-              std::pmr::string heading_content;
-              for (size_t j = 0; j < para_lines.size(); ++j) {
-                if (j > 0) heading_content += '\n';
-                heading_content += para_lines[j];
-              }
-              heading.raw_content = std::move(heading_content);
-              blocks.push_back(heading);
+              SetRawContent(heading.raw_content, para_lines);
+              blocks.push_back(std::move(heading));
               return;
             }
           }
@@ -7338,15 +7649,16 @@ class BlockParser {
         if ((trimmed.starts_with("- ") || trimmed.starts_with("+ ") ||
              trimmed.starts_with("* ")) ||
             (trimmed.size() >= 2 &&
-             std::isdigit(static_cast<unsigned char>(trimmed[0])))) {
+             detail::IsDigit(static_cast<unsigned char>(trimmed[0])))) {
           if (trimmed.starts_with("- ") || trimmed.starts_with("+ ") ||
               trimmed.starts_with("* ")) {
             break;
           }
           // Check for ordered list
           size_t num_end = 0;
-          while (num_end < trimmed.size() &&
-                 std::isdigit(static_cast<unsigned char>(trimmed[num_end]))) {
+          while (
+              num_end < trimmed.size() &&
+              detail::IsDigit(static_cast<unsigned char>(trimmed[num_end]))) {
             ++num_end;
           }
           if (num_end > 0 && num_end < trimmed.size() &&
@@ -7417,9 +7729,10 @@ class BlockParser {
           bool is_closing = (trimmed.size() >= 2 && trimmed[1] == '/');
           size_t tag_start = is_closing ? 2 : 1;
           size_t tag_end = tag_start;
-          while (tag_end < trimmed.size() &&
-                 (std::isalnum(static_cast<unsigned char>(trimmed[tag_end])) ||
-                  trimmed[tag_end] == '-')) {
+          while (
+              tag_end < trimmed.size() &&
+              (detail::IsAlnum(static_cast<unsigned char>(trimmed[tag_end])) ||
+               trimmed[tag_end] == '-')) {
             ++tag_end;
           }
           if (tag_end > tag_start) {
@@ -7452,12 +7765,7 @@ class BlockParser {
         if (TryBuildTable(trimmed, &table)) {
           if (!para_lines.empty()) {
             Paragraph leading;
-            std::pmr::string leading_content;
-            for (size_t j = 0; j < para_lines.size(); ++j) {
-              if (j > 0) leading_content += '\n';
-              leading_content += para_lines[j];
-            }
-            leading.raw_content = std::move(leading_content);
+            SetRawContent(leading.raw_content, para_lines);
             blocks.push_back(std::move(leading));
           }
           blocks.push_back(std::move(table));
@@ -7475,12 +7783,7 @@ class BlockParser {
     }
 
     Paragraph para;
-    std::pmr::string para_content;
-    for (size_t j = 0; j < para_lines.size(); ++j) {
-      if (j > 0) para_content += '\n';
-      para_content += para_lines[j];
-    }
-    para.raw_content = std::move(para_content);
+    SetRawContent(para.raw_content, para_lines);
     blocks.push_back(std::move(para));
   }
 
@@ -7490,18 +7793,11 @@ class BlockParser {
           [&parser, this](auto&& node) {
             using T = std::decay_t<decltype(node)>;
             if constexpr (std::is_same_v<T, Paragraph>) {
-              // Store raw_content in string_storage so string_views survive
-              // moves (SSO strings have data inside the object, which becomes
-              // invalid after move)
-              doc_->string_storage.push_back(std::move(node.raw_content));
-              std::string_view stable_content = doc_->string_storage.back();
-              node.children = parser.Parse(stable_content);
+              node.children =
+                  parser.Parse(StableText(node.raw_content, parser));
             } else if constexpr (std::is_same_v<T, Heading>) {
-              // Store raw_content in string_storage so string_views survive
-              // moves
-              doc_->string_storage.push_back(std::move(node.raw_content));
-              std::string_view stable_content = doc_->string_storage.back();
-              node.children = parser.Parse(stable_content);
+              node.children =
+                  parser.Parse(StableText(node.raw_content, parser));
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
               ParseInlines(node.summary, parser);
               ParseInlines(node.children, parser);
@@ -7514,9 +7810,8 @@ class BlockParser {
             } else if constexpr (std::is_same_v<T, Table>) {
               for (auto& row : node.rows) {
                 for (auto& cell : row.cells) {
-                  doc_->string_storage.push_back(std::move(cell.raw_content));
-                  std::string_view stable_content = doc_->string_storage.back();
-                  cell.children = parser.Parse(stable_content);
+                  cell.children =
+                      parser.Parse(StableText(cell.raw_content, parser));
                 }
               }
             }
@@ -7533,13 +7828,11 @@ class BlockParser {
           [&parser, this](auto&& node) {
             using T = std::decay_t<decltype(node)>;
             if constexpr (std::is_same_v<T, Paragraph>) {
-              doc_->string_storage.push_back(std::move(node.raw_content));
-              std::string_view stable_content = doc_->string_storage.back();
-              node.children = parser.Parse(stable_content);
+              node.children =
+                  parser.Parse(StableText(node.raw_content, parser));
             } else if constexpr (std::is_same_v<T, Heading>) {
-              doc_->string_storage.push_back(std::move(node.raw_content));
-              std::string_view stable_content = doc_->string_storage.back();
-              node.children = parser.Parse(stable_content);
+              node.children =
+                  parser.Parse(StableText(node.raw_content, parser));
             } else if constexpr (std::is_same_v<T, DetailsBlock>) {
               ParseInlines(node.summary, parser);
               ParseInlines(node.children, parser);
@@ -7552,9 +7845,8 @@ class BlockParser {
             } else if constexpr (std::is_same_v<T, Table>) {
               for (auto& row : node.rows) {
                 for (auto& cell : row.cells) {
-                  doc_->string_storage.push_back(std::move(cell.raw_content));
-                  std::string_view stable_content = doc_->string_storage.back();
-                  cell.children = parser.Parse(stable_content);
+                  cell.children =
+                      parser.Parse(StableText(cell.raw_content, parser));
                 }
               }
             }
@@ -7568,6 +7860,22 @@ class BlockParser {
 // HTML Renderer
 // =============================================================================
 
+// Safe mode: whether a link/image destination uses a scheme that can run
+// script or read local files. Mirrors cmark's _scan_dangerous_url:
+// `javascript:`, `vbscript:`, `file:` and `data:` (except the image types
+// data:image/png, gif, jpeg and webp), compared case-insensitively.
+inline bool IsDangerousUrl(std::string_view url) {
+  if (detail::StartsWithInsensitive(url, "data:")) {
+    return !(detail::StartsWithInsensitive(url, "data:image/png") ||
+             detail::StartsWithInsensitive(url, "data:image/gif") ||
+             detail::StartsWithInsensitive(url, "data:image/jpeg") ||
+             detail::StartsWithInsensitive(url, "data:image/webp"));
+  }
+  return detail::StartsWithInsensitive(url, "javascript:") ||
+         detail::StartsWithInsensitive(url, "vbscript:") ||
+         detail::StartsWithInsensitive(url, "file:");
+}
+
 class HtmlRenderer {
  public:
   // GFM `tagfilter` (Disallowed Raw HTML) extension: when set, the leading
@@ -7575,11 +7883,21 @@ class HtmlRenderer {
   // "&lt;".
   bool enable_tagfilter = false;
 
+  // Safe mode (see Options::safe): omit raw HTML and blank out dangerous
+  // link/image destinations.
+  bool safe = false;
+
   std::pmr::string Render(const Document& doc) {
     doc_ = &doc;
     std::pmr::string result;
-    // Pre-allocate based on block count heuristic (~100 chars per block)
-    result.reserve(doc.children.size() * 100 + 256);
+    // Pre-allocate from the inline text size plus markup per block, so the
+    // output rarely has to grow (each growth step copies everything so far).
+    size_t text_size = 0;
+    for (const auto& s : doc.string_storage) text_size += s.size();
+    size_t block_count = doc.children.size() + doc.block_nodes.size();
+    size_t estimate = text_size + text_size / 8 + block_count * 16 + 256;
+    size_t legacy_estimate = doc.children.size() * 100 + 256;
+    result.reserve(estimate > legacy_estimate ? estimate : legacy_estimate);
     RenderBlocks(doc.children, result, false);
     return result;
   }
@@ -7666,7 +7984,9 @@ class HtmlRenderer {
   }
 
   void RenderHtmlBlock(const HtmlBlock& block, std::pmr::string& out) {
-    if (enable_tagfilter) {
+    if (safe) {
+      out += "<!-- raw HTML omitted -->\n";
+    } else if (enable_tagfilter) {
       detail::tagfilter::RenderFilteredHtmlBlock(block.content, out);
     } else {
       out += block.content;
@@ -7716,8 +8036,13 @@ class HtmlRenderer {
   void RenderDetailsBlock(const DetailsBlock& block, std::pmr::string& out) {
     out += "<details";
     for (const auto& [name, value] : block.attributes) {
+      // The attributes come from raw HTML: safe mode keeps only `open`.
+      if (safe &&
+          !(name.size() == 4 && detail::StartsWithInsensitive(name, "open"))) {
+        continue;
+      }
       out += ' ';
-      out += name;
+      detail::EscapeHtmlTo(name, out);
       if (!value.empty()) {
         out += "=\"";
         for (char c : value) {
@@ -7796,7 +8121,12 @@ class HtmlRenderer {
   void RenderTable(const Table& table, std::pmr::string& out) {
     out += "<table>\n";
 
-    // Header row wrapped in <thead>.
+    // Header row wrapped in <thead>. (The parser always produces one; guard
+    // against hand-built ASTs.)
+    if (table.rows.empty()) {
+      out += "</table>\n";
+      return;
+    }
     out += "<thead>\n";
     const TableRow& header = table.rows.front();
     out += "<tr>\n";
@@ -7891,7 +8221,9 @@ class HtmlRenderer {
               }
             } else if constexpr (std::is_same_v<T, Link>) {
               out += "<a href=\"";
-              detail::EscapeHtmlTo(n.destination, out);
+              if (!(safe && IsDangerousUrl(n.destination))) {
+                detail::EscapeHtmlTo(n.destination, out);
+              }
               out += '\"';
               if (!n.title.empty()) {
                 out += " title=\"";
@@ -7903,7 +8235,9 @@ class HtmlRenderer {
               out += "</a>";
             } else if constexpr (std::is_same_v<T, Image>) {
               out += "<img src=\"";
-              detail::EscapeHtmlTo(n.destination, out);
+              if (!(safe && IsDangerousUrl(n.destination))) {
+                detail::EscapeHtmlTo(n.destination, out);
+              }
               out += "\" alt=\"";
               detail::EscapeHtmlTo(n.alt_text, out);
               out += '"';
@@ -7914,8 +8248,10 @@ class HtmlRenderer {
               }
               out += " />";
             } else if constexpr (std::is_same_v<T, HtmlInline>) {
-              if (enable_tagfilter &&
-                  detail::tagfilter::IsDisallowedTag(n.content)) {
+              if (safe) {
+                out += "<!-- raw HTML omitted -->";
+              } else if (enable_tagfilter &&
+                         detail::tagfilter::IsDisallowedTag(n.content)) {
                 out.append("&lt;");
                 out.append(n.content.substr(1));
               } else {
@@ -7946,6 +8282,15 @@ class HtmlRenderer {
 // concern, matching cmark-gfm/GFM). `enable_latex_math` (the `latexmath`
 // extension, mirroring md4c's MD_FLAG_LATEXMATHSPANS) recognises `$...$`
 // (inline) and `$$...$$` (display) LaTeX math spans with verbatim content.
+//
+// `safe` selects cmark's safe rendering (its default unless `--unsafe` is
+// given): raw HTML blocks and inline HTML are replaced by
+// `<!-- raw HTML omitted -->`, link and image destinations with a
+// `javascript:`, `vbscript:`, `file:` or non-image `data:` scheme are
+// rendered empty, and <details> sections keep only their `open` attribute.
+// It is off by default, as CommonMark itself passes raw HTML through; turn it
+// on when rendering untrusted input (a full HTML sanitiser is still advisable
+// for anything security-critical).
 struct Options {
   bool enable_tables = false;
   bool enable_autolink = false;
@@ -7953,6 +8298,7 @@ struct Options {
   bool enable_tasklist = false;
   bool enable_tagfilter = false;
   bool enable_latex_math = false;
+  bool safe = false;
 };
 
 // Parse Markdown input and return an AST
@@ -7978,12 +8324,13 @@ inline std::pmr::string RenderHtml(const Document& doc) {
   return renderer.Render(doc);
 }
 
-// Render a document AST to HTML, applying the render-time GFM extensions from
-// `options` (currently the `tagfilter` / Disallowed Raw HTML extension).
+// Render a document AST to HTML, applying the render-time options from
+// `options` (the `tagfilter` / Disallowed Raw HTML extension and safe mode).
 inline std::pmr::string RenderHtml(const Document& doc,
                                    const Options& options) {
   HtmlRenderer renderer;
   renderer.enable_tagfilter = options.enable_tagfilter;
+  renderer.safe = options.safe;
   return renderer.Render(doc);
 }
 
@@ -8017,10 +8364,11 @@ inline std::pmr::string MarkdownToHtml(std::string_view input,
 //   (block quotes, lists) are held back until definitively terminated, so a
 //   further `> ` or item line rejoins the same block rather than starting a new
 //   one.
-// - `Feed` only re-parses when the chunk contains a '\n'; a chunk without one
-//   cannot finalize any block, so it is buffered at (near) zero cost. This is
-//   what keeps byte/char-by-byte streaming (e.g. LLM output) cheap and bounds
-//   the work done per feed to one or two parses of the held-back tail.
+// - `Feed` only re-parses when the chunk contains a line terminator; a chunk
+//   without one cannot finalize any block, so it is buffered at (near) zero
+//   cost. This is what keeps byte/char-by-byte streaming (e.g. LLM output)
+//   cheap. Re-parses are paced by the cost of the previous one (see
+//   kStreamReparseDivisor), so the total work stays linear in the input.
 // - The held-back buffer is capped (default 4 MiB, see `setPendingLimit`). A
 //   chunk that would push the buffer past the limit throws
 //   `std::length_error` and leaves the buffer unchanged.
@@ -8069,6 +8417,40 @@ inline size_t ByteOffsetOfLine(const std::string& s, size_t line_idx) {
   return s.size();
 }
 
+// Length of the prefix of `s` made of whole lines, i.e. up to and including
+// its last line terminator ('\n' or '\r'). A '\r' that ends `s` does not
+// count: the '\n' of a "\r\n" pair may still arrive in the next chunk.
+inline size_t SettledLength(const std::string& s) {
+  for (size_t i = s.size(); i >= 1; --i) {
+    char c = s[i - 1];
+    if (c == '\n' || (c == '\r' && i < s.size())) return i;
+  }
+  return 0;
+}
+
+// Streaming re-parse policy shared by the streaming parsers. Every re-parse
+// covers the whole held-back tail, so re-parsing on each line of a long open
+// block (a big list, block quote, paragraph or unclosed fence) would cost
+// O(n^2) overall. Instead, the next re-parse waits until new input amounting
+// to 1/kStreamReparseDivisor of the cost of re-parsing the held-back tail has
+// settled. That cost is the tail's size scaled by the amplification of the
+// last parse (`work` bytes of parsing, i.e. the settled input plus nested
+// container content, for `settled` bytes of input). The total parsing work
+// thus stays linear in the input, whatever the cost of an individual parse.
+// Small blocks are still re-checked about every line; output is unaffected,
+// a large block may just be emitted a little later than the line that
+// completed it (at the latest on Flush()).
+inline constexpr size_t kStreamReparseDivisor = 4;
+
+// Settled length the buffer must reach before the next re-parse, given the
+// `held` tail left after a parse of `settled` bytes that did `work` bytes of
+// parsing.
+inline size_t NextStreamReparseAt(size_t held, size_t settled, size_t work) {
+  if (held == 0 || settled == 0) return 0;
+  size_t amplification = work / settled;  // >= 1
+  return held + held / kStreamReparseDivisor * amplification;
+}
+
 using HtmlStreamCallback = std::function<void(std::string_view html)>;
 
 class StreamingMarkdownParser {
@@ -8103,43 +8485,54 @@ class StreamingMarkdownParser {
   // would exceed it throws `std::length_error` and leaves the buffer unchanged.
   void Feed(std::string_view chunk) {
     if (chunk.empty()) return;
+    // (Written so it cannot wrap when the limit was lowered below the
+    // current buffer size.)
     if (chunk.size() > pending_limit_ ||
-        chunk.size() > pending_limit_ - pending_.size()) {
+        pending_.size() > pending_limit_ - chunk.size()) {
       throw std::length_error("markus: streaming pending buffer limit exceeded");
     }
     pending_.append(chunk.data(), chunk.size());
-    if (chunk.find('\n') == std::string_view::npos) return;
+    if (chunk.find_first_of("\r\n") == std::string_view::npos) return;
     EmitCompletedBlocks();
   }
 
   // Emit any remaining buffered content (end-of-input).
   void Flush() {
+    reparse_at_ = 0;
     if (pending_.empty()) return;
     if (pending_.find('[') != std::string::npos) {
       parser_.ExtractLinkRefs(pending_, running_link_refs_);
     }
-    std::pmr::string html =
-        RenderHtml(parser_.Parse(pending_, running_link_refs_), options_);
+    const std::string html = RenderSeeded(pending_);
     pending_.clear();
-    if (!html.empty() && on_html_) {
-      on_html_(std::string_view(html));
-    }
+    Emit(html);
   }
 
   // Discard all buffered content and link references.
   void Reset() {
     pending_.clear();
     running_link_refs_.clear();
+    reparse_at_ = 0;
   }
 
   bool empty() const { return pending_.empty(); }
 
  private:
-  // Render `input` (seeded with the running link references) to a std::string.
+  // Render `input` (seeded with the running link references, which are moved
+  // into the parse and back rather than copied) to a std::string.
   std::string RenderSeeded(std::string_view input) {
-    Document doc = parser_.Parse(input, running_link_refs_);
+    Document doc = parser_.Parse(input, std::move(running_link_refs_));
+    running_link_refs_ = std::move(doc.link_references);
     std::pmr::string html = RenderHtml(doc, options_);
     return std::string(html.data(), html.size());
+  }
+
+  // Pass `html` to the output callback. A copy of the callback is invoked so
+  // the callback may replace itself (setOutputCallback) while it runs.
+  void Emit(std::string_view html) {
+    if (html.empty() || !on_html_) return;
+    HtmlStreamCallback callback = on_html_;
+    callback(html);
   }
 
   // Emit every block in `pending_` that is guaranteed final, leaving only the
@@ -8158,17 +8551,12 @@ class StreamingMarkdownParser {
   void EmitCompletedBlocks() {
     if (pending_.empty()) return;
 
-    // The final line of the buffer has no terminating newline and may still
-    // grow, so only whole lines (up to and including the last '\n') can be
-    // considered. Everything after the last newline is always held back.
-    size_t line_end = 0;
-    for (size_t i = pending_.size(); i >= 1; --i) {
-      if (pending_[i - 1] == '\n') {
-        line_end = i;
-        break;
-      }
-    }
+    // The final line of the buffer has no line terminator and may still grow,
+    // so only whole lines can be considered. Everything after the last line
+    // terminator is always held back.
+    size_t line_end = SettledLength(pending_);
     if (line_end == 0) return;  // only a partial line; wait for more data
+    if (line_end < reparse_at_) return;  // back-off, see NextStreamReparseAt
 
     const std::string settled = pending_.substr(0, line_end);
 
@@ -8194,14 +8582,14 @@ class StreamingMarkdownParser {
       cut = ByteOffsetOfLine(settled, parser_.last_top_block_start_line);
     }
 
+    reparse_at_ = NextStreamReparseAt(
+        line_end - cut, line_end, line_end + parser_.nested_content_bytes());
     if (cut == 0) return;  // whole buffer is a single incomplete block
     const std::string emit_html =
         (cut == line_end) ? full_html : RenderSeeded(pending_.substr(0, cut));
     pending_ = pending_.substr(cut);
 
-    if (!emit_html.empty() && on_html_) {
-      on_html_(std::string_view(emit_html));
-    }
+    Emit(emit_html);
   }
 
   Options options_;
@@ -8210,6 +8598,8 @@ class StreamingMarkdownParser {
   std::string pending_;
   LinkRefMap running_link_refs_;
   size_t pending_limit_ = 4 * 1024 * 1024;
+  // Settled length the buffer must reach before the next re-parse.
+  size_t reparse_at_ = 0;
 };
 
 // =============================================================================
@@ -8226,7 +8616,9 @@ class StreamingMarkdownParser {
 // with the half-open range `[first, last)` of top-level blocks to render
 // (`Document::children`). The Document is only guaranteed to be valid while
 // the callback runs; everything the consumer needs (text, node pools, decoded
-// strings) is read-only state of that Document.
+// strings) is read-only state of that Document. Its `link_references` are
+// empty: references are already resolved into the inline nodes, and the
+// parser keeps the running definitions itself.
 //
 // The finalization semantics match `StreamingMarkdownParser`: a block is
 // emitted once its terminating line has been seen (or it is atomic); the
@@ -8268,32 +8660,35 @@ class StreamingBlockParser {
   // streaming cheap).
   void Feed(std::string_view chunk) {
     if (chunk.empty()) return;
+    // (Written so it cannot wrap when the limit was lowered below the
+    // current buffer size.)
     if (chunk.size() > pending_limit_ ||
-        chunk.size() > pending_limit_ - pending_.size()) {
+        pending_.size() > pending_limit_ - chunk.size()) {
       throw std::length_error("markus: streaming pending buffer limit exceeded");
     }
     pending_.append(chunk.data(), chunk.size());
-    if (chunk.find('\n') == std::string_view::npos) return;
+    if (chunk.find_first_of("\r\n") == std::string_view::npos) return;
     EmitCompletedBlocks();
   }
 
   // Deliver any remaining buffered content (end-of-input).
   void Flush() {
+    reparse_at_ = 0;
     if (pending_.empty()) return;
     if (pending_.find('[') != std::string::npos) {
       parser_.ExtractLinkRefs(pending_, running_link_refs_);
     }
-    Document doc = parser_.Parse(pending_, running_link_refs_);
+    Document doc = parser_.Parse(pending_, std::move(running_link_refs_));
+    running_link_refs_ = std::move(doc.link_references);
     pending_.clear();
-    if (!doc.children.empty() && on_blocks_) {
-      on_blocks_(doc, 0, doc.children.size());
-    }
+    Deliver(doc, 0, doc.children.size());
   }
 
   // Discard all buffered content and link references.
   void Reset() {
     pending_.clear();
     running_link_refs_.clear();
+    reparse_at_ = 0;
   }
 
   bool empty() const { return pending_.empty(); }
@@ -8313,20 +8708,23 @@ class StreamingBlockParser {
   // termination flag recorded by BlockParser (see RecordLastTopBlock). If
   // that block is still open, it is held back: it is the last element of
   // `Document::children` and starts at `last_top_block_start_line`.
+  // Pass blocks [first, last) of `doc` to the block callback. A copy of the
+  // callback is invoked so it may replace itself while it runs.
+  void Deliver(const Document& doc, size_t first, size_t last) {
+    if (first == last || !on_blocks_) return;
+    BlockStreamCallback callback = on_blocks_;
+    callback(doc, first, last);
+  }
+
   void EmitCompletedBlocks() {
     if (pending_.empty()) return;
 
-    // The final line of the buffer has no terminating newline and may still
-    // grow, so only whole lines (up to and including the last '\n') can be
-    // considered. Everything after the last newline is always held back.
-    size_t line_end = 0;
-    for (size_t i = pending_.size(); i >= 1; --i) {
-      if (pending_[i - 1] == '\n') {
-        line_end = i;
-        break;
-      }
-    }
+    // The final line of the buffer has no line terminator and may still grow,
+    // so only whole lines can be considered. Everything after the last line
+    // terminator is always held back.
+    size_t line_end = SettledLength(pending_);
     if (line_end == 0) return;  // only a partial line; wait for more data
+    if (line_end < reparse_at_) return;  // back-off, see NextStreamReparseAt
 
     const std::string settled = pending_.substr(0, line_end);
 
@@ -8337,7 +8735,10 @@ class StreamingBlockParser {
       parser_.ExtractLinkRefs(settled, running_link_refs_);
     }
 
-    Document doc = parser_.Parse(settled, running_link_refs_);
+    // The running link references are moved into the parse (not copied) and
+    // back out before any callback runs, so a re-entrant Feed() sees them.
+    Document doc = parser_.Parse(settled, std::move(running_link_refs_));
+    running_link_refs_ = std::move(doc.link_references);
 
     size_t first = 0;
     size_t last = doc.children.size();
@@ -8348,11 +8749,11 @@ class StreamingBlockParser {
       --last;
       cut = ByteOffsetOfLine(settled, parser_.last_top_block_start_line);
     }
+    reparse_at_ = NextStreamReparseAt(
+        line_end - cut, line_end, line_end + parser_.nested_content_bytes());
     pending_ = pending_.substr(cut);
 
-    if (first != last && on_blocks_) {
-      on_blocks_(doc, first, last);
-    }
+    Deliver(doc, first, last);
   }
 
   Options options_;
@@ -8361,6 +8762,8 @@ class StreamingBlockParser {
   std::string pending_;
   LinkRefMap running_link_refs_;
   size_t pending_limit_ = 4 * 1024 * 1024;
+  // Settled length the buffer must reach before the next re-parse.
+  size_t reparse_at_ = 0;
 };
 
 // Convenience: stream the whole input through the callback (feed + flush).
