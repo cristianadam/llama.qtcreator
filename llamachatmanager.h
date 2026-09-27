@@ -39,6 +39,13 @@ public:
     //! whose tool call is exported with the tool message instead).
     static QString messageToMarkdown(const Message &msg);
 
+    //! Persists a rendered diagram SVG (mermaid diagram, math) with the
+    //! message that displayed it, in the message's extra field (a
+    //! "diagram" entry).  A still-pending message (not committed to the
+    //! database yet) gets the entry in memory, so it is stored with the
+    //! commit; a committed message's stored extra is updated in place.
+    void saveDiagramSvg(const LlamaCpp::Message &msg, const QVariantMap &entry);
+
     QVector<Message> filterByLeafNodeId(const QVector<Message> &messages,
                                         qint64 leafNodeId,
                                         bool includeRoot);

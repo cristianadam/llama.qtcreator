@@ -3,15 +3,23 @@ add_qtc_test(llamatools_test
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
   DEPENDS
-    Qt::Test Qt::Core Qt::Gui Qt::Network Qt::Sql Qt::Widgets
+    Qt::Test Qt::Core Qt::Gui Qt::Network Qt::Sql Qt::Widgets Qt::Svg
     Qt::TaskTree
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::Core
     QtCreator::ProjectExplorer
+    QtCreator::KSyntaxHighlighting
+    QtCreator::quickjsng
+    markus
   SOURCES
     llamatools_test.cpp
+    ../llama.qrc
     ../llamachatmanager.cpp
+    ../llamasyntaxhighligher.cpp
+    ../katexengine.cpp
+    ../markdownrenderer.cpp
+    ../mermaidengine.cpp
     ../llamasettings.cpp
     ../llamastorage.cpp
     ../llamathinkingsectionparser.cpp

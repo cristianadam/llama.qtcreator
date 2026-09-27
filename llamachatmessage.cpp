@@ -92,6 +92,22 @@ void ChatMessage::buildUI()
     m_markdownLabel = new MarkdownLabel(this);
     connect(m_markdownLabel, &MarkdownLabel::copyToClipboard, this, &ChatMessage::onCopyToClipboard);
 
+    // Seed the renderer's diagram cache with the SVGs persisted with this
+    // message (Message.extra), so a reopened conversation shows mermaid
+    // diagrams and math immediately, without re-running the render engines.
+    for (const QVariantMap &e : std::as_const(m_msg.extra)) {
+        if (e.value("type").toString() != QLatin1String("diagram"))
+            continue;
+        MarkdownRenderer::DiagramSvg svg;
+        svg.svg = QByteArray::fromBase64(e.value("svg").toString().toLatin1());
+        svg.context = e.value("context").toString();
+        svg.width = e.value("width").toDouble();
+        svg.height = e.value("height").toDouble();
+        m_markdownLabel->seedDiagramCache(e.value("key").toString(), svg);
+    }
+    connect(m_markdownLabel, &MarkdownRenderer::diagramRendered,
+            this, &ChatMessage::onDiagramRendered);
+
     renderMarkdown(m_msg.content, true);
 
     m_markdownLabel->setObjectName(m_isUser ? "BubbleUser"
@@ -619,6 +635,29 @@ void ChatMessage::updateFixedHeight()
     // When the document size changes (details toggle, streaming), update
     // our fixed height so the layout picks up the new size.
     recomputeFixedHeight();
+}
+
+void ChatMessage::onDiagramRendered(const QString &key, const MarkdownRenderer::DiagramSvg &svg)
+{
+    if (m_msg.id < 0)
+        return;
+
+    QVariantMap entry;
+    entry[QStringLiteral("type")] = QLatin1String("diagram");
+    entry[QStringLiteral("key")] = key;
+    entry[QStringLiteral("context")] = svg.context;
+    entry[QStringLiteral("svg")] = QString::fromLatin1(svg.svg.toBase64());
+    entry[QStringLiteral("width")] = svg.width;
+    entry[QStringLiteral("height")] = svg.height;
+
+    // Queued: the signal fires mid document-edit (inside the renderer's
+    // feed()), and persisting can re-enter the render through
+    // messageExtraUpdated — that must not happen inside the edit block.
+    QMetaObject::invokeMethod(this,
+                              [this, entry] {
+                                  ChatManager::instance().saveDiagramSvg(m_msg, entry);
+                              },
+                              Qt::QueuedConnection);
 }
 
 void ChatMessage::recomputeFixedHeight()

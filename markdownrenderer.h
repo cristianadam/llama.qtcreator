@@ -59,6 +59,38 @@ public:
 
     static constexpr QChar ZeroWidthSpace = QChar(L'\u200b');
 
+    // A rendered diagram SVG (mermaid diagram, KaTeX math) persisted with
+    // the message that displayed it (a "diagram" entry in Message.extra),
+    // so that reopening a conversation does not pay the render cost again
+    // and the Markdown export can embed the picture. \a context holds the
+    // render parameters baked into the SVG (the mermaid theme; the KaTeX
+    // fill colour and font size): an entry is only reused when the context
+    // matches, otherwise the diagram is re-rendered and the entry updated.
+    struct DiagramSvg
+    {
+        QByteArray svg;
+        QString context;
+        double width = 0; // math only: re-boxed image size in px
+        double height = 0;
+    };
+
+    // Cache keys, derived from the diagram source only (not from the
+    // per-render URL), so the persisted entries can be matched again when
+    // the message is re-rendered or exported.
+    static QString mermaidDiagramKey(const QString &source);
+    static QString katexDiagramKey(const QString &tex, bool display);
+
+    // Embeds the persisted diagram SVGs into a Markdown export: ```mermaid
+    // blocks become <details> sections with the rendered picture in the
+    // header and the source in the body (mirroring the chat UI), and
+    // $...$ / $$...$$ spans become inline SVGs. Diagrams without a cached
+    // SVG are left untouched.
+    static QString embedDiagramSvgs(QString content, const QMap<QString, DiagramSvg> &diagrams);
+
+    // Seeds the persistent diagram cache (from Message.extra). Entries are
+    // consulted before the render engines and survive reset().
+    void seedDiagramCache(const QString &key, const DiagramSvg &entry);
+
     // Feed the full markdown buffer rendered so far. Only the suffix that is
     // new compared to the previous buffer is parsed; if the buffer diverged
     // (e.g. thinking sections rewritten) the renderer resets and re-renders.
@@ -90,6 +122,11 @@ public:
 
 signals:
     void copyClicked(const QString &verbatim, const QString &formattedCode);
+
+    // A diagram SVG was freshly rendered (not served from the persistent
+    // cache): the chat UI persists it with the message (Message.extra) so
+    // the next render — conversation reopen, export — can reuse it.
+    void diagramRendered(const QString &key, const DiagramSvg &svg);
 
 protected:
     void paintEvent(QPaintEvent *ev) override;
@@ -272,6 +309,11 @@ private:
     // (SVG blocks) or by the pending key (mermaid blocks, which get it as
     // soon as the async render finishes).
     QHash<QString, QByteArray> m_svgStore;
+    // Persistent diagram cache (mermaid + math), keyed by
+    // mermaidDiagramKey()/katexDiagramKey(). Seeded from Message.extra and
+    // grown as diagrams render; unlike m_svgStore it survives reset(), so a
+    // divergent re-feed does not lose the persisted SVGs.
+    QHash<QString, DiagramSvg> m_diagramCache;
     // Ordinal counter for pending mermaid diagram keys ("mmd-<n>").
     int m_nextMermaidKey = 0;
     int m_paragraphMargin = 0;

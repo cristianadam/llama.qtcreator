@@ -7,6 +7,7 @@
 
 #include "llamachatmanager.h"
 #include "llamatypes.h"
+#include "markdownrenderer.h"
 
 class QToolButton;
 class QPushButton;
@@ -62,6 +63,10 @@ private slots:
     // Update our fixed height when the document size changes (details toggle,
     // streaming). This keeps our explicit height in sync with the document.
     void updateFixedHeight();
+
+    // A diagram SVG (mermaid, math) was rendered: persist it with the
+    // message (Message.extra) so reopens and the export can reuse it.
+    void onDiagramRendered(const QString &key, const MarkdownRenderer::DiagramSvg &svg);
 
 private:
     void buildUI();

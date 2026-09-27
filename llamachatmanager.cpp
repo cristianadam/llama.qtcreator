@@ -16,6 +16,7 @@
 #include "llamachatmanager.h"
 #include "llamasettings.h"
 #include "llamastorage.h"
+#include "markdownrenderer.h"
 #include "llamathinkingsectionparser.h"
 #include "llamatr.h"
 #include "tools/factory.h"
@@ -510,13 +511,37 @@ static QString toolCallToMarkdown(const Message &msg)
     return md;
 }
 
+// The diagram SVGs (mermaid diagrams, math) persisted with a message
+// ("diagram" entries in its extra field), keyed as the renderer keys them.
+static QMap<QString, MarkdownRenderer::DiagramSvg> messageDiagramSvgs(const Message &msg)
+{
+    QMap<QString, MarkdownRenderer::DiagramSvg> diagrams;
+    for (const QVariantMap &e : msg.extra) {
+        if (e.value("type").toString() != QLatin1String("diagram"))
+            continue;
+        MarkdownRenderer::DiagramSvg svg;
+        svg.svg = QByteArray::fromBase64(e.value("svg").toString().toLatin1());
+        svg.context = e.value("context").toString();
+        if (!svg.svg.isEmpty())
+            diagrams.insert(e.value("key").toString(), svg);
+    }
+    return diagrams;
+}
+
 QString ChatManager::messageToMarkdown(const Message &msg)
 {
     if (msg.role == "tool")
         return toolCallToMarkdown(msg);
 
+    // Embed the persisted diagram SVGs so the export shows the rendered
+    // pictures instead of re-computing them (or losing them in viewers
+    // without mermaid/KaTeX support).
+    const QMap<QString, MarkdownRenderer::DiagramSvg> diagrams = messageDiagramSvgs(msg);
+
     if (msg.role == "user")
-        return QStringLiteral("### User\n\n") + msg.content + QStringLiteral("\n\n");
+        return QStringLiteral("### User\n\n")
+               + MarkdownRenderer::embedDiagramSvgs(msg.content, diagrams)
+               + QStringLiteral("\n\n");
 
     // Assistant (or anything else).
     QString processedContent = msg.content;
@@ -534,7 +559,48 @@ QString ChatManager::messageToMarkdown(const Message &msg)
         }
     }
 
-    return QStringLiteral("### Assistant\n\n") + processedContent + QStringLiteral("\n\n");
+    return QStringLiteral("### Assistant\n\n")
+           + MarkdownRenderer::embedDiagramSvgs(processedContent, diagrams)
+           + QStringLiteral("\n\n");
+}
+
+void ChatManager::saveDiagramSvg(const Message &msg, const QVariantMap &entry)
+{
+    if (msg.id < 0 || msg.convId.isEmpty())
+        return;
+
+    if (auto it = m_pendingMessages.find(msg.convId);
+        it != m_pendingMessages.end() && it->id == msg.id) {
+        // Still streaming: stash the entry in the pending message, it is
+        // committed to the database with the message.
+        for (QVariantMap &e : it->extra) {
+            if (e.value("key").toString() == entry.value("key").toString()) {
+                e = entry;
+                return;
+            }
+        }
+        it->extra << entry;
+        return;
+    }
+
+    // Already committed: merge the entry into the stored extra (a theme or
+    // font change re-renders the diagram and updates the entry in place).
+    for (const Message &stored : m_storage->getMessages(msg.convId)) {
+        if (stored.id != msg.id)
+            continue;
+        QList<QVariantMap> extra = stored.extra;
+        bool found = false;
+        for (QVariantMap &e : extra) {
+            if (e.value("key").toString() == entry.value("key").toString()) {
+                e = entry;
+                found = true;
+            }
+        }
+        if (!found)
+            extra << entry;
+        m_storage->updateMessageExtra(stored, extra);
+        return;
+    }
 }
 
 QVector<Message> ChatManager::filterByLeafNodeId(const QVector<Message> &messages,

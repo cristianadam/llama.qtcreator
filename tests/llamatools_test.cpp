@@ -23,6 +23,7 @@
 #include <llamachatmanager.h>
 #include <llamasettings.h>
 #include <llamathinkingsectionparser.h>
+#include <markdownrenderer.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/mcptool.h>
@@ -500,6 +501,9 @@ private slots:
     void messageToMarkdown_thinkingSection();
     void messageToMarkdown_toolCall();
     void messageToMarkdown_toolOnlyAssistant();
+    void messageToMarkdown_embedsCachedMermaidSvg();
+    void messageToMarkdown_embedsCachedMathSvg();
+    void messageToMarkdown_leavesUncachedDiagramsAlone();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -3480,6 +3484,87 @@ void LlamaToolsTest::messageToMarkdown_toolOnlyAssistant()
     emptyAssistant.role = "assistant";
     QVERIFY(ChatManager::messageToMarkdown(emptyAssistant)
                 .startsWith(QStringLiteral("### Assistant")));
+}
+
+void LlamaToolsTest::messageToMarkdown_embedsCachedMermaidSvg()
+{
+    // A ```mermaid block with a persisted render (a "diagram" extra entry
+    // keyed by the source) is exported as a <details> section carrying the
+    // rendered SVG and the source; blocks without a cached SVG are kept
+    // verbatim.
+    const QString source = QStringLiteral("flowchart LR\n  A[Start] --> B[End]");
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content
+        = QStringLiteral("Here you go:\n\n```mermaid\n%1\n```\n\nAnd an uncached one:\n\n")
+              .arg(source)
+          + QStringLiteral("```mermaid\ngraph TD\n  X --> Y\n```");
+
+    QVariantMap entry;
+    entry[QStringLiteral("type")] = QStringLiteral("diagram");
+    entry[QStringLiteral("key")]
+        = MarkdownRenderer::mermaidDiagramKey(source);
+    entry[QStringLiteral("svg")]
+        = QString::fromLatin1(
+            QByteArray("<svg xmlns=\"http://www.w3.org/2000/svg\">cached</svg>").toBase64());
+    assistant.extra.append(entry);
+
+    const QString md = ChatManager::messageToMarkdown(assistant);
+    // The cached block is replaced by the picture + source section...
+    QVERIFY2(md.contains(QStringLiteral("<details>\n<summary>Mermaid diagram</summary>")),
+             qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("<svg xmlns=\"http://www.w3.org/2000/svg\">cached</svg>")),
+             qPrintable(md));
+    // ...with the source kept in a fence below the picture...
+    QVERIFY2(md.contains(QStringLiteral("```mermaid\n") + source + QStringLiteral("\n```")),
+             qPrintable(md));
+    // ...and the uncached block is untouched.
+    QVERIFY2(md.contains(QStringLiteral("```mermaid\ngraph TD\n  X --> Y\n```")),
+             qPrintable(md));
+}
+
+void LlamaToolsTest::messageToMarkdown_embedsCachedMathSvg()
+{
+    // $...$ and $$...$$ spans with persisted renders are exported as inline
+    // SVGs; unspanned dollar signs (prices) and uncached spans stay text.
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content
+        = QStringLiteral("Inline $e^2$ and display\n\n$$\n\\frac{a}{b}\n$$\n\n")
+          + QStringLiteral("Costs $5 and $10, and uncached $x^2$.");
+
+    auto addEntry = [&assistant](const QString &key, const QString &svg) {
+        QVariantMap entry;
+        entry[QStringLiteral("type")] = QStringLiteral("diagram");
+        entry[QStringLiteral("key")] = key;
+        entry[QStringLiteral("svg")]
+            = QString::fromLatin1(svg.toUtf8().toBase64());
+        assistant.extra.append(entry);
+    };
+    addEntry(MarkdownRenderer::katexDiagramKey(QStringLiteral("e^2"), false),
+             QStringLiteral("<svg>inline</svg>"));
+    addEntry(MarkdownRenderer::katexDiagramKey(QStringLiteral("\\frac{a}{b}"), true),
+             QStringLiteral("<svg>display</svg>"));
+
+    const QString md = ChatManager::messageToMarkdown(assistant);
+    QVERIFY2(md.contains(QStringLiteral("Inline <svg>inline</svg> and display")),
+             qPrintable(md));
+    QVERIFY2(md.contains(QStringLiteral("<svg>display</svg>")), qPrintable(md));
+    // The prices are not a math span, and the uncached formula is kept.
+    QVERIFY2(md.contains(QStringLiteral("Costs $5 and $10, and uncached $x^2$.")),
+             qPrintable(md));
+}
+
+void LlamaToolsTest::messageToMarkdown_leavesUncachedDiagramsAlone()
+{
+    // No "diagram" entries in the extra: the export is byte-identical to the
+    // plain rendering (diagrams are left as source).
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QStringLiteral("```mermaid\nA --> B\n```\n\nand $x$.");
+
+    const QString md = ChatManager::messageToMarkdown(assistant);
+    QCOMPARE(md, QStringLiteral("### Assistant\n\n```mermaid\nA --> B\n```\n\nand $x$.\n\n"));
 }
 
 } // namespace LlamaCpp

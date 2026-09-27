@@ -15,10 +15,13 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPalette>
+#include <QRegularExpression>
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QSvgRenderer>
 #include <QTextFragment>
+
+#include <functional>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -197,6 +200,8 @@ void MarkdownRenderer::reset()
     // the stored SVGs (mermaid diagrams, math) can go with it: without this
     // the store would grow for the whole session (mermaid keys are unique
     // per render and never reused).
+    // (m_diagramCache is kept on purpose: it mirrors the SVGs persisted
+    // with the message, and a divergent re-feed must not lose them.)
     m_svgStore.clear();
 
     if (m_doc) {
@@ -688,6 +693,19 @@ bool MarkdownRenderer::renderMermaidCodeBlock(const markus::CodeBlock &code)
     // text means a light UI.
     const QString theme = color(TextForeground).lightness() < 128 ? QStringLiteral("default")
                                                                   : QStringLiteral("dark");
+
+    // A persisted render (Message.extra) for the current theme skips the
+    // engine entirely: the picture appears immediately, no spinner, when a
+    // conversation is reopened.
+    const QString cacheKey = mermaidDiagramKey(source.trimmed());
+    const auto cacheIt = m_diagramCache.constFind(cacheKey);
+    if (cacheIt != m_diagramCache.constEnd() && cacheIt->context == theme)
+        return renderDiagramAsDetails(code,
+                                      cacheIt->svg,
+                                      QStringLiteral("llamasvg://") + cacheKey,
+                                      Tr::tr("Mermaid diagram"),
+                                      "mermaid");
+
     // The render runs on the engine's worker thread; the block shows a busy
     // spinner until the SVG arrives (onMermaidRendered swaps it in), so a
     // heavy diagram never blocks the UI while a conversation is opened or
@@ -697,7 +715,17 @@ bool MarkdownRenderer::renderMermaidCodeBlock(const markus::CodeBlock &code)
                                 Tr::tr("Mermaid diagram"), "mermaid", key))
         return false;
     MermaidEngine::instance()->renderAsync(source, theme, this,
-                                           [this, key](const QByteArray &svg) {
+                                           [this, key, cacheKey, theme](const QByteArray &svg) {
+                                               if (!svg.isEmpty()) {
+                                                   // Persist with the message so the
+                                                   // render work is not repeated on the
+                                                   // next open (and the export can
+                                                   // embed the picture).
+                                                   m_diagramCache.insert(
+                                                       cacheKey, DiagramSvg{svg, theme, 0, 0});
+                                                   emit diagramRendered(
+                                                       cacheKey, m_diagramCache.value(cacheKey));
+                                               }
                                                onMermaidRendered(key, svg);
                                            });
     return true;
@@ -831,6 +859,96 @@ QByteArray MarkdownRenderer::svgContentForUrl(const QUrl &url) const
     if (url.scheme() != QLatin1String("llamasvg"))
         return {};
     return m_svgStore.value(url.authority());
+}
+
+// ---------------------------------------------------------------------------
+// Persistent diagram cache (mermaid + math SVGs, stored with the message)
+// ---------------------------------------------------------------------------
+
+QString MarkdownRenderer::mermaidDiagramKey(const QString &source)
+{
+    // No colon in the prefix: the key doubles as the authority of the
+    // "llamasvg://" image URL, which QUrl::authority() must parse back.
+    return QStringLiteral("mermaid-") + QString::fromLatin1(
+            QCryptographicHash::hash(source.toUtf8(), QCryptographicHash::Md5).toHex().left(16));
+}
+
+QString MarkdownRenderer::katexDiagramKey(const QString &tex, bool display)
+{
+    QByteArray input = tex.toUtf8();
+    input.append(display ? '\1' : '\2');
+    return QStringLiteral("katex-") + QString::fromLatin1(
+            QCryptographicHash::hash(input, QCryptographicHash::Md5).toHex().left(16));
+}
+
+void MarkdownRenderer::seedDiagramCache(const QString &key, const DiagramSvg &entry)
+{
+    if (!key.isEmpty() && !entry.svg.isEmpty())
+        m_diagramCache.insert(key, entry);
+}
+
+QString MarkdownRenderer::embedDiagramSvgs(QString content, const QMap<QString, DiagramSvg> &diagrams)
+{
+    if (diagrams.isEmpty())
+        return content;
+
+    auto lookup = [&diagrams](const QString &key) -> const DiagramSvg * {
+        const auto it = diagrams.constFind(key);
+        return it == diagrams.constEnd() ? nullptr : &it.value();
+    };
+
+    auto replaceMatches = [](const QString &text,
+                             const QRegularExpression &re,
+                             const std::function<QString(const QRegularExpressionMatch &)> &fn) {
+        QString out;
+        int lastEnd = 0;
+        auto it = re.globalMatch(text);
+        while (it.hasNext()) {
+            const QRegularExpressionMatch m = it.next();
+            out += text.mid(lastEnd, m.capturedStart() - lastEnd);
+            out += fn(m);
+            lastEnd = m.capturedEnd();
+        }
+        out += text.mid(lastEnd);
+        return out;
+    };
+
+    // ```mermaid blocks -> <details> section with the rendered picture in
+    // the header and the source in the body (mirroring the chat UI).
+    const QRegularExpression mermaidRe(
+        QStringLiteral("```(?:mermaid|mmd)\\s*\\n(.*?)\\n?```"),
+        QRegularExpression::DotMatchesEverythingOption);
+    content = replaceMatches(content, mermaidRe, [lookup](const QRegularExpressionMatch &m) -> QString {
+        const DiagramSvg *svg = lookup(mermaidDiagramKey(m.captured(1).trimmed()));
+        if (!svg)
+            return m.captured(0);
+        return QStringLiteral("<details>\n<summary>Mermaid diagram</summary>\n\n")
+               + QString::fromUtf8(svg->svg) + QStringLiteral("\n\n```mermaid\n")
+               + m.captured(1).trimmed() + QStringLiteral("\n```\n\n</details>");
+    });
+
+    // Math spans -> inline SVGs. Display math first (it contains the inline
+    // delimiters); spans without a cached SVG are kept verbatim.
+    const QRegularExpression displayRe(
+        QStringLiteral("\\$\\$\\s*(.*?)\\s*\\$\\$"), QRegularExpression::DotMatchesEverythingOption);
+    content = replaceMatches(content, displayRe, [lookup](const QRegularExpressionMatch &m) {
+        const DiagramSvg *svg = lookup(katexDiagramKey(m.captured(1).trimmed(), true));
+        return svg ? QString::fromUtf8(svg->svg) : m.captured(0);
+    });
+    // The content must not start or end with whitespace, and the delimiters
+    // must not be escaped or part of a $$ pair (plain-dollar prices like
+    // "$5 and $10" must stay text).
+    // No (?<!\$) lookbehind: Qt's regex engine does not support it, and
+    // $$ pairs are excluded anyway (the content cannot start or end with a
+    // $ or whitespace, and the closing delimiter is not followed by a $).
+    const QRegularExpression inlineRe(QStringLiteral(
+        "(?<!\\\\)\\$([^\\s$](?:[^$\\n]*[^\\s$])?)\\$(?<!\\\\)(?!\\$)"));
+    content = replaceMatches(content, inlineRe, [lookup](const QRegularExpressionMatch &m) {
+        const DiagramSvg *svg = lookup(katexDiagramKey(m.captured(1), false));
+        return svg ? QString::fromUtf8(svg->svg) : m.captured(0);
+    });
+
+    return content;
 }
 
 void MarkdownRenderer::onMermaidRendered(const QString &key, const QByteArray &svg)
@@ -1254,6 +1372,46 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
     const double displayScale = math.display ? 1.25 : 1.0;
     const int fontSize = qMax(1, QFontInfo(m_baseFont).pixelSize());
     const QString mathColor = color(TextForeground).name();
+
+    auto insertMathImage = [this](const QByteArray &svg, double width, double height, bool display) {
+        // The URL derives from the rendered content, so re-rendering the
+        // in-progress tail reuses the same resource (svgContentForUrl serves it).
+        const QString key = QStringLiteral("ktx-") + QString::fromLatin1(
+                QCryptographicHash::hash(svg, QCryptographicHash::Md5).toHex().left(16));
+        m_svgStore.insert(key, svg);
+
+        if (display) {
+            // Display math arrives as a paragraph holding the single math
+            // span: centre that block so the formula reads as its own line.
+            QTextBlockFormat blkFmt = m_cursor.blockFormat();
+            blkFmt.setAlignment(Qt::AlignHCenter);
+            m_cursor.setBlockFormat(blkFmt);
+        }
+
+        QTextImageFormat imgFmt;
+        imgFmt.setName(QStringLiteral("llamasvg://") + key);
+        imgFmt.setWidth(width);
+        imgFmt.setHeight(height);
+        imgFmt.setVerticalAlignment(QTextCharFormat::AlignBottom);
+        // insertImage() may leave the cursor's char format set to the image
+        // format; the following text must not inherit it.
+        const QTextCharFormat prev = m_cursor.charFormat();
+        m_cursor.insertImage(imgFmt);
+        m_cursor.setCharFormat(prev);
+    };
+
+    // The fill colour and the font size are baked into the SVG, so they are
+    // part of the persisted entry's context: a theme or font change
+    // re-renders the formula (cheap) and updates the entry in place.
+    const QString cacheKey = katexDiagramKey(tex.trimmed(), math.display);
+    const QString cacheContext = mathColor + QLatin1Char('|')
+                                 + QString::number(int(fontSize * displayScale));
+    const auto cacheIt = m_diagramCache.constFind(cacheKey);
+    if (cacheIt != m_diagramCache.constEnd() && cacheIt->context == cacheContext) {
+        insertMathImage(cacheIt->svg, cacheIt->width, cacheIt->height, math.display);
+        return;
+    }
+
     const KaTeXEngine::Rendered rendered = KaTeXEngine::instance()->render(
             tex, math.display, mathColor, int(fontSize * displayScale));
     if (rendered.svg.isEmpty()) {
@@ -1276,32 +1434,15 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
     const double depth = rendered.height - rendered.baseline; // content below baseline
     const double bottomSpace = qMax(textMetrics.descent() * displayScale, depth);
     const double boxHeight = rendered.baseline + bottomSpace;
-    const QString reboxed = reboxSvgHeight(rendered.svg, boxHeight);
+    const QByteArray reboxed = reboxSvgHeight(rendered.svg, boxHeight).toUtf8();
 
-    // The URL derives from the rendered content, so re-rendering the
-    // in-progress tail reuses the same resource (svgContentForUrl serves it).
-    const QString key = QStringLiteral("ktx-") + QString::fromLatin1(
-            QCryptographicHash::hash(rendered.svg, QCryptographicHash::Md5).toHex().left(16));
-    m_svgStore.insert(key, reboxed.toUtf8());
+    // Persist with the message so the render work is not repeated on the
+    // next open (and the export can embed the picture).
+    m_diagramCache.insert(
+        cacheKey, DiagramSvg{reboxed, cacheContext, rendered.width, boxHeight});
+    emit diagramRendered(cacheKey, m_diagramCache.value(cacheKey));
 
-    if (math.display) {
-        // Display math arrives as a paragraph holding the single math span:
-        // centre that block so the formula reads as its own line.
-        QTextBlockFormat blkFmt = m_cursor.blockFormat();
-        blkFmt.setAlignment(Qt::AlignHCenter);
-        m_cursor.setBlockFormat(blkFmt);
-    }
-
-    QTextImageFormat imgFmt;
-    imgFmt.setName(QStringLiteral("llamasvg://") + key);
-    imgFmt.setWidth(rendered.width);
-    imgFmt.setHeight(boxHeight);
-    imgFmt.setVerticalAlignment(QTextCharFormat::AlignBottom);
-    // insertImage() may leave the cursor's char format set to the image
-    // format; the following text must not inherit it.
-    const QTextCharFormat prev = m_cursor.charFormat();
-    m_cursor.insertImage(imgFmt);
-    m_cursor.setCharFormat(prev);
+    insertMathImage(reboxed, rendered.width, boxHeight, math.display);
 }
 
 // ---------------------------------------------------------------------------

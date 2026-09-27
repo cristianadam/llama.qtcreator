@@ -84,6 +84,8 @@ private slots:
     void radicalHookClearsRadicand();
     void invalidMathShowsSource();
     void plainDollarsStayText();
+    void mermaidServedFromPersistedCache();
+    void mathServedFromPersistedCache();
 };
 
 // The math renders synchronously (KaTeX is fast); find the first image URL
@@ -794,6 +796,96 @@ void MarkdownRendererTest::plainDollarsStayText()
 
     QCOMPARE(out.trimmed(), text);
     QVERIFY2(firstImageUrl(renderer).isEmpty(), "no math image expected");
+}
+
+void MarkdownRendererTest::mermaidServedFromPersistedCache()
+{
+    // Render the diagram for real (async) and capture the SVG the renderer
+    // reports as freshly rendered (this is what the chat UI persists with
+    // the message).
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    QString key;
+    MarkdownRenderer::DiagramSvg svg;
+    int emissions = 0;
+    QObject::connect(&renderer, &MarkdownRenderer::diagramRendered, [&](const QString &k,
+                                                                        const MarkdownRenderer::DiagramSvg &s) {
+        key = k;
+        svg = s;
+        ++emissions;
+    });
+    streamText(renderer,
+               QStringLiteral("```mermaid\nflowchart LR\n  A[Start] --> B[End]\n```"));
+    QVERIFY2(waitForPendingMermaid(renderer), "timed out waiting for the async render");
+    QCOMPARE(emissions, 1);
+    QVERIFY2(!key.isEmpty() && !svg.svg.isEmpty(), "expected a rendered diagram SVG");
+    QCOMPARE(key, MarkdownRenderer::mermaidDiagramKey(QStringLiteral("flowchart LR\n  A[Start] --> B[End]")));
+
+    // A renderer seeded with the persisted entry must show the picture
+    // immediately (synchronously, no spinner, no engine run, no new
+    // emission).
+    MarkdownRenderer cached;
+    cached.document()->setTextWidth(500);
+    cached.seedDiagramCache(key, svg);
+    int cachedEmissions = 0;
+    QObject::connect(&cached, &MarkdownRenderer::diagramRendered, [&](const QString &, const MarkdownRenderer::DiagramSvg &) {
+        ++cachedEmissions;
+    });
+    streamText(cached, QStringLiteral("```mermaid\nflowchart LR\n  A[Start] --> B[End]\n```"));
+
+    // No pending placeholder: the picture was in place before any async
+    // render could have run.
+    for (QTextBlock blk = cached.document()->firstBlock(); blk.isValid();
+         blk = blk.next()) {
+        QVERIFY2(blk.blockFormat()
+                     .property(MarkdownRenderer::MermaidPendingKeyProp)
+                     .toString()
+                     .isEmpty(),
+                 "a cached diagram must not show a spinner placeholder");
+    }
+    const QString url = firstImageUrl(cached);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://")), qPrintable(url));
+    QCOMPARE(cached.svgContentForUrl(QUrl(url)), svg.svg);
+    QCOMPARE(cachedEmissions, 0);
+}
+
+void MarkdownRendererTest::mathServedFromPersistedCache()
+{
+    // Render the formula for real and capture the SVG (the chat UI persists
+    // it with the message).
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    QString key;
+    MarkdownRenderer::DiagramSvg svg;
+    int emissions = 0;
+    QObject::connect(&renderer, &MarkdownRenderer::diagramRendered, [&](const QString &k,
+                                                                        const MarkdownRenderer::DiagramSvg &s) {
+        key = k;
+        svg = s;
+        ++emissions;
+    });
+    streamText(renderer, QStringLiteral("The answer is $e^{i\\pi}+1=0$."));
+    QCOMPARE(emissions, 1);
+    QVERIFY2(!key.isEmpty() && !svg.svg.isEmpty(), "expected a rendered math SVG");
+    QCOMPARE(key, MarkdownRenderer::katexDiagramKey(QStringLiteral("e^{i\\pi}+1=0"), false));
+
+    // A seeded renderer serves the same SVG synchronously, with the same
+    // image geometry, and does not re-render.
+    MarkdownRenderer cached;
+    cached.document()->setTextWidth(500);
+    cached.seedDiagramCache(key, svg);
+    int cachedEmissions = 0;
+    QObject::connect(&cached, &MarkdownRenderer::diagramRendered, [&](const QString &, const MarkdownRenderer::DiagramSvg &) {
+        ++cachedEmissions;
+    });
+    streamText(cached, QStringLiteral("The answer is $e^{i\\pi}+1=0$."));
+
+    const QString url = firstImageUrl(cached);
+    QVERIFY2(url.startsWith(QLatin1String("llamasvg://")), qPrintable(url));
+    QCOMPARE(cached.svgContentForUrl(QUrl(url)), svg.svg);
+    // The image box must keep the persisted geometry (re-boxed height).
+    QCOMPARE(imageFormatHeight(cached, url), svg.height);
+    QCOMPARE(cachedEmissions, 0);
 }
 
 int main(int argc, char **argv)
