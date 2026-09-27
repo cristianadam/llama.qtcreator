@@ -78,6 +78,11 @@ public:
     // on land in this list.
     Utils::StringListAspect enabledMcpToolsList{this};
     Utils::BoolAspect toolsEnabled{this};
+    // Run the chat tools in a sandbox: bash commands in a platform sandbox
+    // (bubblewrap on Linux, sandbox-exec on macOS; not available on
+    // Windows), and the file tools restricted to the project directory and
+    // the temporary locations.
+    Utils::BoolAspect sandboxCommands{this};
 
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};
@@ -122,6 +127,12 @@ public:
 
     Utils::BoolAspect enableLlamaCpp{this};
     ProjectExplorer::UseGlobalAspect useGlobalSettings{Utils::Id(), this};
+    // Per-project override for the global "Sandbox commands" setting.
+    Utils::BoolAspect sandboxCommands{this};
+
+    //! The effective sandbox setting: the global value when
+    //! \c useGlobalSettings is on, the project value otherwise.
+    bool isSandboxEnabled() const;
 };
 
 class ToolsSettingsPage : public Core::IOptionsPage

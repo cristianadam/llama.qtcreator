@@ -5,6 +5,7 @@ namespace LlamaCpp::Constants {
     const char LLAMACPP_PROJECT_SETTINGS_ID[] = "LlamaCpp.Project.Settings";
     const char ENABLE_LLAMACPP[] = "LlamaCpp.EnableLlamaCpp";
     const char LLAMACPP_USE_GLOBAL_SETTINGS[] = "LlamaCpp.UseGlobalSettings";
+    const char LLAMACPP_PROJECT_SANDBOX_COMMANDS[] = "LlamaCpp.SandboxCommands";
 
     const char LLAMACPP_TOGGLE_ENABLE_DISABLE[] = "LlamaCpp.ToggleEnableDisable";
     const char LLAMACPP_TOGGLE_AUTOFIM[] = "LlamaCpp.ToggleAutoFIM";

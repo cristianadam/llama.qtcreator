@@ -169,6 +169,8 @@ void FindTool::run(const QJsonObject &args,
     }
 
     const FilePath root = absoluteProjectPath(FilePath::fromUserInput(args.value("path").toString()));
+    if (const QString error = sandboxAccessError(root, /*isWrite=*/false); !error.isEmpty())
+        return done(error, false);
     const QString rootString = root.toUserOutput();
     const QFileInfo rootInfo(rootString);
     if (!rootInfo.exists() || !rootInfo.isDir()) {

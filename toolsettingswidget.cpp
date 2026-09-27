@@ -107,9 +107,25 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     ripgrepLayout->addWidget(m_ripgrepButton);
     updateRipgrepStatus();
 
+    // Sandbox for the chat tools. Not available on Windows (Windows
+    // Sandbox is a full VM, not a per-command wrapper), so the check-box
+    // is disabled there.
+    m_sandboxCheck = new QCheckBox(settings().sandboxCommands.displayName(), this);
+    m_sandboxCheck->setToolTip(settings().sandboxCommands.toolTip());
+    m_sandboxCheck->setChecked(settings().sandboxCommands());
+#if defined(Q_OS_WIN)
+    m_sandboxCheck->setEnabled(false);
+    m_sandboxCheck->setToolTip(Tr::tr("Sandboxing is not supported on Windows."));
+#endif
+    connect(m_sandboxCheck,
+            &QCheckBox::toggled,
+            this,
+            [](bool checked) { settings().sandboxCommands.setValue(checked); });
+
     // layout
     using namespace Layouting;
-    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow}.attachTo(this);
+    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow, m_sandboxCheck}
+        .attachTo(this);
 
     connect(filterLineEdit,
             &FancyLineEdit::textChanged,

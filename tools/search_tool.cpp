@@ -231,6 +231,8 @@ void SearchTool::run(const QJsonObject &args,
     }
 
     const FilePath root = absoluteProjectPath(FilePath::fromUserInput(args.value("path").toString()));
+    if (const QString error = sandboxAccessError(root, /*isWrite=*/false); !error.isEmpty())
+        return done(error, false);
     const QString rootString = root.toUserOutput();
     if (!root.exists()) {
         return done(Tr::tr("Error: path does not exist: %1").arg(rootString), false);

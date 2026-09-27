@@ -25,6 +25,7 @@ add_qtc_test(llamatools_test
     ../tools/mcptool.cpp
     ../tools/patch.cpp
     ../tools/bash_tool.cpp
+    ../tools/readfile_tool.cpp
     ../tools/task_tool.cpp
     ../tools/tool.cpp
     ../tools/todowrite_tool.cpp

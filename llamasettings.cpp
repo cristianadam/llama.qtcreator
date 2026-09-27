@@ -506,6 +506,19 @@ LlamaSettings::LlamaSettings()
     toolsEnabled.setToolTip(
         Tr::tr("If checked the chat will start with the Tools button turned on."));
 
+    sandboxCommands.setSettingsKey("SandboxCommands");
+    sandboxCommands.setDefaultValue(false);
+    sandboxCommands.setDisplayName(Tr::tr("Sandbox commands"));
+    sandboxCommands.setLabelText(Tr::tr("Sandbox commands"));
+    sandboxCommands.setToolTip(Tr::tr(
+        "If checked, the chat tools are confined to a sandbox: bash commands "
+        "run in a platform sandbox that blocks writes to system locations "
+        "(bubblewrap/bwrap on Linux, sandbox-exec on macOS), and the file "
+        "tools may only write inside the project directory and temporary "
+        "locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, "
+        "~/.kube, ~/.netrc) are not readable by any tool. Not supported on "
+        "Windows."));
+
     //
     // Web search (websearch tool)
     //
@@ -654,6 +667,7 @@ LlamaSettings::LlamaSettings()
     max_tokens.setEnabler(&enableLlamaCpp);
     customJson.setEnabler(&enableLlamaCpp);
     toolsEnabled.setEnabler(&enableLlamaCpp);
+    sandboxCommands.setEnabler(&enableLlamaCpp);
     webSearchProvider.setEnabler(&enableLlamaCpp);
     webSearchExaUrl.setEnabler(&enableLlamaCpp);
     webSearchExaApiKey.setEnabler(&enableLlamaCpp);
@@ -786,11 +800,28 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
 
     initEnableAspect(enableLlamaCpp);
 
+    sandboxCommands.setSettingsKey(Constants::LLAMACPP_PROJECT_SANDBOX_COMMANDS);
+    sandboxCommands.setDefaultValue(false);
+    sandboxCommands.setDisplayName(Tr::tr("Sandbox commands"));
+    sandboxCommands.setLabelText(Tr::tr("Sandbox commands"));
+    sandboxCommands.setToolTip(
+        Tr::tr("Overrides the global 'Sandbox commands' setting for this "
+               "project. See the global setting on the Llama Tools page for "
+               "what the sandbox restricts."));
+
     Store map = storeFromVariant(project->namedSettings(Constants::LLAMACPP_PROJECT_SETTINGS_ID));
     fromMap(map);
 
     enableLlamaCpp.addOnChanged(this, [this, project] { save(project); });
     useGlobalSettings.addOnChanged(this, [this, project] { save(project); });
+    sandboxCommands.addOnChanged(this, [this, project] { save(project); });
+}
+
+bool LlamaProjectSettings::isSandboxEnabled() const
+{
+    if (useGlobalSettings())
+        return settings().sandboxCommands();
+    return sandboxCommands();
 }
 
 void LlamaProjectSettings::setUseGlobalSettings(bool useGlobal)

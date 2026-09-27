@@ -66,6 +66,9 @@ void ReadFileTool::run(const QJsonObject &args,
     bool readAll = args.value("should_read_entire_file").toBool(false);
 
     const FilePath targetFile = absoluteProjectPath(filePath);
+    if (const QString error = sandboxAccessError(targetFile, /*isWrite=*/false);
+            !error.isEmpty())
+        return done(error, false);
     if (!targetFile.exists()) {
         return done(Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput()), false);
     }

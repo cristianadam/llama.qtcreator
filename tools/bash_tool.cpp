@@ -1,6 +1,8 @@
 #include "bash_tool.h"
 #include "factory.h"
+#include "llamasettings.h"
 #include "llamatr.h"
+#include "tool_utils.h"
 
 #include <QtTaskTree/qprocesstask.h>
 #include <QtTaskTree/qtasktree.h>
@@ -46,6 +48,13 @@ struct BashSpec
     QString program;
     QString executeFlag;
     QString error; // non-empty when no usable bash was found
+};
+
+struct SandboxSpec
+{
+    QString program; // sandbox wrapper executable
+    QStringList arguments; // wrapper arguments, the command follows them
+    QString error; // non-empty when the sandbox is requested but unavailable
 };
 
 #if defined(Q_OS_WIN)
@@ -101,6 +110,176 @@ BashSpec bashSpec()
     if (onPath.exists())
         return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
     return { QStringLiteral("/bin/sh"), QStringLiteral("-c"), {} };
+#endif
+}
+
+// Escapes a path for use inside a double-quoted sandbox-exec profile string.
+QString profileString(const QString &path)
+{
+    QString escaped = path;
+    escaped.replace(QLatin1Char('\\'), QStringLiteral("\\\\"));
+    escaped.replace(QLatin1Char('"'), QStringLiteral("\\\""));
+    return escaped;
+}
+
+#if defined(Q_OS_MACOS)
+
+// Default-allow profile that turns the system locations read-only. The
+// working directory and the temporary locations stay writable. Two
+// Seatbelt quirks shape the deny list (both verified empirically):
+// - request paths are canonicalized by the kernel (/var -> /private/var),
+//   while rule paths are matched as written, so rules must use the
+//   canonical spelling to take effect
+// - a matching deny beats a more specific allow, so a blanket deny of a
+//   writable location's parent (e.g. /private/var covering $TMPDIR,
+//   /Users covering the working directory) cannot be carved out with an
+//   allow. Deny entries that would cover one of the writable locations
+//   (e.g. the home directory when the project is inside it, or a project
+//   on a volume under /Volumes) are skipped instead.
+QString macSandboxProfile(const QString &cwd)
+{
+    const QString tmpDir = QDir::tempPath();
+    const QString workDir = profileString(cwd);
+
+    // Unreadable credential locations (skipped when the working directory
+    // is inside one of them, the same way the write denies are).
+    QStringList readDenies;
+    for (const QString &secret : secretReadPaths())
+        if (!pathCovers(secret, cwd))
+            readDenies << QStringLiteral("  (subpath \"") + profileString(secret)
+                        + QStringLiteral("\")");
+
+    QStringList denyPaths = {
+        QStringLiteral("/bin"),
+        QStringLiteral("/sbin"),
+        QStringLiteral("/usr"),
+        QStringLiteral("/System"),
+        QStringLiteral("/Library"),
+        QStringLiteral("/Applications"),
+        QStringLiteral("/cores"),
+        QStringLiteral("/opt"),
+        QStringLiteral("/home"),
+        QStringLiteral("/Volumes"),
+        QStringLiteral("/etc"),
+        QStringLiteral("/private/etc"),
+        // Canonical spellings: the /var/... forms are dead rules, see above.
+        QStringLiteral("/private/var/db"),
+        QStringLiteral("/private/var/root"),
+        QStringLiteral("/private/var/log"),
+        QStringLiteral("/private/var/at"),
+        QStringLiteral("/private/var/spool"),
+        QStringLiteral("/private/var/mail"),
+        QStringLiteral("/private/var/ldap"),
+    };
+    // The credential locations are not writable either: the read denies
+    // above would be pointless if commands could plant or overwrite
+    // credentials.
+    for (const QString &secret : secretReadPaths())
+        denyPaths << secret;
+    // Home directories under /Users (all users'; the entry covering the
+    // working directory is skipped by the loop below).
+    const QStringList userDirs =
+        QDir(QStringLiteral("/Users")).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString &userDir : userDirs)
+        denyPaths << QStringLiteral("/Users/") + userDir;
+    QStringList writeDenies;
+    for (const QString &denyPath : denyPaths)
+        if (!pathCovers(denyPath, cwd) && !pathCovers(denyPath, tmpDir))
+            writeDenies << QStringLiteral("  (subpath \"") + profileString(denyPath)
+                        + QStringLiteral("\")");
+
+    // Note: the (allow file-write*) block below is belt-and-braces -
+    // (allow default) already permits those writes, and the deny list skips
+    // anything covering the working directory or the temporary locations, so
+    // a matching deny can never beat the allow. It is kept to make the
+    // writable locations explicit.
+    QString profile = QStringLiteral(
+                          "(version 1)\n"
+                          "(allow default)\n"
+                          "(allow file-write* (literal \"/dev/null\") "
+                          "(literal \"/dev/zero\") "
+                          "(literal \"/dev/urandom\") "
+                          "(literal \"/dev/random\") "
+                          "(literal \"/dev/tty\") "
+                          "(subpath \"/private/tmp\") "
+                          "(subpath \"")
+        + profileString(tmpDir) + QStringLiteral("\") (subpath \"") + workDir
+        + QStringLiteral("\"))\n");
+    // Block devices are writable under (allow default), so a runaway command
+    // could dd or mkfs a disk. Individual globs, as a subpath deny of /dev
+    // would also beat the needed writes to /dev/null that shell redirections
+    // do constantly.
+    profile += QStringLiteral(
+                   "(deny file-write* (literal \"/dev/disk*\") "
+                   "(literal \"/dev/rdisk*\") "
+                   "(literal \"/dev/bpf*\") (literal \"/dev/apple*\"))\n");
+    if (!writeDenies.isEmpty())
+        profile += QStringLiteral("(deny file-write*\n") + writeDenies.join(QLatin1Char('\n'))
+                 + QStringLiteral("\n)\n");
+    if (!readDenies.isEmpty())
+        profile += QStringLiteral("(deny file-read*\n") + readDenies.join(QLatin1Char('\n'))
+                 + QStringLiteral("\n)\n");
+    return profile;
+}
+
+#endif
+
+// Builds the wrapper that confines the command to the working directory and
+// the temporary locations. Linux uses bubblewrap (the whole file system is
+// read-only except \a cwd and /tmp); macOS uses sandbox-exec. Windows has no
+// per-command sandbox (Windows Sandbox is a full VM), so it is reported as
+// unavailable there.
+SandboxSpec sandboxSpec(const QString &cwd)
+{
+#if defined(Q_OS_WIN)
+    return { {}, {}, Tr::tr("Sandboxing is not supported on Windows. "
+                            "Uncheck 'Sandbox commands' in the Llama "
+                            "settings to run commands without a sandbox.") };
+#elif defined(Q_OS_MACOS)
+    const FilePath exe =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("sandbox-exec"));
+    if (!exe.exists())
+        return { {}, {}, Tr::tr("The sandbox-exec executable was not found; "
+                                "sandboxing is unavailable on this system.") };
+    return { exe.toUserOutput(),
+             { QStringLiteral("-p"), macSandboxProfile(cwd) },
+             {} };
+#else
+    const FilePath exe =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("bwrap"));
+    if (!exe.exists())
+        return { {}, {}, Tr::tr("bubblewrap (bwrap) was not found. Install it "
+                                "(e.g. 'apt install bubblewrap' or 'dnf install "
+                                "bubblewrap') or uncheck 'Sandbox commands' "
+                                "in the Llama settings to run commands without "
+                                "a sandbox.") };
+    QStringList args = { QStringLiteral("--ro-bind"), QStringLiteral("/"),
+                         QStringLiteral("/"),
+                         QStringLiteral("--bind"), cwd, cwd };
+    // A fresh, empty /tmp for the command. Skipped when the working
+    // directory is inside it, as the later mount would wipe out the
+    // writable cwd bind.
+    if (!pathCovers(QStringLiteral("/tmp"), cwd))
+        args << QStringLiteral("--tmpfs") << QStringLiteral("/tmp");
+    args << QStringLiteral("--dev") << QStringLiteral("/dev")
+        << QStringLiteral("--proc") << QStringLiteral("/proc")
+        << QStringLiteral("--unshare-pid")
+        << QStringLiteral("--unshare-ipc")
+        << QStringLiteral("--unshare-uts")
+        << QStringLiteral("--die-with-parent");
+    // Hide the credential locations - the read equivalent of the macOS
+    // deny-read rules: empty tmpfses over the directories, /dev/null over
+    // the files. Skipped when the working directory is inside one of them,
+    // as the later mount would wipe out the writable cwd bind.
+    for (const QString &secret : secretReadPaths()) {
+        if (pathCovers(secret, cwd))
+            continue;
+        if (QDir(secret).exists())
+            args << QStringLiteral("--tmpfs") << secret;
+        else if (QFileInfo(secret).isFile())
+            args << QStringLiteral("--ro-bind") << QStringLiteral("/dev/null") << secret;
+    }
+    return { exe.toUserOutput(), args, {} };
 #endif
 }
 
@@ -267,12 +446,33 @@ QString BashTool::name() const
 
 QString BashTool::toolDefinition() const
 {
-    return R"raw(
+    QString description = QStringLiteral(
+        "Executes a command in a bash shell and returns its combined output "
+        "(stdout and stderr). Commands use bash/POSIX syntax on all platforms "
+        "(Windows uses Git Bash). Use this for terminal operations like git, "
+        "npm, docker, running builds or tests. Do not use it for reading, "
+        "writing, editing or searching files - use the dedicated tools for "
+        "that instead. Output is limited to the last 2000 lines or 50 KB; if "
+        "it is truncated, the full output is saved to a temporary file and "
+        "its path is reported. Non-zero exit codes, crashes and timeouts are "
+        "reported as failures together with the output produced so far.");
+    if (sandboxEnabled(ProjectManager::startupProject()))
+        description += QStringLiteral(
+            " Commands run in a sandbox: only the working directory and "
+            "temporary locations are writable, system locations are "
+            "read-only, and credential locations (~/.ssh, ~/.aws, "
+            "~/.gnupg, ~/.kube, ~/.netrc) are not readable, so do not "
+            "attempt to modify files outside the working directory or to "
+            "read credentials. The workdir must be inside the project "
+            "directory or a temporary location. On Linux, /tmp is a fresh "
+            "empty directory for each command, so files do not persist "
+            "there between commands.");
+    return QString::fromUtf8(R"raw(
     {
         "type": "function",
         "function": {
             "name": "bash",
-            "description": "Executes a command in a bash shell and returns its combined output (stdout and stderr). Commands use bash/POSIX syntax on all platforms (Windows uses Git Bash). Use this for terminal operations like git, npm, docker, running builds or tests. Do not use it for reading, writing, editing or searching files - use the dedicated tools for that instead. Output is limited to the last 2000 lines or 50 KB; if it is truncated, the full output is saved to a temporary file and its path is reported. Non-zero exit codes, crashes and timeouts are reported as failures together with the output produced so far.",
+            "description": "%1",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -293,7 +493,7 @@ QString BashTool::toolDefinition() const
                 "strict": true
             }
         }
-    })raw";
+    })raw").arg(description);
 }
 
 QString BashTool::oneLineSummary(const QJsonObject &arguments) const
@@ -323,8 +523,9 @@ void BashTool::run(const QJsonObject &arguments,
         return;
     }
 
+    Project *p = ProjectManager::startupProject();
     FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (const Project *p = ProjectManager::startupProject())
+    if (p)
         cwd = p->projectDirectory();
 
     const QString workdir = arguments.value("workdir").toString();
@@ -339,12 +540,32 @@ void BashTool::run(const QJsonObject &arguments,
         return;
     }
 
+    // The sandbox makes the working directory writable, so a model-supplied
+    // workdir must stay inside the locations the sandbox allows writes to,
+    // or the command would define its own sandbox boundary.
+    if (const QString error = sandboxAccessError(cwd, /*isWrite=*/true);
+            !error.isEmpty()) {
+        done(Tr::tr("Error: %1").arg(error), false);
+        return;
+    }
+
     int timeoutMs = arguments.value("timeout").toInt(kDefaultTimeoutMs);
     timeoutMs = qBound(1, timeoutMs, kMaxTimeoutMs);
 
     const BashSpec spec = bashSpec();
     if (!spec.error.isEmpty()) {
         done(Tr::tr("Error: %1").arg(spec.error), false);
+        return;
+    }
+
+    // Optionally confine the command to a sandbox (bubblewrap on Linux,
+    // sandbox-exec on macOS). The wrapper becomes the program to start; the
+    // shell and the command are its arguments.
+    const SandboxSpec sandbox = sandboxEnabled(p)
+            ? sandboxSpec(cwdString)
+            : SandboxSpec{};
+    if (!sandbox.error.isEmpty()) {
+        done(Tr::tr("Error: %1").arg(sandbox.error), false);
         return;
     }
 
@@ -410,7 +631,20 @@ void BashTool::run(const QJsonObject &arguments,
         }
     }
 
-    const auto onSetup = [state, cwdString, env, spec, command](QProcess &process) {
+    const auto onSetup = [state, cwdString, env, spec, command,
+                          sandbox](QProcess &process) {
+        // The program to start and its arguments: the shell and the command,
+        // optionally wrapped in the sandbox. The stub and the plain QProcess
+        // path must agree on the inferior, or the sandbox would be silently
+        // bypassed.
+        QString program = spec.program;
+        QStringList arguments = {spec.executeFlag, command};
+        if (!sandbox.program.isEmpty()) {
+            program = sandbox.program;
+            arguments =
+                sandbox.arguments + QStringList{spec.program, spec.executeFlag, command};
+        }
+
         process.setWorkingDirectory(cwdString);
         process.setProcessChannelMode(QProcess::MergedChannels);
         if (state->usedStub) {
@@ -421,22 +655,21 @@ void BashTool::run(const QJsonObject &arguments,
             // --wait must be passed explicitly (even empty): the option has
             // a default value, and a non-empty value makes the stub wait for
             // a key press before exiting.
-            process.setArguments({QStringLiteral("-s"),
-                                  state->socketName,
-                                  QStringLiteral("-w"),
-                                  cwdString,
-                                  QStringLiteral("-e"),
-                                  state->envFilePath,
-                                  QStringLiteral("--wait"),
-                                  QString(),
-                                  QStringLiteral("--"),
-                                  spec.program,
-                                  spec.executeFlag,
-                                  command});
+            QStringList stubArguments = {QStringLiteral("-s"),
+                                         state->socketName,
+                                         QStringLiteral("-w"),
+                                         cwdString,
+                                         QStringLiteral("-e"),
+                                         state->envFilePath,
+                                         QStringLiteral("--wait"),
+                                         QString(),
+                                         QStringLiteral("--")};
+            stubArguments += arguments;
+            process.setArguments(stubArguments);
         } else {
             process.setProcessEnvironment(env);
-            process.setProgram(spec.program);
-            process.setArguments({spec.executeFlag, command});
+            process.setProgram(program);
+            process.setArguments(arguments);
         }
     };
 

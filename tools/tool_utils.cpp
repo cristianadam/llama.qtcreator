@@ -1,12 +1,78 @@
+#include "llamasettings.h"
+#include "llamatr.h"
+
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
+#include <QDir>
 #include <QFileInfo>
+#include <QStandardPaths>
 
+using namespace LlamaCpp;
 using namespace ProjectExplorer;
 using namespace Utils;
+
+bool sandboxEnabled(Project *project)
+{
+#if defined(Q_OS_WIN)
+    Q_UNUSED(project);
+    return false;
+#else
+    if (project)
+        return LlamaProjectSettings(project).isSandboxEnabled();
+    return settings().sandboxCommands();
+#endif
+}
+
+bool pathCovers(const QString &prefix, const QString &path)
+{
+    return path == prefix
+            || path.startsWith(prefix.endsWith(QLatin1Char('/'))
+                                       ? prefix
+                                       : prefix + QLatin1Char('/'));
+}
+
+// Credential locations that sandboxed tools must not read, mirroring the
+// denyRead defaults of the pi sandbox extension.
+QStringList secretReadPaths()
+{
+    const QString home = QDir::homePath();
+    return { home + QStringLiteral("/.ssh"),
+             home + QStringLiteral("/.aws"),
+             home + QStringLiteral("/.gnupg"),
+             home + QStringLiteral("/.kube"),
+             home + QStringLiteral("/.netrc") };
+}
+
+QString sandboxAccessError(const FilePath &path, bool isWrite)
+{
+    if (!sandboxEnabled(ProjectManager::startupProject()))
+        return {};
+
+    const QString p = path.toFSPathString();
+    if (isWrite) {
+        FilePath cwd = Core::DocumentManager::projectsDirectory();
+        if (const Project *project = ProjectManager::startupProject())
+            cwd = project->projectDirectory();
+        if (pathCovers(cwd.toFSPathString(), p) || pathCovers(QDir::tempPath(), p))
+            return {};
+        return Tr::tr(
+                   "Writing to \"%1\" is not allowed: the sandbox only permits "
+                   "writes inside the project directory and temporary "
+                   "locations.")
+                .arg(p);
+    }
+
+    for (const QString &secret : secretReadPaths())
+        if (pathCovers(secret, p))
+            return Tr::tr(
+                       "Reading \"%1\" is not allowed: credential locations "
+                       "are not readable inside the sandbox.")
+                    .arg(p);
+    return {};
+}
 
 FilePath absoluteProjectPath(const FilePath &relPath, bool mustExist)
 {

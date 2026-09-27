@@ -1,10 +1,33 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 
 namespace Utils {
 class FilePath;
 }
+
+namespace ProjectExplorer {
+class Project;
+}
+
+//! True when the sandbox is enabled (global or per-project setting; always
+//! false on Windows, where there is no per-command sandbox).
+bool sandboxEnabled(ProjectExplorer::Project *project);
+
+//! True when \a path equals \a prefix or is located inside it.
+bool pathCovers(const QString &prefix, const QString &path);
+
+//! Credential locations (directories and files) that sandboxed tools must
+//! not read.
+QStringList secretReadPaths();
+
+//! Model-facing error when the (enabled) sandbox forbids \a isWrite access
+//! to \a path; an empty string when the access is allowed or the sandbox is
+//! disabled. Mirrors the bash sandbox: writes are restricted to the project
+//! directory and the temporary locations, reads are denied for the
+//! credential locations.
+QString sandboxAccessError(const Utils::FilePath &path, bool isWrite);
 
 /*! Resolves \a relPath against the startup project directory (or the project
     directory when no project is open).

@@ -130,6 +130,8 @@ void WriteTool::run(const QJsonObject &args,
     const QString content = args.value("content").toString();
 
     const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path), /*mustExist=*/false);
+    if (const QString error = sandboxAccessError(target, /*isWrite=*/true); !error.isEmpty())
+        return done(error, false);
     if (target.parentDir().isFile())
         return done(Tr::tr("Cannot write \"%1\": a parent path is a file.").arg(path), false);
 

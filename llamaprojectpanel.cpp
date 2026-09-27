@@ -28,6 +28,7 @@ public:
         Column {
             m_settings->useGlobalSettings,
             m_settings->enableLlamaCpp,
+            m_settings->sandboxCommands,
             st,
         }.attachTo(this);
 
@@ -38,7 +39,9 @@ public:
 private:
     void applyGlobalState()
     {
-        m_settings->enableLlamaCpp.setEnabled(!m_settings->useGlobalSettings());
+        const bool useGlobal = m_settings->useGlobalSettings();
+        m_settings->enableLlamaCpp.setEnabled(!useGlobal);
+        m_settings->sandboxCommands.setEnabled(!useGlobal);
     }
 
     LlamaProjectSettings *m_settings = nullptr;

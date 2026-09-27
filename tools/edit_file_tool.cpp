@@ -356,6 +356,8 @@ void EditFileTool::run(const QJsonObject &args,
     const bool replaceAll = args.value("replace_all").toBool();
 
     const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
+    if (const QString error = sandboxAccessError(target, /*isWrite=*/true); !error.isEmpty())
+        return done(error, false);
     if (!target.isFile())
         return done(Tr::tr("Cannot edit \"%1\": file not found. Use read_file to verify the "
                            "path, or write to create the file.")

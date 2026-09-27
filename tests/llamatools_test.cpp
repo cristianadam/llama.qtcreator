@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QEventLoop>
+#include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTextStream>
 #include <QTimer>
@@ -19,12 +20,14 @@
 #include <utils/filepath.h>
 
 #include <llamachatmanager.h>
+#include <llamasettings.h>
 #include <llamathinkingsectionparser.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/mcptool.h>
 #include <tools/patch.h>
 #include <tools/bash_tool.h>
+#include <tools/readfile_tool.h>
 #include <tools/find_tool.h>
 #include <tools/ripgrep.h>
 #include <tools/search_tool.h>
@@ -437,6 +440,11 @@ private slots:
     void bash_missingWorkdir();
     void bash_emptyCommand();
     void bash_timeout();
+    void bash_sandbox();
+    void bash_sandboxWithStub();
+    void bash_sandboxDenyRead();
+    void sandboxFileTools();
+    void projectSandboxOverride();
     void bash_truncation();
     void bash_summaries();
     void bash_detailsMarkdown();
@@ -2213,6 +2221,333 @@ void LlamaToolsTest::bash_timeout()
     const auto [output, ok] = runBashTool(args, 30000);
     QVERIFY(!ok);
     QVERIFY(output.contains("timed out after 500 ms"));
+}
+
+// Restores the global sandbox setting (and, when \a restoreHome is set,
+// the HOME environment variable) when the scope is left, even when a
+// failing assertion returns early from the test.
+class SandboxTestEnv
+{
+public:
+    explicit SandboxTestEnv(bool restoreHome = false)
+        : m_sandbox(settings().sandboxCommands()),
+          m_home(qEnvironmentVariable("HOME")),
+          m_hadHome(!m_home.isEmpty()),
+          m_restoreHome(restoreHome)
+    {
+        settings().sandboxCommands.setValue(true);
+    }
+
+    ~SandboxTestEnv()
+    {
+        settings().sandboxCommands.setValue(m_sandbox);
+        if (m_restoreHome) {
+            if (m_hadHome)
+                qputenv("HOME", m_home.toUtf8());
+            else
+                qunsetenv("HOME");
+        }
+    }
+
+private:
+    bool m_sandbox = false;
+    QString m_home;
+    bool m_hadHome = false;
+    bool m_restoreHome = false;
+};
+
+void LlamaToolsTest::bash_sandbox()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("Sandboxing is not supported on Windows");
+#elif defined(Q_OS_MACOS)
+    if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
+        QSKIP("sandbox-exec is not available on this system");
+#else
+    if (QStandardPaths::findExecutable(QStringLiteral("bwrap")).isEmpty())
+        QSKIP("bubblewrap (bwrap) is not installed");
+#endif
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+
+    const SandboxTestEnv env;
+
+    // Writing in the working directory keeps working inside the sandbox.
+    QJsonObject args;
+    args["command"] = QStringLiteral(
+        "touch llama-sandbox-file && rm llama-sandbox-file && echo "
+        "sandbox-cwd-ok");
+    args["workdir"] = workdir.path();
+    const auto [output, ok] = runBashTool(args);
+
+    // Writing to a system location is refused.
+    QJsonObject deniedArgs;
+    deniedArgs["command"] = QStringLiteral("touch /usr/llama-sandbox-test");
+    deniedArgs["workdir"] = workdir.path();
+    const auto denied = runBashTool(deniedArgs);
+
+    QVERIFY(ok);
+    QVERIFY(output.contains("sandbox-cwd-ok"));
+
+    QVERIFY(!denied.second);
+    QVERIFY(!QFileInfo::exists(QStringLiteral("/usr/llama-sandbox-test")));
+}
+
+// The stub path in BashTool::run used to bypass the sandbox; this test
+// installs a fake process stub (a script that execs everything after its
+// "--" separator) via LLAMA_SHELL_STUB and verifies the sandbox still
+// applies.
+void LlamaToolsTest::bash_sandboxWithStub()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("Sandboxing is not supported on Windows");
+#elif defined(Q_OS_MACOS)
+    if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
+        QSKIP("sandbox-exec is not available on this system");
+#else
+    if (QStandardPaths::findExecutable(QStringLiteral("bwrap")).isEmpty())
+        QSKIP("bubblewrap (bwrap) is not installed");
+#endif
+
+    QTemporaryDir stubDir;
+    QVERIFY(stubDir.isValid());
+    const QString stubPath = stubDir.path() + QStringLiteral("/fake_stub.sh");
+    QFile stub(stubPath);
+    QVERIFY(stub.open(QIODevice::WriteOnly));
+    stub.write("#!/bin/sh\n"
+               "while [ $# -gt 0 ] && [ \"$1\" != \"--\" ]; do shift; done\n"
+               "shift\n"
+               "exec \"$@\"\n");
+    stub.close();
+    QVERIFY(QFile::setPermissions(stubPath,
+                                  QFile::ReadOwner | QFile::WriteOwner |
+                                  QFile::ExeOwner | QFile::ReadGroup |
+                                  QFile::ExeGroup | QFile::ReadOther |
+                                  QFile::ExeOther));
+
+    qputenv("LLAMA_SHELL_STUB", stubPath.toUtf8());
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+
+    const SandboxTestEnv env;
+    QJsonObject args;
+    args["command"] = QStringLiteral("touch /usr/llama-sandbox-stub-test");
+    args["workdir"] = workdir.path();
+    const auto denied = runBashTool(args);
+
+    qunsetenv("LLAMA_SHELL_STUB");
+
+    QVERIFY(!denied.second);
+    QVERIFY(!QFileInfo::exists(QStringLiteral("/usr/llama-sandbox-stub-test")));
+}
+
+void LlamaToolsTest::bash_sandboxDenyRead()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("Sandboxing is not supported on Windows");
+#elif defined(Q_OS_MACOS)
+    if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
+        QSKIP("sandbox-exec is not available on this system");
+#else
+    if (QStandardPaths::findExecutable(QStringLiteral("bwrap")).isEmpty())
+        QSKIP("bubblewrap (bwrap) is not installed");
+#endif
+
+    // Point HOME at a temporary directory with a fake credential file so the
+    // test never touches the real user's ~/.ssh & co.
+    QTemporaryDir fakeHome;
+    QVERIFY(fakeHome.isValid());
+    const QString keyFile = fakeHome.path() + QStringLiteral("/.ssh/id_test");
+    QDir(fakeHome.path()).mkpath(QStringLiteral(".ssh"));
+    QFile file(keyFile);
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    file.write("llama-secret-key");
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+
+    // Captures (and later restores) HOME and the sandbox setting.
+    const SandboxTestEnv env(/* restoreHome = */ true);
+    qputenv("HOME", fakeHome.path().toUtf8());
+    QJsonObject args;
+    args["command"] = QStringLiteral("cat .ssh/id_test");
+    args["workdir"] = workdir.path();
+    const auto [output, ok] = runBashTool(args);
+
+    QVERIFY(!ok);
+    QVERIFY(!output.contains("llama-secret-key"));
+}
+
+// The file tools run in-process and must honor the same sandbox rules as
+// the bash tool: no reading credential directories, no writes outside the
+// project directory and the temporary locations.
+void LlamaToolsTest::sandboxFileTools()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("Sandboxing is not supported on Windows");
+#endif
+
+    // The real home directory, captured before HOME is pointed at fakeHome
+    // below (QDir::homePath() follows $HOME).
+    const QString realHome = QDir::homePath();
+
+    QTemporaryDir fakeHome;
+    QVERIFY(fakeHome.isValid());
+    const QString keyFile = fakeHome.path() + QStringLiteral("/.ssh/id_test");
+    QDir(fakeHome.path()).mkpath(QStringLiteral(".ssh"));
+    QFile file(keyFile);
+    QVERIFY(file.open(QIODevice::WriteOnly));
+    file.write("llama-secret-key");
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+
+    // Captures (and later restores) HOME and the sandbox setting.
+    const SandboxTestEnv env(/* restoreHome = */ true);
+    qputenv("HOME", fakeHome.path().toUtf8());
+
+    // read_file: credential files are not readable.
+    QJsonObject readArgs;
+    readArgs["file_path"] = keyFile;
+    const auto readRes = runTool<Tools::ReadFileTool>(readArgs);
+    QVERIFY(!readRes.second);
+    QVERIFY(!readRes.first.contains("llama-secret-key"));
+
+    // write / edit: outside the project directory is not writable.
+    QJsonObject writeArgs;
+    writeArgs["path"] = QStringLiteral("/usr/llama-sandbox-write-test");
+    writeArgs["content"] = QStringLiteral("x");
+    const auto writeRes = runTool<Tools::WriteTool>(writeArgs);
+    QVERIFY(!writeRes.second);
+    QVERIFY(!QFile::exists(QStringLiteral("/usr/llama-sandbox-write-test")));
+
+    QJsonObject editEntry;
+    editEntry["oldText"] = QStringLiteral("a");
+    editEntry["newText"] = QStringLiteral("b");
+    QJsonObject editArgs;
+    editArgs["path"] = QStringLiteral("/etc/llama-sandbox-edit-test");
+    editArgs["edits"] = QJsonArray{editEntry};
+    const auto editRes = runTool<Tools::EditFileTool>(editArgs);
+    QVERIFY(!editRes.second);
+
+    // search / find: credential directories are not searchable.
+    QJsonObject searchArgs;
+    searchArgs["path"] = QString(fakeHome.path() + QStringLiteral("/.ssh"));
+    searchArgs["pattern"] = QStringLiteral("llama");
+    const auto searchRes = runTool<Tools::SearchTool>(searchArgs);
+    QVERIFY(!searchRes.second);
+    QVERIFY(!searchRes.first.contains("llama-secret-key"));
+
+    QJsonObject findArgs;
+    findArgs["path"] = QString(fakeHome.path() + QStringLiteral("/.ssh"));
+    findArgs["pattern"] = QStringLiteral("id_*");
+    const auto findRes = runTool<Tools::FindTool>(findArgs);
+    QVERIFY(!findRes.second);
+    QVERIFY(!findRes.first.contains("id_test"));
+
+    // Writing inside a temporary location keeps working (the sandbox also
+    // allows the project directory, but no project is open in this test).
+    QJsonObject okWriteArgs;
+    okWriteArgs["path"] = QString(workdir.path() + QStringLiteral("/allowed.txt"));
+    okWriteArgs["content"] = QStringLiteral("fine");
+    const auto okWriteRes = runTool<Tools::WriteTool>(okWriteArgs);
+    QVERIFY(okWriteRes.second);
+
+    // apply_patch: an in-place update outside the project directory and the
+    // temporary locations is not allowed even though the file is readable
+    // (the write check must not be skipped when source == target). The
+    // fixture lives in the home directory: fakeHome is a temporary location
+    // and therefore writable by design.
+    const QString patchTarget =
+        realHome + QStringLiteral("/llama-sandbox-patch-target.txt");
+    {
+        QFile patchFile(patchTarget);
+        QVERIFY(patchFile.open(QIODevice::WriteOnly));
+        patchFile.write("a\n");
+    }
+    QJsonObject patchArgs;
+    patchArgs["patchText"] = QStringLiteral(
+                                  "*** Begin Patch\n"
+                                  "*** Update File: %1\n"
+                                  "@@\n"
+                                  "-a\n"
+                                  "+b\n"
+                                  "*** End Patch")
+                                 .arg(patchTarget);
+    const auto patchRes = runTool<LlamaCpp::ApplyPatchTool>(patchArgs);
+    QVERIFY(!patchRes.second);
+    {
+        QFile checkFile(patchTarget);
+        QVERIFY(checkFile.open(QIODevice::ReadOnly));
+        QCOMPARE(checkFile.readAll(), QByteArray("a\n"));
+    }
+    QVERIFY(QFile::remove(patchTarget));
+
+    // apply_patch: deleting a file outside the project directory and the
+    // temporary locations is not allowed. A delete has no target, so the
+    // source must be checked as a write, or any readable file could be
+    // removed.
+    const QString deleteTarget =
+        realHome + QStringLiteral("/llama-sandbox-delete-target.txt");
+    {
+        QFile deleteFile(deleteTarget);
+        QVERIFY(deleteFile.open(QIODevice::WriteOnly));
+        deleteFile.write("a\n");
+    }
+    QJsonObject deleteArgs;
+    deleteArgs["patchText"] = QStringLiteral(
+                                  "*** Begin Patch\n"
+                                  "*** Delete File: %1\n"
+                                  "*** End Patch")
+                                 .arg(deleteTarget);
+    const auto deleteRes = runTool<LlamaCpp::ApplyPatchTool>(deleteArgs);
+    QVERIFY(!deleteRes.second);
+    QVERIFY(QFile::exists(deleteTarget));
+    QVERIFY(QFile::remove(deleteTarget));
+
+    // bash: a model-supplied workdir outside the project directory and the
+    // temporary locations would redefine the sandbox boundary, so it is
+    // refused (independent of the platform sandbox executable).
+    QJsonObject workdirArgs;
+    workdirArgs["command"] = QStringLiteral("echo sandbox-workdir-test");
+    workdirArgs["workdir"] = QStringLiteral("/usr");
+    const auto workdirRes = runBashTool(workdirArgs);
+    QVERIFY(!workdirRes.second);
+    QVERIFY(workdirRes.first.contains("not allowed"));
+}
+
+void LlamaToolsTest::projectSandboxOverride()
+{
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+    ProjectExplorer::Project *project =
+        ProjectExplorer::ProjectManager::setStartupProject(workdir.path());
+
+    LlamaProjectSettings projectSettings(project);
+
+    // Restores the global setting when the scope is left, even when a
+    // failing assertion returns early from the test.
+    const SandboxTestEnv env;
+
+    // With "use global settings" the global value applies.
+    settings().sandboxCommands.setValue(true);
+    QVERIFY(projectSettings.isSandboxEnabled());
+    settings().sandboxCommands.setValue(false);
+    QVERIFY(!projectSettings.isSandboxEnabled());
+
+    // With a project override the global value is ignored.
+    projectSettings.useGlobalSettings.setValue(false);
+    QVERIFY(!projectSettings.isSandboxEnabled()); // project default is off
+    projectSettings.sandboxCommands.setValue(true);
+    QVERIFY(projectSettings.isSandboxEnabled());
+    settings().sandboxCommands.setValue(true);
+    QVERIFY(projectSettings.isSandboxEnabled());
+    projectSettings.sandboxCommands.setValue(false);
+    QVERIFY(!projectSettings.isSandboxEnabled());
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
 }
 
 void LlamaToolsTest::bash_truncation()

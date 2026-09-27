@@ -421,6 +421,25 @@ void ApplyPatchTool::run(const QJsonObject &args,
         }
         }
 
+        // Sandbox access checks, like the rest of the verification: no side
+        // effects when they fail. Reads apply to the source, writes to the
+        // target - except for deletes, which have no target and remove the
+        // source. Skipping the write check for in-place updates (target ==
+        // source) would allow modifying any readable file outside the
+        // project directory, and skipping it for deletes would allow
+        // deleting them.
+        if (const QString error = sandboxAccessError(op.source, /*isWrite=*/false);
+                !error.isEmpty())
+            return done(QStringLiteral("apply_patch verification failed: %1").arg(error),
+                        false);
+        const FilePath writeTarget = op.target.isEmpty() ? op.source : op.target;
+        if (!writeTarget.isEmpty()) {
+            const QString error = sandboxAccessError(writeTarget, /*isWrite=*/true);
+            if (!error.isEmpty())
+                return done(QStringLiteral("apply_patch verification failed: %1").arg(error),
+                            false);
+        }
+
         ops.append(op);
     }
 
