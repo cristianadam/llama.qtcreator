@@ -23,6 +23,7 @@ Local LLM-assisted text completion for Qt Creator.
 - Speculative Decoding support
 - Display performance stats
 - Chat support (including [Mermaid](https://mermaid.js.org/) diagrams and [KaTeX](https://katex.org/) math, rendered to SVG with a bundled QuickJS runtime - no browser required)
+- "Human Editor" endpoint: select it in the chat's model dropdown to use the chat as a Markdown editor - replies are written by you in a regular text editor opened in a split next to the chat (save to send), and assistant messages can be edited in place the same way
 - Source and Image drag & drop support
 - Current editor selection predefined and custom LLM prompts
 - [Tools usage](https://github.com/cristianadam/llama.qtcreator/wiki/Tools)

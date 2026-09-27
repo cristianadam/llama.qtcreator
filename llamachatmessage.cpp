@@ -53,6 +53,7 @@ ChatMessage::ChatMessage(const Message &msg,
     , m_siblingIdx(siblingIdx)
     , m_isUser(msg.role == "user")
     , m_isTool(msg.role == "tool")
+    , m_humanEditor(!m_isUser && !m_isTool && ChatManager::instance().isHumanEditor())
 {
     setObjectName("ChatMessage");
 
@@ -222,6 +223,15 @@ void ChatMessage::buildUI()
         connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
         m_actionLayout->addWidget(m_editButton);
     } else {
+        // "Human Editor" mode: assistant messages are edited in place in
+        // the split text editor (the whole message, not a re‑send).
+        m_editButton = new QToolButton(this);
+        m_editButton->setText("H");
+        m_editButton->setToolTip(Tr::tr("Edit the message in the Markdown editor"));
+        m_editButton->setVisible(m_humanEditor && !m_haveToolCalls);
+        connect(m_editButton, &QToolButton::clicked, this, &ChatMessage::onEditClicked);
+        m_actionLayout->addWidget(m_editButton);
+
         m_regenButton = new QToolButton(this);
         m_regenButton->setText("A");
         m_regenButton->setToolTip(Tr::tr("Re-generate the answer"));
@@ -302,9 +312,11 @@ void ChatMessage::messageCompleted(bool completed)
 
     if (!m_isUser && !m_isTool) {
         // Normal assistant – show buttons only when the answer is finished.
+        m_completed = completed;
         m_regenButton->setVisible(completed && !haveToolCalls());
         m_copyButton->setVisible(completed && !haveToolCalls());
         m_deleteButton->setVisible(completed && !haveToolCalls());
+        m_editButton->setVisible(completed && !haveToolCalls() && m_humanEditor);
 
         renderMarkdown(m_msg.content, completed);
     } else if (m_isTool) {
@@ -340,6 +352,13 @@ bool ChatMessage::shouldCollapse() const
 bool ChatMessage::isUser() const
 {
     return m_isUser;
+}
+
+void ChatMessage::setHumanEditorMode(bool on)
+{
+    m_humanEditor = on;
+    if (m_editButton && !m_isUser)
+        m_editButton->setVisible(on && m_completed && !haveToolCalls());
 }
 
 void ChatMessage::applyStyleSheet()

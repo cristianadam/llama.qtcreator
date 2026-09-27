@@ -9,6 +9,11 @@
 
 #include "llamatypes.h"
 
+namespace Core {
+class IDocument;
+class IEditor;
+}
+
 namespace LlamaCpp {
 
 class Storage;
@@ -82,6 +87,43 @@ public:
     //! to load the model when it is not loaded yet.
     void selectModel(const QString &id);
 
+    //! True when the "Human Editor" pseudo‑model is selected: the
+    //! "assistant" side of the conversation is a human typing Markdown in
+    //! a text editor split next to the chat, not a llama.cpp model (no
+    //! server request is made).
+    bool isHumanEditor() const;
+
+    //! Commits the pending "Human Editor" assistant message with \a content
+    //! (the split editor was saved).
+    void commitHumanEditorMessage(const QString &convId, const QString &content);
+
+    //! Discards the pending "Human Editor" assistant message (the split
+    //! editor was closed without saving / the generation was stopped).
+    void abortHumanEditorMessage(const QString &convId);
+
+    //! In‑place edit of a stored message's content ("Human Editor" mode):
+    //! updates the database and emits Storage::messageContentUpdated.
+    void updateMessageContent(const QString &convId, qint64 msgId, const QString &content);
+
+    // "Human Editor" documents: regular text editors opened in a split
+    // next to the chat.  Saving the document commits its content as a chat
+    // message, closing it without saving aborts a pending reply.
+
+    //! Registers \a document (shown in \a editor) as a "Human Editor"
+    //! session.  \a msgId > 0: in‑place edit of that stored message;
+    //! otherwise a new pending reply for \a convId.  \a filePath is the
+    //! throw‑away temp file backing the document, removed when the editor
+    //! closes.
+    void registerHumanEditorSession(Core::IDocument *document,
+                                    Core::IEditor *editor,
+                                    const QString &convId,
+                                    qint64 msgId,
+                                    const QString &filePath = {});
+    bool isHumanEditorDocument(const Core::IDocument *document) const;
+    //! The editor of a registered "Human Editor" session of \a convId (only
+    //! pending replies when \a pendingOnly), or nullptr.
+    Core::IEditor *humanEditorEditor(const QString &convId, bool pendingOnly = false) const;
+
     void generateMessage(const QString &convId,
                          qint64 leafNodeId,
                          std::function<void(qint64)> onChunk);
@@ -129,6 +171,15 @@ public:
 
 signals:
     void modelsUpdated();
+
+    //! The "Human Editor" endpoint is ready for a reply: a pending
+    //! assistant message exists for \a convId and the UI should open the
+    //! split text editor (commit/abort it with
+    //! commitHumanEditorMessage()/abortHumanEditorMessage()).
+    void humanEditorReplyReady(const QString &convId);
+
+    //! The pending "Human Editor" assistant message was discarded.
+    void humanEditorAborted(const QString &convId);
 
     // emitted when the active conversation changes – UI can react
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
@@ -202,5 +253,17 @@ private:
     QSet<QString> m_taskConversations;
     QHash<QString, TaskConversationConfig> m_taskConfigs;
     bool m_taskConvCreationPending{false};
+
+    // "Human Editor" sessions, keyed by the editor's document.
+    struct HumanEditorSession
+    {
+        QString convId;
+        qint64 msgId{0}; // >0: in‑place edit of a stored message; 0: pending reply
+        const Core::IDocument *document{nullptr};
+        Core::IEditor *editor{nullptr};
+        QString filePath; // throw‑away temp file, removed when the editor closes
+        bool committed{false}; // content already saved to the chat
+    };
+    QHash<const Core::IDocument *, HumanEditorSession> m_humanEditorSessions;
 };
 } // namespace LlamaCpp

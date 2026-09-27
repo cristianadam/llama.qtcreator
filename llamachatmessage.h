@@ -45,6 +45,11 @@ public:
 
     bool isTool() const;
 
+    //! Toggles the in‑place "Edit" button on assistant messages (visible
+    //! only in "Human Editor" mode, where assistant messages are edited in
+    //! the split text editor).
+    void setHumanEditorMode(bool on);
+
 signals:
     void regenerateRequested(const Message &msg);
     void editRequested(const Message &msg);
@@ -86,6 +91,8 @@ private:
     int m_siblingIdx{1};
     bool m_isUser;
     bool m_isTool = false;
+    bool m_humanEditor = false; // "Human Editor" mode at construction time
+    bool m_completed = true;    // last messageCompleted() state
 
     // UI
     QToolButton *m_copyButton{nullptr};

@@ -14,6 +14,8 @@
 
 #include <QCoreApplication>
 #include <QAction>
+#include <QDir>
+#include <QFile>
 #include <QHash>
 #include <QActionGroup>
 #include <QHBoxLayout>
@@ -22,6 +24,7 @@
 #include <QLineEdit>
 #include <QLocale>
 #include <QMenu>
+#include <QKeySequence>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -37,6 +40,7 @@
 #include "llamachatmanager.h"
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
+#include "llamastorage.h"
 #include "llamaconstants.h"
 #include "llamaicons.h"
 #include "llamasettings.h"
@@ -50,6 +54,28 @@ using namespace Utils;
 namespace LlamaCpp {
 
 namespace {
+
+// "Human Editor" documents are backed by a throw‑away file in the temp dir
+// so the regular text editor treats them as ordinary, saveable files (no
+// "Save As" dialog, which a file‑less document would trigger).  The file is
+// removed when the editor closes; the real content lives in the chat
+// (committed on save, see ChatManager).
+QString humanEditorFilePath(const QString &uniqueId)
+{
+    static QString dirPath;
+    if (dirPath.isEmpty()) {
+        dirPath = QDir::tempPath() + QStringLiteral("/llama-cpp-chat");
+        QDir().mkpath(dirPath);
+    }
+    const QString path = dirPath + QStringLiteral("/") + uniqueId + QStringLiteral(".md");
+    // Create the (empty) file so the document sees a writable path; a
+    // non‑existent file is treated as read‑only.  The real content is set via
+    // setContents(); this file is only a throw‑away backing store.
+    QFile file(path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        file.close();
+    return path;
+}
 
 // The thinking levels and their display names, shared by the status bar
 // dropdown menu and the button label.
@@ -211,8 +237,21 @@ ChatEditor::ChatEditor()
     ChatManager &chatManager = ChatManager::instance();
     connect(m_modelCombo, qOverload<int>(&QComboBox::activated), this, [this](int idx) {
         ChatManager::instance().selectModel(m_modelCombo->itemData(idx).toString());
+        applyHumanEditorMode();
     });
     connect(&chatManager, &ChatManager::modelsUpdated, this, &ChatEditor::onModelsUpdated);
+    connect(&chatManager,
+            &ChatManager::humanEditorReplyReady,
+            this,
+            &ChatEditor::onHumanEditorReplyReady);
+    connect(&chatManager,
+            &ChatManager::humanEditorAborted,
+            this,
+            &ChatEditor::onHumanEditorAborted);
+    connect(&Storage::instance(),
+            &Storage::messageContentUpdated,
+            this,
+            &ChatEditor::onMessageContentUpdated);
     connect(&chatManager, &ChatManager::messageAppended, this, &ChatEditor::onMessageAppended);
     connect(&chatManager,
             &ChatManager::pendingMessageChanged,
@@ -344,6 +383,24 @@ ChatEditor::ChatEditor()
     prevSearchAction.setText(Tr::tr("Previous search result"));
     prevSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
     prevSearchAction.addOnTriggered(this, [this] { prevSearchResult(); });
+
+    // Global "Send to Llama Chat" action: commits the current "Human
+    // Editor" document (the split text editor) as a chat message, the same
+    // as saving it (Ctrl+S).  Registered once, against the long‑lived
+    // ChatManager as context: an action registered against this editor
+    // would be deregistered when the editor is destroyed.
+    static bool sendActionRegistered = false;
+    if (!sendActionRegistered) {
+        sendActionRegistered = true;
+        ActionBuilder sendAction(&ChatManager::instance(), Constants::LLAMACPP_SEND_ACTION);
+        sendAction.setText(Tr::tr("Send to Llama Chat"));
+        sendAction.setDefaultKeySequence(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Enter));
+        sendAction.addOnTriggered(&ChatManager::instance(), [] {
+            Core::IDocument *document = EditorManager::currentDocument();
+            if (document && ChatManager::instance().isHumanEditorDocument(document))
+                EditorManager::saveDocument(document);
+        });
+    }
 }
 
 ChatEditor::~ChatEditor()
@@ -807,6 +864,15 @@ void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &
 void ChatEditor::onStopRequested()
 {
     const Conversation conv = ChatManager::instance().currentConversation();
+
+    // A "Human Editor" reply in progress: closing its (unsaved) editor
+    // discards the pending message.
+    if (IEditor *editor = ChatManager::instance().humanEditorEditor(conv.id,
+                                                                    /*pendingOnly=*/true)) {
+        EditorManager::closeEditors({editor}, /*askAboutModifiedEditors=*/false);
+        return;
+    }
+
     ChatManager::instance().stopGenerating(conv.id);
 
     m_input->setIsGenerating(false);
@@ -820,6 +886,15 @@ void ChatEditor::onFileDropped(const QStringList &files)
 
 void ChatEditor::onEditRequested(const Message &msg)
 {
+    // "Human Editor" mode: assistant messages are edited in place in a
+    // regular text editor (split next to the chat) – the whole message is
+    // editable (the user can type anywhere), not just appended to and
+    // re‑sent.  Saving the editor commits the change.
+    if (msg.role == "assistant" && ChatManager::instance().isHumanEditor()) {
+        openHumanEditorDocument(msg.convId, msg.id, msg.content);
+        return;
+    }
+
     m_editedMessage = msg;
     m_input->setEditingText(msg.content, msg.extra);
     m_speedLabel->setVisible(false);
@@ -873,6 +948,14 @@ void ChatEditor::syncThinkingLevel()
 void ChatEditor::onModelsUpdated()
 {
     updateModelCombo();
+    applyHumanEditorMode();
+}
+
+void ChatEditor::applyHumanEditorMode()
+{
+    const bool on = ChatManager::instance().isHumanEditor();
+    for (ChatMessage *w : std::as_const(m_messageWidgets))
+        w->setHumanEditorMode(on);
 }
 
 void ChatEditor::updateModelCombo()
@@ -882,6 +965,12 @@ void ChatEditor::updateModelCombo()
 
     m_modelCombo->blockSignals(true);
     m_modelCombo->clear();
+    // The "Human Editor" pseudo‑model: the "assistant" side of the
+    // conversation is a human typing Markdown in a text editor split next
+    // to the chat, so the chat doubles as a Markdown editor with live
+    // preview.
+    m_modelCombo->addItem(Tr::tr("Human Editor"),
+                          QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID));
     if (models.isEmpty()) {
         // Model list unavailable: show the current model from the server
         // props as a single entry.
@@ -899,6 +988,97 @@ void ChatEditor::updateModelCombo()
     const int idx = m_modelCombo->findData(selected);
     m_modelCombo->setCurrentIndex(idx >= 0 ? idx : 0);
     m_modelCombo->blockSignals(false);
+}
+
+void ChatEditor::onHumanEditorReplyReady(const QString &convId)
+{
+    if (convId != m_viewingConvId) {
+        // Not the conversation we display: drop the pending reply so it
+        // does not linger and the input is not left in the "generating"
+        // state.
+        ChatManager::instance().abortHumanEditorMessage(convId);
+        return;
+    }
+
+    // Seed the editor with the text the user just sent: it is the start of
+    // the document, not the final one.
+    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+    QString seed;
+    for (const Message &m : std::as_const(chat.messages))
+        if (m.id == chat.conv.currNode)
+            seed = m.content;
+
+    openHumanEditorDocument(convId, /*msgId=*/0, seed);
+}
+
+void ChatEditor::openHumanEditorDocument(const QString &convId, qint64 msgId, const QString &text)
+{
+    // Open the "Human Editor" document as a regular text editor in a new
+    // split next to the chat: the user edits like in any editor and saves
+    // (Ctrl+S, or the "Send to Llama Chat" action) to commit the message.
+    const int viewId = EditorManager::viewIdForEditor(this);
+    if (viewId > 0)
+        EditorManager::splitView(viewId, Qt::Horizontal);
+
+    const QString uniqueId = msgId > 0
+        ? (QStringLiteral("llamacpp-message-") + QString::number(msgId))
+        : (QStringLiteral("llamacpp-reply-") + QString::number(QDateTime::currentMSecsSinceEpoch()));
+    // The (throw‑away) file path doubles as the document's identity; the
+    // real content is passed separately and the tab shows a friendly name.
+    const QString path = humanEditorFilePath(uniqueId);
+
+    QString title = path;
+    IEditor *editor = EditorManager::openEditorWithContents(
+        Core::Constants::K_DEFAULT_TEXT_EDITOR_ID,
+        &title,
+        text.toUtf8(), // the actual document content
+        uniqueId,
+        EditorManager::OpenInOtherSplit);
+
+    if (!editor) {
+        // No editor could be opened: drop the pending reply so the input is
+        // not left in the "generating" state.
+        if (msgId <= 0)
+            ChatManager::instance().abortHumanEditorMessage(convId);
+        QFile::remove(path);
+        return;
+    }
+
+    // openEditorWithContents() does not put the path on the document (it only
+    // uses it to pick the factory); a file‑less document would trigger a
+    // "Save As" dialog on save (isSaveAsNeeded() is true when filePath() is
+    // empty), so point it at the throw‑away file explicitly.
+    editor->document()->setFilePath(FilePath::fromString(path));
+    editor->document()->setPreferredDisplayName(
+        msgId > 0 ? Tr::tr("Edit Message") : Tr::tr("Human Editor"));
+
+    ChatManager::instance().registerHumanEditorSession(editor->document(),
+                                                       editor,
+                                                       convId,
+                                                       msgId,
+                                                       path);
+}
+
+void ChatEditor::onHumanEditorAborted(const QString &convId)
+{
+    if (convId == m_viewingConvId)
+        m_input->setIsGenerating(false);
+}
+
+void ChatEditor::onMessageContentUpdated(const Message &msg)
+{
+    if (msg.convId != m_viewingConvId)
+        return;
+
+    for (ChatMessage *w : std::as_const(m_messageWidgets)) {
+        if (w->message().id != msg.id)
+            continue;
+        w->message().content = msg.content;
+        w->renderMarkdown(msg.content, true);
+        w->messageCompleted(true);
+        w->recomputeFixedHeight();
+        break;
+    }
 }
 
 void ChatEditor::onServerPropsUpdated()

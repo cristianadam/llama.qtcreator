@@ -1,4 +1,5 @@
 #include <QCoreApplication>
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
@@ -9,11 +10,14 @@
 #include <optional>
 
 #include <coreplugin/documentmanager.h>
+#include <coreplugin/editormanager/editormanager.h>
+#include <coreplugin/textdocument.h>
 
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
 
 #include "llamachatmanager.h"
+#include "llamaconstants.h"
 #include "llamasettings.h"
 #include "llamastorage.h"
 #include "markdownrenderer.h"
@@ -218,6 +222,58 @@ ChatManager::ChatManager(QObject *parent)
     connect(m_storage, &Storage::conversationRenamed, this, &ChatManager::conversationRenamed);
     connect(m_storage, &Storage::conversationDeleted, this, &ChatManager::conversationDeleted);
     connect(m_storage, &Storage::messageExtraUpdated, this, &ChatManager::messageExtraUpdated);
+
+    // "Human Editor" documents: saving the split text editor commits its
+    // content as a chat message (a new assistant reply, or the in‑place
+    // edit of a stored message).
+    connect(Core::EditorManager::instance(),
+            &Core::EditorManager::aboutToSave,
+            this,
+            [this](Core::IDocument *document, Core::IDocument::SaveOption) {
+                auto it = m_humanEditorSessions.find(document);
+                if (it == m_humanEditorSessions.end())
+                    return;
+                // A pending reply is committed at most once (a later save is a
+                // plain file save); an in‑place edit re‑updates the message on
+                // every save.
+                if (it->committed && it->msgId <= 0)
+                    return;
+                it->committed = true;
+
+                Core::BaseTextDocument *textDocument =
+                    qobject_cast<Core::BaseTextDocument *>(document);
+                const QString content = textDocument ? textDocument->plainText() : QString();
+
+                if (it->msgId > 0)
+                    updateMessageContent(it->convId, it->msgId, content);
+                else
+                    commitHumanEditorMessage(it->convId, content);
+
+                // Note: the throw‑away file is removed when the editor closes
+                // (not here – the actual file write happens after this signal).
+            });
+
+    // Closing a "Human Editor" editor without saving aborts the pending
+    // reply (an in‑place edit simply keeps the old content).
+    connect(Core::EditorManager::instance(),
+            &Core::EditorManager::editorAboutToClose,
+            this,
+            [this](Core::IEditor *editor) {
+                for (auto it = m_humanEditorSessions.begin();
+                     it != m_humanEditorSessions.end();
+                     ++it) {
+                    if (it->editor != editor)
+                        continue;
+                    // A pending reply that was never saved is discarded; an
+                    // in‑place edit that was never saved keeps the old text.
+                    if (it->msgId <= 0 && !it->committed)
+                        abortHumanEditorMessage(it->convId);
+                    if (!it->filePath.isEmpty())
+                        QFile::remove(it->filePath);
+                    m_humanEditorSessions.erase(it);
+                    return;
+                }
+            });
 }
 
 static QNetworkReply *getServerProps(QNetworkAccessManager *manager,
@@ -365,9 +421,10 @@ void ChatManager::refreshModels()
                 for (const auto &m : std::as_const(m_models))
                     if (m.id == m_selectedModel)
                         selected = true;
-                if (!selected) {
+                if (!selected && !isHumanEditor()) {
                     // Fall back to the loaded model, or the first one if none
-                    // is loaded yet.
+                    // is loaded yet.  The "Human Editor" pseudo‑model is not
+                    // in the server's list, so it must not be clobbered.
                     m_selectedModel = m_models.first().id;
                     for (const auto &m : std::as_const(m_models))
                         if (m.status == QLatin1String("loaded")) {
@@ -391,6 +448,12 @@ void ChatManager::selectModel(const QString &id)
     if (id.isEmpty() || id == m_selectedModel)
         return;
     m_selectedModel = id;
+
+    // The "Human Editor" endpoint is not a server model: no load request.
+    if (isHumanEditor()) {
+        emit modelsUpdated();
+        return;
+    }
 
     // Router mode: ask the server to load the model when it is not loaded
     // yet. The load endpoint returns before loading completes, so the
@@ -692,6 +755,17 @@ void ChatManager::generateMessage(const QString &convId,
     pending.parent = leafNodeId;
     pending.children.clear();
     m_pendingMessages.insert(convId, pending);
+
+    // The "Human Editor" endpoint: the "assistant" reply is produced by a
+    // human in the Markdown editor dialog, not by the server.  The pending
+    // message is committed (or discarded) by
+    // commitHumanEditorMessage()/abortHumanEditorMessage().  Task
+    // conversations always run against a real model.
+    if (isHumanEditor() && !m_taskConversations.contains(convId)) {
+        emit humanEditorReplyReady(convId);
+        return;
+    }
+
     m_abortControllers[convId] = nullptr; // will hold the reply
 
     sendChatRequest(
@@ -1008,6 +1082,74 @@ void ChatManager::replaceMessageAndGenerate(const QString &convId,
 
     onChunk(parentNodeId);
     generateMessage(convId, parentNodeId, onChunk);
+}
+
+bool ChatManager::isHumanEditor() const
+{
+    return m_selectedModel == QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID);
+}
+
+void ChatManager::commitHumanEditorMessage(const QString &convId, const QString &content)
+{
+    auto it = m_pendingMessages.find(convId);
+    if (it == m_pendingMessages.end())
+        return;
+
+    Message pm = it.value();
+    pm.content = content;
+    m_pendingMessages.erase(it);
+
+    // Emits messageAppended (pendingId = the pending message's id), which
+    // the chat UI uses to finalize the reply bubble.
+    m_storage->appendMsg(pm, pm.parent);
+}
+
+void ChatManager::abortHumanEditorMessage(const QString &convId)
+{
+    if (m_pendingMessages.remove(convId) > 0)
+        emit humanEditorAborted(convId);
+}
+
+void ChatManager::updateMessageContent(const QString &convId, qint64 msgId, const QString &content)
+{
+    for (Message m : m_storage->getMessages(convId)) {
+        if (m.id != msgId)
+            continue;
+        m.content = content;
+        // Emits messageContentUpdated, which the chat UI uses to re‑render
+        // the message in place.
+        m_storage->updateMessageContent(m);
+        return;
+    }
+}
+
+void ChatManager::registerHumanEditorSession(Core::IDocument *document,
+                                             Core::IEditor *editor,
+                                             const QString &convId,
+                                             qint64 msgId,
+                                             const QString &filePath)
+{
+    if (!document)
+        return;
+    m_humanEditorSessions.insert(document,
+                                 HumanEditorSession{convId, msgId, document, editor, filePath});
+}
+
+bool ChatManager::isHumanEditorDocument(const Core::IDocument *document) const
+{
+    return m_humanEditorSessions.contains(document);
+}
+
+Core::IEditor *ChatManager::humanEditorEditor(const QString &convId, bool pendingOnly) const
+{
+    for (const HumanEditorSession &session : std::as_const(m_humanEditorSessions)) {
+        if (session.convId != convId)
+            continue;
+        if (pendingOnly && session.msgId > 0)
+            continue;
+        return session.editor;
+    }
+    return nullptr;
 }
 
 LlamaCppServerProps ChatManager::serverProps() const

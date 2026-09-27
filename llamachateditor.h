@@ -74,6 +74,9 @@ public slots:
     void prevSearchResult();
     void clearSearch();
     void onMessageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
+    void onHumanEditorReplyReady(const QString &convId);
+    void onHumanEditorAborted(const QString &convId);
+    void onMessageContentUpdated(const LlamaCpp::Message &msg);
 
 private:
     void updateSpeedLabel(const Message &msg);
@@ -84,6 +87,13 @@ private:
     void preWrapDocument(ChatMessage *w);
     void syncThinkingLevel();
     void updateModelCombo();
+    // Toggles the in‑place edit button on all assistant message widgets
+    // after the "Human Editor" endpoint was (de)selected.
+    void applyHumanEditorMode();
+    // Opens a "Human Editor" document as a regular text editor in a new
+    // split next to the chat.  \a msgId > 0: in‑place edit of that stored
+    // message; otherwise a new pending reply for \a convId.
+    void openHumanEditorDocument(const QString &convId, qint64 msgId, const QString &text);
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
 
