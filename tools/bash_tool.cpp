@@ -525,6 +525,20 @@ QString BashTool::oneLineSummary(const QJsonObject &arguments) const
 void BashTool::run(const QJsonObject &arguments,
                    std::function<void(const QString &, bool)> done) const
 {
+    runCommand(arguments, std::move(done), OutputHandler{});
+}
+
+void BashTool::runLive(const QJsonObject &arguments,
+                       const OutputHandler &onOutput,
+                       std::function<void(const QString &, bool)> done) const
+{
+    runCommand(arguments, std::move(done), onOutput); // copy – see runCommand()
+}
+
+void BashTool::runCommand(const QJsonObject &arguments,
+                          std::function<void(const QString &, bool)> done,
+                          OutputHandler onOutput) const
+{
     const QString command = arguments.value("command").toString().trimmed();
     if (command.isEmpty()) {
         done(Tr::tr("Error: the command must not be empty."), false);
@@ -639,8 +653,11 @@ void BashTool::run(const QJsonObject &arguments,
         }
     }
 
+    // Captures a copy of the output handler (std::function copies are
+    // cheap); the setup handler itself must stay const-callable for
+    // QProcessTask.
     const auto onSetup = [state, cwdString, env, spec, command,
-                          sandbox](QProcess &process) {
+                          sandbox, onOutput](QProcess &process) {
         // The program to start and its arguments: the shell and the command,
         // optionally wrapped in the sandbox. The stub and the plain QProcess
         // path must agree on the inferior, or the sandbox would be silently
@@ -672,12 +689,30 @@ void BashTool::run(const QJsonObject &arguments,
                                          QStringLiteral("--wait"),
                                          QString(),
                                          QStringLiteral("--")};
-            stubArguments += arguments;
+            // The stub execs the first argument after "--" as the program,
+            // so the program (shell, or sandbox wrapper) must lead.
+            stubArguments += QStringList{program} + arguments;
             process.setArguments(stubArguments);
         } else {
             process.setProcessEnvironment(env);
             process.setProgram(program);
             process.setArguments(arguments);
+        }
+
+        // Live output: drain the merged channel as it arrives and report
+        // the (truncated) tail.  The done handler appends whatever is left.
+        if (onOutput) {
+            // The process outlives the connection (the task tree owns it,
+            // and the context object, state, is released with the tree).
+            // The connection owns its own copy of the handler.
+            QObject::connect(&process,
+                             &QProcess::readyRead,
+                             state,
+                             [state, handler = onOutput, &process] {
+                                 state->output +=
+                                         QString::fromUtf8(process.readAllStandardOutput());
+                                 handler(truncateOutput(state->output).content);
+                             });
         }
     };
 
@@ -686,7 +721,7 @@ void BashTool::run(const QJsonObject &arguments,
     // casting away const to drain the output buffer is safe.
     const auto onProcessDone = [state](const QProcess &process, DoneWith) {
         QProcess *mutableProcess = const_cast<QProcess *>(&process);
-        state->output = QString::fromUtf8(mutableProcess->readAllStandardOutput());
+        state->output += QString::fromUtf8(mutableProcess->readAllStandardOutput());
         state->processError = process.error();
         state->errorString = process.errorString();
         state->exitStatus = process.exitStatus();

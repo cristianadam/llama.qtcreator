@@ -2,6 +2,8 @@
 
 #include "llamatr.h"
 
+#include <QJsonArray>
+
 #include <algorithm>
 
 namespace LlamaCpp {
@@ -84,6 +86,49 @@ QString truncatedPreview(const QString &text, int maxLines)
     if (fences % 2 == 1)
         preview += QLatin1Char('\n') + QString(fenceLength, QLatin1Char('`'));
     return preview;
+}
+
+namespace {
+// The data URL is base64 (no newlines), so the markers delimit it
+// unambiguously even when the text part is empty.
+const QString kImageStartMarker = QStringLiteral("[[llama:image]]");
+const QString kImageEndMarker = QStringLiteral("[[/llama:image]]");
+} // namespace
+
+QString toolResultWithImage(const QString &text, const QString &dataUrl)
+{
+    return text + QStringLiteral("\n\n") + kImageStartMarker + dataUrl + kImageEndMarker;
+}
+
+bool splitToolResultImage(const QString &output, QString &text, QString &dataUrl)
+{
+    const int start = output.indexOf(kImageStartMarker);
+    if (start == -1)
+        return false;
+    const int end = output.indexOf(kImageEndMarker, start + kImageStartMarker.size());
+    if (end == -1)
+        return false;
+    dataUrl = output.mid(start + kImageStartMarker.size(),
+                         end - start - kImageStartMarker.size());
+    if (!dataUrl.startsWith(QLatin1String("data:image/")))
+        return false;
+    text = output.left(start).trimmed();
+    return true;
+}
+
+QString toolResultText(const QJsonValue &content)
+{
+    if (content.isString())
+        return content.toString();
+    if (!content.isArray())
+        return {};
+    QStringList text;
+    for (const QJsonValue &part : content.toArray()) {
+        const QJsonObject obj = part.toObject();
+        if (obj.value(QStringLiteral("type")).toString() == QLatin1String("text"))
+            text << obj.value(QStringLiteral("text")).toString();
+    }
+    return text.join(QLatin1Char('\n'));
 }
 
 } // namespace LlamaCpp

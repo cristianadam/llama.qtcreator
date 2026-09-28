@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QJsonValue>
 #include <QJsonObject>
 #include <QString>
 #include <functional>
@@ -58,6 +59,23 @@ public:
     virtual void run(const QJsonObject &arguments,
                      std::function<void(const QString &output, bool ok)> done) const
         = 0;
+
+    //! @p onOutput receives the tail of the output produced so far while
+    //! the tool runs (throttling is the caller's job).
+    using OutputHandler = std::function<void(const QString &partialOutput)>;
+
+    /*! Whether runLive() reports live output while the tool runs. */
+    virtual bool supportsLiveOutput() const { return false; }
+
+    /*! Like run(), but additionally reports the output tail while the
+        tool runs.  The default implementation ignores the live channel; */
+    virtual void runLive(const QJsonObject &arguments,
+                         const OutputHandler &onOutput,
+                         std::function<void(const QString &output, bool ok)> done) const
+    {
+        Q_UNUSED(onOutput);
+        run(arguments, done);
+    }
 };
 
 //! Wraps \a content in a markdown code fence (optionally with an \a info
@@ -74,5 +92,22 @@ QString codeFence(const QString &content, const QString &info = {});
 //! gets the expand icon, which signals more content.  Returns an empty
 //! string for empty input.
 QString truncatedPreview(const QString &text, int maxLines);
+
+//! Wraps \a text and an image \a dataUrl (e.g. "data:image/png;base64,\u2026")
+//! into the single result string a Tool::run() done‑callback can carry.
+//! ChatManager recognises the wrapper and stores/sends the tool result as
+//! content parts (text + image_url) so a vision model can see the image;
+//! the markers never reach storage or the UI.
+QString toolResultWithImage(const QString &text, const QString &dataUrl);
+
+//! Splits a string created by toolResultWithImage() back into \a text and
+//! \a dataUrl.  Returns false, leaving both untouched, when \a output
+//! carries no image.
+bool splitToolResultImage(const QString &output, QString &text, QString &dataUrl);
+
+//! Display text of a tool‑result "content" value that is either a plain
+//! string or an array of content parts (text + image_url); image parts are
+//! skipped.
+QString toolResultText(const QJsonValue &content);
 
 } // namespace LlamaCpp

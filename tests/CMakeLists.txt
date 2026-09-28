@@ -51,6 +51,7 @@ add_qtc_test(llamatools_test
     ../tools/websearch_tool.cpp
     ../tools/search_tool.cpp
     ../tools/find_tool.cpp
+    ../tools/ls_tool.cpp
     ../tools/ripgrep.cpp
 )
 

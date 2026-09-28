@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QLayout>
 #include <QFile>
+#include <QImage>
 #include <QList>
 #include <QMovie>
 #include <QPainter>
@@ -13,6 +14,8 @@
 #include <QTextBlock>
 #include <QTextDocumentFragment>
 #include <QToolTip>
+
+#include <algorithm>
 
 #include <coreplugin/editormanager/editormanager.h>
 #include <repository.h>
@@ -270,6 +273,21 @@ QVariant MarkdownLabel::loadResource(int type, const QUrl &name)
     if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("llamasvg")) {
         m_svgUrls.insert(name);
         return renderSvgResource(name);
+    }
+
+    if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("data")) {
+        // "data:<mime>;base64,<payload>" – image attachments of tool
+        // results (read_file on an image file), shown in the expanded tool
+        // call.  Scaled to the document width and rasterized at device
+        // resolution so it stays crisp on Retina.
+        const QString payload = name.toString().section(QLatin1Char(','), 1);
+        const QImage image = QImage::fromData(QByteArray::fromBase64(payload.toUtf8()));
+        // Floor at 2x, like the SVG path: loadResource() is often first
+        // called while the widget is still hidden (devicePixelRatioF() == 1)
+        // and the raster is cached until the next resize.
+        return MarkdownRenderer::scaledImageForDisplay(image,
+                                                       qMax(document()->textWidth(), 200.0),
+                                                       qMax(devicePixelRatioF(), 2.0));
     }
 
     // Default handling for everything else (e.g. normal file URLs).

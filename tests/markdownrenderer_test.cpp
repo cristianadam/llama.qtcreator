@@ -74,6 +74,8 @@ private slots:
     void toolCallSummaryWithOutputPreview();
     void collapsedSectionStaysCollapsed();
     void svgCodeBlockRendersAsImage();
+    void dataUrlImageRendersAsImage();
+    void scaledImageForDisplay();
     void svgCodeBlockWithoutLanguageTag();
     void brokenSvgFallsBackToCode();
     void mermaidCodeBlockRendersAsImage();
@@ -501,6 +503,64 @@ void MarkdownRendererTest::svgCodeBlockRendersAsImage()
     QVERIFY2(body.isValid(), "expected a details body carrying the SVG source");
     QVERIFY2(!body.isVisible(), "the source body must be collapsed by default");
     QVERIFY(renderer.toPlainText().contains("<rect"));
+}
+
+void MarkdownRendererTest::dataUrlImageRendersAsImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // The tool bubble embeds image attachments (read_file on an image file)
+    // as data URLs; the destination contains commas, which the parser must
+    // keep inside the image link.
+    const QString text
+        = QStringLiteral("Result:\n\n![Image](data:image/png;base64,iVBORw0KGgo=)");
+    streamText(renderer, text);
+
+    QString imageUrl;
+    for (int p = 0; p < renderer.document()->characterCount() && imageUrl.isEmpty();
+         ++p) {
+        QTextCursor cursor(renderer.document());
+        cursor.setPosition(p);
+        if (cursor.charFormat().isImageFormat())
+            imageUrl = cursor.charFormat().toImageFormat().name();
+    }
+    QVERIFY2(!imageUrl.isEmpty(), "expected an image in the document");
+    QCOMPARE(imageUrl, QStringLiteral("data:image/png;base64,iVBORw0KGgo="));
+}
+
+void MarkdownRendererTest::scaledImageForDisplay()
+{
+    // A null image stays null.
+    QVERIFY(MarkdownRenderer::scaledImageForDisplay(QImage(), 500, 2.0).isNull());
+
+    // Small images keep their native size and get no device pixel ratio
+    // (up-scaling a small picture only makes it blurrier).
+    QImage small(100, 50, QImage::Format_ARGB32);
+    small.fill(Qt::red);
+    const QImage smallOut = MarkdownRenderer::scaledImageForDisplay(small, 500, 2.0);
+    QCOMPARE(smallOut.size(), QSize(100, 50));
+    QCOMPARE(smallOut.devicePixelRatio(), 1.0);
+
+    // A wide image is fitted to the width and rasterized at device
+    // resolution: logical 500x250 at dpr 2 is a 1000x500 px raster.
+    QImage wide(2000, 1000, QImage::Format_ARGB32);
+    wide.fill(Qt::blue);
+    const QImage wideOut = MarkdownRenderer::scaledImageForDisplay(wide, 500, 2.0);
+    QCOMPARE(wideOut.devicePixelRatio(), 2.0);
+    QCOMPARE(wideOut.width(), 1000);
+    QCOMPARE(wideOut.height(), 500);
+
+    // A tall image hits the 600 px height cap: logical 150x600 at dpr 1.
+    QImage tall(1000, 4000, QImage::Format_ARGB32);
+    tall.fill(Qt::green);
+    const QImage tallOut = MarkdownRenderer::scaledImageForDisplay(tall, 500, 1.0);
+    QCOMPARE(tallOut.width(), 150);
+    QCOMPARE(tallOut.height(), 600);
+
+    // The down-scaled raster actually carries the source content (the
+    // stepped resampling must not lose the image).
+    QVERIFY(wideOut.pixelColor(wideOut.width() / 2, wideOut.height() / 2)
+                .blue() > 200);
 }
 
 void MarkdownRendererTest::svgCodeBlockWithoutLanguageTag()

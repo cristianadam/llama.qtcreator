@@ -37,13 +37,16 @@
 #include <tools/readfile_tool.h>
 #include <tools/skill_tool.h>
 #include <tools/find_tool.h>
+#include <tools/ls_tool.h>
 #include <tools/ripgrep.h>
+#include <tools/tool.h>
 #include <tools/search_tool.h>
 #include <tools/task_tool.h>
 #include <tools/todowrite_tool.h>
 #include <tools/webfetch_tool.h>
 #include <tools/write_tool.h>
 #include <tools/edit_file_tool.h>
+#include <tools/tool_utils.h>
 #include <tools/websearch_tool.h>
 #include <tools/web_utils.h>
 
@@ -452,6 +455,7 @@ private slots:
     void bash_sandboxWithStub();
     void bash_sandboxDenyRead();
     void bash_sandboxNetwork();
+    void bashLiveOutputHandlerLifetime();
     void sandboxFileTools();
     void projectSandboxOverride();
     void bash_truncation();
@@ -484,6 +488,14 @@ private slots:
     void find_dotfiles();
     void find_badPath();
     void find_summaries();
+
+    // LsTool
+    void ls_toolDefinition();
+    void ls_run();
+    void ls_emptyDir();
+    void ls_limit();
+    void ls_badPath();
+    void ls_summaries();
 
     // Ripgrep (download module)
     void ripgrep_metadata();
@@ -539,6 +551,30 @@ private slots:
     void skillTool_loadsSkill();
     void skillTool_truncatesLongContent();
     void skillTool_unknownSkill();
+
+    // ReadFileTool limits
+    void readfile_rangeContinuationHint();
+    void readfile_wholeFileCap();
+    void readfile_byteCap();
+    void readfile_emptyFile();
+
+    // ReadFileTool image support / tool result image helpers
+    void readfile_imageAttachment();
+    void readfile_imageTooLarge();
+    void toolImage_wrapSplitRoundTrip();
+    void toolImage_textFromContentParts();
+
+    // EditFileTool argument tolerance / result
+    void editfile_editsAsJsonString();
+    void editfile_editsAsObject();
+    void editfile_legacyTopLevel();
+    void editfile_resultContainsDiff();
+
+    // repairJson (string‑literal repair for small‑model tool arguments)
+    void repairJson_controlChars();
+    void repairJson_invalidEscapes();
+    void repairJson_validUnchanged();
+    void repairJson_structureNotFixed();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -2466,6 +2502,56 @@ void LlamaToolsTest::bash_sandboxNetwork()
             || denied.first.contains("Network is unreachable"));
 }
 
+// The live-output handler is a local that is destroyed while the command is
+// still running – the tool must keep its own copy (regression test for a
+// use‑after‑free of the caller's handler on the first readyRead).
+void LlamaToolsTest::bashLiveOutputHandlerLifetime()
+{
+    Tools::BashTool tool;
+    QJsonObject args;
+    args[QStringLiteral("command")]
+        = QStringLiteral("echo hello-live; sleep 0.3; echo done");
+
+    QString liveTail;
+    QString result;
+    bool ok = false;
+    bool finished = false;
+
+    {
+        // Deliberately scoped: it dies long before the command finishes.
+        // (readyRead events are only delivered in the loop below, so with a
+        // handler pointer into this scope the first delivery would touch a
+        // dead object.)
+        Tool::OutputHandler onOutput = [&liveTail](const QString &tail) {
+            liveTail = tail;
+        };
+        tool.runLive(args,
+                     onOutput,
+                     [&result, &ok, &finished](const QString &out, bool success) {
+                         result = out;
+                         ok = success;
+                         finished = true;
+                     });
+    }
+
+    QEventLoop loop;
+    QTimer poll;
+    poll.setInterval(10);
+    QObject::connect(&poll, &QTimer::timeout, [&] { if (finished)
+                                                         loop.quit(); });
+    poll.start();
+    QTimer::singleShot(30000, &loop, [&] { poll.stop();
+                                           loop.quit(); });
+    loop.exec();
+
+    QVERIFY2(finished, qPrintable(result));
+    QVERIFY(ok);
+    QVERIFY(result.contains(QStringLiteral("hello-live")));
+    QVERIFY(result.contains(QStringLiteral("done")));
+    // The (copied) handler kept receiving the tail while the command ran.
+    QVERIFY(!liveTail.isEmpty());
+}
+
 // The file tools run in-process and must honor the same sandbox rules as
 // the bash tool: no reading credential directories, no writes outside the
 // project directory and the temporary locations.
@@ -3175,6 +3261,120 @@ void LlamaToolsTest::find_summaries()
     QVERIFY(md.contains("Pattern: `*.json`"));
     QVERIFY(md.contains("Path: /some/dir"));
     QVERIFY(md.contains("x.json"));
+}
+
+// ============================================================================
+// LsTool
+// ============================================================================
+
+void LlamaToolsTest::ls_toolDefinition()
+{
+    Tools::LsTool tool;
+    QCOMPARE(tool.name(), QString("ls"));
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(tool.toolDefinition().toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QVERIFY(doc.isObject());
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("ls"));
+    QVERIFY(!function["description"].toString().isEmpty());
+
+    const QJsonObject parameters = function["parameters"].toObject();
+    QCOMPARE(parameters["type"].toString(), QString("object"));
+    QVERIFY(parameters["strict"].toBool());
+    const QJsonObject properties = parameters["properties"].toObject();
+    for (const QString &name : {QStringLiteral("path"), QStringLiteral("limit")})
+        QVERIFY2(properties.contains(name), qPrintable(name));
+    // Nothing is required: a bare ls lists the project directory.
+    QCOMPARE(parameters["required"].toArray().size(), 0);
+}
+
+void LlamaToolsTest::ls_run()
+{
+    const QString root = gTempDir->path() + QStringLiteral("/ls_run");
+    QDir().mkpath(root + QStringLiteral("/sub"));
+    writeTextFile(root + QStringLiteral("/a.cpp"), "a\n");
+    writeTextFile(root + QStringLiteral("/Zebra.txt"), "z\n");
+    writeTextFile(root + QStringLiteral("/.hidden"), "h\n");
+
+    Tools::LsTool tool;
+    QJsonObject args;
+    args["path"] = root;
+
+    const auto [output, ok] = runTool<Tools::LsTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    // Case-insensitive alphabetical order, dotfiles included, directories
+    // carry a '/' suffix.
+    QCOMPARE(output, QStringLiteral(".hidden\na.cpp\nsub/\nZebra.txt"));
+}
+
+void LlamaToolsTest::ls_emptyDir()
+{
+    const QString root = gTempDir->path() + QStringLiteral("/ls_empty");
+    QDir().mkpath(root);
+
+    Tools::LsTool tool;
+    QJsonObject args;
+    args["path"] = root;
+
+    const auto [output, ok] = runTool<Tools::LsTool>(args);
+    QVERIFY(ok);
+    QCOMPARE(output, QString("Directory is empty."));
+}
+
+void LlamaToolsTest::ls_limit()
+{
+    const QString root = gTempDir->path() + QStringLiteral("/ls_limit");
+    QDir().mkpath(root);
+    for (int i = 1; i <= 10; ++i)
+        writeTextFile(root + QStringLiteral("/file_%1.txt").arg(i), QStringLiteral("x\n"));
+
+    Tools::LsTool tool;
+    QJsonObject args;
+    args["path"] = root;
+    args["limit"] = 4;
+
+    const auto [output, ok] = runTool<Tools::LsTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(output.count("file_"), 4);
+    QVERIFY(output.contains("4 entries limit reached. Use limit=8"));
+}
+
+void LlamaToolsTest::ls_badPath()
+{
+    Tools::LsTool tool;
+    QJsonObject args;
+    args["path"] = QStringLiteral("/nonexistent/llama-ls-dir");
+
+    const auto [output, ok] = runTool<Tools::LsTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains("not a directory"));
+}
+
+void LlamaToolsTest::ls_summaries()
+{
+    Tools::LsTool tool;
+    QCOMPARE(tool.name(), QString("ls"));
+
+    QJsonObject args;
+    args["path"] = QStringLiteral("src");
+    QCOMPARE(tool.oneLineSummary(args), QString("list directory src"));
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("list directory ."));
+
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src\"}")),
+             QString("list directory src"));
+    // While the path is not (fully) visible yet, fall back to the default.
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src")),
+             QString("list directory ."));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString("list directory ."));
+
+    QJsonObject mdArgs;
+    mdArgs["path"] = QStringLiteral("/some/dir");
+    const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("a.txt\nsub/"), true);
+    QVERIFY(md.contains("Path: `/some/dir`"));
+    QVERIFY(md.contains("a.txt"));
 }
 
 // ============================================================================
@@ -4255,6 +4455,313 @@ void LlamaToolsTest::skillTool_unknownSkill()
     // Missing name argument.
     auto [emptyOutput, emptyOk] = runTool<Tools::SkillTool>(QJsonObject());
     QVERIFY(!emptyOk);
+}
+
+// ============================================================================
+// ReadFileTool limits
+// ============================================================================
+
+void LlamaToolsTest::readfile_rangeContinuationHint()
+{
+    QStringList lines;
+    for (int i = 1; i <= 300; ++i)
+        lines << QStringLiteral("line%1").arg(i);
+    writeTextFile(gTempDir->path() + "/hint.txt", lines.join(QStringLiteral("\n")));
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("hint.txt");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 300;
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains(QStringLiteral("line1")));
+    QVERIFY(output.contains(QStringLiteral("line250")));
+    QVERIFY(!output.contains(QStringLiteral("line251")));
+    // Actionable continuation hint instead of a silent cut.
+    QVERIFY(output.contains(QStringLiteral("[Showing lines 1-250 of 300.")));
+    QVERIFY(output.contains(QStringLiteral("first_line=251")));
+}
+
+void LlamaToolsTest::readfile_wholeFileCap()
+{
+    QStringList lines;
+    for (int i = 1; i <= 3000; ++i)
+        lines << QStringLiteral("line%1").arg(i);
+    writeTextFile(gTempDir->path() + "/big.txt", lines.join(QStringLiteral("\n")));
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("big.txt");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 3000;
+    args[QStringLiteral("should_read_entire_file")] = true;
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains(QStringLiteral("line2000")));
+    QVERIFY(!output.contains(QStringLiteral("line2001")));
+    QVERIFY(output.contains(QStringLiteral("[Showing lines 1-2000 of 3000.")));
+    QVERIFY(output.contains(QStringLiteral("first_line=2001")));
+}
+
+void LlamaToolsTest::readfile_byteCap()
+{
+    // 60 lines of 1000 bytes: past the 50 KB cap.
+    const QString bigLine(1000, QLatin1Char('x'));
+    QString content;
+    for (int i = 0; i < 60; ++i)
+        content += (i > 0 ? QStringLiteral("\n") : QString()) + bigLine;
+    writeTextFile(gTempDir->path() + "/wide.txt", content);
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("wide.txt");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 60;
+    args[QStringLiteral("should_read_entire_file")] = true;
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(ok);
+    QVERIFY(output.contains(QStringLiteral("50 KB limit reached")));
+    // 51 lines fit (51 x 1001 bytes), the 52nd does not.
+    QVERIFY(output.contains(QStringLiteral("first_line=52")));
+}
+
+void LlamaToolsTest::readfile_emptyFile()
+{
+    // A 0‑byte file is a legitimate empty result, not a byte‑cap error.
+    writeTextFile(gTempDir->path() + "/empty.txt", {});
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("empty.txt");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 1;
+    args[QStringLiteral("should_read_entire_file")] = true;
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(ok);
+    QCOMPARE(output, QString());
+
+    // … and so is a slice covering only empty lines (with the usual
+    // continuation hint, since more lines follow).
+    writeTextFile(gTempDir->path() + "/blanklines.txt", QStringLiteral("\n\n"));
+    args[QStringLiteral("file_path")] = QStringLiteral("blanklines.txt");
+    args[QStringLiteral("last_line_inclusive")] = 1;
+    args[QStringLiteral("should_read_entire_file")] = false;
+    std::tie(output, ok) = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(ok);
+    QVERIFY(output.trimmed().startsWith(QStringLiteral("[Showing lines 1-1 of 3.")));
+    QVERIFY(!output.contains(QStringLiteral("limit")));
+}
+
+void LlamaToolsTest::readfile_imageAttachment()
+{
+    // A minimal 1x1 transparent PNG.
+    const QByteArray png = QByteArray::fromHex(
+        "89504E470D0A1A0A0000000D49484452000000010000000108060000001F15C489"
+        "0000000D49444154789C62000100000500010D0A2DB40000000049454E44AE426082");
+    QVERIFY(!png.isEmpty());
+    const QString path = gTempDir->path() + "/pixel.png";
+    {
+        QFile f(path);
+        QVERIFY(f.open(QFile::WriteOnly));
+        f.write(png);
+    }
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("pixel.png");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 1;
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    // The result carries the image as a data URL behind the markers.
+    QVERIFY(output.contains(QStringLiteral("[[llama:image]]")));
+    QVERIFY(output.contains(QStringLiteral("data:image/png;base64,")));
+
+    QString text;
+    QString dataUrl;
+    QVERIFY2(splitToolResultImage(output, text, dataUrl), qPrintable(output));
+    QVERIFY(text.contains(QStringLiteral("Image file")));
+    QVERIFY(text.contains(QStringLiteral("image/png")));
+    QCOMPARE(dataUrl,
+             QStringLiteral("data:image/png;base64,") + QString::fromLatin1(png.toBase64()));
+}
+
+void LlamaToolsTest::readfile_imageTooLarge()
+{
+    // 10 MB + 1 of JPEG magic + padding: past the image read limit.
+    const QString path = gTempDir->path() + "/huge.jpg";
+    {
+        QFile f(path);
+        QVERIFY(f.open(QFile::WriteOnly));
+        f.write(QByteArray::fromHex("FFD8FF"));
+        f.write(QByteArray(10 * 1024 * 1024, 0));
+    }
+
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("huge.jpg");
+    auto [output, ok] = runTool<Tools::ReadFileTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains(QStringLiteral("10 MB read limit")));
+}
+
+void LlamaToolsTest::toolImage_wrapSplitRoundTrip()
+{
+    const QString wrapped = toolResultWithImage(QStringLiteral("hello"),
+                                                 QStringLiteral("data:image/png;base64,AAA="));
+    QString text;
+    QString url;
+    QVERIFY(splitToolResultImage(wrapped, text, url));
+    QCOMPARE(text, QString("hello"));
+    QCOMPARE(url, QString("data:image/png;base64,AAA="));
+
+    // An empty text part is fine (the markers delimit the base64 data URL).
+    const QString wrappedNoText =
+            toolResultWithImage(QString(), QStringLiteral("data:image/jpeg;base64,BBB="));
+    QVERIFY(splitToolResultImage(wrappedNoText, text, url));
+    QCOMPARE(text, QString());
+    QCOMPARE(url, QString("data:image/jpeg;base64,BBB="));
+
+    // Plain results are left alone.
+    QVERIFY(!splitToolResultImage(QStringLiteral("plain output"), text, url));
+    // A marker without a data URL payload is not an image attachment.
+    QVERIFY(!splitToolResultImage(QStringLiteral("[[llama:image]]not-a-url[[/llama:image]]"),
+                                  text,
+                                  url));
+}
+
+void LlamaToolsTest::toolImage_textFromContentParts()
+{
+    // Plain string content.
+    QCOMPARE(toolResultText(QJsonValue(QStringLiteral("plain"))), QString("plain"));
+
+    // Content parts: text parts are joined, image parts are skipped.
+    QJsonArray parts;
+    QJsonObject textPart1;
+    textPart1["type"] = QStringLiteral("text");
+    textPart1["text"] = QStringLiteral("line1");
+    parts.append(textPart1);
+    QJsonObject imagePart;
+    imagePart["type"] = QStringLiteral("image_url");
+    imagePart["image_url"] = QJsonObject{{"url", QStringLiteral("data:image/png;base64,AAA=")}};
+    parts.append(imagePart);
+    QJsonObject textPart2;
+    textPart2["type"] = QStringLiteral("text");
+    textPart2["text"] = QStringLiteral("line2");
+    parts.append(textPart2);
+    QCOMPARE(toolResultText(QJsonValue(parts)), QString("line1\nline2"));
+
+    // No content at all.
+    QCOMPARE(toolResultText(QJsonValue()), QString());
+}
+
+// ============================================================================
+// EditFileTool argument tolerance / result
+// ============================================================================
+
+void LlamaToolsTest::editfile_editsAsJsonString()
+{
+    writeTextFile(gTempDir->path() + "/str.txt", QStringLiteral("alpha\n"));
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("str.txt");
+    args[QStringLiteral("edits")]
+        = QStringLiteral("[{\"oldText\": \"alpha\", \"newText\": \"beta\"}]");
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->path() + "/str.txt"), QString("beta\n"));
+}
+
+void LlamaToolsTest::editfile_editsAsObject()
+{
+    writeTextFile(gTempDir->path() + "/obj.txt", QStringLiteral("alpha\n"));
+    QJsonObject edit;
+    edit[QStringLiteral("oldText")] = QStringLiteral("alpha");
+    edit[QStringLiteral("newText")] = QStringLiteral("beta");
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("obj.txt");
+    args[QStringLiteral("edits")] = edit; // single object, not an array
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->path() + "/obj.txt"), QString("beta\n"));
+}
+
+void LlamaToolsTest::editfile_legacyTopLevel()
+{
+    writeTextFile(gTempDir->path() + "/legacy.txt", QStringLiteral("alpha\n"));
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("legacy.txt");
+    args[QStringLiteral("oldText")] = QStringLiteral("alpha");
+    args[QStringLiteral("newText")] = QStringLiteral("beta");
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QCOMPARE(readTextFile(gTempDir->path() + "/legacy.txt"), QString("beta\n"));
+}
+
+void LlamaToolsTest::editfile_resultContainsDiff()
+{
+    writeTextFile(gTempDir->path() + "/diff.txt", QStringLiteral("alpha\n"));
+    QJsonObject edit;
+    edit[QStringLiteral("oldText")] = QStringLiteral("alpha");
+    edit[QStringLiteral("newText")] = QStringLiteral("beta");
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("diff.txt");
+    args[QStringLiteral("edits")] = QJsonArray{edit};
+    auto [output, ok] = runTool<Tools::EditFileTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    // The model sees the change without re‑reading the file.
+    QVERIFY(output.contains(QStringLiteral("```diff")));
+    QVERIFY(output.contains(QStringLiteral("-alpha")));
+    QVERIFY(output.contains(QStringLiteral("+beta")));
+}
+
+// ============================================================================
+// repairJson (string‑literal repair for small‑model tool arguments)
+// ============================================================================
+
+void LlamaToolsTest::repairJson_controlChars()
+{
+    // A real newline and tab inside a JSON string (the #1 small‑model
+    // malformations, e.g. multi‑line bash commands).  Qt's parser already
+    // tolerates these; the repair must keep the value intact.
+    const QString broken = QStringLiteral("{\"command\": \"echo hi\n\tworld\"}");
+    const QString repaired = repairJson(broken);
+    QVERIFY(repaired != broken);
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(repaired.toUtf8(), &err);
+    QVERIFY2(err.error == QJsonParseError::NoError, qPrintable(repaired));
+    QCOMPARE(doc.object().value(QStringLiteral("command")).toString(),
+             QString(QStringLiteral("echo hi\n\tworld")));
+}
+
+void LlamaToolsTest::repairJson_invalidEscapes()
+{
+    // A backslash before an invalid escape character (a Windows‑ish path).
+    // Qt's parser accepts this but silently *drops* the backslash
+    // ("C:.projects"); the repair doubles it, so the tool receives the
+    // intended literal.
+    const QString broken = QStringLiteral("{\"path\": \"C:\\.projects\"}");
+    QJsonParseError err;
+    const QJsonDocument unrepaired = QJsonDocument::fromJson(broken.toUtf8(), &err);
+    QCOMPARE(unrepaired.object().value(QStringLiteral("path")).toString(),
+             QString(QStringLiteral("C:.projects")));
+
+    const QJsonDocument doc = QJsonDocument::fromJson(repairJson(broken).toUtf8(), &err);
+    QVERIFY2(err.error == QJsonParseError::NoError, qPrintable(repairJson(broken)));
+    QCOMPARE(doc.object().value(QStringLiteral("path")).toString(),
+             QString(QStringLiteral("C:\\.projects")));
+}
+
+void LlamaToolsTest::repairJson_validUnchanged()
+{
+    const QString valid = QStringLiteral("{\"a\": 1, \"b\": \"x\\n\\u0041\\t\", \"c\": true}");
+    QCOMPARE(repairJson(valid), valid);
+}
+
+void LlamaToolsTest::repairJson_structureNotFixed()
+{
+    // Truncated / structurally broken JSON is out of scope: the repair must
+    // not hide it (the caller reports the parse failure to the model).
+    QJsonParseError err;
+    const QString truncated = QStringLiteral("{\"a\": \"b\"");
+    QVERIFY(QJsonDocument::fromJson(repairJson(truncated).toUtf8(), &err).isNull());
+
+    const QString notJson = QStringLiteral("sure, here is the JSON: {\"a\": 1");
+    QVERIFY(QJsonDocument::fromJson(repairJson(notJson).toUtf8(), &err).isNull());
 }
 
 } // namespace LlamaCpp

@@ -340,8 +340,32 @@ void EditFileTool::run(const QJsonObject &args,
     if (path.isEmpty())
         return done(Tr::tr("Tool error: \"path\" must be a non-empty string."), false);
 
+    // Tolerate small‑model quirks in the arguments: "edits" may arrive as
+    // a JSON string, as a single edit object, or (legacy) as top‑level
+    // "oldText"/"newText" fields next to "path".  Normalise all of them to
+    // the array form before validating.
+    QJsonArray editsArray = args.value("edits").toArray();
+    if (editsArray.isEmpty()) {
+        const QJsonValue editsValue = args.value("edits");
+        if (editsValue.isString()) {
+            const QJsonDocument parsed =
+                    QJsonDocument::fromJson(editsValue.toString().toUtf8());
+            if (parsed.isArray())
+                editsArray = parsed.array();
+            else if (parsed.isObject())
+                editsArray = QJsonArray{parsed.object()};
+        } else if (editsValue.isObject()) {
+            editsArray = QJsonArray{editsValue.toObject()};
+        } else if (args.contains("oldText") && args.contains("newText")) {
+            QJsonObject legacy;
+            legacy[QStringLiteral("oldText")] = args.value("oldText");
+            legacy[QStringLiteral("newText")] = args.value("newText");
+            editsArray = QJsonArray{legacy};
+        }
+    }
+
     QVector<QPair<QString, QString>> edits;
-    for (const QJsonValue &value : args.value("edits").toArray()) {
+    for (const QJsonValue &value : editsArray) {
         const QJsonObject edit = value.toObject();
         if (!edit.contains("oldText") || !edit.contains("newText")) {
             return done(Tr::tr("Tool error: every edit needs an \"oldText\" and a \"newText\"."),
@@ -379,7 +403,25 @@ void EditFileTool::run(const QJsonObject &args,
     if (!writeRes)
         return done(Tr::tr("Cannot edit \"%1\": %2").arg(path, writeRes.error()), false);
 
-    return done(Tr::tr("Successfully replaced %1 block(s) in %2.").arg(replacements).arg(path), true);
+    QString result =
+            Tr::tr("Successfully replaced %1 block(s) in %2.").arg(replacements).arg(path);
+    // Show the change to the model directly: without it the model tends to
+    // re‑read the file just to verify the edit, costing a round trip.
+    QString diff;
+    for (const auto &edit : edits) {
+        for (const QString &line : edit.first.split(QLatin1Char('\n')))
+            diff += QLatin1Char('-') + line + QLatin1Char('\n');
+        for (const QString &line : edit.second.split(QLatin1Char('\n')))
+            diff += QLatin1Char('+') + line + QLatin1Char('\n');
+    }
+    // Cap the diff: a huge rewrite does not need its full diff in context.
+    constexpr int kMaxDiffLines = 100;
+    const QStringList diffLines = diff.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
+    if (diffLines.size() > kMaxDiffLines)
+        diff = diffLines.mid(0, kMaxDiffLines).join(QLatin1Char('\n'))
+               + QStringLiteral("\n…");
+    result += QLatin1Char('\n') + codeFence(diff, QStringLiteral("diff"));
+    return done(result, true);
 }
 
 } // namespace LlamaCpp::Tools

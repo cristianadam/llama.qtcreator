@@ -255,7 +255,7 @@ static QString toolCallToHtml(const Message &msg)
         if (e.contains("tool_result")) {
             QJsonObject result = e.value("tool_result").toJsonObject();
             if (!result.isEmpty())
-                functionResult = result.value("content").toString();
+                functionResult = toolResultText(result.value("content"));
         }
         if (e.contains("tool_status"))
             toolStatus = e.value("tool_status").toString(); // "success" / "failed"

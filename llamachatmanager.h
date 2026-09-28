@@ -167,7 +167,8 @@ public:
     void executeToolAndSendResult(const QString &convId,
                                   const LlamaCpp::Message &msg,
                                   const ToolCall &tool,
-                                  std::function<void(qint64)> onChunk);
+                                  std::function<void(qint64)> onChunk,
+                                  std::shared_ptr<int> batchRemaining = nullptr);
 
 signals:
     void modelsUpdated();

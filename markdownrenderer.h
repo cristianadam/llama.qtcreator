@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QFont>
 #include <QHash>
+#include <QImage>
 #include <QList>
 #include <QMap>
 #include <QStack>
@@ -125,6 +126,15 @@ public:
     // empty for unknown or foreign URLs.  MarkdownLabel::loadResource() turns
     // it into pixels.
     QByteArray svgContentForUrl(const QUrl &url) const;
+
+    //! Prepares \a image for inline display: scaled down to fit \a maxWidth
+    //! (smaller images keep their native size), height capped at 600 px
+    //! (like the SVG drawings), rasterized at \a devicePixelRatio so the
+    //! picture stays crisp on Retina.  Strong down-scales are done in
+    //! halving steps with a final smooth pass, which resamples noticeably
+    //! better than a single large scale.
+    static QImage scaledImageForDisplay(const QImage &image, double maxWidth,
+                                        qreal devicePixelRatio);
 
 signals:
     void copyClicked(const QString &verbatim, const QString &formattedCode);

@@ -4,6 +4,7 @@
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/ripgrep.h"
+#include "tools/tool_utils.h"
 
 #include <QtTaskTree/QTaskTree>
 #include <QtTaskTree/qtasktreerunner.h>
@@ -342,7 +343,9 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
 
 void ToolsSettingsWidget::updateModelFromEnabledTools()
 {
-    const QStringList enabled = settings().enabledToolsList();
+    // effectiveEnabledTools(): tools added by a newer plugin version show
+    // up checked, like isToolEnabled() resolves them at run time.
+    const QStringList enabled = effectiveEnabledTools();
     const QStringList enabledMcp = settings().enabledMcpToolsList();
     const int groupCount = m_model->rowCount();
     for (int groupRow = 0; groupRow < groupCount; ++groupRow) {

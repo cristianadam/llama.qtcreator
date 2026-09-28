@@ -29,6 +29,14 @@ QStringList secretReadPaths();
 //! credential locations.
 QString sandboxAccessError(const Utils::FilePath &path, bool isWrite);
 
+//! The effectively enabled local tools: the stored EnabledToolsList plus
+//! every registered tool the stored list does not know about yet, so tools
+//! added by a newer plugin version are enabled by default.  A tool the user
+//! explicitly disabled stays disabled – it is still present in the stored
+//! list.  Remote (MCP) tools are not part of this list; they have their
+//! own opt-in EnabledMcpToolsList.
+QStringList effectiveEnabledTools();
+
 /*! Resolves \a relPath against the startup project directory (or the project
     directory when no project is open).
 
@@ -46,3 +54,14 @@ Utils::FilePath absoluteProjectPath(const Utils::FilePath &relPath, bool mustExi
 //! SVG maps to "xml" (there is no dedicated SVG definition, and XML
 //! highlighting reads fine for it).
 QString codeLanguageFor(const QString &filePath);
+
+/*! Repairs the two JSON string‑literal malformations that small models
+    produce most often, so that \c QJsonDocument::fromJson can parse the
+    result: raw control characters inside strings (real newlines/tabs in a
+    \c command or \c content value) are escaped, and backslashes before
+    invalid escape characters are doubled.  The string is returned unchanged
+    when it is already valid.  Structural problems (truncated objects,
+    missing braces) are *not* repaired – only string literals.
+
+    Ported from the pi coding agent (packages/ai/src/utils/json-parse.ts). */
+QString repairJson(const QString &json);

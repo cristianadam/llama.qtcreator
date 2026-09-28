@@ -21,6 +21,8 @@
 #include <QSvgRenderer>
 #include <QTextFragment>
 
+#include <algorithm>
+
 #include <functional>
 #include <QToolButton>
 #include <QToolTip>
@@ -859,6 +861,40 @@ QByteArray MarkdownRenderer::svgContentForUrl(const QUrl &url) const
     if (url.scheme() != QLatin1String("llamasvg"))
         return {};
     return m_svgStore.value(url.authority());
+}
+
+QImage MarkdownRenderer::scaledImageForDisplay(const QImage &image,
+                                               double maxWidth,
+                                               qreal devicePixelRatio)
+{
+    if (image.isNull())
+        return {};
+
+    // Logical display size: fit the width, cap the height like the SVG
+    // drawings.  Smaller images keep their native size (up-scaling a small
+    // picture only makes it blurrier).
+    double w = image.width();
+    double h = image.height();
+    const double scale
+        = std::min({1.0, maxWidth / w, 600.0 / h});
+    if (scale >= 1.0)
+        return image;
+    w *= scale;
+    h *= scale;
+
+    // Rasterize at device resolution so the picture stays crisp on Retina.
+    const qreal dpr = qMax(devicePixelRatio, 1.0);
+    const int targetWidth = qMax(1, qRound(w * dpr));
+
+    // A single large down-scale resamples poorly (aliasing, smearing): halve
+    // repeatedly until within a factor of two of the target, then take one
+    // final smooth step.
+    QImage stepped = image;
+    while (stepped.width() > targetWidth * 2)
+        stepped = stepped.scaledToWidth(stepped.width() / 2, Qt::FastTransformation);
+    stepped = stepped.scaledToWidth(targetWidth, Qt::SmoothTransformation);
+    stepped.setDevicePixelRatio(dpr);
+    return stepped;
 }
 
 // ---------------------------------------------------------------------------

@@ -428,6 +428,8 @@ QString ChatMessage::getToolUsageAndResult() const
     QString argumentsJson;
     QString functionResult;
     QString toolStatus;
+    QString liveOutput; // tail of the output while the tool is still running
+    QStringList imageUrls; // image attachments of the result (read_file)
 
     if (!m_msg.extra.isEmpty()) {
         for (const QVariantMap &e : m_msg.extra) {
@@ -442,12 +444,31 @@ QString ChatMessage::getToolUsageAndResult() const
             }
             if (e.contains("tool_result")) {
                 QJsonObject result = e.value("tool_result").toJsonObject();
-                if (!result.isEmpty())
-                    functionResult = result.value("content").toString();
+                if (!result.isEmpty()) {
+                    functionResult = toolResultText(result.value("content"));
+                    // Image content parts (read_file on an image) are shown
+                    // in the expanded tool call.
+                    const QJsonValue content = result.value("content");
+                    if (content.isArray()) {
+                        for (const QJsonValue &part : content.toArray()) {
+                            const QJsonObject obj = part.toObject();
+                            if (obj.value("type").toString() == QLatin1String("image_url")) {
+                                const QString url
+                                    = obj.value("image_url").toObject().value("url").toString();
+                                if (url.startsWith(QLatin1String("data:image/")))
+                                    imageUrls << url;
+                            }
+                        }
+                    }
+                }
             }
 
             if (e.contains("tool_status")) {
                 toolStatus = e.value("tool_status").toString(); // "success" / "failed"
+            }
+
+            if (e.contains("tool_live_output")) {
+                liveOutput = e.value("tool_live_output").toString();
             }
         }
     }
@@ -495,6 +516,17 @@ QString ChatMessage::getToolUsageAndResult() const
         if (summaryText.isEmpty())
             summaryText = tool->oneLineSummary(args);
         summaryText += QStringLiteral(" ...");
+        if (!liveOutput.trimmed().isEmpty()) {
+            // Live tail of the output (e.g. a running bash command): the
+            // last few lines, like the preview of a finished call.
+            const QStringList lines = liveOutput.split(QLatin1Char('\n'));
+            QString tail = lines.size() > 3
+                    ? lines.mid(lines.size() - 3).join(QLatin1Char('\n'))
+                    : liveOutput;
+            if (tail.size() > 240)
+                tail = tail.left(237) + QStringLiteral("…");
+            summaryText += QStringLiteral("\n\n") + codeFence(tail);
+        }
     } else {
         summaryText = tool->oneLineSummary(args);
         // Show a few lines of the outcome directly in the summary, like pi
@@ -506,7 +538,17 @@ QString ChatMessage::getToolUsageAndResult() const
             summaryText += QStringLiteral("\n\n") + preview;
     }
     const QString summary = statusIconHtml + "&nbsp;" + summaryText;
-    QString details = tool->detailsMarkdown(args, functionResult, toolStatus == QLatin1String("success"));
+
+    // Attached images (read_file on an image file) in the expanded view;
+    // MarkdownLabel::loadResource() decodes the data URLs.  The text part
+    // of such a result is already visible as the summary preview, so the
+    // details skip it and show only the picture.
+    QString details;
+    if (imageUrls.isEmpty())
+        details = tool->detailsMarkdown(args, functionResult,
+                                        toolStatus == QLatin1String("success"));
+    for (const QString &url : imageUrls)
+        details += QStringLiteral("\n\n![%1](%2)").arg(Tr::tr("Image"), url);
 
     return QString("<details data-tool=\"true\"><summary>%1</summary>\n\n%2\n</details>\n").arg(summary, details);
 }

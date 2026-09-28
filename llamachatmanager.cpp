@@ -28,6 +28,7 @@
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/tool.h"
+#include "tools/tool_utils.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
 Q_LOGGING_CATEGORY(llamaChatTools, "llama.cpp.chat.tools", QtWarningMsg)
@@ -153,48 +154,47 @@ static bool isToolEnabled(const QString &toolName)
 {
     if (McpBridge::instance().isMcpTool(toolName))
         return settings().enabledMcpToolsList().contains(toolName);
-    return settings().enabledToolsList().contains(toolName);
+    // effectiveEnabledTools() also enables tools that were registered after
+    // the user's stored list was written (new plugin version).
+    return effectiveEnabledTools().contains(toolName);
 }
 
 static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTools = nullptr)
 {
+    QJsonArray toolsArr;
     const QStringList creatorsList = ToolFactory::instance().creatorsList();
-    QStringList toolDefinitions;
-    for (const QString &toolName : creatorsList) {
+    for (const QString &toolName : std::as_const(creatorsList)) {
         std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
         if (!tool)
             continue; // e.g. a remote tool that disappeared mid‑flight
-        toolDefinitions << tool->toolDefinition();
-    }
 
-    QJsonArray toolsArr;
-    for (const QString &toolStr : std::as_const(toolDefinitions)) {
         QJsonParseError err;
-        QJsonDocument doc = QJsonDocument::fromJson(toolStr.toUtf8(), &err);
+        QJsonDocument doc = QJsonDocument::fromJson(tool->toolDefinition().toUtf8(), &err);
         if (err.error != QJsonParseError::NoError || !doc.isObject()) {
             qWarning() << "Invalid tool JSON:" << err.errorString();
             continue;
         }
 
-        // Extract the tool name so we can check whether it is enabled.
-        const QJsonObject root = doc.object();
-        const QJsonObject functionObj = root.value(QStringLiteral("function")).toObject();
-        const QString toolName = functionObj.value(QStringLiteral("name")).toString();
+        const QJsonObject functionObj = doc.object().value(QStringLiteral("function")).toObject();
+        const QString name = functionObj.value(QStringLiteral("name")).toString();
 
-        if (allowedTools && !allowedTools->contains(toolName)) {
+        if (allowedTools && !allowedTools->contains(name)) {
             // Not part of the conversation‑specific tool whitelist (task
             // sub‑agent) – it must not be advertised either.  An empty
             // whitelist means no tools at all.
             continue;
         }
 
-        if (!isToolEnabled(toolName)) {
+        if (!isToolEnabled(name)) {
             // Skip disabled tools – they must never be advertised to the server.
             qCInfo(llamaChatTools).nospace()
-                << "Tool '" << toolName << "' is disabled, not adding it to payload.";
+                << "Tool '" << name << "' is disabled, not adding it to payload.";
             continue;
         }
 
+        QJsonObject root;
+        root[QStringLiteral("type")] = QStringLiteral("function");
+        root[QStringLiteral("function")] = functionObj;
         toolsArr.append(root);
     }
 
@@ -538,7 +538,7 @@ static QString toolCallToMarkdown(const Message &msg)
             }
         }
         if (e.contains("tool_result"))
-            functionResult = e.value("tool_result").toJsonObject().value("content").toString();
+            functionResult = toolResultText(e.value("tool_result").toJsonObject().value("content"));
         if (e.contains("tool_status"))
             toolStatus = e.value("tool_status").toString(); // "success" / "failed"
         // NB: tool_calls, tool_result and tool_status may live in the same
@@ -771,6 +771,12 @@ void ChatManager::generateMessage(const QString &convId,
                         : it->allowedTools;
                     allowed.removeAll(QStringLiteral("task")); // no recursion
                     addToolsToPayload(payload, &allowed);
+                    // First sub‑agent turn: force a tool call so smaller
+                    // models start working instead of narrating a plan.
+                    // Later turns stay free, so the subagent can still
+                    // finish with a plain report.
+                    if (leafMsgs.size() <= 1)
+                        payload[QStringLiteral("tool_choice")] = QStringLiteral("required");
                 } else {
                     addToolsToPayload(payload);
                 }
@@ -1163,9 +1169,83 @@ static Message createToolMessage(const Message &assistantCall)
     return toolMsg;
 }
 
+namespace {
+
+// A base64 image in the prompt is pure token cost, and the model only
+// needs it while it is actively looking at the result.  Image content
+// parts are therefore kept only in the last few messages; in older tool
+// results they are replaced by a text note (the text part stays).
+constexpr int kImageContextMessages = 3;
+
+QJsonValue toolResultContentForApi(const QJsonValue &content, bool keepImages)
+{
+    if (keepImages || !content.isArray())
+        return content;
+    QJsonArray parts;
+    bool hasImage = false;
+    for (const QJsonValue &part : content.toArray()) {
+        const QJsonObject obj = part.toObject();
+        if (obj.value(QStringLiteral("type")).toString() == QLatin1String("image_url")) {
+            hasImage = true;
+            QJsonObject note;
+            note[QStringLiteral("type")] = QStringLiteral("text");
+            note[QStringLiteral("text")] = QStringLiteral("[image omitted from context]");
+            parts.append(note);
+        } else {
+            parts.append(part);
+        }
+    }
+    return hasImage ? QJsonValue(parts) : content;
+}
+
+} // namespace
+
 QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 {
     QJsonArray res;
+
+    // Parallel tool calls: filterByLeafNodeId() follows a single parent
+    // chain, so of several sibling tool results only the one on the leaf
+    // path survives the filter.  Collect the missing siblings (keyed by
+    // their assistant message) so that every tool_call in the request has
+    // a matching tool result – a dangling tool_call confuses the model and
+    // violates the chat protocol.
+    QMap<qint64, QVector<Message>> missingToolResults;
+    if (!msgs.isEmpty()) {
+        QSet<qint64> keptIds;
+        bool hasToolCalls = false;
+        QSet<QString> callIds;
+        QSet<QString> resultIds;
+        for (const Message &m : msgs) {
+            keptIds.insert(m.id);
+            for (const QVariantMap &e : m.extra) {
+                if (m.role == "assistant" && e.contains("tool_calls")) {
+                    hasToolCalls = true;
+                    for (const QJsonValue &v : e["tool_calls"].toJsonArray())
+                        callIds.insert(v.toObject().value("id").toString());
+                } else if (m.role == "tool" && e.contains("tool_result")) {
+                    resultIds.insert(e["tool_result"].toJsonObject()
+                                        .value("tool_call_id").toString());
+                }
+            }
+        }
+        // Only fetch the conversation from storage when the leaf‑path filter
+        // actually dropped a result; a full getMessages() per request is
+        // wasteful in long conversations.
+        const QSet<QString> unresolved = callIds - resultIds;
+        if (hasToolCalls && !unresolved.isEmpty()) {
+            const QVector<Message> all = m_storage->getMessages(msgs.first().convId);
+            for (const Message &m : all) {
+                if (m.role != "tool" || keptIds.contains(m.id))
+                    continue;
+                for (const QVariantMap &e : m.extra)
+                    if (e.contains("tool_result")) {
+                        missingToolResults[m.parent].append(m);
+                        break;
+                    }
+            }
+        }
+    }
 
     QString sysMsgText = LlamaCpp::settings().systemMessage.value();
     const bool isTaskConversation = !msgs.isEmpty()
@@ -1207,7 +1287,9 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(sys);
     }
 
-    for (const Message &msg : msgs) {
+    for (int i = 0; i < msgs.size(); ++i) {
+        const Message &msg = msgs.at(i);
+        const bool keepImages = msgs.size() - i <= kImageContextMessages;
         if (msg.role != "user" || msg.extra.isEmpty()) {
             QJsonObject out;
             out["role"] = msg.role;
@@ -1220,12 +1302,42 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                 }
             } else if (msg.role == "tool") {
                 for (const QVariantMap &e : msg.extra) {
-                    if (e.contains("tool_result"))
-                        res.append(e["tool_result"].toJsonObject());
+                    if (e.contains("tool_result")) {
+                        QJsonObject toolOut = e["tool_result"].toJsonObject();
+                        toolOut["content"] =
+                                toolResultContentForApi(toolOut.value("content"), keepImages);
+                        res.append(toolOut);
+                    }
                 }
             }
 
             res.append(out);
+
+            // Re‑add the tool results of parallel calls that the leaf‑path
+            // filter dropped, right after their assistant message.
+            if (msg.role == "assistant") {
+                const auto sit = missingToolResults.constFind(msg.id);
+                if (sit != missingToolResults.constEnd()) {
+                    for (const Message &sib : sit.value()) {
+                        for (const QVariantMap &e : sib.extra) {
+                            if (e.contains("tool_result")) {
+                                QJsonObject toolOut = e["tool_result"].toJsonObject();
+                                toolOut["content"] = toolResultContentForApi(
+                                    toolOut.value("content"), keepImages);
+                                res.append(toolOut);
+                            }
+                        }
+                        // Mirror what the loop appends for a regular tool
+                        // message (the empty role/content object), so the
+                        // stream shape is identical to the one the model
+                        // saw while the results streamed in.
+                        QJsonObject sibOut;
+                        sibOut["role"] = QStringLiteral("tool");
+                        sibOut["content"] = sib.content;
+                        res.append(sibOut);
+                    }
+                }
+            }
 
             continue;
         }
@@ -1458,6 +1570,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     m_storage->updateMessageExtra(pm, pm.extra);
 
                     QJsonArray array = e["tool_calls"].toJsonArray();
+                    QVector<ToolCall> tools;
                     for (const QJsonValue &v : array) {
                         QJsonObject obj = v.toObject();
                         ToolCall tool;
@@ -1465,8 +1578,18 @@ void ChatManager::sendChatRequest(const QString &convId,
                         obj = obj["function"].toObject();
                         tool.name = obj["name"].toString();
                         tool.arguments = obj["arguments"].toString();
-
-                        executeToolAndSendResult(convId, pm, tool, [](qint64) {});
+                        tools.append(tool);
+                    }
+                    // Parallel tool calls: the next assistant turn is
+                    // requested only once *all* results are in, so the
+                    // follow‑up request carries every tool result (the
+                    // missing siblings are re‑added by
+                    // normalizeMsgsForAPI()).  Without this, each finished
+                    // tool would trigger its own request and the
+                    // isGenerating() guard would drop all but the first.
+                    auto batchRemaining = std::make_shared<int>(tools.size());
+                    for (const ToolCall &tool : tools) {
+                        executeToolAndSendResult(convId, pm, tool, [](qint64) {}, batchRemaining);
                         haveToolExecution = true;
                     }
                 }
@@ -1504,37 +1627,56 @@ void ChatManager::sendChatRequest(const QString &convId,
 void ChatManager::executeToolAndSendResult(const QString &convId,
                                            const Message &assistantMsg,
                                            const ToolCall &tool,
-                                           std::function<void(qint64)> onChunk)
+                                           std::function<void(qint64)> onChunk,
+                                           std::shared_ptr<int> batchRemaining)
 {
-    // Check whether the requested tool is enabled.
-    if (!isToolEnabled(tool.name)) {
-        qCWarning(llamaChatTools) << "Tool" << tool.name
-                                  << "was called but is disabled – skipping.";
-
-        // Insert a synthetic “failed” tool‑result so the conversation can continue.
+    // Append a synthetic “failed” tool‑result and continue the conversation,
+    // so the model gets another turn to react (and retry) instead of the
+    // conversation dying on a tool error.
+    auto sendFailedToolResult = [this, convId, &assistantMsg, &tool, onChunk,
+                                 batchRemaining](const QString &content) {
         Message toolMsg = createToolMessage(assistantMsg);
         QJsonObject toolJsonMsg;
         toolJsonMsg["role"] = "tool";
         toolJsonMsg["tool_call_id"] = tool.id;
         toolJsonMsg["name"] = tool.name;
-        toolJsonMsg["content"] = QStringLiteral("Tool disabled");
+        toolJsonMsg["content"] = content;
         QVariantMap toolResultExtra;
         toolResultExtra["tool_result"] = toolJsonMsg;
         toolResultExtra["tool_status"] = QStringLiteral("failed");
         toolMsg.extra << toolResultExtra;
         m_storage->appendMsg(toolMsg, assistantMsg.id);
         onChunk(toolMsg.id);
-
-        // Continue the conversation as if the tool had returned an error.
+        if (batchRemaining && --*batchRemaining > 0)
+            return; // sibling tool calls of the same message are still running
         generateMessage(convId, toolMsg.id, onChunk);
+    };
+
+    // Check whether the requested tool is enabled.
+    if (!isToolEnabled(tool.name)) {
+        qCWarning(llamaChatTools) << "Tool" << tool.name
+                                  << "was called but is disabled – skipping.";
+        sendFailedToolResult(QStringLiteral("Tool disabled"));
         return;
     }
 
     QJsonParseError err;
     QJsonDocument doc = QJsonDocument::fromJson(tool.arguments.toUtf8(), &err);
     if (err.error != QJsonParseError::NoError) {
-        qCWarning(llamaChatNetwork)
+        // Small models often emit raw control characters (real newlines in a
+        // command/content string) or invalid escapes – try a string‑literal
+        // repair before giving up.
+        const QString repaired = repairJson(tool.arguments);
+        if (repaired != tool.arguments)
+            doc = QJsonDocument::fromJson(repaired.toUtf8(), &err);
+    }
+    if (err.error != QJsonParseError::NoError) {
+        qCWarning(llamaChatTools)
             << "Tool args JSON malformed:" << err.errorString() << tool.arguments.toUtf8();
+        sendFailedToolResult(
+            QStringLiteral("Tool arguments were not valid JSON (%1). Call the tool "
+                           "again with valid JSON arguments.")
+                .arg(err.errorString()));
         return;
     }
 
@@ -1543,7 +1685,8 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
     std::unique_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
     if (!realTool) {
-        qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
+        qCWarning(llamaChatTools) << "Unsupported tool:" << tool.name;
+        sendFailedToolResult(QStringLiteral("Unknown tool: %1").arg(tool.name));
         return;
     }
 
@@ -1556,33 +1699,79 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     m_storage->appendMsg(toolMsg, assistantMsg.id);
     onChunk(toolMsg.id);
 
-    auto toolFinished = [this, convId, toolMsg, tool, onChunk](const QString &toolOutput,
-                                                                bool ok) mutable {
+    // Tools that report live output (bash) show the current output tail in
+    // the running tool bubble; it is persisted at most every
+    // kLiveOutputIntervalMs and dropped again when the result arrives.
+    static constexpr int kLiveOutputIntervalMs = 400;
+    auto sharedMsg = std::make_shared<Message>(toolMsg);
+    auto lastLiveUpdate = std::make_shared<qint64>(0);
+    auto publishLiveOutput = [this, sharedMsg, lastLiveUpdate](const QString &tail) {
+        const qint64 now = QDateTime::currentMSecsSinceEpoch();
+        if (now - *lastLiveUpdate < kLiveOutputIntervalMs)
+            return;
+        *lastLiveUpdate = now;
+
+        auto extra = sharedMsg->extra;
+        for (auto &e : extra)
+            e.remove(QStringLiteral("tool_live_output"));
+        QVariantMap live;
+        live[QStringLiteral("tool_live_output")] = tail;
+        extra << live;
+        sharedMsg->extra = extra;
+        // Storage emits messageExtraUpdated, which the chat view follows.
+        m_storage->updateMessageExtra(*sharedMsg, extra);
+    };
+
+    auto toolFinished = [this, convId, sharedMsg, tool, onChunk,
+                          batchRemaining](const QString &toolOutput,
+                                          bool ok) mutable {
         QJsonObject toolJsonMsg;
         toolJsonMsg["role"] = "tool";
         toolJsonMsg["tool_call_id"] = tool.id;
         toolJsonMsg["name"] = tool.name;
-        toolJsonMsg["content"] = toolOutput;
+        // An image attachment (read_file on an image) travels as content
+        // parts – text plus image_url – which llama-server tokenizes for
+        // vision models.
+        QString toolText = toolOutput;
+        QString dataUrl;
+        if (splitToolResultImage(toolOutput, toolText, dataUrl)) {
+            QJsonArray parts;
+            QJsonObject textPart;
+            textPart["type"] = QStringLiteral("text");
+            textPart["text"] = toolText;
+            parts.append(textPart);
+            QJsonObject imagePart;
+            imagePart["type"] = QStringLiteral("image_url");
+            imagePart["image_url"] = QJsonObject{{"url", dataUrl}};
+            parts.append(imagePart);
+            toolJsonMsg["content"] = parts;
+        } else {
+            toolJsonMsg["content"] = toolOutput;
+        }
         QVariantMap toolResultExtra;
         toolResultExtra["tool_result"] = toolJsonMsg;
         toolResultExtra["tool_status"] = ok ? QStringLiteral("success") : "failed";
 
+        Message &toolMsg = *sharedMsg;
+        for (auto &e : toolMsg.extra)
+            e.remove(QStringLiteral("tool_live_output"));
         toolMsg.extra << toolResultExtra;
         m_storage->updateMessageExtra(toolMsg, toolMsg.extra);
 
         if (m_runningTools.value(convId) > 0)
             --m_runningTools[convId];
 
-        // generate assistant reply
+        // Generate the assistant reply only once every tool call of the
+        // message has reported back; the request then carries all results.
+        if (batchRemaining && --*batchRemaining > 0)
+            return;
         generateMessage(toolMsg.convId, toolMsg.id, onChunk);
     };
 
-    if (realTool) {
+    if (realTool->supportsLiveOutput())
+        realTool->runLive(doc.object(), publishLiveOutput, std::move(toolFinished));
+    else
         realTool->run(doc.object(), std::move(toolFinished));
-    } else {
-        qCWarning(llamaChatNetwork) << "Unsupported tool:" << tool.name;
-        return;
-    }
 }
 
 void ChatManager::deleteConversation(const QString &convId)

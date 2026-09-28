@@ -1,5 +1,9 @@
+#include "tool_utils.h"
+
+#include "factory.h"
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "mcpbridge.h"
 
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/project.h>
@@ -8,6 +12,7 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QSet>
 #include <QStandardPaths>
 
 using namespace LlamaCpp;
@@ -72,6 +77,18 @@ QString sandboxAccessError(const FilePath &path, bool isWrite)
                        "are not readable inside the sandbox.")
                     .arg(p);
     return {};
+}
+
+QStringList effectiveEnabledTools()
+{
+    QStringList enabled = settings().enabledToolsList();
+    for (const QString &name : LlamaCpp::ToolFactory::instance().creatorsList()) {
+        if (LlamaCpp::McpBridge::instance().isMcpTool(name))
+            continue; // remote tools have their own opt-in list
+        if (!enabled.contains(name))
+            enabled << name;
+    }
+    return enabled;
 }
 
 FilePath absoluteProjectPath(const FilePath &relPath, bool mustExist)
@@ -147,4 +164,91 @@ QString codeLanguageFor(const QString &filePath)
     if (suffix == "kt" || suffix == "kts")
         return QStringLiteral("kotlin");
     return QStringLiteral("text");
+}
+
+namespace {
+
+const QSet<QChar> kValidJsonEscapes{'"', '\\', '/', 'b', 'f', 'n', 'r', 't', 'u'};
+
+bool isJsonControlCharacter(QChar c)
+{
+    return c.unicode() >= 0x00 && c.unicode() <= 0x1f;
+}
+
+QString escapeJsonControlCharacter(QChar c)
+{
+    switch (c.unicode()) {
+    case '\b':
+        return QStringLiteral("\\b");
+    case '\f':
+        return QStringLiteral("\\f");
+    case '\n':
+        return QStringLiteral("\\n");
+    case '\r':
+        return QStringLiteral("\\r");
+    case '\t':
+        return QStringLiteral("\\t");
+    default:
+        return QStringLiteral("\\u%1").arg(static_cast<int>(c.unicode()), 4, 16, QChar('0'));
+    }
+}
+
+} // namespace
+
+QString repairJson(const QString &json)
+{
+    QString repaired;
+    repaired.reserve(json.size());
+    bool inString = false;
+    for (int i = 0; i < json.size(); ++i) {
+        const QChar ch = json.at(i);
+
+        if (!inString) {
+            repaired.append(ch);
+            if (ch == QLatin1Char('"'))
+                inString = true;
+            continue;
+        }
+
+        if (ch == QLatin1Char('"')) {
+            repaired.append(ch);
+            inString = false;
+            continue;
+        }
+
+        if (ch == QLatin1Char('\\')) {
+            const QChar next = (i + 1 < json.size()) ? json.at(i + 1) : QChar();
+            if (next.isNull()) {
+                repaired.append(QLatin1String("\\\\")); // dangling backslash
+                continue;
+            }
+            if (next == QLatin1Char('u')) {
+                const QString digits = json.mid(i + 2, 4);
+                bool isHex = digits.size() == 4;
+                for (const QChar d : digits) {
+                    if (!QLatin1String("0123456789abcdefABCDEF").contains(d)) {
+                        isHex = false;
+                        break;
+                    }
+                }
+                if (isHex) {
+                    repaired.append(QStringLiteral("\\u"));
+                    repaired.append(digits);
+                    i += 5;
+                    continue;
+                }
+            }
+            if (kValidJsonEscapes.contains(next)) {
+                repaired.append(QLatin1Char('\\'));
+                repaired.append(next);
+                ++i;
+                continue;
+            }
+            repaired.append(QLatin1String("\\\\")); // invalid escape: keep literal backslash
+            continue;
+        }
+
+        repaired.append(isJsonControlCharacter(ch) ? escapeJsonControlCharacter(ch) : ch);
+    }
+    return repaired;
 }
