@@ -96,6 +96,7 @@ private:
     void openHumanEditorDocument(const QString &convId, qint64 msgId, const QString &text);
     void performSearch(const QString &query);
     void jumpToResult(int idx, bool selected = true);
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     TextEditor::TextDocumentPtr m_document;

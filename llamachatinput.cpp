@@ -403,7 +403,13 @@ bool ChatInput::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::ShortcutOverride) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() == Qt::Key_Escape) {
-            emit editingCancelled();
+            // Esc acts as the stop button while a reply is being
+            // generated (LLM streaming or a running tool); otherwise it
+            // cancels the pending input / message edit.
+            if (m_isGenerating)
+                emit stopRequested();
+            else
+                emit editingCancelled();
             return true;
         }
     }

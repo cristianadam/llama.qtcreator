@@ -25,6 +25,7 @@
 #include <QLocale>
 #include <QMenu>
 #include <QKeySequence>
+#include <QKeyEvent>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -134,6 +135,9 @@ ChatEditor::ChatEditor()
 
     widget->setLayout(layout);
     setWidget(widget);
+    // Catch Esc from any widget in the editor (the ChatInput handles it
+    // itself when one of its children has focus).
+    widget->installEventFilter(this);
 
     m_statusBar = new Utils::StyledBar;
     auto statusLayout = new QHBoxLayout(m_statusBar);
@@ -876,6 +880,22 @@ void ChatEditor::onStopRequested()
     ChatManager::instance().stopGenerating(conv.id);
 
     m_input->setIsGenerating(false);
+}
+
+bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
+{
+    // Esc stops an in‑progress generation (LLM streaming or a running
+    // tool) no matter which widget in the chat editor has focus.  The
+    // ChatInput consumes the event first when one of its children is
+    // focused, so this only fires for the message area, status bar, ….
+    if (obj == widget() && event->type() == QEvent::ShortcutOverride) {
+        if (auto *keyEvent = static_cast<QKeyEvent *>(event);
+            keyEvent->key() == Qt::Key_Escape && m_input->isGenerating()) {
+            onStopRequested();
+            return true;
+        }
+    }
+    return Core::IEditor::eventFilter(obj, event);
 }
 
 void ChatEditor::onFileDropped(const QStringList &files)
