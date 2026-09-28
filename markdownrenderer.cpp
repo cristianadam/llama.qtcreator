@@ -11,6 +11,8 @@
 #include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QMimeData>
+#include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
@@ -19,7 +21,9 @@
 #include <QResizeEvent>
 #include <QScrollBar>
 #include <QSvgRenderer>
+#include <QTextDocumentFragment>
 #include <QTextFragment>
+#include <QTextLayout>
 
 #include <algorithm>
 
@@ -183,6 +187,7 @@ void MarkdownRenderer::reset()
 
     qDeleteAll(m_codeOverlays);
     m_codeOverlays.clear();
+    m_inlineCodeRanges.clear();
     // Keep m_toggleDetails: section ids are ordinal, so the user's
     // expand/collapse choices still apply to the re-rendered sections.
     m_nextDetailsId = 0;
@@ -366,9 +371,42 @@ void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineN
             } else if constexpr (std::is_same_v<T, markus::HardBreak>) {
                 m_cursor.insertText(QStringLiteral("\n"));
             } else if constexpr (std::is_same_v<T, markus::Code>) {
+                // The padding spaces must keep the *surrounding* text's
+                // format — capture it before handleInlineCode() pushes the
+                // mono code format on the stack.
+                const QTextCharFormat outerFormat
+                    = m_textCharFormatStack.isEmpty()
+                          ? QTextCharFormat()
+                          : m_textCharFormatStack.top();
                 handleInlineCode();
-                m_cursor.insertText(fromStdString(n.content));
-                popCharFormat();
+                if (m_headingLevel == 0) {
+                    // The padding spaces around the span give the painted
+                    // chip (paintInlineCodeChips()) real padding room — Qt 6.11
+                    // has no layout-level inline padding (the char-format
+                    // edge spacing was removed, and nested frames break
+                    // toPlainText()/clipboard) — without adding regular
+                    // space characters to the text. copy() and
+                    // ChatMessage::plainText() strip them again, so they
+                    // never reach the clipboard or search matches.
+                    // insertText(text, fmt) also sets the cursor's current
+                    // char format, so the code content must be inserted with
+                    // the mono format explicitly — after the first padding
+                    // char the cursor would carry outerFormat.
+                    const QTextCharFormat codeFormat
+                        = m_textCharFormatStack.top();
+                    const int start = m_cursor.position();
+                    m_cursor.insertText(InlineCodePadding, outerFormat);
+                    m_cursor.insertText(fromStdString(n.content), codeFormat);
+                    popCharFormat();
+                    m_cursor.insertText(InlineCodePadding, outerFormat);
+                    // Remember the range (including the padding) so
+                    // paintEvent() can paint the rounded chip background.
+                    m_inlineCodeRanges.append({start, m_cursor.position()});
+                } else {
+                    // Headings keep the heading font and get no chip.
+                    m_cursor.insertText(fromStdString(n.content));
+                    popCharFormat();
+                }
             } else if constexpr (std::is_same_v<T, markus::Emphasis>) {
                 handleEmph();
                 renderInlines(doc, n.children);
@@ -444,6 +482,13 @@ void MarkdownRenderer::clearTailRegion()
     if (cursor.hasSelection())
         cursor.removeSelectedText();
     pruneStaleCodeBlocks();
+    // The wiped tail invalidates the chip ranges touching it (a code span
+    // may run past m_tailStart and be re-rendered); ranges ending before
+    // m_tailStart keep their positions.
+    m_inlineCodeRanges.erase(
+        std::remove_if(m_inlineCodeRanges.begin(), m_inlineCodeRanges.end(),
+                       [this](const InlineCodeRange &r) { return r.end > m_tailStart; }),
+        m_inlineCodeRanges.end());
 }
 
 void MarkdownRenderer::pruneStaleCodeBlocks()
@@ -639,6 +684,24 @@ void MarkdownRenderer::renderCodeBlockText(const markus::CodeBlock &code)
         }
     } else {
         m_cursor.insertText(content, baseCharFmt);
+    }
+
+    // Qt collapses the margins of adjacent blocks, so with the usual
+    // m_paragraphMargin line margins the block ends up flush with the
+    // neighbouring text. Double the outer margins (first line's top, last
+    // line's bottom) to leave a clear gap around the block's background,
+    // like GitHub's spacing between a code block and the surrounding text.
+    {
+        QTextBlock blk = first;
+        while (blk.next().isValid()
+               && blk.next().blockFormat().property(BlockCodeIdProp).toInt() == blockId)
+            blk = blk.next();
+        QTextBlockFormat topFmt = first.blockFormat();
+        topFmt.setTopMargin(2 * m_paragraphMargin);
+        QTextCursor(first).setBlockFormat(topFmt);
+        QTextBlockFormat botFmt = blk.blockFormat();
+        botFmt.setBottomMargin(2 * m_paragraphMargin);
+        QTextCursor(blk).setBlockFormat(botFmt);
     }
 
     m_codeBlock = false;
@@ -1535,11 +1598,11 @@ void MarkdownRenderer::handleInlineCode()
     fmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
     fmt.setFontFixedPitch(true);
     // Inside a heading, keep the heading's font size and skip the inline-code
-    // background so the code stays bold and scales with the heading.
-    if (m_headingLevel == 0) {
-        fmt.setBackground(color(InlineCodeBackground));
+    // chip styling so the code stays bold and scales with the heading. The
+    // chip background is not set here: paintEvent() paints a rounded rect
+    // behind the span (see m_inlineCodeRanges).
+    if (m_headingLevel == 0)
         fmt.setFontPointSize(m_baseFontSize * 0.90);
-    }
     m_textCharFormatStack.push(fmt);
     m_cursor.setCharFormat(fmt);
 }
@@ -1832,6 +1895,117 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
 // Painting
 // ---------------------------------------------------------------------------
 
+// Document-coordinate rects covering the character range [start, end), one
+// rect per line the range wraps across. Used to paint the inline-code chip
+// backgrounds in paintEvent().
+static QVector<QRectF> inlineCodeRangeRects(QTextDocument *doc, int start, int end)
+{
+    QVector<QRectF> rects;
+    for (QTextBlock blk = doc->findBlock(start); blk.isValid() && blk.position() < end;
+         blk = blk.next()) {
+        QTextLayout *layout = blk.layout();
+        if (!layout)
+            continue;
+        const QPointF origin = layout->position();
+        const int blockStart = blk.position();
+        for (int li = 0; li < layout->lineCount(); ++li) {
+            const QTextLine line = layout->lineAt(li);
+            const int lineStart = blockStart + line.textStart();
+            const int lineEnd = lineStart + line.textLength();
+            const int from = qMax(start, lineStart);
+            const int to = qMin(end, lineEnd);
+            if (from >= to)
+                continue;
+            // Leading edge of the first char, trailing edge of the last one.
+            // The range already includes the padding spaces
+            // (InlineCodePadding) on both sides of the code — that is the
+            // chip's padding. The rect must not extend into the surrounding
+            // text (a neighbouring word space stays outside as the visible
+            // gap; extending into it would pad the chip twice).
+            const qreal x1 = line.cursorToX(from - lineStart);
+            // cursorToX(pos, Trailing) is the right edge of the char *at*
+            // pos, so the range's last char is at to-1 — asking for to would
+            // swallow the character after the span into the chip.
+            const qreal x2 = line.cursorToX(to - lineStart - 1, QTextLine::Trailing);
+            const QRectF lineRect = line.rect();
+            QRectF r(origin.x() + lineRect.x() + x1,
+                     origin.y() + lineRect.y() - 2,
+                     x2 - x1, lineRect.height() + 4);
+            // At the start of a line the padding can run past the document
+            // edge; clamp so the rounded corners are never clipped.
+            r = r.intersected(QRectF(0, 0,
+                                     doc->textWidth() > 0 ? doc->textWidth() : 1e9,
+                                     doc->size().height()));
+            if (!r.isNull())
+                rects.append(r);
+        }
+    }
+    return rects;
+}
+
+// Removes the chip padding so copied text reads like the source markdown:
+// a padding run touching a real space collapses into that one space ("how
+// \u2004\u2004code" -> "how code", "code\u2004\u2004 is" -> "code is"), and a run with no
+// neighbouring space is deleted outright ("code\u2004\u2004." -> "code.").
+static QString stripInlineCodePadding(QString text)
+{
+    text.replace(QRegularExpression(QStringLiteral("[ ]*\u2004+[ ]")),
+                 QStringLiteral(" "));
+    text.replace(QRegularExpression(QStringLiteral("\u2004+")), QString());
+    return text;
+}
+
+// The rounded inline-code chip backgrounds (ranges recorded in
+// renderInline(); one rounded rect per line a span wraps across).
+void MarkdownRenderer::paintInlineCodeChips(QPainter &painter, const QRectF &visibleRect)
+{
+    if (m_inlineCodeRanges.isEmpty())
+        return;
+    painter.save();
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(color(InlineCodeBackground));
+    painter.setPen(Qt::NoPen);
+    for (const InlineCodeRange &range : m_inlineCodeRanges) {
+        if (range.end <= range.start)
+            continue;
+        for (const QRectF &fragRect : inlineCodeRangeRects(m_doc, range.start, range.end)) {
+            const QRectF r = fragRect.translated(contentOffset());
+            if (!r.intersects(visibleRect))
+                continue;
+            painter.drawRoundedRect(r, 4, 4);
+        }
+    }
+    painter.restore();
+}
+
+void MarkdownRenderer::copySelection()
+{
+    const QTextCursor cur = textCursor();
+    if (!cur.hasSelection())
+        return;
+    // The padding spaces around the inline-code chips are layout padding
+    // only; keep them out of what the user copies.
+    QMimeData *mime = new QMimeData;
+    // QTextEdit::selectionToHtml() was removed in Qt 6.11; the fragment
+    // API still renders the selection to HTML.
+    mime->setHtml(stripInlineCodePadding(QTextDocumentFragment(cur).toHtml()));
+    mime->setText(stripInlineCodePadding(cur.selectedText()));
+    QGuiApplication::clipboard()->clear();
+    QGuiApplication::clipboard()->setMimeData(mime);
+}
+
+void MarkdownRenderer::keyPressEvent(QKeyEvent *ev)
+{
+    // copy() is not virtual, so the stripped copy is hooked into the Copy
+    // shortcut (also posted by the context-menu action) here.
+    if (ev->matches(QKeySequence::Copy) && textCursor().hasSelection()) {
+        copySelection();
+        ev->accept();
+        return;
+    }
+    QTextBrowser::keyPressEvent(ev);
+}
+
 void MarkdownRenderer::paintEvent(QPaintEvent *ev)
 {
     QPainter painter(viewport());
@@ -1854,6 +2028,8 @@ void MarkdownRenderer::paintEvent(QPaintEvent *ev)
         painter.setBrush(Qt::NoBrush);
         painter.drawRoundedRect(viewRect, radius, radius);
     }
+
+    paintInlineCodeChips(painter, visibleRect);
 
     QPen headingPen(color(HorizontalRuler));
     headingPen.setWidth(1);
@@ -1950,6 +2126,7 @@ void MarkdownRenderer::paintEvent(QPaintEvent *ev)
 
 void MarkdownRenderer::mousePressEvent(QMouseEvent *ev)
 {
+    m_pressPos = ev->position().toPoint();
     QTextCursor cur = cursorForPosition(ev->pos());
     if (!cur.isNull()) {
         QTextBlock blk = cur.block();
@@ -1964,6 +2141,17 @@ void MarkdownRenderer::mousePressEvent(QMouseEvent *ev)
         }
     }
     QTextBrowser::mousePressEvent(ev);
+}
+
+void MarkdownRenderer::mouseReleaseEvent(QMouseEvent *ev)
+{
+    QTextBrowser::mouseReleaseEvent(ev);
+    // A drag-copy is written to the clipboard by QTextEdit itself, bypassing
+    // copySelection(); redo it with the chip padding stripped. The threshold
+    // is Qt's internal (unexposed) drag distance, 8 px.
+    if (textCursor().hasSelection()
+        && (ev->position().toPoint() - m_pressPos).manhattanLength() > 8)
+        copySelection();
 }
 
 void MarkdownRenderer::resizeEvent(QResizeEvent *event)

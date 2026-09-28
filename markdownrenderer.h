@@ -61,6 +61,16 @@ public:
 
     static constexpr QChar ZeroWidthSpace = QChar(L'\u200b');
 
+    // Three-per-em space (U+2004, ~4 px at the default size) inserted on
+    // both sides of a non-heading inline code span: it gives the painted
+    // chip (paintInlineCodeChips()) visible padding around the code without
+    // inserting regular space characters into the document text. (The hair
+    // space U+200A would be the natural choice, but it is only ~0.8 px wide
+    // in the system font — invisible; U+2005 at ~3 px felt too thin.) It is
+    // stripped again on clipboard copy (copy()) and in
+    // ChatMessage::plainText().
+    static constexpr QChar InlineCodePadding = QChar(L'\u2004');
+
     // A rendered diagram SVG (mermaid diagram, KaTeX math) persisted with
     // the message that displayed it (a "diagram" entry in Message.extra),
     // so that reopening a conversation does not pay the render cost again
@@ -127,6 +137,12 @@ public:
     // it into pixels.
     QByteArray svgContentForUrl(const QUrl &url) const;
 
+    // Copies the selection with the inline-code chip padding stripped (it is
+    // layout padding only, not user text). QTextEdit's copy() slot is not
+    // virtual, so keyPressEvent() routes the Copy shortcut here and
+    // mouseReleaseEvent() redoes drag-copies (written by QTextEdit itself).
+    void copySelection();
+
     //! Prepares \a image for inline display: scaled down to fit \a maxWidth
     //! (smaller images keep their native size), height capped at 600 px
     //! (like the SVG drawings), rasterized at \a devicePixelRatio so the
@@ -146,7 +162,13 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent *ev) override;
+
+    // Paints the rounded inline-code chip backgrounds; see
+    // paintInlineCodeChips() in the .cpp.
+    void paintInlineCodeChips(QPainter &painter, const QRectF &visibleRect);
+    void keyPressEvent(QKeyEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
     void resizeEvent(QResizeEvent *event) override;
 
     // Called whenever the rendered document changed in a way that can change
@@ -315,6 +337,19 @@ private:
     // ids they will have once finalized.
     int m_tailDetailsIndex = -1;
     int m_nextCodeBlockId = 0;
+    // Document ranges of the inline `code` spans (outside headings).
+    // paintInlineCodeChips() paints the rounded chip background behind them;
+    // the char format carries no background of its own. Stable for the
+    // finalized document; pruned by clearTailRegion() and reset().
+    struct InlineCodeRange
+    {
+        int start = 0;
+        int end = 0;
+    };
+    QVector<InlineCodeRange> m_inlineCodeRanges;
+    // Viewport position of the last mouse press; mouseReleaseEvent() uses it
+    // to detect drag-copies (which QTextEdit puts on the clipboard itself).
+    QPoint m_pressPos;
     // True while renderPendingTail() is re-rendering the in-progress tail.
     // Diagrams (mermaid) are only rendered for finalized blocks: rendering
     // is comparatively expensive and the tail changes on every feed, so a

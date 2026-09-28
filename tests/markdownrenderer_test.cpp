@@ -1,5 +1,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
+#include <QRegularExpression>
+#include <QClipboard>
 #include <QElapsedTimer>
 #include <QPainter>
 #include <QEventLoop>
@@ -22,7 +24,16 @@ static QString streamText(MarkdownRenderer &renderer, const QString &full, int s
     renderer.feed(full.toUtf8());
     renderer.finish();
 
-    return renderer.toPlainText();
+    // The inline-code chip padding (U+2004 spaces) is layout padding only;
+    // remove it (like copySelection() does) so the assertions see the
+    // user-visible text: padding touching a real space collapses into that
+    // space, padding with no neighbouring space is deleted.
+    static const QRegularExpression padWithSpace(QStringLiteral("[ ]*\u2004+[ ]"));
+    static const QRegularExpression padOnly(QStringLiteral("\u2004+"));
+    QString out = renderer.toPlainText();
+    out.replace(padWithSpace, QStringLiteral(" "));
+    out.replace(padOnly, QString());
+    return out;
 }
 
 static bool containsAll(const QString &text, const QStringList &lines)
@@ -64,6 +75,8 @@ class MarkdownRendererTest : public QObject
     Q_OBJECT
 private slots:
     void plainParagraph();
+    void inlineCodeChipPainting();
+    void inlineCodePaddingStrippedOnCopy();
     void multiParagraph();
     void codeBlock();
     void list();
@@ -121,6 +134,103 @@ void MarkdownRendererTest::plainParagraph()
     renderer.document()->setTextWidth(500);
     const QString out = streamText(renderer, "Hello world, this is a reply.");
     QCOMPARE(out.trimmed(), QStringLiteral("Hello world, this is a reply."));
+}
+
+// The chip background is painted in paintEvent(); a chip at the very start
+// of a line must not have its padding (and thus its rounded corners)
+// clipped at the document edge.
+void MarkdownRendererTest::inlineCodeChipPainting()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // Loud chip colour so the painted geometry is easy to assert on.
+    renderer.setColor(MarkdownRenderer::InlineCodeBackground, QColor(0xff0000));
+    streamText(renderer,
+               QStringLiteral("`std::cout` is part of _iostream_ header.\n\n"
+                              "Notice how `std::cout` is not having a border around?"));
+    renderer.resize(520, 160);
+    renderer.show();
+    QApplication::processEvents();
+
+    const QImage img = renderer.grab().toImage();
+    auto rowHasRed = [&img](int y) {
+        for (int x = 0; x < img.width(); ++x) {
+            const QRgb c = img.pixel(x, y);
+            if (qRed(c) > 200 && qGreen(c) < 80)
+                return true;
+        }
+        return false;
+    };
+    auto firstRedX = [&img](int y) {
+        for (int x = 0; x < img.width(); ++x) {
+            const QRgb c = img.pixel(x, y);
+            if (qRed(c) > 200 && qGreen(c) < 80)
+                return x;
+        }
+        return -1;
+    };
+    auto lastRedX = [&img](int y) {
+        for (int x = img.width() - 1; x >= 0; --x) {
+            const QRgb c = img.pixel(x, y);
+            if (qRed(c) > 200 && qGreen(c) < 80)
+                return x;
+        }
+        return -1;
+    };
+
+    int chipTop = -1;
+    for (int y = 0; y < img.height(); ++y)
+        if (rowHasRed(y)) {
+            chipTop = y;
+            break;
+        }
+    QVERIFY2(chipTop > 0, "chip was not painted");
+
+    // The chip sits at the start of the line: its left corners must be
+    // rounded, not clipped at the document edge — so the topmost chip row
+    // starts a couple of pixels in, while a middle row reaches the chip's
+    // left edge.
+    const int firstRedTop = firstRedX(chipTop);
+    const int firstRedMid = firstRedX(chipTop + 6);
+    QVERIFY2(firstRedTop > 2, "top-left chip corner is clipped");
+    QVERIFY2(firstRedMid >= 0 && firstRedMid <= firstRedTop,
+             "chip left edge missing in the middle rows");
+
+    // Right edge: the chip must stop at the span's trailing padding — the
+    // word space and the following word stay outside. (Asking cursorToX() for
+    // the trailing edge one char past the range would swallow the next
+    // character into the chip.)
+    const int wordPos = renderer.document()->toPlainText().indexOf(QStringLiteral("is part"));
+    QVERIFY2(wordPos > 0, "test text not found in document");
+    QTextBlock blk = renderer.document()->findBlock(wordPos);
+    const QTextLine line = blk.layout()->lineAt(0);
+    // grab() is in device pixels, the layout is in logical ones.
+    const qreal dpr = renderer.devicePixelRatioF();
+    const qreal xWord = (blk.layout()->position().x() + line.rect().x()
+                         + line.cursorToX(wordPos - blk.position()))
+                        * dpr;
+    const int lastRedMid = lastRedX(chipTop + 6);
+    QVERIFY2(lastRedMid > 0, "chip right edge missing in the middle rows");
+    QVERIFY2(lastRedMid + 2 < xWord,
+             "chip right edge extends past the padding into the following text");
+}
+
+void MarkdownRendererTest::inlineCodePaddingStrippedOnCopy()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    streamText(renderer, QStringLiteral("Notice how `std::cout` is fast.\n"));
+
+    // The document itself carries the padding spaces around the chip.
+    QVERIFY(renderer.toPlainText().contains(MarkdownRenderer::InlineCodePadding));
+
+    // Copying must not leak the padding characters.
+    QTextCursor cur(renderer.document());
+    cur.select(QTextCursor::Document);
+    renderer.setTextCursor(cur);
+    renderer.copySelection();
+    QCOMPARE(QApplication::clipboard()->text(),
+             QStringLiteral("Notice how std::cout is fast."));
 }
 
 void MarkdownRendererTest::multiParagraph()

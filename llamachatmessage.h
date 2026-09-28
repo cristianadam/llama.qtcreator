@@ -34,6 +34,12 @@ public:
     void setSiblingIdx(int newSiblingIdx);
 
     QString plainText() const;
+    // The chip padding leaves runs of several spaces around inline code in
+    // plainText(); turn single spaces in a search query into "[ ]+" (outside
+    // character classes) so ordinary queries still match across code
+    // boundaries. Shared by performSearch() and highlightAllMatches() so
+    // both see the same matches.
+    static QString whitespaceTolerantPattern(const QString &query);
     // (Re)computes and applies the widget's fixed height from the current
     // document size, contents margins, layout spacing and action row height.
     void recomputeFixedHeight();
