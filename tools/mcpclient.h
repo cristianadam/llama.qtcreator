@@ -53,6 +53,7 @@ public:
     void disconnectFromServer();
 
     bool isConnected() const { return m_state == State::Ready; }
+    const QUrl &url() const { return m_url; }
 
     const QList<McpToolInfo> &tools() const { return m_tools; }
     bool isToolKnown(const QString &name) const { return m_toolNames.contains(name); }

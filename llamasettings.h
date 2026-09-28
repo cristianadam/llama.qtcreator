@@ -83,6 +83,11 @@ public:
     // (they eat a lot of context); only the ones the user explicitly turned
     // on land in this list.
     Utils::StringListAspect enabledMcpToolsList{this};
+    // User-configured MCP servers (managed on the "Tools" settings page),
+    // stored as a JSON array of {name, url, headers} objects – see
+    // Tools::McpServerConfig. The builtin Qt Creator MCP server is not
+    // listed here; it is used automatically when available.
+    Utils::StringAspect mcpServersJson{this};
     Utils::BoolAspect toolsEnabled{this};
     // Run the chat tools in a sandbox: bash commands in a platform sandbox
     // (bubblewrap on Linux, sandbox-exec on macOS; not available on

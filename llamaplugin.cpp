@@ -106,8 +106,8 @@ FilePath LlamaPlugin::getTranslationFilePath(const QString &translationFile)
 
 void LlamaPlugin::initialize()
 {
-    // Publish the tools served by the Qt Creator MCP server (building,
-    // running, opening projects, …) as chat tools.
+    // Publish the tools served by MCP servers (the builtin Qt Creator
+    // server, and any user-configured servers) as chat tools.
     ToolFactory::instance().setRemoteToolProvider(&McpBridge::instance());
 
     // Translations

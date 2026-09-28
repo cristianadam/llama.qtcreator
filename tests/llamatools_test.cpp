@@ -32,6 +32,7 @@
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/mcptool.h>
+#include <tools/mcpserverconfig.h>
 #include <tools/patch.h>
 #include <tools/bash_tool.h>
 #include <tools/readfile_tool.h>
@@ -501,7 +502,11 @@ private slots:
     void ripgrep_metadata();
     void ripgrep_resolvedPath();
 
-    // McpTool (Qt Creator MCP server tools)
+    // McpServerConfig (configured MCP servers, settings JSON)
+    void mcpserverconfig_jsonRoundTrip();
+    void mcpserverconfig_invalidEntriesSkipped();
+
+    // McpTool (MCP server tools)
     void mcptool_toolDefinition();
     void mcptool_oneLineSummary();
     void mcptool_streamingSummary();
@@ -3452,7 +3457,56 @@ void LlamaToolsTest::factory_searchFind()
 }
 
 // ============================================================================
-// McpTool / remote tool provider (Qt Creator MCP server)
+// McpServerConfig (configured MCP servers, settings JSON)
+// ============================================================================
+
+void LlamaToolsTest::mcpserverconfig_jsonRoundTrip()
+{
+    Tools::McpServerConfig a;
+    a.name = QStringLiteral("Alpha");
+    a.url = QUrl(QStringLiteral("http://127.0.0.1:1234/mcp"));
+    a.headers = {QStringLiteral("Authorization: Bearer token123")};
+
+    Tools::McpServerConfig b;
+    b.name = QStringLiteral("Beta");
+    b.url = QUrl(QStringLiteral("https://mcp.example.com/sse"));
+
+    const QVector<Tools::McpServerConfig> servers = {a, b};
+    const QVector<Tools::McpServerConfig> restored =
+            Tools::McpServerConfig::fromJson(Tools::McpServerConfig::toJson(servers));
+
+    QCOMPARE(restored.size(), 2);
+    QCOMPARE(restored[0].name, a.name);
+    QCOMPARE(restored[0].url, a.url);
+    QCOMPARE(restored[0].headers, a.headers);
+    QCOMPARE(restored[1].name, b.name);
+    QCOMPARE(restored[1].url, b.url);
+    QVERIFY(restored[1].headers.isEmpty());
+}
+
+void LlamaToolsTest::mcpserverconfig_invalidEntriesSkipped()
+{
+    // Empty and malformed input yields an empty list.
+    QVERIFY(Tools::McpServerConfig::fromJson(QString()).isEmpty());
+    QVERIFY(Tools::McpServerConfig::fromJson(QStringLiteral("{not json")).isEmpty());
+
+    // Invalid entries (empty name, non-http(s) URL) are dropped, valid
+    // ones kept; blank headers are dropped too.
+    const QString json = QStringLiteral(
+        "[{\"name\": \"\", \"url\": \"http://ok.example/mcp\"},"
+        "{\"name\": \"Bad\", \"url\": \"ftp://nope.example/mcp\"},"
+        "{\"name\": \"Fine\", \"url\": \"http://fine.example/mcp\","
+        "\"headers\": [\"Authorization: Bearer x\", \"   \"]},"
+        "{\"name\": \"Fine\", \"url\": \"http://duplicate.example/mcp\"}]");
+    const QVector<Tools::McpServerConfig> servers = Tools::McpServerConfig::fromJson(json);
+    QCOMPARE(servers.size(), 1);
+    QCOMPARE(servers.first().name, QString("Fine"));
+    // The first entry with a name wins over a later duplicate.
+    QCOMPARE(servers.first().url, QUrl(QStringLiteral("http://fine.example/mcp")));
+    QCOMPARE(servers.first().headers, QStringList{QStringLiteral("Authorization: Bearer x")});
+}
+
+// McpTool / remote tool provider (MCP servers)
 // ============================================================================
 
 void LlamaToolsTest::mcptool_toolDefinition()

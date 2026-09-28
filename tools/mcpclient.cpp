@@ -43,6 +43,10 @@ McpClient::~McpClient() = default;
 
 void McpClient::connectTo(const QUrl &url, const QStringList &httpHeaders)
 {
+    // While a handshake is in flight the (new) URL/headers are dropped;
+    // the in-flight handshake finishes against the old endpoint and the
+    // next syncServers() picks the change up (a failed handshake
+    // re-handshakes on its own, so this self-heals quickly).
     if (m_state == State::Handshaking)
         return;
     // Re‑handshake also when only the headers changed (e.g. the server's
@@ -76,7 +80,7 @@ void McpClient::startHandshake()
     sendRequest(QStringLiteral("initialize"), params,
                 [this](const QJsonObject &response) {
                     if (response.isEmpty()) {
-                        fail(Tr::tr("Cannot reach the Qt Creator MCP server."));
+                        fail(Tr::tr("Cannot reach the MCP server."));
                         return;
                     }
 
@@ -103,7 +107,7 @@ void McpClient::requestToolList()
                 QJsonObject(),
                 [this](const QJsonObject &listResponse) {
                     if (listResponse.isEmpty()) {
-                        fail(Tr::tr("Cannot reach the Qt Creator MCP server."));
+                        fail(Tr::tr("Cannot reach the MCP server."));
                         return;
                     }
 
@@ -161,7 +165,7 @@ void McpClient::disconnectFromServer()
 
     m_state = State::Disconnected;
     m_sessionId.clear();
-    failPending(Tr::tr("Connection to the Qt Creator MCP server was closed."));
+    failPending(Tr::tr("Connection to the MCP server was closed."));
 
     const bool hadTools = !m_tools.isEmpty();
     m_tools.clear();
@@ -188,8 +192,8 @@ void McpClient::callTool(const QString &name,
                          ToolCallback callback)
 {
     if (m_state != State::Ready) {
-        callback(Tr::tr("The Qt Creator MCP server is not available. "
-                        "Enable the \"Qt Creator MCP Server\" plugin in Qt Creator settings."),
+        callback(Tr::tr("The MCP server is not available. Check that the server "
+                        "is running and reachable, then try again."),
                  false);
         return;
     }
@@ -249,7 +253,7 @@ void McpClient::callTool(const QString &name,
                  if (cb) {
                      qCWarning(lmcp) << "Stale MCP session detected – re-handshaking.";
                      startHandshake();
-                     cb(Tr::tr("The Qt Creator MCP server restarted; the call was not "
+                     cb(Tr::tr("The MCP server restarted; the call was not "
                                "executed. Please try again."),
                         false);
                  }

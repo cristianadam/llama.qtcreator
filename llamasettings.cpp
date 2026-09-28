@@ -527,6 +527,11 @@ LlamaSettings::LlamaSettings()
     enabledMcpToolsList.setSettingsKey("EnabledMcpToolsList");
     enabledMcpToolsList.setDefaultValue(QStringList());
 
+    // Configured MCP servers, as a JSON array (Tools::McpServerConfig);
+    // empty means: only the builtin Qt Creator MCP server.
+    mcpServersJson.setSettingsKey("McpServers");
+    mcpServersJson.setDefaultValue(QString());
+
     toolsEnabled.setSettingsKey("ToolsEnabled");
     toolsEnabled.setDefaultValue(false);
     toolsEnabled.setDisplayName(Tr::tr("Enable Tools in Chat"));

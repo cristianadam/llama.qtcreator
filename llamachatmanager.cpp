@@ -148,8 +148,8 @@ void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens)
 }
 
 // Local tools are enabled when listed in EnabledToolsList. Tools served by
-// the Qt Creator MCP server are disabled by default and only included when
-// the user explicitly enabled them (EnabledMcpToolsList).
+// MCP servers are disabled by default and only included when the user
+// explicitly enabled them (EnabledMcpToolsList).
 static bool isToolEnabled(const QString &toolName)
 {
     if (McpBridge::instance().isMcpTool(toolName))

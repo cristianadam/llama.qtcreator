@@ -103,6 +103,7 @@ add_qtc_plugin(LlamaCpp
     tools/mcpclient_test.cpp
     tools/mermaidengine_test.cpp
     tools/mcptool.cpp tools/mcptool.h
+    tools/mcpserverconfig.h
     tools/patch.cpp tools/patch.h
     tools/readfile_tool.cpp tools/readfile_tool.h
     tools/skill_tool.cpp tools/skill_tool.h

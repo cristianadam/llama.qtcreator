@@ -1,6 +1,7 @@
 #include "toolsettingswidget.h"
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "llamasyntaxhighlighter.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/ripgrep.h"
@@ -9,14 +10,21 @@
 #include <QtTaskTree/QTaskTree>
 #include <QtTaskTree/qtasktreerunner.h>
 
+#include <texteditor/fontsettings.h>
+
 #include <utils/fancylineedit.h>
 #include <utils/qtcassert.h>
 
+#include <QHash>
 #include <QHBoxLayout>
 #include <QHeaderView>
+
+#include <algorithm>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QMessageBox>
+#include <QMouseEvent>
 #include <QRegularExpression>
 
 using namespace Utils;
@@ -58,11 +66,18 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     m_view = new QTreeView(this);
     m_view->setUniformRowHeights(true);
     m_view->setHeaderHidden(false);
+    m_view->viewport()->installEventFilter(this);
 
     m_detailEdit = new QTextEdit(this);
     m_detailEdit->setReadOnly(true);
     m_detailEdit->setWordWrapMode(QTextOption::NoWrap);
     m_detailEdit->setPlaceholderText(Tr::tr("Select a tool to view its definition"));
+
+    // Show the tool definitions in the editor's fixed font, with JSON
+    // syntax highlighting (the same "JSON" definition and color scheme the
+    // Qt Creator editor uses).
+    m_detailEdit->setFont(TextEditor::globalFontSettings().data().font());
+    m_jsonHighlighter = new ToolsJsonHighlighter(m_detailEdit->document());
 
     // model
     m_model = new TreeModel<>(m_view);
@@ -133,10 +148,37 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             this,
             [](bool checked) { settings().loadProjectInstructions.setValue(checked); });
 
+    // MCP server management, laid out like the skill directories on the
+    // Skills page: buttons in a column to the right of the tree, acting on
+    // the selected server group row (every group except "Internal"; the
+    // builtin "Qt Creator" server cannot be edited or removed). Tool names
+    // must be unique across servers: the Qt Creator server and servers
+    // listed earlier take priority.
+    m_addServerButton = new QPushButton(Tr::tr("Add…"), this);
+    m_editServerButton = new QPushButton(Tr::tr("Edit"), this);
+    m_removeServerButton = new QPushButton(Tr::tr("Remove"), this);
+    m_editServerButton->setEnabled(false);
+    m_removeServerButton->setEnabled(false);
+
+    connect(m_addServerButton, &QPushButton::clicked, this, &ToolsSettingsWidget::addServer);
+    connect(m_editServerButton, &QPushButton::clicked, this, &ToolsSettingsWidget::editServer);
+    connect(m_removeServerButton,
+            &QPushButton::clicked,
+            this,
+            &ToolsSettingsWidget::removeServer);
+
     // layout
     using namespace Layouting;
-    Column{filterLineEdit, m_view, m_detailEdit, ripgrepRow,
-           m_sandboxCheck, m_loadInstructionsCheck}
+    Column{
+        Row{
+            Column{filterLineEdit, m_view},
+            Column{m_addServerButton, m_editServerButton, m_removeServerButton, st},
+        },
+        m_detailEdit,
+        ripgrepRow,
+        m_sandboxCheck,
+        m_loadInstructionsCheck,
+    }
         .attachTo(this);
 
     connect(filterLineEdit,
@@ -171,8 +213,8 @@ ToolsSettingsWidget::ToolsSettingsWidget()
         updateEnabledToolsFromModel();
     });
 
-    // The tools served by the Qt Creator MCP server change at runtime
-    // (the server connects / disconnects) – refresh the list on that.
+    // The tools served by the MCP servers change at runtime (a server
+    // connects / disconnects) – refresh the tree on that.
     connect(&McpBridge::instance(),
             &McpBridge::toolsChanged,
             this,
@@ -181,10 +223,20 @@ ToolsSettingsWidget::ToolsSettingsWidget()
                 updateModelFromEnabledTools();
             });
 
+    // The connection state of the servers changes at runtime (a server
+    // starts or stops) – refresh the tree's status on that.
+    connect(&McpBridge::instance(), &McpBridge::connectionChanged, this, &ToolsSettingsWidget::fillModel);
+
     connect(m_view->selectionModel(),
             &QItemSelectionModel::currentChanged,
             this,
             &ToolsSettingsWidget::showToolDefinition);
+
+    // Double-clicking a configurable server group edits it.
+    connect(m_view, &QTreeView::doubleClicked, this, [this](const QModelIndex &) {
+        if (!configurableServerOf(m_view->model(), m_view->currentIndex()).isEmpty())
+            editServer();
+    });
 }
 
 void ToolsSettingsWidget::fillModel()
@@ -218,12 +270,13 @@ void ToolsSettingsWidget::fillModel()
     };
 
     QStringList internalTools;
-    QStringList mcpTools;
+    QMap<QString, QStringList> mcpToolsByServer;
     for (const QString &toolName : ToolFactory::instance().creatorsList()) {
-        if (McpBridge::instance().isMcpTool(toolName))
-            mcpTools << toolName;
-        else
+        const QString server = McpBridge::instance().serverForTool(toolName);
+        if (server.isEmpty())
             internalTools << toolName;
+        else
+            mcpToolsByServer[server] << toolName;
     }
 
     // "Internal" – the tools implemented by this plugin
@@ -234,14 +287,35 @@ void ToolsSettingsWidget::fillModel()
             appendTool(internalGroup, toolName);
     }
 
-    // "Qt Creator MCP" – the tools served by the Qt Creator MCP server.
-    // Only shown while the server is connected.
-    if (!mcpTools.isEmpty()) {
-        auto *mcpGroup = new GroupItem(Tr::tr("Qt Creator MCP"));
-        m_model->rootItem()->appendChild(mcpGroup);
-        for (const QString &toolName : mcpTools)
-            appendTool(mcpGroup, toolName);
-    }
+    // One group per MCP server, named after the server: the builtin
+    // "Qt Creator" server first, then the configured servers in their
+    // stored order. Configured servers are shown even while not connected,
+    // so a dead server can still be edited / removed from the tree; a
+    // server's tools only appear while it is connected.
+    QHash<QString, bool> connectedByServer;
+    for (const McpBridge::ServerStatus &status : McpBridge::instance().serverStatuses())
+        connectedByServer.insert(status.name, status.connected);
+    QSet<QString> addedServers;
+    const auto appendServerGroup = [&](const QString &serverName, bool configurable) {
+        if (addedServers.contains(serverName))
+            return;
+        addedServers.insert(serverName);
+        auto *serverGroup = new GroupItem(serverName,
+                                          serverName,
+                                          connectedByServer.value(serverName),
+                                          configurable);
+        m_model->rootItem()->appendChild(serverGroup);
+        if (const auto tools = mcpToolsByServer.constFind(serverName); tools != mcpToolsByServer.constEnd())
+            for (const QString &toolName : tools.value())
+                appendTool(serverGroup, toolName);
+    };
+    // The builtin server first (not part of the configured list, not
+    // editable); shown only while available.
+    if (connectedByServer.contains(McpBridge::builtInServerName()))
+        appendServerGroup(McpBridge::builtInServerName(), /*configurable=*/false);
+    for (const Tools::McpServerConfig &config :
+             Tools::McpServerConfig::fromJson(settings().mcpServersJson()))
+        appendServerGroup(config.name, /*configurable=*/true);
 
     // Initialise the check-states from the stored settings
     updateModelFromEnabledTools();
@@ -264,8 +338,59 @@ void ToolsSettingsWidget::updateRipgrepStatus()
 void ToolsSettingsWidget::showToolDefinition(const QModelIndex &current,
                                              const QModelIndex & /*previous*/)
 {
+    // The Edit / Remove buttons only act on a configurable server group row.
+    m_editServerButton->setEnabled(false);
+    m_removeServerButton->setEnabled(false);
+
     if (!current.isValid()) {
         m_detailEdit->clear();
+        return;
+    }
+
+    // A top-level row is a group row; the MCP server groups show the
+    // server's connection details.
+    if (!current.parent().isValid()) {
+        const QString serverName = current.data(GroupItem::ServerNameRole).toString();
+        if (serverName.isEmpty()) {
+            m_detailEdit->clear(); // "Internal" – nothing to show
+            return;
+        }
+
+        const bool configurable = current.data(GroupItem::ConfigurableRole).toBool();
+        m_editServerButton->setEnabled(configurable);
+        m_removeServerButton->setEnabled(configurable);
+
+        QStringList parts;
+        parts << Tr::tr("Name: %1").arg(serverName);
+
+        const Tools::McpServerConfig *config = nullptr;
+        const QVector<Tools::McpServerConfig> servers =
+                Tools::McpServerConfig::fromJson(settings().mcpServersJson());
+        for (const Tools::McpServerConfig &candidate : servers)
+            if (candidate.name == serverName) {
+                config = &candidate;
+                break;
+            }
+
+        if (config) {
+            parts << Tr::tr("URL: %1").arg(config->url.toString());
+            parts << Tr::tr("Headers: %1")
+                       .arg(config->headers.isEmpty() ? Tr::tr("(none)")
+                                                      : config->headers.join(", "));
+            parts << QString();
+            parts << Tr::tr("The tools served by this server are listed below; check a "
+                            "tool to enable it for the chat.");
+        } else {
+            // The builtin server (not part of the configured list).
+            for (const McpBridge::ServerStatus &status : McpBridge::instance().serverStatuses())
+                if (status.name == serverName && status.url.isValid())
+                    parts << Tr::tr("URL: %1").arg(status.url.toString());
+            parts << QString();
+            parts << Tr::tr("The builtin Qt Creator MCP server, managed by Qt Creator "
+                            "itself (Tools → MCP in the Qt Creator settings).");
+        }
+
+        m_detailEdit->setPlainText(parts.join(QLatin1Char('\n')));
         return;
     }
 
@@ -374,19 +499,169 @@ void ToolsSettingsWidget::apply()
     settings().writeSettings(); // writes all changed aspects, including enabledTools
 }
 
+// Column 0 carries the enable check-boxes: a click on such a cell toggles
+// the check state and does not reliably change the current index (or emit
+// clicked), so the detail pane would only update on the second click. Watch
+// the viewport's mouse release directly so the details show on the first
+// click in any column.
+bool ToolsSettingsWidget::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_view->viewport() && event->type() == QEvent::MouseButtonRelease) {
+        const auto *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() == Qt::LeftButton) {
+            const QModelIndex index = m_view->indexAt(mouseEvent->position().toPoint());
+            if (index.isValid())
+                showToolDefinition(index, QModelIndex());
+        }
+        return false;
+    }
+    return Core::IOptionsPageWidget::eventFilter(watched, event);
+}
+
 void ToolsSettingsWidget::cancel()
 {
     // Re‑load the stored value – this discards any UI changes.
     settings().readSettings(); // reload from .ini
     m_sandboxCheck->setChecked(settings().sandboxCommands());
     m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
+    fillModel(); // also drop server groups that were added but not applied
     updateModelFromEnabledTools(); // reflect the stored state in the UI
+}
+
+/* ----------------------------------------------- MCP servers management */
+
+QString ToolsSettingsWidget::configurableServerOf(const QAbstractItemModel *model,
+                                                  const QModelIndex &index)
+{
+    if (!index.isValid() || index.parent().isValid())
+        return {};
+    if (index.data(GroupItem::ConfigurableRole).toBool())
+        return index.data(GroupItem::ServerNameRole).toString();
+    return {};
+}
+
+void ToolsSettingsWidget::addServer()
+{
+    McpServerDialog dialog(Tools::McpServerConfig{}, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    Tools::McpServerConfig server = dialog.server();
+
+    // The builtin server's name is reserved.
+    if (server.name == McpBridge::builtInServerName()) {
+        QMessageBox::warning(this,
+                             Tr::tr("MCP Server"),
+                             Tr::tr("The name \"%1\" is reserved for the builtin Qt "
+                                    "Creator MCP server.")
+                                     .arg(McpBridge::builtInServerName()));
+        return;
+    }
+
+    QVector<Tools::McpServerConfig> servers =
+            Tools::McpServerConfig::fromJson(settings().mcpServersJson());
+
+    // Adding a name that is already configured replaces that entry.
+    int replaceAt = -1;
+    for (int i = 0; i < servers.size(); ++i)
+        if (servers[i].name == server.name) {
+            replaceAt = i;
+            break;
+        }
+    if (replaceAt >= 0)
+        servers[replaceAt] = server;
+    else
+        servers.append(server);
+
+    settings().mcpServersJson.setValue(Tools::McpServerConfig::toJson(servers));
+    fillModel();
+    selectServerRow(server.name);
+}
+
+void ToolsSettingsWidget::editServer()
+{
+    const QString name =
+            configurableServerOf(m_view->model(), m_view->currentIndex());
+    if (name.isEmpty())
+        return;
+
+    Tools::McpServerConfig server;
+    for (const Tools::McpServerConfig &candidate :
+             Tools::McpServerConfig::fromJson(settings().mcpServersJson()))
+        if (candidate.name == name) {
+            server = candidate;
+            break;
+        }
+
+    McpServerDialog dialog(server, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    Tools::McpServerConfig edited = dialog.server();
+
+    // The builtin server's name is reserved.
+    if (edited.name == McpBridge::builtInServerName()) {
+        QMessageBox::warning(this,
+                             Tr::tr("MCP Server"),
+                             Tr::tr("The name \"%1\" is reserved for the builtin Qt "
+                                    "Creator MCP server.")
+                                     .arg(McpBridge::builtInServerName()));
+        return;
+    }
+
+    // Replaced by the (old) row name – editing may also rename the server.
+    QVector<Tools::McpServerConfig> updated =
+            Tools::McpServerConfig::fromJson(settings().mcpServersJson());
+    for (int i = 0; i < updated.size(); ++i)
+        if (updated[i].name == name) {
+            updated[i] = edited;
+            break;
+        }
+
+    settings().mcpServersJson.setValue(Tools::McpServerConfig::toJson(updated));
+    fillModel();
+    selectServerRow(edited.name);
+}
+
+void ToolsSettingsWidget::removeServer()
+{
+    const QString name =
+            configurableServerOf(m_view->model(), m_view->currentIndex());
+    if (name.isEmpty())
+        return;
+
+    QVector<Tools::McpServerConfig> servers =
+            Tools::McpServerConfig::fromJson(settings().mcpServersJson());
+    servers.erase(std::remove_if(servers.begin(),
+                                 servers.end(),
+                                 [&name](const Tools::McpServerConfig &s) { return s.name == name; }),
+                  servers.end());
+    settings().mcpServersJson.setValue(Tools::McpServerConfig::toJson(servers));
+    fillModel();
+}
+
+void ToolsSettingsWidget::selectServerRow(const QString &serverName)
+{
+    const QAbstractItemModel *model = m_view->model();
+    for (int row = 0; row < model->rowCount(); ++row) {
+        const QModelIndex index = model->index(row, 0);
+        if (index.data(GroupItem::ServerNameRole).toString() == serverName) {
+            m_view->setCurrentIndex(index);
+            return;
+        }
+    }
 }
 
 /* ---------------------------------------------------------------- GroupItem */
 
-ToolsSettingsWidget::GroupItem::GroupItem(const QString &groupName)
+ToolsSettingsWidget::GroupItem::GroupItem(const QString &groupName,
+                                          const QString &serverName,
+                                          bool connected,
+                                          bool configurable)
     : m_name(groupName)
+    , m_serverName(serverName)
+    , m_connected(connected)
+    , m_configurable(configurable)
 {
 }
 
@@ -401,10 +676,20 @@ QVariant ToolsSettingsWidget::GroupItem::data(int column, int role) const
     }
 
     if (column == 1 && role == Qt::DisplayRole) {
+        if (!m_serverName.isEmpty() && !m_connected)
+            return Tr::tr("not connected");
         const int count = childCount();
+        if (count == 0)
+            return m_serverName.isEmpty() ? QVariant()
+                                          : Tr::tr("no tools");
         return count == 1 ? QStringLiteral("1 tool")
                           : QString::number(count) + QStringLiteral(" tools");
     }
+
+    if (role == ServerNameRole)
+        return m_serverName;
+    if (role == ConfigurableRole)
+        return m_configurable;
 
     return QVariant();
 }
@@ -537,6 +822,89 @@ bool ToolsSettingsWidget::ToolItem::setData(int column, const QVariant &value, i
         }
     }
     return false;
+}
+
+/* ------------------------------------------ ToolsJsonHighlighter */
+
+ToolsJsonHighlighter::ToolsJsonHighlighter(QTextDocument *document)
+    : QSyntaxHighlighter(document)
+{
+    m_engine.setDefinition(syntaxDefinitionForName(QStringLiteral("JSON")));
+    m_defaultFormat =
+            TextEditor::globalFontSettings().data().toTextCharFormat(TextEditor::C_TEXT);
+}
+
+void ToolsJsonHighlighter::highlightBlock(const QString &text)
+{
+    // The engine carries inter-line state (e.g. an unterminated string).
+    // Reset it at the start of the document so re-highlighting fresh
+    // content does not continue a state from the previous content.
+    if (currentBlock().blockNumber() == 0)
+        m_engine.resetState();
+
+    QVector<HighlightFragment> fragments;
+    m_engine.highlight(text, m_defaultFormat, fragments);
+    int position = 0;
+    for (const HighlightFragment &fragment : fragments) {
+        setFormat(position, fragment.text.length(), fragment.format);
+        position += fragment.text.length();
+    }
+}
+
+/* ----------------------------------------------------------- McpServerDialog */
+
+McpServerDialog::McpServerDialog(const Tools::McpServerConfig &server, QWidget *parent)
+    : QDialog(parent)
+{
+    setWindowTitle(Tr::tr("MCP Server"));
+
+    m_nameEdit = new QLineEdit(server.name, this);
+    m_nameEdit->setPlaceholderText(Tr::tr("Display name, e.g. My MCP server"));
+
+    m_urlEdit = new QLineEdit(server.url.toString(), this);
+    m_urlEdit->setPlaceholderText(Tr::tr("https://host:port/mcp"));
+
+    m_headersEdit = new QPlainTextEdit(this);
+    m_headersEdit->setPlainText(server.headers.join(QLatin1Char('\n')));
+    m_headersEdit->setPlaceholderText(Tr::tr("One \"Name: value\" header per line, e.g.\n"
+                                             "Authorization: Bearer <token>"));
+    m_headersEdit->setMaximumHeight(80);
+
+    m_buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    connect(m_buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    // A Form initializer list is flushed as a *single* row (first item =
+    // label, the rest in an HBox), so each field gets its own addRow().
+    using namespace Layouting;
+    Form form;
+    form.addRow({new QLabel(Tr::tr("Name:")), m_nameEdit});
+    form.addRow({new QLabel(Tr::tr("URL:")), m_urlEdit});
+    form.addRow({new QLabel(Tr::tr("Headers:")), m_headersEdit});
+
+    Column{form, m_buttons}.attachTo(this);
+
+    connect(m_nameEdit, &QLineEdit::textChanged, this, &McpServerDialog::updateValidation);
+    connect(m_urlEdit, &QLineEdit::textChanged, this, &McpServerDialog::updateValidation);
+    updateValidation();
+}
+
+Tools::McpServerConfig McpServerDialog::server() const
+{
+    Tools::McpServerConfig config;
+    config.name = m_nameEdit->text().trimmed();
+    config.url = QUrl(m_urlEdit->text().trimmed());
+    const QStringList lines =
+            m_headersEdit->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    for (const QString &line : lines)
+        if (!line.trimmed().isEmpty())
+            config.headers << line.trimmed();
+    return config;
+}
+
+void McpServerDialog::updateValidation()
+{
+    m_buttons->button(QDialogButtonBox::Ok)->setEnabled(server().isValid());
 }
 
 } // namespace LlamaCpp
