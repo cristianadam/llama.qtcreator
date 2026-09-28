@@ -165,6 +165,11 @@ void SyntaxHighlighter::processLine(const QString &line,
         fragments.append({line.mid(currentPos), defaultFmt});
 }
 
+void SyntaxHighlighter::resetState()
+{
+    m_state = KSyntaxHighlighting::State();
+}
+
 void SyntaxHighlighter::highlight(const QString &content,
                                   const QTextCharFormat &defaultFmt,
                                   QVector<HighlightFragment> &fragments)

@@ -72,6 +72,12 @@ public:
     // server as the OAI "reasoning_effort" field).
     Utils::StringAspect thinkingLevel{this};
 
+    // Skills (see the "Skills" settings page): the directories scanned for
+    // SKILL.md files, and the discovered skills the user turned off (by
+    // canonical SKILL.md path – skills are enabled by default).
+    Utils::StringListAspect skillsDirectories{this};
+    Utils::StringListAspect disabledSkillsList{this};
+
     Utils::StringListAspect enabledToolsList{this};
     // Tools served by the Qt Creator MCP server are disabled by default
     // (they eat a lot of context); only the ones the user explicitly turned
@@ -149,6 +155,12 @@ class ToolsSettingsPage : public Core::IOptionsPage
 {
 public:
     ToolsSettingsPage();
+};
+
+class SkillsSettingsPage : public Core::IOptionsPage
+{
+public:
+    SkillsSettingsPage();
 };
 
 } // namespace LlamaCpp

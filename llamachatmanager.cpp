@@ -20,6 +20,7 @@
 #include "llamaconstants.h"
 #include "llamasettings.h"
 #include "projectinstructions.h"
+#include "skills.h"
 #include "llamastorage.h"
 #include "markdownrenderer.h"
 #include "llamathinkingsectionparser.h"
@@ -726,6 +727,11 @@ void ChatManager::generateMessage(const QString &convId,
     if (isGenerating(convId))
         return;
 
+    // Pick up skill changes from disk for the upcoming turn. The system
+    // message and the skill tool share this scan for the whole turn, so
+    // they always agree on what exists.
+    Skills::clearCache();
+
     auto currMsgs = m_storage->getMessages(convId);
     auto leafMsgs = m_storage->filterByLeafNodeId(currMsgs, leafNodeId, false);
 
@@ -1181,6 +1187,17 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                 sysMsgText = sysMsgText.trimmed().isEmpty()
                         ? instructions
                         : sysMsgText + QStringLiteral("\n\n") + instructions;
+        }
+
+        // Advertise the enabled skills (name + description) so the model
+        // can load the matching one with the skill tool when a task calls
+        // for it.
+        if (settings().toolsEnabled() && isToolEnabled(QStringLiteral("skill"))) {
+            const QString skillsPrompt = Skills::formatForPrompt(Skills::enabledSkills());
+            if (!skillsPrompt.isEmpty())
+                sysMsgText = sysMsgText.trimmed().isEmpty()
+                        ? skillsPrompt
+                        : sysMsgText + QStringLiteral("\n\n") + skillsPrompt;
         }
     }
     if (!sysMsgText.trimmed().isEmpty()) {

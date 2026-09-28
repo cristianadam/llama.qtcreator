@@ -2,6 +2,7 @@
 #include "llamaconstants.h"
 #include "llamatr.h"
 #include "promptssettingswidget.h"
+#include "skillssettingswidget.h"
 #include "tools/factory.h"
 #include "tools/tool.h"
 #include "toolsettingswidget.h"
@@ -11,6 +12,7 @@
 #include <utils/layoutbuilder.h>
 
 #include <QComboBox>
+#include <QDir>
 #include <QLabel>
 #include <QToolTip>
 
@@ -45,11 +47,20 @@ QStringList defaultLocatorPrompts()
 
 ToolsSettingsPage::ToolsSettingsPage()
 {
-    setId("LlamaCpp.Tools");         // unique identifier
-    setDisplayName(Tr::tr("Tools")); // title shown in the Settings dialog
+    setId(Constants::LLAMACPP_TOOLS_OPTIONS_ID); // unique identifier
+    setDisplayName(Tr::tr("Tools"));             // title shown in the Settings dialog
     setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
     setSettingsProvider([] { return &LlamaCpp::settings(); });
     setWidgetCreator([] { return new LlamaCpp::ToolsSettingsWidget; });
+}
+
+SkillsSettingsPage::SkillsSettingsPage()
+{
+    setId(Constants::LLAMACPP_SKILLS_OPTIONS_ID); // unique identifier
+    setDisplayName(Tr::tr("Skills"));             // title shown in the Settings dialog
+    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+    setSettingsProvider([] { return &LlamaCpp::settings(); });
+    setWidgetCreator([] { return new LlamaCpp::SkillsSettingsWidget; });
 }
 
 // The static instance makes the page appear automatically.
@@ -66,6 +77,7 @@ static void initEnableAspect(BoolAspect &enableLlamaCpp)
 LlamaSettings &settings()
 {
     static ToolsSettingsPage theToolsPage;
+    static SkillsSettingsPage theSkillsPage;
 
     static LlamaSettings settings;
     return settings;
@@ -486,6 +498,22 @@ LlamaSettings::LlamaSettings()
         Tr::tr("Built-in prompts of the \"ll\" locator. Only the first line of a "
                "prompt is shown in the menu; the full text is sent to the model. "
                "\"{selection}\" is replaced with the selected text."));
+
+    //
+    // Skills
+    //
+    skillsDirectories.setSettingsKey("SkillsDirectories");
+    skillsDirectories.setDefaultValue({QDir::homePath() + QStringLiteral("/.llama/skills")});
+    skillsDirectories.setDisplayName(Tr::tr("Skill directories"));
+    skillsDirectories.setToolTip(Tr::tr(
+        "Directories scanned recursively for skills. A skill is a directory "
+        "containing a SKILL.md file (Agent Skills specification) with a name "
+        "and a description in its YAML frontmatter."));
+
+    // Discovered skills are enabled by default; only the ones the user
+    // unchecked on the Skills settings page land in this list.
+    disabledSkillsList.setSettingsKey("DisabledSkillsList");
+    disabledSkillsList.setDefaultValue(QStringList());
 
     //
     // Tools

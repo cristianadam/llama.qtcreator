@@ -15,6 +15,8 @@
 #include <QTcpSocket>
 #include <QtTest/QtTest>
 
+#include <unistd.h>
+
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
 
@@ -24,6 +26,7 @@
 #include <llamahtmlexporter.h>
 #include <llamasettings.h>
 #include <projectinstructions.h>
+#include <skills.h>
 #include <llamathinkingsectionparser.h>
 #include <markdownrenderer.h>
 #include <tools/apply_patch_tool.h>
@@ -32,6 +35,7 @@
 #include <tools/patch.h>
 #include <tools/bash_tool.h>
 #include <tools/readfile_tool.h>
+#include <tools/skill_tool.h>
 #include <tools/find_tool.h>
 #include <tools/ripgrep.h>
 #include <tools/search_tool.h>
@@ -522,6 +526,19 @@ private slots:
     void projectInstructions_noGitOnlyProjectDir();
     void projectInstructions_content();
     void projectInstructions_truncation();
+
+    // Skills (scanner + prompt formatting)
+    void skills_scanBasic();
+    void skills_scanNestedAndRootFiles();
+    void skills_scanSkillRootStopsRecursion();
+    void skills_scanValidationAndCollisions();
+    void skills_scanDisableModelInvocation();
+    void skills_scanSkipsSymlinks();
+    void skills_formatForPrompt();
+    void skills_enabledSkillsFiltering();
+    void skillTool_loadsSkill();
+    void skillTool_truncatesLongContent();
+    void skillTool_unknownSkill();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -3915,6 +3932,329 @@ void LlamaToolsTest::projectInstructions_truncation()
     QVERIFY(body.endsWith(marker));
     body.chop(marker.size());
     QCOMPARE(body.size(), 32 * 1024);
+}
+
+// Restores the global skill settings (and clears the scan cache) when the
+// scope is left, even when a failing assertion returns early from the test.
+class SkillsTestEnv
+{
+public:
+    SkillsTestEnv()
+        : m_dirs(settings().skillsDirectories()),
+          m_disabled(settings().disabledSkillsList())
+    {
+    }
+
+    ~SkillsTestEnv()
+    {
+        settings().skillsDirectories.setValue(m_dirs);
+        settings().disabledSkillsList.setValue(m_disabled);
+        Skills::clearCache();
+    }
+
+private:
+    QStringList m_dirs;
+    QStringList m_disabled;
+};
+
+// (no assertions in here: QtTest macros expand to a bare return, which is
+// not allowed in a non‑void function)
+QString makeSkillFile(const QString &dir, const QString &relPath, const QString &content)
+{
+    const QString path = dir + QLatin1Char('/') + relPath;
+    QDir().mkpath(QFileInfo(path).absolutePath());
+    writeTextFile(path, content);
+    return path;
+}
+
+void LlamaToolsTest::skills_scanBasic()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("pdf-tools/SKILL.md"),
+                  QStringLiteral("---\nname: pdf-tools\ndescription: Extract text from PDFs.\n"
+                                 "---\n\n# PDF tools\n\nBody text."));
+
+    const SkillScanResult result = Skills::scan({dir.path()});
+    // (first() on an empty list would crash – guard the message)
+    QVERIFY2(result.diagnostics.isEmpty(),
+             result.diagnostics.isEmpty() ? "" : qPrintable(result.diagnostics.first().message));
+    QCOMPARE(result.skills.size(), 1);
+    const Skill &skill = result.skills.first();
+    QCOMPARE(skill.name, QStringLiteral("pdf-tools"));
+    QCOMPARE(skill.description, QStringLiteral("Extract text from PDFs."));
+    QCOMPARE(skill.baseDir,
+             QFileInfo(dir.path() + QStringLiteral("/pdf-tools")).canonicalFilePath());
+    QVERIFY(skill.filePath.endsWith(QStringLiteral("/SKILL.md")));
+    QCOMPARE(skill.content, QStringLiteral("# PDF tools\n\nBody text."));
+    QVERIFY(!skill.disableModelInvocation);
+}
+
+void LlamaToolsTest::skills_scanNestedAndRootFiles()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("a/deep/SKILL.md"),
+                  QStringLiteral("---\nname: deep\ndescription: Nested skill.\n---\nBody"));
+    // Bare root‑level Markdown with a description is a skill, the name
+    // falling back to the file name.
+    makeSkillFile(dir.path(),
+                  QStringLiteral("root-skill.md"),
+                  QStringLiteral("---\ndescription: A root level skill.\n---\nBody"));
+    // No frontmatter description – not a skill, skipped silently.
+    makeSkillFile(dir.path(), QStringLiteral("plain.md"), QStringLiteral("Just notes."));
+
+    const SkillScanResult result = Skills::scan({dir.path()});
+    QVERIFY2(result.diagnostics.isEmpty(),
+             result.diagnostics.isEmpty() ? "" : qPrintable(result.diagnostics.first().message));
+    QCOMPARE(result.skills.size(), 2);
+    QStringList names;
+    for (const Skill &skill : result.skills)
+        names << skill.name;
+    QVERIFY(names.contains(QStringLiteral("deep")));
+    QVERIFY(names.contains(QStringLiteral("root-skill")));
+}
+
+void LlamaToolsTest::skills_scanSkillRootStopsRecursion()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("outer/SKILL.md"),
+                  QStringLiteral("---\nname: outer\ndescription: Outer skill.\n---\nBody"));
+    // Inside a skill root – must not be picked up.
+    makeSkillFile(dir.path(),
+                  QStringLiteral("outer/inner/SKILL.md"),
+                  QStringLiteral("---\nname: inner\ndescription: Inner skill.\n---\nBody"));
+
+    const SkillScanResult result = Skills::scan({dir.path()});
+    QVERIFY(result.diagnostics.isEmpty());
+    QCOMPARE(result.skills.size(), 1);
+    QCOMPARE(result.skills.first().name, QStringLiteral("outer"));
+}
+
+void LlamaToolsTest::skills_scanValidationAndCollisions()
+{
+    QTemporaryDir dir1;
+    QTemporaryDir dir2;
+    QVERIFY(dir1.isValid() && dir2.isValid());
+    // Invalid name (uppercase + underscore) – skipped with a diagnostic.
+    makeSkillFile(dir1.path(),
+                  QStringLiteral("bad-name/SKILL.md"),
+                  QStringLiteral("---\nname: Bad_Name\ndescription: Bad name.\n---\nBody"));
+    // Declared skill without a description – skipped with a diagnostic.
+    makeSkillFile(dir2.path(),
+                  QStringLiteral("no-desc/SKILL.md"),
+                  QStringLiteral("---\nname: no-desc\n---\nBody"));
+    // Name collision – the first discovered skill wins.
+    makeSkillFile(dir1.path(),
+                  QStringLiteral("dup/SKILL.md"),
+                  QStringLiteral("---\nname: dup\ndescription: First.\n---\nBody"));
+    makeSkillFile(dir2.path(),
+                  QStringLiteral("dup/SKILL.md"),
+                  QStringLiteral("---\nname: dup\ndescription: Second.\n---\nBody"));
+    // Name does not match its directory – kept, but flagged (like pi).
+    makeSkillFile(dir2.path(),
+                  QStringLiteral("mismatch/SKILL.md"),
+                  QStringLiteral("---\nname: other\ndescription: Mismatch.\n---\nBody"));
+
+    const SkillScanResult result = Skills::scan({dir1.path(), dir2.path()});
+    QCOMPARE(result.skills.size(), 2);
+    const Skill *dup = nullptr;
+    const Skill *other = nullptr;
+    for (const Skill &skill : result.skills) {
+        if (skill.name == QStringLiteral("dup"))
+            dup = &skill;
+        else if (skill.name == QStringLiteral("other"))
+            other = &skill;
+    }
+    QVERIFY(dup && other);
+    QCOMPARE(dup->description, QStringLiteral("First."));
+    // Two invalid files + one collision + one name/directory mismatch.
+    QCOMPARE(result.diagnostics.size(), 4);
+    bool sawMismatch = false;
+    for (const SkillDiagnostic &d : result.diagnostics)
+        if (d.message.contains(QLatin1String("does not match")))
+            sawMismatch = true;
+    QVERIFY(sawMismatch);
+}
+
+void LlamaToolsTest::skills_scanDisableModelInvocation()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("hidden/SKILL.md"),
+                  QStringLiteral("---\nname: hidden\ndescription: Explicit only.\n"
+                                 "disable-model-invocation: true\n---\nBody"));
+
+    const SkillScanResult result = Skills::scan({dir.path()});
+    QVERIFY(result.diagnostics.isEmpty());
+    QCOMPARE(result.skills.size(), 1);
+    QVERIFY(result.skills.first().disableModelInvocation);
+}
+
+void LlamaToolsTest::skills_scanSkipsSymlinks()
+{
+    QTemporaryDir dir;
+    QTemporaryDir outside;
+    QVERIFY(dir.isValid() && outside.isValid());
+    makeSkillFile(outside.path(),
+                  QStringLiteral("linked/SKILL.md"),
+                  QStringLiteral("---\nname: linked\ndescription: Outside.\n---\nBody"));
+    if (::symlink((outside.path() + QStringLiteral("/linked")).toLocal8Bit().constData(),
+                  (dir.path() + QStringLiteral("link")).toLocal8Bit().constData())
+        != 0)
+        QSKIP("symlinks are not supported here");
+
+    const SkillScanResult result = Skills::scan({dir.path()});
+    QVERIFY(result.diagnostics.isEmpty());
+    QCOMPARE(result.skills.size(), 0);
+}
+
+void LlamaToolsTest::skills_formatForPrompt()
+{
+    QCOMPARE(Skills::formatForPrompt({}), QString());
+
+    Skill skill;
+    skill.name = QStringLiteral("demo");
+    skill.description = QStringLiteral("Handle <files> & \"stuff\"");
+    skill.filePath = QStringLiteral("/tmp/skills/demo/SKILL.md");
+
+    const QString prompt = Skills::formatForPrompt({skill});
+    QVERIFY(prompt.contains(QStringLiteral("<available_skills>")));
+    QVERIFY(prompt.contains(QStringLiteral("</available_skills>")));
+    QVERIFY(prompt.contains(QStringLiteral("<name>demo</name>")));
+    // XML‑escaped description.
+    QVERIFY(prompt.contains(QStringLiteral("&lt;files&gt; &amp; &quot;stuff&quot;")));
+    QVERIFY(!prompt.contains(QStringLiteral("<files>")));
+    // The skill tool (not read_file) loads the skill, so the list carries
+    // no location.
+    QVERIFY(prompt.contains(QStringLiteral("skill tool")));
+    QVERIFY(!prompt.contains(QStringLiteral("read_file")));
+    QVERIFY(!prompt.contains(QStringLiteral("<location>")));
+}
+
+void LlamaToolsTest::skills_enabledSkillsFiltering()
+{
+    const SkillsTestEnv env;
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString p1 = makeSkillFile(dir.path(),
+                                     QStringLiteral("one/SKILL.md"),
+                                     QStringLiteral("---\nname: one\ndescription: First.\n---\nB"));
+    const QString p2 = makeSkillFile(dir.path(),
+                                     QStringLiteral("two/SKILL.md"),
+                                     QStringLiteral("---\nname: two\ndescription: Second.\n---\nB"));
+
+    settings().skillsDirectories.setValue({dir.path()});
+    settings().disabledSkillsList.setValue({QFileInfo(p2).canonicalFilePath()});
+    Skills::clearCache();
+
+    const QVector<Skill> enabled = Skills::enabledSkills();
+    QCOMPARE(enabled.size(), 1);
+    QCOMPARE(enabled.first().name, QStringLiteral("one"));
+
+    // The disabled list is re‑read on every call (only the scan is cached).
+    settings().disabledSkillsList.setValue(QStringList());
+    QCOMPARE(Skills::enabledSkills().size(), 2);
+}
+
+void LlamaToolsTest::skillTool_loadsSkill()
+{
+    const SkillsTestEnv env;
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("gerrit-diff/SKILL.md"),
+                  QStringLiteral("---\nname: gerrit-diff\ndescription: Fetch diffs.\n---\n\n"
+                                 "# Gerrit Diff\n\nRun the script.\n"));
+    // Accompanying files the model should be told about.
+    makeSkillFile(dir.path(), QStringLiteral("gerrit-diff/scripts/fetch.py"), "print(1)");
+    makeSkillFile(dir.path(), QStringLiteral("gerrit-diff/references/notes.md"), "notes");
+    // A dot directory must not be listed.
+    makeSkillFile(dir.path(), QStringLiteral("gerrit-diff/.git/config"), "x");
+
+    settings().skillsDirectories.setValue({dir.path()});
+    Skills::clearCache();
+
+    QJsonObject args;
+    args[QStringLiteral("name")] = QStringLiteral("gerrit-diff");
+    auto [output, ok] = runTool<Tools::SkillTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(output.contains(QStringLiteral("<skill_content name=\"gerrit-diff\">")));
+    QVERIFY(output.contains(QStringLiteral("# Gerrit Diff")));
+    QVERIFY(output.contains(QStringLiteral("Run the script.")));
+    // The frontmatter is not part of the content.
+    QVERIFY(!output.contains(QStringLiteral("description: Fetch diffs")));
+    const QString baseDir = QFileInfo(dir.path() + QStringLiteral("/gerrit-diff")).canonicalFilePath();
+    QVERIFY(output.contains(QString::fromLatin1("Base directory for this skill: ") + baseDir));
+    // Sampled file list, relative paths, SKILL.md and dot files excluded.
+    QVERIFY(output.contains(QStringLiteral("<skill_files>")));
+    QVERIFY(output.contains(QStringLiteral("<file>references/notes.md</file>")));
+    QVERIFY(output.contains(QStringLiteral("<file>scripts/fetch.py</file>")));
+    QVERIFY(!output.contains(QStringLiteral("SKILL.md</file>")));
+    QVERIFY(!output.contains(QStringLiteral(".git")));
+    QVERIFY(output.contains(QStringLiteral("</skill_content>")));
+
+    // A skill disabled in the settings is still loadable by explicit name.
+    settings().disabledSkillsList.setValue({QFileInfo(dir.path() + "/gerrit-diff/SKILL.md").canonicalFilePath()});
+    auto [disabledOutput, disabledOk] = runTool<Tools::SkillTool>(args);
+    QVERIFY2(disabledOk, qPrintable(disabledOutput));
+    QVERIFY(disabledOutput.contains(QStringLiteral("<skill_content")));
+}
+
+void LlamaToolsTest::skillTool_truncatesLongContent()
+{
+    const SkillsTestEnv env;
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString body = QStringLiteral("x").repeated(40 * 1024);
+    makeSkillFile(dir.path(),
+                  QStringLiteral("big/SKILL.md"),
+                  QStringLiteral("---\nname: big\ndescription: Big skill.\n---\n") + body);
+
+    settings().skillsDirectories.setValue({dir.path()});
+    Skills::clearCache();
+
+    QJsonObject args;
+    args[QStringLiteral("name")] = QStringLiteral("big");
+    auto [output, ok] = runTool<Tools::SkillTool>(args);
+    QVERIFY2(ok, qPrintable(output));
+    // Capped like project instructions, with a notice.
+    QVERIFY(output.contains(QStringLiteral("[... truncated ...]")));
+    QVERIFY(output.length() < 40 * 1024);
+}
+
+void LlamaToolsTest::skillTool_unknownSkill()
+{
+    const SkillsTestEnv env;
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    makeSkillFile(dir.path(),
+                  QStringLiteral("one/SKILL.md"),
+                  QStringLiteral("---\nname: one\ndescription: First.\n---\nB"));
+    makeSkillFile(dir.path(),
+                  QStringLiteral("two/SKILL.md"),
+                  QStringLiteral("---\nname: two\ndescription: Second.\n---\nB"));
+
+    settings().skillsDirectories.setValue({dir.path()});
+    Skills::clearCache();
+
+    QJsonObject args;
+    args[QStringLiteral("name")] = QStringLiteral("nope");
+    auto [output, ok] = runTool<Tools::SkillTool>(args);
+    QVERIFY(!ok);
+    QVERIFY(output.contains(QStringLiteral("nope")));
+    // The available names are listed to steer the model back on track.
+    QVERIFY(output.contains(QStringLiteral("one")));
+    QVERIFY(output.contains(QStringLiteral("two")));
+
+    // Missing name argument.
+    auto [emptyOutput, emptyOk] = runTool<Tools::SkillTool>(QJsonObject());
+    QVERIFY(!emptyOk);
 }
 
 } // namespace LlamaCpp

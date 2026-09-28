@@ -34,6 +34,10 @@ public:
                    const QTextCharFormat &defaultFmt,
                    QVector<HighlightFragment> &fragments);
 
+    // Resets the inter-line state (e.g. an open code fence). Call this
+    // before highlighting a new document starting at its first block.
+    void resetState();
+
 protected:
     void applyFormat(int offset, int length, const KSyntaxHighlighting::Format &format) override;
 

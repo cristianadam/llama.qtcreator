@@ -9,7 +9,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer)
+# Qt Creator bundles yaml-cpp (used for the skill frontmatter) and exports
+# it as the QtCreator::yaml-cpp imported target: the headers come from the
+# Qt Creator source tree, the library is the one shipped in the app bundle
+# (resolved at runtime via the app's rpath).
+find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer yaml-cpp)
 find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer Network TaskTree Svg
                REQUIRED)
 
@@ -48,6 +52,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::ProjectExplorer
     QtCreator::TextEditor
   DEPENDS
+    QtCreator::yaml-cpp
     Qt::Widgets
     Qt::Sql
     Qt::Network
@@ -100,6 +105,7 @@ add_qtc_plugin(LlamaCpp
     tools/mcptool.cpp tools/mcptool.h
     tools/patch.cpp tools/patch.h
     tools/readfile_tool.cpp tools/readfile_tool.h
+    tools/skill_tool.cpp tools/skill_tool.h
     tools/search_tool.cpp tools/search_tool.h
     tools/find_tool.cpp tools/find_tool.h
     tools/ripgrep.cpp tools/ripgrep.h
@@ -114,6 +120,8 @@ add_qtc_plugin(LlamaCpp
     tools/websearch_tool.cpp tools/websearch_tool.h
     projectinstructions.cpp projectinstructions.h
     promptssettingswidget.cpp promptssettingswidget.h
+    skills.cpp skills.h
+    skillssettingswidget.cpp skillssettingswidget.h
     toolsettingswidget.cpp toolsettingswidget.h
 )
 

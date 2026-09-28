@@ -11,6 +11,7 @@ add_qtc_test(llamatools_test
     QtCreator::ProjectExplorer
     QtCreator::KSyntaxHighlighting
     QtCreator::quickjsng
+    QtCreator::yaml-cpp
     markus
   SOURCES
     llamatools_test.cpp
@@ -28,6 +29,8 @@ add_qtc_test(llamatools_test
     ../promptssettingswidget.cpp
     ../promptssettingswidget.h
     ../projectinstructions.cpp
+    ../skills.cpp
+    ../skillssettingswidget.cpp
     ../toolsettingswidget.cpp
     ../tools/apply_patch_tool.cpp
     ../tools/edit_file_tool.cpp
@@ -37,6 +40,7 @@ add_qtc_test(llamatools_test
     ../tools/patch.cpp
     ../tools/bash_tool.cpp
     ../tools/readfile_tool.cpp
+    ../tools/skill_tool.cpp
     ../tools/task_tool.cpp
     ../tools/tool.cpp
     ../tools/todowrite_tool.cpp

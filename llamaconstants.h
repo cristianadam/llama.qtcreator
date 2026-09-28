@@ -21,6 +21,8 @@ namespace LlamaCpp::Constants {
 
     const char LLAMACPP_GENERAL_OPTIONS_ID[] = "LlamaCpp.General";
     const char LLAMACPP_PROMPTS_OPTIONS_ID[] = "LlamaCpp.Prompts";
+    const char LLAMACPP_TOOLS_OPTIONS_ID[] = "LlamaCpp.Tools";
+    const char LLAMACPP_SKILLS_OPTIONS_ID[] = "LlamaCpp.Skills";
     const char LLAMACPP_GENERAL_OPTIONS_CATEGORY[] = "ZY.LlamaCpp";
     const char LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY[] = "LlamaCpp";
 
