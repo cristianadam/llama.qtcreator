@@ -97,7 +97,7 @@ QString SkillTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "skill",
-            "description": "Load a specialized skill when the task at hand matches one of the available skills in the system context. Returns the skill's instructions, its base directory and a sample list of the files that come with it; relative paths in the skill are relative to that base directory.",
+            "description": "Load a specialized skill when the task matches one of the available skills in the system context. Returns the skill's instructions, its base directory and a sample of the files that come with it; relative paths are relative to that base directory.",
             "parameters": {
                 "type": "object",
                 "properties": {

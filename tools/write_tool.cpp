@@ -31,11 +31,7 @@ QString WriteTool::name() const
 QString WriteTool::toolDefinition() const
 {
     const QString description = R"desc(
-Create a new file or completely overwrite an existing one with the given content.
-
-- Use write for new files and for full rewrites. For small, targeted changes to an existing file use edit_file instead (and read_file it first).
-- Parent directories are created automatically.
-- Overwriting an existing file replaces its entire content – read it first if you need to keep parts of it.
+Create a new file or completely overwrite an existing one with the given content. Parent directories are created automatically. For small, targeted changes to an existing file use edit_file instead (and read_file it first); overwriting replaces the entire content, so read the file first if you need to keep parts of it.
 )desc";
 
     QJsonObject pathProperty;

@@ -94,7 +94,7 @@ QString WebSearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "websearch",
-            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. The backend (Exa, Google Custom Search, Brave Search or Tavily) and its endpoint/API key are configurable in the Llama.cpp settings. Use this to find documentation, news, or the right page to read; afterwards use webfetch to retrieve the full content of a promising result.",
+            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. Use this to find the right page to read, then use webfetch to retrieve its full content.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -127,6 +127,22 @@ WebSearchConfig WebSearchConfig::fromSettings()
     config.tavilyUrl = settings().webSearchTavilyUrl().trimmed();
     config.tavilyApiKey = settings().webSearchTavilyApiKey().trimmed();
     return config;
+}
+
+bool WebSearchConfig::isConfigured() const
+{
+    if (provider == QLatin1String("google"))
+        return !googleApiKey.isEmpty() && !googleCx.isEmpty();
+    if (provider == QLatin1String("brave"))
+        return !braveApiKey.isEmpty();
+    if (provider == QLatin1String("tavily"))
+        return !tavilyApiKey.isEmpty();
+    // Default: Exa. The hosted endpoint needs an API key; a *custom* endpoint
+    // (e.g. a local proxy) does not. The settings aspect pre-fills the hosted
+    // URL as its default, so only a URL differing from it counts as custom -
+    // otherwise the tool would be advertised to every keyless user.
+    const bool customEndpoint = !exaUrl.isEmpty() && exaUrl != QLatin1String(kExaDefaultUrl);
+    return customEndpoint || !exaApiKey.isEmpty();
 }
 
 QString parseMcpSearchResponse(const QString &body)

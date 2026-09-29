@@ -457,24 +457,21 @@ QString BashTool::toolDefinition() const
         "Executes a command in a bash shell and returns its combined output "
         "(stdout and stderr). Commands use bash/POSIX syntax on all platforms "
         "(Windows uses Git Bash). Use this for terminal operations like git, "
-        "npm, docker, running builds or tests. Do not use it for reading, "
+        "npm, docker, running builds or tests; do not use it for reading, "
         "writing, editing or searching files - use the dedicated tools for "
-        "that instead. Output is limited to the last 2000 lines or 50 KB; if "
-        "it is truncated, the full output is saved to a temporary file and "
-        "its path is reported. Non-zero exit codes, crashes and timeouts are "
-        "reported as failures together with the output produced so far.");
+        "that. Output is limited to the last 2000 lines or 50 KB; when "
+        "truncated, the full output is saved to a temporary file and its "
+        "path is reported. Non-zero exit codes, crashes and timeouts are "
+        "reported as failures, including the output produced so far.");
     if (sandboxEnabled(ProjectManager::startupProject()))
         description += QStringLiteral(
             " Commands run in a sandbox: only the working directory and "
-            "temporary locations are writable, system locations are "
-            "read-only, and credential locations (~/.ssh, ~/.aws, "
-            "~/.gnupg, ~/.kube, ~/.netrc) are not readable, so do not "
-            "attempt to modify files outside the working directory or to "
-            "read credentials. The workdir must be inside the project "
-            "directory or a temporary location. On Linux, /tmp is a fresh "
-            "empty directory for each command, so files do not persist "
-            "there between commands. Commands have no network access; use "
-            "the webfetch and websearch tools for web access.");
+            "temporary locations are writable, credential locations "
+            "(~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not "
+            "readable, and there is no network access - use the webfetch "
+            "and websearch tools for that. The workdir must be inside the "
+            "project directory or a temporary location; on Linux /tmp is "
+            "fresh and empty for each command.");
     return QString::fromUtf8(R"raw(
     {
         "type": "function",
@@ -490,11 +487,11 @@ QString BashTool::toolDefinition() const
                     },
                     "workdir": {
                         "type": "string",
-                        "description": "The working directory to run the command in. Defaults to the current project directory. Use this instead of 'cd' commands."
+                        "description": "Working directory. Defaults to the project directory; use this instead of 'cd'."
                     },
                     "timeout": {
                         "type": "integer",
-                        "description": "Optional timeout in milliseconds. Defaults to 120000 ms and must not exceed 600000 ms."
+                        "description": "Timeout in milliseconds (default 120000, max 600000)."
                     }
                 },
                 "required": ["command"],

@@ -69,12 +69,12 @@ QString LsTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "ls",
-            "description": "Lists the contents of a directory. Returns entry names sorted alphabetically (case-insensitive), one per line, with a '/' suffix for directories. Dotfiles are included. Use this to get an overview of a directory before reading or searching in it. Output is limited to the first 500 entries or 50 KB, whichever is hit first; the result then explains how to retrieve more.",
+            "description": "Lists the contents of a directory: entry names sorted alphabetically, one per line, with a '/' suffix for directories. Dotfiles are included. Output is limited to the first 500 entries or 50 KB, whichever is hit first.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "path": { "type": "string", "description": "Directory to list. Absolute, or relative to the current project directory. Defaults to the project directory." },
-                    "limit": { "type": "integer", "description": "Maximum number of entries to return (1 to 5000). Defaults to 500." }
+                    "path": { "type": "string", "description": "Directory to list, absolute or relative to the project directory. Defaults to the project directory." },
+                    "limit": { "type": "integer", "description": "Maximum number of entries (1 to 5000). Defaults to 500." }
                 },
                 "required": [],
                 "strict": true

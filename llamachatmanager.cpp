@@ -29,6 +29,7 @@
 #include "tools/mcpbridge.h"
 #include "tools/tool.h"
 #include "tools/tool_utils.h"
+#include "tools/websearch_tool.h"
 
 Q_LOGGING_CATEGORY(llamaChatNetwork, "llama.cpp.chat.network", QtWarningMsg)
 Q_LOGGING_CATEGORY(llamaChatTools, "llama.cpp.chat.tools", QtWarningMsg)
@@ -189,6 +190,17 @@ static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTo
             // Skip disabled tools – they must never be advertised to the server.
             qCInfo(llamaChatTools).nospace()
                 << "Tool '" << name << "' is disabled, not adding it to payload.";
+            continue;
+        }
+
+        if (name == QLatin1String("skill") && Skills::enabledSkills().isEmpty()) {
+            // No skills to load – advertising the tool would only cost
+            // context. It reappears as soon as a skill is enabled.
+            continue;
+        }
+        if (name == QLatin1String("websearch")
+                && !Tools::WebSearchConfig::fromSettings().isConfigured()) {
+            // No search backend configured – every call would fail.
             continue;
         }
 

@@ -103,13 +103,13 @@ QString FindTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "find",
-            "description": "Finds files by glob pattern using ripgrep. Returns matching file paths relative to the searched directory, one per line, respecting .gitignore. Hidden files are listed but the .git directory is never listed. Use this instead of bash with find. Output is limited to the first 1000 results or 50 KB, whichever is hit first; the result then explains how to retrieve more.",
+            "description": "Finds files by glob pattern using ripgrep. Returns matching file paths relative to the searched directory, one per line, respecting .gitignore. Output is limited to the first 1000 results or 50 KB, whichever is hit first.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "pattern": { "type": "string", "description": "Glob pattern to match files against, e.g. '*.cpp', '**/*.json', or 'src/**/*test*'. Patterns match against the path relative to the searched directory." },
-                    "path": { "type": "string", "description": "Directory to search. Absolute, or relative to the current project directory. Defaults to the project directory." },
-                    "limit": { "type": "integer", "description": "Maximum number of results to return (1 to 5000). Defaults to 1000." }
+                    "pattern": { "type": "string", "description": "Glob pattern to match files against, e.g. '*.cpp', '**/*.json'." },
+                    "path": { "type": "string", "description": "Directory to search, absolute or relative to the project directory. Defaults to the project directory." },
+                    "limit": { "type": "integer", "description": "Maximum number of results (1 to 5000). Defaults to 1000." }
                 },
                 "required": ["pattern"],
                 "strict": true

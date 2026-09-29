@@ -165,13 +165,13 @@ QString WebFetchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "webfetch",
-            "description": "Fetches a URL and returns its content as compact, LLM‑friendly text. HTML pages have their markup stripped and are converted to lightweight markdown (or plain text); other content types are returned as‑is. Use this to read documentation, web pages, or any http(s) resource. The returned content is truncated at 50000 characters.",
+            "description": "Fetches a URL and returns its content as compact, LLM‑friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as‑is. The returned content is truncated at 50000 characters.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "url": { "type": "string", "description": "The fully‑formed URL to fetch (http:// or https://)." },
                     "format": { "type": "string", "enum": ["markdown", "text", "html"], "description": "Output format. \"markdown\" (default): HTML stripped to light markdown. \"text\": visible plain text. \"html\": raw page source." },
-                    "timeout": { "type": "integer", "description": "Optional timeout in seconds. Defaults to 30, maximum 120." }
+                    "timeout": { "type": "integer", "description": "Timeout in seconds. Defaults to 30, maximum 120." }
                 },
                 "required": ["url"],
                 "strict": true

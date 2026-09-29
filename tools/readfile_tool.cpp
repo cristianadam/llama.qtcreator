@@ -54,14 +54,14 @@ QString ReadFileTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "read_file",
-            "description": "Read the contents of a file from first_line to last_line_inclusive (at most 250 lines per call), or most of the file when should_read_entire_file is true. Output is capped (2000 lines, 50 KB); when it is cut short, the result ends with a hint telling which first_line to use for the next call - follow it to continue reading. Image files (jpeg, png, gif, webp, bmp) are returned as an image attachment the model can see (the server must run a vision model with a matching mmproj); the line arguments are ignored for images.",
+            "description": "Read the contents of a file from first_line to last_line_inclusive (at most 250 lines per call), or most of the file when should_read_entire_file is true. Output is capped (2000 lines, 50 KB); when cut short, the result ends with a hint for the next first_line - follow it. Image files (jpeg, png, gif, webp, bmp) are returned as an image attachment; the line arguments are ignored for images.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "first_line": { "type": "integer", "description": "The number of first line to read. Starts with 1." },
-                    "last_line_inclusive": { "type": "integer", "description": "The number of last line to read. Line numbers start with 1" },
-                    "should_read_entire_file": { "type": "boolean", "description": "Whether to read the entire file (subject to the size caps). Defaults to false." },
-                    "file_path": { "type": "string", "description": "The path of the file to read. The path may be absolute or relative to the current project directory." }
+                    "first_line": { "type": "integer", "description": "First line to read (1-based)." },
+                    "last_line_inclusive": { "type": "integer", "description": "Last line to read (1-based)." },
+                    "should_read_entire_file": { "type": "boolean", "description": "Read the entire file (subject to the size caps). Defaults to false." },
+                    "file_path": { "type": "string", "description": "Path of the file to read, absolute or relative to the project directory." }
                 },
                 "required": [ "first_line", "last_line_inclusive", "file_path" ],
                 "strict": true

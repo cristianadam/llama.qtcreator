@@ -140,26 +140,18 @@ Example:
 *** Delete File: obsolete.txt
 *** End Patch
 
-Guidelines for reliable patches:
-- Always include the *** Begin Patch and *** End Patch markers.
-- Always include a section header (Add File / Update File / Delete File) for every file.
-- Prefix new lines with +, even when creating a new file. A missing + prefix in an Add File section is tolerated (the line is kept as content), but always prefix the lines anyway.
-- Include at least 3 context lines above and below each change so the location is unambiguous.
-- Keep hunks structurally coherent: when changing a function or a block, rewrite the whole unit instead of scattered line edits.
+Guidelines:
+- Include at least 3 context lines above and below each change so the location is unambiguous; if a line occurs several times, add context or an @@ context line to target the right occurrence.
+- When changing a function or a block, rewrite the whole unit instead of scattered line edits.
 - If the change affects most of a file, or the file is small, prefer *** Add File: with the complete new content over many hunks.
-- Hunks are located top to bottom: each hunk is searched for starting right after where the previous hunk matched. To change a line that occurs several times, emit one hunk per occurrence in file order; to change one specific occurrence, add context lines or an @@ context line.
-- An Update section that leaves the file unchanged (removed and added lines identical) is rejected.
-- A *** End of File line anchors a hunk to the end of the file; a hunk without removed lines is inserted at the end of the file.
-- Multiple sections that target the same file (for example two Update sections) are applied in order, each on top of the result of the previous one.
-- Inside an Update File hunk, a line that does not start with a space, - or + is rejected; the patch is never applied with silently dropped lines.
-- The whole patch is validated before any file is modified. When a hunk cannot be located, the error tells where the closest match is or whether the hunks are out of file order - adjust the patch accordingly.
+- A hunk without removed lines is an insertion; a *** End of File line anchors it to the end of the file.
+- When a hunk cannot be located, the error reports the closest match - adjust the patch and retry.
 )desc";
 
     QJsonObject patchTextProperty;
     patchTextProperty[QStringLiteral("type")] = QStringLiteral("string");
     patchTextProperty[QStringLiteral("description")] = QStringLiteral(
-        "The full patch text that describes all changes to be made. "
-        "File paths are relative to the workspace root (or absolute).");
+        "The full patch text. File paths are relative to the workspace root (or absolute).");
 
     QJsonObject properties;
     properties[QStringLiteral("patchText")] = patchTextProperty;

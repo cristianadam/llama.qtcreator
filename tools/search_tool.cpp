@@ -158,17 +158,17 @@ QString SearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "search",
-            "description": "Searches file contents for a pattern (regular expression or literal string) using ripgrep. Returns matching lines as 'path:line: text' with paths relative to the searched directory, respecting .gitignore. Hidden files are searched but the .git directory is never searched. Use this instead of bash with grep. Output is limited to the first 100 matches or 50 KB, whichever is hit first; the result then explains how to retrieve more.",
+            "description": "Searches file contents for a pattern using ripgrep. Returns matching lines as 'path:line: text' with paths relative to the searched directory, respecting .gitignore. Output is limited to the first 100 matches or 50 KB, whichever is hit first.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "pattern": { "type": "string", "description": "Search pattern (regular expression, or literal string when literal is true)." },
-                    "path": { "type": "string", "description": "Directory or file to search. Absolute, or relative to the current project directory. Defaults to the project directory." },
-                    "glob": { "type": "string", "description": "Only search files matching this glob pattern, e.g. '*.cpp' or '**/*.ts'." },
-                    "ignore_case": { "type": "boolean", "description": "Case-insensitive search. Defaults to false." },
-                    "literal": { "type": "boolean", "description": "Treat the pattern as a literal string instead of a regular expression. Defaults to false." },
-                    "context": { "type": "integer", "description": "Number of lines to show before and after each match (0 to 20). Defaults to 0." },
-                    "limit": { "type": "integer", "description": "Maximum number of matches to return (1 to 1000). Defaults to 100." }
+                    "path": { "type": "string", "description": "Directory or file to search, absolute or relative to the project directory. Defaults to the project directory." },
+                    "glob": { "type": "string", "description": "Only search files matching this glob, e.g. '*.cpp'." },
+                    "ignore_case": { "type": "boolean", "description": "Case-insensitive. Defaults to false." },
+                    "literal": { "type": "boolean", "description": "Treat the pattern as a literal string. Defaults to false." },
+                    "context": { "type": "integer", "description": "Lines to show before and after each match (0 to 20). Defaults to 0." },
+                    "limit": { "type": "integer", "description": "Maximum number of matches (1 to 1000). Defaults to 100." }
                 },
                 "required": ["pattern"],
                 "strict": true

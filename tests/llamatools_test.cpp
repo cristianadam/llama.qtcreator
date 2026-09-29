@@ -438,6 +438,7 @@ private slots:
     void websearch_parseBraveResults();
     void websearch_parseTavilyResults();
     void websearch_toolDefinition();
+    void websearch_isConfigured();
     void websearch_summaries();
     void websearch_exaEndpointUrl();
     void websearch_parseMcpResponse();
@@ -2102,6 +2103,51 @@ void LlamaToolsTest::websearch_parseTavilyResults()
     QVERIFY(results[1].snippet.isEmpty());
 
     QVERIFY(Tools::parseTavilyResults(QJsonObject()).isEmpty());
+}
+
+void LlamaToolsTest::websearch_isConfigured()
+{
+    using Config = Tools::WebSearchConfig;
+
+    // Exa: hosted endpoint needs a key.
+    Config c;
+    c.provider = QStringLiteral("exa");
+    QVERIFY(!c.isConfigured());
+    c.exaApiKey = QStringLiteral("secret");
+    QVERIFY(c.isConfigured());
+
+    // Exa: the settings aspect pre-fills the hosted URL as default - that
+    // must not count as a configured custom endpoint (regression: the tool
+    // would be advertised to every keyless user).
+    c.exaApiKey.clear();
+    c.exaUrl = QStringLiteral("https://mcp.exa.ai/mcp");
+    QVERIFY(!c.isConfigured());
+
+    // Exa: a *custom* endpoint (e.g. local proxy) works keyless.
+    c.exaUrl = QStringLiteral("http://127.0.0.1:8080/mcp");
+    QVERIFY(c.isConfigured());
+
+    // Google: needs both key and cx.
+    c = Config{};
+    c.provider = QStringLiteral("google");
+    QVERIFY(!c.isConfigured());
+    c.googleApiKey = QStringLiteral("secret");
+    QVERIFY(!c.isConfigured());
+    c.googleCx = QStringLiteral("123");
+    QVERIFY(c.isConfigured());
+
+    // Brave / Tavily: key only.
+    c = Config{};
+    c.provider = QStringLiteral("brave");
+    QVERIFY(!c.isConfigured());
+    c.braveApiKey = QStringLiteral("secret");
+    QVERIFY(c.isConfigured());
+
+    c = Config{};
+    c.provider = QStringLiteral("tavily");
+    QVERIFY(!c.isConfigured());
+    c.tavilyApiKey = QStringLiteral("secret");
+    QVERIFY(c.isConfigured());
 }
 
 void LlamaToolsTest::websearch_toolDefinition()

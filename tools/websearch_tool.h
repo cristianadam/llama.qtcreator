@@ -40,6 +40,10 @@ struct WebSearchConfig
     QString tavilyApiKey;
 
     static WebSearchConfig fromSettings();
+
+    //! True when the selected backend has the credentials/endpoint needed to
+    //! actually run a query (the tool is only advertised to the model then).
+    bool isConfigured() const;
 };
 
 //! Extracts the LLM‑friendly text from an MCP (JSON‑RPC) tools/call

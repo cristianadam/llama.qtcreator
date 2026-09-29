@@ -36,12 +36,7 @@ QString TodoWriteTool::name() const
 QString TodoWriteTool::toolDefinition() const
 {
     const QString description = R"desc(
-Create or update the task list used to track progress on multi-step work.
-
-- Always send the complete list of tasks; each call replaces the previous list.
-- Use it proactively for non-trivial tasks (3 or more steps): plan the work first, then update the list as you go.
-- Exactly one task may be in_progress at a time; set it to completed as soon as it is done.
-- Task content is a short imperative phrase, e.g. "Add write tool to the tool factory".
+Create or update the task list used to track progress on multi-step work. Always send the complete list; each call replaces the previous one. Use it proactively for tasks with 3 or more steps: plan the work first, then update it as you go. Exactly one task may be in_progress at a time; set it to completed as soon as it is done. Task content is a short imperative phrase.
 )desc";
 
     QJsonObject contentProperty;
@@ -55,8 +50,7 @@ Create or update the task list used to track progress on multi-step work.
                                                         QLatin1String(kInProgress),
                                                         QLatin1String(kCompleted)};
     statusProperty[QStringLiteral("description")] =
-        QStringLiteral("Current state of the task: \"pending\", \"in_progress\" or "
-                       "\"completed\".");
+        QStringLiteral("Current state of the task.");
 
     QJsonObject todoProperties;
     todoProperties[QStringLiteral("content")] = contentProperty;
