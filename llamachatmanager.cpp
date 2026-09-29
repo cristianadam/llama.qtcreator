@@ -691,6 +691,9 @@ void ChatManager::sendMessage(const QString &convId,
     newMsg.children.clear();
     newMsg.extra = extra; // simple wrapper – see MessageExtra
 
+    // A user message breaks any tool-call streak (runaway guard).
+    m_consecutiveToolTurns.remove(convId);
+
     m_storage->appendMsg(newMsg, leafNodeId);
     onChunk(newMsg.id);
 
@@ -768,6 +771,10 @@ void ChatManager::generateMessage(const QString &convId,
         emit humanEditorReplyReady(convId);
         return;
     }
+
+    // Fresh tool-call aggregation state for this stream (per conversation –
+    // several chats may stream in parallel).
+    m_streamingToolCalls.insert(convId, {});
 
     m_abortControllers[convId] = nullptr; // will hold the reply
 
@@ -1073,6 +1080,9 @@ void ChatManager::replaceMessageAndGenerate(const QString &convId,
     if (isGenerating(convId))
         return;
 
+    // A user‑initiated replace breaks any tool-call streak (runaway guard).
+    m_consecutiveToolTurns.remove(convId);
+
     if (!content.isEmpty()) {
         auto now = QDateTime::currentMSecsSinceEpoch();
         Message newMsg;
@@ -1218,11 +1228,14 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 
     // Parallel tool calls: filterByLeafNodeId() follows a single parent
     // chain, so of several sibling tool results only the one on the leaf
-    // path survives the filter.  Collect the missing siblings (keyed by
-    // their assistant message) so that every tool_call in the request has
-    // a matching tool result – a dangling tool_call confuses the model and
-    // violates the chat protocol.
-    QMap<qint64, QVector<Message>> missingToolResults;
+    // path survives the filter.  Collect the missing siblings so that every
+    // tool_call in the request has a matching tool result – a dangling
+    // tool_call confuses the model and violates the chat protocol.  The
+    // results are keyed by (assistant, tool_call id) so they can be emitted
+    // in the assistant's tool_calls order: the tools run in parallel, so
+    // completion order (storage order) does not match call order.
+    QHash<qint64, QHash<QString, const Message *>> toolResultsByCall;
+    QHash<qint64, QStringList> toolCallOrder;
     if (!msgs.isEmpty()) {
         QSet<qint64> keptIds;
         bool hasToolCalls = false;
@@ -1233,11 +1246,16 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             for (const QVariantMap &e : m.extra) {
                 if (m.role == "assistant" && e.contains("tool_calls")) {
                     hasToolCalls = true;
-                    for (const QJsonValue &v : e["tool_calls"].toJsonArray())
-                        callIds.insert(v.toObject().value("id").toString());
+                    for (const QJsonValue &v : e["tool_calls"].toJsonArray()) {
+                        const QString id = v.toObject().value("id").toString();
+                        callIds.insert(id);
+                        toolCallOrder[m.id].append(id);
+                    }
                 } else if (m.role == "tool" && e.contains("tool_result")) {
-                    resultIds.insert(e["tool_result"].toJsonObject()
-                                        .value("tool_call_id").toString());
+                    const QString id = e["tool_result"].toJsonObject()
+                                          .value("tool_call_id").toString();
+                    resultIds.insert(id);
+                    toolResultsByCall[m.parent].insert(id, &m);
                 }
             }
         }
@@ -1252,7 +1270,9 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                     continue;
                 for (const QVariantMap &e : m.extra)
                     if (e.contains("tool_result")) {
-                        missingToolResults[m.parent].append(m);
+                        toolResultsByCall[m.parent].insert(
+                            e["tool_result"].toJsonObject().value("tool_call_id").toString(),
+                            &m);
                         break;
                     }
             }
@@ -1299,8 +1319,13 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(sys);
     }
 
+    // Tool results re‑emitted in call order after their assistant message
+    // (must not be emitted again at their natural position in \a msgs).
+    QSet<qint64> emittedToolMsgIds;
     for (int i = 0; i < msgs.size(); ++i) {
         const Message &msg = msgs.at(i);
+        if (msg.role == "tool" && emittedToolMsgIds.contains(msg.id))
+            continue;
         const bool keepImages = msgs.size() - i <= kImageContextMessages;
         if (msg.role != "user" || msg.extra.isEmpty()) {
             QJsonObject out;
@@ -1325,12 +1350,15 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 
             res.append(out);
 
-            // Re‑add the tool results of parallel calls that the leaf‑path
-            // filter dropped, right after their assistant message.
+            // Emit the tool results of a parallel batch right after their
+            // assistant message, in tool_calls order (the leaf‑path filter
+            // dropped the siblings; the leaf result is re‑emitted here too
+            // and skipped at its natural position above).
             if (msg.role == "assistant") {
-                const auto sit = missingToolResults.constFind(msg.id);
-                if (sit != missingToolResults.constEnd()) {
-                    for (const Message &sib : sit.value()) {
+                const auto rit = toolResultsByCall.constFind(msg.id);
+                if (rit != toolResultsByCall.constEnd()) {
+                    auto emitToolResult = [&res, &emittedToolMsgIds, keepImages](
+                                              const Message &sib) {
                         for (const QVariantMap &e : sib.extra) {
                             if (e.contains("tool_result")) {
                                 QJsonObject toolOut = e["tool_result"].toJsonObject();
@@ -1347,7 +1375,11 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                         sibOut["role"] = QStringLiteral("tool");
                         sibOut["content"] = sib.content;
                         res.append(sibOut);
-                    }
+                        emittedToolMsgIds.insert(sib.id);
+                    };
+                    for (const Message *sib : orderedToolResults(
+                                 *rit, toolCallOrder.value(msg.id)))
+                        emitToolResult(*sib);
                 }
             }
 
@@ -1398,6 +1430,125 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(out); // we only need the role/content to build APIMessage
     }
     return res;
+}
+
+void ChatManager::finalizeToolCallBatch(StreamingToolCalls &state)
+{
+    if (!state.openBatch)
+        return;
+    state.indexOffset = state.calls.size();
+    state.openBatch = false;
+}
+
+QList<const Message *> ChatManager::orderedToolResults(
+        const QHash<QString, const Message *> &results, const QStringList &callOrder)
+{
+    QList<const Message *> ordered;
+    if (callOrder.isEmpty()) {
+        for (const Message *sib : results)
+            ordered.append(sib);
+        return ordered;
+    }
+    QSet<QString> emitted;
+    for (const QString &callId : callOrder) {
+        const auto it = results.constFind(callId);
+        if (it == results.constEnd())
+            continue;
+        ordered.append(it.value());
+        emitted.insert(callId);
+    }
+    // Results whose call id the model did not reference (should not happen)
+    // still get sent, in \a results' iteration order, so no tool result is
+    // ever lost.
+    for (auto it = results.constBegin(); it != results.constEnd(); ++it)
+        if (!emitted.contains(it.key()))
+            ordered.append(it.value());
+    return ordered;
+}
+
+void ChatManager::mergeToolCallDeltas(StreamingToolCalls &state,
+                                      const QJsonArray &deltas,
+                                      QList<QVariantMap> *committed)
+{
+    for (const QJsonValue &tcVal : deltas) {
+        const QJsonObject tc = tcVal.toObject();
+        const QString toolId = tc.value("id").toString();
+
+        // llama-server restarts the per-batch index at 0 after an
+        // interleaved text chunk, so re-base each new batch onto the calls
+        // collected so far (same scheme as the llama.cpp web UI); a delta
+        // without a usable index is appended at the end.
+        const QJsonValue idxVal = tc.value("index");
+        const bool hasIndex = idxVal.isDouble() && idxVal.toDouble() >= 0;
+        const int rawIndex = hasIndex ? int(idxVal.toDouble()) : 0;
+        int index = hasIndex ? rawIndex + state.indexOffset : state.calls.size();
+
+        // Defensively mark the batch boundary implicitly, too: if a delta
+        // lands on an already committed slot but carries a *different* id,
+        // a new batch must have started without a text chunk in between –
+        // without the re-base the call would merge into the committed slot
+        // and be silently lost.  (A committed slot always has a non-empty
+        // id: a missing one gets the synthetic "tool_<index>" fallback at
+        // commit time.)
+        if (hasIndex
+                && index < state.calls.size()
+                && state.done.contains(index)
+                && !toolId.isEmpty()
+                && toolId != state.calls.at(index).id) {
+            state.indexOffset = state.calls.size();
+            index = rawIndex + state.indexOffset;
+        }
+
+        while (index >= state.calls.size())
+            state.calls.emplace_back();
+
+        ToolCall &tool = state.calls[index];
+        if (!toolId.isEmpty())
+            tool.id = toolId;
+
+        if (tc.contains("function")) {
+            const QJsonObject func = tc.value("function").toObject();
+            if (func.contains("name"))
+                tool.name = func.value("name").toString();
+            if (func.contains("arguments"))
+                tool.arguments += func.value("arguments").toString();
+        }
+        state.openBatch = true;
+
+        // A call is committed once its arguments form valid JSON.  The slot
+        // is kept (and marked done) for the rest of the stream: removing it
+        // would shift the indices the server keeps sending, and re-parsing
+        // would commit the call twice.
+        if (!state.done.contains(index)) {
+            QJsonParseError err;
+            QJsonDocument::fromJson(tool.arguments.toUtf8(), &err);
+            if (err.error == QJsonParseError::NoError) {
+                // The web UI falls back to a synthetic id when the model
+                // omits one, so the tool result can reference its call.
+                if (tool.id.isEmpty())
+                    tool.id = QStringLiteral("tool_%1").arg(index);
+                if (committed) {
+                    QVariantMap extra;
+                    extra["tool_calls"] = QJsonArray{
+                        QJsonObject{{"id", tool.id},
+                                    {"type", "function"},
+                                    {"function",
+                                     QJsonObject{{"name", tool.name},
+                                                 {"arguments", tool.arguments}}}}};
+                    // Keep the extras in slot (call) order, not completion
+                    // order: a later call can finish streaming before an
+                    // earlier one.
+                    extra["tool_call_index"] = index;
+                    int pos = committed->size();
+                    while (pos > 0
+                           && committed->at(pos - 1).value("tool_call_index").toInt() > index)
+                        --pos;
+                    committed->insert(pos, extra);
+                }
+                state.done.insert(index);
+            }
+        }
+    }
 }
 
 void ChatManager::sendChatRequest(const QString &convId,
@@ -1461,6 +1612,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                 if (delta.contains("reasoning_content")) {
                     QString reasoningAdded = delta["reasoning_content"].toString();
                     if (!reasoningAdded.isEmpty()) {
+                        // A text chunk after a tool-call batch ends the
+                        // batch: the next batch's indices restart at 0.
+                        finalizeToolCallBatch(m_streamingToolCalls[convId]);
                         Message &pm = m_pendingMessages[convId];
 
                         if (pm.content.isEmpty())
@@ -1474,6 +1628,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                 if (delta.contains("content")) {
                     QString added = delta["content"].toString();
                     if (!added.isEmpty()) {
+                        finalizeToolCallBatch(m_streamingToolCalls[convId]);
                         Message &pm = m_pendingMessages[convId];
                         if (!pm.haveContent
                             && pm.content.startsWith(ThinkingSectionParser::startToken())) {
@@ -1498,59 +1653,30 @@ void ChatManager::sendChatRequest(const QString &convId,
                         pm.haveContent = true;
                     }
 
-                    const QJsonArray &toolCalls = delta["tool_calls"].toArray();
-                    for (const QJsonValue &tcVal : toolCalls) {
-                        const QJsonObject &tc = tcVal.toObject();
-                        const QString toolId = tc["id"].toString();
-                        const int index = tc["index"].toInt();
+                    mergeToolCallDeltas(m_streamingToolCalls[convId],
+                                        delta["tool_calls"].toArray(),
+                                        &pm.extra);
 
-                        while (index >= m_toolCalls.size())
-                            m_toolCalls.emplace_back();
-
-                        if (index < 0)
+                    // Streaming preview of the call currently being
+                    // streamed (the last named slot that is not committed
+                    // yet; fall back to the most recent named call).
+                    const StreamingToolCalls &st = m_streamingToolCalls[convId];
+                    for (int i = st.calls.size() - 1; i >= 0; --i) {
+                        const ToolCall &tool = st.calls.at(i);
+                        if (tool.name.isEmpty() || st.done.contains(i))
                             continue;
-
-                        ToolCall &tool = m_toolCalls[index];
-                        if (!toolId.isEmpty())
-                            tool.id = toolId;
-
-                        if (tc.contains("function")) {
-                            const QJsonObject &func = tc["function"].toObject();
-                            if (func.contains("name"))
-                                tool.name = func["name"].toString();
-                            if (func.contains("arguments"))
-                                tool.arguments += func["arguments"].toString();
-                        }
-
-                        if (!tool.name.isEmpty()) {
-                            pm.toolCallInProgress = tool.name;
-                            pm.toolCallPreview.clear();
-                            if (!m_streamingTools.contains(tool.name))
-                                m_streamingTools.insert(tool.name,
-                                                        ToolFactory::instance().create(tool.name));
-                            const auto it = m_streamingTools.find(tool.name);
-                            if (it != m_streamingTools.end() && it.value())
-                                pm.toolCallPreview = it.value()->streamingSummary(tool.arguments);
-                        }
-
-                        QJsonParseError err;
-                        QJsonDocument parsed = QJsonDocument::fromJson(tool.arguments.toUtf8(),
-                                                                       &err);
-                        if (err.error == QJsonParseError::NoError) {
-                            QVariantMap extra;
-                            extra["tool_calls"] = QJsonArray{
-                                QJsonObject{{"id", tool.id},
-                                            {"type", "function"},
-                                            {"function",
-                                             QJsonObject{{"name", tool.name},
-                                                         {"arguments", tool.arguments}}}}};
-                            pm.extra << extra;
-
-                            m_toolCalls.remove(index);
-                        }
-
-                        emit pendingMessageChanged(pm);
+                        pm.toolCallInProgress = tool.name;
+                        pm.toolCallPreview.clear();
+                        if (!m_streamingTools.contains(tool.name))
+                            m_streamingTools.insert(tool.name,
+                                                    ToolFactory::instance().create(tool.name));
+                        const auto it = m_streamingTools.find(tool.name);
+                        if (it != m_streamingTools.end() && it.value())
+                            pm.toolCallPreview = it.value()->streamingSummary(tool.arguments);
+                        break;
                     }
+
+                    emit pendingMessageChanged(pm);
                 }
             }
             onChunk(-1); // UI scroll‑to‑bottom
@@ -1567,6 +1693,7 @@ void ChatManager::sendChatRequest(const QString &convId,
         m_abortControllers.remove(convId);
 
         Message pm = m_pendingMessages.take(convId);
+        m_streamingToolCalls.remove(convId);
         m_storage->appendMsg(pm, pm.parent);
 
         const bool isTaskConversation = m_taskConversations.contains(convId);
@@ -1576,22 +1703,59 @@ void ChatManager::sendChatRequest(const QString &convId,
             const bool doSummarization = msgs.size() == 3 && !isTaskConversation;
             bool haveToolExecution = false;
 
+            // Collect the tool calls committed during the stream (each is a
+            // single-entry "tool_calls" extra, in call order).
+            QVector<ToolCall> tools;
             for (const QVariantMap &e : pm.extra) {
-                if (e.contains("tool_calls")) {
-                    // Store the "tool_calls" into the database
-                    m_storage->updateMessageExtra(pm, pm.extra);
+                if (!e.contains("tool_calls"))
+                    continue;
+                QJsonArray array = e["tool_calls"].toJsonArray();
+                for (const QJsonValue &v : array) {
+                    QJsonObject obj = v.toObject();
+                    ToolCall tool;
+                    tool.id = obj["id"].toString();
+                    obj = obj["function"].toObject();
+                    tool.name = obj["name"].toString();
+                    tool.arguments = obj["arguments"].toString();
+                    tools.append(tool);
+                }
+            }
+            if (!tools.isEmpty()) {
+                // Store the "tool_calls" into the database
+                m_storage->updateMessageExtra(pm, pm.extra);
 
-                    QJsonArray array = e["tool_calls"].toJsonArray();
-                    QVector<ToolCall> tools;
-                    for (const QJsonValue &v : array) {
-                        QJsonObject obj = v.toObject();
-                        ToolCall tool;
-                        tool.id = obj["id"].toString();
-                        obj = obj["function"].toObject();
-                        tool.name = obj["name"].toString();
-                        tool.arguments = obj["arguments"].toString();
-                        tools.append(tool);
+                // Runaway guard (the web UI caps its agentic loop with
+                // maxTurns and asks the user to continue): a local model can
+                // loop tool calls forever, so after a long streak of
+                // tool‑only turns the calls are not executed – the model
+                // gets a failed result telling it to finish instead.
+                static constexpr int kMaxConsecutiveToolTurns = 50;
+                const int turns = m_consecutiveToolTurns.value(convId) + 1;
+                if (turns > kMaxConsecutiveToolTurns) {
+                    m_consecutiveToolTurns.insert(convId, 0);
+                    Message lastTool;
+                    for (const ToolCall &tool : tools) {
+                        Message toolMsg = createToolMessage(pm);
+                        QJsonObject toolJsonMsg;
+                        toolJsonMsg["role"] = "tool";
+                        toolJsonMsg["tool_call_id"] = tool.id;
+                        toolJsonMsg["name"] = tool.name;
+                        toolJsonMsg["content"] = QStringLiteral(
+                                                        "Tool loop limit reached (%1 "
+                                                        "consecutive tool turns). Stop calling "
+                                                        "tools and provide your final answer "
+                                                        "now.")
+                                .arg(kMaxConsecutiveToolTurns);
+                        QVariantMap toolResultExtra;
+                        toolResultExtra["tool_result"] = toolJsonMsg;
+                        toolResultExtra["tool_status"] = QStringLiteral("failed");
+                        toolMsg.extra << toolResultExtra;
+                        m_storage->appendMsg(toolMsg, pm.id);
+                        lastTool = toolMsg;
                     }
+                    generateMessage(convId, lastTool.id, [](qint64) {});
+                } else {
+                    m_consecutiveToolTurns.insert(convId, turns);
                     // Parallel tool calls: the next assistant turn is
                     // requested only once *all* results are in, so the
                     // follow‑up request carries every tool result (the
@@ -1602,10 +1766,13 @@ void ChatManager::sendChatRequest(const QString &convId,
                     auto batchRemaining = std::make_shared<int>(tools.size());
                     for (const ToolCall &tool : tools) {
                         executeToolAndSendResult(convId, pm, tool, [](qint64) {}, batchRemaining);
-                        haveToolExecution = true;
                     }
                 }
+                haveToolExecution = true;
             }
+
+            if (!haveToolExecution)
+                m_consecutiveToolTurns.remove(convId);
 
             if (doSummarization) { // first assistant reply
                 summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
@@ -1795,6 +1962,8 @@ void ChatManager::deleteConversation(const QString &convId)
         emit taskConversationFinished(convId, {}, false);
     }
     m_taskConfigs.remove(convId);
+    m_streamingToolCalls.remove(convId);
+    m_consecutiveToolTurns.remove(convId);
 
     m_storage->deleteConversation(convId);
 }

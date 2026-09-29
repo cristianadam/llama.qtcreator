@@ -458,6 +458,8 @@ private slots:
     void bash_sandboxDenyRead();
     void bash_sandboxNetwork();
     void bashLiveOutputHandlerLifetime();
+    void streamingToolCallAggregation();
+    void toolResultOrdering();
     void sandboxFileTools();
     void projectSandboxOverride();
     void bash_truncation();
@@ -2551,6 +2553,209 @@ void LlamaToolsTest::bash_sandboxNetwork()
     // loopback down): ENETUNREACH.
     QVERIFY(denied.first.contains("Operation not permitted")
             || denied.first.contains("Network is unreachable"));
+}
+
+// Streaming aggregation of (parallel) tool calls, as implemented in
+// ChatManager::mergeToolCallDeltas()/finalizeToolCallBatch() – the same
+// scheme as the llama.cpp web UI's mergeToolCallDeltas.
+void LlamaToolsTest::streamingToolCallAggregation()
+{
+    auto deltas = [](std::initializer_list<QPair<int, QJsonObject>> list) {
+        QJsonArray arr;
+        for (const auto &p : list) {
+            QJsonObject o = p.second;
+            o["index"] = p.first;
+            arr.append(o);
+        }
+        return arr;
+    };
+    auto fnDelta = [](const QString &name, const QString &args, const QString &id = QString()) {
+        QJsonObject fn;
+        if (!name.isEmpty())
+            fn["name"] = name;
+        if (!args.isEmpty())
+            fn["arguments"] = args;
+        QJsonObject o;
+        o["function"] = fn;
+        if (!id.isEmpty())
+            o["id"] = id;
+        return o;
+    };
+    auto committedCalls = [](const QList<QVariantMap> &committed) {
+        QJsonArray calls;
+        for (const QVariantMap &e : committed)
+            calls.append(e["tool_calls"].toJsonArray().first());
+        return calls;
+    };
+
+    // One call, arguments split over several deltas.
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta("read_file", "{\"path\": ")}}), &committed);
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta(QString(), "\"a.cpp\"}")}}), &committed);
+        QCOMPARE(committed.size(), 1);
+        const QJsonObject call = committedCalls(committed).first().toObject();
+        QCOMPARE(call["id"].toString(), QString("tool_0")); // synthetic id
+        QCOMPARE(call["function"].toObject()["name"].toString(), QString("read_file"));
+        QCOMPARE(call["function"].toObject()["arguments"].toString(),
+                 QString("{\"path\": \"a.cpp\"}"));
+        // Further deltas for the committed call must not commit it twice.
+        ChatManager::mergeToolCallDeltas(state, deltas({{0, fnDelta(QString(), "")}}), &committed);
+        QCOMPARE(committed.size(), 1);
+    }
+
+    // Two parallel calls with interleaved deltas; the first one completes
+    // while the second is still streaming (the old code removed the
+    // completed slot, which shifted the second call's index and lost its
+    // early argument chunks).
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        ChatManager::mergeToolCallDeltas(
+            state,
+            deltas({{0, fnDelta("read_file", "{\"path\": \"a\"}", "id_a")},
+                    {1, fnDelta("read_file", "{\"pa")}}),
+            &committed);
+        QCOMPARE(committed.size(), 1); // call 0 complete, call 1 not yet
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{1, fnDelta(QString(), "th\": \"b\"}")}}), &committed);
+        QCOMPARE(committed.size(), 2);
+        const QJsonArray calls = committedCalls(committed);
+        QCOMPARE(calls.size(), 2);
+        QCOMPARE(calls.at(0)["id"].toString(), QString("id_a"));
+        QCOMPARE(calls.at(1)["id"].toString(), QString("tool_1"));
+        QCOMPARE(calls.at(1)["function"].toObject()["arguments"].toString(),
+                 QString("{\"path\": \"b\"}"));
+    }
+
+    // A text chunk between two tool-call batches re-bases the indices
+    // (llama-server restarts them at 0); without the finalize the second
+    // batch would overwrite the first call.
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta("read_file", "{\"path\": \"a\"}", "id_a")}}), &committed);
+        ChatManager::finalizeToolCallBatch(state);
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta("write", "{\"path\": \"b\"}", "id_b")}}), &committed);
+        QCOMPARE(committed.size(), 2);
+        const QJsonArray calls = committedCalls(committed);
+        QCOMPARE(calls.at(0)["id"].toString(), QString("id_a"));
+        QCOMPARE(calls.at(1)["id"].toString(), QString("id_b"));
+    }
+
+    // A delta without a usable index is appended at the end, not dropped.
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        QJsonObject noIndex = fnDelta("ls", "{}", "id_x");
+        QJsonArray arr;
+        arr.append(noIndex);
+        ChatManager::mergeToolCallDeltas(state, arr, &committed);
+        QCOMPARE(committed.size(), 1);
+        QCOMPARE(committedCalls(committed).first()["id"].toString(), QString("id_x"));
+    }
+
+    // Two batches back-to-back with NO text chunk in between: the second
+    // batch's index 0 must not merge into the first (committed) slot – it
+    // carries a different id, so the batch is re-based implicitly.
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta("read_file", "{\"path\": \"a\"}", "id_a")}}), &committed);
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta("write", "{\"path\": \"b\"}", "id_b")}}), &committed);
+        QCOMPARE(committed.size(), 2);
+        const QJsonArray calls = committedCalls(committed);
+        QCOMPARE(calls.at(0)["id"].toString(), QString("id_a"));
+        QCOMPARE(calls.at(1)["id"].toString(), QString("id_b"));
+    }
+
+    // Committed extras keep the slot (call) order, not the completion
+    // order: call 1 finishes streaming before call 0.
+    {
+        LlamaCpp::StreamingToolCalls state;
+        QList<QVariantMap> committed;
+        ChatManager::mergeToolCallDeltas(
+            state,
+            deltas({{0, fnDelta("read_file", "{\"path\": ", "id_a")},
+                    {1, fnDelta("read_file", "{\"path\": \"b\"}", "id_b")}}),
+            &committed);
+        QCOMPARE(committed.size(), 1); // call 1 complete, call 0 not yet
+        ChatManager::mergeToolCallDeltas(
+            state, deltas({{0, fnDelta(QString(), "\"a\"}")}}), &committed);
+        QCOMPARE(committed.size(), 2);
+        const QJsonArray calls = committedCalls(committed);
+        QCOMPARE(calls.at(0)["id"].toString(), QString("id_a"));
+        QCOMPARE(calls.at(1)["id"].toString(), QString("id_b"));
+    }
+}
+
+// The tool results of a parallel batch are emitted in the assistant's
+// tool_calls order (ChatManager::orderedToolResults, used by
+// normalizeMsgsForAPI), regardless of the storage (completion) order, and
+// a result whose call id the model did not reference is still sent.
+void LlamaToolsTest::toolResultOrdering()
+{
+    auto toolMsg = [](qint64 id, qint64 parent, const QString &callId) {
+        Message m;
+        m.id = id;
+        m.parent = parent;
+        m.role = "tool";
+        m.content = QStringLiteral("result of %1").arg(callId);
+        QJsonObject toolResult;
+        toolResult["tool_call_id"] = callId;
+        toolResult["content"] = m.content;
+        QVariantMap extra;
+        extra["tool_result"] = toolResult;
+        m.extra << extra;
+        return m;
+    };
+    const Message a = toolMsg(10, 1, "call_a");
+    const Message b = toolMsg(11, 1, "call_b");
+    const Message c = toolMsg(12, 1, "call_c");
+
+    // Call order a, b, c; storage order b, a, c → emitted a, b, c.
+    {
+        QHash<QString, const Message *> results;
+        results.insert("call_b", &b);
+        results.insert("call_a", &a);
+        results.insert("call_c", &c);
+        const QList<const Message *> ordered = ChatManager::orderedToolResults(
+            results, {QStringLiteral("call_a"), QStringLiteral("call_b"),
+                      QStringLiteral("call_c")});
+        QCOMPARE(ordered.size(), 3);
+        QCOMPARE(ordered.at(0), &a);
+        QCOMPARE(ordered.at(1), &b);
+        QCOMPARE(ordered.at(2), &c);
+    }
+
+    // A result the model did not reference is appended, not dropped.
+    {
+        QHash<QString, const Message *> results;
+        results.insert("call_a", &a);
+        results.insert("call_c", &c);
+        const QList<const Message *> ordered = ChatManager::orderedToolResults(
+            results, {QStringLiteral("call_a"), QStringLiteral("call_b")});
+        QCOMPARE(ordered.size(), 2);
+        QCOMPARE(ordered.at(0), &a);
+        QCOMPARE(ordered.at(1), &c);
+    }
+
+    // No call order known → the results' iteration order.
+    {
+        QHash<QString, const Message *> results;
+        results.insert("call_a", &a);
+        const QList<const Message *> ordered =
+            ChatManager::orderedToolResults(results, {});
+        QCOMPARE(ordered.size(), 1);
+        QCOMPARE(ordered.at(0), &a);
+    }
 }
 
 // The live-output handler is a local that is destroyed while the command is

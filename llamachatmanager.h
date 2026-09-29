@@ -26,6 +26,18 @@ struct ToolCall
     QString id;        // tool-call identifier
 };
 
+//! Tool calls aggregated while an assistant stream is in flight (per
+//! conversation).  Slots are never removed mid-stream – removing one would
+//! shift the indices the server keeps sending; the \a done set marks slots
+//! whose arguments already parsed and were committed to the pending message.
+struct StreamingToolCalls
+{
+    QVector<ToolCall> calls;
+    QSet<int> done;
+    int indexOffset = 0; // rebase for a new batch after interleaved text
+    bool openBatch = false;
+};
+
 class ChatManager : public QObject
 {
     Q_OBJECT
@@ -43,6 +55,29 @@ public:
     //! that have nothing to show (e.g. a tool‑call‑only assistant wrapper,
     //! whose tool call is exported with the tool message instead).
     static QString messageToMarkdown(const Message &msg);
+
+    //! Merges a batch of tool-call deltas (as streamed by llama-server) into
+    //! \a state.  llama-server restarts the per-batch index at 0 after an
+    //! interleaved text chunk, so a new batch is re-based onto the calls
+    //! collected so far (\c finalizeToolCallBatch() marks the boundary, same
+    //! scheme as the llama.cpp web UI); a delta without a usable index is
+    //! appended at the end.  Calls whose arguments already form valid JSON
+    //! are appended to \a committed (in call order) as single-entry
+    //! "tool_calls" extras; a missing id gets the synthetic "tool_<index>"
+    //! fallback so the tool result can always reference its call.
+    static void mergeToolCallDeltas(StreamingToolCalls &state,
+                                    const QJsonArray &deltas,
+                                    QList<QVariantMap> *committed);
+    //! Ends the open tool-call batch: the next batch's indices restart at 0.
+    static void finalizeToolCallBatch(StreamingToolCalls &state);
+
+    //! The tool results of one assistant batch in emission order: arranged
+    //! according to \a callOrder (the assistant's tool_calls order); results
+    //! whose call id is not in \a callOrder (should not happen) are appended
+    //! in \a results' iteration order, so no tool result is ever lost.
+    static QList<const Message *> orderedToolResults(
+            const QHash<QString, const Message *> &results,
+            const QStringList &callOrder);
 
     //! Persists a rendered diagram SVG (mermaid diagram, math) with the
     //! message that displayed it, in the message's extra field (a
@@ -237,8 +272,13 @@ private:
     QHash<QString, QNetworkReply *> m_abortControllers;
     QHash<QString, QNetworkReply *> m_titleSummaryReplies;
     QHash<QString, QNetworkReply *> m_followUpReplies;
-    QVector<ToolCall> m_toolCalls;
+    QHash<QString, StreamingToolCalls> m_streamingToolCalls;
     QHash<QString, std::shared_ptr<LlamaCpp::Tool>> m_streamingTools;
+
+    //! Consecutive tool-call turns per conversation (runaway guard, see the
+    //! finished handler in generateMessage()); reset by a user message,
+    //! replaceMessageAndGenerate(), or a tool-free assistant turn.
+    QHash<QString, int> m_consecutiveToolTurns;
 
     //! Number of tools currently executing (per conversation).  Tools run
     //! asynchronously, so a conversation stays "busy" until every in‑flight
