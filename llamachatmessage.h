@@ -22,7 +22,8 @@ public:
     explicit ChatMessage(const Message &msg,
                          const QVector<qint64> &siblingLeafIds,
                          int siblingIdx,
-                         QWidget *parent = nullptr);
+                         QWidget *parent = nullptr,
+                         bool completed = true);
 
     Message &message() { return m_msg; }
     void renderMarkdown(const QString &text, bool forceUpdate = false);

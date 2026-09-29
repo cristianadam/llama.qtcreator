@@ -817,7 +817,9 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         msg.content = content;
         msg.children.clear();
 
-        w = new ChatMessage(msg, {}, 0, widget());
+        // completed=false: the bubble is still streaming; the ctor must not
+        // finish() the markdown label (see the ctor comment there).
+        w = new ChatMessage(msg, {}, 0, widget(), /* completed */ false);
         preWrapDocument(w);
 
         m_messageLayout->addWidget(w);

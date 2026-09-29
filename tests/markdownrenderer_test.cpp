@@ -101,7 +101,52 @@ private slots:
     void plainDollarsStayText();
     void mermaidServedFromPersistedCache();
     void mathServedFromPersistedCache();
+    void finishFinalizesPendingBlocks();
 };
+
+// finish() Flush()es the streaming parser: whatever is pending becomes a
+// stable block, and the next feed() starts a *new* block after it. So a
+// message that is still streaming must never be finished mid-stream —
+// rendering the first chunk with feed()+finish() and streaming the rest
+// splits the first token into its own paragraph (this is how the ChatMessage
+// ctor used to break the first line of every streamed reply).
+void MarkdownRendererTest::finishFinalizesPendingBlocks()
+{
+    const QString full
+        = QStringLiteral("I can use the **bash** tool to find out the date — "
+                         "for example, by running the `date` command in the shell.");
+
+    auto blockCount = [](MarkdownRenderer &r) {
+        int n = 0;
+        for (QTextBlock b = r.document()->firstBlock(); b.isValid(); b = b.next())
+            ++n;
+        return n;
+    };
+
+    // Correct streaming pattern: feed the growing buffer, finish once at the
+    // end — one paragraph.
+    {
+        MarkdownRenderer renderer;
+        renderer.feed(full.left(1).toUtf8());
+        renderer.feed(full.left(4).toUtf8());
+        renderer.feed(full.toUtf8());
+        renderer.finish();
+        QCOMPARE(blockCount(renderer), 1);
+    }
+
+    // The pitfall: finishing after the first chunk freezes it as a stable
+    // block; the remainder streams in as a second paragraph.
+    {
+        MarkdownRenderer renderer;
+        renderer.feed(full.left(1).toUtf8());
+        renderer.finish();
+        renderer.feed(full.left(4).toUtf8());
+        renderer.feed(full.toUtf8());
+        renderer.finish();
+        QCOMPARE(blockCount(renderer), 2);
+        QCOMPARE(renderer.document()->firstBlock().text(), QStringLiteral("I"));
+    }
+}
 
 // The math renders synchronously (KaTeX is fast); find the first image URL
 // in the document, if any.

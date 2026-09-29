@@ -46,7 +46,8 @@ namespace LlamaCpp {
 ChatMessage::ChatMessage(const Message &msg,
                          const QVector<qint64> &siblingLeafIds,
                          int siblingIdx,
-                         QWidget *parent)
+                         QWidget *parent,
+                         bool completed)
     : QWidget(parent)
     , m_msg(msg)
     , m_siblingLeafIds(siblingLeafIds)
@@ -65,6 +66,17 @@ ChatMessage::ChatMessage(const Message &msg,
     }
 
     buildUI();
+
+    if (completed)
+        renderMarkdown(m_msg.content, true);
+    else
+        // Still streaming: render without finish()ing the label's streaming
+        // parser. A finish() (Flush) here would finalize this first chunk as
+        // a stable block; every later chunk then lands in the pending tail
+        // and is rendered as a new paragraph after it — a visible line
+        // break after the first streamed token (or a split code block when
+        // the first chunk already carries fence lines).
+        renderMarkdown(m_msg.content, false);
 
     // When the document size changes (details toggle, streaming), update our
     // fixed height so the layout picks up the new size. Use a queued connection
@@ -108,8 +120,6 @@ void ChatMessage::buildUI()
     }
     connect(m_markdownLabel, &MarkdownRenderer::diagramRendered,
             this, &ChatMessage::onDiagramRendered);
-
-    renderMarkdown(m_msg.content, true);
 
     m_markdownLabel->setObjectName(m_isUser ? "BubbleUser"
                                             : (m_isTool ? "BubbleTool" : "BubbleAssistant"));
