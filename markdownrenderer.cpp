@@ -16,6 +16,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPalette>
 #include <QRegularExpression>
 #include <QResizeEvent>
@@ -1895,18 +1896,59 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
 // Painting
 // ---------------------------------------------------------------------------
 
-// Document-coordinate rects covering the character range [start, end), one
-// rect per line the range wraps across. Used to paint the inline-code chip
-// backgrounds in paintEvent().
-static QVector<QRectF> inlineCodeRangeRects(QTextDocument *doc, int start, int end)
+// The effective font of the character at \a pos (the char format's font
+// properties on top of the document's default font).
+static QFont inlineCodeCharFont(QTextDocument *doc, int pos)
 {
-    QVector<QRectF> rects;
+    QFont f = doc->defaultFont();
+    QTextCursor cur(doc);
+    cur.setPosition(pos);
+    const QFont ff = cur.charFormat().font();
+    if (!ff.family().isEmpty())
+        f.setFamily(ff.family());
+    if (ff.pointSizeF() > 0)
+        f.setPointSizeF(ff.pointSizeF());
+    if (ff.weight() != QFont::Normal)
+        f.setWeight(ff.weight());
+    if (ff.italic())
+        f.setItalic(true);
+    if (ff.fixedPitch())
+        f.setFixedPitch(true);
+    return f;
+}
+
+// Width of the text [from, to), measured per character (Qt's line layout is
+// the sum of the per-char advances at the default letter spacing).
+static qreal inlineCodeTextWidth(QTextDocument *doc, int from, int to)
+{
+    qreal w = 0;
+    QFontMetricsF fm(doc->defaultFont());
+    QFont lastFont;
+    for (int i = from; i < to; ++i) {
+        const QFont f = inlineCodeCharFont(doc, i);
+        if (f != lastFont) {
+            fm = QFontMetricsF(f);
+            lastFont = f;
+        }
+        w += fm.horizontalAdvance(doc->characterAt(i));
+    }
+    return w;
+}
+
+// Viewport-coordinate chip fragments, one per line a span wraps across.
+static QVector<QRectF> inlineCodeChipLines(MarkdownRenderer *renderer, int start, int end)
+{
+    QVector<QRectF> lines;
+    QTextDocument *doc = renderer->document();
+    // cursorRect() is in viewport coordinates; the font-metrics fallback
+    // below computes in document coordinates and needs the scroll offset.
+    const qreal scrollX = renderer->horizontalScrollBar()->value();
+    const qreal scrollY = renderer->verticalScrollBar()->value();
     for (QTextBlock blk = doc->findBlock(start); blk.isValid() && blk.position() < end;
          blk = blk.next()) {
         QTextLayout *layout = blk.layout();
         if (!layout)
             continue;
-        const QPointF origin = layout->position();
         const int blockStart = blk.position();
         for (int li = 0; li < layout->lineCount(); ++li) {
             const QTextLine line = layout->lineAt(li);
@@ -1922,25 +1964,71 @@ static QVector<QRectF> inlineCodeRangeRects(QTextDocument *doc, int start, int e
             // chip's padding. The rect must not extend into the surrounding
             // text (a neighbouring word space stays outside as the visible
             // gap; extending into it would pad the chip twice).
-            const qreal x1 = line.cursorToX(from - lineStart);
-            // cursorToX(pos, Trailing) is the right edge of the char *at*
-            // pos, so the range's last char is at to-1 — asking for to would
-            // swallow the character after the span into the chip.
-            const qreal x2 = line.cursorToX(to - lineStart - 1, QTextLine::Trailing);
-            const QRectF lineRect = line.rect();
-            QRectF r(origin.x() + lineRect.x() + x1,
-                     origin.y() + lineRect.y() - 2,
-                     x2 - x1, lineRect.height() + 4);
-            // At the start of a line the padding can run past the document
-            // edge; clamp so the rounded corners are never clipped.
-            r = r.intersected(QRectF(0, 0,
-                                     doc->textWidth() > 0 ? doc->textWidth() : 1e9,
-                                     doc->size().height()));
-            if (!r.isNull())
-                rects.append(r);
+            //
+            // cursorRect() is the same mechanism Qt uses to paint the text
+            // cursor, so its edges line up with the rendered text — unlike
+            // the old layout-position + QTextLine::cursorToX() math, which
+            // miscounted list-item indents (chip shifted right). It is
+            // degenerate on hard-wrapped lines (a long unbreakable token:
+            // every position maps to the line origin), where the width is
+            // measured from the per-character advances instead.
+            // The vertical extent is the full line in both branches (the
+            // cursor rect can be shorter than the line on tall lines), in
+            // viewport coordinates like the x edges.
+            const qreal y = layout->position().y() + line.rect().y() - scrollY;
+            const qreal h = line.rect().height();
+            qreal x1 = 0, x2 = 0;
+            QTextCursor c1(doc);
+            c1.setPosition(from);
+            QTextCursor c2(doc);
+            c2.setPosition(to);
+            const QRectF r1 = renderer->cursorRect(c1);
+            const QRectF r2 = renderer->cursorRect(c2);
+            if (!r1.isNull() && !r2.isNull() && r2.left() > r1.left()) {
+                x1 = r1.left();
+                x2 = r2.left();
+            } else {
+                // Degenerate cursorRect() (no x progress between the range
+                // edges): hard-wrapped lines map every position to the line
+                // origin, as do zero-advance characters. Measure the width
+                // from the per-character advances instead.
+                const qreal lineX = layout->position().x() + line.rect().x();
+                x1 = lineX + inlineCodeTextWidth(doc, lineStart, from) - scrollX;
+                x2 = lineX + inlineCodeTextWidth(doc, lineStart, to) - scrollX;
+            }
+            if (x2 <= x1)
+                continue;
+            lines.append(QRectF(x1, y - 2, x2 - x1, h + 4));
         }
     }
-    return rects;
+    return lines;
+}
+
+// A rect with independently rounded corners (radius clamped to the rect),
+// so a chip wrapping across several lines only rounds the corners at the
+// true start/end of the span and stays square where it continues onto the
+// next/previous line.
+static QPainterPath chipPath(const QRectF &r, bool roundTopLeft, bool roundTopRight,
+                             bool roundBottomLeft, bool roundBottomRight, qreal radius)
+{
+    const qreal rad = qMin(radius, qMin(r.width(), r.height()) / 2);
+    const qreal l = r.left(), t = r.top(), rr = r.right(), b = r.bottom();
+    QPainterPath path;
+    path.moveTo(l + (roundTopLeft ? rad : 0), t);
+    path.lineTo(rr - (roundTopRight ? rad : 0), t);
+    if (roundTopRight)
+        path.arcTo(QRectF(rr - 2 * rad, t, 2 * rad, 2 * rad), 90, -90);
+    path.lineTo(rr, b - (roundBottomRight ? rad : 0));
+    if (roundBottomRight)
+        path.arcTo(QRectF(rr - 2 * rad, b - 2 * rad, 2 * rad, 2 * rad), 0, -90);
+    path.lineTo(l + (roundBottomLeft ? rad : 0), b);
+    if (roundBottomLeft)
+        path.arcTo(QRectF(l, b - 2 * rad, 2 * rad, 2 * rad), 270, -90);
+    path.lineTo(l, t + (roundTopLeft ? rad : 0));
+    if (roundTopLeft)
+        path.arcTo(QRectF(l, t, 2 * rad, 2 * rad), 180, -90);
+    path.closeSubpath();
+    return path;
 }
 
 // Removes the chip padding so copied text reads like the source markdown:
@@ -1956,7 +2044,7 @@ static QString stripInlineCodePadding(QString text)
 }
 
 // The rounded inline-code chip backgrounds (ranges recorded in
-// renderInline(); one rounded rect per line a span wraps across).
+// renderInline(); one fragment per line a span wraps across).
 void MarkdownRenderer::paintInlineCodeChips(QPainter &painter, const QRectF &visibleRect)
 {
     if (m_inlineCodeRanges.isEmpty())
@@ -1968,11 +2056,18 @@ void MarkdownRenderer::paintInlineCodeChips(QPainter &painter, const QRectF &vis
     for (const InlineCodeRange &range : m_inlineCodeRanges) {
         if (range.end <= range.start)
             continue;
-        for (const QRectF &fragRect : inlineCodeRangeRects(m_doc, range.start, range.end)) {
-            const QRectF r = fragRect.translated(contentOffset());
+        const QVector<QRectF> lines = inlineCodeChipLines(this, range.start, range.end);
+        for (int i = 0; i < lines.size(); ++i) {
+            const QRectF &r = lines.at(i);
             if (!r.intersects(visibleRect))
                 continue;
-            painter.drawRoundedRect(r, 4, 4);
+            // Round the corners at the true top/bottom of the chip: the top
+            // corners on the first line, the bottom corners on the last one.
+            // Middle lines of a wrapped span stay square so the fragments
+            // read as one continuous chip.
+            const bool topEnd = (i == 0);
+            const bool bottomEnd = (i == lines.size() - 1);
+            painter.drawPath(chipPath(r, topEnd, topEnd, bottomEnd, bottomEnd, 4));
         }
     }
     painter.restore();

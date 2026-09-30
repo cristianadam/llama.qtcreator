@@ -76,6 +76,9 @@ class MarkdownRendererTest : public QObject
 private slots:
     void plainParagraph();
     void inlineCodeChipPainting();
+    void inlineCodeChipInList();
+    void inlineCodeChipInQuote();
+    void inlineCodeChipWrapped();
     void inlineCodePaddingStrippedOnCopy();
     void multiParagraph();
     void codeBlock();
@@ -1101,6 +1104,195 @@ void MarkdownRendererTest::mathServedFromPersistedCache()
     // The image box must keep the persisted geometry (re-boxed height).
     QCOMPARE(imageFormatHeight(cached, url), svg.height);
     QCOMPARE(cachedEmissions, 0);
+}
+
+// The red chip bands in a grabbed image: contiguous row runs, with the
+// min/max red x per band (device pixels).
+struct ChipBand
+{
+    int minY = 0;
+    int maxY = 0;
+    int minLeft = 0;
+    int maxRight = 0;
+};
+
+static bool isChipRed(QRgb c)
+{
+    return qRed(c) > 200 && qGreen(c) < 80;
+}
+
+static QVector<ChipBand> chipBands(const QImage &img)
+{
+    auto firstRedX = [&img](int y) {
+        for (int x = 0; x < img.width(); ++x)
+            if (isChipRed(img.pixel(x, y)))
+                return x;
+        return -1;
+    };
+    auto lastRedX = [&img](int y) {
+        for (int x = img.width() - 1; x >= 0; --x)
+            if (isChipRed(img.pixel(x, y)))
+                return x;
+        return -1;
+    };
+    QVector<ChipBand> bands;
+    int y = 0;
+    while (y < img.height()) {
+        if (firstRedX(y) == -1) {
+            ++y;
+            continue;
+        }
+        ChipBand band;
+        band.minY = y;
+        band.maxY = y;
+        band.minLeft = img.width();
+        band.maxRight = -1;
+        while (band.maxY + 1 < img.height() && firstRedX(band.maxY + 1) != -1)
+            ++band.maxY;
+        for (int yy = band.minY; yy <= band.maxY; ++yy) {
+            band.minLeft = qMin(band.minLeft, firstRedX(yy));
+            band.maxRight = qMax(band.maxRight, lastRedX(yy));
+        }
+        bands.append(band);
+        y = band.maxY + 1;
+    }
+    return bands;
+}
+
+// The document positions of the chip range (padding included) around the
+// first \a token span in the rendered text.
+static void chipRange(const MarkdownRenderer &renderer, const QString &token, int *start, int *end)
+{
+    const QString plain = renderer.toPlainText();
+    const int codePos = plain.indexOf(token);
+    QVERIFY2(codePos > 0, "test text not found in document");
+    int s = codePos;
+    while (s > 0 && plain.at(s - 1) == MarkdownRenderer::InlineCodePadding)
+        --s;
+    int e = codePos + token.size();
+    while (e < plain.size() && plain.at(e) == MarkdownRenderer::InlineCodePadding)
+        ++e;
+    *start = s;
+    *end = e;
+}
+
+// The chip must line up with the rendered text: cursorRect() is the same
+// mechanism Qt uses to paint the text cursor, so its edges mark where the
+// span's characters actually draw.
+static void verifyChipAligned(MarkdownRenderer &renderer, const QString &token, int width, int height)
+{
+    renderer.setColor(MarkdownRenderer::InlineCodeBackground, QColor(0xff0000));
+    renderer.resize(width, height);
+    renderer.show();
+    QApplication::processEvents();
+
+    int s = 0, e = 0;
+    chipRange(renderer, token, &s, &e);
+    QTextCursor cs(renderer.document());
+    cs.setPosition(s);
+    QTextCursor ce(renderer.document());
+    ce.setPosition(e);
+    const QRectF rs = renderer.cursorRect(cs);
+    const QRectF re = renderer.cursorRect(ce);
+
+    const QImage img = renderer.grab().toImage();
+    const qreal dpr = renderer.devicePixelRatioF();
+    const QVector<ChipBand> bands = chipBands(img);
+    QVERIFY2(!bands.isEmpty(), "chip was not painted");
+    // The fixtures contain exactly one chip, so the first band is it.
+    const ChipBand &band = bands.first();
+    // The chip's vertical extent is the cursor line plus the 2 px padding.
+    QVERIFY2(band.minY / dpr >= rs.top() - 3 && band.minY / dpr <= rs.top() + 1,
+             qPrintable(QString("chip band y %1-%2, cursor line top %3")
+                            .arg(band.minY / dpr).arg(band.maxY / dpr).arg(rs.top())));
+    // Left/right edges within a couple of device pixels of the text edges
+    // (antialiasing). The old layout-math chip was off by the list/quote
+    // indent here.
+    const qreal tol = 3 * dpr;
+    QVERIFY2(qAbs(band.minLeft - rs.left() * dpr) <= tol,
+             qPrintable(QString("chip left %1, text left %2")
+                            .arg(band.minLeft).arg(rs.left() * dpr)));
+    QVERIFY2(qAbs(band.maxRight - re.left() * dpr) <= tol,
+             qPrintable(QString("chip right %1, text right %2")
+                            .arg(band.maxRight).arg(re.left() * dpr)));
+}
+
+// The chip in a list item used to be shifted right by the list indent
+// (the layout/line origin does not carry the item's text offset).
+void MarkdownRendererTest::inlineCodeChipInList()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    streamText(renderer, QStringLiteral("1. first `zzqx` item\n2. second item\n"));
+    verifyChipAligned(renderer, QStringLiteral("zzqx"), 520, 200);
+}
+
+// Same check for a quoted paragraph (the thinking-section body is rendered
+// as a quote).
+void MarkdownRendererTest::inlineCodeChipInQuote()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    streamText(renderer,
+               QStringLiteral("<details><summary>Thinking</summary>\n\nlet me `zzqx` here\n"
+                              "</details>\n"));
+    verifyChipAligned(renderer, QStringLiteral("zzqx"), 520, 200);
+}
+
+// A span wrapping across several lines (a long unbreakable token) must get
+// a chip fragment on every line it occupies — cursorToX() reports
+// degenerate positions on hard-wrapped lines, which used to collapse the
+// chip to a sliver on the middle lines.
+void MarkdownRendererTest::inlineCodeChipWrapped()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(120);
+    streamText(renderer,
+               QStringLiteral("some words and `averyveryverylongcodetoken` more words\n"));
+    renderer.setColor(MarkdownRenderer::InlineCodeBackground, QColor(0xff0000));
+    renderer.resize(140, 300);
+    renderer.show();
+    QApplication::processEvents();
+
+    const QImage img = renderer.grab().toImage();
+    const qreal dpr = renderer.devicePixelRatioF();
+
+    // The token wraps onto its own lines; take the middle two token chars
+    // (they sit on the two full-width token lines) and check that the chip
+    // covers them: red at the line's left edge and at mid-line.
+    const QString plain = renderer.toPlainText();
+    const int codePos = plain.indexOf(QLatin1String("averyveryverylongcodetoken"));
+    QVERIFY2(codePos > 0, "token not found in document");
+    // The chip's left edge is the padding char before the token (it starts
+    // the wrapped line); probe just inside it.
+    int chipStart = codePos;
+    while (chipStart > 0 && plain.at(chipStart - 1) == MarkdownRenderer::InlineCodePadding)
+        --chipStart;
+    QTextCursor chipCursor(renderer.document());
+    chipCursor.setPosition(chipStart);
+    const int xLeft = qRound((renderer.cursorRect(chipCursor).left() + 1) * dpr);
+
+    const int probed[2] = { codePos + 4, codePos + 20 };
+    for (int p : probed) {
+        const QTextBlock blk = renderer.document()->findBlock(p);
+        const QTextLayout *layout = blk.layout();
+        QVERIFY2(layout != nullptr, "block has no layout");
+        int li = 0;
+        while (li + 1 < layout->lineCount()
+               && blk.position() + layout->lineAt(li + 1).textStart() <= p)
+            ++li;
+        const QTextLine line = layout->lineAt(li);
+        QVERIFY2(line.isValid(), "no line found for probed position");
+        // Probe the chip's top padding row (just above the line's text), so
+        // the check cannot land on a glyph painted over the chip.
+        const int y = qRound((layout->position().y() + line.rect().top() - 1) * dpr);
+        QVERIFY2(y > 0 && y < img.height(), "probed line outside the image");
+        const int xMid = img.width() / 2;
+        QVERIFY2(isChipRed(img.pixel(xLeft, y)),
+                 qPrintable(QString("no chip at the left edge of token line y=%1").arg(y)));
+        QVERIFY2(isChipRed(img.pixel(xMid, y)),
+                 qPrintable(QString("no chip at mid-line of token line y=%1").arg(y)));
+    }
 }
 
 int main(int argc, char **argv)
