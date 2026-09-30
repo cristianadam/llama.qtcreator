@@ -1236,6 +1236,10 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     // completion order (storage order) does not match call order.
     QHash<qint64, QHash<QString, const Message *>> toolResultsByCall;
     QHash<qint64, QStringList> toolCallOrder;
+    // Kept alive for the whole function: toolResultsByCall stores pointers
+    // into it for the sibling results fetched from storage (a use of a
+    // block‑scoped vector here was a use‑after‑free).
+    QVector<Message> allMessages;
     if (!msgs.isEmpty()) {
         QSet<qint64> keptIds;
         bool hasToolCalls = false;
@@ -1264,8 +1268,8 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         // wasteful in long conversations.
         const QSet<QString> unresolved = callIds - resultIds;
         if (hasToolCalls && !unresolved.isEmpty()) {
-            const QVector<Message> all = m_storage->getMessages(msgs.first().convId);
-            for (const Message &m : all) {
+            allMessages = m_storage->getMessages(msgs.first().convId);
+            for (const Message &m : allMessages) {
                 if (m.role != "tool" || keptIds.contains(m.id))
                     continue;
                 for (const QVariantMap &e : m.extra)
