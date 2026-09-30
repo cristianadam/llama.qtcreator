@@ -86,6 +86,9 @@ private slots:
     void inlineCodeChipInList();
     void inlineCodeChipInQuote();
     void inlineCodeChipWrapped();
+    void inlineCodeChipInBulletList();
+    void noChipInHeading();
+    void inlineCodeChipWrappedInList();
     void inlineCodePaddingStrippedOnCopy();
     void multiParagraph();
     void codeBlock();
@@ -1364,6 +1367,74 @@ void MarkdownRendererTest::inlineCodeChipInQuote()
     verifyChipAligned(renderer, QStringLiteral("zzqx"), 520, 200);
 }
 
+void MarkdownRendererTest::inlineCodeChipInBulletList()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    streamText(renderer, QStringLiteral("- first `zzqx` item\n- second item\n"));
+    verifyChipAligned(renderer, QStringLiteral("zzqx"), 520, 200);
+}
+
+// Code in a heading gets the mono font but no chip background.
+void MarkdownRendererTest::noChipInHeading()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    streamText(renderer, QStringLiteral("## include `std::cout`\n"));
+
+    renderer.setColor(MarkdownRenderer::InlineCodeBackground, QColor(0xff0000));
+    renderer.resize(520, 200);
+    renderer.show();
+    QApplication::processEvents();
+    const QImage img = renderer.grab().toImage();
+    QVERIFY2(chipBands(img).isEmpty(), "chip was painted in a heading");
+}
+
+// A hard-wrapped token (longer than the line) must be covered by the chip
+// on every line it occupies — probe the chip's top padding row (so the
+// check cannot land on a glyph painted over the chip) at the token line's
+// left edge and at mid-line.
+static void verifyChipCoversWrappedToken(MarkdownRenderer &renderer, const QString &token)
+{
+    const QImage img = renderer.grab().toImage();
+    const qreal dpr = renderer.devicePixelRatioF();
+
+    const QString plain = renderer.toPlainText();
+    const int codePos = plain.indexOf(token);
+    QVERIFY2(codePos > 0, "token not found in document");
+    // The chip's left edge is the padding char before the token (it starts
+    // the wrapped line); probe just inside it.
+    int chipStart = codePos;
+    while (chipStart > 0 && plain.at(chipStart - 1) == MarkdownRenderer::InlineCodePadding)
+        --chipStart;
+    QTextCursor chipCursor(renderer.document());
+    chipCursor.setPosition(chipStart);
+    const int xLeft = qRound((renderer.cursorRect(chipCursor).left() + 1) * dpr);
+
+    // The token wraps onto its own lines; take the middle two token chars
+    // (they sit on the two full-width token lines) and check that the chip
+    // covers them.
+    const int probed[2] = { codePos + 4, codePos + 20 };
+    for (int p : probed) {
+        const QTextBlock blk = renderer.document()->findBlock(p);
+        const QTextLayout *layout = blk.layout();
+        QVERIFY2(layout != nullptr, "block has no layout");
+        int li = 0;
+        while (li + 1 < layout->lineCount()
+               && blk.position() + layout->lineAt(li + 1).textStart() <= p)
+            ++li;
+        const QTextLine line = layout->lineAt(li);
+        QVERIFY2(line.isValid(), "no line found for probed position");
+        const int y = qRound((layout->position().y() + line.rect().top() - 1) * dpr);
+        QVERIFY2(y > 0 && y < img.height(), "probed line outside the image");
+        const int xMid = img.width() / 2;
+        QVERIFY2(isChipRed(img.pixel(xLeft, y)),
+                 qPrintable(QString("no chip at the left edge of token line y=%1").arg(y)));
+        QVERIFY2(isChipRed(img.pixel(xMid, y)),
+                 qPrintable(QString("no chip at mid-line of token line y=%1").arg(y)));
+    }
+}
+
 // A span wrapping across several lines (a long unbreakable token) must get
 // a chip fragment on every line it occupies — cursorToX() reports
 // degenerate positions on hard-wrapped lines, which used to collapse the
@@ -1379,45 +1450,24 @@ void MarkdownRendererTest::inlineCodeChipWrapped()
     renderer.show();
     QApplication::processEvents();
 
-    const QImage img = renderer.grab().toImage();
-    const qreal dpr = renderer.devicePixelRatioF();
+    verifyChipCoversWrappedToken(renderer, QStringLiteral("averyveryverylongcodetoken"));
+}
 
-    // The token wraps onto its own lines; take the middle two token chars
-    // (they sit on the two full-width token lines) and check that the chip
-    // covers them: red at the line's left edge and at mid-line.
-    const QString plain = renderer.toPlainText();
-    const int codePos = plain.indexOf(QLatin1String("averyveryverylongcodetoken"));
-    QVERIFY2(codePos > 0, "token not found in document");
-    // The chip's left edge is the padding char before the token (it starts
-    // the wrapped line); probe just inside it.
-    int chipStart = codePos;
-    while (chipStart > 0 && plain.at(chipStart - 1) == MarkdownRenderer::InlineCodePadding)
-        --chipStart;
-    QTextCursor chipCursor(renderer.document());
-    chipCursor.setPosition(chipStart);
-    const int xLeft = qRound((renderer.cursorRect(chipCursor).left() + 1) * dpr);
+// Same, but inside a list item: the hard-wrapped token lines start at the
+// item's continuation indent, and the chip edges must follow them (the old
+// font-metrics-from-line-start fallback drifted here with mixed fonts).
+void MarkdownRendererTest::inlineCodeChipWrappedInList()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(120);
+    streamText(renderer,
+               QStringLiteral("- some words and `averyveryverylongcodetoken` more words\n"));
+    renderer.setColor(MarkdownRenderer::InlineCodeBackground, QColor(0xff0000));
+    renderer.resize(140, 300);
+    renderer.show();
+    QApplication::processEvents();
 
-    const int probed[2] = { codePos + 4, codePos + 20 };
-    for (int p : probed) {
-        const QTextBlock blk = renderer.document()->findBlock(p);
-        const QTextLayout *layout = blk.layout();
-        QVERIFY2(layout != nullptr, "block has no layout");
-        int li = 0;
-        while (li + 1 < layout->lineCount()
-               && blk.position() + layout->lineAt(li + 1).textStart() <= p)
-            ++li;
-        const QTextLine line = layout->lineAt(li);
-        QVERIFY2(line.isValid(), "no line found for probed position");
-        // Probe the chip's top padding row (just above the line's text), so
-        // the check cannot land on a glyph painted over the chip.
-        const int y = qRound((layout->position().y() + line.rect().top() - 1) * dpr);
-        QVERIFY2(y > 0 && y < img.height(), "probed line outside the image");
-        const int xMid = img.width() / 2;
-        QVERIFY2(isChipRed(img.pixel(xLeft, y)),
-                 qPrintable(QString("no chip at the left edge of token line y=%1").arg(y)));
-        QVERIFY2(isChipRed(img.pixel(xMid, y)),
-                 qPrintable(QString("no chip at mid-line of token line y=%1").arg(y)));
-    }
+    verifyChipCoversWrappedToken(renderer, QStringLiteral("averyveryverylongcodetoken"));
 }
 
 int main(int argc, char **argv)

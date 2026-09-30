@@ -594,19 +594,18 @@ void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineN
                 handleInlineCode();
                 if (m_headingLevel == 0) {
                     // The padding spaces around the span give the painted
-                    // chip (paintInlineCodeChips()) real padding room — Qt 6.11
-                    // has no layout-level inline padding (the char-format
-                    // edge spacing was removed, and nested frames break
-                    // toPlainText()/clipboard) — without adding regular
-                    // space characters to the text. copy() and
-                    // ChatMessage::plainText() strip them again, so they
-                    // never reach the clipboard or search matches.
+                    // chip (paintInlineCodeChips()) real padding room — Qt
+                    // 6.11 has no layout-level inline padding (the
+                    // char-format edge spacing was removed, and nested
+                    // frames break toPlainText()/clipboard) — without
+                    // adding regular space characters to the text. copy()
+                    // and ChatMessage::plainText() strip them again, so
+                    // they never reach the clipboard or search matches.
                     // insertText(text, fmt) also sets the cursor's current
-                    // char format, so the code content must be inserted with
-                    // the mono format explicitly — after the first padding
-                    // char the cursor would carry outerFormat.
-                    const QTextCharFormat codeFormat
-                        = m_textCharFormatStack.top();
+                    // char format, so the code content must be inserted
+                    // with the mono format explicitly — after the first
+                    // padding char the cursor would carry outerFormat.
+                    const QTextCharFormat codeFormat = m_textCharFormatStack.top();
                     const int start = m_cursor.position();
                     m_cursor.insertText(InlineCodePadding, outerFormat);
                     m_cursor.insertText(fromStdString(n.content), codeFormat);
@@ -616,7 +615,10 @@ void MarkdownRenderer::renderInline(const markus::Document &doc, markus::InlineN
                     // paintEvent() can paint the rounded chip background.
                     m_inlineCodeRanges.append({start, m_cursor.position()});
                 } else {
-                    // Headings keep the heading font and get no chip.
+                    // Headings get the mono font (the cursor's current
+                    // format, which handleInlineCode() set) but no chip
+                    // background — the padding/chip path above is for
+                    // regular text only.
                     m_cursor.insertText(fromStdString(n.content));
                     popCharFormat();
                 }
@@ -1945,10 +1947,10 @@ void MarkdownRenderer::handleInlineCode()
                                                           : m_textCharFormatStack.top();
     fmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
     fmt.setFontFixedPitch(true);
-    // Inside a heading, keep the heading's font size and skip the inline-code
-    // chip styling so the code stays bold and scales with the heading. The
-    // chip background is not set here: paintEvent() paints a rounded rect
-    // behind the span (see m_inlineCodeRanges).
+    // Inside a heading, keep the heading's font size (and weight) so the
+    // code scales with the heading; it gets the mono font but no chip
+    // background. The chip is not set here in any case: paintEvent() paints
+    // a rounded rect behind regular-text spans (see m_inlineCodeRanges).
     if (m_headingLevel == 0)
         fmt.setFontPointSize(m_baseFontSize * 0.90);
     m_textCharFormatStack.push(fmt);
@@ -2313,6 +2315,7 @@ static QVector<QRectF> inlineCodeChipLines(MarkdownRenderer *renderer, int start
         if (!layout)
             continue;
         const int blockStart = blk.position();
+        const int blockEnd = blockStart + blk.length();
         for (int li = 0; li < layout->lineCount(); ++li) {
             const QTextLine line = layout->lineAt(li);
             const int lineStart = blockStart + line.textStart();
@@ -2329,39 +2332,53 @@ static QVector<QRectF> inlineCodeChipLines(MarkdownRenderer *renderer, int start
             // gap; extending into it would pad the chip twice).
             //
             // cursorRect() is the same mechanism Qt uses to paint the text
-            // cursor, so its edges line up with the rendered text — unlike
-            // the old layout-position + QTextLine::cursorToX() math, which
-            // miscounted list-item indents (chip shifted right). It is
-            // degenerate on hard-wrapped lines (a long unbreakable token:
-            // every position maps to the line origin), where the width is
-            // measured from the per-character advances instead.
-            // The vertical extent is the full line in both branches (the
-            // cursor rect can be shorter than the line on tall lines), in
-            // viewport coordinates like the x edges.
+            // cursor, so its edges line up with the rendered text (lists,
+            // quotes, indents, hard-wrapped continuation lines — the text
+            // draws at the line origin there). Two quirks to work around:
+            // - at a line end that is not the block end, cursorRect(to)
+            //   reports the *next* line's start, not the trailing edge of
+            //   this line's text — so take the previous char's cursor
+            //   position plus that single char's advance (one metrics
+            //   lookup, no per-line width summation that would drift with
+            //   kerning/mixed fonts);
+            // - with no usable cursor rect at all (missing layout), fall
+            //   back to the per-character advances from the line start.
+            // The vertical extent is the full line (the cursor rect can be
+            // shorter than the line on tall lines), in viewport coordinates
+            // like the x edges.
             const qreal y = layout->position().y() + line.rect().y() - scrollY;
             const qreal h = line.rect().height();
-            qreal x1 = 0, x2 = 0;
             QTextCursor c1(doc);
             c1.setPosition(from);
-            QTextCursor c2(doc);
-            c2.setPosition(to);
             const QRectF r1 = renderer->cursorRect(c1);
-            const QRectF r2 = renderer->cursorRect(c2);
-            if (!r1.isNull() && !r2.isNull() && r2.left() > r1.left()) {
-                x1 = r1.left();
-                x2 = r2.left();
+            qreal x2 = -1;
+            if (to < lineEnd || to == blockEnd - 1) {
+                // The cursor at `to` sits on this line (mid-line, or at the
+                // last text char of the block where there is no next line):
+                // its rect is the trailing edge.
+                QTextCursor c2(doc);
+                c2.setPosition(to);
+                x2 = renderer->cursorRect(c2).left();
             } else {
-                // Degenerate cursorRect() (no x progress between the range
-                // edges): hard-wrapped lines map every position to the line
-                // origin, as do zero-advance characters. Measure the width
-                // from the per-character advances instead.
-                const qreal lineX = layout->position().x() + line.rect().x();
-                x1 = lineX + inlineCodeTextWidth(doc, lineStart, from) - scrollX;
-                x2 = lineX + inlineCodeTextWidth(doc, lineStart, to) - scrollX;
+                // `to` is a mid-block line end: cursorRect(to) would report
+                // the next line's start. Take the previous char's cursor
+                // position plus that single char's advance.
+                QTextCursor c2(doc);
+                c2.setPosition(to - 1);
+                const QRectF r2 = renderer->cursorRect(c2);
+                x2 = r2.left() + QFontMetricsF(inlineCodeCharFont(doc, to - 1))
+                                .horizontalAdvance(doc->characterAt(to - 1));
             }
-            if (x2 <= x1)
+            if (r1.isNull() || x2 <= r1.left()) {
+                const qreal lineX = layout->position().x() + line.rect().x();
+                const qreal fx1 = lineX + inlineCodeTextWidth(doc, lineStart, from) - scrollX;
+                const qreal fx2 = lineX + inlineCodeTextWidth(doc, lineStart, to) - scrollX;
+                if (fx2 <= fx1)
+                    continue;
+                lines.append(QRectF(fx1, y - 2, fx2 - fx1, h + 4));
                 continue;
-            lines.append(QRectF(x1, y - 2, x2 - x1, h + 4));
+            }
+            lines.append(QRectF(r1.left(), y - 2, x2 - r1.left(), h + 4));
         }
     }
     return lines;
