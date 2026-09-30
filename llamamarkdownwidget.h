@@ -49,11 +49,20 @@ private:
     void updateColorPalette();
     QVariant renderSvgResource(const QUrl &name);
     void refreshSvgResources();
+    // Scales a data: image URL or a local image file to the current document
+    // width (null for anything else); the result is what loadResource() and
+    // refreshDisplayImages() serve for those URLs.
+    QVariant displayImageForUrl(const QUrl &name);
+    void refreshDisplayImages();
 
     QElapsedTimer m_markdownConversionTimer;
     QMovie *m_spinner = nullptr;
     QSet<QUrl> m_spinnerUrls;
     QSet<QUrl> m_svgUrls;
+    // data: / local-file image URLs served through displayImageForUrl(); they
+    // are re-scaled and re-served on resize (like the SVGs), because
+    // loadResource() is not called again for URLs the document has fetched.
+    QSet<QUrl> m_displayImageUrls;
     int m_heightAdjustment{0};
 };
 } // namespace LlamaCpp

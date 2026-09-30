@@ -3,11 +3,14 @@
 #include <QRegularExpression>
 #include <QClipboard>
 #include <QElapsedTimer>
+#include <QMediaPlayer>
 #include <QPainter>
 #include <QEventLoop>
 #include <QRegularExpression>
 #include <QTextImageFormat>
 #include <QTimer>
+#include <QTemporaryDir>
+#include <QtMultimediaWidgets/QVideoWidget>
 #include <QtSvg/QSvgRenderer>
 #include <QtTest/QtTest>
 
@@ -43,6 +46,10 @@ static bool containsAll(const QString &text, const QStringList &lines)
             return false;
     return true;
 }
+
+// Declared below (after the test class); used by the video tests.
+static QList<QTextImageFormat> imageFormats(MarkdownRenderer &renderer);
+static QString firstImageUrl(MarkdownRenderer &renderer);
 
 // Mermaid diagrams render asynchronously on the engine's worker thread:
 // after a finalized block is rendered, its placeholder block carries
@@ -104,8 +111,114 @@ private slots:
     void plainDollarsStayText();
     void mermaidServedFromPersistedCache();
     void mathServedFromPersistedCache();
+    void videoElementRendersAsOverlayImage();
+    void missingVideoFallsBackToText();
+    void videoAttributesAndPlayerReuse();
     void finishFinalizesPendingBlocks();
 };
+
+// A <video> element renders as a "llamavideo://" image fragment (the
+// QVideoWidget overlay is positioned over it by updateAllOverlaysGeometry),
+// not as raw HTML text.
+void MarkdownRendererTest::videoElementRendersAsOverlayImage()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    const QString path = tempDir.filePath("clip.mp4");
+    {
+        QFile file(path);
+        QVERIFY(file.open(QIODevice::WriteOnly));
+        file.write("fake mp4");
+    }
+
+    const QString text
+        = QStringLiteral("Watch:\n\n<video src=\"%1\" autoplay loop muted></video>\n").arg(path);
+    streamText(renderer, text);
+
+    const QString url = firstImageUrl(renderer);
+    QVERIFY2(url.startsWith(QLatin1String("llamavideo://")),
+             qPrintable(QStringLiteral("url=%1 text=[%2]").arg(url, renderer.toPlainText())));
+    QCOMPARE(renderer.videoPathForUrl(QUrl(url)), path);
+    QVERIFY2(!renderer.toHtml().contains(QLatin1String("<video")),
+             "the video must not leak into the document as raw HTML");
+    QVERIFY2(renderer.toPlainText().contains(QStringLiteral("Watch:")),
+             "the surrounding text must survive");
+
+    // The QVideoWidget overlay must end up visible over the placeholder once
+    // the document has been laid out (regression: it was positioned only at
+    // feed() time — before layout — and stayed hidden, so users saw the
+    // placeholder instead of the playing video).
+    renderer.resize(520, 300);
+    renderer.show();
+    QApplication::processEvents();
+    const auto widgets = renderer.viewport()->findChildren<QVideoWidget *>();
+    QCOMPARE(widgets.size(), 1);
+    QVERIFY2(widgets.first()->isVisible(), "the video overlay must be shown");
+    QVERIFY2(!widgets.first()->geometry().isEmpty(),
+             "the overlay must be sized over the placeholder");
+}
+
+// A <video> with a missing file leaves a visible note, not a dead
+// placeholder image.
+void MarkdownRendererTest::missingVideoFallsBackToText()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text = QStringLiteral(
+        "<video src=\"/nonexistent/clip.mp4\" autoplay></video>");
+    const QString out = streamText(renderer, text);
+    QVERIFY2(out.contains(QStringLiteral("video not found")), qPrintable(out));
+    QVERIFY2(firstImageUrl(renderer).isEmpty(), "no image expected for a missing video");
+}
+
+// <video> width/height/loop attributes are honored, and two elements for
+// the same file share one image URL and one player (the key derives from
+// the file path, so streaming tail re-renders reuse the player).
+void MarkdownRendererTest::videoAttributesAndPlayerReuse()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+
+    QTemporaryDir tempDir;
+    QVERIFY(tempDir.isValid());
+    const QString path = tempDir.filePath("clip.mp4");
+    {
+        QFile file(path);
+        QVERIFY(file.open(QIODevice::WriteOnly));
+        file.write("fake mp4");
+    }
+
+    const QString text = QStringLiteral(
+                             "<video src=\"%1\" width=\"320\" height=\"180\" loop=\"false\"></video>\n"
+                             "<video src=\"%1\"></video>\n")
+                             .arg(path);
+    streamText(renderer, text);
+
+    const QList<QTextImageFormat> formats = imageFormats(renderer);
+    QCOMPARE(formats.size(), 2);
+    QCOMPARE(formats.first().name(), formats.last().name());
+    QVERIFY(formats.first().name().startsWith(QLatin1String("llamavideo://")));
+    QCOMPARE(formats.first().width(), 320.0);
+    QCOMPARE(formats.first().height(), 180.0);
+
+    // One shared player; loop="false" means "play once" (Qt normalizes
+    // setLoops(0) to Loops::Once — 1, not 0).
+    const auto players = renderer.findChildren<QMediaPlayer *>();
+    QCOMPARE(players.size(), 1);
+    QCOMPARE(players.first()->loops(), 1);
+}
+
+static QString rectStr(const QRectF &r)
+{
+    return QStringLiteral("[%1, %2 %3x%4]")
+        .arg(r.x(), 0, 'g', 6)
+        .arg(r.y(), 0, 'g', 6)
+        .arg(r.width(), 0, 'g', 6)
+        .arg(r.height(), 0, 'g', 6);
+}
 
 // finish() Flush()es the streaming parser: whatever is pending becomes a
 // stable block, and the next feed() starts a *new* block after it. So a
@@ -153,15 +266,27 @@ void MarkdownRendererTest::finishFinalizesPendingBlocks()
 
 // The math renders synchronously (KaTeX is fast); find the first image URL
 // in the document, if any.
+static QList<QTextImageFormat> imageFormats(MarkdownRenderer &renderer)
+{
+    QList<QTextImageFormat> formats;
+    QTextCursor cursor(renderer.document());
+    // Skip the last character (paragraph separator): it can never be an
+    // image, and selecting past it is out of range.
+    for (int p = 0; p + 1 < renderer.document()->characterCount(); ++p) {
+        // Select the character: a collapsed cursor's charFormat() reports
+        // the *preceding* character's format (except at a block's start).
+        cursor.setPosition(p);
+        cursor.setPosition(p + 1, QTextCursor::KeepAnchor);
+        if (const QTextCharFormat cf = cursor.charFormat(); cf.isImageFormat())
+            formats.append(cf.toImageFormat());
+    }
+    return formats;
+}
+
 static QString firstImageUrl(MarkdownRenderer &renderer)
 {
-    for (int p = 0; p < renderer.document()->characterCount(); ++p) {
-        QTextCursor cursor(renderer.document());
-        cursor.setPosition(p);
-        if (cursor.charFormat().isImageFormat())
-            return cursor.charFormat().toImageFormat().name();
-    }
-    return {};
+    const QList<QTextImageFormat> formats = imageFormats(renderer);
+    return formats.isEmpty() ? QString() : formats.first().name();
 }
 
 static double imageFormatHeight(MarkdownRenderer &renderer, const QString &url)

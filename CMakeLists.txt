@@ -15,6 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # (resolved at runtime via the app's rpath).
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer yaml-cpp)
 find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer Network TaskTree Svg
+               Multimedia MultimediaWidgets
                REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
@@ -62,6 +63,8 @@ add_qtc_plugin(LlamaCpp
     QtCreator::quickjsng
     Qt::TaskTree
     Qt::Svg
+    Qt::Multimedia
+    Qt::MultimediaWidgets
     markus
     LlamaSpinner
   SOURCES

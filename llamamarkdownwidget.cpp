@@ -2,6 +2,7 @@
 #include <QBuffer>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QFileInfo>
 #include <QLayout>
 #include <QFile>
 #include <QImage>
@@ -170,6 +171,11 @@ void MarkdownLabel::resizeEvent(QResizeEvent *event)
     // they track the new column width (loadResource() is not called again
     // for URLs the document has already fetched).
     refreshSvgResources();
+    // Raster images (data: attachments, local files) were scaled at the old
+    // width too — they can have been first loaded while the widget was
+    // still hidden (200 px floor), which would keep them small after the
+    // window grows.
+    refreshDisplayImages();
     notifyGeometryChanged();                       // notify layout
 }
 
@@ -275,23 +281,59 @@ QVariant MarkdownLabel::loadResource(int type, const QUrl &name)
         return renderSvgResource(name);
     }
 
-    if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("data")) {
-        // "data:<mime>;base64,<payload>" – image attachments of tool
-        // results (read_file on an image file), shown in the expanded tool
-        // call.  Scaled to the document width and rasterized at device
-        // resolution so it stays crisp on Retina.
-        const QString payload = name.toString().section(QLatin1Char(','), 1);
-        const QImage image = QImage::fromData(QByteArray::fromBase64(payload.toUtf8()));
-        // Floor at 2x, like the SVG path: loadResource() is often first
-        // called while the widget is still hidden (devicePixelRatioF() == 1)
-        // and the raster is cached until the next resize.
-        return MarkdownRenderer::scaledImageForDisplay(image,
-                                                       qMax(document()->textWidth(), 200.0),
-                                                       qMax(devicePixelRatioF(), 2.0));
+    if (type == QTextDocument::ImageResource
+        && (name.scheme() == QLatin1String("data")
+            || name.isLocalFile() || name.scheme().isEmpty())) {
+        const QVariant image = displayImageForUrl(name);
+        if (image.isValid())
+            m_displayImageUrls.insert(name);
+        return image;
     }
 
     // Default handling for everything else (e.g. normal file URLs).
     return MarkdownRenderer::loadResource(type, name);
+}
+
+QVariant MarkdownLabel::displayImageForUrl(const QUrl &name)
+{
+    // Scaled to the document width and rasterized at device resolution so
+    // it stays crisp on Retina.  Floor the DPR at 2x, like the SVG path:
+    // loadResource() is often first called while the widget is still hidden
+    // (devicePixelRatioF() == 1) and the raster is cached until the next
+    // resize.
+    const auto scale = [this](const QImage &image) {
+        return MarkdownRenderer::scaledImageForDisplay(image,
+                                                       qMax(document()->textWidth(), 200.0),
+                                                       qMax(devicePixelRatioF(), 2.0));
+    };
+
+    if (name.scheme() == QLatin1String("data")) {
+        // "data:<mime>;base64,<payload>" – image attachments of tool
+        // results (read_file on an image file), shown in the expanded tool
+        // call.
+        const QString payload = name.toString().section(QLatin1Char(','), 1);
+        return scale(QImage::fromData(QByteArray::fromBase64(payload.toUtf8())));
+    }
+
+    // Local image files (markdown ![](x.webp), <img src="x.png">). A
+    // relative path resolves against the working directory (Qt's default
+    // for file-less documents).
+    const QString path = name.isRelative() ? QFileInfo(name.toString()).absoluteFilePath()
+                                           : name.toLocalFile();
+    if (!QFile::exists(path))
+        return {}; // missing file: no image
+    const QImage image(path);
+    if (image.isNull())
+        return {}; // undecodable file: no image
+    return scale(image);
+}
+
+void MarkdownLabel::refreshDisplayImages()
+{
+    if (m_displayImageUrls.isEmpty())
+        return;
+    for (const QUrl &url : m_displayImageUrls)
+        document()->addResource(QTextDocument::ImageResource, url, displayImageForUrl(url));
 }
 
 QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
