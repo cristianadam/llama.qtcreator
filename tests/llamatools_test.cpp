@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QProcessEnvironment>
 #include <QtTest/QtTest>
 
 #include <unistd.h>
@@ -32,6 +33,7 @@
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/mcptool.h>
+#include <tools/windows_sandbox.h>
 #include <tools/mcpserverconfig.h>
 #include <tools/patch.h>
 #include <tools/bash_tool.h>
@@ -462,6 +464,9 @@ private slots:
     void toolResultOrdering();
     void sandboxFileTools();
     void projectSandboxOverride();
+    void windowsSandboxSpecNotProvisioned();
+    void windowsSandboxSpecUnavailable();
+    void windowsSandboxSpec();
     void bash_truncation();
     void bash_summaries();
     void bash_detailsMarkdown();
@@ -2391,7 +2396,8 @@ private:
 void LlamaToolsTest::bash_sandbox()
 {
 #if defined(Q_OS_WIN)
-    QSKIP("Sandboxing is not supported on Windows");
+    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
+        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2433,7 +2439,8 @@ void LlamaToolsTest::bash_sandbox()
 void LlamaToolsTest::bash_sandboxWithStub()
 {
 #if defined(Q_OS_WIN)
-    QSKIP("Sandboxing is not supported on Windows");
+    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
+        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2478,7 +2485,8 @@ void LlamaToolsTest::bash_sandboxWithStub()
 void LlamaToolsTest::bash_sandboxDenyRead()
 {
 #if defined(Q_OS_WIN)
-    QSKIP("Sandboxing is not supported on Windows");
+    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
+        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2519,7 +2527,8 @@ void LlamaToolsTest::bash_sandboxDenyRead()
 void LlamaToolsTest::bash_sandboxNetwork()
 {
 #if defined(Q_OS_WIN)
-    QSKIP("Sandboxing is not supported on Windows");
+    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
+        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2815,10 +2824,8 @@ void LlamaToolsTest::bashLiveOutputHandlerLifetime()
 // project directory and the temporary locations.
 void LlamaToolsTest::sandboxFileTools()
 {
-#if defined(Q_OS_WIN)
-    QSKIP("Sandboxing is not supported on Windows");
-#endif
-
+    // The file tools run in-process and their path checks are platform
+    // independent, so this test runs on Windows as well.
     // The real home directory, captured before HOME is pointed at fakeHome
     // below (QDir::homePath() follows $HOME).
     const QString realHome = QDir::homePath();
@@ -2978,6 +2985,144 @@ void LlamaToolsTest::projectSandboxOverride()
     QVERIFY(!projectSettings.isSandboxEnabled());
 
     ProjectExplorer::ProjectManager::resetStartupProject();
+}
+
+// Writes a fake srt-win shell script that answers `user status` with
+// \a statusJson and accepts `acl grant`/`acl revoke`, so the Windows
+// wrapper construction can be exercised on any platform. Returns the
+// script path (executable).
+static QString writeFakeSrtWin(const QString &dir, const QString &statusJson)
+{
+    Q_ASSERT(!statusJson.contains(QLatin1Char('\'')));
+    const QString path = dir + QStringLiteral("/srt-win");
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return {};
+    file.write((QStringLiteral("#!/bin/sh\n")
+                    + QStringLiteral("if [ \"$1\" = user ]; then\n")
+                    + QStringLiteral("  echo '")
+                    + statusJson + QStringLiteral("'\n")
+                    + QStringLiteral("elif [ \"$1\" = acl ]; then\n")
+                    + QStringLiteral("  cat > /dev/null\n")
+                    + QStringLiteral("fi\nexit 0\n"))
+                       .toUtf8());
+    file.close();
+    QFile::setPermissions(path,
+                          QFile::permissions(path)
+                                  | QFileDevice::ExeOwner
+                                  | QFileDevice::ExeGroup
+                                  | QFileDevice::ExeOther);
+    return path;
+}
+
+// The successful provisioning probe is cached per srt-win executable for
+// the session; this test uses its own fake (a fresh QTemporaryDir path),
+// so the not-provisioned path is reachable regardless of test order.
+void LlamaToolsTest::windowsSandboxSpecNotProvisioned()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString fake = writeFakeSrtWin(
+        dir.path(),
+        QStringLiteral("{\"user\":{\"exists\":false},\"cred_present\":false}"));
+    qputenv("LLAMA_SRT_WIN", fake.toUtf8());
+
+    const LlamaCpp::Tools::WindowsSandboxSpec spec =
+        LlamaCpp::Tools::windowsSandboxSpec(QDir::tempPath(), QProcessEnvironment());
+
+    qunsetenv("LLAMA_SRT_WIN");
+
+    QVERIFY(spec.program.isEmpty());
+    QVERIFY(!spec.error.isEmpty());
+    QVERIFY(spec.error.contains("not provisioned"));
+    // The error is actionable: it points at the one-time install.
+    QVERIFY(spec.error.contains("windows-install"));
+}
+
+void LlamaToolsTest::windowsSandboxSpecUnavailable()
+{
+    if (!QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
+        QSKIP("srt-win is on the PATH");
+    qputenv("LLAMA_SRT_WIN", "/nonexistent/srt-win");
+
+    const LlamaCpp::Tools::WindowsSandboxSpec spec =
+        LlamaCpp::Tools::windowsSandboxSpec(QDir::tempPath(), QProcessEnvironment());
+
+    qunsetenv("LLAMA_SRT_WIN");
+
+    QVERIFY(spec.program.isEmpty());
+    QVERIFY(!spec.error.isEmpty());
+    QVERIFY(spec.error.contains(QStringLiteral("srt-win")));
+    QVERIFY(spec.error.contains("windows-install"));
+}
+
+void LlamaToolsTest::windowsSandboxSpec()
+{
+    QTemporaryDir home;
+    QTemporaryDir workdir;
+    QVERIFY(home.isValid());
+    QVERIFY(workdir.isValid());
+    const QString fake = writeFakeSrtWin(
+        home.path(),
+        QStringLiteral("{\"user\":{\"exists\":true,\"sid\":\"S-1-5-21-1-10-1\"},"
+                       "\"cred_present\":true}"));
+
+    // secretReadPaths() follows $HOME.
+    const QString realHome = qEnvironmentVariable("HOME");
+    const bool hadHome = !realHome.isEmpty();
+    qputenv("HOME", home.path().toUtf8());
+    qputenv("LLAMA_SRT_WIN", fake.toUtf8());
+
+    QProcessEnvironment env;
+    env.insert("PATH", "/usr/bin");
+    env.insert("FOO", "bar baz");
+
+    const LlamaCpp::Tools::WindowsSandboxSpec spec =
+        LlamaCpp::Tools::windowsSandboxSpec(workdir.path(), env);
+
+    // An oversized environment exceeds the CreateProcessW command line
+    // limit and is refused with an actionable error. (Kept before the
+    // LLAMA_SRT_WIN/HOME restore below so this call uses the fake too.)
+    QProcessEnvironment bigEnv = env;
+    bigEnv.insert("BIG", QString(40000, QLatin1Char('x')));
+    const LlamaCpp::Tools::WindowsSandboxSpec bigSpec =
+        LlamaCpp::Tools::windowsSandboxSpec(workdir.path(), bigEnv);
+
+    qunsetenv("LLAMA_SRT_WIN");
+    if (hadHome)
+        qputenv("HOME", realHome.toUtf8());
+    else
+        qunsetenv("HOME");
+
+    QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
+    QCOMPARE(spec.program, fake);
+    // The `exec --quiet` wrapper; the shell and the command follow the `--`.
+    QCOMPARE((spec.arguments.mid(0, 2)),
+             (QStringList{ QStringLiteral("exec"), QStringLiteral("--quiet") }));
+    QCOMPARE(spec.arguments.last(), QStringLiteral("--"));
+    // The credential locations are denied for read and write. Directory
+    // targets carry a trailing backslash (srt-win materializes a missing
+    // deny target as an empty directory then); the .netrc file does not.
+    const int denyRead = spec.arguments.indexOf(QStringLiteral("--deny-read"));
+    QVERIFY(denyRead != -1);
+    const QString ssh = spec.arguments.at(denyRead + 1);
+    QVERIFY(ssh.startsWith(home.path() + QStringLiteral("/.ssh")));
+    QVERIFY(ssh.endsWith(QLatin1Char('\\')));
+    const QString netrc = home.path() + QStringLiteral("/.netrc");
+    const int netrcIndex = spec.arguments.indexOf(netrc);
+    QVERIFY(netrcIndex > 0);
+    QCOMPARE(spec.arguments.at(netrcIndex - 1), QStringLiteral("--deny-read"));
+    const int netrcDenyWrite = spec.arguments.indexOf(QStringLiteral("--deny-write"),
+                                                      netrcIndex);
+    QVERIFY(netrcDenyWrite != -1);
+    QCOMPARE(spec.arguments.at(netrcDenyWrite + 1), netrc);
+    // The caller's environment is passed as the --env overlay (the
+    // sandboxed child starts with the sandbox user's profile env only).
+    QVERIFY(spec.arguments.contains(QStringLiteral("PATH=/usr/bin")));
+    QVERIFY(spec.arguments.contains(QStringLiteral("FOO=bar baz")));
+
+    QVERIFY(!bigSpec.error.isEmpty());
+    QVERIFY(bigSpec.error.contains("too long"));
 }
 
 void LlamaToolsTest::bash_truncation()

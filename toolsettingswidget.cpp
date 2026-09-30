@@ -123,16 +123,11 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     ripgrepLayout->addWidget(m_ripgrepButton);
     updateRipgrepStatus();
 
-    // Sandbox for the chat tools. Not available on Windows (Windows
-    // Sandbox is a full VM, not a per-command wrapper), so the check-box
-    // is disabled there.
+    // Sandbox for the chat tools (bubblewrap on Linux, sandbox-exec on
+    // macOS, srt-win/@anthropic-ai/sandbox-runtime on Windows).
     m_sandboxCheck = new QCheckBox(settings().sandboxCommands.displayName(), this);
     m_sandboxCheck->setToolTip(settings().sandboxCommands.toolTip());
     m_sandboxCheck->setChecked(settings().sandboxCommands());
-#if defined(Q_OS_WIN)
-    m_sandboxCheck->setEnabled(false);
-    m_sandboxCheck->setToolTip(Tr::tr("Sandboxing is not supported on Windows."));
-#endif
     connect(m_sandboxCheck,
             &QCheckBox::toggled,
             this,

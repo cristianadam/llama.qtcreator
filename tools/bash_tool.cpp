@@ -3,6 +3,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "tool_utils.h"
+#include "windows_sandbox.h"
 
 #include <QtTaskTree/qprocesstask.h>
 #include <QtTaskTree/qtasktree.h>
@@ -144,9 +145,9 @@ QString macSandboxProfile(const QString &cwd)
     // Unreadable credential locations (skipped when the working directory
     // is inside one of them, the same way the write denies are).
     QStringList readDenies;
-    for (const QString &secret : secretReadPaths())
-        if (!pathCovers(secret, cwd))
-            readDenies << QStringLiteral("  (subpath \"") + profileString(secret)
+    for (const SecretReadPath &secret : secretReadPaths())
+        if (!pathCovers(secret.path, cwd))
+            readDenies << QStringLiteral("  (subpath \"") + profileString(secret.path)
                         + QStringLiteral("\")");
 
     QStringList denyPaths = {
@@ -174,8 +175,8 @@ QString macSandboxProfile(const QString &cwd)
     // The credential locations are not writable either: the read denies
     // above would be pointless if commands could plant or overwrite
     // credentials.
-    for (const QString &secret : secretReadPaths())
-        denyPaths << secret;
+    for (const SecretReadPath &secret : secretReadPaths())
+        denyPaths << secret.path;
     // Home directories under /Users (all users'; the entry covering the
     // working directory is skipped by the loop below).
     const QStringList userDirs =
@@ -232,15 +233,16 @@ QString macSandboxProfile(const QString &cwd)
 
 // Builds the wrapper that confines the command to the working directory and
 // the temporary locations. Linux uses bubblewrap (the whole file system is
-// read-only except \a cwd and /tmp); macOS uses sandbox-exec. Windows has no
-// per-command sandbox (Windows Sandbox is a full VM), so it is reported as
-// unavailable there.
-SandboxSpec sandboxSpec(const QString &cwd)
+// read-only except \a cwd and /tmp); macOS uses sandbox-exec; Windows uses
+// srt-win (the @anthropic-ai/sandbox-runtime backend): the command runs as
+// a dedicated sandbox user with no network egress and an isolated profile,
+// the home directory is readable, and \a cwd plus the temporary directory
+// are writable. \a env is the environment the (sandboxed) command gets.
+SandboxSpec sandboxSpec(const QString &cwd, const QProcessEnvironment &env)
 {
 #if defined(Q_OS_WIN)
-    return { {}, {}, Tr::tr("Sandboxing is not supported on Windows. "
-                            "Uncheck 'Sandbox commands' in the Llama "
-                            "settings to run commands without a sandbox.") };
+    const WindowsSandboxSpec windows = windowsSandboxSpec(cwd, env);
+    return { windows.program, windows.arguments, windows.error };
 #elif defined(Q_OS_MACOS)
     const FilePath exe =
         FilePath::fromUserInput(QStandardPaths::findExecutable("sandbox-exec"));
@@ -278,13 +280,14 @@ SandboxSpec sandboxSpec(const QString &cwd)
     // deny-read rules: empty tmpfses over the directories, /dev/null over
     // the files. Skipped when the working directory is inside one of them,
     // as the later mount would wipe out the writable cwd bind.
-    for (const QString &secret : secretReadPaths()) {
-        if (pathCovers(secret, cwd))
+    for (const SecretReadPath &secret : secretReadPaths()) {
+        if (pathCovers(secret.path, cwd))
             continue;
-        if (QDir(secret).exists())
-            args << QStringLiteral("--tmpfs") << secret;
-        else if (QFileInfo(secret).isFile())
-            args << QStringLiteral("--ro-bind") << QStringLiteral("/dev/null") << secret;
+        if (QDir(secret.path).exists())
+            args << QStringLiteral("--tmpfs") << secret.path;
+        else if (QFileInfo(secret.path).isFile())
+            args << QStringLiteral("--ro-bind") << QStringLiteral("/dev/null")
+                 << secret.path;
     }
     return { exe.toUserOutput(), args, {} };
 #endif
@@ -471,7 +474,9 @@ QString BashTool::toolDefinition() const
             "readable, and there is no network access - use the webfetch "
             "and websearch tools for that. The workdir must be inside the "
             "project directory or a temporary location; on Linux /tmp is "
-            "fresh and empty for each command.");
+            "fresh and empty for each command, and on Windows the command "
+            "runs as a dedicated sandbox user with its own empty profile "
+            "and temporary directory.");
     return QString::fromUtf8(R"raw(
     {
         "type": "function",
@@ -577,18 +582,22 @@ void BashTool::runCommand(const QJsonObject &arguments,
         return;
     }
 
+    // The environment is needed both for the process and to build the
+    // sandbox wrapper (srt-win passes it as the --env overlay for the
+    // sandboxed child, which starts with the sandbox user's own profile
+    // environment only).
+    const QProcessEnvironment env = shellEnvironment();
+
     // Optionally confine the command to a sandbox (bubblewrap on Linux,
-    // sandbox-exec on macOS). The wrapper becomes the program to start; the
-    // shell and the command are its arguments.
+    // sandbox-exec on macOS, srt-win on Windows). The wrapper becomes the
+    // program to start; the shell and the command are its arguments.
     const SandboxSpec sandbox = sandboxEnabled(p)
-            ? sandboxSpec(cwdString)
+            ? sandboxSpec(cwdString, env)
             : SandboxSpec{};
     if (!sandbox.error.isEmpty()) {
         done(Tr::tr("Error: %1").arg(sandbox.error), false);
         return;
     }
-
-    const QProcessEnvironment env = shellEnvironment();
 
     auto *state = new BashState;
 

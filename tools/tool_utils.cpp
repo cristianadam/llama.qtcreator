@@ -21,14 +21,9 @@ using namespace Utils;
 
 bool sandboxEnabled(Project *project)
 {
-#if defined(Q_OS_WIN)
-    Q_UNUSED(project);
-    return false;
-#else
     if (project)
         return LlamaProjectSettings(project).isSandboxEnabled();
     return settings().sandboxCommands();
-#endif
 }
 
 bool pathCovers(const QString &prefix, const QString &path)
@@ -41,14 +36,14 @@ bool pathCovers(const QString &prefix, const QString &path)
 
 // Credential locations that sandboxed tools must not read, mirroring the
 // denyRead defaults of the pi sandbox extension.
-QStringList secretReadPaths()
+QList<SecretReadPath> secretReadPaths()
 {
     const QString home = QDir::homePath();
-    return { home + QStringLiteral("/.ssh"),
-             home + QStringLiteral("/.aws"),
-             home + QStringLiteral("/.gnupg"),
-             home + QStringLiteral("/.kube"),
-             home + QStringLiteral("/.netrc") };
+    return { { home + QStringLiteral("/.ssh"), false },
+             { home + QStringLiteral("/.aws"), false },
+             { home + QStringLiteral("/.gnupg"), false },
+             { home + QStringLiteral("/.kube"), false },
+             { home + QStringLiteral("/.netrc"), true } };
 }
 
 QString sandboxAccessError(const FilePath &path, bool isWrite)
@@ -70,8 +65,8 @@ QString sandboxAccessError(const FilePath &path, bool isWrite)
                 .arg(p);
     }
 
-    for (const QString &secret : secretReadPaths())
-        if (pathCovers(secret, p))
+    for (const SecretReadPath &secret : secretReadPaths())
+        if (pathCovers(secret.path, p))
             return Tr::tr(
                        "Reading \"%1\" is not allowed: credential locations "
                        "are not readable inside the sandbox.")

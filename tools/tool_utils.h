@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -11,16 +12,24 @@ namespace ProjectExplorer {
 class Project;
 }
 
-//! True when the sandbox is enabled (global or per-project setting; always
-//! false on Windows, where there is no per-command sandbox).
+//! True when the sandbox is enabled (global or per-project setting; same
+//! resolution on all platforms, including Windows).
 bool sandboxEnabled(ProjectExplorer::Project *project);
 
 //! True when \a path equals \a prefix or is located inside it.
 bool pathCovers(const QString &prefix, const QString &path);
 
+//! A credential location that sandboxed tools must not read.
+struct SecretReadPath
+{
+    QString path;
+    bool isFile = false; //!< true for file locations (e.g. ~/.netrc),
+                         //!< false for directories
+};
+
 //! Credential locations (directories and files) that sandboxed tools must
 //! not read.
-QStringList secretReadPaths();
+QList<SecretReadPath> secretReadPaths();
 
 //! Model-facing error when the (enabled) sandbox forbids \a isWrite access
 //! to \a path; an empty string when the access is allowed or the sandbox is

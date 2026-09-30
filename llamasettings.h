@@ -90,9 +90,9 @@ public:
     Utils::StringAspect mcpServersJson{this};
     Utils::BoolAspect toolsEnabled{this};
     // Run the chat tools in a sandbox: bash commands in a platform sandbox
-    // (bubblewrap on Linux, sandbox-exec on macOS; not available on
-    // Windows), and the file tools restricted to the project directory and
-    // the temporary locations.
+    // (bubblewrap on Linux, sandbox-exec on macOS, srt-win from
+    // @anthropic-ai/sandbox-runtime on Windows), and the file tools
+    // restricted to the project directory and the temporary locations.
     Utils::BoolAspect sandboxCommands{this};
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
