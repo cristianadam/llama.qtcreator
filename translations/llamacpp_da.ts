@@ -13,7 +13,7 @@
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+144"/>
+        <location filename="../llamaplugin.cpp" line="+146"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -35,22 +35,22 @@
     <message>
         <location line="+1"/>
         <source>Next Completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste fuldendelse</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Previous Completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige fuldendelse</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis serverstatus</translation>
     </message>
     <message>
         <location filename="../llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
-        <translation type="unfinished"></translation>
+        <translation>llama.cpp-samtale</translation>
     </message>
     <message>
         <location line="+49"/>
@@ -60,27 +60,27 @@
     <message>
         <location line="+4"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift til den næste cachelagrede fuldendelseskandidat på den aktuelle position (tryk på Ctrl+G, derefter Ned).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Ctrl+G Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G Ned</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Cycle to the previous cached completion candidate at the current position (press Ctrl+G, then Up).</source>
-        <translation type="unfinished"></translation>
+        <translation>Skift til den forrige cachelagrede fuldendelseskandidat på den aktuelle position (tryk på Ctrl+G, derefter Op).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Ctrl+G Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G Op</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Query the llama.cpp servers and report which models are loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spørg llama.cpp-serverne, og rapportér, hvilke modeller der er indlæst.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -93,70 +93,70 @@
         <translation>Aktiver llama.cpp.</translation>
     </message>
     <message>
-        <location line="+363"/>
+        <location line="+373"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
     <message>
         <location line="+676"/>
         <source>llama.cpp %1 server (model: %2): invalid endpoint %3</source>
-        <translation type="unfinished"></translation>
+        <translation>llama.cpp %1-server (model: %2): ugyldigt slutpunkt %3</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+75"/>
         <source>default</source>
-        <translation type="unfinished"></translation>
+        <translation>standard</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>not reachable</source>
-        <translation type="unfinished"></translation>
+        <translation>ikke tilgængelig</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>no models loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>ingen modeller er indlæst</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>multiple models loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>flere modeller er indlæst</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>model %1 is not loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>model %1 er ikke indlæst</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>ready</source>
-        <translation type="unfinished"></translation>
+        <translation>klar</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>llama.cpp %1 server (%2, model: %3): %4</source>
-        <translation type="unfinished"></translation>
+        <translation>llama.cpp %1-server (%2, model: %3): %4</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>FIM</source>
-        <translation type="unfinished"></translation>
+        <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+126"/>
+        <location filename="../promptssettingswidget.cpp" line="+116"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1219"/>
-        <location filename="../llamaprojectpanel.cpp" line="+58"/>
+        <location line="-1229"/>
+        <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+60"/>
+        <location filename="../llamasettings.cpp" line="+71"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Aktiver llama.cpp</translation>
@@ -167,7 +167,7 @@
         <translation>Aktiverer integrationen af llama.cpp.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Endpoint</source>
         <translation>Slutpunkt</translation>
     </message>
@@ -226,12 +226,12 @@
         <translation type="vanished">Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-80"/>
         <source>Tools</source>
         <translation>Værktøjer</translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+86"/>
         <source>Max Token Predictions</source>
         <translation>Maksimale token-forudsigelser</translation>
     </message>
@@ -346,54 +346,59 @@
         <translation type="vanished">Det maksimale antal gemte fuldendelser, der skal opbevares i result_cache.</translation>
     </message>
     <message>
-        <location line="-168"/>
+        <location line="-178"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsummarér titlen på samtalen på få ord, herunder ét emoji. Brug det sprog, der bruges i samtalen. Brug almindelig tekst, ingen markdown.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Generate up to five follow up questions in the context of the current conversation. The questions are from the user point of view. Only questions, no explanations. Use the language used in the conversation. Return a JSON object with a single key &quot;follow_ups&quot; containing an array of plain text question strings, no markdown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Generér op til fem opfølgende spørgsmål i sammenhængen med den aktuelle samtale. Spørgsmålene er fra brugerens synsvinkel. Kun spørgsmål, ingen forklaringer. Brug det sprog, der bruges i samtalen. Returnér et JSON-objekt med en enkelt nøgle &quot;follow_ups&quot;, der indeholder et array af spørgsmål som almindelig tekst, ingen markdown.</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+29"/>
+        <source>Skills</source>
+        <translation>Færdigheder</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>FIM Model</source>
-        <translation type="unfinished"></translation>
+        <translation>FIM-model</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>FIM Model:</source>
-        <translation type="unfinished"></translation>
+        <translation>FIM-model:</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation type="unfinished"></translation>
+        <translation>Navnet på den model, der skal bruges til FIM-fuldendelse, når flere modeller er indlæst på serveren (valgfrit, anbefalet: Qwen3 Coder).</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Completions per Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuldendelser pr. position</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Completions per Position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuldendelser pr. position:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Number of completions to cache per position (ring buffer). Use the Next/Previous Completion shortcuts (Ctrl+G then Down/Up) to cycle through them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Antal fuldendelser, der skal cachelagres pr. position (ringpuffer). Brug genvejstasterne Næste/Forrige fuldendelse (Ctrl+G derefter Ned/Op) til at skifte mellem dem.</translation>
     </message>
     <message>
         <location line="+57"/>
         <source>Max number of cached context keys to keep in the result cache. Each key can hold up to &apos;Completions per Position&apos; individual completions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Det maksimale antal cachelagrede kontekstnøgler, der skal beholdes i resultatchachen. Hver nøgle kan indeholde op til &apos;Fuldendelser pr. position&apos; enkelte fuldendelser.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -834,65 +839,86 @@
     <message>
         <location line="+4"/>
         <source>Thinking Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Tænkeniveau</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; eller &quot;max&quot;.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Utility Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjælpemodel</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Utility Model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hjælpemodel:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Default: chat model</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard: chat-model</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Conversation Title Prompt</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompt til samtaletitel</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Prompt sent to the model to generate a short conversation title after the first reply.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompt, der sendes til modellen for at generere en kort samtaletitel efter det første svar.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Follow-Up Questions Prompt</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompt til opfølgende spørgsmål</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Prompt sent to the model to generate follow-up questions after a complete reply.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompt, der sendes til modellen for at generere opfølgende spørgsmål efter et fuldstændigt svar.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <source>Follow-Up Questions</source>
+        <translation>Opfølgende spørgsmål</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
+        <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Locator Prompts</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompts til lokatoren</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+9"/>
+        <source>Skill directories</source>
+        <translation>Færdigheds-mapper</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories scanned recursively for skills. A skill is a directory containing a SKILL.md file (Agent Skills specification) with a name and a description in its YAML frontmatter.</source>
+        <translation>Mapper, der scannes rekursivt efter færdigheder. En færdighed er en mappe, der indeholder en SKILL.md-fil (Agent Skills-specifikation) med et navn og en beskrivelse i YAML-frontmatter.</translation>
+    </message>
+    <message>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>Aktiver værktøjer i chat</translation>
@@ -903,202 +929,248 @@
         <translation>Hvis markeret, starter chatten med værktøjsknappen aktiveret.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
+        <location line="+1"/>
+        <location line="+311"/>
+        <location line="+1"/>
+        <source>Sandbox commands</source>
+        <translation>Sandbox-kommandoer</translation>
+    </message>
+    <message>
+        <location line="-311"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation>Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <location line="+1"/>
+        <location line="+307"/>
+        <location line="+1"/>
+        <source>Load project instructions</source>
+        <translation>Indlæs projektinstruktioner</translation>
+    </message>
+    <message>
+        <location line="-307"/>
+        <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
+        <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Web Search Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Web-søgeudbyder</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Web Search Provider:</source>
-        <translation type="unfinished"></translation>
+        <translation>Web-søgeudbyder:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation type="unfinished"></translation>
+        <translation>Backend, der bruges af websearch-værktøjet: &quot;exa&quot; (standard, kræver ingen API-nøgle), &quot;google&quot; (Custom Search JSON API, kræver en API-nøgle og et søgemaskine-id), &quot;brave&quot; (Brave Search API, kræver en API-nøgle) eller &quot;tavily&quot; (kræver en API-nøgle).</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Exa Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Exa-slutpunkt</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Exa-slutpunkt:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Exa MCP endpoint used by the websearch tool.</source>
-        <translation type="unfinished"></translation>
+        <translation>URL for Exa-MCP-slutpunktet, der bruges af websearch-værktøjet.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Exa-API-nøgle</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Exa-API-nøgle:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Valgfri Exa-API-nøgle. Uden en nøgle bruges det fælles (ratebegrænsede) slutpunkt.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Google-slutpunkt</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Google-slutpunkt:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Google Custom Search (customsearch/v1) endpoint used by the websearch tool.</source>
-        <translation type="unfinished"></translation>
+        <translation>URL for Google Custom Search-slutpunktet (customsearch/v1), der bruges af websearch-værktøjet.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Google-API-nøgle</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Google-API-nøgle:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for the Google Custom Search JSON API (required for the &quot;google&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>API-nøgle til Google Custom Search JSON API (kræves for udbyderen &quot;google&quot;).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google Search Engine ID (cx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Google Search Engine-id (cx)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google Search Engine ID (cx):</source>
-        <translation type="unfinished"></translation>
+        <translation>Google Search Engine-id (cx):</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The cx (search engine ID) of the Google Custom Search engine (required for the &quot;google&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>Cx-værdien (søgemaskine-id) for Google Custom Search-maskinen (kræves for udbyderen &quot;google&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Brave Search Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Brave Search-slutpunkt</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Brave Search Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Brave Search-slutpunkt:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Brave Search API endpoint used by the websearch tool (the &quot;brave&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>URL for Brave Search API-slutpunktet, der bruges af websearch-værktøjet (udbyderen &quot;brave&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Brave Search API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Brave Search API-nøgle</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Brave Search API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Brave Search API-nøgle:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for the Brave Search API, get one at brave.com/search/api (required for the &quot;brave&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>API-nøgle til Brave Search API. Få en på brave.com/search/api (kræves for udbyderen &quot;brave&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Tavily Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavily-slutpunkt</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Tavily Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavily-slutpunkt:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Tavily search endpoint used by the websearch tool (the &quot;tavily&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>URL for Tavily-søgeslutpunktet, der bruges af websearch-værktøjet (udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Tavily API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavily-API-nøgle</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Tavily API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tavily-API-nøgle:</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for Tavily, get one at tavily.com (required for the &quot;tavily&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+232"/>
+        <location line="+191"/>
+        <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
+        <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Overrides the global &apos;Load project instructions&apos; setting for this project. See the global setting on the Llama Tools page for what is loaded.</source>
+        <translation>Tilsidesætter den globale indstilling &apos;Indlæs projektinstruktioner&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad der indlæses.</translation>
+    </message>
+    <message>
+        <location line="+63"/>
         <source>Prompts</source>
-        <translation type="unfinished"></translation>
+        <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+59"/>
+        <location filename="../llamachateditor.cpp" line="+86"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Slået fra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Lav</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Mellem</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Høj</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Maks</translation>
     </message>
     <message>
-        <location line="+59"/>
+        <location line="+62"/>
         <source>LLM model</source>
-        <translation type="unfinished"></translation>
+        <translation>LLM-model</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>Thinking level</source>
-        <translation type="unfinished"></translation>
+        <source>Follow up</source>
+        <translation>Opfølg</translation>
     </message>
     <message>
-        <location line="+188"/>
+        <location line="+1"/>
+        <source>Generate follow-up questions after each reply</source>
+        <translation>Generér opfølgende spørgsmål efter hvert svar</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Thinking level</source>
+        <translation>Tænkeniveau</translation>
+    </message>
+    <message>
+        <location line="+186"/>
         <source>Search in chat</source>
         <translation>Søg i chat</translation>
     </message>
@@ -1113,7 +1185,12 @@
         <translation>Forrige søgeresultat</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+13"/>
+        <source>Send to Llama Chat</source>
+        <translation>Send til Llama Chat</translation>
+    </message>
+    <message>
+        <location line="+49"/>
         <source>Model Path: %1</source>
         <translation>Modelsti: %1</translation>
     </message>
@@ -1140,42 +1217,53 @@
     <message>
         <location line="+35"/>
         <source>Follow‑up questions:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="+398"/>
+        <location line="+481"/>
         <source>Thinking level: %1 (applies to new messages)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+27"/>
+        <location line="+81"/>
+        <source>Human Editor</source>
+        <translation>Menneskelig redaktør</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Edit Message</source>
+        <translation>Rediger meddelelse</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dette vil slette %1 meddelelser, herunder: %2 brugermeddelelser og %3 assistentsvar ...</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Confirm Branch Deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekræft sletning af gren</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Delete Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Slet meddelelse</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Are you sure you want to delete this message?</source>
-        <translation type="unfinished"></translation>
+        <translation>Er du sikker på, at du vil slette denne meddelelse?</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+162"/>
         <source>Processing: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Behandler: %1%</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Prompt-behandling:&lt;/b&gt;&lt;br&gt;Samlede tokens: %1&lt;br&gt;Behandlet: %2&lt;br&gt;Cachelagret: %3&lt;br&gt;Tid: %4 ms</translation>
     </message>
     <message>
         <source>Follow-up questions:</source>
@@ -1194,12 +1282,12 @@
     <message>
         <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontekst: %1% brugt</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontekst: %1% brugt.&lt;br&gt;  %2 tokens fra %3.</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -1253,7 +1341,7 @@
         <translation type="vanished">Klik for at udvide / skjule tænkeprocessen</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+118"/>
+        <location filename="../llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Vedhæftede filer</translation>
     </message>
@@ -1273,7 +1361,12 @@
         <translation>Rediger denne meddelelse</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
+        <source>Edit the message in the Markdown editor</source>
+        <translation>Rediger meddelelsen i Markdown-editoren</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Re-generate the answer</source>
         <translation>Generer svaret på ny</translation>
     </message>
@@ -1285,30 +1378,31 @@
     <message>
         <location line="+7"/>
         <source>Delete this message</source>
-        <translation type="unfinished"></translation>
+        <translation>Slet denne meddelelse</translation>
     </message>
     <message>
-        <location line="+339"/>
+        <location line="+299"/>
+        <source>Image</source>
+        <translation>Billede</translation>
+    </message>
+    <message>
         <source>Overwrite File?</source>
-        <translation>Overskrive fil?</translation>
+        <translation type="vanished">Overskrive fil?</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The file &quot;%1&quot; already exists.
 
 Do you want to overwrite it?</source>
-        <translation>Fil &quot;%1&quot; findes allerede.
+        <translation type="vanished">Fil &quot;%1&quot; findes allerede.
 Vil du overskrive den?</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Save File</source>
-        <translation>Gem fil</translation>
+        <translation type="vanished">Gem fil</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>All Files (*)</source>
-        <translation>Alle filer (*)</translation>
+        <translation type="vanished">Alle filer (*)</translation>
     </message>
     <message>
         <location filename="../llamaconversationsmodel.cpp" line="+73"/>
@@ -1326,7 +1420,7 @@ Vil du overskrive den?</translation>
         <translation>Konversations-id</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+111"/>
+        <location filename="../llamaconversationsview.cpp" line="+113"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Opretter en ny samtale med llama.cpp</translation>
     </message>
@@ -1347,17 +1441,22 @@ Vil du overskrive den?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+40"/>
+        <location line="+41"/>
         <source>Delete</source>
         <translation>Slet</translation>
     </message>
     <message>
-        <location line="-39"/>
+        <location line="-40"/>
         <source>Save as Markdown</source>
         <translation>Gem som Markdown</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+3"/>
+        <source>Save as HTML</source>
+        <translation>Gem som HTML</translation>
+    </message>
+    <message>
+        <location line="+30"/>
         <source>Delete Conversation</source>
         <translation>Slet denne samtale</translation>
     </message>
@@ -1369,29 +1468,36 @@ Vil du overskrive den?</translation>
 %1</translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
         <translation>Gem denne samtale som Markdown</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location line="+40"/>
         <source>Error</source>
         <translation>Fejl</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-39"/>
+        <location line="+40"/>
         <source>Cannot write file:
 %1</source>
         <translation>Kan ikke skrive til filen:
 %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-13"/>
+        <source>Save Conversation as HTML</source>
+        <translation>Gem samtalen som HTML</translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <source>llama.cpp Conversations</source>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-790"/>
+        <location filename="../llamasettings.cpp" line="-896"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -1429,28 +1535,38 @@ Indbyggede prompts: %1
 Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+733"/>
-        <location line="+34"/>
-        <source>Details</source>
-        <translation type="unfinished"></translation>
+        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <source>SVG image</source>
+        <translation>SVG-billede</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+30"/>
+        <location line="+9"/>
+        <source>Mermaid diagram</source>
+        <translation>Mermaid-diagram</translation>
+    </message>
+    <message>
+        <location line="+492"/>
+        <location line="+34"/>
+        <source>Details</source>
+        <translation>Detaljer</translation>
+    </message>
+    <message>
+        <location line="+718"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Kopier koden nedenfor til udklipsholderen</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Save the code below into a file on disk</source>
-        <translation>Gem koden nedenfor i en fil på disk</translation>
+        <translation type="vanished">Gem koden nedenfor i en fil på disk</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Copied to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieret til udklipsholderen</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+109"/>
+        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Vis/fjern detaljer om værktøjsbrug</translation>
     </message>
@@ -1808,433 +1924,690 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Vælg et værktøj for at se dets JSON-definition</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+59"/>
+        <location filename="../toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
-        <translation type="unfinished"></translation>
+        <translation>Vælg et værktøj for at se dets definition</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+10"/>
         <source>Tool</source>
         <translation>Værktøj</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+18"/>
+        <source>Download ripgrep %1</source>
+        <translation>Download ripgrep %1</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Edit</source>
+        <translation>Rediger</translation>
+    </message>
+    <message>
+        <location line="+171"/>
+        <source>The search and find tools use ripgrep, which is not installed on this system.</source>
+        <translation>Værktøjerne search og find bruger ripgrep, som ikke er installeret på dette system.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>ripgrep: %1</source>
+        <translation>ripgrep: %1</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <location line="+11"/>
+        <source>URL: %1</source>
+        <translation>URL: %1</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <source>Headers: %1</source>
+        <translation>Headers: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>(none)</source>
+        <translation>(ingen)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
+        <translation>De værktøjer, som denne server tilbyder, er vist nedenfor; marker et værktøj for at aktivere det til chatten.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
+        <translation>Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer → MCP i Qt Creator-indstillingerne).</translation>
+    </message>
+    <message>
+        <location line="+165"/>
+        <location line="+51"/>
+        <location line="+254"/>
+        <source>MCP Server</source>
+        <translation>MCP-server</translation>
+    </message>
+    <message>
+        <location line="-304"/>
+        <location line="+51"/>
+        <source>The name &quot;%1&quot; is reserved for the builtin Qt Creator MCP server.</source>
+        <translation>Navnet &quot;%1&quot; er reserveret til den indbyggede Qt Creator MCP-server.</translation>
+    </message>
+    <message>
+        <location line="+74"/>
+        <source>not connected</source>
+        <translation>ikke forbundet</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>no tools</source>
+        <translation>ingen værktøjer</translation>
+    </message>
+    <message>
+        <location line="+178"/>
+        <source>Display name, e.g. My MCP server</source>
+        <translation>Visningsnavn, f.eks. Min MCP-server</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>https://host:port/mcp</source>
+        <translation>https://host:port/mcp</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>One &quot;Name: value&quot; header per line, e.g.
+Authorization: Bearer &lt;token&gt;</source>
+        <translation>Én &quot;Name: value&quot;-header pr. linje, f.eks.
+Authorization: Bearer &lt;token&gt;</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Name:</source>
+        <translation>Navn:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>URL:</source>
+        <translation>URL:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Headers:</source>
+        <translation>Headers:</translation>
+    </message>
+    <message>
+        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <source>Choose a Skills Directory</source>
+        <translation>Vælg en færdigheds-mappe</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Select a skill to view its content</source>
+        <translation>Vælg en færdighed for at se dens indhold</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location filename="../toolsettingswidget.cpp" line="-794"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+0"/>
+        <source>Skill</source>
+        <translation>Færdighed</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Skill directories:</source>
+        <translation>Færdigheds-mapper:</translation>
+    </message>
+    <message>
+        <location line="+115"/>
+        <source>%1 skill file(s) were skipped: %2</source>
+        <translation>%1 færdighedsfil(er) blev sprunget over: %2</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <location filename="../toolsettingswidget.cpp" line="+275"/>
+        <source>Name: %1</source>
+        <translation>Navn: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Description: %1</source>
+        <translation>Beskrivelse: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>File: %1</source>
+        <translation>Fil: %1</translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>1 skill</source>
+        <translation>1 færdighed</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>%1 skills</source>
+        <translation>%1 færdigheder</translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Ingen beskrivelse</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Internal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Qt Creator MCP</source>
-        <translation type="unfinished"></translation>
+        <translation>Intern</translation>
     </message>
     <message>
         <location filename="../llamalocatorfilter.cpp" line="+64"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Send det aktuelle udvalg til llama.cpp med en prompt.
+Indbyggede prompts: %1
+Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-83"/>
+        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <source>(empty)</source>
+        <translation>(tom)</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location filename="../skillssettingswidget.cpp" line="-353"/>
+        <location filename="../toolsettingswidget.cpp" line="-127"/>
+        <source>Add…</source>
+        <translation>Tilføj…</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../skillssettingswidget.cpp" line="+17"/>
+        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <source>Remove</source>
+        <translation>Fjern</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Select a prompt to edit it</source>
+        <translation>Vælg en prompt for at redigere den</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Reset to Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nulstil til standard</translation>
     </message>
     <message>
-        <location line="+70"/>
-        <source>Collapse the full prompt</source>
-        <translation type="unfinished"></translation>
+        <location line="+16"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation>Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Expand the full prompt</source>
-        <translation type="unfinished"></translation>
+        <location line="+8"/>
+        <source>Prompt</source>
+        <translation>Prompt</translation>
     </message>
     <message>
-        <location line="+28"/>
-        <source>Locator (“ll”)</source>
-        <translation type="unfinished"></translation>
+        <location line="+9"/>
+        <source>Prompts:</source>
+        <translation>Prompts:</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. “{selection}” is replaced with the selected text.</source>
-        <translation type="unfinished"></translation>
+        <location line="+30"/>
+        <source>Title</source>
+        <translation>Titel</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Add Prompt</source>
-        <translation type="unfinished"></translation>
+        <source>Locator (&quot;ll&quot;)</source>
+        <translation>Lokator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location line="+64"/>
-        <source>Remove this prompt</source>
-        <translation type="unfinished"></translation>
+        <location filename="../skills.cpp" line="+78"/>
+        <source>failed to read file</source>
+        <translation>kunne ikke læse filen</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>invalid YAML frontmatter: %1</source>
+        <translation>ugyldig YAML-frontmatter: %1</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>frontmatter is not a key/value mapping</source>
+        <translation>frontmatter er ikke en nøgle/værdi-mapping</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>description is required</source>
+        <translation>beskrivelse er påkrævet</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>description exceeds %1 characters (%2)</source>
+        <translation>beskrivelsen overskrider %1 tegn (%2)</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>ugyldigt navn &quot;%1&quot; (kun små bogstaver a‑z, 0‑9 og bindestreger, maks. %2 tegn, ingen bindestreger i begyndelse/slut eller i træk)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
+        <translation>navnet &quot;%1&quot; svarer ikke til mappen &quot;%2&quot;</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
+        <translation>navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
 </context>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+242"/>
+        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Slet %1</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Edit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediger %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Flyt %1 til %2</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+7"/>
         <source>Apply patch</source>
-        <translation type="unfinished"></translation>
+        <translation>Anvend patch</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Apply patch to %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>Anvend patch på %1 filer</translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+79"/>
         <source>created</source>
-        <translation type="unfinished"></translation>
+        <translation>oprettet</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location filename="../tools/edit_file_tool.cpp" line="+315"/>
+        <location line="+6"/>
         <source>edited</source>
-        <translation type="unfinished"></translation>
+        <translation>redigeret</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>moved</source>
-        <translation type="unfinished"></translation>
+        <translation>flyttet</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>slettet</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+192"/>
         <source>Success. Updated the following files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+93"/>
+        <location filename="../tools/bash_tool.cpp" line="+103"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+147"/>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation>sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+145"/>
         <source>[Output truncated: %1]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Output beskåret: %1]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>showing last %1 of %2 lines</source>
-        <translation type="unfinished"></translation>
+        <translation>viser de sidste %1 af %2 linjer</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>showing last %1 KB</source>
-        <translation type="unfinished"></translation>
+        <translation>viser de sidste %1 KB</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Full output saved to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+112"/>
         <source>running %1</source>
-        <translation type="unfinished"></translation>
+        <translation>kører %1</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+22"/>
         <source>Error: the command must not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejl: kommandoen må ikke være tom.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Error: working directory does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejl: arbejdsmappe findes ikke: %1</translation>
     </message>
     <message>
         <location line="+9"/>
+        <location line="+9"/>
+        <location line="+17"/>
         <source>Error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejl: %1</translation>
     </message>
     <message>
-        <location line="+130"/>
+        <location line="+161"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommandoen timed ud efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Failed to start the command: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunne ikke starte kommandoen: %1</translation>
     </message>
     <message>
         <location line="+2"/>
+        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location line="+7"/>
+        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location line="+7"/>
         <source>unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>ukendt fejl</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Command terminated abnormally (crashed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommandoen afsluttede unormalt (crashed).</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Command exited with code %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommandoen afsluttede med kode %1.</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+51"/>
         <source>Working directory: %1
+
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Arbejdsmappe: %1
+
+</translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="-39"/>
+        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediger fil</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>edit %1 (%2 blocks)</source>
-        <translation type="unfinished"></translation>
+        <translation>rediger %1 (%2 blokke)</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+26"/>
         <source>edit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>rediger %1</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+35"/>
+        <location filename="../tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: hver redigering kræver et &quot;oldText&quot; og et &quot;newText&quot;.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: &quot;edits&quot; skal indeholde mindst én erstatning.</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or apply_patch to create the file.</source>
-        <translation type="unfinished"></translation>
+        <location line="+9"/>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation>Kan ikke redigere &quot;%1&quot;: filen blev ikke fundet. Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan ikke redigere &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 blok/blev erstatte(t) i %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+79"/>
+        <location filename="../tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
-        <source>Cannot reach the Qt Creator MCP server.</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot reach the MCP server.</source>
+        <translation>Kan ikke nå MCP-serveren.</translation>
     </message>
     <message>
         <location line="-22"/>
         <source>MCP initialize failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MCP-initialisering fejlede: %1</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>MCP tools/list failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>MCP tools/list fejlede: %1</translation>
     </message>
     <message>
         <location line="+53"/>
-        <source>Connection to the Qt Creator MCP server was closed.</source>
-        <translation type="unfinished"></translation>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>Forbindelsen til MCP-serveren blev lukket.</translation>
     </message>
     <message>
         <location line="+27"/>
-        <source>The Qt Creator MCP server is not available. Enable the &quot;Qt Creator MCP Server&quot; plugin in Qt Creator settings.</source>
-        <translation type="unfinished"></translation>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>MCP-serveren er ikke tilgængelig. Tjek, at serveren kører og kan nås, og prøv derefter igen.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+61"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>MCP-serveren genstartede; opkaldet blev ikke udført. Prøv venligst igen.</translation>
+    </message>
+    <message>
+        <location line="-42"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>The Qt Creator MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+53"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="unfinished"></translation>
+        <translation>MCP-serveren returnerede HTTP %1 for værktøjsopkaldet.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation type="unfinished"></translation>
+        <translation>MCP-serveren returnerede et tomt eller fejlfornemt svar.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+53"/>
+        <location filename="../tools/readfile_tool.cpp" line="+78"/>
         <source>read whole file %1</source>
-        <translation type="unfinished">læs hele fil %1</translation>
+        <translation>læs hele fil %1</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation type="unfinished"></translation>
+        <translation>læs %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+22"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished">Fil &quot;%1&quot; findes ikke.</translation>
+        <translation>Fil &quot;%1&quot; findes ikke.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Kunne ikke læse &quot;%1&quot;: %2</translation>
+        <translation>Kunne ikke læse &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>Billedet &quot;%1&quot; er %2 MB stort og overskrider læsegrænsen på %3 MB; ændr størrelsen på det først (f.eks. med bash-værktøjet).</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>Billedfil &quot;%1&quot; (%2, %3 bytes). Dens indhold er vedhæftet som et billede.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation type="unfinished">Første linje skal være &gt;= 1.</translation>
+        <translation>Første linje skal være &gt;= 1.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="unfinished">Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
+        <translation>Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="unfinished">Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
+        <translation>Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+35"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="unfinished"></translation>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>Linje %1 i &quot;%2&quot; er større end læsegrænsen på %3 KB; filen kan ikke læses med dette værktøj.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> %1 KB-grænsen nået.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
+    </message>
+    <message>
+        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du er &quot;general&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Arbejd selvstændigt med de tilgængelige værktøjer, indtil opgaven er fuldført; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport over, hvad du har gjort eller fundet, inklusive relevante filstier med linjenumre, så den primære samtale kan fortsætte arbejdet.</translation>
     </message>
     <message>
         <location line="+68"/>
         <location line="+27"/>
         <source>task: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>opgave: %1</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: både &quot;description&quot; og &quot;prompt&quot; er påkrævede.</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: ukendt subagent_type &quot;%1&quot; (forventet &quot;explore&quot; eller &quot;general&quot;)</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Task: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Opgave: %1</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="unfinished"></translation>
+        <translation>Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
+
+%3</translation>
     </message>
     <message>
         <location filename="../tools/webfetch_tool.cpp" line="+158"/>
         <location line="+27"/>
         <source>fetch %1</source>
-        <translation type="unfinished"></translation>
+        <translation>hent %1</translation>
     </message>
     <message>
         <location line="+112"/>
         <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="unfinished"></translation>
+        <translation>Ugyldig URL &quot;%1&quot;: den skal starte med http:// eller https://</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="unfinished"></translation>
+        <translation>Hentning af %1 fejlede: svaret er for stort (grænse 5 MB).</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fetch failed for %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Hentning af %1 fejlede: %2</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>
 
 [... content truncated at %1 characters ...]</source>
-        <translation type="unfinished"></translation>
+        <translation>
+
+[... indhold beskåret ved %1 tegn ...]</translation>
     </message>
     <message>
         <location filename="../tools/websearch_tool.cpp" line="+87"/>
         <location line="+26"/>
         <source>search %1</source>
-        <translation type="unfinished"></translation>
+        <translation>søg %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+123"/>
         <source>Search results for &quot;%1&quot;:</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgeresultater for &quot;%1&quot;:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id'et (cx) i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2243,48 +2616,406 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+42"/>
         <location line="+46"/>
         <source>Search failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: %1</translation>
     </message>
     <message>
         <location line="-135"/>
         <location line="+51"/>
         <location line="+42"/>
         <source>Search failed: invalid response from the search provider.</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: ugyldigt svar fra søgeudbyderen.</translation>
     </message>
     <message>
         <location line="-82"/>
         <source>no results found for &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>ingen resultater fundet for &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: Brave-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
         <location line="+34"/>
         <location line="+41"/>
         <location line="+40"/>
         <source>No results found for &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen resultater fundet for &quot;%1&quot;.</translation>
     </message>
     <message>
         <location line="-72"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgning fejlede: Exa-slutpunktets URL er ikke konfigureret.</translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Søgeresultater for &quot;%1&quot;:
+
+%2</translation>
+    </message>
+    <message>
+        <location filename="../tools/find_tool.cpp" line="-153"/>
+        <location line="+11"/>
+        <source>find files %1</source>
+        <translation>find filer %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/search_tool.cpp" line="-145"/>
+        <source>Pattern: `%1`</source>
+        <translation>Mønster: `%1`</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <source>  Path: %1</source>
+        <translation>  Stie: %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/search_tool.cpp" line="+18"/>
+        <source>Error: the pattern must not be empty.</source>
+        <translation>Fejl: mønstret må ikke være tomt.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <source>Error: path is not a directory: %1</source>
+        <translation>Fejl: stien er ikke en mappe: %1</translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../tools/search_tool.cpp" line="+113"/>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation>[Kunne ikke starte ripgrep: %1]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation>[ripgrep fejlede (afslutningskode %1): %2]</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation>[Grænsen på %1 resultater nået. Brug limit=%2 for flere resultater, eller brug et mere specifikt mønster.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>No files found.</source>
+        <translation>Ingen filer fundet.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/ls_tool.cpp" line="-29"/>
+        <location line="+6"/>
+        <source>list directory %1</source>
+        <source>list directory %1</source>
+        <translation>Liste mappen %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Path: `%1`
+
+</source>
+        <translation>Sti: `%1`
+
+</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Directory is empty.</source>
+        <translation>Mappen er tom.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>[Output beskåret til %1 KB. List en undermappe for at se de resterende poster.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation>MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <source>Download ripgrep</source>
+        <translation>Download ripgrep</translation>
+    </message>
+    <message>
+        <location line="+57"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>Download ripgrep %1 fra GitHub?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Project: %1</source>
+        <translation>Projekt: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License: %1</source>
+        <translation>Licens: %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Download</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>Pakken indeholder ingen ripgrep-binær.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>Der findes ingen ripgrep til denne platform.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>Downloader ripgrep ...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>Download af ripgrep fejlede: %1</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Verifying package integrity...</source>
+        <translation>Verificerer pakkeintegritet ...</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation>Den downloadede pakke er ikke den, der blev forventet.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>Udpakker ripgrep ...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>Udpakning af ripgrep fejlede: %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location line="+11"/>
+        <source>search for %1</source>
+        <translation>søg efter %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: `%1`</source>
+        <translation>  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Error: path does not exist: %1</source>
+        <translation>Fejl: stien findes ikke: %1</translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>[Grænsen på %1 treffere nået. Brug limit=%2 for flere resultater, eller forfin mønstret.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>[Nogle linjer beskåret til %1 tegn. Brug read_file for at se hele linjerne.]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>Ingen treffere fundet.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <source>load skill %1</source>
+        <translation>indlæs færdighed %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>Argumentet &quot;name&quot; er påkrævet.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>Færdigheden &quot;%1&quot; blev ikke fundet. Tilgængelige færdigheder: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(none)</source>
+        <translation>(ingen)</translation>
+    </message>
+    <message>
+        <location filename="../tools/todowrite_tool.cpp" line="+98"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>opdater opgaveliste</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>opdater opgaveliste (%1 opgaver)</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>Værktøjsfejl: opgave %1 har et tomt &quot;content&quot;.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>Værktøjsfejl: opgave %1 har ukendt status &quot;%2&quot; (forventet &quot;pending&quot;, &quot;in_progress&quot; eller &quot;completed&quot;).</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>Værktøjsfejl: kun én opgave kan være &quot;in_progress&quot; ad gangen (%1 angivet).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
+    </message>
+    <message>
+        <location filename="../tools/tool_utils.cpp" line="+61"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>Læsning af &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger kan ikke læses i sandboxen.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
+        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Installer det engang med &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); der kræves ikke logout, netværksspærringen nøgler på den dedikerede sandbox-brugers SID. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
+        <translation>Windows-sandbox-backenden (srt-win) kunne ikke spørges (afslutning %1): %2 %3</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>The Windows sandbox user is not provisioned. %1</source>
+        <translation>Windows-sandbox-brugeren er ikke provisioneret. %1</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation>Windows-sandbox-backenden (srt-win) rapporterede ikke sandbox-brugers SID. %1</translation>
+    </message>
+    <message>
+        <location line="+90"/>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation>Windows-sandboxen kunne ikke give sandbox-brugeren adgang til arbejdsmappe (afslutning %1): %2</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation>srt-win (@anthropic-ai/sandbox-runtime Windows-sandbox-backend) blev ikke fundet på PATH. %1 LLAMA_SRT_WIN kan pege på eksekverbaren.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <source>Write file</source>
+        <translation>Skriv fil</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>skriv %1</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>Kan ikke skrive til &quot;%1&quot;: en forælderstie er en fil.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>Kan ikke skrive til &quot;%1&quot;: kan ikke oprette mappe: %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Kan ikke skrive til &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>%1 bytes blev skrevet til %2.</translation>
     </message>
 </context>
 </TS>
