@@ -543,8 +543,6 @@ private slots:
     void htmlExport_toolCall();
     void htmlExport_thinkingSection();
     void htmlExport_embedsCachedDiagrams();
-    void htmlExport_inlineStyles();
-    void htmlExport_inlineStylesTaskList();
 
     // Project instructions (AGENTS.md / CLAUDE.md)
     void projectInstructions_candidatePriority();
@@ -4271,13 +4269,10 @@ void LlamaToolsTest::htmlExport_conversationDocument()
     // Theme colours were resolved to hex values, no token names left behind.
     QVERIFY(html.contains(QStringLiteral("background: #")));
     QVERIFY(!html.contains(QStringLiteral("Token_")));
-    // The message bubbles carry their styles inline as well as in the
-    // <style> block, so pasting into a WYSIWYG editor keeps the look.
-    QVERIFY(html.contains(QStringLiteral("<div class=\"msg user\" style=\"")));
-    QVERIFY(html.contains(QStringLiteral("<div class=\"msg assistant\" style=\"")));
-    QVERIFY(html.contains(QStringLiteral("<p style=\"")));
-    QVERIFY(html.contains(QStringLiteral(">Hello</p>")));
-    QVERIFY(html.contains(QStringLiteral(">Hi!</p>")));
+    QVERIFY(html.contains(QStringLiteral("<div class=\"msg user\">")));
+    QVERIFY(html.contains(QStringLiteral("<div class=\"msg assistant\">")));
+    QVERIFY(html.contains(QStringLiteral("<p>Hello</p>")));
+    QVERIFY(html.contains(QStringLiteral("<p>Hi!</p>")));
     // Tables get the chat renderer's alternating row shading.
     QVERIFY(html.contains(QStringLiteral("tbody tr:nth-child(odd)")));
 }
@@ -4293,21 +4288,16 @@ void LlamaToolsTest::htmlExport_userAssistant()
     assistant.content = QStringLiteral("**bold** and `inline code`\n\n- one\n- two");
 
     const QString userHtml = HtmlExporter::messageToHtml(user);
-    QVERIFY2(userHtml.contains(QStringLiteral("<div class=\"msg user\" style=\"")),
+    QVERIFY2(userHtml.contains(QStringLiteral("<div class=\"msg user\">")), qPrintable(userHtml));
+    QVERIFY2(userHtml.contains(QStringLiteral("<a href=\"https://example.com\">the docs</a>")),
              qPrintable(userHtml));
-    QVERIFY2(userHtml.contains(QStringLiteral("<a href=\"https://example.com\" style=\"color:")),
-             qPrintable(userHtml));
-    QVERIFY2(userHtml.contains(QStringLiteral(">the docs</a>")), qPrintable(userHtml));
     // The literal < in the text is escaped, not a real element.
     QVERIFY(userHtml.contains(QStringLiteral("1 &lt; 2")));
 
     const QString assistantHtml = HtmlExporter::messageToHtml(assistant);
     QVERIFY2(assistantHtml.contains(QStringLiteral("<strong>bold</strong>")),
              qPrintable(assistantHtml));
-    // Inline code gets its monospace + muted‑background style attribute.
-    QVERIFY2(assistantHtml.contains(QStringLiteral("<code style=\"font-family:")),
-             qPrintable(assistantHtml));
-    QVERIFY2(assistantHtml.contains(QStringLiteral(">inline code</code>")),
+    QVERIFY2(assistantHtml.contains(QStringLiteral("<code>inline code</code>")),
              qPrintable(assistantHtml));
     QVERIFY2(assistantHtml.contains(QStringLiteral("<li>one</li>")), qPrintable(assistantHtml));
 }
@@ -4319,9 +4309,7 @@ void LlamaToolsTest::htmlExport_codeBlockHighlighted()
     assistant.content = QStringLiteral("```cpp\nint main() { return 0; }\n```");
 
     const QString html = HtmlExporter::messageToHtml(assistant);
-    // The block (and its code element) carry inline styles, too.
-    QVERIFY2(html.contains(QStringLiteral("<pre style=\"")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<code style=\"")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("<pre><code>")), qPrintable(html));
     // The C++ definition produced coloured runs (the keyword "int" at least).
     QVERIFY2(html.contains(QStringLiteral("<span style=\"color:#")), qPrintable(html));
     // The runs may be split across spans, so check the pieces.
@@ -4364,10 +4352,9 @@ void LlamaToolsTest::htmlExport_toolCall()
     toolMsg.extra.append(resultExtra);
 
     const QString html = HtmlExporter::messageToHtml(toolMsg);
-    QVERIFY2(html.contains(QStringLiteral("<div class=\"msg tool\" style=\"")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("<div class=\"msg tool\">")), qPrintable(html));
     // one-line summary of the bash tool (backticks as <code>), plus the status
-    QVERIFY2(html.contains(QStringLiteral("<code style=\"font-family:")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral(">ls -la</code>")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("<code>ls -la</code>")), qPrintable(html));
     QVERIFY(html.contains(QStringLiteral("(success)")));
     QVERIFY(html.contains(QStringLiteral("<strong>Arguments</strong>")));
     // JSON quotes are HTML-escaped inside the code block.
@@ -4417,7 +4404,7 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
     const QString html = HtmlExporter::messageToHtml(assistant);
     // The cached mermaid block becomes a section with a base64 image and the
     // source below it...
-    QVERIFY2(html.contains(QStringLiteral("<summary style=\"cursor:pointer")),
+    QVERIFY2(html.contains(QStringLiteral("<summary>Mermaid diagram</summary>")),
              qPrintable(html));
     QVERIFY2(html.contains(QStringLiteral("data:image/svg+xml;base64,") + b64),
              qPrintable(html));
@@ -4425,9 +4412,8 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
     QVERIFY2(html.contains(QStringLiteral("--&gt; B[End]")), qPrintable(html));
     // ...and the cached math span an inline image, aligned like the chat
     // view (re-boxed SVGs pin to the line bottom, display math is centred).
-    QVERIFY2(html.contains(QStringLiteral("class=\"math\" src=\"data:image/svg+xml;base64,")),
+    QVERIFY2(html.contains(QStringLiteral("<img class=\"math\" src=\"data:image/svg+xml;base64,")),
              qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("vertical-align:bottom")), qPrintable(html));
 
     // Display math gets the centred block variant. Mixed with inline math in
     // the same message: the display pass must not leave a $...$ that the
@@ -4441,10 +4427,9 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
     Message displayMsg = assistant;
     displayMsg.content = QStringLiteral("And $$e^2$$ overall, like $e^2$ inline.");
     const QString displayHtml = HtmlExporter::messageToHtml(displayMsg);
-    QVERIFY2(displayHtml.contains(QStringLiteral("class=\"math display\"")),
+    QVERIFY2(displayHtml.contains(QStringLiteral("<img class=\"math display\"")),
              qPrintable(displayHtml));
-    QVERIFY2(displayHtml.contains(QStringLiteral("display:block")), qPrintable(displayHtml));
-    QVERIFY2(displayHtml.contains(QStringLiteral("class=\"math\" src=")),
+    QVERIFY2(displayHtml.contains(QStringLiteral("<img class=\"math\" src=")),
              qPrintable(displayHtml));
     // No escaped img tags (that is what a corrupted attribute looks like).
     QVERIFY(!displayHtml.contains(QLatin1String("&lt;img")));
@@ -4455,7 +4440,7 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
     user.content = QStringLiteral("Look: $e^2$");
     user.extra.append(mathEntry);
     const QString userHtml = HtmlExporter::messageToHtml(user);
-    QVERIFY2(userHtml.contains(QStringLiteral("class=\"math\" src=\"data:image/svg+xml;base64,")),
+    QVERIFY2(userHtml.contains(QStringLiteral("<img class=\"math\" src=\"data:image/svg+xml;base64,")),
              qPrintable(userHtml));
 }
 
@@ -4470,88 +4455,10 @@ void LlamaToolsTest::htmlExport_thinkingSection()
     const QString html = HtmlExporter::messageToHtml(assistant);
     // The thinking section becomes a collapsible <details> section whose
     // summary is not wrapped in a <p> (not valid phrasing content).
-    QVERIFY2(html.contains(QStringLiteral("<summary style=\"cursor:pointer")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral(">Thought</summary>")), qPrintable(html));
+    QVERIFY2(html.contains(QStringLiteral("<summary>Thought</summary>")), qPrintable(html));
     QVERIFY(html.contains(QStringLiteral("let me think")));
     QVERIFY(html.contains(QStringLiteral("The answer is 42.")));
     QVERIFY(!html.contains(QStringLiteral("<summary><p>")));
-}
-
-void LlamaToolsTest::htmlExport_inlineStyles()
-{
-    // Everything the <style> block styles must also arrive as style
-    // attributes, so the markup survives paste into editors that drop
-    // <style> blocks.
-    Message user;
-    user.role = "user";
-    user.content = QStringLiteral(
-        "# Heading\n\n> quoted\n\n---\n\n| a | b |\n| - | - |\n| 1 | 2 |\n| 3 | 4 |\n| 5 | 6 |");
-
-    const QString html = HtmlExporter::messageToHtml(user);
-    // Block elements of the bubble.
-    QVERIFY2(html.contains(QStringLiteral("<h1 style=\"font-size:20px;")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<blockquote style=\"border-left:3px solid")),
-             qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<hr style=\"border:none;border-top:1px solid")),
-             qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<table style=\"border-collapse:collapse")),
-             qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<th style=\"border:1px solid")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("<td style=\"border:1px solid")), qPrintable(html));
-
-    // ".msg > :first-child" / ":last-child": the bubble's first element
-    // (the h1) loses its top margin, its last (the table) its bottom one.
-    QVERIFY2(html.contains(QStringLiteral("<h1 style=\"font-size:20px;margin-top:0\"")),
-             qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral(
-                 "<table style=\"border-collapse:collapse;margin:8px 0;margin-bottom:0\"")),
-             qPrintable(html));
-
-    // "tbody tr:nth-child(odd)": 1st and 3rd body rows shaded, 2nd not.
-    const QString shadedRow = QStringLiteral("<tr style=\"background:");
-    const QString plainRow = QStringLiteral("<tr>");
-    const int firstRow = html.indexOf(shadedRow);
-    const int secondRow = html.indexOf(plainRow, firstRow);
-    const int thirdRow = html.indexOf(shadedRow, secondRow);
-    QVERIFY2(firstRow > 0, qPrintable(html));
-    QVERIFY2(secondRow > firstRow, qPrintable(html));
-    QVERIFY2(thirdRow > secondRow, qPrintable(html));
-
-    // The <style> block is kept as well (identical rules, no conflict).
-    const QString document = HtmlExporter::conversationHtml("T", {user});
-    QVERIFY(document.contains(QStringLiteral("<style>")));
-    QVERIFY(document.contains(QStringLiteral("<body style=\"font-family:")));
-    // The .chat container is inlined, too (bubble separation on paste).
-    QVERIFY2(document.contains(QStringLiteral(
-                 "<div class=\"chat\" style=\"display:flex;flex-direction:column;gap:12px\">")),
-             qPrintable(document));
-    // Each bubble carries exactly one style attribute (no double inlining
-    // by conversationHtml()).
-    const QRegularExpression bubbleRe(QStringLiteral("<div class=\"msg \\w+\"[^>]*>"));
-    int bubbles = 0;
-    for (auto it = bubbleRe.globalMatch(document); it.hasNext();) {
-        QCOMPARE(it.next().captured(0).count(QLatin1String("style=")), 1);
-        ++bubbles;
-    }
-    QCOMPARE(bubbles, 1); // the test conversation has a single user message
-}
-
-void LlamaToolsTest::htmlExport_inlineStylesTaskList()
-{
-    // markus emits GFM task-list checkboxes as self-closing <input> tags;
-    // those are void and must not desync the inliner's tag stack, or the
-    // ".msg > :last-child" margin zeroing of the trailing block is lost.
-    Message assistant;
-    assistant.role = "assistant";
-    assistant.content = QStringLiteral("- [ ] one\n- [x] two\n\ntrailing paragraph\n");
-
-    const QString html = HtmlExporter::messageToHtml(assistant);
-    QVERIFY2(html.contains(QStringLiteral("<input type=\"checkbox\"")), qPrintable(html));
-    const int lastP = html.lastIndexOf(QStringLiteral("<p"));
-    QVERIFY2(lastP > 0, qPrintable(html));
-    QVERIFY2(html.mid(lastP).startsWith(QStringLiteral(
-                 "<p style=\"margin:8px 0;margin-bottom:0\">trailing paragraph</p>")),
-             qPrintable(html.mid(lastP, 80)));
 }
 
 void LlamaToolsTest::projectInstructions_candidatePriority()

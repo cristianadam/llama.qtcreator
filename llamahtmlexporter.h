@@ -9,9 +9,9 @@ namespace LlamaCpp {
 
 // Exports a conversation as self‑contained HTML whose styling (rounded
 // message bubbles, current theme colours, syntax‑highlighted code blocks)
-// mirrors the chat view.  The styles live both in a <style> block and as
-// inline style attributes on every element, so the markup keeps its look
-// when pasted into WYSIWYG editors that drop <style> blocks.
+// mirrors the chat view.  The document carries its styles in a <style>
+// block, so it can be pasted into any editor that allows editing the HTML
+// source.
 class HtmlExporter
 {
 public:
