@@ -586,38 +586,7 @@ void ChatMessage::setSiblingLeafIds(const QVector<qint64> &newSiblingLeafIds)
 
 QString ChatMessage::plainText() const
 {
-    // The inline-code chip padding (U+2004) is layout only, not user text.
-    // Replace it with a *regular* space — 1:1, so offsets in the result stay
-    // valid document positions — instead of deleting it, which would fuse
-    // the code with the neighbouring word ("cout is" -> "coutis") and break
-    // search matches.
-    return m_markdownLabel->toPlainText().replace(MarkdownRenderer::InlineCodePadding,
-                                                  QLatin1Char(' '));
-}
-
-QString ChatMessage::whitespaceTolerantPattern(const QString &query)
-{
-    QString out;
-    out.reserve(query.size());
-    bool inClass = false;
-    for (int i = 0; i < query.size(); ++i) {
-        const QChar c = query.at(i);
-        if (c == QLatin1Char('\\') && i + 1 < query.size()) {
-            // Keep escape sequences verbatim.
-            out += c;
-            out += query.at(++i);
-            continue;
-        }
-        if (c == QLatin1Char('['))
-            inClass = true;
-        else if (c == QLatin1Char(']'))
-            inClass = false;
-        if (c == QLatin1Char(' ') && !inClass)
-            out += QStringLiteral("[ ]+");
-        else
-            out += c;
-    }
-    return out;
+    return m_markdownLabel->toPlainText();
 }
 
 void ChatMessage::highlightAllMatches(const QString &query)
@@ -631,24 +600,15 @@ void ChatMessage::highlightAllMatches(const QString &query)
     if (query.isEmpty())
         return;
 
-    // Match on plainText() (chip padding mapped to regular spaces, 1:1) with
-    // the same whitespace-tolerant pattern as ChatEditor::performSearch(),
-    // so highlights and counted results always agree. doc->find() on the raw
-    // document would not see across the U+2004 padding characters.
-    const QString text = plainText();
-    const QRegularExpression re(whitespaceTolerantPattern(query),
-                                QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression re(query, QRegularExpression::CaseInsensitiveOption);
     QTextDocument *doc = te->document();
 
     QVector<QTextEdit::ExtraSelection> selections;
-    QTextCursor cursor(doc);
-    for (auto it = re.globalMatch(text); it.hasNext(); ) {
-        const QRegularExpressionMatch m = it.next();
+    QTextCursor cursor;
+    while (!(cursor = doc->find(re, cursor)).isNull()) {
         QTextEdit::ExtraSelection sel;
 
         sel.format.setBackground(creatorColor(Theme::TextColorHighlightBackground));
-        cursor.setPosition(m.capturedStart());
-        cursor.setPosition(m.capturedStart() + m.capturedLength(), QTextCursor::KeepAnchor);
         sel.cursor = cursor;
         selections.append(sel);
     }

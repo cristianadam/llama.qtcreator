@@ -1228,11 +1228,7 @@ void ChatEditor::performSearch(const QString &query)
 {
     clearSearch(); // wipe old highlights
 
-    // plainText() maps the chip padding to regular spaces 1:1 (so the
-    // offsets below stay valid document positions for jumpToResult()); the
-    // pattern tolerates the resulting multi-space runs around inline code.
-    const QRegularExpression re(ChatMessage::whitespaceTolerantPattern(query),
-                                QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression re(query, QRegularExpression::CaseInsensitiveOption);
     for (ChatMessage *w : std::as_const(m_messageWidgets)) {
         const QString txt = w->plainText();
         QRegularExpressionMatchIterator it = re.globalMatch(txt);
