@@ -201,7 +201,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Conversation avec llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+133"/>
+        <location filename="../llamaplugin.cpp" line="+135"/>
         <source>llama.cpp coversation</source>
         <translation>Conversation avec llama.cpp</translation>
     </message>
@@ -223,7 +223,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location filename="../llamaplugin.h" line="-2"/>
         <source>New Conversation</source>
-        <translation type="unfinished">Nouvelle conversation</translation>
+        <translation>Nouvelle conversation</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -238,17 +238,17 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+1"/>
         <source>Next Completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Complétion suivante</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Previous Completion</source>
-        <translation type="unfinished"></translation>
+        <translation>Complétion précédente</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher l'état du serveur</translation>
     </message>
     <message>
         <location filename="../llamaplugin.cpp" line="+29"/>
@@ -258,27 +258,27 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+4"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer au candidat de complétion suivante en cache à la position actuelle (appuyez sur Ctrl+G, puis sur la flèche bas).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Ctrl+G Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G Flèche bas</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Cycle to the previous cached completion candidate at the current position (press Ctrl+G, then Up).</source>
-        <translation type="unfinished"></translation>
+        <translation>Passer au candidat de complétion précédente en cache à la position actuelle (appuyez sur Ctrl+G, puis sur la flèche haut).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Ctrl+G Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G Flèche haut</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Query the llama.cpp servers and report which models are loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interroger les serveurs llama.cpp et indiquer quels modèles sont chargés.</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -291,70 +291,70 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Active l&apos;intégration de llama.cpp.</translation>
     </message>
     <message>
-        <location line="+363"/>
+        <location line="+373"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Erreur lors de la récupération de la complétion FIM depuis %1 : %2</translation>
     </message>
     <message>
         <location line="+676"/>
         <source>llama.cpp %1 server (model: %2): invalid endpoint %3</source>
-        <translation type="unfinished"></translation>
+        <translation>serveur llama.cpp %1 (modèle : %2) : point d'accès non valide %3</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+75"/>
         <source>default</source>
-        <translation type="unfinished"></translation>
+        <translation>par défaut</translation>
     </message>
     <message>
         <location line="-46"/>
         <source>not reachable</source>
-        <translation type="unfinished"></translation>
+        <translation>inaccessible</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>no models loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>aucun modèle chargé</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>multiple models loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>plusieurs modèles chargés</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>model %1 is not loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>le modèle %1 n'est pas chargé</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>ready</source>
-        <translation type="unfinished"></translation>
+        <translation>prêt</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>llama.cpp %1 server (%2, model: %3): %4</source>
-        <translation type="unfinished"></translation>
+        <translation>serveur llama.cpp %1 (%2, modèle : %3) : %4</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>FIM</source>
-        <translation type="unfinished"></translation>
+        <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+126"/>
+        <location filename="../promptssettingswidget.cpp" line="+116"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1219"/>
-        <location filename="../llamaprojectpanel.cpp" line="+58"/>
+        <location line="-1229"/>
+        <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+60"/>
+        <location filename="../llamasettings.cpp" line="+71"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Activer l&apos;intégration de llama.cpp</translation>
@@ -365,7 +365,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Active l&apos;intégration avec le serveur llama.cpp.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Endpoint</source>
         <translation>Point d&apos;accès (Endpoint)</translation>
     </message>
@@ -409,12 +409,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
     <message>
-        <location line="-70"/>
+        <location line="-80"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+52"/>
         <source>API Key</source>
         <translation>Clé API</translation>
     </message>
@@ -544,84 +544,89 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre maximal de complétions mises en cache à conserver dans le cache des résultats.</translation>
     </message>
     <message>
-        <location line="-168"/>
+        <location line="-178"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Résumez le titre de la conversation en quelques mots, en incluant un emoji. Utilisez la langue utilisée dans la conversation. Utilisez du texte brut, sans Markdown.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Generate up to five follow up questions in the context of the current conversation. The questions are from the user point of view. Only questions, no explanations. Use the language used in the conversation. Return a JSON object with a single key &quot;follow_ups&quot; containing an array of plain text question strings, no markdown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Générez au plus cinq questions complémentaires dans le contexte de la conversation actuelle. Les questions sont du point de vue de l'utilisateur. Questions uniquement, sans explications. Utilisez la langue utilisée dans la conversation. Retournez un objet JSON avec une seule clé « follow_ups » contenant un tableau de chaînes de questions en texte brut, sans Markdown.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Create a summary of {selection}</source>
-        <translation type="unfinished">Créer un résumé de {sélection}</translation>
+        <translation>Créer un résumé de {sélection}</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation type="unfinished">Créer un message de validation pour {sélection}</translation>
+        <translation>Créer un message de validation pour {sélection}</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Explain the code in {selection}</source>
-        <translation type="unfinished">Expliquer le code dans {sélection}</translation>
+        <translation>Expliquer le code dans {sélection}</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Do spell checking and fix any typos in {selection}</source>
-        <translation type="unfinished">Corriger l&apos;orthographe et les fautes de frappe dans {sélection}</translation>
+        <translation>Corriger l'orthographe et les fautes de frappe dans {sélection}</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation type="unfinished">Générer des cas de test pour {sélection}. Résultat uniquement du code, sans explications.</translation>
+        <translation>Générer des cas de test pour {sélection}. Résultat uniquement du code, sans explications.</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation type="unfinished">Mettre à jour la traduction dans {sélection}. Fournir le fichier de traduction complet en sortie.</translation>
+        <translation>Mettre à jour la traduction dans {sélection}. Fournir le fichier de traduction complet en sortie.</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+15"/>
+        <source>Skills</source>
+        <translation>Compétences</translation>
+    </message>
+    <message>
+        <location line="+51"/>
         <source>FIM Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle FIM</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>FIM Model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle FIM :</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du modèle à utiliser pour la complétion FIM lorsque plusieurs modèles sont chargés sur le serveur (facultatif, recommandé : Qwen3 Coder).</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Completions per Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Complétions par position</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Completions per Position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Complétions par position :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Number of completions to cache per position (ring buffer). Use the Next/Previous Completion shortcuts (Ctrl+G then Down/Up) to cycle through them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de complétions à mettre en cache par position (tampon circulaire). Utilisez les raccourcis Complétion suivante/précédente (Ctrl+G puis flèche bas/haut) pour les parcourir.</translation>
     </message>
     <message>
         <location line="+57"/>
         <source>Max number of cached context keys to keep in the result cache. Each key can hold up to &apos;Completions per Position&apos; individual completions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre maximal de clés de contexte en cache à conserver dans le cache des résultats. Chaque clé peut contenir jusqu'à « Complétions par position » complétions distinctes.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1055,231 +1060,288 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher le nombre de jetons générés par seconde</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+41"/>
+        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <source>Follow-Up Questions</source>
+        <translation>Questions complémentaires</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
+        <translation>Lorsqu'il est activé, des suggestions de questions complémentaires sont générées après chaque réponse complète de l'assistant.</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Skill directories</source>
+        <translation>Dossiers de compétences</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories scanned recursively for skills. A skill is a directory containing a SKILL.md file (Agent Skills specification) with a name and a description in its YAML frontmatter.</source>
+        <translation>Dossiers parcourus récursivement à la recherche de compétences. Une compétence est un dossier contenant un fichier SKILL.md (spécification Agent Skills) avec un nom et une description dans sa partie frontmatter YAML.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <location line="+1"/>
+        <location line="+311"/>
+        <location line="+1"/>
+        <source>Sandbox commands</source>
+        <translation>Commandes dans un bac à sable</translation>
+    </message>
+    <message>
+        <location line="-311"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s'exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, srt-win de @anthropic-ai/sandbox-runtime sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d'authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n'ont pas d'accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable nécessite une installation unique : 'npx @anthropic-ai/sandbox-runtime windows-install' (une invite UAC) ; l'exécutable srt-win doit être dans le PATH (LLAMA_SRT_WIN peut pointer vers lui).</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <location line="+1"/>
+        <location line="+307"/>
+        <location line="+1"/>
+        <source>Load project instructions</source>
+        <translation>Charger les instructions du projet</translation>
+    </message>
+    <message>
+        <location line="-307"/>
+        <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
+        <translation>Si cette option est cochée, le fichier d'instructions du projet actuel est ajouté au message du système du chat. Le fichier est AGENTS.md, avec CLAUDE.md en secours, et est recherché dans le dossier du projet puis en remontant jusqu'à la racine du dépôt git, afin qu'un monorepo puisse conserver un seul fichier d'instructions pour tous ses projets. Les fichiers de plus de 32 Ko sont tronqués.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Web Search Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur de recherche web</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Web Search Provider:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournisseur de recherche web :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation type="unfinished"></translation>
+        <translation>Backend utilisé par l'outil websearch : « exa » (par défaut, aucune clé API requise), « google » (Custom Search JSON API, requiert une clé API et un identifiant de moteur de recherche), « brave » (Brave Search API, requiert une clé API) ou « tavily » (requiert une clé API).</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Exa Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Exa</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Exa :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Exa MCP endpoint used by the websearch tool.</source>
-        <translation type="unfinished"></translation>
+        <translation>URL du point d'accès MCP Exa utilisé par l'outil websearch.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Exa</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Exa API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Exa :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Exa facultative. Sans clé, le point d'accès partagé (avec limitation de débit) est utilisé.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Google</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Google :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Google Custom Search (customsearch/v1) endpoint used by the websearch tool.</source>
-        <translation type="unfinished"></translation>
+        <translation>URL du point d'accès Google Custom Search (customsearch/v1) utilisé par l'outil websearch.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Google</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Google :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for the Google Custom Search JSON API (required for the &quot;google&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API pour la Google Custom Search JSON API (requise pour le fournisseur « google »).</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Google Search Engine ID (cx)</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant du moteur de recherche Google (cx)</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Google Search Engine ID (cx):</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant du moteur de recherche Google (cx) :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>The cx (search engine ID) of the Google Custom Search engine (required for the &quot;google&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>L'identifiant cx (identifiant de moteur de recherche) du moteur Google Custom Search (requis pour le fournisseur « google »).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Brave Search Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Brave Search</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Brave Search Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Brave Search :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Brave Search API endpoint used by the websearch tool (the &quot;brave&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>URL du point d'accès de l'API Brave Search utilisé par l'outil websearch (le fournisseur « brave »).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Brave Search API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Brave Search</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Brave Search API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Brave Search :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for the Brave Search API, get one at brave.com/search/api (required for the &quot;brave&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API pour l'API Brave Search, à obtenir sur brave.com/search/api (requise pour le fournisseur « brave »).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Tavily Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Tavily</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Tavily Endpoint:</source>
-        <translation type="unfinished"></translation>
+        <translation>Point d'accès Tavily :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>URL of the Tavily search endpoint used by the websearch tool (the &quot;tavily&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>URL du point d'accès de recherche Tavily utilisé par l'outil websearch (le fournisseur « tavily »).</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Tavily API Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Tavily</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Tavily API Key:</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API Tavily :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>API key for Tavily, get one at tavily.com (required for the &quot;tavily&quot; provider).</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé API pour Tavily, à obtenir sur tavily.com (requise pour le fournisseur « tavily »).</translation>
     </message>
     <message>
-        <location line="+232"/>
+        <location line="+191"/>
+        <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
+        <translation>Remplace le paramètre global « Commandes dans un bac à sable » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce que le bac à sable restreint.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Overrides the global &apos;Load project instructions&apos; setting for this project. See the global setting on the Llama Tools page for what is loaded.</source>
+        <translation>Remplace le paramètre global « Charger les instructions du projet » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce qui est chargé.</translation>
+    </message>
+    <message>
+        <location line="+63"/>
         <source>Prompts</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitations (prompts)</translation>
     </message>
     <message>
         <source>Show Tokens Per Second:</source>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-392"/>
+        <location line="-488"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Thinking Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de réflexion</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de réflexion (raisonnement) pour les modèles capables de réflexion : « default », « off », « low », « medium », « high » ou « max ».</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Utility Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle utilitaire</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Utility Model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle utilitaire :</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Default: chat model</source>
-        <translation type="unfinished"></translation>
+        <translation>Par défaut : modèle de chat</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Conversation Title Prompt</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitation pour le titre de conversation</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Prompt sent to the model to generate a short conversation title after the first reply.</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitation envoyée au modèle pour générer un titre court de conversation après la première réponse.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Follow-Up Questions Prompt</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitation pour les questions complémentaires</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Prompt sent to the model to generate follow-up questions after a complete reply.</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitation envoyée au modèle pour générer des questions complémentaires après une réponse complète.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+12"/>
         <source>Locator Prompts</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitations du localisateur</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation type="unfinished"></translation>
+        <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d'une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+39"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>Activer l&apos;utilisation d&apos;outils dans le chat</translation>
@@ -1290,446 +1352,703 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Si cette option est cochée, la fenêtre de chat démarrera avec l&apos;outil d&apos;outils activé par défaut.</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+59"/>
+        <location filename="../llamachateditor.cpp" line="+86"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Par défaut</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactivé</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Moyen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Élevé</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximal</translation>
     </message>
     <message>
-        <location line="+59"/>
+        <location line="+62"/>
         <source>LLM model</source>
-        <translation type="unfinished"></translation>
+        <translation>Modèle LLM</translation>
     </message>
     <message>
         <location line="+18"/>
-        <source>Thinking level</source>
-        <translation type="unfinished"></translation>
+        <source>Follow up</source>
+        <translation>Questions complémentaires</translation>
     </message>
     <message>
-        <location line="+188"/>
+        <location line="+1"/>
+        <source>Generate follow-up questions after each reply</source>
+        <translation>Générer des questions complémentaires après chaque réponse</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Thinking level</source>
+        <translation>Niveau de réflexion</translation>
+    </message>
+    <message>
+        <location line="+186"/>
         <source>Search in chat</source>
-        <translation type="unfinished">Recherche dans le chat</translation>
+        <translation>Recherche dans le chat</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Next search result</source>
-        <translation type="unfinished">Prochain résultat de recherche</translation>
+        <translation>Prochain résultat de recherche</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Previous search result</source>
-        <translation type="unfinished">Résultat de recherche précédent</translation>
+        <translation>Résultat de recherche précédent</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+13"/>
+        <source>Send to Llama Chat</source>
+        <translation>Envoyer à Llama Chat</translation>
+    </message>
+    <message>
+        <location line="+49"/>
         <source>Model Path: %1</source>
-        <translation type="unfinished">Chemin du modèle : %1</translation>
+        <translation>Chemin du modèle : %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Context: %L1</source>
-        <translation type="unfinished">Contexte : %1 jetons</translation>
+        <translation>Contexte : %1 jetons</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Vision: %1</source>
-        <translation type="unfinished">Vision : %1</translation>
+        <translation>Vision : %1</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>yes</source>
-        <translation type="unfinished">oui</translation>
+        <translation>oui</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>no</source>
-        <translation type="unfinished">non</translation>
+        <translation>non</translation>
     </message>
     <message>
         <location line="+35"/>
         <source>Follow‑up questions:</source>
-        <translation type="unfinished">Questions supplémentaires :</translation>
+        <translation>Questions supplémentaires :</translation>
     </message>
     <message>
-        <location line="+398"/>
+        <location line="+481"/>
         <source>Thinking level: %1 (applies to new messages)</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de réflexion : %1 (s'applique aux nouveaux messages)</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+27"/>
+        <location line="+81"/>
+        <source>Human Editor</source>
+        <translation>Éditeur humain</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Edit Message</source>
+        <translation>Modifier le message</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette action supprimera %1 messages, dont : %2 messages utilisateur et %3 réponses de l'assistant ...</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Confirm Branch Deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmer la suppression de la branche</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Delete Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer le message</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Are you sure you want to delete this message?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment supprimer ce message ?</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+162"/>
         <source>Processing: %1%</source>
-        <translation type="unfinished"></translation>
+        <translation>Traitement : %1%</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Traitement de l'invitation :&lt;/b&gt;&lt;br&gt;Jetons au total : %1&lt;br&gt;Traités : %2&lt;br&gt;En cache : %3&lt;br&gt;Durée : %4 ms</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Speed: %1 t/s</source>
-        <translation type="unfinished">Vitesse : %1 jetons/seconde</translation>
+        <translation>Vitesse : %1 jetons/seconde</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
-        <translation type="unfinished">&lt;b&gt;Invitation&lt;/b&gt; :&lt;br&gt;Jetons : %1&lt;br&gt;Durée : %2 ms&lt;br&gt;Vitesse : %3 jetons/seconde&lt;br&gt;&lt;br&gt;&lt;b&gt;Génération&lt;/b&gt; :&lt;br&gt;Jetons : %4&lt;br&gt;Durée : %5 ms&lt;br&gt;Vitesse : %6 jetons/seconde</translation>
+        <translation>&lt;b&gt;Invitation&lt;/b&gt; :&lt;br&gt;Jetons : %1&lt;br&gt;Durée : %2 ms&lt;br&gt;Vitesse : %3 jetons/seconde&lt;br&gt;&lt;br&gt;&lt;b&gt;Génération&lt;/b&gt; :&lt;br&gt;Jetons : %4&lt;br&gt;Durée : %5 ms&lt;br&gt;Vitesse : %6 jetons/seconde</translation>
     </message>
     <message>
         <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation type="unfinished"></translation>
+        <translation>Contexte : %1% utilisé</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>Contexte : %1% utilisé.&lt;br&gt;  %2 jetons provenant de %3.</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>LlamaCpp Chat Editor</source>
-        <translation type="unfinished">Éditeur de chat pour Llama.cpp</translation>
+        <translation>Éditeur de chat pour Llama.cpp</translation>
     </message>
     <message>
         <location filename="../llamachatinput.cpp" line="+74"/>
         <source>Type a message (Shift+Enter for new line)</source>
-        <translation type="unfinished">Saisir un message (Appuyez sur Maj+Entrée pour commencer une nouvelle ligne)</translation>
+        <translation>Saisir un message (Appuyez sur Maj+Entrée pour commencer une nouvelle ligne)</translation>
     </message>
     <message>
         <location line="+16"/>
         <location line="+6"/>
         <source>Disable Tools usage</source>
-        <translation type="unfinished">Désactiver l&apos;utilisation d&apos;outils</translation>
+        <translation>Désactiver l'utilisation d'outils</translation>
     </message>
     <message>
         <location line="-5"/>
         <location line="+6"/>
         <source>Enable Tools usage</source>
-        <translation type="unfinished">Activer l&apos;utilisation d&apos;outils</translation>
+        <translation>Activer l'utilisation d'outils</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Attach file</source>
-        <translation type="unfinished">Joindre un fichier</translation>
+        <translation>Joindre un fichier</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>Stop assistant answer generation</source>
-        <translation type="unfinished">Arrêter la génération de réponse de l&apos;assistant</translation>
+        <translation>Arrêter la génération de réponse de l'assistant</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Send message to assistant</source>
-        <translation type="unfinished">Envoyer le message à l&apos;assistant</translation>
+        <translation>Envoyer le message à l'assistant</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+118"/>
+        <location filename="../llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
-        <translation type="unfinished">Fichiers joints</translation>
+        <translation>Fichiers joints</translation>
     </message>
     <message>
         <location line="+74"/>
         <source>Go to previous message</source>
-        <translation type="unfinished">Aller au message précédent</translation>
+        <translation>Aller au message précédent</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Go to next message</source>
-        <translation type="unfinished">Aller au message suivant</translation>
+        <translation>Aller au message suivant</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Edit the message</source>
-        <translation type="unfinished">Modifier le message</translation>
+        <translation>Modifier le message</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+8"/>
+        <source>Edit the message in the Markdown editor</source>
+        <translation>Modifier le message dans l'éditeur Markdown</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Re-generate the answer</source>
-        <translation type="unfinished"></translation>
+        <translation>Régénérer la réponse</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Copy the message to clipboard</source>
-        <translation type="unfinished">Copier le message dans le presse-papiers</translation>
+        <translation>Copier le message dans le presse-papiers</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Delete this message</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer ce message</translation>
     </message>
     <message>
-        <location line="+339"/>
+        <location line="+299"/>
+        <source>Image</source>
+        <translation>Image</translation>
+    </message>
+    <message>
         <source>Overwrite File?</source>
-        <translation type="unfinished">Écraser le fichier ?</translation>
+        <translation type="obsolete">Écraser le fichier ?</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>The file &quot;%1&quot; already exists.
-
-Do you want to overwrite it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+21"/>
         <source>Save File</source>
-        <translation type="unfinished">Enregistrer le fichier</translation>
+        <translation type="obsolete">Enregistrer le fichier</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>All Files (*)</source>
-        <translation type="unfinished">Tous les fichiers (*)</translation>
+        <translation type="obsolete">Tous les fichiers (*)</translation>
     </message>
     <message>
         <location filename="../llamaconversationsmodel.cpp" line="+73"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Conversation Id</source>
-        <translation type="unfinished">Identifiant de la conversation</translation>
+        <translation>Identifiant de la conversation</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+111"/>
+        <location filename="../llamaconversationsview.cpp" line="+113"/>
         <source>Creates a new llama.cpp conversation</source>
-        <translation type="unfinished">Créer une nouvelle conversation avec Llama.cpp</translation>
+        <translation>Créer une nouvelle conversation avec Llama.cpp</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Refresh</source>
-        <translation type="unfinished">Actualiser</translation>
+        <translation>Actualiser</translation>
     </message>
     <message>
         <location line="+114"/>
         <source>Rename...</source>
-        <translation type="unfinished">Renommer...</translation>
+        <translation>Renommer...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Summarize</source>
-        <translation type="unfinished">Résumé</translation>
+        <translation>Résumé</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+40"/>
+        <location line="+41"/>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
-        <location line="-39"/>
+        <location line="-40"/>
         <source>Save as Markdown</source>
-        <translation type="unfinished">Exporter sous forme de Markdown</translation>
+        <translation>Exporter sous forme de Markdown</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+3"/>
+        <source>Save as HTML</source>
+        <translation>Exporter sous forme de HTML</translation>
+    </message>
+    <message>
+        <location line="+30"/>
         <source>Delete Conversation</source>
-        <translation type="unfinished">Supprimer la conversation</translation>
+        <translation>Supprimer la conversation</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
-        <translation type="unfinished">Confirmez-vous la suppression de la conversation :
+        <translation>Confirmez-vous la suppression de la conversation :
 %1</translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
-        <translation type="unfinished">Exporter la conversation sous forme de Markdown</translation>
+        <translation>Exporter la conversation sous forme de Markdown</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location line="+40"/>
         <source>Error</source>
-        <translation type="unfinished">Erreur</translation>
+        <translation>Erreur</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-39"/>
+        <location line="+40"/>
         <source>Cannot write file:
 %1</source>
-        <translation type="unfinished">Impossible d&apos;écrire le fichier :
+        <translation>Impossible d'écrire le fichier :
 %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-13"/>
+        <source>Save Conversation as HTML</source>
+        <translation>Exporter la conversation sous forme de HTML</translation>
+    </message>
+    <message>
+        <location line="+24"/>
         <source>llama.cpp Conversations</source>
-        <translation type="unfinished">Conversations avec Llama.cpp</translation>
+        <translation>Conversations avec Llama.cpp</translation>
     </message>
     <message>
         <location filename="../llamalocatorfilter.cpp" line="+64"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer la sélection actuelle à llama.cpp avec une invitation.
+Invitations intégrées : %1
+Vous pouvez saisir n'importe quelle autre invitation – elles sont mémorisées pour la prochaine fois.</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+109"/>
+        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
-        <translation type="unfinished">Afficher/masquer les détails de l&apos;utilisation de l&apos;outil</translation>
+        <translation>Afficher/masquer les détails de l'utilisation de l'outil</translation>
     </message>
     <message>
         <location filename="../llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation type="unfinished">Rechercher</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Find ...</source>
-        <translation type="unfinished">Chercher...</translation>
+        <translation>Chercher...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Previous result</source>
-        <translation type="unfinished">Résultat précédent</translation>
+        <translation>Résultat précédent</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Next result</source>
-        <translation type="unfinished">Résultat suivant</translation>
+        <translation>Résultat suivant</translation>
     </message>
     <message>
         <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
-        <translation type="unfinished">Processus de réflexion</translation>
+        <translation>Processus de réflexion</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Thinking</source>
-        <translation type="unfinished">Réfléchit</translation>
+        <translation>Réfléchit</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+733"/>
+        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <source>SVG image</source>
+        <translation>Image SVG</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <location line="+9"/>
+        <source>Mermaid diagram</source>
+        <translation>Diagramme Mermaid</translation>
+    </message>
+    <message>
+        <location line="+492"/>
         <location line="+34"/>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+718"/>
         <source>Copy the code below to Clipboard</source>
-        <translation type="unfinished">Copier le code suivant dans le presse-papiers</translation>
+        <translation>Copier le code suivant dans le presse-papiers</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Save the code below into a file on disk</source>
-        <translation type="unfinished">Enregistrer le code suivant dans un fichier sur le disque</translation>
+        <translation type="obsolete">Enregistrer le code suivant dans un fichier sur le disque</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Copied to clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Copié dans le presse-papiers</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-83"/>
+        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <source>(empty)</source>
+        <translation>(vide)</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location filename="../skillssettingswidget.cpp" line="+63"/>
+        <location filename="../toolsettingswidget.cpp" line="+152"/>
+        <source>Add…</source>
+        <translation>Ajouter…</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../skillssettingswidget.cpp" line="+17"/>
+        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <source>Remove</source>
+        <translation>Retirer</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Select a prompt to edit it</source>
+        <translation>Sélectionnez une invitation pour la modifier</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Reset to Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+70"/>
-        <source>Collapse the full prompt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Expand the full prompt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+28"/>
-        <source>Locator (“ll”)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. “{selection}” is replaced with the selected text.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Add Prompt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+64"/>
-        <source>Remove this prompt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../toolsettingswidget.cpp" line="+59"/>
-        <source>Select a tool to view its definition</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Tool</source>
-        <translation type="unfinished">Outil</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Description</source>
-        <translation type="unfinished">Description</translation>
-    </message>
-    <message>
-        <location line="+90"/>
-        <source>No description</source>
-        <translation type="unfinished">Aucune description disponible</translation>
+        <translation>Réinitialiser aux valeurs par défaut</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>Internal</source>
-        <translation type="unfinished"></translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation>Seule la première ligne d'une invitation est affichée dans le menu du localisateur ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Prompt</source>
+        <translation>Invitation</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Qt Creator MCP</source>
-        <translation type="unfinished"></translation>
+        <source>Prompts:</source>
+        <translation>Invitations :</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Title</source>
+        <translation>Titre</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Locator (&quot;ll&quot;)</source>
+        <translation>Localisateur (« ll »)</translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="-80"/>
+        <source>Select a tool to view its definition</source>
+        <translation>Sélectionnez un outil pour afficher sa définition</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool</source>
+        <translation>Outil</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Download ripgrep %1</source>
+        <translation>Télécharger ripgrep %1</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Edit</source>
+        <translation>Modifier</translation>
+    </message>
+    <message>
+        <location line="+171"/>
+        <source>The search and find tools use ripgrep, which is not installed on this system.</source>
+        <translation>Les outils de recherche et de localisation utilisent ripgrep, qui n'est pas installé sur ce système.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>ripgrep: %1</source>
+        <translation>ripgrep : %1</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <location line="+11"/>
+        <source>URL: %1</source>
+        <translation>URL : %1</translation>
+    </message>
+    <message>
+        <location line="-10"/>
+        <source>Headers: %1</source>
+        <translation>En-têtes : %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>(none)</source>
+        <translation>(aucun)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
+        <translation>Les outils fournis par ce serveur sont listés ci-dessous ; cochez un outil pour l'activer pour le chat.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
+        <translation>Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils → MCP dans les paramètres de Qt Creator).</translation>
+    </message>
+    <message>
+        <location line="+165"/>
+        <location line="+51"/>
+        <location line="+254"/>
+        <source>MCP Server</source>
+        <translation>Serveur MCP</translation>
+    </message>
+    <message>
+        <location line="-304"/>
+        <location line="+51"/>
+        <source>The name &quot;%1&quot; is reserved for the builtin Qt Creator MCP server.</source>
+        <translation>Le nom « %1 » est réservé au serveur MCP intégré de Qt Creator.</translation>
+    </message>
+    <message>
+        <location line="+74"/>
+        <source>not connected</source>
+        <translation>non connecté</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>no tools</source>
+        <translation>aucun outil</translation>
+    </message>
+    <message>
+        <location line="+178"/>
+        <source>Display name, e.g. My MCP server</source>
+        <translation>Nom d'affichage, par exemple Mon serveur MCP</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>https://host:port/mcp</source>
+        <translation>https://host:port/mcp</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>One &quot;Name: value&quot; header per line, e.g.
+Authorization: Bearer &lt;token&gt;</source>
+        <translation>Un en-tête « Name: value » par ligne, par exemple :
+Authorization: Bearer &lt;token&gt;</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Name:</source>
+        <translation>Nom :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>URL:</source>
+        <translation>URL :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Headers:</source>
+        <translation>En-têtes :</translation>
+    </message>
+    <message>
+        <location filename="../skillssettingswidget.cpp" line="-11"/>
+        <source>Choose a Skills Directory</source>
+        <translation>Choisir un dossier de compétences</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Select a skill to view its content</source>
+        <translation>Sélectionnez une compétence pour afficher son contenu</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location filename="../toolsettingswidget.cpp" line="-794"/>
+        <source>Description</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Skill</source>
+        <translation>Compétence</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Skill directories:</source>
+        <translation>Dossiers de compétences :</translation>
+    </message>
+    <message>
+        <location line="+115"/>
+        <source>%1 skill file(s) were skipped: %2</source>
+        <translation>%1 fichier(s) de compétence(s) ont été ignorés : %2</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <location filename="../toolsettingswidget.cpp" line="+275"/>
+        <source>Name: %1</source>
+        <translation>Nom : %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Description: %1</source>
+        <translation>Description : %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>File: %1</source>
+        <translation>Fichier : %1</translation>
+    </message>
+    <message>
+        <location line="+141"/>
+        <source>1 skill</source>
+        <translation>1 compétence</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>%1 skills</source>
+        <translation>%1 compétences</translation>
+    </message>
+    <message>
+        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <source>No description</source>
+        <translation>Aucune description disponible</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Internal</source>
+        <translation>Interne</translation>
+    </message>
+    <message>
+        <location filename="../skills.cpp" line="+78"/>
+        <source>failed to read file</source>
+        <translation>échec de la lecture du fichier</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>invalid YAML frontmatter: %1</source>
+        <translation>frontmatter YAML non valide : %1</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>frontmatter is not a key/value mapping</source>
+        <translation>le frontmatter n'est pas un tableau clé/valeur</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>description is required</source>
+        <translation>la description est requise</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>description exceeds %1 characters (%2)</source>
+        <translation>la description dépasse %1 caractères (%2)</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>nom non valide « %1 » (minuscules a-z, chiffres 0-9 et tirets seulement, %2 caractères au maximum, pas de tirets en début/fin ou consécutifs)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
+        <translation>le nom « %1 » ne correspond pas à son dossier « %2 »</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
+        <translation>le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
 </context>
 <context>
@@ -2099,358 +2418,406 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+242"/>
+        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter %1</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer %1</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Edit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer %1 vers %2</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+7"/>
         <source>Apply patch</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer un correctif</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Apply patch to %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer un correctif à %1 fichiers</translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+79"/>
         <source>created</source>
-        <translation type="unfinished"></translation>
+        <translation>créé</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location filename="../tools/edit_file_tool.cpp" line="+315"/>
+        <location line="+6"/>
         <source>edited</source>
-        <translation type="unfinished"></translation>
+        <translation>modifié</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>moved</source>
-        <translation type="unfinished"></translation>
+        <translation>déplacé</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>supprimé</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+192"/>
         <source>Success. Updated the following files:</source>
-        <translation type="unfinished"></translation>
+        <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+93"/>
+        <location filename="../tools/bash_tool.cpp" line="+103"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
     <message>
-        <location line="+122"/>
+        <location line="+147"/>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation>L'exécutable sandbox-exec n'a pas été trouvé ; le bac à sable n'est pas disponible sur ce système.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) n'a pas été trouvé. Installez-le (par exemple 'apt install bubblewrap' ou 'dnf install bubblewrap') ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+145"/>
         <source>[Output truncated: %1]</source>
-        <translation type="unfinished"></translation>
+        <translation>[Sortie tronquée : %1]</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>showing last %1 of %2 lines</source>
-        <translation type="unfinished"></translation>
+        <translation>affichant les %1 dernières lignes sur %2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>showing last %1 KB</source>
-        <translation type="unfinished"></translation>
+        <translation>affichant les %1 Ko derniers</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Full output saved to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie complète enregistrée dans : %1</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+112"/>
         <source>running %1</source>
-        <translation type="unfinished"></translation>
+        <translation>exécution de %1</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+22"/>
         <source>Error: the command must not be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur : la commande ne doit pas être vide.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Error: working directory does not exist: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur : le dossier de travail n'existe pas : %1</translation>
     </message>
     <message>
         <location line="+9"/>
+        <location line="+9"/>
+        <location line="+17"/>
         <source>Error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur : %1</translation>
     </message>
     <message>
-        <location line="+130"/>
+        <location line="+161"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation type="unfinished"></translation>
+        <translation>La commande a expiré après %1 ms. Réessayez avec un délai plus long si la commande est censée prendre plus de temps.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Failed to start the command: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du démarrage de la commande : %1</translation>
     </message>
     <message>
         <location line="+2"/>
+        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location line="+7"/>
+        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location line="+7"/>
         <source>unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>erreur inconnue</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Command terminated abnormally (crashed).</source>
-        <translation type="unfinished"></translation>
+        <translation>La commande s'est terminée de manière anormale (plantage).</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Command exited with code %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>La commande s'est terminée avec le code %1.</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+51"/>
         <source>Working directory: %1
+
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier de travail : %1
+
+</translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="-39"/>
+        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier un fichier</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>edit %1 (%2 blocks)</source>
-        <translation type="unfinished"></translation>
+        <translation>modifier %1 (%2 blocs)</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+26"/>
         <source>edit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>modifier %1</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+35"/>
+        <location filename="../tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : « path » doit être une chaîne non vide.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : chaque modification a besoin d'un « oldText » et d'un « newText ».</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : « edits » doit contenir au moins un remplacement.</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or apply_patch to create the file.</source>
-        <translation type="unfinished"></translation>
+        <location line="+9"/>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation>Impossible de modifier « %1 » : fichier introuvable. Utilisez read_file pour vérifier le chemin, ou write pour créer le fichier.</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de modifier « %1 » : %2</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+3"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+79"/>
+        <location filename="../tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
-        <source>Cannot reach the Qt Creator MCP server.</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot reach the MCP server.</source>
+        <translation>Impossible de joindre le serveur MCP.</translation>
     </message>
     <message>
         <location line="-22"/>
         <source>MCP initialize failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation MCP échouée : %1</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>MCP tools/list failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>tools/list MCP a échoué : %1</translation>
     </message>
     <message>
         <location line="+53"/>
-        <source>Connection to the Qt Creator MCP server was closed.</source>
-        <translation type="unfinished"></translation>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>La connexion au serveur MCP a été fermée.</translation>
     </message>
     <message>
         <location line="+27"/>
-        <source>The Qt Creator MCP server is not available. Enable the &quot;Qt Creator MCP Server&quot; plugin in Qt Creator settings.</source>
-        <translation type="unfinished"></translation>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>Le serveur MCP n'est pas disponible. Vérifiez que le serveur est en cours d'exécution et joignable, puis réessayez.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+61"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>Le serveur MCP a redémarré ; l'appel n'a pas été exécuté. Veuillez réessayer.</translation>
+    </message>
+    <message>
+        <location line="-42"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>L'outil MCP « %1 » a échoué : %2</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>The Qt Creator MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+53"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur MCP a renvoyé HTTP %1 pour l'appel d'outil.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+53"/>
+        <location filename="../tools/readfile_tool.cpp" line="+78"/>
         <source>read whole file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>lire tout le fichier %1</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation type="unfinished"></translation>
+        <translation>lire %1:%2-%3</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+22"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished">Le fichier **« %1 »** n&apos;existe pas.</translation>
+        <translation>Le fichier **« %1 »** n'existe pas.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="unfinished">Impossible de lire **« %1 »** : %2.</translation>
+        <translation>Impossible de lire **« %1 »** : %2.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>L'image « %1 » fait %2 Mo et dépasse la limite de lecture de %3 Mo ; redimensionnez-la d'abord (par exemple avec l'outil bash).</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>Fichier image « %1 » (%2, %3 octets). Son contenu est joint sous forme d'image.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>first_line doit être &gt;= 1.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="unfinished"></translation>
+        <translation>last_line_inclusive doit être &gt;= first_line.</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="unfinished"></translation>
+        <translation>first_line (%1) dépasse le nombre de lignes de « %2 » (%3).</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+35"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="unfinished"></translation>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>La ligne %1 de « %2 » est plus grande que la limite de lecture de %3 Ko ; le fichier ne peut pas être lu avec cet outil.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> Limite de %1 Ko atteinte.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
+    </message>
+    <message>
+        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n'exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l'utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous êtes le sous-agent « general », exécuté dans une conversation séparée, isolée de la conversation principale. Travaillez de manière autonome avec les outils disponibles jusqu'à l'accomplissement de la tâche ; vous ne pouvez pas poser de questions à l'utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis de ce que vous avez fait ou trouvé, y compris les chemins de fichiers pertinents avec les numéros de ligne, afin que la conversation principale puisse continuer le travail.</translation>
     </message>
     <message>
         <location line="+68"/>
         <location line="+27"/>
         <source>task: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>tâche : %1</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : « description » et « prompt » sont requis.</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : subagent_type « %1 » inconnu (attendu « explore » ou « general »)</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Task: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâche : %1</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la tâche : la sous-conversation « %1 » s'est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
+
+%3</translation>
     </message>
     <message>
         <location filename="../tools/webfetch_tool.cpp" line="+158"/>
         <location line="+27"/>
         <source>fetch %1</source>
-        <translation type="unfinished"></translation>
+        <translation>récupérer %1</translation>
     </message>
     <message>
         <location line="+112"/>
         <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="unfinished"></translation>
+        <translation>URL « %1 » non valide : elle doit commencer par http:// ou https://</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la récupération de %1 : réponse trop volumineuse (limite 5 Mo).</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fetch failed for %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la récupération de %1 : %2</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>
 
 [... content truncated at %1 characters ...]</source>
-        <translation type="unfinished"></translation>
+        <translation>
+
+[... contenu tronqué à %1 caractères ...]</translation>
     </message>
     <message>
         <location filename="../tools/websearch_tool.cpp" line="+87"/>
         <location line="+26"/>
         <source>search %1</source>
-        <translation type="unfinished"></translation>
+        <translation>rechercher %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+123"/>
         <source>Search results for &quot;%1&quot;:</source>
-        <translation type="unfinished"></translation>
+        <translation>Résultats de recherche pour « %1 » :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d'outil : « query » doit être une chaîne non vide.</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : le backend Google n'est pas configuré. Définissez la clé API et l'identifiant du moteur de recherche (cx) dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2459,48 +2826,405 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <location line="+42"/>
         <location line="+46"/>
         <source>Search failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : %1</translation>
     </message>
     <message>
         <location line="-135"/>
         <location line="+51"/>
         <location line="+42"/>
         <source>Search failed: invalid response from the search provider.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : réponse non valide du fournisseur de recherche.</translation>
     </message>
     <message>
         <location line="-82"/>
         <source>no results found for &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>aucun résultat trouvé pour « %1 »</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : le backend Brave n'est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
         <location line="+34"/>
         <location line="+41"/>
         <location line="+40"/>
         <source>No results found for &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun résultat trouvé pour « %1 ».</translation>
     </message>
     <message>
         <location line="-72"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : le backend Tavily n'est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
         <location line="+41"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la recherche : l'URL du point d'accès Exa n'est pas configurée.</translation>
     </message>
     <message>
         <location line="+33"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Résultats de recherche pour « %1 » :
+
+%2</translation>
+    </message>
+    <message>
+        <location filename="../tools/find_tool.cpp" line="-153"/>
+        <location line="+11"/>
+        <source>find files %1</source>
+        <translation>localiser les fichiers %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/search_tool.cpp" line="-145"/>
+        <source>Pattern: `%1`</source>
+        <translation>Motif : `%1`</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <source>  Path: %1</source>
+        <translation>  Chemin : %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation>Erreur : ripgrep (rg) n'a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l'outil find.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../tools/search_tool.cpp" line="+18"/>
+        <source>Error: the pattern must not be empty.</source>
+        <translation>Erreur : le motif ne doit pas être vide.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <source>Error: path is not a directory: %1</source>
+        <translation>Erreur : le chemin n'est pas un dossier : %1</translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; utilisez un motif plus spécifique.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../tools/search_tool.cpp" line="+113"/>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation>[Échec du démarrage de ripgrep : %1]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation>[ripgrep a échoué (code de sortie %1) : %2]</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation>[Limite de %1 résultats atteinte. Utilisez limit=%2 pour plus de résultats, ou utilisez un motif plus spécifique.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>No files found.</source>
+        <translation>Aucun fichier trouvé.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation>[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/ls_tool.cpp" line="-29"/>
+        <location line="+6"/>
+        <source>list directory %1</source>
+        <translation>lister le dossier %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Path: `%1`
+
+</source>
+        <translation>Chemin : `%1`
+
+</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Directory is empty.</source>
+        <translation>Le dossier est vide.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>[Sortie tronquée à %1 Ko. Listez un sous-dossier pour voir les entrées restantes.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d'entrées.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation>L'outil MCP « %1 » n'est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <source>Download ripgrep</source>
+        <translation>Télécharger ripgrep</translation>
+    </message>
+    <message>
+        <location line="+57"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>Télécharger ripgrep %1 depuis GitHub ?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n'est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Project: %1</source>
+        <translation>Projet : %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>License: %1</source>
+        <translation>Licence : %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Download</source>
+        <translation>Télécharger</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>Le paquet ne contient aucun binaire ripgrep.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>Il n'existe pas de ripgrep pour cette plateforme.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>Téléchargement de ripgrep...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>Échec du téléchargement de ripgrep : %1</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Verifying package integrity...</source>
+        <translation>Vérification de l'intégrité du paquet...</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation>Le paquet téléchargé n'est pas celui qui était attendu.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>Extraction de ripgrep...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>Échec de l'extraction de ripgrep : %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location line="+11"/>
+        <source>search for %1</source>
+        <translation>rechercher %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: `%1`</source>
+        <translation>  Glob : `%1`</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>Erreur : ripgrep (rg) n'a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l'outil search.</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Error: path does not exist: %1</source>
+        <translation>Erreur : le chemin n'existe pas : %1</translation>
+    </message>
+    <message>
+        <location line="+100"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; restreignez le chemin ou affinez le motif.]</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>[Limite de %1 correspondances atteinte. Utilisez limit=%2 pour plus de résultats, ou affinez le motif.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>[Certaines lignes sont tronquées à %1 caractères. Utilisez read_file pour voir les lignes complètes.]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>Aucune correspondance trouvée.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
+    </message>
+    <message>
+        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <source>load skill %1</source>
+        <translation>charger la compétence %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>L'argument « name » est requis.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>Compétence « %1 » introuvable. Compétences disponibles : %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(none)</source>
+        <translation>(aucun)</translation>
+    </message>
+    <message>
+        <location filename="../tools/todowrite_tool.cpp" line="+98"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>mettre à jour la liste des tâches</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>mettre à jour la liste des tâches (%1 tâches)</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>Erreur d'outil : « todos » doit contenir au moins une tâche.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>Erreur d'outil : la tâche %1 a un « content » vide.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>Erreur d'outil : la tâche %1 a un statut inconnu « %2 » (attendu : « pending », « in_progress » ou « completed »).</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>Erreur d'outil : une seule tâche peut être « in_progress » à la fois (%1 fournies).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
+    </message>
+    <message>
+        <location filename="../tools/tool_utils.cpp" line="+61"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
+        <translation>L'écriture dans « %1 » n'est pas autorisée : le bac à sable n'autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>La lecture de « %1 » n'est pas autorisée : les emplacements de jetons d'authentification ne sont pas lisibles dans le bac à sable.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
+        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Installez-le une fois avec 'npx @anthropic-ai/sandbox-runtime windows-install' (une invite UAC) ; aucune déconnexion n'est nécessaire, la barrière réseau s'appuie sur le SID de l'utilisateur bac à sable dédié. À défaut, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
+        <translation>Le backend bac à sable Windows (srt-win) n'a pas pu être interrogé (sortie %1) : %2 %3</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>The Windows sandbox user is not provisioned. %1</source>
+        <translation>L'utilisateur bac à sable Windows n'est pas provisionné. %1</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation>Le backend bac à sable Windows (srt-win) n'a pas renvoyé le SID de l'utilisateur bac à sable. %1</translation>
+    </message>
+    <message>
+        <location line="+90"/>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation>Le bac à sable Windows n'a pas pu accorder à l'utilisateur bac à sable l'accès au dossier de travail (sortie %1) : %2</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation>srt-win (le backend bac à sable Windows de @anthropic-ai/sandbox-runtime) n'a pas été trouvé dans le PATH. %1 LLAMA_SRT_WIN peut pointer vers l'exécutable.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l'environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <source>Write file</source>
+        <translation>Écrire un fichier</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>écrire %1</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>Erreur d'outil : « content » est requis.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>Impossible d'écrire « %1 » : un chemin parent est un fichier.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>Impossible d'écrire « %1 » : impossible de créer le dossier : %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Impossible d'écrire dans **« %1 »** : %2.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>%1 octets écrits avec succès dans %2.</translation>
     </message>
 </context>
 </TS>
