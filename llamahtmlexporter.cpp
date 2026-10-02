@@ -12,6 +12,7 @@
 
 #include <3rdparty/markus/markus.h>
 
+#include "ansitext.h"
 #include "llamatheme.h"
 #include "llamathinkingsectionparser.h"
 #include "llamasyntaxhighlighter.h"
@@ -70,9 +71,14 @@ static QString replaceMatches(const QString &text,
 // Runs \a content through the shared KSyntaxHighlighting highlighter and
 // returns it as escaped text with per‑run <span> styling (the same colour
 // scheme the chat view uses).
-static QString highlightCode(const QString &language, const QString &content)
+static QString highlightCode(const QString &language, QString content)
 {
-    if (language.isEmpty())
+    // Terminal transcripts carry ANSI color codes; the chat view decodes
+    // them (MarkdownRenderer), the export shows the plain text. Stripping is
+    // applied to every block: it is a no-op for code that has no escapes and
+    // keeps any stray escape bytes out of the exported HTML / clipboard.
+    content = stripAnsiSequences(content);
+    if (language.isEmpty() || language == QLatin1String("terminal"))
         return escapeHtml(content);
 
     QVector<HighlightFragment> fragments;

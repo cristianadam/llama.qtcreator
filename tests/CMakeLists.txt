@@ -18,6 +18,7 @@ add_qtc_test(llamatools_test
   SOURCES
     llamatools_test.cpp
     ../llama.qrc
+    ../ansitext.cpp
     ../llamachatmanager.cpp
     ../llamasyntaxhighligher.cpp
     ../katexengine.cpp
@@ -104,6 +105,7 @@ add_qtc_test(markdownrenderer_test
     markus
   SOURCES
     markdownrenderer_test.cpp
+    ../ansitext.cpp
     ../markdownrenderer.cpp
     ../katexengine.cpp
     ../mermaidengine.cpp

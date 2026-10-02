@@ -11,6 +11,11 @@
 #include <QtSvg/QSvgRenderer>
 #include <QtTest/QtTest>
 
+#include <QSettings>
+
+#include <utils/theme/theme.h>
+
+#include "ansitext.h"
 #include <markdownrenderer.h>
 
 using namespace LlamaCpp;
@@ -65,6 +70,27 @@ static bool waitForPendingMermaid(MarkdownRenderer &renderer, int timeoutMs = 60
     return false;
 }
 
+
+// Standalone test: no Qt Creator theme is installed, so install a minimal
+// one and override the terminal ANSI tokens the tests assert on.
+static void setTerminalAnsiColor(int index, const QColor &color)
+{
+    static Utils::Theme *theme = nullptr;
+    static QTemporaryDir dir;
+    if (!theme) {
+        struct TestTheme : Utils::Theme
+        {
+            TestTheme() : Utils::Theme(QStringLiteral("test")) {}
+        };
+        theme = new TestTheme;
+        Utils::setCreatorTheme(theme);
+    }
+    QSettings settings(dir.path() + QStringLiteral("/theme.ini"), QSettings::IniFormat);
+    settings.setValue(QStringLiteral("Colors/TerminalAnsi%1").arg(index), color.name().mid(1)); // no leading "#": Theme::readSettings prepends it
+    settings.sync();
+    theme->readSettings(settings);
+}
+
 class MarkdownRendererTest : public QObject
 {
     Q_OBJECT
@@ -72,6 +98,8 @@ private slots:
     void plainParagraph();
     void multiParagraph();
     void codeBlock();
+    void terminalBlockDecodesAnsiColors();
+    void ansiDecodeAndStrip();
     void list();
     void thinkingSection();
     void detailsSummaryMarkdown();
@@ -334,6 +362,65 @@ void MarkdownRendererTest::list()
                                QStringLiteral("second"),
                                QStringLiteral("third")}),
              qPrintable(out));
+}
+
+void MarkdownRendererTest::terminalBlockDecodesAnsiColors()
+{
+    setTerminalAnsiColor(1, QColor(200, 30, 30));
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QString text = QStringLiteral("```terminal\n$ ls\n\x1b[0;31mmissing.txt\x1b[0m\n```\n");
+    const QString out = streamText(renderer, text);
+    QVERIFY2(out.contains(QStringLiteral("missing.txt")), qPrintable(out));
+    QVERIFY(!out.contains(QChar(0x1B)));
+
+    // The colored run carries the terminal theme's red.
+    bool found = false;
+    for (QTextBlock blk = renderer.document()->firstBlock(); blk.isValid() && !found;
+         blk = blk.next()) {
+        for (QTextBlock::Iterator it = blk.begin(); it != blk.end(); ++it) {
+            const QTextFragment &frag = it.fragment();
+            if (frag.text() == QLatin1String("missing.txt")
+                && frag.charFormat().foreground().color() == QColor(200, 30, 30))
+                found = true;
+        }
+    }
+    QVERIFY2(found, qPrintable(out));
+}
+
+void MarkdownRendererTest::ansiDecodeAndStrip()
+{
+    QCOMPARE(stripAnsiSequences(QStringLiteral("\x1b[31mred\x1b[0m plain")),
+             QStringLiteral("red plain"));
+    QCOMPARE(stripAnsiSequences(QStringLiteral("\x1b]0;title\x07text\x1b[K")),
+             QStringLiteral("text"));
+    QCOMPARE(stripAnsiSequences(QStringLiteral("no escapes")),
+             QStringLiteral("no escapes"));
+
+    setTerminalAnsiColor(1, QColor(200, 30, 30));
+    const QVector<HighlightFragment> frags = decodeAnsiText(
+            QStringLiteral("a\x1b[1;31mb\x1b[0m\x1b[38;5;196mc\x1b[38;2;1;2;3md"),
+            QTextCharFormat());
+    QString joined;
+    for (const HighlightFragment &f : std::as_const(frags))
+        joined += f.text;
+    QCOMPARE(joined, QStringLiteral("abcd"));
+    QCOMPARE(frags.size(), 4);
+
+    QCOMPARE(frags.at(1).text, QStringLiteral("b"));
+    QCOMPARE(frags.at(1).format.foreground().color(), QColor(200, 30, 30));
+    QCOMPARE(frags.at(1).format.fontWeight(), int(QFont::Bold));
+    QCOMPARE(frags.at(2).format.foreground().color(), QColor(255, 0, 0)); // 256-color 196
+    QCOMPARE(frags.at(3).format.foreground().color(), QColor(1, 2, 3)); // truecolor
+
+    // An incomplete sequence at the end (the block is still streaming) is
+    // dropped; the next render carries the complete sequence.
+    const QVector<HighlightFragment> partial =
+        decodeAnsiText(QStringLiteral("x\x1b[3"), QTextCharFormat());
+    QString partialJoined;
+    for (const HighlightFragment &f : std::as_const(partial))
+        partialJoined += f.text;
+    QCOMPARE(partialJoined, QStringLiteral("x"));
 }
 
 void MarkdownRendererTest::thinkingSection()

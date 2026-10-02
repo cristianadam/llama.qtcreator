@@ -32,6 +32,7 @@
 #include <QToolButton>
 #include <QToolTip>
 
+#include "ansitext.h"
 #include "katexengine.h"
 #include "llamasyntaxhighlighter.h"
 #include "llamatr.h"
@@ -833,12 +834,18 @@ void MarkdownRenderer::renderCodeBlockText(const markus::CodeBlock &code)
 
     const QString content = fromStdString(code.content);
 
-    // Inside a quote (e.g. a thinking section body) the code is muted like
-    // the surrounding text; only unquoted code gets syntax highlighting.
-    // The "rounded margin" around the code is not created with invisible
-    // spacer lines but by expanding the block's bounding rect when the
-    // background is painted (see codeBlockBackgroundRect()).
-    if (m_blockQuoteDepth == 0) {
+    // Terminal transcripts (the bash tool fences its output as "terminal"):
+    // decode the ANSI color codes the command emitted, with the terminal
+    // theme's palette, so the block reads like a real terminal.
+    if (m_codeBlockLanguage == QLatin1String("terminal") && containsAnsiSequences(content)) {
+        for (const HighlightFragment &fragment : decodeAnsiText(content, baseCharFmt))
+            m_cursor.insertText(fragment.text, fragment.format);
+    } else if (m_blockQuoteDepth == 0) {
+        // Inside a quote (e.g. a thinking section body) the code is muted like
+        // the surrounding text; only unquoted code gets syntax highlighting.
+        // The "rounded margin" around the code is not created with invisible
+        // spacer lines but by expanding the block's bounding rect when the
+        // background is painted (see codeBlockBackgroundRect()).
         QVector<HighlightFragment> fragments;
         SyntaxHighlighter highlighter;
         highlighter.setDefinition(syntaxDefinitionForName(m_codeBlockLanguage));

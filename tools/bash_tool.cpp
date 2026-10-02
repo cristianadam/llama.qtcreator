@@ -300,6 +300,14 @@ QProcessEnvironment shellEnvironment()
         if (const Kit *kit = p->activeKit())
             env = kit->buildEnvironment().toProcessEnvironment();
     }
+    // The captured output is not a terminal, so tools that colorize only
+    // for TTYs would print plain text. Force color output (and a color-
+    // capable TERM) so that the output keeps the colors a real terminal
+    // would show (GNU/BSD tools honor CLICOLOR_FORCE, most JS/Python CLIs
+    // honor FORCE_COLOR).
+    env.insert(QStringLiteral("CLICOLOR_FORCE"), QStringLiteral("1"));
+    env.insert(QStringLiteral("FORCE_COLOR"), QStringLiteral("1"));
+    env.insert(QStringLiteral("TERM"), QStringLiteral("xterm-256color"));
     return env;
 }
 
@@ -462,7 +470,10 @@ QString BashTool::toolDefinition() const
         "(Windows uses Git Bash). Use this for terminal operations like git, "
         "npm, docker, running builds or tests; do not use it for reading, "
         "writing, editing or searching files - use the dedicated tools for "
-        "that. Output is limited to the last 2000 lines or 50 KB; when "
+        "that. The output may contain ANSI escape sequences for terminal "
+        "colors (commands run with CLICOLOR_FORCE and FORCE_COLOR set); "
+        "ignore them when interpreting the output. Output is limited to "
+        "the last 2000 lines or 50 KB; when "
         "truncated, the full output is saved to a temporary file and its "
         "path is reported. Non-zero exit codes, crashes and timeouts are "
         "reported as failures, including the output produced so far.");
@@ -822,7 +833,7 @@ QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty())
         md = Tr::tr("Working directory: %1\n\n").arg(workdir);
-    md += codeFence(block, QStringLiteral("bash"));
+    md += codeFence(block, QStringLiteral("terminal"));
     return md;
 }
 
@@ -844,7 +855,7 @@ QString BashTool::summaryPreview(const QJsonObject &arguments, const QString &re
         tail = QStringLiteral("…\n") + lines.mid(lines.size() - kMaxLines + 1).join(QLatin1Char('\n'));
     if (tail.size() > 240)
         tail = tail.left(237);
-    return codeFence(tail);
+    return codeFence(tail, QStringLiteral("terminal"));
 }
 
 } // namespace LlamaCpp::Tools

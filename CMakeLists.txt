@@ -70,6 +70,7 @@ add_qtc_plugin(LlamaCpp
   SOURCES
     llama.qrc
     llamaicons.h
+    ansitext.cpp ansitext.h
     autoscrollarea.cpp autoscrollarea.h
     fimcache.cpp fimcache.h
     llamachateditor.cpp llamachateditor.h

@@ -1775,12 +1775,12 @@ void LlamaToolsTest::preview_bashTail()
     // Long output: the *tail* is shown, prefixed with an ellipsis line.
     const QString output = QStringLiteral("l1\nl2\nl3\nl4\nl5");
     const QString preview = tool.summaryPreview(QJsonObject(), output, true);
-    QCOMPARE(preview, QString("```\n…\nl4\nl5\n```"));
+    QCOMPARE(preview, QString("```terminal\n…\nl4\nl5\n```"));
     QVERIFY(!preview.contains("l1"));
 
     // Short output passes through, still fenced.
     const QString shortPreview = tool.summaryPreview(QJsonObject(), QStringLiteral("ok"), true);
-    QCOMPARE(shortPreview, QString("```\nok\n```"));
+    QCOMPARE(shortPreview, QString("```terminal\nok\n```"));
 
     // Empty output: no preview.
     QCOMPARE(tool.summaryPreview(QJsonObject(), QString(), true), QString());
@@ -3179,7 +3179,7 @@ void LlamaToolsTest::bash_detailsMarkdown()
     const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"), true);
     // The command and its output appear in a single terminal‑style block:
     // the command with a "$ " prompt, the output directly below it.
-    QVERIFY(md.contains("```bash\n$ git status\nOn branch main\n```"));
+    QVERIFY(md.contains("```terminal\n$ git status\nOn branch main\n```"));
     QVERIFY(md.contains("/some/dir"));
 
     QJsonObject noWorkdir;

@@ -535,7 +535,7 @@ QString ChatMessage::getToolUsageAndResult() const
                     : liveOutput;
             if (tail.size() > 240)
                 tail = tail.left(237) + QStringLiteral("…");
-            summaryText += QStringLiteral("\n\n") + codeFence(tail);
+            summaryText += QStringLiteral("\n\n") + codeFence(tail, QStringLiteral("terminal"));
         }
     } else {
         summaryText = tool->oneLineSummary(args);
