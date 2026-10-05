@@ -86,13 +86,15 @@ QString LsTool::toolDefinition() const
 QString LsTool::streamingSummary(const QString &partialArgs) const
 {
     const QString path = extractPartialString(partialArgs, QStringLiteral("path"));
-    return Tr::tr("list directory %1").arg(path.isEmpty() ? QStringLiteral(".") : path);
+    const QString dir = path.isEmpty() ? QStringLiteral(".") : path;
+    return Tr::tr("list directory %1").arg(codeSpan(dir));
 }
 
 QString LsTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString path = args.value("path").toString();
-    return Tr::tr("list directory %1").arg(path.isEmpty() ? QStringLiteral(".") : path);
+    const QString dir = path.isEmpty() ? QStringLiteral(".") : path;
+    return Tr::tr("list directory %1").arg(codeSpan(dir));
 }
 
 QString LsTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const

@@ -353,7 +353,7 @@
     <message>
         <location line="+6"/>
         <source>Generate up to five follow up questions in the context of the current conversation. The questions are from the user point of view. Only questions, no explanations. Use the language used in the conversation. Return a JSON object with a single key &quot;follow_ups&quot; containing an array of plain text question strings, no markdown.</source>
-        <translation>Сгенеруйте не більше п'яти запитань для продовження в контексті поточної розмови. Запитання мають бути з погляду користувача. Тільки запитання, без пояснень. Використовуйте мову, якою ведеться розмова. Поверніть об'єкт JSON з одним ключем &quot;follow_ups&quot;, що містить масив рядків із запитаннями у звичайному тексті, без Markdown.</translation>
+        <translation>Сгенеруйте не більше п&apos;яти запитань для продовження в контексті поточної розмови. Запитання мають бути з погляду користувача. Тільки запитання, без пояснень. Використовуйте мову, якою ведеться розмова. Поверніть об&apos;єкт JSON з одним ключем &quot;follow_ups&quot;, що містить масив рядків із запитаннями у звичайному тексті, без Markdown.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -373,7 +373,7 @@
     <message>
         <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>Назва моделі для завершення FIM, якщо на сервері завантажено кілька моделей (необов'язково, рекомендовано: Qwen3 Coder).</translation>
+        <translation>Назва моделі для завершення FIM, якщо на сервері завантажено кілька моделей (необов&apos;язково, рекомендовано: Qwen3 Coder).</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -997,7 +997,7 @@
     <message>
         <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Необов'язковий ключ API Exa. Без ключа використовується спільна (з обмеженням частоти) кінцева точка.</translation>
+        <translation>Необов&apos;язковий ключ API Exa. Без ключа використовується спільна (з обмеженням частоти) кінцева точка.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -1540,7 +1540,7 @@ You can type any other prompt – they are remembered for next time.</source>
 Ви можете ввести іншу підказку – вона буде збережена для наступного разу.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>зображення SVG</translation>
     </message>
@@ -2089,7 +2089,7 @@ Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
         <translation>Надіслати поточне виділення до llama.cpp з запитом.
 Вбудовані запити: %1
-Ви можете ввести будь-який інший запит – він буде запам'ятовано для наступного разу.</translation>
+Ви можете ввести будь-який інший запит – він буде запам&apos;ятовано для наступного разу.</translation>
     </message>
     <message>
         <location filename="../promptssettingswidget.cpp" line="-99"/>
@@ -2163,7 +2163,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+30"/>
         <source>description is required</source>
-        <translation>опис є обов'язковим</translation>
+        <translation>опис є обов&apos;язковим</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -2260,7 +2260,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>bubblewrap (bwrap) не знайдено. Встановіть його (наприклад, &apos;apt install bubblewrap&apos; або &apos;dnf install bubblewrap&apos;) або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Вивід обрізано: %1]</translation>
     </message>
@@ -2280,7 +2280,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Повний вивід збережено у: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>виконується %1</translation>
     </message>
@@ -2313,9 +2313,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>невідома помилка</translation>
@@ -2392,7 +2392,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <location filename="../tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
-        <translation>Не вдається встановити з'єднання з MCP-сервером.</translation>
+        <translation>Не вдається встановити з&apos;єднання з MCP-сервером.</translation>
     </message>
     <message>
         <location line="-22"/>
@@ -2407,12 +2407,12 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+53"/>
         <source>Connection to the MCP server was closed.</source>
-        <translation>З'єднання з MCP-сервером закрито.</translation>
+        <translation>З&apos;єднання з MCP-сервером закрито.</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>MCP-сервер недоступний. Переконайтеся, що сервер запущено і до нього можна встановити з'єднання, а потім повторіть спробу.</translation>
+        <translation>MCP-сервер недоступний. Переконайтеся, що сервер запущено і до нього можна встановити з&apos;єднання, а потім повторіть спробу.</translation>
     </message>
     <message>
         <location line="+61"/>
@@ -2435,17 +2435,21 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP-сервер повернув порожню або некоректну відповідь.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>прочитати весь файл %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>прочитати %1:%2‑%3</translation>
+        <translation type="vanished">прочитати %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>прочитати %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Файл &quot;%1&quot; не існує.</translation>
     </message>
@@ -2513,7 +2517,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>Помилка інструмента: обов'язкові &quot;description&quot; та &quot;prompt&quot;.</translation>
+        <translation>Помилка інструмента: обов&apos;язкові &quot;description&quot; та &quot;prompt&quot;.</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2643,16 +2647,20 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>знайти файли %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Взірець: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Взірець: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Взірець: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2673,7 +2681,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Помилка: шлях не є каталогом: %1</translation>
     </message>
@@ -2710,8 +2718,8 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[Вивід обрізано до %1 КБ. Скористайтеся більш специфічним взірцем, щоб побачити всі результати.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>список директорій %1</translation>
     </message>
@@ -2815,15 +2823,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Не вдалося розпакувати ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>пошук: %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2868,7 +2880,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>Аргумент &quot;name&quot; є обов'язковим.</translation>
+        <translation>Аргумент &quot;name&quot; є обов&apos;язковим.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2892,7 +2904,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>оновити список завдань (%1 завдань)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Помилка інструмента: &quot;todos&quot; має містити принаймні одне завдання.</translation>
     </message>
@@ -2929,7 +2941,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Встановіть його один раз командою &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); вихід із системи не потрібен, мережевий паркан прив'язаний до SID спеціального користувача пісочниці. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
+        <translation>Встановіть його один раз командою &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); вихід із системи не потрібен, мережевий паркан прив&apos;язаний до SID спеціального користувача пісочниці. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -2975,7 +2987,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Помилка інструмента: обов'язковий &quot;content&quot;.</translation>
+        <translation>Помилка інструмента: обов&apos;язковий &quot;content&quot;.</translation>
     </message>
     <message>
         <location line="+7"/>

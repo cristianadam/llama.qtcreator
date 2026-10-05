@@ -353,7 +353,7 @@
     <message>
         <location line="+6"/>
         <source>Generate up to five follow up questions in the context of the current conversation. The questions are from the user point of view. Only questions, no explanations. Use the language used in the conversation. Return a JSON object with a single key &quot;follow_ups&quot; containing an array of plain text question strings, no markdown.</source>
-        <translation>Wygeneruj do pięciu pytań uzupełniających w kontekście bieżącej konwersacji. Pytania są z perspektywy użytkownika. Tylko pytania, bez wyjaśnień. Użyj języka używanego w konwersacji. Zwróć obiekt JSON z jednym kluczem "follow_ups" zawierającym tablicę ciągów tekstowych z pytaniami w zwykłym tekście, bez markdown.</translation>
+        <translation>Wygeneruj do pięciu pytań uzupełniających w kontekście bieżącej konwersacji. Pytania są z perspektywy użytkownika. Tylko pytania, bez wyjaśnień. Użyj języka używanego w konwersacji. Zwróć obiekt JSON z jednym kluczem &quot;follow_ups&quot; zawierającym tablicę ciągów tekstowych z pytaniami w zwykłym tekście, bez markdown.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -398,7 +398,7 @@
     <message>
         <location line="+57"/>
         <source>Max number of cached context keys to keep in the result cache. Each key can hold up to &apos;Completions per Position&apos; individual completions.</source>
-        <translation>Maksymalna liczba kluczy kontekstu w pamięci podręcznej wyników. Każdy klucz może zawierać do 'Uzupełnień na pozycję' poszczególnych uzupełnień.</translation>
+        <translation>Maksymalna liczba kluczy kontekstu w pamięci podręcznej wyników. Każdy klucz może zawierać do &apos;Uzupełnień na pozycję&apos; poszczególnych uzupełnień.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -844,7 +844,7 @@
     <message>
         <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation>Poziom myślenia (wnioskowania) dla modeli zdolnych do myślenia: "default", "off", "low", "medium", "high" lub "max".</translation>
+        <translation>Poziom myślenia (wnioskowania) dla modeli zdolnych do myślenia: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; lub &quot;max&quot;.</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -905,7 +905,7 @@
     <message>
         <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Wbudowane polecenia lokalizatora "ll". W menu wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. "{selection}" jest zastępowane zaznaczonym tekstem.</translation>
+        <translation>Wbudowane polecenia lokalizatora &quot;ll&quot;. W menu wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. &quot;{selection}&quot; jest zastępowane zaznaczonym tekstem.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -939,7 +939,7 @@
     <message>
         <location line="-311"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: 'npx @anthropic-ai/sandbox-runtime windows-install' (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
+        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -967,7 +967,7 @@
     <message>
         <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation>Moduł backendu używany przez narzędzie websearch: "exa" (domyślnie, bez klucza API), "google" (Custom Search JSON API, wymaga klucza API i identyfikatora silnika wyszukiwania), "brave" (Brave Search API, wymaga klucza API) lub "tavily" (wymaga klucza API).</translation>
+        <translation>Moduł backendu używany przez narzędzie websearch: &quot;exa&quot; (domyślnie, bez klucza API), &quot;google&quot; (Custom Search JSON API, wymaga klucza API i identyfikatora silnika wyszukiwania), &quot;brave&quot; (Brave Search API, wymaga klucza API) lub &quot;tavily&quot; (wymaga klucza API).</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -1027,7 +1027,7 @@
     <message>
         <location line="+2"/>
         <source>API key for the Google Custom Search JSON API (required for the &quot;google&quot; provider).</source>
-        <translation>Klucz API dla Google Custom Search JSON API (wymagany dla dostawcy "google").</translation>
+        <translation>Klucz API dla Google Custom Search JSON API (wymagany dla dostawcy &quot;google&quot;).</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -1042,7 +1042,7 @@
     <message>
         <location line="+2"/>
         <source>The cx (search engine ID) of the Google Custom Search engine (required for the &quot;google&quot; provider).</source>
-        <translation>Wartość cx (identyfikator silnika wyszukiwania) silnika Google Custom Search (wymagana dla dostawcy "google").</translation>
+        <translation>Wartość cx (identyfikator silnika wyszukiwania) silnika Google Custom Search (wymagana dla dostawcy &quot;google&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1057,7 +1057,7 @@
     <message>
         <location line="+2"/>
         <source>URL of the Brave Search API endpoint used by the websearch tool (the &quot;brave&quot; provider).</source>
-        <translation>Adres URL punktu końcowego Brave Search API używanego przez narzędzie websearch (dostawca "brave").</translation>
+        <translation>Adres URL punktu końcowego Brave Search API używanego przez narzędzie websearch (dostawca &quot;brave&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1072,7 +1072,7 @@
     <message>
         <location line="+2"/>
         <source>API key for the Brave Search API, get one at brave.com/search/api (required for the &quot;brave&quot; provider).</source>
-        <translation>Klucz API dla Brave Search API, uzyskaj go na brave.com/search/api (wymagany dla dostawcy "brave").</translation>
+        <translation>Klucz API dla Brave Search API, uzyskaj go na brave.com/search/api (wymagany dla dostawcy &quot;brave&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1087,7 +1087,7 @@
     <message>
         <location line="+2"/>
         <source>URL of the Tavily search endpoint used by the websearch tool (the &quot;tavily&quot; provider).</source>
-        <translation>Adres URL punktu końcowego wyszukiwania Tavily używanego przez narzędzie websearch (dostawca "tavily").</translation>
+        <translation>Adres URL punktu końcowego wyszukiwania Tavily używanego przez narzędzie websearch (dostawca &quot;tavily&quot;).</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1102,17 +1102,17 @@
     <message>
         <location line="+2"/>
         <source>API key for Tavily, get one at tavily.com (required for the &quot;tavily&quot; provider).</source>
-        <translation>Klucz API dla Tavily, uzyskaj go na tavily.com (wymagany dla dostawcy "tavily").</translation>
+        <translation>Klucz API dla Tavily, uzyskaj go na tavily.com (wymagany dla dostawcy &quot;tavily&quot;).</translation>
     </message>
     <message>
         <location line="+191"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
-        <translation>Nadpisuje globalne ustawienie 'Piaskownica poleceń' dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co piaskownica ogranicza.</translation>
+        <translation>Nadpisuje globalne ustawienie &apos;Piaskownica poleceń&apos; dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co piaskownica ogranicza.</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Overrides the global &apos;Load project instructions&apos; setting for this project. See the global setting on the Llama Tools page for what is loaded.</source>
-        <translation>Nadpisuje globalne ustawienie 'Wczytaj instrukcje projektu' dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co jest wczytywane.</translation>
+        <translation>Nadpisuje globalne ustawienie &apos;Wczytaj instrukcje projektu&apos; dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co jest wczytywane.</translation>
     </message>
     <message>
         <location line="+63"/>
@@ -1532,7 +1532,7 @@ Wbudowane polecenia: %1
 Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>Obraz SVG</translation>
     </message>
@@ -1997,7 +1997,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="-304"/>
         <location line="+51"/>
         <source>The name &quot;%1&quot; is reserved for the builtin Qt Creator MCP server.</source>
-        <translation>Nazwa "%1" jest zarezerwowana dla wbudowanego serwera MCP Qt Creator.</translation>
+        <translation>Nazwa &quot;%1&quot; jest zarezerwowana dla wbudowanego serwera MCP Qt Creator.</translation>
     </message>
     <message>
         <location line="+74"/>
@@ -2023,7 +2023,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="+4"/>
         <source>One &quot;Name: value&quot; header per line, e.g.
 Authorization: Bearer &lt;token&gt;</source>
-        <translation>Jeden nagłówek "Nazwa: wartość" na linię, np.
+        <translation>Jeden nagłówek &quot;Nazwa: wartość&quot; na linię, np.
 Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
@@ -2149,7 +2149,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+16"/>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>W menu lokalizatora wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. "{selection}" jest zastępowane zaznaczonym tekstem.</translation>
+        <translation>W menu lokalizatora wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. &quot;{selection}&quot; jest zastępowane zaznaczonym tekstem.</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2169,7 +2169,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+7"/>
         <source>Locator (&quot;ll&quot;)</source>
-        <translation>Lokalizator ("ll")</translation>
+        <translation>Lokalizator (&quot;ll&quot;)</translation>
     </message>
     <message>
         <location filename="../skills.cpp" line="+78"/>
@@ -2199,17 +2199,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+4"/>
         <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>nieprawidłowa nazwa "%1" (tylko małe litery a-z, cyfry 0-9 i myślniki, maks. %2 znaki, bez myślników na początku, na końcu lub z rzędu)</translation>
+        <translation>nieprawidłowa nazwa &quot;%1&quot; (tylko małe litery a-z, cyfry 0-9 i myślniki, maks. %2 znaki, bez myślników na początku, na końcu lub z rzędu)</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
-        <translation>nazwa "%1" nie odpowiada jej katalogowi "%2"</translation>
+        <translation>nazwa &quot;%1&quot; nie odpowiada jej katalogowi &quot;%2&quot;</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>nazwa "%1" koliduje z %2 – zachowano pierwszą</translation>
+        <translation>nazwa &quot;%1&quot; koliduje z %2 – zachowano pierwszą</translation>
     </message>
 </context>
 <context>
@@ -2283,10 +2283,10 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+9"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Nie znaleziono bubblewrap (bwrap). Zainstaluj go (np. 'apt install bubblewrap' lub 'dnf install bubblewrap') lub odznacz 'Piaskownica poleceń' w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+        <translation>Nie znaleziono bubblewrap (bwrap). Zainstaluj go (np. &apos;apt install bubblewrap&apos; lub &apos;dnf install bubblewrap&apos;) lub odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Wyjście skrócone: %1]</translation>
     </message>
@@ -2306,7 +2306,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pełne wyjście zapisano do: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>uruchamianie %1</translation>
     </message>
@@ -2339,9 +2339,9 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>nieznany błąd</translation>
@@ -2385,29 +2385,29 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="+35"/>
         <location filename="../tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation>Błąd narzędzia: "path" musi być niepustym ciągiem tekstowym.</translation>
+        <translation>Błąd narzędzia: &quot;path&quot; musi być niepustym ciągiem tekstowym.</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation>Błąd narzędzia: każda edycja wymaga "oldText" i "newText".</translation>
+        <translation>Błąd narzędzia: każda edycja wymaga &quot;oldText&quot; i &quot;newText&quot;.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation>Błąd narzędzia: "edits" musi zawierać co najmniej jedną zamianę.</translation>
+        <translation>Błąd narzędzia: &quot;edits&quot; musi zawierać co najmniej jedną zamianę.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>Nie można edytować "%1": nie znaleziono pliku. Użyj read_file, aby zweryfikować ścieżkę, lub write, aby utworzyć plik.</translation>
+        <translation>Nie można edytować &quot;%1&quot;: nie znaleziono pliku. Użyj read_file, aby zweryfikować ścieżkę, lub write, aby utworzyć plik.</translation>
     </message>
     <message>
         <location line="+7"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation>Nie można edytować "%1": %2</translation>
+        <translation>Nie można edytować &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2448,7 +2448,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="-42"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>Narzędzie MCP "%1" nie powiodło się: %2</translation>
+        <translation>Narzędzie MCP &quot;%1&quot; nie powiodło się: %2</translation>
     </message>
     <message>
         <location line="+53"/>
@@ -2461,17 +2461,21 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Serwer MCP zwrócił pustą lub nieprawidłową odpowiedź.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>przeczytaj cały plik %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>przeczytaj %1:%2-%3</translation>
+        <translation type="vanished">przeczytaj %1:%2-%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>przeczytaj %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Plik &quot;%1&quot; nie istnieje.</translation>
     </message>
@@ -2483,12 +2487,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+11"/>
         <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>Obraz "%1" ma rozmiar %2 MB i przekracza limit odczytu %3 MB; najpierw zmień jego rozmiar (np. za pomocą narzędzia bash).</translation>
+        <translation>Obraz &quot;%1&quot; ma rozmiar %2 MB i przekracza limit odczytu %3 MB; najpierw zmień jego rozmiar (np. za pomocą narzędzia bash).</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>Plik obrazu "%1" (%2, %3 bajtów). Jego zawartość jest dołączona jako obraz.</translation>
+        <translation>Plik obrazu &quot;%1&quot; (%2, %3 bajtów). Jego zawartość jest dołączona jako obraz.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -2508,7 +2512,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+30"/>
         <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>Linia %1 pliku "%2" jest większa niż limit odczytu %3 KB; plik nie może zostać odczytany tym narzędziem.</translation>
+        <translation>Linia %1 pliku &quot;%2&quot; jest większa niż limit odczytu %3 KB; plik nie może zostać odczytany tym narzędziem.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -2523,12 +2527,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location filename="../tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>Jesteś subagentem "explore", działającym w osobnej rozmowie, odizolowanej od głównej. Przeszukuj kod i odpowiedz na zadanie za pomocą dostępnych narzędzi tylko do odczytu: użyj "find", aby lokalizować pliki po nazwie, "search", aby przeszukiwać zawartość plików, i "read_file", aby odczytać odpowiednie fragmenty. Nie modyfikuj żadnych plików i nie uruchamiaj poleceń, które cokolwiek zmieniają. Działaj samodzielnie; nie możesz zadawać użytkownikowi pytań. Po zakończeniu odpowiedz jednym zwięzłym raportem zawierającym kluczowe ustalenia, ścieżki do plików z numerami linii oraz wszystko, czego główna rozmowa potrzebuje, aby kontynuować pracę.</translation>
+        <translation>Jesteś subagentem &quot;explore&quot;, działającym w osobnej rozmowie, odizolowanej od głównej. Przeszukuj kod i odpowiedz na zadanie za pomocą dostępnych narzędzi tylko do odczytu: użyj &quot;find&quot;, aby lokalizować pliki po nazwie, &quot;search&quot;, aby przeszukiwać zawartość plików, i &quot;read_file&quot;, aby odczytać odpowiednie fragmenty. Nie modyfikuj żadnych plików i nie uruchamiaj poleceń, które cokolwiek zmieniają. Działaj samodzielnie; nie możesz zadawać użytkownikowi pytań. Po zakończeniu odpowiedz jednym zwięzłym raportem zawierającym kluczowe ustalenia, ścieżki do plików z numerami linii oraz wszystko, czego główna rozmowa potrzebuje, aby kontynuować pracę.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>Jesteś subagentem "general", działającym w osobnej rozmowie, odizolowanej od głównej. Działaj samodzielnie za pomocą dostępnych narzędzi, aż zadanie zostanie ukończone; nie możesz zadawać użytkownikowi pytań. Po zakończeniu odpowiedz jednym zwięzłym raportem o tym, co zrobiłeś lub odkryłeś, wraz ze ścieżkami do plików z numerami linii, aby główna rozmowa mogła kontynuować pracę.</translation>
+        <translation>Jesteś subagentem &quot;general&quot;, działającym w osobnej rozmowie, odizolowanej od głównej. Działaj samodzielnie za pomocą dostępnych narzędzi, aż zadanie zostanie ukończone; nie możesz zadawać użytkownikowi pytań. Po zakończeniu odpowiedz jednym zwięzłym raportem o tym, co zrobiłeś lub odkryłeś, wraz ze ścieżkami do plików z numerami linii, aby główna rozmowa mogła kontynuować pracę.</translation>
     </message>
     <message>
         <location line="+68"/>
@@ -2539,12 +2543,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>Błąd narzędzia: wymagane są zarówno "description", jak i "prompt".</translation>
+        <translation>Błąd narzędzia: wymagane są zarówno &quot;description&quot;, jak i &quot;prompt&quot;.</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>Błąd narzędzia: nieznany subagent_type "%1" (oczekiwano "explore" lub "general")</translation>
+        <translation>Błąd narzędzia: nieznany subagent_type &quot;%1&quot; (oczekiwano &quot;explore&quot; lub &quot;general&quot;)</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2554,14 +2558,14 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+20"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Zadanie nie powiodło się: podrozmowa "%1" zakończyła się bez ostatecznej odpowiedzi (mogła zostać zatrzymana lub usunięta).</translation>
+        <translation>Zadanie nie powiodło się: podrozmowa &quot;%1&quot; zakończyła się bez ostatecznej odpowiedzi (mogła zostać zatrzymana lub usunięta).</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation>Zadanie ukończone w podrozmowie "%1" (id: %2). Rozmowa jest zachowywana na liście rozmów i można ją otworzyć, aby kontynuować pracę. Ostateczny raport subagenta:
+        <translation>Zadanie ukończone w podrozmowie &quot;%1&quot; (id: %2). Rozmowa jest zachowywana na liście rozmów i można ją otworzyć, aby kontynuować pracę. Ostateczny raport subagenta:
 
 %3</translation>
     </message>
@@ -2574,7 +2578,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+112"/>
         <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>Nieprawidłowy adres URL "%1": musi zaczynać się od http:// lub https://</translation>
+        <translation>Nieprawidłowy adres URL &quot;%1&quot;: musi zaczynać się od http:// lub https://</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2604,12 +2608,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+123"/>
         <source>Search results for &quot;%1&quot;:</source>
-        <translation>Wyniki wyszukiwania dla "%1":</translation>
+        <translation>Wyniki wyszukiwania dla &quot;%1&quot;:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation>Błąd narzędzia: "query" musi być niepustym ciągiem tekstowym.</translation>
+        <translation>Błąd narzędzia: &quot;query&quot; musi być niepustym ciągiem tekstowym.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -2635,7 +2639,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="-82"/>
         <source>no results found for &quot;%1&quot;</source>
-        <translation>nie znaleziono wyników dla "%1"</translation>
+        <translation>nie znaleziono wyników dla &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -2647,7 +2651,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="+41"/>
         <location line="+40"/>
         <source>No results found for &quot;%1&quot;.</source>
-        <translation>Nie znaleziono wyników dla "%1".</translation>
+        <translation>Nie znaleziono wyników dla &quot;%1&quot;.</translation>
     </message>
     <message>
         <location line="-72"/>
@@ -2664,21 +2668,25 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
-        <translation>Wyniki wyszukiwania dla "%1":
+        <translation>Wyniki wyszukiwania dla &quot;%1&quot;:
 
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>znajdź pliki %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Wzorzec: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Wzorzec: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Wzorzec: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2699,7 +2707,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Błąd: ścieżka nie jest katalogiem: %1</translation>
     </message>
@@ -2736,8 +2744,8 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>[Wyjście skrócone do %1 KB. Użyj bardziej szczegółowego wzorca, aby zobaczyć wszystkie wyniki.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>lista katalogu %1</translation>
     </message>
@@ -2768,7 +2776,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location filename="../tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation>Narzędzie MCP "%1" jest niedostępne (żaden połączony serwer MCP nie udostępnia go).</translation>
+        <translation>Narzędzie MCP &quot;%1&quot; jest niedostępne (żaden połączony serwer MCP nie udostępnia go).</translation>
     </message>
     <message>
         <location filename="../tools/ripgrep.cpp" line="+89"/>
@@ -2841,15 +2849,19 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Rozpakowanie ripgrep nie powiodło się: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>wyszukaj %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Wzorzec glob: `%1`</translation>
+        <translation type="vanished">  Wzorzec glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Wzorzec glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2894,12 +2906,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>Argument "name" jest wymagany.</translation>
+        <translation>Argument &quot;name&quot; jest wymagany.</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>Umiejętność "%1" nie została znaleziona. Dostępne umiejętności: %2</translation>
+        <translation>Umiejętność &quot;%1&quot; nie została znaleziona. Dostępne umiejętności: %2</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2918,24 +2930,24 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>zaktualizuj listę zadań (%1 zadań)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>Błąd narzędzia: "todos" musi zawierać co najmniej jedno zadanie.</translation>
+        <translation>Błąd narzędzia: &quot;todos&quot; musi zawierać co najmniej jedno zadanie.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>Błąd narzędzia: zadanie %1 ma puste "content".</translation>
+        <translation>Błąd narzędzia: zadanie %1 ma puste &quot;content&quot;.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Błąd narzędzia: zadanie %1 ma nieznany status "%2" (oczekiwano "pending", "in_progress" lub "completed").</translation>
+        <translation>Błąd narzędzia: zadanie %1 ma nieznany status &quot;%2&quot; (oczekiwano &quot;pending&quot;, &quot;in_progress&quot; lub &quot;completed&quot;).</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>Błąd narzędzia: tylko jedno zadanie może mieć status "in_progress" w danym momencie (podano %1).</translation>
+        <translation>Błąd narzędzia: tylko jedno zadanie może mieć status &quot;in_progress&quot; w danym momencie (podano %1).</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2945,17 +2957,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location filename="../tools/tool_utils.cpp" line="+61"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Zapis do "%1" nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu i lokalizacjach tymczasowych.</translation>
+        <translation>Zapis do &quot;%1&quot; nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu i lokalizacjach tymczasowych.</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>Odczyt "%1" nie jest dozwolony: lokalizacje poświadczeń nie są czytelne w piaskownicy.</translation>
+        <translation>Odczyt &quot;%1&quot; nie jest dozwolony: lokalizacje poświadczeń nie są czytelne w piaskownicy.</translation>
     </message>
     <message>
         <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Zainstaluj go raz poleceniem 'npx @anthropic-ai/sandbox-runtime windows-install' (jedno okno UAC); nie jest potrzebne wylogowanie, ogrodzenie sieciowe opiera się na SID dedykowanego użytkownika piaskownicy. Alternatywnie odznacz 'Piaskownica poleceń' w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+        <translation>Zainstaluj go raz poleceniem &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); nie jest potrzebne wylogowanie, ogrodzenie sieciowe opiera się na SID dedykowanego użytkownika piaskownicy. Alternatywnie odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -2985,7 +2997,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+48"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Wiersz polecenia piaskownicy Windows jest za długi (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz 'Piaskownica poleceń' w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+        <translation>Wiersz polecenia piaskownicy Windows jest za długi (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
         <location filename="../tools/write_tool.cpp" line="-48"/>
@@ -3001,17 +3013,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Błąd narzędzia: wymagane jest "content".</translation>
+        <translation>Błąd narzędzia: wymagane jest &quot;content&quot;.</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>Nie można zapisać "%1": ścieżka nadrzędna jest plikiem.</translation>
+        <translation>Nie można zapisać &quot;%1&quot;: ścieżka nadrzędna jest plikiem.</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>Nie można zapisać "%1": nie można utworzyć katalogu: %2</translation>
+        <translation>Nie można zapisać &quot;%1&quot;: nie można utworzyć katalogu: %2</translation>
     </message>
     <message>
         <location line="+7"/>

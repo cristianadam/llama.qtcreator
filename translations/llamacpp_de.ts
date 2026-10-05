@@ -1248,7 +1248,7 @@
         <translation>Möchten Sie diese Nachricht wirklich löschen?</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+162"/>
         <source>Processing: %1%</source>
         <translation>Verarbeitung: %1%</translation>
     </message>
@@ -1535,7 +1535,7 @@ Voreingestellte Prompts: %1
 Sie können beliebige andere Prompts eingeben – diese werden für spätere Verwendung gespeichert.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+956"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG-Bild</translation>
     </message>
@@ -2278,7 +2278,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) wurde nicht gefunden. Installieren Sie es (z. B. &apos;apt install bubblewrap&apos; oder &apos;dnf install bubblewrap&apos;) oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Ausgabe gekürzt: %1]</translation>
     </message>
@@ -2298,7 +2298,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vollständige Ausgabe gespeichert unter: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>führe %1 aus</translation>
     </message>
@@ -2331,9 +2331,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
@@ -2453,17 +2453,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Der MCP-Server hat eine leere oder fehlerhafte Antwort zurückgegeben.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>Datei **„%1“** komplett lesen</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>Zeilen **„%2“** bis **„%3“** in Datei **„%1“** lesen</translation>
+        <translation type="vanished">Zeilen **„%2“** bis **„%3“** in Datei **„%1“** lesen</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>Datei %1 lesen</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Datei **„%1“** existiert nicht.</translation>
     </message>
@@ -2661,16 +2665,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>Dateien %1 finden</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Muster: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Muster: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Muster: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2691,7 +2699,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fehler: Pfad ist kein Verzeichnis: %1</translation>
     </message>
@@ -2728,8 +2736,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Ausgabe auf %1 KB gekürzt. Verwenden Sie ein spezifischeres Muster, um alle Ergebnisse zu sehen.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>Verzeichnis %1 auflisten</translation>
     </message>
@@ -2833,15 +2841,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Entpacken von ripgrep fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>Suche nach %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2910,7 +2922,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Aufgabenliste aktualisieren (%1 Aufgaben)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Tool-Fehler: &quot;todos&quot; muss mindestens eine Aufgabe enthalten.</translation>
     </message>

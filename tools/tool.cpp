@@ -50,6 +50,13 @@ QString codeFence(const QString &content, const QString &info)
     return QStringLiteral("%1%2\n%3\n%1").arg(fence, info, body);
 }
 
+QString codeSpan(const QString &text)
+{
+    return text.contains(QLatin1Char('`'))
+            ? QStringLiteral("`` %1 ``").arg(text)
+            : QStringLiteral("`%1`").arg(text);
+}
+
 QString truncatedPreview(const QString &text, int maxLines)
 {
     if (text.isEmpty())

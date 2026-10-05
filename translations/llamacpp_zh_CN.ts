@@ -1544,7 +1544,7 @@ You can type any other prompt – they are remembered for next time.</source>
 您可以输入其他提示 – 这些提示将被记住以备下次使用。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG 图像</translation>
     </message>
@@ -2304,7 +2304,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>未找到 bubblewrap（bwrap）。请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[输出已截断：%1]</translation>
     </message>
@@ -2324,7 +2324,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>完整输出已保存到：%1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>正在运行 %1</translation>
     </message>
@@ -2357,9 +2357,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
@@ -2479,17 +2479,21 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP 服务器返回了空响应或格式错误的响应。</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>读取文件 %1 的全部内容</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>读取 %1 中的第 %2 到 %3 行</translation>
+        <translation type="vanished">读取 %1 中的第 %2 到 %3 行</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>读取 %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>文件 &quot;%1&quot; 不存在。</translation>
     </message>
@@ -2687,16 +2691,20 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>查找文件 %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">模式：`%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>模式：`%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>模式：%1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2717,7 +2725,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>错误：路径不是目录：%1</translation>
     </message>
@@ -2754,8 +2762,8 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[输出已截断到 %1 KB。使用更具体的模式以查看所有结果。]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>列出目录 %1</translation>
     </message>
@@ -2859,15 +2867,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>解压 ripgrep 失败：%1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>搜索 %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob：`%1`</translation>
+        <translation type="vanished">  Glob：`%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob：%1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2936,7 +2948,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>更新任务列表（%1 个任务）</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>工具错误：“todos” 必须至少包含一个任务。</translation>
     </message>

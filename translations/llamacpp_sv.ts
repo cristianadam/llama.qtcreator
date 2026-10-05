@@ -474,7 +474,7 @@ Fördefinierade prompts: %1
 Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG-bild</translation>
     </message>
@@ -2290,7 +2290,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) hittades inte. Installera det (t.ex. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Utdata avklippt: %1]</translation>
     </message>
@@ -2310,7 +2310,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hela utdata sparad till: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>kör %1</translation>
     </message>
@@ -2343,9 +2343,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>okänt fel</translation>
@@ -2465,17 +2465,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP-servern returnerade ett tomt eller felformat svar.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>läs hela filen %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>läs %1:%2‑%3</translation>
+        <translation type="vanished">läs %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>läs %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Fil &quot;%1&quot; finns inte.</translation>
     </message>
@@ -2673,16 +2677,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>hitta filer %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Mönster: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Mönster: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Mönster: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2703,7 +2711,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fel: sökvägen är inte en katalog: %1</translation>
     </message>
@@ -2740,8 +2748,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Utdata avklippt till %1 KB. Använd ett mer specifikt mönster för att se alla resultat.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>lista katalog %1</translation>
     </message>
@@ -2845,15 +2853,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Upppackningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>sök efter %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2922,7 +2934,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>uppdatera uppgiftslistan (%1 uppgifter)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Verktygsfel: &quot;todos&quot; måste innehålla åtminstone en uppgift.</translation>
     </message>

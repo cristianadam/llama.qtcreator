@@ -123,10 +123,7 @@ QString FindTool::streamingSummary(const QString &partialArgs) const
     const QString pattern = extractPartialString(partialArgs, QStringLiteral("pattern"));
     if (pattern.isEmpty())
         return {};
-    const QString code = pattern.contains(QLatin1Char('`'))
-            ? QStringLiteral("``%1``").arg(pattern)
-            : QStringLiteral("`%1`").arg(pattern);
-    return Tr::tr("find files %1").arg(code);
+    return Tr::tr("find files %1").arg(codeSpan(pattern));
 }
 
 QString FindTool::oneLineSummary(const QJsonObject &args) const
@@ -134,10 +131,7 @@ QString FindTool::oneLineSummary(const QJsonObject &args) const
     const QString pattern = args.value("pattern").toString();
     if (pattern.isEmpty())
         return {};
-    const QString code = pattern.contains(QLatin1Char('`'))
-            ? QStringLiteral("``%1``").arg(pattern)
-            : QStringLiteral("`%1`").arg(pattern);
-    return Tr::tr("find files %1").arg(code);
+    return Tr::tr("find files %1").arg(codeSpan(pattern));
 }
 
 QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
@@ -145,9 +139,9 @@ QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     Q_UNUSED(ok);
     const QString pattern = arguments.value("pattern").toString();
     const QString path = arguments.value("path").toString();
-    QString md = Tr::tr("Pattern: `%1`").arg(pattern);
+    QString md = Tr::tr("Pattern: %1").arg(codeSpan(pattern));
     if (!path.isEmpty())
-        md += Tr::tr("  Path: %1").arg(path);
+        md += Tr::tr("  Path: %1").arg(codeSpan(path));
     md += QStringLiteral("\n\n") + codeFence(result);
     return md;
 }

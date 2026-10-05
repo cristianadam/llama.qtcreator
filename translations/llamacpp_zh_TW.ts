@@ -1532,7 +1532,7 @@ You can type any other prompt – they are remembered for next time.</source>
 您可以輸入其他任何提示 - 它們將被記住以備下次使用。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG 圖片</translation>
     </message>
@@ -2283,7 +2283,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>找不到 bubblewrap（bwrap）。請安裝它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[輸出已截斷：%1]</translation>
     </message>
@@ -2303,7 +2303,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完整輸出已儲存至：%1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>正在執行 %1</translation>
     </message>
@@ -2336,9 +2336,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>未知錯誤</translation>
@@ -2458,17 +2458,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP 伺服器返回了空或格式錯誤的回應。</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>讀取整個檔案 %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>讀取 %1：第 %2 行至第 %3 行</translation>
+        <translation type="vanished">讀取 %1：第 %2 行至第 %3 行</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>讀取 %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>檔案「%1」不存在。</translation>
     </message>
@@ -2666,16 +2670,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>尋找檔案 %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">模式：`%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>模式：`%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>模式：%1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2696,7 +2704,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>錯誤：路徑不是目錄：%1</translation>
     </message>
@@ -2733,8 +2741,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[輸出已截斷為 %1 KB。使用更具體的模式以查看所有結果。]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>列出目錄 %1</translation>
     </message>
@@ -2838,15 +2846,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>解壓 ripgrep 失敗：%1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>搜尋 %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob：`%1`</translation>
+        <translation type="vanished">  Glob：`%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob：%1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2915,7 +2927,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>更新任務列表（%1 個任務）</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>工具錯誤：&quot;todos&quot; 必須至少包含一個任務。</translation>
     </message>

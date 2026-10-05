@@ -73,7 +73,7 @@ QString WriteTool::oneLineSummary(const QJsonObject &args) const
     const QString path = args.value("path").toString();
     if (path.isEmpty())
         return Tr::tr("Write file");
-    return Tr::tr("write %1").arg(path);
+    return Tr::tr("write %1").arg(codeSpan(path));
 }
 
 QString WriteTool::streamingSummary(const QString &partialArgs) const
@@ -99,7 +99,7 @@ QString WriteTool::streamingSummary(const QString &partialArgs) const
     const QString path = partialArgs.mid(start + 1, end - start - 1);
     if (path.isEmpty())
         return {};
-    return Tr::tr("write %1").arg(path);
+    return Tr::tr("write %1").arg(codeSpan(path));
 }
 
 QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const

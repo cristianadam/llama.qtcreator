@@ -1528,7 +1528,7 @@ Vgrajena povabila: %1
 Lahko vpišete katerikoli drugo povabilo – bodo zapomnjena za naslednjič.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>Slika SVG</translation>
     </message>
@@ -2279,7 +2279,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) ni bil najden. Namestite ga (npr. &apos;apt install bubblewrap&apos; ali &apos;dnf install bubblewrap&apos;) ali odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Izhod okrajšan: %1]</translation>
     </message>
@@ -2299,7 +2299,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Celoten izhod shranjen v: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>se izvaja %1</translation>
     </message>
@@ -2332,9 +2332,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>neznana napaka</translation>
@@ -2454,17 +2454,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP strežnik je vrnil prazno ali nepravilno oblikovan odgovor.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>preberi celotno datoteko %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>preberi %1:%2‑%3</translation>
+        <translation type="vanished">preberi %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>preberi %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Datoteka &quot;%1&quot; ne obstaja.</translation>
     </message>
@@ -2662,16 +2666,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>poišči datoteke %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Vzorec: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Vzorec: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Vzorec: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2692,7 +2700,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Napaka: pot ni imenik: %1</translation>
     </message>
@@ -2729,8 +2737,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Izhod okrajšan na %1 KB. Za ogled vseh rezultatov uporabite bolj specifičen vzorec.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>naštiri imenik %1</translation>
     </message>
@@ -2834,15 +2842,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Razpakiranje ripgrep ni uspešno: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>išči %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2911,7 +2923,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>posodobi seznam nalog (%1 nalog)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Napaka orodja: &quot;todos&quot; mora vsebovati vsaj eno nalogo.</translation>
     </message>

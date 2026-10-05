@@ -1376,7 +1376,7 @@ You can type any other prompt – they are remembered for next time.</source>
 その他のプロンプトも入力できます。入力したプロンプトは次回以降に記憶されます。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG イメージ</translation>
     </message>
@@ -1975,7 +1975,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>［出力が切り詰められました: %1］</translation>
     </message>
@@ -1995,7 +1995,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完全な出力を以下に保存しました: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>%1 を実行中</translation>
     </message>
@@ -2028,9 +2028,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>不明なエラー</translation>
@@ -2150,17 +2150,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP サーバーが空のまたは無効な応答を返しました。</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>ファイル %1 をすべて読み込む</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>%1 の %2‑%3 行を読み込む</translation>
+        <translation type="vanished">%1 の %2‑%3 行を読み込む</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>%1 を読み取る</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>ファイル &quot;%1&quot; は存在しません。</translation>
     </message>
@@ -2358,16 +2362,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>ファイル検索 %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">パターン: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>パターン: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>パターン: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2388,7 +2396,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>エラー: パスがディレクトリではありません: %1</translation>
     </message>
@@ -2425,8 +2433,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>［出力を %1 KB に切り詰めました。すべての結果を表示するには、より具体的なパターンを使用してください。］</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>ディレクトリ %1 の一覧</translation>
     </message>
@@ -2530,15 +2538,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ripgrep の展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>%1 を検索</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  グローブ: `%1`</translation>
+        <translation type="vanished">  グローブ: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  グローブ: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2607,7 +2619,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>タスクリストを更新（%1 タスク）</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>ツールエラー: &quot;todos&quot; には少なくとも1つのタスクを含める必要があります。</translation>
     </message>

@@ -182,10 +182,7 @@ QString SearchTool::streamingSummary(const QString &partialArgs) const
     const QString pattern = extractPartialString(partialArgs, QStringLiteral("pattern"));
     if (pattern.isEmpty())
         return {};
-    const QString code = pattern.contains(QLatin1Char('`'))
-            ? QStringLiteral("``%1``").arg(pattern)
-            : QStringLiteral("`%1`").arg(pattern);
-    return Tr::tr("search for %1").arg(code);
+    return Tr::tr("search for %1").arg(codeSpan(pattern));
 }
 
 QString SearchTool::oneLineSummary(const QJsonObject &args) const
@@ -193,10 +190,7 @@ QString SearchTool::oneLineSummary(const QJsonObject &args) const
     const QString pattern = args.value("pattern").toString();
     if (pattern.isEmpty())
         return {};
-    const QString code = pattern.contains(QLatin1Char('`'))
-            ? QStringLiteral("``%1``").arg(pattern)
-            : QStringLiteral("`%1`").arg(pattern);
-    return Tr::tr("search for %1").arg(code);
+    return Tr::tr("search for %1").arg(codeSpan(pattern));
 }
 
 QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
@@ -204,12 +198,12 @@ QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString 
     Q_UNUSED(ok);
     const QString pattern = arguments.value("pattern").toString();
     const QString glob = arguments.value("glob").toString();
-    QString md = Tr::tr("Pattern: `%1`").arg(pattern);
+    QString md = Tr::tr("Pattern: %1").arg(codeSpan(pattern));
     if (!glob.isEmpty())
-        md += Tr::tr("  Glob: `%1`").arg(glob);
+        md += Tr::tr("  Glob: %1").arg(codeSpan(glob));
     const QString path = arguments.value("path").toString();
     if (!path.isEmpty())
-        md += Tr::tr("  Path: %1").arg(path);
+        md += Tr::tr("  Path: %1").arg(codeSpan(path));
     md += QStringLiteral("\n\n") + codeFence(result);
     return md;
 }

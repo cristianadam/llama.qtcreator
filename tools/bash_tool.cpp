@@ -527,12 +527,7 @@ QString BashTool::oneLineSummary(const QJsonObject &arguments) const
         firstLine += QStringLiteral(" …");
     if (firstLine.isEmpty())
         return {};
-    // Render the command as a code span (the summary is markdown); use a
-    // double backtick when the command contains backticks itself.
-    const QString code = firstLine.contains(QLatin1Char('`'))
-            ? QStringLiteral("``%1``").arg(firstLine)
-            : QStringLiteral("`%1`").arg(firstLine);
-    return Tr::tr("running %1").arg(code);
+    return Tr::tr("running %1").arg(codeSpan(firstLine));
 }
 
 void BashTool::run(const QJsonObject &arguments,

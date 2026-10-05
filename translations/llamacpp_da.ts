@@ -1535,7 +1535,7 @@ Indbyggede prompts: %1
 Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>SVG-billede</translation>
     </message>
@@ -2279,7 +2279,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Output beskåret: %1]</translation>
     </message>
@@ -2299,7 +2299,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>kører %1</translation>
     </message>
@@ -2332,9 +2332,9 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>ukendt fejl</translation>
@@ -2454,17 +2454,21 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>MCP-serveren returnerede et tomt eller fejlfornemt svar.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>læs hele fil %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>læs %1:%2‑%3</translation>
+        <translation type="vanished">læs %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>læs %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Fil &quot;%1&quot; findes ikke.</translation>
     </message>
@@ -2607,7 +2611,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     <message>
         <location line="+11"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id'et (cx) i Llama.cpp-indstillingerne.</translation>
+        <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -2662,16 +2666,20 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>find filer %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Mønster: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Mønster: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Mønster: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2692,7 +2700,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fejl: stien er ikke en mappe: %1</translation>
     </message>
@@ -2729,9 +2737,8 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
-        <source>list directory %1</source>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>Liste mappen %1</translation>
     </message>
@@ -2835,15 +2842,19 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Udpakning af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>søg efter %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2912,7 +2923,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>opdater opgaveliste (%1 opgaver)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
     </message>

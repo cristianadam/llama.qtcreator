@@ -409,6 +409,7 @@ private slots:
 
     // codeFence / summaryPreview / truncatedPreview
     void codeFence_escaping();
+    void codeSpan_escaping();
     void preview_truncatedPreview();
     void preview_bashTail();
     void preview_bashShort();
@@ -1151,7 +1152,7 @@ void LlamaToolsTest::tool_oneLineSummary()
         "*** Add File: moonphase7/main.cpp\n"
         "+int main() { return 0; }\n"
         "*** End Patch");
-    QCOMPARE(tool.oneLineSummary(add), QString("Add moonphase7/main.cpp"));
+    QCOMPARE(tool.oneLineSummary(add), QString("Add `moonphase7/main.cpp`"));
 
     QJsonObject single;
     single["patchText"] = QStringLiteral(
@@ -1161,14 +1162,14 @@ void LlamaToolsTest::tool_oneLineSummary()
         "-a\n"
         "+b\n"
         "*** End Patch");
-    QCOMPARE(tool.oneLineSummary(single), QString("Edit src/main.cpp"));
+    QCOMPARE(tool.oneLineSummary(single), QString("Edit `src/main.cpp`"));
 
     QJsonObject del;
     del["patchText"] = QStringLiteral(
         "*** Begin Patch\n"
         "*** Delete File: obsolete.txt\n"
         "*** End Patch");
-    QCOMPARE(tool.oneLineSummary(del), QString("Delete obsolete.txt"));
+    QCOMPARE(tool.oneLineSummary(del), QString("Delete `obsolete.txt`"));
 
     QJsonObject move;
     move["patchText"] = QStringLiteral(
@@ -1179,7 +1180,7 @@ void LlamaToolsTest::tool_oneLineSummary()
         "-a\n"
         "+b\n"
         "*** End Patch");
-    QCOMPARE(tool.oneLineSummary(move), QString("Move a.txt to dir/b.txt"));
+    QCOMPARE(tool.oneLineSummary(move), QString("Move `a.txt` to `dir/b.txt`"));
 
     QJsonObject multi;
     multi["patchText"] = QStringLiteral(
@@ -1215,7 +1216,7 @@ void LlamaToolsTest::tool_streamingSummary_addFile()
                  "{\"patchText\": \"*** Begin Patch\\n"
                  "*** Add File: moonphase8/main.cpp\\n"
                  "+int main() {")),
-             QString("Add moonphase8/main.cpp"));
+             QString("Add `moonphase8/main.cpp`"));
 }
 
 void LlamaToolsTest::tool_streamingSummary_updateFile()
@@ -1227,7 +1228,7 @@ void LlamaToolsTest::tool_streamingSummary_updateFile()
                  "@@ def greet():\\n"
                  " def greet():\\n"
                  "-    print(")),
-             QString("Edit src/app.py"));
+             QString("Edit `src/app.py`"));
 }
 
 void LlamaToolsTest::tool_streamingSummary_moveFile()
@@ -1239,7 +1240,7 @@ void LlamaToolsTest::tool_streamingSummary_moveFile()
                  "*** Move to: new/name.txt\\n"
                  "@@\\n"
                  "-old content")),
-             QString("Move old/name.txt to new/name.txt"));
+             QString("Move `old/name.txt` to `new/name.txt`"));
 }
 
 void LlamaToolsTest::tool_streamingSummary_moveAfterHunkIgnored()
@@ -1252,7 +1253,7 @@ void LlamaToolsTest::tool_streamingSummary_moveAfterHunkIgnored()
                  "@@\\n"
                  "-x\\n"
                  "*** Move to: b.txt")),
-             QString("Edit a.txt"));
+             QString("Edit `a.txt`"));
 }
 
 void LlamaToolsTest::tool_streamingSummary_deleteFile()
@@ -1261,7 +1262,7 @@ void LlamaToolsTest::tool_streamingSummary_deleteFile()
     QCOMPARE(tool.streamingSummary(QStringLiteral(
                  "{\"patchText\": \"*** Begin Patch\\n"
                  "*** Delete File: obsolete.txt")),
-             QString("Delete obsolete.txt"));
+             QString("Delete `obsolete.txt`"));
 }
 
 void LlamaToolsTest::tool_streamingSummary_firstSectionWins()
@@ -1274,7 +1275,7 @@ void LlamaToolsTest::tool_streamingSummary_firstSectionWins()
                  "+x\\n"
                  "*** Update File: b.txt\\n"
                  "@@")),
-             QString("Add a.txt"));
+             QString("Add `a.txt`"));
 }
 
 void LlamaToolsTest::tool_detailsMarkdown()
@@ -1499,9 +1500,9 @@ void LlamaToolsTest::editfile_summaries()
     edits.append(edit);
     args[QStringLiteral("edits")] = edits;
 
-    QCOMPARE(tool.oneLineSummary(args), QString("edit src/main.cpp"));
+    QCOMPARE(tool.oneLineSummary(args), QString("edit `src/main.cpp`"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src/main.cpp\"")),
-              QString("edit src/main.cpp"));
+              QString("edit `src/main.cpp`"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
 
     // On success the details markdown shows the replacement as a diff,
@@ -1644,9 +1645,9 @@ void LlamaToolsTest::write_summaries()
     args[QStringLiteral("path")] = QStringLiteral("src/main.cpp");
     args[QStringLiteral("content")] = QStringLiteral("int main() {}\n");
 
-    QCOMPARE(tool.oneLineSummary(args), QString("write src/main.cpp"));
+    QCOMPARE(tool.oneLineSummary(args), QString("write `src/main.cpp`"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src/main.cpp\"")),
-              QString("write src/main.cpp"));
+              QString("write `src/main.cpp`"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString());
 
     // On success the details markdown shows the written content as a code block.
@@ -1688,6 +1689,31 @@ void LlamaToolsTest::codeFence_escaping()
     // output) must not gain a spurious empty last line in the fence body.
     QCOMPARE(codeFence(QStringLiteral("a\nb\n")), QString("```\na\nb\n```"));
     QCOMPARE(codeFence(QStringLiteral("a\nb\n\n")), QString("```\na\nb\n\n```"));
+}
+
+void LlamaToolsTest::codeSpan_escaping()
+{
+    // Plain text gets a single code span.
+    QCOMPARE(codeSpan(QStringLiteral("src/main.cpp")),
+             QString("`src/main.cpp`"));
+
+    // Text containing a backtick needs a double backtick, or the inner
+    // backtick would close the span early and render live markdown.
+    QCOMPARE(codeSpan(QStringLiteral("a`b")), QString("`` a`b ``"));
+    QCOMPARE(codeSpan(QStringLiteral("`")), QString("`` ` ``"));
+
+    // The summaries of the file tools use the same escaping for paths.
+    Tools::WriteTool writeTool;
+    QJsonObject args;
+    args[QStringLiteral("path")] = QStringLiteral("we`ird.txt");
+    args[QStringLiteral("content")] = QStringLiteral("x");
+    QCOMPARE(writeTool.oneLineSummary(args), QString("write `` we`ird.txt ``"));
+
+    Tools::LsTool lsTool;
+    QJsonObject lsArgs;
+    lsArgs[QStringLiteral("path")] = QStringLiteral("we`ird");
+    QCOMPARE(lsTool.oneLineSummary(lsArgs),
+             QString("list directory `` we`ird ``"));
 }
 
 void LlamaToolsTest::write_markdownContent()
@@ -3255,7 +3281,7 @@ void LlamaToolsTest::bash_summaries()
 
     // Backticks in the command need a double‑backtick code span.
     args["command"] = QStringLiteral("echo \"`date`\"");
-    QCOMPARE(tool.oneLineSummary(args), QString("running ``echo \"`date`\"``"));
+    QCOMPARE(tool.oneLineSummary(args), QString("running `` echo \"`date`\" ``"));
 
     QVERIFY(tool.toolDefinition().contains("\"bash\""));
     QVERIFY(tool.toolDefinition().contains("120000"));
@@ -3573,7 +3599,7 @@ void LlamaToolsTest::search_summaries()
 
     // Backticks in the pattern need a double‑backtick code span.
     args["pattern"] = QStringLiteral("a`b");
-    QCOMPARE(tool.oneLineSummary(args), QString("search for ``a`b``"));
+    QCOMPARE(tool.oneLineSummary(args), QString("search for `` a`b ``"));
 
     // No pattern yet.
     QCOMPARE(tool.oneLineSummary(QJsonObject()), QString());
@@ -3752,7 +3778,7 @@ void LlamaToolsTest::find_summaries()
     mdArgs["path"] = QStringLiteral("/some/dir");
     const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("x.json"), true);
     QVERIFY(md.contains("Pattern: `*.json`"));
-    QVERIFY(md.contains("Path: /some/dir"));
+    QVERIFY(md.contains("Path: `/some/dir`"));
     QVERIFY(md.contains("x.json"));
 }
 
@@ -3853,15 +3879,15 @@ void LlamaToolsTest::ls_summaries()
 
     QJsonObject args;
     args["path"] = QStringLiteral("src");
-    QCOMPARE(tool.oneLineSummary(args), QString("list directory src"));
-    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("list directory ."));
+    QCOMPARE(tool.oneLineSummary(args), QString("list directory `src`"));
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("list directory `.`"));
 
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src\"}")),
-             QString("list directory src"));
+             QString("list directory `src`"));
     // While the path is not (fully) visible yet, fall back to the default.
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"path\": \"src")),
-             QString("list directory ."));
-    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString("list directory ."));
+             QString("list directory `.`"));
+    QCOMPARE(tool.streamingSummary(QStringLiteral("{}")), QString("list directory `.`"));
 
     QJsonObject mdArgs;
     mdArgs["path"] = QStringLiteral("/some/dir");

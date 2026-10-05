@@ -86,6 +86,12 @@ public:
 //! markdown.
 QString codeFence(const QString &content, const QString &info = {});
 
+//! Wraps \a text in a markdown inline code span.  A path that itself
+//! contains a backtick is wrapped in double backticks (space‑padded, so
+//! CommonMark strips the padding back off), which cannot be closed by the
+//! inner backtick.
+QString codeSpan(const QString &text);
+
 //! Truncates \a text for inline display: at most \a maxLines lines and 300
 //! characters.  A code fence left open by the cut is closed so the markdown
 //! stays well‑formed.  No ellipsis is appended: the details header already

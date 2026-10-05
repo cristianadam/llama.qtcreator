@@ -1523,7 +1523,7 @@ Vestavěné prompty: %1
 Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použití.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+890"/>
+        <location filename="../markdownrenderer.cpp" line="+897"/>
         <source>SVG image</source>
         <translation>Obrázek SVG</translation>
     </message>
@@ -2274,7 +2274,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) nebyl nalezen. Nainstalujte ho (např. &apos;apt install bubblewrap&apos; nebo &apos;dnf install bubblewrap&apos;) nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+153"/>
         <source>[Output truncated: %1]</source>
         <translation>[Výstup oříznut: %1]</translation>
     </message>
@@ -2294,7 +2294,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úplný výstup uložen do: %1</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+110"/>
         <source>running %1</source>
         <translation>spouštění %1</translation>
     </message>
@@ -2327,9 +2327,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+275"/>
+        <location filename="../tools/find_tool.cpp" line="+269"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+345"/>
+        <location filename="../tools/search_tool.cpp" line="+339"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>neznámá chyba</translation>
@@ -2449,17 +2449,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP server vrátil prázdnou nebo nesprávně formátovanou odpověď.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+78"/>
+        <location filename="../tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>přečíst celý soubor %1</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>read %1:%2‑%3</source>
-        <translation>přečíst %1:%2‑%3</translation>
+        <translation type="vanished">přečíst %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>přečíst %1</translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation>Soubor &quot;%1&quot; neexistuje.</translation>
     </message>
@@ -2657,16 +2661,20 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-153"/>
-        <location line="+11"/>
+        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location line="+8"/>
         <source>find files %1</source>
         <translation>najít soubory %1</translation>
     </message>
     <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Vzor: `%1`</translation>
+    </message>
+    <message>
         <location line="+8"/>
         <location filename="../tools/search_tool.cpp" line="-145"/>
-        <source>Pattern: `%1`</source>
-        <translation>Vzor: `%1`</translation>
+        <source>Pattern: %1</source>
+        <translation>Vzor: %1</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -2687,7 +2695,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+118"/>
+        <location filename="../tools/ls_tool.cpp" line="+120"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Chyba: cesta není adresář: %1</translation>
     </message>
@@ -2724,8 +2732,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Výstup oříznut na %1 KB. Pro zobrazení všech výsledků použijte konkrétnější vzor.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-29"/>
-        <location line="+6"/>
+        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location line="+7"/>
         <source>list directory %1</source>
         <translation>seznam adresáře %1</translation>
     </message>
@@ -2829,15 +2837,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rozbalování ripgrep selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
-        <location line="+11"/>
+        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location line="+8"/>
         <source>search for %1</source>
         <translation>vyhledat %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: `%1`</source>
-        <translation>  Glob: `%1`</translation>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -2906,7 +2918,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>aktualizovat seznam úloh (%1 úloh)</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+61"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Chyba nástroje: &quot;todos&quot; musí obsahovat alespoň jednu úlohu.</translation>
     </message>

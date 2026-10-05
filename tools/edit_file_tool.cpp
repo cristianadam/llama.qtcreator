@@ -268,8 +268,8 @@ QString EditFileTool::oneLineSummary(const QJsonObject &args) const
         return Tr::tr("Edit file");
     const int count = args.value("edits").toArray().size();
     if (count > 1)
-        return Tr::tr("edit %1 (%2 blocks)").arg(path).arg(count);
-    return Tr::tr("edit %1").arg(path);
+        return Tr::tr("edit %1 (%2 blocks)").arg(codeSpan(path)).arg(count);
+    return Tr::tr("edit %1").arg(codeSpan(path));
 }
 
 QString EditFileTool::streamingSummary(const QString &partialArgs) const
@@ -295,7 +295,7 @@ QString EditFileTool::streamingSummary(const QString &partialArgs) const
     const QString path = partialArgs.mid(start + 1, end - start - 1);
     if (path.isEmpty())
         return {};
-    return Tr::tr("edit %1").arg(path);
+    return Tr::tr("edit %1").arg(codeSpan(path));
 }
 
 QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const

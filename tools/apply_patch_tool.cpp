@@ -178,13 +178,13 @@ QString hunkSummary(Patch::HunkType type, const QString &path, const QString &mo
 {
     switch (type) {
     case Patch::HunkType::Add:
-        return Tr::tr("Add %1").arg(path);
+        return Tr::tr("Add %1").arg(codeSpan(path));
     case Patch::HunkType::Delete:
-        return Tr::tr("Delete %1").arg(path);
+        return Tr::tr("Delete %1").arg(codeSpan(path));
     case Patch::HunkType::Update:
         if (movePath.isEmpty())
-            return Tr::tr("Edit %1").arg(path);
-        return Tr::tr("Move %1 to %2").arg(path, movePath);
+            return Tr::tr("Edit %1").arg(codeSpan(path));
+        return Tr::tr("Move %1 to %2").arg(codeSpan(path), codeSpan(movePath));
     }
     return Tr::tr("Apply patch");
 }

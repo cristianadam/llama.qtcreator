@@ -74,12 +74,14 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
 {
     const QString file = args.value("file_path").toString();
     const bool all = args.value("should_read_entire_file").toBool(false);
-    if (all)
-        return Tr::tr("read whole file %1").arg(file);
-
-    int first = args.value("first_line").toInt(1);
-    int last = args.value("last_line_inclusive").toInt(first);
-    return Tr::tr("read %1:%2‑%3").arg(file).arg(first).arg(last);
+    QString target = file;
+    if (!all) {
+        int first = args.value("first_line").toInt(1);
+        int last = args.value("last_line_inclusive").toInt(first);
+        target = QStringLiteral("%1:%2\u2011%3").arg(file).arg(first).arg(last);
+    }
+    return all ? Tr::tr("read whole file %1").arg(codeSpan(target))
+               : Tr::tr("read %1").arg(codeSpan(target));
 }
 
 QString ReadFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
