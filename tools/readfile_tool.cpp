@@ -82,6 +82,28 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
     return Tr::tr("read %1:%2‑%3").arg(file).arg(first).arg(last);
 }
 
+QString ReadFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
+{
+    // Failures show the raw error; the ✗ icon in the summary already marks
+    // the call as failed.
+    if (!ok || result.isEmpty())
+        return result;
+
+    const QString path = args.value("file_path").toString();
+    // The truncation hint ("[Showing lines …]") is appended by run() and is
+    // not part of the file; keep it outside the code fence so it is not
+    // highlighted as file content.
+    const int hintPos = result.lastIndexOf(QStringLiteral("\n\n[Showing lines "));
+    const QString content = hintPos == -1 ? result : result.left(hintPos);
+    QString md = codeFence(content, codeLanguageFor(path));
+    if (hintPos != -1)
+        // codeFence() ends with the closing fence and no trailing newline;
+        // without this the hint is glued to it, which is not a valid closing
+        // fence and would leave the code block open.
+        md += QLatin1Char('\n') + result.mid(hintPos + 2);
+    return md;
+}
+
 // Whole‑file reads are capped so a huge file (minified JS, generated
 // data, …) cannot blow the local model's context window.  The caps match
 // the bash tool's output limits.

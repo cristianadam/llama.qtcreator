@@ -568,6 +568,7 @@ private slots:
 
     // ReadFileTool limits
     void readfile_rangeContinuationHint();
+    void readfile_detailsMarkdown();
     void readfile_wholeFileCap();
     void readfile_byteCap();
     void readfile_emptyFile();
@@ -5021,6 +5022,43 @@ void LlamaToolsTest::readfile_rangeContinuationHint()
     // Actionable continuation hint instead of a silent cut.
     QVERIFY(output.contains(QStringLiteral("[Showing lines 1-250 of 300.")));
     QVERIFY(output.contains(QStringLiteral("first_line=251")));
+}
+
+void LlamaToolsTest::readfile_detailsMarkdown()
+{
+    const Tools::ReadFileTool tool;
+
+    // The file content is fenced with the language derived from the suffix.
+    QJsonObject args;
+    args[QStringLiteral("file_path")] = QStringLiteral("README.md");
+    args[QStringLiteral("first_line")] = 1;
+    args[QStringLiteral("last_line_inclusive")] = 3;
+    const QString md = tool.detailsMarkdown(args, QStringLiteral("# Title\n\nSome text"), true);
+    QVERIFY(md.startsWith(QStringLiteral("```markdown\n# Title")));
+    QVERIFY(md.endsWith(QStringLiteral("\n```")));
+
+    // The continuation hint is not part of the file and stays outside the
+    // code fence.
+    const QString truncated = QStringLiteral("line1\nline2\n\n[Showing lines 1-2 of 10. "
+                                             "Continue with first_line=3, last_line_inclusive=251.]");
+    const QString md2 = tool.detailsMarkdown(args, truncated, true);
+    const int fenceClose = md2.lastIndexOf(QStringLiteral("```"));
+    QVERIFY(fenceClose > 0);
+    QVERIFY(!md2.left(fenceClose).contains(QStringLiteral("[Showing lines ")));
+    // The hint must start on its own line right after the closing fence, so
+    // the fence is a valid closing fence and the block renders closed.
+    QCOMPARE(md2.mid(fenceClose + 3),
+             QStringLiteral("\n[Showing lines 1-2 of 10. "
+                            "Continue with first_line=3, last_line_inclusive=251.]"));
+
+    // Unmapped suffixes fall back to "text"; failures show the raw error.
+    QJsonObject binArgs;
+    binArgs[QStringLiteral("file_path")] = QStringLiteral("data.bin");
+    QVERIFY(tool.detailsMarkdown(binArgs, QStringLiteral("x"), true)
+                .startsWith(QStringLiteral("```text\nx")));
+    QCOMPARE(tool.detailsMarkdown(args, QStringLiteral("File \"README.md\" does not exist."), false),
+             QStringLiteral("File \"README.md\" does not exist."));
+    QCOMPARE(tool.detailsMarkdown(args, QString(), true), QString());
 }
 
 void LlamaToolsTest::readfile_wholeFileCap()
