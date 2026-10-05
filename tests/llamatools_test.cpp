@@ -417,6 +417,7 @@ private slots:
 
     // TodoWriteTool
     void todowrite_ok();
+    void todowrite_slidingWindow();
     void todowrite_emptyList();
     void todowrite_emptyContent();
     void todowrite_unknownStatus();
@@ -1869,8 +1870,98 @@ void LlamaToolsTest::todowrite_ok()
 
     const QString md = todo.detailsMarkdown(args, output, ok);
     QVERIFY(md.contains("- [x] Plan the work"));
-    QVERIFY(md.contains("- [~] Implement it"));
+    QVERIFY(md.contains("- [ ] Implement it")); // in_progress renders as an unchecked box
     QVERIFY(md.contains("- [ ] Test it"));
+}
+
+void LlamaToolsTest::todowrite_slidingWindow()
+{
+    Tools::TodoWriteTool todo;
+
+    auto makeArgs = [](const QStringList &statuses) {
+        QJsonObject args;
+        QJsonArray todos;
+        for (int i = 0; i < statuses.size(); ++i) {
+            QJsonObject t;
+            t[QStringLiteral("content")] = QStringLiteral("task%1").arg(i + 1);
+            t[QStringLiteral("status")] = statuses.at(i);
+            todos.append(t);
+        }
+        args[QStringLiteral("todos")] = todos;
+        return args;
+    };
+
+    // in_progress in the middle: the window is centred on it.
+    QJsonObject args = makeArgs({QStringLiteral("completed"),
+                                 QStringLiteral("completed"),
+                                 QStringLiteral("in_progress"),
+                                 QStringLiteral("pending"),
+                                 QStringLiteral("pending")});
+    QString md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(!md.contains("task1"));
+    QVERIFY(md.contains("- [x] task2"));
+    QVERIFY(md.contains("- [ ] task3"));
+    QVERIFY(md.contains("- [ ] task4"));
+    QVERIFY(!md.contains("task5"));
+
+    // in_progress at the start: the first 3.
+    args = makeArgs({QStringLiteral("in_progress"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(md.contains("- [ ] task1"));
+    QVERIFY(md.contains("- [ ] task2"));
+    QVERIFY(md.contains("- [ ] task3"));
+    QVERIFY(!md.contains("task4"));
+
+    // in_progress at the end: the last 3.
+    args = makeArgs({QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("in_progress")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(!md.contains("task1"));
+    QVERIFY(!md.contains("task2"));
+    QVERIFY(md.contains("- [x] task3"));
+    QVERIFY(md.contains("- [x] task4"));
+    QVERIFY(md.contains("- [ ] task5"));
+
+    // all done: the last 3.
+    args = makeArgs({QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("completed")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(!md.contains("task1"));
+    QVERIFY(!md.contains("task2"));
+    QVERIFY(md.contains("- [x] task3"));
+    QVERIFY(md.contains("- [x] task4"));
+    QVERIFY(md.contains("- [x] task5"));
+
+    // some done, none in progress: the first 3 (the completed head).
+    args = makeArgs({QStringLiteral("completed"),
+                     QStringLiteral("completed"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(md.contains("- [x] task1"));
+    QVERIFY(md.contains("- [x] task2"));
+    QVERIFY(md.contains("- [ ] task3"));
+    QVERIFY(!md.contains("task4"));
+
+    // 3 or fewer tasks: always the whole list.
+    args = makeArgs({QStringLiteral("in_progress"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(md.contains("- [ ] task1"));
+    QVERIFY(md.contains("- [ ] task2"));
+    QVERIFY(md.contains("- [ ] task3"));
 }
 
 void LlamaToolsTest::todowrite_emptyList()

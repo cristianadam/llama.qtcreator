@@ -111,15 +111,41 @@ QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &r
     // On failure show the error, not the rejected list.
     if (!ok)
         return result;
+    const QJsonArray todos = args.value("todos").toArray();
+    const int n = todos.size();
+    if (n == 0)
+        return {};
+
+    // Sliding window of kWindowSize around the in_progress task, so long lists
+    // stay compact: the first 3 at the start, the last 3 once everything is
+    // done, and the current task always visible in between.
+    constexpr int kWindowSize = 3;
+    int start = 0;
+    if (n > kWindowSize) {
+        int inProgress = -1;
+        bool anyPending = false;
+        for (int i = 0; i < n; ++i) {
+            const QString status = todos.at(i).toObject().value("status").toString();
+            if (status == QLatin1String(kInProgress))
+                inProgress = i;
+            else if (status != QLatin1String(kCompleted))
+                anyPending = true;
+        }
+        if (inProgress >= 0)
+            start = qBound(0, inProgress - 1, n - kWindowSize);
+        else if (!anyPending)
+            start = n - kWindowSize; // all done: show the final 3
+    }
+
     QString md;
-    for (const QJsonValue &value : args.value("todos").toArray()) {
-        const QJsonObject todo = value.toObject();
+    for (int i = start; i < start + qMin(kWindowSize, n); ++i) {
+        const QJsonObject todo = todos.at(i).toObject();
         const QString status = todo.value("status").toString();
         const QString content = todo.value("content").toString();
+        // GFM task lists only have two states ([ ] and [x]); markus renders
+        // any other marker as literal text, so in_progress stays unchecked.
         if (status == QLatin1String(kCompleted))
             md += QStringLiteral("- [x] %1\n").arg(content);
-        else if (status == QLatin1String(kInProgress))
-            md += QStringLiteral("- [~] %1\n").arg(content);
         else
             md += QStringLiteral("- [ ] %1\n").arg(content);
     }
