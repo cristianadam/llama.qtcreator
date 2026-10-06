@@ -1,7 +1,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QLoggingCategory>
-#include <QSettings>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -14,6 +13,8 @@
 Q_LOGGING_CATEGORY(llamaStorage, "llama.cpp.storage", QtWarningMsg)
 
 namespace LlamaCpp {
+
+static constexpr int kMaxInputHistoryEntries = 100;
 
 static QString serialize(const QList<QVariantMap> &list)
 {
@@ -132,6 +133,10 @@ Storage::Storage()
     if (!q.exec("CREATE INDEX IF NOT EXISTS idx_messages_convId ON messages(convId)"))
         qCCritical(llamaStorage) << "Failed to create table \"idx_messages_convId\""
                                  << q.lastError();
+
+    if (!q.exec("CREATE TABLE IF NOT EXISTS input_history "
+                "(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT)"))
+        qCCritical(llamaStorage) << "Failed to create table \"input_history\"" << q.lastError();
 }
 
 QList<Conversation> Storage::getAllConversations()
@@ -609,5 +614,54 @@ bool Storage::deleteMessageBranch(qint64 msgId)
     }
 
     return true;
+}
+
+QStringList Storage::inputHistory()
+{
+    QStringList res;
+    QSqlQuery q(db);
+    const QString select = QStringLiteral("SELECT text FROM input_history ORDER BY id DESC LIMIT %1")
+                               .arg(kMaxInputHistoryEntries);
+    if (q.exec(select)) {
+        while (q.next())
+            res << q.value(0).toString();
+    } else {
+        qCWarning(llamaStorage) << "inputHistory:" << q.lastError();
+    }
+    return res;
+}
+
+void Storage::addInputHistory(const QString &text)
+{
+    const QString trimmed = text.trimmed();
+    if (trimmed.isEmpty())
+        return;
+
+    QSqlQuery q(db);
+    q.prepare("SELECT text FROM input_history ORDER BY id DESC LIMIT 1");
+    if (q.exec() && q.next() && q.value(0).toString() == trimmed)
+        return; // don't add consecutive duplicates
+
+    q.prepare("INSERT INTO input_history (text) VALUES (:text)");
+    q.bindValue(":text", trimmed);
+    if (!q.exec()) {
+        qCWarning(llamaStorage) << "addInputHistory:" << q.lastError();
+        return;
+    }
+
+    // Keep the history bounded.
+    const QString cap = QStringLiteral(
+        "DELETE FROM input_history WHERE id NOT IN "
+        "(SELECT id FROM input_history ORDER BY id DESC LIMIT %1)")
+                            .arg(kMaxInputHistoryEntries);
+    if (!q.exec(cap))
+        qCWarning(llamaStorage) << "addInputHistory: failed to cap history:" << q.lastError();
+}
+
+void Storage::clearInputHistory()
+{
+    QSqlQuery q(db);
+    if (!q.exec("DELETE FROM input_history"))
+        qCWarning(llamaStorage) << "clearInputHistory:" << q.lastError();
 }
 } // namespace LlamaCpp

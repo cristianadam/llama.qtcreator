@@ -1,7 +1,12 @@
+#include <QApplication>
+#include <QClipboard>
 #include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QFileDialog>
+#include <QFontMetrics>
 #include <QHBoxLayout>
+#include <QMenu>
+#include <QMessageBox>
 #include <QMimeData>
 #include <QTabBar>
 #include <QTabWidget>
@@ -16,6 +21,7 @@
 
 #include "llamachatinput.h"
 #include "llamasettings.h"
+#include "llamastorage.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -77,6 +83,19 @@ void ChatInput::buildUI()
 
     m_txt->installEventFilter(this);
     installEventFilter(this);
+
+    m_txt->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_txt, &QWidget::customContextMenuRequested, this,
+            [this](const QPoint &pos) { showContextMenu(pos); });
+
+    // Editing the text while browsing the history abandons browsing (the
+    // saved draft is discarded).
+    connect(m_txt, &QTextEdit::textChanged, this, [this]() {
+        if (!m_applyingHistory)
+            exitHistoryBrowsing();
+    });
+
+    m_history = Storage::instance().inputHistory();
 
     QHBoxLayout *btnLayout = new QHBoxLayout;
     btnLayout->setContentsMargins(0, 0, 0, 0);
@@ -239,6 +258,8 @@ void ChatInput::applyStyleSheet()
 
 void ChatInput::cleanUp()
 {
+    // Clearing the text also fires textChanged, which resets any in-progress
+    // history browsing (see the textChanged connection in buildUI).
     m_txt->clear();
 
     while (m_attachedFilesBar->count() > 0) {
@@ -254,9 +275,118 @@ void ChatInput::cleanUp()
 void ChatInput::onSendClicked()
 {
     QString message = m_txt->toPlainText().trimmed();
-    if (!message.isEmpty())
+    if (!message.isEmpty()) {
+        addToHistory(message);
         emit sendRequested(message, getExtraFromAttachedFiles());
+    }
     cleanUp();
+}
+
+void ChatInput::addToHistory(const QString &text)
+{
+    Storage::instance().addInputHistory(text);
+    m_history = Storage::instance().inputHistory();
+}
+
+void ChatInput::navigateHistory(int direction)
+{
+    // direction +1 = older (Up), -1 = newer (Down)
+    // Re-read the shared history: other chat inputs may have added entries
+    // since this widget was constructed.
+    m_history = Storage::instance().inputHistory();
+    if (m_history.isEmpty())
+        return;
+
+    const int newIndex = m_historyIndex + direction;
+    if (newIndex < -1 || newIndex >= m_history.size())
+        return;
+
+    if (m_historyIndex == -1)
+        m_historyDraft = m_txt->toPlainText();
+
+    m_historyIndex = newIndex;
+
+    m_applyingHistory = true;
+    if (m_historyIndex == -1) {
+        m_txt->setPlainText(m_historyDraft);
+        m_historyDraft.clear();
+    } else {
+        m_txt->setPlainText(m_history.at(m_historyIndex));
+    }
+    m_applyingHistory = false;
+
+    QTextCursor cursor = m_txt->textCursor();
+    // Older entries: cursor at the start (convenient for editing the
+    // beginning); newer entries / restored draft: cursor at the end
+    // (convenient for appending and sending).
+    const bool cursorAtStart = m_historyIndex != -1 && direction == 1;
+    cursor.setPosition(cursorAtStart ? 0 : m_txt->document()->characterCount() - 1);
+    m_txt->setTextCursor(cursor);
+}
+
+void ChatInput::exitHistoryBrowsing()
+{
+    m_historyIndex = -1;
+    m_historyDraft.clear();
+}
+
+void ChatInput::showContextMenu(const QPoint &pos)
+{
+    QMenu menu(m_txt);
+
+    const bool hasSelection = m_txt->textCursor().hasSelection();
+    const bool hasClipboardText = !QApplication::clipboard()->text().isEmpty();
+    if (hasSelection) {
+        menu.addAction(Tr::tr("Cut"), m_txt, &QTextEdit::cut);
+        menu.addAction(Tr::tr("Copy"), m_txt, &QTextEdit::copy);
+    }
+    if (hasClipboardText)
+        menu.addAction(Tr::tr("Paste"), m_txt, &QTextEdit::paste);
+    if (hasSelection || hasClipboardText)
+        menu.addSeparator();
+
+    // History submenu: the most recent entries, elided to their first line.
+    // Activating one inserts the full (possibly multiline) entry.
+    QMenu *historyMenu = menu.addMenu(Tr::tr("History"));
+    const QStringList history = Storage::instance().inputHistory();
+    if (history.isEmpty()) {
+        QAction *none = historyMenu->addAction(Tr::tr("No history"));
+        none->setEnabled(false);
+    } else {
+        const QFontMetrics fm = historyMenu->fontMetrics();
+        const int maxEntries = 20;
+        for (int i = 0; i < qMin(maxEntries, history.size()); ++i) {
+            const QString entry = history.at(i);
+            const QString label = fm.elidedText(entry.section(QLatin1Char('\n'), 0, 0),
+                                                Qt::ElideRight, 300);
+            historyMenu->addAction(label, this, [this, entry]() {
+                m_applyingHistory = true;
+                m_txt->setPlainText(entry);
+                m_applyingHistory = false;
+                exitHistoryBrowsing();
+                QTextCursor cursor = m_txt->textCursor();
+                cursor.setPosition(m_txt->document()->characterCount() - 1);
+                m_txt->setTextCursor(cursor);
+                m_txt->setFocus();
+            });
+        }
+    }
+
+    menu.addSeparator();
+    menu.addAction(Tr::tr("Clear History"), this, [this]() {
+        const int count = Storage::instance().inputHistory().size();
+        if (QMessageBox::question(this,
+                                  Tr::tr("Clear History"),
+                                  Tr::tr("Remove all %1 saved input history entries?")
+                                      .arg(count))
+                != QMessageBox::Yes)
+            return;
+        Storage::instance().clearInputHistory();
+        m_history.clear();
+        exitHistoryBrowsing();
+    });
+
+    menu.exec(m_txt->mapToGlobal(pos));
 }
 
 void ChatInput::onStopClicked()
@@ -416,10 +546,47 @@ bool ChatInput::eventFilter(QObject *obj, QEvent *event)
 
     if (obj == m_txt && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-        if (keyEvent->modifiers() == Qt::NoModifier
+        // Ignore the keypad flag so numpad arrows / enter work as well.
+        const Qt::KeyboardModifiers modifiers = keyEvent->modifiers() & ~Qt::KeypadModifier;
+        if (modifiers == Qt::NoModifier
             && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)) {
             onSendClicked();
             return true;
+        }
+
+        if (modifiers == Qt::NoModifier
+            && (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down)) {
+            const bool up = keyEvent->key() == Qt::Key_Up;
+            QTextCursor cursor = m_txt->textCursor();
+            const int lastBlock = m_txt->document()->blockCount() - 1;
+
+            if (up && cursor.blockNumber() == 0) {
+                if (m_historyIndex >= 0 || m_txt->document()->isEmpty()
+                    || cursor.positionInBlock() == 0) {
+                    navigateHistory(1);
+                    return true;
+                }
+                // Not at the line start yet: snap there, the next Up press
+                // then enters the history.
+                cursor.setPosition(0);
+                m_txt->setTextCursor(cursor);
+                return true;
+            }
+
+            if (!up && cursor.blockNumber() == lastBlock) {
+                if (m_historyIndex >= 0) {
+                    navigateHistory(-1);
+                    return true;
+                }
+                const int end = m_txt->document()->characterCount() - 1;
+                if (cursor.position() != end) {
+                    // Snap to the end; the next Down press enters the
+                    // history.
+                    cursor.setPosition(end);
+                    m_txt->setTextCursor(cursor);
+                    return true;
+                }
+            }
         }
     }
 

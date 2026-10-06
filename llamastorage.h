@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QSqlDatabase>
+#include <QStringList>
 #include <QVariant>
 #include <QVector>
 
@@ -30,6 +31,13 @@ public:
     bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
     bool updateMessageContent(const Message &msg);
     bool deleteMessageBranch(qint64 msgId);
+
+    // Chat input history, most recent first (for the input's Up/Down
+    // navigation). Stored here rather than in QtCreator.ini: entries can be
+    // multiline, which does not fit an INI key well.
+    QStringList inputHistory();
+    void addInputHistory(const QString &text);
+    void clearInputHistory();
 
 signals:
     void conversationCreated(const QString &convId);

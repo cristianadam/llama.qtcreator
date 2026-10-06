@@ -39,6 +39,11 @@ private:
     void cleanUp();
     void addFilesFromLocalPaths(const QStringList &filePaths);
 
+    void addToHistory(const QString &text);
+    void navigateHistory(int direction);
+    void exitHistoryBrowsing();
+    void showContextMenu(const QPoint &pos);
+
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -51,6 +56,14 @@ private:
     bool m_isGenerating{false};
 
     QList<QPair<QString, QByteArray>> m_attachedFiles;
+
+    // Input history: most recent first. m_historyIndex == -1 means "not
+    // browsing"; m_historyDraft holds the text the user was composing when
+    // browsing started, so it can be restored.
+    QStringList m_history;
+    int m_historyIndex{-1};
+    QString m_historyDraft;
+    bool m_applyingHistory{false};
 };
 
 } // namespace LlamaCpp
