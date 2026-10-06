@@ -15,7 +15,9 @@
 #include <QMessageBox>
 #include <QPoint>
 #include <QPointer>
+#include <QQueue>
 #include <QPushButton>
+#include <QSet>
 #include <QSortFilterProxyModel>
 #include <QStandardPaths>
 #include <QToolButton>
@@ -48,10 +50,24 @@ protected:
         if (!filterRegularExpression().isValid()) // no filter -> accept all
             return true;
 
+        return rowMatchesRecursively(sourceRow, sourceParent);
+    }
+
+private:
+    // Accept a row when it matches the filter itself or when any of its
+    // descendants matches (so a task conversation is shown even if only its
+    // title, not its parent's, contains the search text).
+    bool rowMatchesRecursively(int sourceRow, const QModelIndex &sourceParent) const
+    {
         const QModelIndex idx = sourceModel()->index(sourceRow, 0, sourceParent);
-        const QString txt = sourceModel()->data(idx).toString();
+        const QString txt = sourceModel()->data(idx, Qt::DisplayRole).toString();
         if (txt.contains(filterRegularExpression()))
             return true;
+
+        const int childCount = sourceModel()->rowCount(idx);
+        for (int i = 0; i < childCount; ++i)
+            if (rowMatchesRecursively(i, idx))
+                return true;
 
         return false; // nothing matched
     }
@@ -72,7 +88,8 @@ protected:
 private:
     void resizeColumns();
     void contextMenuAtPoint(const QPoint &point);
-    void expandAndResize();
+    void restoreExpansionAndResize();
+    void expansionChanged(const QModelIndex &idx, bool expanded);
     QModelIndex selectedIndex();
 
     bool deleteConversation();
@@ -83,6 +100,9 @@ private:
 
     QAction *m_addAction{nullptr};
     QAction *m_refreshAction{nullptr};
+
+    QSet<QString> m_expandedIds; // ids of the currently expanded branches
+    bool m_expansionInitialized{false};
 
     Utils::NavigationTreeView *m_conversationsView{nullptr};
     ConversationsModel *m_model{nullptr};
@@ -172,17 +192,21 @@ ConversationsView::ConversationsView()
             &QWidget::customContextMenuRequested,
             this,
             &ConversationsView::contextMenuAtPoint);
-    connect(m_model, &QAbstractItemModel::modelReset, this, &ConversationsView::expandAndResize);
+    // Track the expanded branches so their state survives model resets.
+    connect(m_conversationsView, &QTreeView::expanded, this, [this](const QModelIndex &idx) {
+        expansionChanged(idx, true);
+    });
+    connect(m_conversationsView, &QTreeView::collapsed, this, [this](const QModelIndex &idx) {
+        expansionChanged(idx, false);
+    });
+    connect(m_model, &QAbstractItemModel::modelReset, this, &ConversationsView::restoreExpansionAndResize);
 
     m_conversationsView->selectionModel()->clear();
 }
 
 void ConversationsView::refresh()
 {
-    m_model->clear();
-    for (const Conversation &c : ChatManager::instance().allConversations()) {
-        m_model->addConversation(c);
-    }
+    m_model->setConversations(ChatManager::instance().allConversations());
 }
 
 void ConversationsView::newConversation()
@@ -239,9 +263,36 @@ void ConversationsView::contextMenuAtPoint(const QPoint &point)
     contextMenu.exec(m_conversationsView->viewport()->mapToGlobal(point));
 }
 
-void ConversationsView::expandAndResize()
+void ConversationsView::expansionChanged(const QModelIndex &idx, bool expanded)
 {
-    m_conversationsView->expandAll();
+    const QString id = idx.data(ConversationsModel::ConversationIdRole).toString();
+    if (expanded)
+        m_expandedIds.insert(id);
+    else
+        m_expandedIds.remove(id);
+}
+
+void ConversationsView::restoreExpansionAndResize()
+{
+    if (!m_expansionInitialized) {
+        // First refresh: show everything expanded (the expanded() signals
+        // fired by expandAll() populate m_expandedIds).
+        m_conversationsView->expandAll();
+        m_expansionInitialized = true;
+    } else {
+        // Restore the branches the user had open before the model reset, so a
+        // background refresh does not re-expand the whole tree.
+        QQueue<QModelIndex> pending;
+        for (int row = 0; row < m_filterModel->rowCount(); ++row)
+            pending.enqueue(m_filterModel->index(row, 0));
+        while (!pending.isEmpty()) {
+            const QModelIndex idx = pending.dequeue();
+            if (m_expandedIds.contains(idx.data(ConversationsModel::ConversationIdRole).toString()))
+                m_conversationsView->expand(idx);
+            for (int child = 0; child < m_filterModel->rowCount(idx); ++child)
+                pending.enqueue(m_filterModel->index(child, 0, idx));
+        }
+    }
     resizeColumns();
 }
 

@@ -119,6 +119,7 @@ struct Conversation
     qint64 lastModified{-1};
     qint64 currNode{-1}; // id of the node currently shown
     QString name;
+    QString parentId; // id of the parent conversation (empty for top‑level); set for task (sub‑agent) conversations
 };
 
 struct ViewingChat

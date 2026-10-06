@@ -967,7 +967,11 @@ Conversation ChatManager::createConversation(const QString &name)
 Conversation ChatManager::createTaskConversation(const QString &name)
 {
     m_taskConvCreationPending = true;
-    Conversation conv = m_storage->createConversation(name);
+    // The active conversation is the one whose agent spawned this task, so it
+    // becomes the parent in the conversations tree.  createTaskConversation()
+    // does not change the active conversation, so m_activeConvId is still the
+    // spawning conversation here.
+    Conversation conv = m_storage->createConversation(name, m_activeConvId);
     m_taskConvCreationPending = false;
     m_taskConversations.insert(conv.id);
     return conv;

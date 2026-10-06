@@ -18,7 +18,7 @@ public:
 
     QList<Conversation> getAllConversations();
     Conversation getOneConversation(const QString &convId);
-    Conversation createConversation(const QString &name);
+    Conversation createConversation(const QString &name, const QString &parentId = {});
     void renameConversation(const QString &convId, const QString &name);
     void deleteConversation(const QString &convId);
 

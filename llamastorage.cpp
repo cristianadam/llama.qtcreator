@@ -93,8 +93,29 @@ Storage::Storage()
     // create tables if not exist
     QSqlQuery q(db);
     if (!q.exec("CREATE TABLE IF NOT EXISTS conversations "
-                "(id TEXT PRIMARY KEY, lastModified INTEGER, currNode INTEGER, name TEXT)"))
+                "(id TEXT PRIMARY KEY, lastModified INTEGER, currNode INTEGER, name TEXT, "
+                "parent TEXT)"))
         qCCritical(llamaStorage) << "Failed to create table \"conversations\"" << q.lastError();
+
+    // Migrate older databases that predate the parent column (task / sub‑agent
+    // conversations are nested under the conversation that spawned them).
+    // Inspect the schema with PRAGMA table_info so the check is based on the
+    // table definition itself, not on its contents.
+    bool hasParentColumn = false;
+    if (q.exec("PRAGMA table_info(conversations)")) {
+        while (q.next()) {
+            if (q.value(1).toString() == "parent") {
+                hasParentColumn = true;
+                break;
+            }
+        }
+    }
+    if (!hasParentColumn) {
+        if (q.exec("ALTER TABLE conversations ADD COLUMN parent TEXT"))
+            qCDebug(llamaStorage) << "Added \"parent\" column to conversations table";
+        else
+            qCWarning(llamaStorage) << "Failed to add \"parent\" column" << q.lastError();
+    }
 
     if (!q.exec("CREATE TABLE IF NOT EXISTS messages "
                 "(id INTEGER PRIMARY KEY AUTOINCREMENT, convId TEXT, type TEXT, timestamp INTEGER, "
@@ -127,6 +148,7 @@ QList<Conversation> Storage::getAllConversations()
         c.lastModified = q.value("lastModified").toLongLong();
         c.currNode = q.value("currNode").toLongLong();
         c.name = q.value("name").toString();
+        c.parentId = q.value("parent").toString();
         res.append(c);
     }
     return res;
@@ -149,21 +171,23 @@ Conversation Storage::getOneConversation(const QString &convId)
     c.lastModified = q.value("lastModified").toLongLong();
     c.currNode = q.value("currNode").toLongLong();
     c.name = q.value("name").toString();
+    c.parentId = q.value("parent").toString();
     return c;
 }
 
-Conversation Storage::createConversation(const QString &name)
+Conversation Storage::createConversation(const QString &name, const QString &parentId)
 {
     qint64 now = QDateTime::currentMSecsSinceEpoch() - 1;
 
     QSqlQuery q(db);
-    q.prepare("INSERT INTO conversations (id,lastModified,currNode,name) "
-              "VALUES (:id,:lm,:curr,:name)");
+    q.prepare("INSERT INTO conversations (id,lastModified,currNode,name,parent) "
+              "VALUES (:id,:lm,:curr,:name,:parent)");
     QString convId = QString("conv-%1").arg(now);
     q.bindValue(":id", convId);
     q.bindValue(":lm", now);
     q.bindValue(":curr", -1); // Will be updated after root message is created
     q.bindValue(":name", name);
+    q.bindValue(":parent", parentId);
     if (!q.exec())
         qCWarning(llamaStorage) << "createConversation insert into conversations" << q.lastError();
 
@@ -198,6 +222,7 @@ Conversation Storage::createConversation(const QString &name)
     c.lastModified = now;
     c.currNode = rootMsgId;
     c.name = name;
+    c.parentId = parentId;
 
     emit conversationCreated(convId);
 
@@ -220,6 +245,14 @@ void Storage::renameConversation(const QString &convId, const QString &name)
 void Storage::deleteConversation(const QString &convId)
 {
     QSqlQuery q(db);
+
+    // Re‑parent any task conversations nested under this one so they surface
+    // at the top level instead of being left orphaned.
+    q.prepare("UPDATE conversations SET parent = '' WHERE parent = (:id)");
+    q.bindValue(":id", convId);
+    if (!q.exec())
+        qCWarning(llamaStorage) << "Re‑parenting children of conversation" << convId << q.lastError();
+
     q.prepare("DELETE FROM conversations WHERE id = (:id)");
     q.bindValue(":id", convId);
     if (!q.exec())

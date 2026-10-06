@@ -4,20 +4,76 @@
 
 namespace LlamaCpp {
 
+struct ConversationsModel::Node
+{
+    Conversation conv;
+    QVector<Node *> children;
+    Node *parent = nullptr;
+
+    ~Node()
+    {
+        qDeleteAll(children);
+    }
+};
+
 ConversationsModel::ConversationsModel(QObject *parent)
-    : QAbstractTableModel(parent)
+    : QAbstractItemModel(parent)
+    , m_root(new Node)
 {}
+
+ConversationsModel::~ConversationsModel()
+{
+    delete m_root;
+}
+
+ConversationsModel::Node *ConversationsModel::nodeFromIndex(const QModelIndex &index) const
+{
+    if (index.isValid())
+        return static_cast<Node *>(index.internalPointer());
+    return m_root;
+}
+
+QModelIndex ConversationsModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (row < 0 || column != 0)
+        return {};
+
+    Node *parentNode = nodeFromIndex(parent);
+    if (!parentNode || row >= parentNode->children.size())
+        return {};
+
+    Node *node = parentNode->children.at(row);
+    if (node)
+        return createIndex(row, column, node);
+    return {};
+}
+
+QModelIndex ConversationsModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return {};
+
+    Node *child = nodeFromIndex(index);
+    if (!child)
+        return {};
+
+    Node *p = child->parent;
+    if (!p || p == m_root)
+        return {};
+
+    return createIndex(p->parent->children.indexOf(p), 0, p);
+}
 
 int ConversationsModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
-    return static_cast<int>(m_items.size());
+    Node *node = nodeFromIndex(parent);
+    return node ? node->children.size() : 0;
 }
 
 int ConversationsModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 3;
+    return 1;
 }
 
 QVariant ConversationsModel::data(const QModelIndex &index, int role) const
@@ -25,26 +81,26 @@ QVariant ConversationsModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return {};
 
-    if (index.row() < 0 || index.row() >= rowCount())
+    Node *node = nodeFromIndex(index);
+    if (!node)
         return {};
 
-    const Conversation &c = m_items.at(index.row());
+    const Conversation &c = node->conv;
 
-    if (role == Qt::DisplayRole) {
-        if (index.column() == 0) {
-            return c.name;
-        }
-    } else if (role == Qt::ToolTipRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+        return c.name;
+    case Qt::ToolTipRole:
         // Render the lastModified as ISO‑8601 for readability
-        QDateTime dt = QDateTime::fromMSecsSinceEpoch(c.lastModified, Qt::LocalTime);
-        return dt.toString(Qt::ISODate);
-    } else if (role == TimestampRole) {
+        return QDateTime::fromMSecsSinceEpoch(c.lastModified, Qt::LocalTime).toString(Qt::ISODate);
+    case TimestampRole:
         // Custom role: return the raw epoch value
         return c.lastModified;
-    } else if (role == ConversationIdRole) {
+    case ConversationIdRole:
         return c.id;
-    } else if (role == Qt::EditRole) {
-        return data(index, Qt::DisplayRole);
+    default:
+        break;
     }
 
     return {};
@@ -52,45 +108,23 @@ QVariant ConversationsModel::data(const QModelIndex &index, int role) const
 
 bool ConversationsModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (role == Qt::EditRole) {
-        if (index.column() == 0) {
-            const Conversation &c = m_items.at(index.row());
+    if (role != Qt::EditRole || !index.isValid())
+        return false;
 
-            ChatManager::instance().renameConversation(c.id, value.toString());
-            return true;
-        }
-    }
-    return false;
-}
+    Node *node = nodeFromIndex(index);
+    if (!node)
+        return false;
 
-QVariant ConversationsModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (role != Qt::DisplayRole)
-        return {};
-
-    if (orientation == Qt::Horizontal) {
-        if (section == 0)
-            return Tr::tr("Name");
-        else if (section == 1)
-            return Tr::tr("Date");
-        else if (section == 2)
-            return Tr::tr("Conversation Id");
-    }
-
-    return {};
+    ChatManager::instance().renameConversation(node->conv.id, value.toString());
+    return true;
 }
 
 Qt::ItemFlags ConversationsModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags f = QAbstractTableModel::flags(index);
-
     if (!index.isValid())
         return Qt::NoItemFlags;
-    else
-        return f |= Qt::ItemIsEditable;
 
-    // All items are read‑only in this simple model
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
 }
 
 QHash<int, QByteArray> ConversationsModel::roleNames() const
@@ -102,26 +136,61 @@ QHash<int, QByteArray> ConversationsModel::roleNames() const
     return roles;
 }
 
-void ConversationsModel::addConversation(const Conversation &c)
+void ConversationsModel::buildTree(const QList<Conversation> &conversations)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    m_items.append(c);
-    endInsertRows();
+    m_root->children.clear();
+    m_root->conv = {};
+
+    // First pass: create a node for every conversation (not attached yet),
+    // keeping the input order (lastModified DESC from the storage layer).
+    QHash<QString, Node *> byId;
+    byId.reserve(conversations.size());
+    QVector<Node *> nodes;
+    nodes.reserve(conversations.size());
+    for (const Conversation &c : conversations) {
+        Node *node = new Node;
+        node->conv = c;
+        byId.insert(c.id, node);
+        nodes.append(node);
+    }
+
+    // Second pass: attach each node to its parent, so every node ends up in
+    // exactly one children list (see ~Node's qDeleteAll).  A missing / self
+    // parent leaves the node at the top level.
+    for (Node *node : std::as_const(nodes)) {
+        Node *parent = m_root;
+        const QString &pid = node->conv.parentId;
+        if (!pid.isEmpty() && pid != node->conv.id) {
+            auto it = byId.find(pid);
+            if (it != byId.end())
+                parent = it.value();
+        }
+        node->parent = parent;
+        parent->children.append(node);
+    }
 }
 
-void ConversationsModel::clear()
+void ConversationsModel::setConversations(const QList<Conversation> &conversations)
 {
-    if (m_items.isEmpty())
-        return;
+    beginResetModel();
+    buildTree(conversations);
+    endResetModel();
+}
 
-    beginRemoveRows(QModelIndex(), 0, rowCount() - 1);
-    m_items.clear();
-    endRemoveRows();
+void ConversationsModel::collectConversations(Node *node, QList<Conversation> &res)
+{
+    for (Node *child : std::as_const(node->children)) {
+        res.append(child->conv);
+        collectConversations(child, res);
+    }
 }
 
 QList<Conversation> ConversationsModel::allConversations() const
 {
-    return QList<Conversation>(m_items.begin(), m_items.end());
+    QList<Conversation> res;
+    res.reserve(m_root->children.size());
+    collectConversations(m_root, res);
+    return res;
 }
 
 } // namespace LlamaCpp
