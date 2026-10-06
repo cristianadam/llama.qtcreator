@@ -66,6 +66,10 @@ QString extractPartialString(const QString &partialArgs, const QString &key)
     return partialArgs.mid(start + 1, end - start - 1);
 }
 
+} // namespace
+
+//! State of a running find; defined after the anonymous namespace so
+//! FindTool (declared in the header) can hold a pointer to it.
 struct FindState : public QObject
 {
     explicit FindState() = default;
@@ -76,14 +80,13 @@ struct FindState : public QObject
     int resultCount = 0;
     bool limitReached = false;
     bool timedOut = false;
+    bool aborted = false; // the user pressed Escape
     QProcess::ProcessError processError = QProcess::UnknownError;
     QString errorString;
     QString stderrText;
     QStringList outputLines;
     QByteArray pending; // incomplete output line
 };
-
-} // namespace
 
 const bool registered = [] {
     ToolFactory::instance().registerCreator(FindTool{}.name(),
@@ -201,6 +204,7 @@ void FindTool::run(const QJsonObject &args,
     auto *state = new FindState;
     state->searchRoot = rootString;
     state->limit = limit;
+    m_state = state;
 
     QProcess *process = new QProcess(state);
     state->process = process;
@@ -255,18 +259,24 @@ void FindTool::run(const QJsonObject &args,
                          state->errorString = state->process->errorString();
                      });
 
+    // No context object: the connection dies with the process. The tool
+    // itself is kept alive by ChatManager until done() runs, so capturing
+    // this is safe (and Tool is not a QObject, so it cannot be the context).
     QObject::connect(
         process,
         qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
-        state,
-        [state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+        [this, state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+            m_state = nullptr;
             state->stderrText += QString::fromUtf8(state->process->readAllStandardError());
 
             QString results = state->outputLines.join(QLatin1Char('\n'));
             QStringList notes;
             bool ok = true;
 
-            if (state->timedOut && !state->limitReached) {
+            if (state->aborted) {
+                ok = false;
+                notes << Tr::tr("[Search was stopped by the user. The results are incomplete.]");
+            } else if (state->timedOut && !state->limitReached) {
                 ok = false;
                 notes << Tr::tr("[Search timed out after %1 ms. The results are "
                                 "incomplete; use a more specific pattern.]")
@@ -319,6 +329,16 @@ void FindTool::run(const QJsonObject &args,
 
     timer->start(kTimeoutMs);
     process->start(rgPath.toUserOutput(), rgArgs);
+}
+
+void FindTool::abort()
+{
+    FindState *state = m_state;
+    m_state = nullptr;
+    if (state && state->process && state->process->state() != QProcess::NotRunning) {
+        state->aborted = true;
+        state->process->kill();
+    }
 }
 
 } // namespace LlamaCpp::Tools

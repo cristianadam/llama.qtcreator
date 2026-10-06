@@ -3,6 +3,8 @@
 
 namespace LlamaCpp::Tools {
 
+struct SearchState;
+
 class SearchTool : public Tool
 {
 public:
@@ -18,6 +20,12 @@ public:
                            bool ok) const override;
     void run(const QJsonObject &arguments,
              std::function<void(const QString &output, bool ok)> done) const override;
+    void abort() override;
+
+private:
+    //! The state of the currently running search (nullptr when idle), so
+    //! abort() can kill the ripgrep process.
+    mutable SearchState *m_state = nullptr;
 };
 
 } // namespace LlamaCpp::Tools

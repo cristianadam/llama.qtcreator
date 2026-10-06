@@ -73,6 +73,10 @@ QString extractPartialString(const QString &partialArgs, const QString &key)
     return partialArgs.mid(start + 1, end - start - 1);
 }
 
+} // namespace
+
+//! State of a running search; defined after the anonymous namespace so
+//! SearchTool (declared in the header) can hold a pointer to it.
 struct SearchState : public QObject
 {
     explicit SearchState() = default;
@@ -85,6 +89,7 @@ struct SearchState : public QObject
     bool limitReached = false;
     bool linesTruncated = false;
     bool timedOut = false;
+    bool aborted = false; // the user pressed Escape
     QProcess::ProcessError processError = QProcess::UnknownError;
     QString errorString;
     QString stderrText;
@@ -92,6 +97,8 @@ struct SearchState : public QObject
     QSet<QString> emittedLines; // "file\x0c<line>" of already printed lines
     QByteArray pending;         // incomplete output line
 };
+
+namespace {
 
 /*! Parses one ripgrep --json event and appends the formatted line to the
     state. Context lines that were already printed (overlapping context
@@ -273,6 +280,7 @@ void SearchTool::run(const QJsonObject &args,
     state->searchRoot = rootString;
     state->rootIsDir = rootIsDir;
     state->limit = limit;
+    m_state = state;
 
     QProcess *process = new QProcess(state);
     state->process = process;
@@ -325,18 +333,24 @@ void SearchTool::run(const QJsonObject &args,
                          state->errorString = state->process->errorString();
                      });
 
+    // No context object: the connection dies with the process. The tool
+    // itself is kept alive by ChatManager until done() runs, so capturing
+    // this is safe (and Tool is not a QObject, so it cannot be the context).
     QObject::connect(
         process,
         qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
-        state,
-        [state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+        [this, state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+            m_state = nullptr;
             state->stderrText += QString::fromUtf8(state->process->readAllStandardError());
 
             QString matches = state->outputLines.join(QLatin1Char('\n'));
             QStringList notes;
             bool ok = true;
 
-            if (state->timedOut && !state->limitReached) {
+            if (state->aborted) {
+                ok = false;
+                notes << Tr::tr("[Search was stopped by the user. The results are incomplete.]");
+            } else if (state->timedOut && !state->limitReached) {
                 ok = false;
                 notes << Tr::tr("[Search timed out after %1 ms. The results are "
                                 "incomplete; narrow the path or refine the pattern.]")
@@ -393,6 +407,16 @@ void SearchTool::run(const QJsonObject &args,
 
     timer->start(kTimeoutMs);
     process->start(rgPath.toUserOutput(), rgArgs);
+}
+
+void SearchTool::abort()
+{
+    SearchState *state = m_state;
+    m_state = nullptr;
+    if (state && state->process && state->process->state() != QProcess::NotRunning) {
+        state->aborted = true;
+        state->process->kill();
+    }
 }
 
 } // namespace LlamaCpp::Tools

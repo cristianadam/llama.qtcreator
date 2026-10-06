@@ -285,6 +285,16 @@ private:
     //! tool has reported back.
     QHash<QString, int> m_runningTools;
 
+    //! The tool objects currently executing (per conversation), registered
+    //! by executeToolAndSendResult().  stopGenerating() calls abort() on
+    //! them when the user presses Escape while a tool is running.
+    QHash<QString, QVector<std::shared_ptr<Tool>>> m_activeTools;
+
+    //! Conversations where the user asked to stop while tools were running.
+    //! When the last in‑flight tool of such a conversation reports back, the
+    //! conversation ends there instead of the model getting another turn.
+    QSet<QString> m_stopRequested;
+
     // Task‑conversation (sub‑agent) state
     struct TaskConversationConfig
     {

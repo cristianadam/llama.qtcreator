@@ -4,6 +4,8 @@
 #include <QJsonObject>
 #include <QVector>
 
+class QNetworkReply;
+
 namespace LlamaCpp::Tools {
 
 class WebSearchTool : public Tool
@@ -15,6 +17,12 @@ public:
     QString oneLineSummary(const QJsonObject &args) const override;
     void run(const QJsonObject &arguments,
              std::function<void(const QString &output, bool ok)> done) const override;
+    void abort() override;
+
+private:
+    //! The in‑flight reply (nullptr when idle), so abort() can cancel the
+    //! request.  Deleted by web_utils before the done callback runs.
+    mutable QNetworkReply *m_reply = nullptr;
 };
 
 struct SearchResult

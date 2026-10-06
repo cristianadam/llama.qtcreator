@@ -3,6 +3,7 @@
 #include "llamatr.h"
 #include "web_utils.h"
 
+#include <QNetworkReply>
 #include <QRegularExpression>
 #include <QUrl>
 
@@ -308,9 +309,11 @@ void WebFetchTool::run(const QJsonObject &args,
     httpGet(url,
             timeoutSec,
             kMaxResponseBytes,
-            [url, format, done](const QByteArray &body,
-                                const QString &contentType,
-                                const QString &error) {
+            [this, url, format, done](const QByteArray &body,
+                                      const QString &contentType,
+                                      const QString &error) {
+                // The reply was deleted before this callback ran.
+                m_reply = nullptr;
                 if (!error.isEmpty()) {
                     const QString msg = error.contains(QStringLiteral("size limit"))
                         ? Tr::tr("Fetch failed for %1: response too large (limit 5 MB).").arg(url)
@@ -332,7 +335,16 @@ void WebFetchTool::run(const QJsonObject &args,
                            + Tr::tr("\n\n[... content truncated at %1 characters ...]")
                                  .arg(kMaxOutputChars);
                 return done(content, true);
-            });
+            },
+            &m_reply);
+}
+
+void WebFetchTool::abort()
+{
+    if (m_reply) {
+        m_reply->abort();
+        m_reply = nullptr;
+    }
 }
 
 } // namespace LlamaCpp::Tools

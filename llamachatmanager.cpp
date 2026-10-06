@@ -1065,13 +1065,28 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
 
 void ChatManager::stopGenerating(const QString &convId)
 {
-    if (!m_pendingMessages.contains(convId))
+    // While a tool is running there is no pending message (the assistant
+    // message was already committed when the stream ended), so the guard
+    // must also accept "busy" conversations.
+    if (!m_pendingMessages.contains(convId) && m_runningTools.value(convId) == 0)
         return;
 
     if (m_abortControllers.contains(convId)) {
         auto controller = m_abortControllers.take(convId);
         controller->abort();
         controller->deleteLater();
+    }
+
+    // Tools that are running cannot be aborted the network way – ask each
+    // of them to stop (kill their process / abort their request) and
+    // remember that the conversation must not continue once they report
+    // back (the flag is cleared in executeToolAndSendResult()'s
+    // toolFinished callback).
+    if (m_runningTools.value(convId) > 0) {
+        m_stopRequested.insert(convId);
+        for (const auto &tool : m_activeTools.value(convId))
+            if (tool)
+                tool->abort();
     }
 }
 
@@ -1870,12 +1885,16 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     qCInfo(llamaChatTools).noquote() << "Calling tool:" << tool.name << "with arguments:\n"
                                      << tool.arguments;
 
-    std::unique_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
+    std::shared_ptr<Tool> realTool = ToolFactory::instance().create(tool.name);
     if (!realTool) {
         qCWarning(llamaChatTools) << "Unsupported tool:" << tool.name;
         sendFailedToolResult(QStringLiteral("Unknown tool: %1").arg(tool.name));
         return;
     }
+
+    // Register the tool so stopGenerating() can abort it (Escape) while it
+    // runs; unregistered in toolFinished below.
+    m_activeTools[convId].append(realTool);
 
     Message toolMsg = createToolMessage(assistantMsg);
 
@@ -1909,7 +1928,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         m_storage->updateMessageExtra(*sharedMsg, extra);
     };
 
-    auto toolFinished = [this, convId, sharedMsg, tool, onChunk,
+    auto toolFinished = [this, convId, sharedMsg, realTool, tool, onChunk,
                           batchRemaining](const QString &toolOutput,
                                           bool ok) mutable {
         QJsonObject toolJsonMsg;
@@ -1947,11 +1966,29 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
         if (m_runningTools.value(convId) > 0)
             --m_runningTools[convId];
+        if (auto it = m_activeTools.find(convId); it != m_activeTools.end())
+            it->removeAll(realTool);
 
         // Generate the assistant reply only once every tool call of the
         // message has reported back; the request then carries all results.
         if (batchRemaining && --*batchRemaining > 0)
             return;
+
+        // The user pressed Escape while the tool ran: end the conversation
+        // here instead of handing the (failed) result to the model for
+        // another turn.  Sibling tools of the same batch were aborted as
+        // well, so the last one to report back clears the flag.
+        if (m_stopRequested.contains(convId)) {
+            m_stopRequested.remove(convId);
+            // A stopped task conversation must still report back to the
+            // "task" tool waiting in its parent conversation (as
+            // deleteConversation does), or the parent would stay busy
+            // forever: its stop flag is only cleared when that tool has
+            // reported back as well.
+            if (m_taskConversations.remove(convId) > 0)
+                emit taskConversationFinished(convId, {}, false);
+            return;
+        }
         generateMessage(toolMsg.convId, toolMsg.id, onChunk);
     };
 
@@ -1972,6 +2009,8 @@ void ChatManager::deleteConversation(const QString &convId)
     m_taskConfigs.remove(convId);
     m_streamingToolCalls.remove(convId);
     m_consecutiveToolTurns.remove(convId);
+    m_activeTools.remove(convId);
+    m_stopRequested.remove(convId);
 
     m_storage->deleteConversation(convId);
 }

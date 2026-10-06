@@ -181,6 +181,7 @@ void TaskTool::run(const QJsonObject &args,
     auto &chat = ChatManager::instance();
     const QString convName = Tr::tr("Task: %1").arg(description);
     const Conversation conv = chat.createTaskConversation(convName);
+    m_convId = conv.id;
     const QStringList availableTools = ToolFactory::instance().creatorsList();
     chat.configureTaskConversation(conv.id,
                                    taskSystemPromptFor(type),
@@ -191,10 +192,11 @@ void TaskTool::run(const QJsonObject &args,
     auto connection = std::make_shared<QMetaObject::Connection>();
     *connection = QObject::connect(&chat,
                                    &ChatManager::taskConversationFinished,
-                                   [connection, convId = conv.id, convName, done](
+                                   [this, connection, convId = conv.id, convName, done](
                                            const QString &id, const QString &content, bool ok) {
                                        if (id != convId)
                                            return;
+                                       m_convId.clear();
                                        QObject::disconnect(*connection);
                                        const QString report = taskFinalReport(content);
                                        if (!ok || report.isEmpty())
@@ -214,6 +216,17 @@ void TaskTool::run(const QJsonObject &args,
                                    });
 
     chat.sendMessage(conv.id, conv.currNode, prompt, {}, [](qint64) {});
+}
+
+void TaskTool::abort()
+{
+    // Stopping the sub‑conversation aborts its stream (or its running
+    // tools, recursively) and emits taskConversationFinished with
+    // ok=false, which reports the failure back through the done callback.
+    if (!m_convId.isEmpty()) {
+        ChatManager::instance().stopGenerating(m_convId);
+        m_convId.clear();
+    }
 }
 
 } // namespace LlamaCpp::Tools

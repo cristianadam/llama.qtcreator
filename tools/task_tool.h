@@ -28,6 +28,12 @@ public:
 
     void run(const QJsonObject &arguments,
              std::function<void(const QString &output, bool ok)> done) const override;
+    void abort() override;
+
+private:
+    //! The sub‑conversation of the currently running task (empty when
+    //! idle), so abort() can stop it.
+    mutable QString m_convId;
 };
 
 //! The system prompt for the given subagent type ("explore" or "general").

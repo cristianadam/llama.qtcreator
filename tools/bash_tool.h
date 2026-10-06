@@ -3,6 +3,8 @@
 
 namespace LlamaCpp::Tools {
 
+class BashState;
+
 class BashTool : public Tool
 {
 public:
@@ -15,6 +17,7 @@ public:
     void runLive(const QJsonObject &arguments,
                  const OutputHandler &onOutput,
                  std::function<void(const QString &output, bool ok)> done) const override;
+    void abort() override;
     QString detailsMarkdown(const QJsonObject &arguments,
                                     const QString &result,
                                     bool ok) const override;
@@ -31,6 +34,10 @@ private:
     void runCommand(const QJsonObject &arguments,
                     std::function<void(const QString &output, bool ok)> done,
                     OutputHandler onOutput) const;
+
+    //! The state of the currently running command (nullptr when idle), so
+    //! abort() can kill the shell.
+    mutable BashState *m_state = nullptr;
 };
 
 } // namespace LlamaCpp::Tools

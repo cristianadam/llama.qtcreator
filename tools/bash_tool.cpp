@@ -422,10 +422,14 @@ TruncatedOutput truncateOutput(const QString &text)
     return result;
 }
 
+} // namespace
+
 // State shared between the task tree callbacks. All access happens on the
 // main thread, in this order: timeout handler, process done handler,
 // tree done handler. Owns the stub's control server and temp files, which
 // are released when the state is destroyed in the tree done handler.
+// Defined after the anonymous namespace so BashTool (declared in the
+// header) can hold a pointer to it.
 class BashState : public QObject
 {
 public:
@@ -438,18 +442,18 @@ public:
     std::unique_ptr<Utils::TemporaryFilePath> socketDir;
     QString envFilePath;
     QLocalSocket *controlSocket = nullptr; // owned by the control server
+    QProcess *process = nullptr; // owned by the task tree, set in onSetup
 
     bool usedStub = false;
     bool crashed = false;
     bool timedOut = false;
+    bool aborted = false; // the user pressed Escape
     QProcess::ProcessError processError = QProcess::UnknownError;
     QString errorString;
     QProcess::ExitStatus exitStatus = QProcess::NormalExit;
     int exitCode = -1;
     QString output;
 };
-
-} // namespace
 
 const bool registered = [] {
     ToolFactory::instance().registerCreator(BashTool{}.name(),
@@ -543,6 +547,29 @@ void BashTool::runLive(const QJsonObject &arguments,
     runCommand(arguments, std::move(done), onOutput); // copy – see runCommand()
 }
 
+void BashTool::abort()
+{
+    BashState *state = m_state;
+    m_state = nullptr;
+    if (!state)
+        return;
+    state->aborted = true;
+    if (state->usedStub) {
+        // Kill the inferior (the shell) over the control socket; the stub
+        // exits once the inferior is gone. If the socket is not usable,
+        // fall back to killing the stub itself. If the inferior survives
+        // the kill, the command timeout is the backstop.
+        if (state->controlSocket && state->controlSocket->isWritable()) {
+            state->controlSocket->write("k", 1);
+            state->controlSocket->flush();
+        } else if (state->process && state->process->state() != QProcess::NotRunning) {
+            state->process->kill();
+        }
+    } else if (state->process && state->process->state() != QProcess::NotRunning) {
+        state->process->kill();
+    }
+}
+
 void BashTool::runCommand(const QJsonObject &arguments,
                           std::function<void(const QString &, bool)> done,
                           OutputHandler onOutput) const
@@ -606,6 +633,7 @@ void BashTool::runCommand(const QJsonObject &arguments,
     }
 
     auto *state = new BashState;
+    m_state = state;
 
     // Run the command through Qt Creator's process stub when available, so
     // the shell (the inferior) can be killed over the control socket and
@@ -670,6 +698,10 @@ void BashTool::runCommand(const QJsonObject &arguments,
     // QProcessTask.
     const auto onSetup = [state, cwdString, env, spec, command,
                           sandbox, onOutput](QProcess &process) {
+        // Kept for abort(): the process is owned by the task tree and
+        // outlives the state's use of the pointer.
+        state->process = &process;
+
         // The program to start and its arguments: the shell and the command,
         // optionally wrapped in the sandbox. The stub and the plain QProcess
         // path must agree on the inferior, or the sandbox would be silently
@@ -756,11 +788,15 @@ void BashTool::runCommand(const QJsonObject &arguments,
 
     // Builds the model-facing result from whatever the process managed to
     // produce, then reports it and cleans up.
-    auto finish = [state, done = std::move(done), timeoutMs](DoneWith) mutable {
+    auto finish = [this, state, done = std::move(done), timeoutMs](DoneWith) mutable {
+        m_state = nullptr;
         QStringList notes;
         bool ok = true;
 
-        if (state->timedOut) {
+        if (state->aborted) {
+            ok = false;
+            notes << Tr::tr("Command was stopped by the user.");
+        } else if (state->timedOut) {
             ok = false;
             notes << Tr::tr("Command timed out after %1 ms. Retry with a larger "
                             "timeout if the command is expected to take longer.")

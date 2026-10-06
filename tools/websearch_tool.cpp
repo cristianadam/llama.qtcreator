@@ -7,6 +7,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QNetworkReply>
 #include <QRegularExpression>
 #include <QUrl>
 #include <QUrlQuery>
@@ -274,9 +275,11 @@ void WebSearchTool::run(const QJsonObject &args,
         return httpGet(u.toString(),
                        kTimeoutSec,
                        kMaxResponseBytes,
-                       [query, done](const QByteArray &body,
-                                     const QString &,
-                                     const QString &error) {
+                       [this, query, done](const QByteArray &body,
+                                           const QString &,
+                                           const QString &error) {
+                           // The reply was deleted before this callback ran.
+                           m_reply = nullptr;
                            if (!error.isEmpty())
                                return done(Tr::tr("Search failed: %1").arg(error), false);
                            QJsonParseError parseError;
@@ -299,7 +302,8 @@ void WebSearchTool::run(const QJsonObject &args,
                                            false);
                            }
                            return done(formatResults(query, results), true);
-                       });
+                       },
+                       &m_reply);
     }
 
     if (config.provider == QLatin1String("brave")) {
@@ -325,9 +329,11 @@ void WebSearchTool::run(const QJsonObject &args,
                        headers,
                        kTimeoutSec,
                        kMaxResponseBytes,
-                       [query, done](const QByteArray &body,
-                                     const QString &,
-                                     const QString &error) {
+                       [this, query, done](const QByteArray &body,
+                                           const QString &,
+                                           const QString &error) {
+                           // The reply was deleted before this callback ran.
+                           m_reply = nullptr;
                            if (!error.isEmpty())
                                return done(Tr::tr("Search failed: %1").arg(error), false);
                            QJsonParseError parseError;
@@ -342,7 +348,8 @@ void WebSearchTool::run(const QJsonObject &args,
                                return done(Tr::tr("No results found for \"%1\".").arg(query),
                                            true);
                            return done(formatResults(query, results), true);
-                       });
+                       },
+                       &m_reply);
     }
 
     if (config.provider == QLatin1String("tavily")) {
@@ -367,9 +374,11 @@ void WebSearchTool::run(const QJsonObject &args,
                         headers,
                         kTimeoutSec,
                         kMaxResponseBytes,
-                        [query, done](const QByteArray &body,
-                                      const QString &,
-                                      const QString &error) {
+                        [this, query, done](const QByteArray &body,
+                                            const QString &,
+                                            const QString &error) {
+                          // The reply was deleted before this callback ran.
+                          m_reply = nullptr;
                           if (!error.isEmpty())
                               return done(Tr::tr("Search failed: %1").arg(error), false);
                           QJsonParseError parseError;
@@ -382,7 +391,8 @@ void WebSearchTool::run(const QJsonObject &args,
                           if (results.isEmpty())
                               return done(Tr::tr("No results found for \"%1\".").arg(query), true);
                           return done(formatResults(query, results), true);
-                      });
+                      },
+                      &m_reply);
     }
 
     // Default: Exa via its hosted MCP endpoint (JSON‑RPC tools/call).
@@ -415,7 +425,11 @@ void WebSearchTool::run(const QJsonObject &args,
                     headers,
                     kTimeoutSec,
                     kMaxResponseBytes,
-                    [query, done](const QByteArray &body, const QString &, const QString &error) {
+                    [this, query, done](const QByteArray &body,
+                                        const QString &,
+                                        const QString &error) {
+                        // The reply was deleted before this callback ran.
+                        m_reply = nullptr;
                         if (!error.isEmpty())
                             return done(Tr::tr("Search failed: %1").arg(error), false);
                         const QString text = parseMcpSearchResponse(QString::fromUtf8(body));
@@ -424,7 +438,16 @@ void WebSearchTool::run(const QJsonObject &args,
                         const QString out
                             = Tr::tr("Search results for \"%1\":\n\n%2").arg(query, text);
                         return done(out, true);
-                    });
+                    },
+                    &m_reply);
+}
+
+void WebSearchTool::abort()
+{
+    if (m_reply) {
+        m_reply->abort();
+        m_reply = nullptr;
+    }
 }
 
 } // namespace LlamaCpp::Tools

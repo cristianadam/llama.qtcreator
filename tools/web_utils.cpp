@@ -42,7 +42,8 @@ void startRequest(const QNetworkRequest &request,
                   QNetworkAccessManager::Operation operation,
                   const QByteArray &postData,
                   qint64 maxResponseBytes,
-                  HttpResponseCallback done)
+                  HttpResponseCallback done,
+                  QNetworkReply **replyOut)
 {
     auto *state = new FetchState{};
     state->done = std::move(done);
@@ -52,7 +53,8 @@ void startRequest(const QNetworkRequest &request,
     // as long as the tree (and with it the request) is.
     auto *manager = new QNetworkAccessManager(tree);
 
-    const auto onSetup = [state, request, operation, postData, manager, maxResponseBytes](
+    const auto onSetup = [state, request, operation, postData, manager,
+                          maxResponseBytes, replyOut](
                              QNetworkReplyWrapper &wrapper) {
         wrapper.setRequest(request);
         wrapper.setOperation(operation);
@@ -74,6 +76,13 @@ void startRequest(const QNetworkRequest &request,
                                      reply->abort();
                              }
                          });
+
+        // Hand the reply to the caller so it can abort the request.
+        if (replyOut)
+            QObject::connect(&wrapper,
+                             &QNetworkReplyWrapper::started,
+                             &wrapper,
+                             [&wrapper, replyOut] { *replyOut = wrapper.reply(); });
     };
 
     // The wrapper deletes the reply just after emitting done(), so this is
@@ -112,7 +121,8 @@ void startRequest(const QNetworkRequest &request,
 void httpGet(const QString &url,
              int timeoutSeconds,
              qint64 maxResponseBytes,
-             HttpResponseCallback done)
+             HttpResponseCallback done,
+             QNetworkReply **replyOut)
 {
     QNetworkRequest request = makeRequest(QUrl(url));
     request.setTransferTimeout(qMax(1, timeoutSeconds) * 1000);
@@ -120,14 +130,16 @@ void httpGet(const QString &url,
                  QNetworkAccessManager::GetOperation,
                  {},
                  maxResponseBytes,
-                 std::move(done));
+                 std::move(done),
+                 replyOut);
 }
 
 void httpGet(const QString &url,
              const QList<QPair<QByteArray, QByteArray>> &headers,
              int timeoutSeconds,
              qint64 maxResponseBytes,
-             HttpResponseCallback done)
+             HttpResponseCallback done,
+             QNetworkReply **replyOut)
 {
     QNetworkRequest request = makeRequest(QUrl(url));
     request.setTransferTimeout(qMax(1, timeoutSeconds) * 1000);
@@ -137,7 +149,8 @@ void httpGet(const QString &url,
                  QNetworkAccessManager::GetOperation,
                  {},
                  maxResponseBytes,
-                 std::move(done));
+                 std::move(done),
+                 replyOut);
 }
 
 void httpPost(const QString &url,
@@ -145,7 +158,8 @@ void httpPost(const QString &url,
               const QList<QPair<QByteArray, QByteArray>> &headers,
               int timeoutSeconds,
               qint64 maxResponseBytes,
-              HttpResponseCallback done)
+              HttpResponseCallback done,
+              QNetworkReply **replyOut)
 {
     QNetworkRequest request = makeRequest(QUrl(url));
     request.setTransferTimeout(qMax(1, timeoutSeconds) * 1000);
@@ -155,7 +169,8 @@ void httpPost(const QString &url,
                  QNetworkAccessManager::PostOperation,
                  body,
                  maxResponseBytes,
-                 std::move(done));
+                 std::move(done),
+                 replyOut);
 }
 
 } // namespace LlamaCpp::Tools

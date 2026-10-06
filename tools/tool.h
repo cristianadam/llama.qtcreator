@@ -76,6 +76,18 @@ public:
         Q_UNUSED(onOutput);
         run(arguments, done);
     }
+
+    /*! Aborts an in‑flight execution because the user asked to stop
+        (pressed Escape).  Tools that run a process or a network request
+        should terminate it, so their done callback is then invoked with
+        ok=false.  The default does nothing: the run simply finishes on its
+        own, and ChatManager makes sure the conversation does not continue
+        after it.  Must be safe to call before run() started its work, after
+        it finished, and more than once.  The done callback must eventually
+        be invoked in all cases – ChatManager only unblocks the conversation
+        (and clears its stop flag) when every aborted tool has reported
+        back. */
+    virtual void abort() {}
 };
 
 //! Wraps \a content in a markdown code fence (optionally with an \a info
