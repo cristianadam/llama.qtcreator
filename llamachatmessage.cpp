@@ -692,13 +692,18 @@ void ChatMessage::onDeleteClicked()
 
 void ChatMessage::updateUI()
 {
+    // Tool messages are strictly sequential (one per tool call/result); the
+    // left/right sibling navigation is only meaningful for user and
+    // assistant messages that have regenerated variants.
+    const bool showSiblingNav = !m_isTool && m_siblingLeafIds.size() > 1;
+
     m_siblingLabel->setText(QString("%1/%2").arg(m_siblingIdx).arg(m_siblingLeafIds.size()));
     m_prevButton->setEnabled(m_siblingIdx > 1);
     m_nextButton->setEnabled(m_siblingIdx < m_siblingLeafIds.size());
 
-    m_prevButton->setVisible(m_siblingLeafIds.size() > 1);
-    m_siblingLabel->setVisible(m_siblingLeafIds.size() > 1);
-    m_nextButton->setVisible(m_siblingLeafIds.size() > 1);
+    m_prevButton->setVisible(showSiblingNav);
+    m_siblingLabel->setVisible(showSiblingNav);
+    m_nextButton->setVisible(showSiblingNav);
 }
 
 void ChatMessage::updateFixedHeight()
