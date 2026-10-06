@@ -3619,6 +3619,26 @@ void LlamaToolsTest::search_summaries()
     QVERIFY(md.contains("Pattern: `alpha`"));
     QVERIFY(md.contains("Glob: `*.cpp`"));
     QVERIFY(md.contains("alpha.cpp:1: x"));
+
+    // The collapsed preview shows the matches themselves, not the pattern
+    // header: the default preview would cut off right after the opening
+    // fence and render an empty code block.
+    const QString preview
+        = tool.summaryPreview(mdArgs, QStringLiteral("a.cpp:1: x\nb.cpp:2: y\nc.cpp:3: z"), true);
+    QCOMPARE(preview, QStringLiteral("```\na.cpp:1: x\nb.cpp:2: y\nc.cpp:3: z\n```"));
+    QVERIFY(!preview.contains("Pattern:"));
+
+    // A long result is cut to a few lines; the fence stays well‑formed.
+    const QString longPreview
+        = tool.summaryPreview(mdArgs, QStringLiteral("l1\nl2\nl3\nl4\nl5"), true);
+    QCOMPARE(longPreview, QStringLiteral("```\nl1\nl2\nl3\n```"));
+
+    // On failure no preview: the ✗ icon marks the call, the error text is
+    // only shown in the expanded details.
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
+    QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
+    // A whitespace‑only result would render as an empty code block.
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
 // ============================================================================
@@ -3780,6 +3800,18 @@ void LlamaToolsTest::find_summaries()
     QVERIFY(md.contains("Pattern: `*.json`"));
     QVERIFY(md.contains("Path: `/some/dir`"));
     QVERIFY(md.contains("x.json"));
+
+    // The collapsed preview shows the file list itself, not the pattern
+    // header (the default preview would render an empty code block).
+    const QString preview
+        = tool.summaryPreview(mdArgs, QStringLiteral("a.json\nb.json\nc.json\nd.json"), true);
+    QCOMPARE(preview, QStringLiteral("```\na.json\nb.json\nc.json\n```"));
+    QVERIFY(!preview.contains("Pattern:"));
+
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
+    QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
+    // A whitespace‑only result would render as an empty code block.
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
 // ============================================================================
@@ -3894,6 +3926,17 @@ void LlamaToolsTest::ls_summaries()
     const QString md = tool.detailsMarkdown(mdArgs, QStringLiteral("a.txt\nsub/"), true);
     QVERIFY(md.contains("Path: `/some/dir`"));
     QVERIFY(md.contains("a.txt"));
+
+    // The collapsed preview shows the entry list itself, not the path
+    // header (the default preview would render an empty code block).
+    const QString preview = tool.summaryPreview(mdArgs, QStringLiteral("a.txt\nsub/\nb.txt"), true);
+    QCOMPARE(preview, QStringLiteral("```\na.txt\nsub/\nb.txt\n```"));
+    QVERIFY(!preview.contains("Path:"));
+
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
+    QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
+    // A whitespace‑only result would render as an empty code block.
+    QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
 // ============================================================================

@@ -108,6 +108,15 @@ QString LsTool::detailsMarkdown(const QJsonObject &arguments, const QString &res
     return md;
 }
 
+QString LsTool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
+{
+    Q_UNUSED(arguments);
+    // Preview the entry list itself, not the path header (the default
+    // preview would cut off right after the opening fence and render an
+    // empty block when a path is shown).
+    return listPreview(result, ok);
+}
+
 void LsTool::run(const QJsonObject &args,
                  std::function<void(const QString &, bool)> done) const
 {

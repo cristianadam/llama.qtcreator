@@ -146,6 +146,15 @@ QString FindTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     return md;
 }
 
+QString FindTool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
+{
+    Q_UNUSED(arguments);
+    // The pattern header is already part of the one‑line summary; preview
+    // the file list itself, not the header (the default preview would cut
+    // off right after the opening fence and render an empty block).
+    return listPreview(result, ok);
+}
+
 void FindTool::run(const QJsonObject &args,
                    std::function<void(const QString &, bool)> done) const
 {

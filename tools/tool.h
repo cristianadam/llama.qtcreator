@@ -99,6 +99,15 @@ QString codeSpan(const QString &text);
 //! string for empty input.
 QString truncatedPreview(const QString &text, int maxLines);
 
+//! Collapsed‑view preview for tools whose result is a plain list of lines
+//! (find, ls, search): the first few lines inside a well‑formed code fence.
+//! The default preview would truncate detailsMarkdown() after three lines,
+//! which for these tools lands right after the opening fence of the result
+//! block and renders an empty code block.  On failure (or for an empty
+//! result) returns an empty string: the ✗ icon marks the failed call, and
+//! the error text is only shown in the expanded details.
+QString listPreview(const QString &result, bool ok);
+
 //! Wraps \a text and an image \a dataUrl (e.g. "data:image/png;base64,\u2026")
 //! into the single result string a Tool::run() done‑callback can carry.
 //! ChatManager recognises the wrapper and stores/sends the tool result as

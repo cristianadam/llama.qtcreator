@@ -208,6 +208,15 @@ QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString 
     return md;
 }
 
+QString SearchTool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
+{
+    Q_UNUSED(arguments);
+    // The pattern header is already part of the one‑line summary; preview
+    // the matches themselves, not the header (the default preview would
+    // cut off right after the opening fence and render an empty block).
+    return listPreview(result, ok);
+}
+
 void SearchTool::run(const QJsonObject &args,
                      std::function<void(const QString &, bool)> done) const
 {

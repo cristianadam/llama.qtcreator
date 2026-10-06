@@ -95,6 +95,18 @@ QString truncatedPreview(const QString &text, int maxLines)
     return preview;
 }
 
+QString listPreview(const QString &result, bool ok)
+{
+    // On failure the ✗ icon suffices in the collapsed view; the error text
+    // is only shown in the expanded details.  trimmed() also rejects a
+    // newline‑only result, which codeFence() would render as an empty block.
+    if (!ok || result.trimmed().isEmpty())
+        return {};
+    // 4 = 3 content lines + the opening fence line; truncatedPreview() closes
+    // the fence left open by the cut so the markdown stays well‑formed.
+    return truncatedPreview(codeFence(result), 4);
+}
+
 namespace {
 // The data URL is base64 (no newlines), so the markers delimit it
 // unambiguously even when the text part is empty.
