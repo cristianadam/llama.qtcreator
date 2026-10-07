@@ -143,6 +143,25 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             this,
             [](bool checked) { settings().loadProjectInstructions.setValue(checked); });
 
+    // Runaway tool-loop guard: the maximum number of consecutive tool-only
+    // turns (0 = no limit), mirroring the web UI's maxTurns cap.
+    auto *maxToolTurnsLabel = new QLabel(settings().maxToolTurns.labelText(), this);
+    m_maxToolTurnsSpin = new QSpinBox(this);
+    m_maxToolTurnsSpin->setRange(0, 100000);
+    m_maxToolTurnsSpin->setValue(settings().maxToolTurns());
+    m_maxToolTurnsSpin->setToolTip(settings().maxToolTurns.toolTip());
+    maxToolTurnsLabel->setBuddy(m_maxToolTurnsSpin);
+    connect(m_maxToolTurnsSpin,
+            QOverload<int>::of(&QSpinBox::valueChanged),
+            this,
+            [](int value) { settings().maxToolTurns.setValue(value); });
+    auto *maxToolTurnsRow = new QWidget(this);
+    auto *maxToolTurnsLayout = new QHBoxLayout(maxToolTurnsRow);
+    maxToolTurnsLayout->setContentsMargins(0, 0, 0, 0);
+    maxToolTurnsLayout->addWidget(maxToolTurnsLabel);
+    maxToolTurnsLayout->addWidget(m_maxToolTurnsSpin);
+    maxToolTurnsLayout->addStretch();
+
     // MCP server management, laid out like the skill directories on the
     // Skills page: buttons in a column to the right of the tree, acting on
     // the selected server group row (every group except "Internal"; the
@@ -169,11 +188,12 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             Column{filterLineEdit, m_view},
             Column{m_addServerButton, m_editServerButton, m_removeServerButton, st},
         },
-        m_detailEdit,
-        ripgrepRow,
-        m_sandboxCheck,
-        m_loadInstructionsCheck,
-    }
+         m_detailEdit,
+         ripgrepRow,
+         m_sandboxCheck,
+         m_loadInstructionsCheck,
+         maxToolTurnsRow,
+     }
         .attachTo(this);
 
     connect(filterLineEdit,
@@ -519,6 +539,7 @@ void ToolsSettingsWidget::cancel()
     settings().readSettings(); // reload from .ini
     m_sandboxCheck->setChecked(settings().sandboxCommands());
     m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
+    m_maxToolTurnsSpin->setValue(settings().maxToolTurns());
     fillModel(); // also drop server groups that were added but not applied
     updateModelFromEnabledTools(); // reflect the stored state in the UI
 }

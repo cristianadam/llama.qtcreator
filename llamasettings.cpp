@@ -603,6 +603,18 @@ LlamaSettings::LlamaSettings()
         "can keep a single instructions file for all of its projects. "
         "Files larger than 32 KB are truncated."));
 
+    maxToolTurns.setSettingsKey("MaxToolTurns");
+    maxToolTurns.setDefaultValue(100);
+    maxToolTurns.setRange(0, 100000);
+    maxToolTurns.setDisplayName(Tr::tr("Max consecutive tool turns"));
+    maxToolTurns.setLabelText(Tr::tr("Max consecutive tool turns:"));
+    maxToolTurns.setToolTip(Tr::tr(
+        "A local model can loop tool calls forever, so after this many "
+        "consecutive tool-only turns the calls are not executed – the model "
+        "gets a failed result telling it to finish instead. Task "
+        "(sub-agent) conversations are not limited. Set to 0 for no "
+        "limit."));
+
     //
     // Web search (websearch tool)
     //
@@ -753,6 +765,7 @@ LlamaSettings::LlamaSettings()
     toolsEnabled.setEnabler(&enableLlamaCpp);
     sandboxCommands.setEnabler(&enableLlamaCpp);
     loadProjectInstructions.setEnabler(&enableLlamaCpp);
+    maxToolTurns.setEnabler(&enableLlamaCpp);
     webSearchProvider.setEnabler(&enableLlamaCpp);
     webSearchExaUrl.setEnabler(&enableLlamaCpp);
     webSearchExaApiKey.setEnabler(&enableLlamaCpp);

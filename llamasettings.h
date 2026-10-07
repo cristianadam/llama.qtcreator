@@ -97,6 +97,9 @@ public:
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
     Utils::BoolAspect loadProjectInstructions{this};
+    // Runaway tool-loop guard: the maximum number of consecutive
+    // tool-only turns before the calls are no longer executed (0 = no limit).
+    Utils::IntegerAspect maxToolTurns{this};
 
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};

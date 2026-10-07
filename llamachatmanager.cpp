@@ -2091,10 +2091,11 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // Task (sub‑agent) conversations are exempt: their result
                 // is consumed by the parent conversation, so a limit there
                 // would force the user to reopen the task and continue it
-                // manually.
-                static constexpr int kMaxConsecutiveToolTurns = 100;
+                // manually. The limit is configurable on the Tools settings
+                // page; 0 means no limit.
+                const int maxToolTurns = settings().maxToolTurns();
                 const int turns = m_consecutiveToolTurns.value(convId) + 1;
-                if (!isTaskConversation && turns > kMaxConsecutiveToolTurns) {
+                if (!isTaskConversation && maxToolTurns > 0 && turns > maxToolTurns) {
                     m_consecutiveToolTurns.insert(convId, 0);
                     Message lastTool;
                     for (const ToolCall &tool : tools) {
@@ -2108,7 +2109,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                                                         "consecutive tool turns). Stop calling "
                                                         "tools and provide your final answer "
                                                         "now.")
-                                .arg(kMaxConsecutiveToolTurns);
+                                .arg(maxToolTurns);
                         QVariantMap toolResultExtra;
                         toolResultExtra["tool_result"] = toolJsonMsg;
                         toolResultExtra["tool_status"] = QStringLiteral("failed");
