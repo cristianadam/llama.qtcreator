@@ -31,6 +31,10 @@ struct SecretReadPath
 //! not read.
 QList<SecretReadPath> secretReadPaths();
 
+//! The directory the tools operate in: the startup project directory when a
+//! project is open, otherwise the default projects directory.
+Utils::FilePath toolsWorkingDirectory();
+
 //! Model-facing error when the (enabled) sandbox forbids \a isWrite access
 //! to \a path; an empty string when the access is allowed or the sandbox is
 //! disabled. Mirrors the bash sandbox: writes are restricted to the project

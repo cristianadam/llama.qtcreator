@@ -356,6 +356,7 @@ private slots:
     // ApplyPatchTool::run
     void tool_fullPatch();
     void tool_addFileInStartupProject();
+    void absoluteProjectPath_generalDirFallback();
     void tool_addMarkdownFile();
     void tool_move();
     void tool_updateSameFileTwice();
@@ -948,6 +949,31 @@ void LlamaToolsTest::tool_addFileInStartupProject()
     QCOMPARE(readTextFile(projectDir.pathAppended("src/added.txt").toFSPathString()),
              QString("added\n"));
     QVERIFY(!QFile::exists(gTempDir->filePath("src/added.txt")));
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
+
+void LlamaToolsTest::absoluteProjectPath_generalDirFallback()
+{
+    // With a startup project open, a relative path that exists in the
+    // project directory wins, and a path that exists only in the general
+    // projects directory (gTempDir, set in initTestCase) still resolves
+    // there – the fallback must not collapse into the project directory.
+    const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("fallbackproj"));
+    QVERIFY(projectDir.ensureWritableDir());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toFSPathString());
+
+    writeTextFile(projectDir.pathAppended("shared.txt").toFSPathString(), "project\n");
+    writeTextFile(gTempDir->filePath("shared.txt"), "general\n");
+    writeTextFile(gTempDir->filePath("general-only.txt"), "general\n");
+
+    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("shared.txt")),
+             projectDir.pathAppended("shared.txt"));
+    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("general-only.txt")),
+             Utils::FilePath::fromString(gTempDir->filePath("general-only.txt")));
+    // mustExist = false resolves unconditionally against the project dir.
+    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("new.txt"), /*mustExist=*/false),
+             projectDir.pathAppended("new.txt"));
 
     ProjectExplorer::ProjectManager::resetStartupProject();
 }

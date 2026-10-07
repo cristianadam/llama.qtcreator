@@ -21,7 +21,6 @@
 #include <QTemporaryFile>
 #include <QUuid>
 
-#include <coreplugin/documentmanager.h>
 #include <projectexplorer/kit.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
@@ -580,10 +579,7 @@ void BashTool::runCommand(const QJsonObject &arguments,
         return;
     }
 
-    Project *p = ProjectManager::startupProject();
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    if (p)
-        cwd = p->projectDirectory();
+    FilePath cwd = toolsWorkingDirectory();
 
     const QString workdir = arguments.value("workdir").toString();
     if (!workdir.isEmpty()) {
@@ -624,7 +620,7 @@ void BashTool::runCommand(const QJsonObject &arguments,
     // Optionally confine the command to a sandbox (bubblewrap on Linux,
     // sandbox-exec on macOS, srt-win on Windows). The wrapper becomes the
     // program to start; the shell and the command are its arguments.
-    const SandboxSpec sandbox = sandboxEnabled(p)
+    const SandboxSpec sandbox = sandboxEnabled(ProjectManager::startupProject())
             ? sandboxSpec(cwdString, env)
             : SandboxSpec{};
     if (!sandbox.error.isEmpty()) {

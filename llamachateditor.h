@@ -110,6 +110,7 @@ private:
     QVector<ChatMessage *> m_messageWidgets; // keep for cleanup
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
+    QLabel *m_workingDirLabel{nullptr}; // "Working directory" label in m_propsWidget
     QWidget *m_followUpWidget{nullptr};
     QWidget *m_statusBar{nullptr};
     QLabel *m_contextLabel{nullptr};

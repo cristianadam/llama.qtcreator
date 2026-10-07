@@ -46,6 +46,14 @@ QList<SecretReadPath> secretReadPaths()
              { home + QStringLiteral("/.netrc"), true } };
 }
 
+FilePath toolsWorkingDirectory()
+{
+    FilePath cwd = Core::DocumentManager::projectsDirectory();
+    if (const Project *project = ProjectManager::startupProject())
+        cwd = project->projectDirectory();
+    return cwd;
+}
+
 QString sandboxAccessError(const FilePath &path, bool isWrite)
 {
     if (!sandboxEnabled(ProjectManager::startupProject()))
@@ -53,9 +61,7 @@ QString sandboxAccessError(const FilePath &path, bool isWrite)
 
     const QString p = path.toFSPathString();
     if (isWrite) {
-        FilePath cwd = Core::DocumentManager::projectsDirectory();
-        if (const Project *project = ProjectManager::startupProject())
-            cwd = project->projectDirectory();
+        const FilePath cwd = toolsWorkingDirectory();
         if (pathCovers(cwd.toFSPathString(), p) || pathCovers(QDir::tempPath(), p))
             return {};
         return Tr::tr(
@@ -88,12 +94,9 @@ QStringList effectiveEnabledTools()
 
 FilePath absoluteProjectPath(const FilePath &relPath, bool mustExist)
 {
-    FilePath cwd = Core::DocumentManager::projectsDirectory();
-    const FilePath generalFilePath = cwd.pathAppended(relPath.path());
-
-    if (const Project *p = ProjectManager::startupProject())
-        cwd = p->projectDirectory();
-    const FilePath projectFilePath = cwd.pathAppended(relPath.path());
+    const FilePath projectFilePath = toolsWorkingDirectory().pathAppended(relPath.path());
+    const FilePath generalFilePath = Core::DocumentManager::projectsDirectory()
+                                        .pathAppended(relPath.path());
 
     if (relPath.isAbsolutePath())
         return relPath;

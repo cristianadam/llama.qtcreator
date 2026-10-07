@@ -1,8 +1,11 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/coreconstants.h>
+#include <coreplugin/documentmanager.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
 #include <coreplugin/find/textfindconstants.h>
 #include <coreplugin/icore.h>
+#include <projectexplorer/project.h>
+#include <projectexplorer/projectmanager.h>
 
 #include <utils/action.h>
 #include <utils/fsengine/fileiconprovider.h>
@@ -48,6 +51,8 @@
 #include "llamasettings.h"
 #include "llamatheme.h"
 #include "llamatr.h"
+
+#include "tools/tool_utils.h"
 
 using namespace TextEditor;
 using namespace Core;
@@ -139,6 +144,16 @@ ChatEditor::ChatEditor()
     // Catch Esc from any widget in the editor (the ChatInput handles it
     // itself when one of its children has focus).
     widget->installEventFilter(this);
+
+    // The "Working directory" label in the empty-conversation props widget
+    // is created once, so keep it in sync when the startup project changes.
+    connect(ProjectExplorer::ProjectManager::instance(),
+            &ProjectExplorer::ProjectManager::startupProjectChanged, this,
+            [this](ProjectExplorer::Project *) {
+                if (m_workingDirLabel)
+                    m_workingDirLabel->setText(Tr::tr("Working directory: %1")
+                                                   .arg(toolsWorkingDirectory().toUserOutput()));
+            });
 
     m_statusBar = new Utils::StyledBar;
     auto statusLayout = new QHBoxLayout(m_statusBar);
@@ -458,17 +473,25 @@ QWidget *ChatEditor::displayServerProps()
 
     const auto &sp = ChatManager::instance().serverProps();
 
-    auto addLabel = [&](const QString &label) {
+    auto addLabel = [&](const QString &label) -> QLabel * {
         QLabel *l = new QLabel(label, w);
         l->setObjectName("ServerPropsLabel");
         l->setWordWrap(true);
         l->setTextInteractionFlags(Qt::TextSelectableByMouse);
         lay->addWidget(l);
+        return l;
     };
 
     addLabel(Tr::tr("Model Path: %1").arg(FilePath::fromUserInput(sp.model_path).fileName()));
     addLabel(Tr::tr("Context: %L1").arg(sp.n_ctx));
     addLabel(Tr::tr("Vision: %1").arg(sp.modalities.vision ? Tr::tr("yes") : Tr::tr("no")));
+
+    // The directory the tools operate in: the startup project when one is
+    // open, otherwise the default projects directory. Kept in a member so
+    // it can be refreshed when the startup project changes (the props
+    // widget itself is created once and not rebuilt).
+    m_workingDirLabel = addLabel(Tr::tr("Working directory: %1")
+                                     .arg(toolsWorkingDirectory().toUserOutput()));
 
     w->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
         QWidget#ServerProps {
