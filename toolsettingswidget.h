@@ -66,8 +66,8 @@ class ToolsSettingsWidget : public Core::IOptionsPageWidget
     Q_OBJECT
 public:
     explicit ToolsSettingsWidget();
-    void apply();
-    void cancel();
+    void apply() override;
+    void cancel() override;
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;

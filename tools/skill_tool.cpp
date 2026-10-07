@@ -142,7 +142,7 @@ void SkillTool::run(const QJsonObject &args,
         return done(Tr::tr("Skill \"%1\" not found. Available skills: %2")
                         .arg(name,
                              names.isEmpty() ? Tr::tr("(none)")
-                                             : names.join(QLatin1Char(', '))),
+                                             : names.join(QLatin1String(", "))),
                     false);
     }
 

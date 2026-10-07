@@ -933,7 +933,7 @@ void LlamaToolsTest::tool_addFileInStartupProject()
     // relative path must create it inside the startup project.
     const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("myproject"));
     QVERIFY(projectDir.ensureWritableDir());
-    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toString());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toFSPathString());
 
     QJsonObject args;
     args[QStringLiteral("patchText")] = QStringLiteral(
@@ -945,7 +945,7 @@ void LlamaToolsTest::tool_addFileInStartupProject()
     auto [output, ok] = runTool(args);
     QVERIFY2(ok, qPrintable(output));
 
-    QCOMPARE(readTextFile(projectDir.pathAppended("src/added.txt").toString()),
+    QCOMPARE(readTextFile(projectDir.pathAppended("src/added.txt").toFSPathString()),
              QString("added\n"));
     QVERIFY(!QFile::exists(gTempDir->filePath("src/added.txt")));
 
@@ -1537,7 +1537,7 @@ void LlamaToolsTest::write_relativePathInStartupProject()
     // resolved against the project directory, not the general one.
     const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("myproject"));
     QVERIFY(projectDir.ensureWritableDir());
-    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toString());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.toFSPathString());
 
     QJsonObject args;
     args[QStringLiteral("path")] = QStringLiteral("src/newfile.txt");
@@ -1546,7 +1546,7 @@ void LlamaToolsTest::write_relativePathInStartupProject()
     auto [output, ok] = runTool<Tools::WriteTool>(args);
     QVERIFY2(ok, qPrintable(output));
 
-    QCOMPARE(readTextFile(projectDir.pathAppended("src/newfile.txt").toString()),
+    QCOMPARE(readTextFile(projectDir.pathAppended("src/newfile.txt").toFSPathString()),
              QString("in the project\n"));
     QVERIFY(!QFile::exists(gTempDir->filePath("src/newfile.txt")));
 
