@@ -1981,6 +1981,18 @@ void LlamaToolsTest::todowrite_slidingWindow()
     QVERIFY(md.contains("- [ ] task3"));
     QVERIFY(!md.contains("task4"));
 
+    // 4 or fewer tasks: always the whole list (a 3-item window would hide a
+    // single item, which reads as a missing task).
+    args = makeArgs({QStringLiteral("in_progress"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending"),
+                     QStringLiteral("pending")});
+    md = todo.detailsMarkdown(args, QString(), true);
+    QVERIFY(md.contains("- [ ] task1"));
+    QVERIFY(md.contains("- [ ] task2"));
+    QVERIFY(md.contains("- [ ] task3"));
+    QVERIFY(md.contains("- [ ] task4"));
+
     // 3 or fewer tasks: always the whole list.
     args = makeArgs({QStringLiteral("in_progress"),
                      QStringLiteral("pending"),

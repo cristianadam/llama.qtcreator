@@ -118,10 +118,12 @@ QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &r
 
     // Sliding window of kWindowSize around the in_progress task, so long lists
     // stay compact: the first 3 at the start, the last 3 once everything is
-    // done, and the current task always visible in between.
+    // done, and the current task always visible in between. Short lists are
+    // shown in full, since a 3-item window would only hide a single item.
     constexpr int kWindowSize = 3;
     int start = 0;
-    if (n > kWindowSize) {
+    int end = n;
+    if (n > kWindowSize + 1) {
         int inProgress = -1;
         bool anyPending = false;
         for (int i = 0; i < n; ++i) {
@@ -135,10 +137,11 @@ QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &r
             start = qBound(0, inProgress - 1, n - kWindowSize);
         else if (!anyPending)
             start = n - kWindowSize; // all done: show the final 3
+        end = qMin(start + kWindowSize, n);
     }
 
     QString md;
-    for (int i = start; i < start + qMin(kWindowSize, n); ++i) {
+    for (int i = start; i < end; ++i) {
         const QJsonObject todo = todos.at(i).toObject();
         const QString status = todo.value("status").toString();
         const QString content = todo.value("content").toString();
