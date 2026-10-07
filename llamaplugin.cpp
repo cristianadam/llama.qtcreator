@@ -24,6 +24,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QCursor>
+#include <QMenu>
 #include <QMessageBox>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -230,6 +232,18 @@ void LlamaPlugin::initialize()
     auto toggleButton = new QToolButton;
     toggleButton->setDefaultAction(&m_toggleAction);
     StatusBarManager::addStatusBarWidget(toggleButton, StatusBarManager::RightCorner);
+
+    // Offer the llama.cpp menu as the status icon's context menu.
+    auto statusMenu = new QMenu(toggleButton);
+    statusMenu->addAction(&m_newConversation);
+    statusMenu->addSeparator();
+    statusMenu->addAction(&m_requestAction);
+    statusMenu->addAction(&m_toggleAction);
+    statusMenu->addAction(&m_toogleAutoFimAction);
+    statusMenu->addAction(&m_statusAction);
+    toggleButton->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(toggleButton, &QToolButton::customContextMenuRequested,
+            toggleButton, [statusMenu](const QPoint &) { statusMenu->exec(QCursor::pos()); });
 
     setupLlamaCppProjectPanel();
     setupConversationViewWidgetFactory();
