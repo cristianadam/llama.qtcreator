@@ -1752,9 +1752,13 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // loop tool calls forever, so after a long streak of
                 // tool‑only turns the calls are not executed – the model
                 // gets a failed result telling it to finish instead.
-                static constexpr int kMaxConsecutiveToolTurns = 50;
+                // Task (sub‑agent) conversations are exempt: their result
+                // is consumed by the parent conversation, so a limit there
+                // would force the user to reopen the task and continue it
+                // manually.
+                static constexpr int kMaxConsecutiveToolTurns = 100;
                 const int turns = m_consecutiveToolTurns.value(convId) + 1;
-                if (turns > kMaxConsecutiveToolTurns) {
+                if (!isTaskConversation && turns > kMaxConsecutiveToolTurns) {
                     m_consecutiveToolTurns.insert(convId, 0);
                     Message lastTool;
                     for (const ToolCall &tool : tools) {
