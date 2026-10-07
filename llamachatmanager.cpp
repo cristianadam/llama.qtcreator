@@ -677,8 +677,29 @@ void ChatManager::sendMessage(const QString &convId,
                               const QList<QVariantMap> &extra,
                               std::function<void(qint64)> onChunk)
 {
-    if (isGenerating(convId) || content.trimmed().isEmpty() || convId.isEmpty())
+    if (content.trimmed().isEmpty() || convId.isEmpty())
         return;
+
+    // A user message breaks any tool-call streak (runaway guard).
+    m_consecutiveToolTurns.remove(convId);
+
+    // Mid‑run steering: while a reply is being generated (streaming or a
+    // tool running) the message is queued and handed to the model at the
+    // next loop point – after the current tool batch, or when the reply
+    // would end – mirroring the steering/follow‑up queues of pi and
+    // opencode.  It is persisted (and joined to the branch) at that point,
+    // not now: the in‑flight assistant message is not committed yet, so it
+    // cannot be the queued message's parent.
+    if (isGenerating(convId)) {
+        m_steeringQueue[convId].append(SteeringMessage{content, extra});
+        emit steeringQueueChanged(convId, m_steeringQueue.value(convId).size());
+        onChunk(leafNodeId);
+        return;
+    }
+
+    // Drain messages queued during an earlier turn first: they were sent
+    // before this one and must precede it in the branch.
+    const qint64 parent = flushSteeringQueue(convId, leafNodeId);
 
     Message newMsg;
     auto now = QDateTime::currentMSecsSinceEpoch();
@@ -687,18 +708,88 @@ void ChatManager::sendMessage(const QString &convId,
     newMsg.timestamp = now;
     newMsg.role = "user";
     newMsg.content = content;
-    newMsg.parent = leafNodeId;
+    newMsg.parent = parent;
     newMsg.children.clear();
     newMsg.extra = extra; // simple wrapper – see MessageExtra
 
-    // A user message breaks any tool-call streak (runaway guard).
-    m_consecutiveToolTurns.remove(convId);
-
-    m_storage->appendMsg(newMsg, leafNodeId);
+    m_storage->appendMsg(newMsg, parent);
     onChunk(newMsg.id);
 
     // generate assistant reply
     generateMessage(newMsg.convId, newMsg.id, onChunk);
+}
+
+int ChatManager::steeringQueueSize(const QString &convId) const
+{
+    return m_steeringQueue.value(convId).size();
+}
+
+QStringList ChatManager::steeringQueue(const QString &convId) const
+{
+    QStringList res;
+    for (const SteeringMessage &sm : m_steeringQueue.value(convId))
+        res << sm.content;
+    return res;
+}
+
+void ChatManager::removeSteeringMessage(const QString &convId, int index)
+{
+    auto it = m_steeringQueue.find(convId);
+    if (it == m_steeringQueue.end() || index < 0 || index >= it->size())
+        return;
+    it->removeAt(index);
+    if (it->isEmpty())
+        m_steeringQueue.erase(it);
+    emit steeringQueueChanged(convId, m_steeringQueue.value(convId).size());
+}
+
+qint64 ChatManager::flushSteeringQueue(const QString &convId, qint64 afterId)
+{
+    auto it = m_steeringQueue.find(convId);
+    if (it == m_steeringQueue.end() || it->isEmpty())
+        return afterId;
+
+    qint64 parent = afterId;
+    for (const SteeringMessage &sm : std::as_const(*it)) {
+        Message msg;
+        msg.convId = convId;
+        msg.type = "text";
+        msg.timestamp = QDateTime::currentMSecsSinceEpoch();
+        msg.role = "user";
+        msg.content = sm.content;
+        msg.parent = parent;
+        msg.children.clear();
+        msg.extra = sm.extra;
+
+        m_storage->appendMsg(msg, parent);
+        parent = msg.id;
+    }
+
+    m_steeringQueue.erase(it);
+    emit steeringQueueChanged(convId, 0);
+    return parent;
+}
+
+// Context overflow: the server refused the request because the history no
+// longer fits the context window.  "context" alone is too broad – "context
+// canceled" and "context deadline exceeded" are transport errors, not a
+// too‑long history – so it must come with a size‑related word.
+static bool isContextOverflowError(const QString &msg)
+{
+    const QString lower = msg.toLower();
+    if (lower.contains(QLatin1String("overflow")))
+        return true;
+    if (!lower.contains(QLatin1String("context")))
+        return false;
+    if (lower.contains(QLatin1String("cancel")) || lower.contains(QLatin1String("deadline")))
+        return false;
+    return lower.contains(QLatin1String("exceed"))
+            || lower.contains(QLatin1String("fit"))
+            || lower.contains(QLatin1String("smaller"))
+            || lower.contains(QLatin1String("length"))
+            || lower.contains(QLatin1String("window"))
+            || lower.contains(QLatin1String("n_ctx"))
+            || lower.contains(QLatin1String("tokens"));
 }
 
 static void readSSEStream(QNetworkReply *reply,
@@ -1063,6 +1154,184 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     });
 }
 
+void ChatManager::compactConversation(const QString &convId,
+                                      qint64 leafNodeId,
+                                      bool force,
+                                      std::function<void(qint64)> onDone)
+{
+    if (!force && !settings().autoCompact.value())
+        return;
+    if (m_compacting.contains(convId))
+        return;
+
+    auto msgs = m_storage->getMessages(convId);
+    if (msgs.isEmpty())
+        return;
+    auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
+
+    // Nothing new to fold in since the last compaction (or the history is
+    // too short to be worth summarizing): another summary would not shrink
+    // the context, it would only burn tokens – and in the overflow-retry
+    // path this is what stops the compact/retry cycle from looping.
+    int markerIndex = -1;
+    for (int i = leafMsgs.size() - 1; i >= 0; --i) {
+        for (const QVariantMap &e : leafMsgs.at(i).extra) {
+            if (e.contains(QStringLiteral("compaction"))) {
+                markerIndex = i;
+                break;
+            }
+        }
+        if (markerIndex >= 0)
+            break;
+    }
+    if (markerIndex >= 0 && leafMsgs.size() - markerIndex < 6) {
+        qCInfo(llamaChatNetwork)
+            << "Skipping compaction of" << convId << ": only"
+            << leafMsgs.size() - markerIndex
+            << "messages since the last summary";
+        return;
+    }
+
+    // In the overflow‑recovery path the full history does not fit the
+    // context window, so the summary request must not carry it all: keep
+    // only the messages from the last marker on (its summary covers the
+    // rest – normalizeMsgsForAPI() re‑emits it) or, without a marker, only
+    // the most recent half of the messages.
+    if (force) {
+        const int start = (markerIndex >= 0) ? markerIndex : leafMsgs.size() / 2;
+        leafMsgs = leafMsgs.mid(start);
+    }
+
+    m_compacting.insert(convId);
+
+    // The summary request sees the full (not yet compacted) history plus
+    // the compaction prompt; a capped token budget and thinking off keep
+    // the housekeeping call short, like the title and follow-up requests.
+    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
+    QJsonArray parts;
+    QJsonObject txt;
+    txt["type"] = "text";
+    txt["text"] = settings().compactPrompt.value();
+    parts.append(txt);
+    QJsonObject prompt;
+    prompt["role"] = "user";
+    prompt["content"] = parts;
+    msgArray.append(prompt);
+
+    QJsonObject payload;
+    payload["messages"] = msgArray;
+    payload["stream"] = false;
+    payload["cache_prompt"] = true;
+    payload["reasoning_format"] = "deepseek";
+    payload["reasoning_in_content"] = "false";
+    addAuxiliaryPayloadParams(payload, /*maxTokens=*/1500);
+
+    QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+
+    QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
+    m_compactReplies.insert(convId, reply);
+
+    QObject::connect(reply, &QNetworkReply::finished, [reply, this, convId, leafNodeId, onDone]() {
+        m_compacting.remove(convId);
+        m_compactReplies.remove(convId);
+        reply->deleteLater();
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qCWarning(llamaChatNetwork) << "Compaction request failed:" << reply->errorString();
+            return;
+        }
+
+        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+        if (!doc.isObject())
+            return;
+        const QJsonArray choices = doc.object().value("choices").toArray();
+        if (choices.isEmpty())
+            return;
+
+        QString summary = choices.first().toObject().value("message").toObject()
+                              .value("content").toString().trimmed();
+        // Small models sometimes wrap the summary in a markdown code fence.
+        if (summary.startsWith(QLatin1String("```"))) {
+            const int nl = summary.indexOf(QLatin1Char('\n'));
+            if (nl > 0)
+                summary = summary.mid(nl + 1);
+            if (summary.endsWith(QLatin1String("```")))
+                summary.chop(3);
+            summary = summary.trimmed();
+        }
+        if (summary.isEmpty())
+            return;
+
+        // A new message may have landed while the summary was being
+        // generated: appending the marker after \a leafNodeId now would
+        // make it an orphan sibling of the newer branch.  Defer it to the
+        // next quiet point, where it is appended after the current leaf.
+        if (isGenerating(convId)) {
+            if (m_pendingCompactMarkers.contains(convId))
+                qCWarning(llamaChatNetwork)
+                    << "Deferring a second compaction summary for" << convId
+                    << "– the first pending marker (and its callback) is "
+                       "replaced by the newer one.";
+            m_pendingCompactMarkers.insert(convId, PendingCompactMarker{summary, onDone});
+            return;
+        }
+
+        // The marker joins the branch chain after \a leafNodeId: the next
+        // user message (and the overflow retry) is appended after it, so
+        // every later request carries the summary instead of the
+        // compacted history.  It renders as a small assistant note in the
+        // chat; the full history stays visible in the UI.
+        Message marker;
+        marker.convId = convId;
+        marker.type = "text";
+        marker.timestamp = QDateTime::currentMSecsSinceEpoch();
+        marker.role = "assistant";
+        marker.content = Tr::tr(
+            "\U0001F5DC Conversation compacted – earlier messages were "
+            "summarized to fit the context window.");
+        QVariantMap entry;
+        entry[QStringLiteral("compaction")] = summary;
+        marker.extra << entry;
+
+        m_storage->appendMsg(marker, leafNodeId);
+        if (onDone)
+            onDone(marker.id);
+    });
+}
+
+void ChatManager::drainPendingCompactMarker(const QString &convId)
+{
+    auto it = m_pendingCompactMarkers.find(convId);
+    if (it == m_pendingCompactMarkers.end())
+        return;
+
+    const Conversation conv = m_storage->getOneConversation(convId);
+    if (conv.currNode < 0)
+        return; // conversation gone; drop the marker
+
+    const PendingCompactMarker pending = it.value();
+    m_pendingCompactMarkers.erase(it);
+
+    Message marker;
+    marker.convId = convId;
+    marker.type = "text";
+    marker.timestamp = QDateTime::currentMSecsSinceEpoch();
+    marker.role = "assistant";
+    marker.content = Tr::tr(
+        "\U0001F5DC Conversation compacted – earlier messages were "
+        "summarized to fit the context window.");
+    QVariantMap entry;
+    entry[QStringLiteral("compaction")] = pending.summary;
+    marker.extra << entry;
+
+    m_storage->appendMsg(marker, conv.currNode);
+    if (pending.onDone)
+        pending.onDone(marker.id);
+}
+
 void ChatManager::stopGenerating(const QString &convId)
 {
     // While a tool is running there is no pending message (the assistant
@@ -1099,8 +1368,11 @@ void ChatManager::replaceMessageAndGenerate(const QString &convId,
     if (isGenerating(convId))
         return;
 
-    // A user‑initiated replace breaks any tool-call streak (runaway guard).
+    // A user‑initiated replace breaks any tool-call streak (runaway guard),
+    // and the steering messages queued for the old branch are stale.
     m_consecutiveToolTurns.remove(convId);
+    m_steeringQueue.remove(convId);
+    emit steeringQueueChanged(convId, 0);
 
     if (!content.isEmpty()) {
         auto now = QDateTime::currentMSecsSinceEpoch();
@@ -1342,10 +1614,41 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(sys);
     }
 
+    // Auto‑compaction: the last compaction marker on the path replaces
+    // everything before it with its summary, emitted as a short
+    // user/assistant pair so the role alternation stays natural.  (The
+    // marker only ever sits at a quiet point – no in‑flight tool calls –
+    // so no tool call before it has a result after it.)
+    int compactStart = 0;
+    QString compactSummary;
+    for (int i = msgs.size() - 1; i >= 0; --i) {
+        for (const QVariantMap &e : msgs.at(i).extra) {
+            if (e.contains(QStringLiteral("compaction"))) {
+                compactStart = i + 1;
+                compactSummary = e.value(QStringLiteral("compaction")).toString();
+                break;
+            }
+        }
+        if (!compactSummary.isEmpty())
+            break;
+    }
+    if (!compactSummary.isEmpty()) {
+        QJsonObject su;
+        su["role"] = QStringLiteral("user");
+        su["content"] = QStringLiteral("Here is a summary of the conversation "
+                                       "so far:\n\n%1")
+                                 .arg(compactSummary);
+        res.append(su);
+        QJsonObject sa;
+        sa["role"] = QStringLiteral("assistant");
+        sa["content"] = QStringLiteral("Understood, I will continue from this summary.");
+        res.append(sa);
+    }
+
     // Tool results re‑emitted in call order after their assistant message
     // (must not be emitted again at their natural position in \a msgs).
     QSet<qint64> emittedToolMsgIds;
-    for (int i = 0; i < msgs.size(); ++i) {
+    for (int i = compactStart; i < msgs.size(); ++i) {
         const Message &msg = msgs.at(i);
         if (msg.role == "tool" && emittedToolMsgIds.contains(msg.id))
             continue;
@@ -1600,8 +1903,13 @@ void ChatManager::sendChatRequest(const QString &convId,
         reply,
         [this, convId, onChunk](const QJsonObject &chunk) {
             if (chunk.contains("error")) {
-                qCWarning(llamaChatNetwork)
-                    << "SSE error:" << chunk["error"].toObject()["message"].toString();
+                const QString errMsg = chunk["error"].toObject()["message"].toString();
+                qCWarning(llamaChatNetwork) << "SSE error:" << errMsg;
+                // Context overflow (the history no longer fits): flag the
+                // pending message so the finished handler can compact the
+                // history and retry, instead of committing an empty reply.
+                if (isContextOverflowError(errMsg) && m_pendingMessages.contains(convId))
+                    m_pendingMessages[convId].overflowError = true;
                 return;
             }
 
@@ -1711,12 +2019,40 @@ void ChatManager::sendChatRequest(const QString &convId,
                 m_abortControllers[convId]->deleteLater();
         });
 
-    QObject::connect(reply, &QNetworkReply::finished, [this, convId, reply] {
+    QObject::connect(reply, &QNetworkReply::finished, [this, convId, reply, onChunk] {
         reply->deleteLater();
         m_abortControllers.remove(convId);
 
         Message pm = m_pendingMessages.take(convId);
         m_streamingToolCalls.remove(convId);
+
+        // Context overflow: the server refused the request because the
+        // history no longer fits.  Drop the assistant message (including
+        // any partial content streamed before the error), compact the
+        // history and retry once.  (compactConversation() does nothing –
+        // and does not call the callback – when a summary was just created
+        // and the history still overflows, so this cannot loop.)
+        if (pm.overflowError) {
+            if (!pm.content.trimmed().isEmpty())
+                qCWarning(llamaChatNetwork)
+                    << "Context overflow in" << convId << "– dropping the partial "
+                    << "reply (" << pm.content.size() << " chars) and compacting "
+                    << "the history.";
+            if (settings().autoCompact.value() && !m_compacting.contains(convId))
+                compactConversation(convId,
+                                    pm.parent,
+                                    /*force=*/true,
+                                    [this, convId, onChunk](qint64 leaf) {
+                                        generateMessage(convId, leaf, onChunk);
+                                    });
+            else
+                qCWarning(llamaChatNetwork)
+                    << "Context overflow in" << convId
+                    << "and the history cannot be compacted further; the "
+                       "request was not retried.";
+            return;
+        }
+
         m_storage->appendMsg(pm, pm.parent);
 
         const bool isTaskConversation = m_taskConversations.contains(convId);
@@ -1780,7 +2116,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                         m_storage->appendMsg(toolMsg, pm.id);
                         lastTool = toolMsg;
                     }
-                    generateMessage(convId, lastTool.id, [](qint64) {});
+                    // Mid‑run steering: queued user messages join the next
+                    // request.
+                    generateMessage(convId, flushSteeringQueue(convId, lastTool.id), [](qint64) {});
                 } else {
                     m_consecutiveToolTurns.insert(convId, turns);
                     // Parallel tool calls: the next assistant turn is
@@ -1809,12 +2147,26 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
 
             if (!haveToolExecution) {
-                if (isTaskConversation) {
+                // A compaction summary that arrived while the conversation
+                // was busy again is appended now, at this quiet point.
+                drainPendingCompactMarker(convId);
+
+                // Mid‑run steering: messages queued while this reply was
+                // generated keep the loop alive (pi's follow‑up messages /
+                // opencode's queued inputs) – unless the user stopped the
+                // generation, in which case the queue waits for the next
+                // user action (like the tool path in
+                // executeToolAndSendResult()).
+                const bool aborted = (reply->error() == QNetworkReply::OperationCanceledError);
+                const bool continueLoop = !aborted && steeringQueueSize(convId) > 0;
+                if (continueLoop)
+                    generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
+                else if (isTaskConversation) {
                     // The sub‑agent reached its final answer (or the stream
                     // was aborted / produced nothing) – hand the result back
                     // to the "task" tool waiting in the parent conversation.
                     const bool ok = (reply->error() == QNetworkReply::NoError)
-                                    && !pm.content.trimmed().isEmpty();
+                            && !pm.content.trimmed().isEmpty();
                     emit taskConversationFinished(convId, pm.content, ok);
                 } else if (reply->error() == QNetworkReply::NoError
                            && !pm.content.trimmed().isEmpty()) {
@@ -1824,6 +2176,21 @@ void ChatManager::sendChatRequest(const QString &convId,
                                       [this, convId, leafNodeId = pm.id](const QStringList &questions) {
                                           emit followUpQuestionsReceived(convId, leafNodeId, questions);
                                       });
+                }
+
+                // Auto‑compaction at a quiet point (no in‑flight tool
+                // calls, the reply would end): summarize the history before
+                // it fills the model's context window.  Skipped when the
+                // loop continues – the next turn's (larger) prompt is
+                // checked the same way once it ends.
+                if (!continueLoop && settings().autoCompact.value()) {
+                    const auto &t = pm.timings;
+                    int usedTokens = int(t.cache_n + t.prompt_n + t.predicted_n);
+                    if (usedTokens <= 0)
+                        usedTokens = pm.promptProgress.total;
+                    const int maxCtx = serverProps().n_ctx;
+                    if (maxCtx > 0 && usedTokens > maxCtx * 4 / 5)
+                        compactConversation(convId, pm.id, /*force=*/false);
                 }
             }
         }
@@ -1981,7 +2348,8 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         // The user pressed Escape while the tool ran: end the conversation
         // here instead of handing the (failed) result to the model for
         // another turn.  Sibling tools of the same batch were aborted as
-        // well, so the last one to report back clears the flag.
+        // well, so the last one to report back clears the flag.  (Queued
+        // steering messages stay in the queue for the next user action.)
         if (m_stopRequested.contains(convId)) {
             m_stopRequested.remove(convId);
             // A stopped task conversation must still report back to the
@@ -1993,7 +2361,9 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                 emit taskConversationFinished(convId, {}, false);
             return;
         }
-        generateMessage(toolMsg.convId, toolMsg.id, onChunk);
+        // Mid‑run steering: user messages queued while the tools ran join
+        // the next request.
+        generateMessage(toolMsg.convId, flushSteeringQueue(toolMsg.convId, toolMsg.id), onChunk);
     };
 
     if (realTool->supportsLiveOutput())
@@ -2015,6 +2385,14 @@ void ChatManager::deleteConversation(const QString &convId)
     m_consecutiveToolTurns.remove(convId);
     m_activeTools.remove(convId);
     m_stopRequested.remove(convId);
+    m_steeringQueue.remove(convId);
+    m_compacting.remove(convId);
+    m_pendingCompactMarkers.remove(convId);
+    if (auto it = m_compactReplies.find(convId); it != m_compactReplies.end()) {
+        it.value()->abort();
+        it.value()->deleteLater();
+        m_compactReplies.erase(it);
+    }
 
     m_storage->deleteConversation(convId);
 }
@@ -2029,6 +2407,12 @@ void ChatManager::renameConversation(const QString &convId, const QString &name)
 
 void ChatManager::deleteMessageBranch(const QString &convId, qint64 msgId)
 {
+    // The branch the queued steering messages were aimed at may be gone.
+    if (m_steeringQueue.contains(convId)) {
+        m_steeringQueue.remove(convId);
+        emit steeringQueueChanged(convId, 0);
+    }
+
     if (m_storage->deleteMessageBranch(msgId))
         emit messageDeleted(convId);
 }

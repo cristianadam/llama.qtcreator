@@ -74,6 +74,11 @@ struct Message
     bool haveContent = false;
     QString toolCallInProgress; // name of the tool call currently being streamed in
     QString toolCallPreview;    // optional summary of the partial arguments, e.g. "Add src/main.cpp"
+
+    // Transient (not persisted): the stream reported a context-overflow
+    // error, so the (empty) assistant message must not be committed – the
+    // history is compacted and the request retried instead.
+    bool overflowError = false;
 };
 
 struct MessageExtraTextFile

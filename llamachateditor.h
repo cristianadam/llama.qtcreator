@@ -81,6 +81,9 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
+    //! Shows/hides the "queued messages" popup button (mid‑run steering)
+    //! and rebuilds its menu (one removable entry per queued message).
+    void updateSteeringButton();
     // Pre‑wrap a freshly created message's document at its final label width
     // so its first size hint is already correct (call before adding the
     // widget to m_messageWidgets / the layout).
@@ -113,6 +116,8 @@ private:
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
     QMenu *m_thinkingMenu{nullptr};
+    QToolButton *m_steeringButton{nullptr};
+    QMenu *m_steeringMenu{nullptr};
     QToolButton *m_followUpButton{nullptr};
     QComboBox *m_modelCombo{nullptr};
 

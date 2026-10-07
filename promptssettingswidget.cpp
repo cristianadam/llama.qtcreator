@@ -120,6 +120,10 @@ void PromptsSettingsWidget::rebuild()
                                           s.followUpPrompt.value(),
                                           defaultFollowUpPrompt(),
                                           false));
+    chatGroup->appendChild(new PromptItem(Tr::tr("Compaction"),
+                                          s.compactPrompt.value(),
+                                          defaultCompactPrompt(),
+                                          false));
     m_model->rootItem()->appendChild(chatGroup);
 
     auto *locatorGroup = new GroupItem(Tr::tr("Locator (\"ll\")"), locatorGroupId());
@@ -238,11 +242,14 @@ void PromptsSettingsWidget::writeSettingsFromModel()
                 continue;
             if (group->groupId() == chatGroupId()) {
                 // The chat prompts are fixed: the first child is the title
-                // prompt, the second the follow-up prompt.
+                // prompt, the second the follow-up prompt, the third the
+                // compaction prompt.
                 if (c == 0)
                     s.titlePrompt.setValue(prompt->text());
-                else
+                else if (c == 1)
                     s.followUpPrompt.setValue(prompt->text());
+                else
+                    s.compactPrompt.setValue(prompt->text());
             } else {
                 locator << prompt->text();
             }

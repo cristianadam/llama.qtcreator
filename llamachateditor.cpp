@@ -6,6 +6,7 @@
 
 #include <utils/action.h>
 #include <utils/fsengine/fileiconprovider.h>
+#include <utils/icon.h>
 #include <utils/utilsicons.h>
 #include <utils/widgets.h>
 
@@ -164,6 +165,17 @@ ChatEditor::ChatEditor()
     m_contextLabel->setTextFormat(Qt::PlainText);
     statusLayout->addWidget(m_contextLabel);
 
+    // Mid‑run steering: user messages sent while a reply is being
+    // generated are queued; the popup lists them and each entry can be
+    // removed before it is handed to the model.
+    m_steeringButton = new QToolButton(m_statusBar);
+    m_steeringButton->setPopupMode(QToolButton::InstantPopup);
+    m_steeringButton->setToolTip(Tr::tr("Queued messages – sent after the current step"));
+    m_steeringButton->setVisible(false);
+    m_steeringMenu = new QMenu(m_steeringButton);
+    m_steeringButton->setMenu(m_steeringMenu);
+    statusLayout->addWidget(m_steeringButton);
+
     // "Follow up" toggle: when checked, follow-up question suggestions are
     // generated after each complete assistant reply.
     m_followUpButton = new QToolButton(m_statusBar);
@@ -308,6 +320,14 @@ ChatEditor::ChatEditor()
                     ViewingChat chat = ChatManager::instance().getViewingChat(m_viewingConvId);
                     refreshMessages(chat.messages, chat.conv.currNode);
                 }
+            });
+
+    connect(&ChatManager::instance(),
+            &ChatManager::steeringQueueChanged,
+            this,
+            [this](const QString &convId, int) {
+                if (convId == m_viewingConvId)
+                    updateSteeringButton();
             });
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
@@ -592,6 +612,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
             updateSpeedLabel(lastMsg);
         updateContextLabel(lastMsg);
     }
+    updateSteeringButton();
 
     // If there were no messages, show the server props
     if (m_messageWidgets.isEmpty() && !m_propsWidget) {
@@ -1381,6 +1402,37 @@ void ChatEditor::updateContextLabel(const Message &msg)
             .arg(percentStr)
             .arg(QLocale().toString(usedTokens))
             .arg(QLocale().toString(maxCtx)));
+}
+
+void ChatEditor::updateSteeringButton()
+{
+    const auto &chatManager = ChatManager::instance();
+    const QStringList queued = chatManager.steeringQueue(m_viewingConvId);
+    m_steeringButton->setVisible(!queued.isEmpty());
+    if (queued.isEmpty())
+        return;
+
+    m_steeringButton->setText(Tr::tr("%1 queued").arg(queued.size()));
+
+    // The menu only changes when the queue does (steeringQueueChanged)
+    // or the conversation switches (refreshMessages), so rebuilding it
+    // here keeps it in sync without an about‑to‑show hook.
+    m_steeringMenu->clear();
+    for (int i = 0; i < queued.size(); ++i) {
+        const QString text = queued.at(i);
+        const QString firstLine = text.section(QLatin1Char('\n'), 0, 0).trimmed();
+        const QString label = firstLine.length() > 60
+                ? firstLine.left(60) + QLatin1String("…")
+                : firstLine;
+        auto *action = m_steeringMenu->addAction(
+            Utils::Icon::fromTheme(QLatin1String("SP.TrashIcon")),
+            Tr::tr("Remove “%1”").arg(label));
+        action->setStatusTip(text);
+        action->setToolTip(Tr::tr("Remove the queued message (it will not be sent)"));
+        connect(action, &QAction::triggered, this, [this, i] {
+            ChatManager::instance().removeSteeringMessage(m_viewingConvId, i);
+        });
+    }
 }
 
 void ChatEditor::scrollToBottom()

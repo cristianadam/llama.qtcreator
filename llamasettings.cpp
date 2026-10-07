@@ -35,6 +35,21 @@ QString defaultFollowUpPrompt()
                   "array of plain text question strings, no markdown.");
 }
 
+QString defaultCompactPrompt()
+{
+    return Tr::tr("The conversation above is long and is running out of context space. "
+                  "Write a detailed summary of it that allows the conversation to continue "
+                  "seamlessly. Structure the summary as markdown with these sections: "
+                  "## Task (what the user asked for and the overall goal), "
+                  "## Key Decisions (important decisions, constraints and preferences), "
+                  "## Work Done (files touched, commands run, code changes and their "
+                  "outcomes), ## Current State (what is completed, what is in progress, "
+                  "errors encountered) and ## Next Steps (what should happen next to "
+                  "finish the task). Be precise and concrete: keep file paths, function "
+                  "names and exact values. Do not answer the user's last message; only "
+                  "summarize.");
+}
+
 QStringList defaultLocatorPrompts()
 {
     return {Tr::tr("Create a summary of {selection}"),
@@ -482,6 +497,13 @@ LlamaSettings::LlamaSettings()
         Tr::tr("Prompt sent to the model to generate follow-up questions after a "
                "complete reply."));
 
+    compactPrompt.setDisplayName(Tr::tr("Compaction Prompt"));
+    compactPrompt.setSettingsKey("CompactPrompt");
+    compactPrompt.setDefaultValue(defaultCompactPrompt());
+    compactPrompt.setToolTip(
+        Tr::tr("Prompt sent to the model to summarize the conversation history "
+               "when it is compacted to fit the context window."));
+
     // Only exposed through the "Follow up" toggle button in the chat status
     // bar, so no options-page entry is needed.
     followUpEnabled.setDisplayName(Tr::tr("Follow-Up Questions"));
@@ -490,6 +512,18 @@ LlamaSettings::LlamaSettings()
     followUpEnabled.setToolTip(
         Tr::tr("When enabled, follow-up question suggestions are generated after "
                "each complete assistant reply."));
+
+    autoCompact.setSettingsKey("AutoCompact");
+    autoCompact.setDefaultValue(true);
+    autoCompact.setDisplayName(Tr::tr("Auto-compact long conversations"));
+    autoCompact.setLabelText(Tr::tr("Auto-compact long conversations"));
+    autoCompact.setToolTip(Tr::tr(
+        "When the conversation uses about 80% of the model's context window, its "
+        "history is summarized into a compact marker message and only the summary "
+        "plus the messages after it are sent to the model from then on. The full "
+        "history stays visible in the chat. Also used to recover from a "
+        "context-overflow error: the history is compacted and the request is "
+        "retried once."));
 
     locatorPrompts.setDisplayName(Tr::tr("Locator Prompts"));
     locatorPrompts.setSettingsKey("LocatorPrompts");
@@ -731,6 +765,7 @@ LlamaSettings::LlamaSettings()
     webSearchTavilyApiKey.setEnabler(&enableLlamaCpp);
     titlePrompt.setEnabler(&enableLlamaCpp);
     followUpPrompt.setEnabler(&enableLlamaCpp);
+    compactPrompt.setEnabler(&enableLlamaCpp);
     locatorPrompts.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {

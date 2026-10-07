@@ -101,12 +101,21 @@ public:
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};
     Utils::StringAspect followUpPrompt{this};
+    // Prompt used to summarize the history when a conversation is compacted
+    // to fit the context window (auto‑compaction / overflow recovery).
+    Utils::StringAspect compactPrompt{this};
     // Toggled by the "Follow up" button in the chat status bar: when on,
     // follow-up question suggestions are generated after each complete reply.
     Utils::BoolAspect followUpEnabled{this};
     // "ll" locator prompts: only the first line of a prompt is shown in the
     // menu, the full text is sent to the model.
     Utils::StringListAspect locatorPrompts{this};
+
+    // Auto-compaction: when the conversation approaches the model's context
+    // window, its history is summarized into a marker message and only the
+    // summary (plus the messages after it) is sent to the model from then
+    // on. Also used to recover from a context-overflow error.
+    Utils::BoolAspect autoCompact{this};
 
     // Web search (websearch tool)
     Utils::StringAspect webSearchProvider{this};
@@ -127,6 +136,7 @@ LlamaSettings &settings();
 //! by the "Reset to Default" button there.
 QString defaultTitlePrompt();
 QString defaultFollowUpPrompt();
+QString defaultCompactPrompt();
 QStringList defaultLocatorPrompts();
 
 class LlamaProjectSettings : public Utils::AspectContainer

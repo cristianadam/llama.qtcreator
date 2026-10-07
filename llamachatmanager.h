@@ -95,6 +95,19 @@ public:
                      const QString &content,
                      const QList<QVariantMap> &extra,
                      std::function<void(qint64)> onChunk);
+
+    //! Number of user messages queued for \a convId while a reply was being
+    //! generated (mid‑run steering, see sendMessage()).
+    int steeringQueueSize(const QString &convId) const;
+
+    //! The queued steering messages of \a convId, in queue order (for the
+    //! "queued messages" popup menu in the chat status bar).
+    QStringList steeringQueue(const QString &convId) const;
+
+    //! Removes the queued steering message at \a index from \a convId's
+    //! queue ("queued messages" popup menu).
+    void removeSteeringMessage(const QString &convId, int index);
+
     void stopGenerating(const QString &convId);
     void replaceMessageAndGenerate(const QString &convId,
                                    qint64 parentNodeId,
@@ -208,6 +221,9 @@ public:
 signals:
     void modelsUpdated();
 
+    //! The number of queued (steering) user messages of \a convId changed.
+    void steeringQueueChanged(const QString &convId, int count);
+
     //! The "Human Editor" endpoint is ready for a reply: a pending
     //! assistant message exists for \a convId and the UI should open the
     //! split text editor (commit/abort it with
@@ -244,6 +260,30 @@ private:
     void updateModelPolling();
 
     QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
+
+    //! Persists the user messages queued for \a convId (mid‑run steering) as
+    //! a chain of user messages after \a afterId.  Returns the id of the
+    //! last persisted message, or \a afterId when the queue is empty.
+    qint64 flushSteeringQueue(const QString &convId, qint64 afterId);
+
+    //! Summarizes the conversation history so far into a compaction marker
+    //! message appended after \a leafNodeId; requests sent after the marker
+    //! carry the summary instead of the compacted history (see
+    //! normalizeMsgsForAPI()).  \a force bypasses the token‑threshold check
+    //! (emergency recovery from a context‑overflow error) and caps the
+    //! summary request to the messages after the last marker (or the most
+    //! recent half, without a marker), so it fits even when the full
+    //! history no longer does.  \a onDone is called with the marker's id
+    //! when the compaction succeeded.
+    void compactConversation(const QString &convId,
+                             qint64 leafNodeId,
+                             bool force,
+                             std::function<void(qint64)> onDone = {});
+
+    //! Appends a deferred compaction marker (see m_pendingCompactMarkers)
+    //! after the conversation's current leaf.  Only valid at a quiet point
+    //! (no in‑flight message), so the marker stays at the end of the branch.
+    void drainPendingCompactMarker(const QString &convId);
 
     void sendChatRequest(const QString &convId,
                          const std::function<void(QJsonObject &payload)> &payloadBuilder,
@@ -294,6 +334,33 @@ private:
     //! When the last in‑flight tool of such a conversation reports back, the
     //! conversation ends there instead of the model getting another turn.
     QSet<QString> m_stopRequested;
+
+    //! User messages typed while a reply was being generated (mid‑run
+    //! steering, like the steering/follow‑up queues of pi and opencode).
+    //! They are persisted and handed to the model at the next loop point:
+    //! after the current tool batch, or when the reply would end.
+    struct SteeringMessage
+    {
+        QString content;
+        QList<QVariantMap> extra;
+    };
+    QHash<QString, QList<SteeringMessage>> m_steeringQueue;
+
+    //! Conversations whose history is currently being summarized
+    //! (auto‑compaction), and the in‑flight summary requests.
+    QSet<QString> m_compacting;
+    QHash<QString, QNetworkReply *> m_compactReplies;
+
+    //! Compaction markers whose summary arrived while the conversation was
+    //! busy again (a new message landed before the summary request
+    //! finished).  Appended at the next quiet point, so the marker always
+    //! sits at the end of the branch and never becomes an orphan sibling.
+    struct PendingCompactMarker
+    {
+        QString summary;
+        std::function<void(qint64)> onDone;
+    };
+    QHash<QString, PendingCompactMarker> m_pendingCompactMarkers;
 
     // Task‑conversation (sub‑agent) state
     struct TaskConversationConfig
