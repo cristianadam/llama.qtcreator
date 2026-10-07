@@ -3,7 +3,8 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 
-#include <QFontDatabase>
+#include <texteditor/fontsettings.h>
+
 #include <QHeaderView>
 
 using namespace Utils;
@@ -48,8 +49,8 @@ PromptsSettingsWidget::PromptsSettingsWidget()
     m_view->setHeaderHidden(false);
 
     m_editor = new QPlainTextEdit(this);
-    m_editor->setLineWrapMode(QPlainTextEdit::NoWrap);
-    m_editor->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+    m_editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    m_editor->setFont(TextEditor::globalFontSettings().data().font());
     m_editor->setPlaceholderText(Tr::tr("Select a prompt to edit it"));
 
     m_resetButton = new QPushButton(Tr::tr("Reset to Default"), this);
