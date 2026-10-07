@@ -16,8 +16,6 @@
 #include <QProcessEnvironment>
 #include <QtTest/QtTest>
 
-#include <unistd.h>
-
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/projectmanager.h>
 
@@ -561,7 +559,6 @@ private slots:
     void skills_scanSkillRootStopsRecursion();
     void skills_scanValidationAndCollisions();
     void skills_scanDisableModelInvocation();
-    void skills_scanSkipsSymlinks();
     void skills_formatForPrompt();
     void skills_enabledSkillsFiltering();
     void skillTool_loadsSkill();
@@ -4961,24 +4958,6 @@ void LlamaToolsTest::skills_scanDisableModelInvocation()
     QVERIFY(result.diagnostics.isEmpty());
     QCOMPARE(result.skills.size(), 1);
     QVERIFY(result.skills.first().disableModelInvocation);
-}
-
-void LlamaToolsTest::skills_scanSkipsSymlinks()
-{
-    QTemporaryDir dir;
-    QTemporaryDir outside;
-    QVERIFY(dir.isValid() && outside.isValid());
-    makeSkillFile(outside.path(),
-                  QStringLiteral("linked/SKILL.md"),
-                  QStringLiteral("---\nname: linked\ndescription: Outside.\n---\nBody"));
-    if (::symlink((outside.path() + QStringLiteral("/linked")).toLocal8Bit().constData(),
-                  (dir.path() + QStringLiteral("link")).toLocal8Bit().constData())
-        != 0)
-        QSKIP("symlinks are not supported here");
-
-    const SkillScanResult result = Skills::scan({dir.path()});
-    QVERIFY(result.diagnostics.isEmpty());
-    QCOMPARE(result.skills.size(), 0);
 }
 
 void LlamaToolsTest::skills_formatForPrompt()

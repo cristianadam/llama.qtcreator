@@ -5,9 +5,9 @@ on: [push]
 env:
   PLUGIN_NAME: LlamaCpp
   QT_VERSION: 6.11.1
-  QT_CREATOR_VERSION: 20.0.0
-  MACOS_DEPLOYMENT_TARGET: "11.0"
-  CMAKE_VERSION: "3.29.6"
+  QT_CREATOR_VERSION: 21.0.0-beta1
+  MACOS_DEPLOYMENT_TARGET: "13.3"
+  CMAKE_VERSION: "3.30.3"
   NINJA_VERSION: "1.12.1"
 
 jobs:
@@ -17,21 +17,22 @@ jobs:
     outputs:
         tag: ${{ steps.git.outputs.tag }}
     strategy:
+      fail-fast: false
       matrix:
         config:
         - {
             name: "Windows Latest MSVC", artifact: "Windows-x64",
-            os: windows-2022,
+            os: windows-latest,
             platform: windows_x64,
             cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
+            environment_script: "C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
           }
         - {
             name: "Windows Latest MSVC Arm64", artifact: "Windows-arm64",
             os: windows-11-arm,
             platform: windows_arm64,
             cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsarm64.bat",
+            environment_script: "C:/Program Files/Microsoft Visual Studio/18/Enterprise/VC/Auxiliary/Build/vcvarsarm64.bat",
           }
         - {
             name: "Ubuntu Latest GCC", artifact: "Linux-x64",
@@ -78,7 +79,7 @@ jobs:
             COMMAND sudo apt-get update
           )
           execute_process(
-            COMMAND sudo apt-get install -y libgl1-mesa-dev
+            COMMAND sudo apt-get install -y libgl1-mesa-dev pulseaudio
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
@@ -145,7 +146,7 @@ jobs:
             execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf "$ENV{GITHUB_WORKSPACE}/${archive}" WORKING_DIRECTORY "${qt_dir}/${subdir}")
           endfunction()
 
-          foreach(package qtbase qtdeclarative qttools)
+          foreach(package qtbase qtdeclarative qttools qtsvg)
             downloadAndExtract(
               "${qt_base_url}/qt.qt6.${qt_version_dotless}.${qt_package_arch_suffix}/${qt_package_version}${package}${qt_package_suffix}.7z"
               ${package}.7z
@@ -153,7 +154,7 @@ jobs:
             )
           endforeach()
 
-          foreach(package qt5compat qtshadertools qttasktree)
+          foreach(package qt5compat qtshadertools qttasktree qtwebsockets qthttpserver qtmultimedia)
             downloadAndExtract(
               "${qt_base_url}/qt.qt6.${qt_version_dotless}.addons.${package}.${qt_package_arch_suffix}/${qt_package_version}${package}${qt_package_suffix}.7z"
               ${package}.7z
