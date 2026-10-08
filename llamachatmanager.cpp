@@ -2140,7 +2140,7 @@ void ChatManager::sendChatRequest(const QString &convId,
             if (!haveToolExecution)
                 m_consecutiveToolTurns.remove(convId);
 
-            if (doSummarization) { // first assistant reply
+            if (doSummarization && settings().autoTitle.value()) { // first assistant reply
                 summarizeConversationTitle(convId, pm.id, [this, convId](const QString &title) {
                     auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(title);
                     renameConversation(convId, shortTitle);
@@ -2398,12 +2398,47 @@ void ChatManager::deleteConversation(const QString &convId)
     m_storage->deleteConversation(convId);
 }
 
+QString sanitizeConversationName(const QString &name)
+{
+    QString out;
+    out.reserve(name.size());
+    for (int i = 0; i < name.size(); ++i) {
+        const QChar ch = name.at(i);
+        // Keep surrogate pairs (e.g. emojis) intact – the individual halves
+        // are not "printable" on their own and would be dropped.
+        if (ch.isHighSurrogate() && i + 1 < name.size()
+                && name.at(i + 1).isLowSurrogate()) {
+            out += ch;
+            out += name.at(i + 1);
+            ++i;
+            continue;
+        }
+        // Newlines, tabs and other control characters would make the document
+        // name span multiple lines in the editor tab and the document list, so
+        // flatten them to plain spaces.
+        if (ch.isSpace() || !ch.isPrint())
+            out += QLatin1Char(' ');
+        else
+            out += ch;
+    }
+    out = out.simplified();
+    const int maxLen = 80;
+    if (out.size() > maxLen) {
+        int cut = out.lastIndexOf(QLatin1Char(' '), maxLen);
+        if (cut < maxLen / 2)
+            cut = maxLen;
+        out = out.left(cut).trimmed() + QChar(0x2026); // …
+    }
+    return out;
+}
+
 void ChatManager::renameConversation(const QString &convId, const QString &name)
 {
-    if (name.isEmpty())
+    const QString sanitized = sanitizeConversationName(name);
+    if (sanitized.isEmpty())
         return;
 
-    m_storage->renameConversation(convId, name);
+    m_storage->renameConversation(convId, sanitized);
 }
 
 void ChatManager::deleteMessageBranch(const QString &convId, qint64 msgId)

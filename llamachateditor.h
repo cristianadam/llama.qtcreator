@@ -120,6 +120,7 @@ private:
     QToolButton *m_steeringButton{nullptr};
     QMenu *m_steeringMenu{nullptr};
     QToolButton *m_followUpButton{nullptr};
+    QToolButton *m_titleButton{nullptr};
     QComboBox *m_modelCombo{nullptr};
 
     QVector<SearchResult> m_searchResults; // all matches of the current query

@@ -537,6 +537,10 @@ private slots:
     void messageToMarkdown_embedsCachedMathSvg();
     void messageToMarkdown_leavesUncachedDiagramsAlone();
 
+    // ChatManager::sanitizeConversationName
+    void sanitizeConversationName_singleLine();
+    void sanitizeConversationName_lengthCap();
+
     // HtmlExporter
     void htmlExport_conversationDocument();
     void htmlExport_userAssistant();
@@ -4464,6 +4468,44 @@ void LlamaToolsTest::messageToMarkdown_leavesUncachedDiagramsAlone()
 
     const QString md = ChatManager::messageToMarkdown(assistant);
     QCOMPARE(md, QStringLiteral("### Assistant\n\n```mermaid\nA --> B\n```\n\nand $x$.\n\n"));
+}
+
+void LlamaToolsTest::sanitizeConversationName_singleLine()
+{
+    // Newlines, tabs and control characters are flattened to single spaces
+    // (a multi-line model-generated title used to make the document list
+    // entries span multiple lines).
+    QCOMPARE(sanitizeConversationName(QStringLiteral("Line one\nLine two")),
+             QStringLiteral("Line one Line two"));
+    QCOMPARE(sanitizeConversationName(QStringLiteral("  a \t b\n\n c  ")),
+             QStringLiteral("a b c"));
+    QCOMPARE(sanitizeConversationName(QStringLiteral("\f\x01x\r\ny")),
+             QStringLiteral("x y"));
+    // Emojis are kept (the title prompt asks for one); they must not be
+    // mangled.
+    QCOMPARE(sanitizeConversationName(QStringLiteral("🚀 Fix\nthe bug")),
+             QStringLiteral("🚀 Fix the bug"));
+    // Whitespace-only input yields an empty name (renameConversation()
+    // skips empty names).
+    QVERIFY(sanitizeConversationName(QStringLiteral("\n\t ")).isEmpty());
+    // Short, clean names pass through unchanged.
+    QCOMPARE(sanitizeConversationName(QStringLiteral("My Chat")),
+             QStringLiteral("My Chat"));
+}
+
+void LlamaToolsTest::sanitizeConversationName_lengthCap()
+{
+    // Long names are cut at a word boundary and get an ellipsis.
+    const QString longName = QStringLiteral("word ").repeated(30).trimmed();
+    const QString truncated = sanitizeConversationName(longName);
+    QVERIFY(truncated.endsWith(QChar(0x2026)));
+    QVERIFY(truncated.size() <= 81);
+    QVERIFY(!truncated.contains(QStringLiteral(" \u2026")));
+    // A single long word (no space near the cut point) is cut hard.
+    const QString oneWord = QStringLiteral("a").repeated(100);
+    const QString hardCut = sanitizeConversationName(oneWord);
+    QVERIFY(hardCut.endsWith(QChar(0x2026)));
+    QCOMPARE(hardCut.size(), 81);
 }
 
 void LlamaToolsTest::htmlExport_conversationDocument()

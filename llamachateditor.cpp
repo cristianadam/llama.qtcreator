@@ -209,6 +209,24 @@ ChatEditor::ChatEditor()
     });
     statusLayout->addWidget(m_followUpButton);
 
+    // "Title" toggle: when checked, a short conversation title is generated
+    // by the model after the first assistant reply.
+    m_titleButton = new QToolButton(m_statusBar);
+    m_titleButton->setCheckable(true);
+    m_titleButton->setText(Tr::tr("Title"));
+    m_titleButton->setToolTip(Tr::tr("Generate a conversation title after the first reply"));
+    m_titleButton->setChecked(settings().autoTitle.value());
+    connect(m_titleButton, &QToolButton::toggled, this, [this](bool checked) {
+        settings().autoTitle.setValue(checked);
+        settings().writeSettings();
+    });
+    // Keep the button state in sync when the setting changes elsewhere.
+    settings().autoTitle.addOnChanged(this, [this] {
+        QSignalBlocker blocker(m_titleButton);
+        m_titleButton->setChecked(settings().autoTitle.value());
+    });
+    statusLayout->addWidget(m_titleButton);
+
     // Thinking-level dropdown (only shown when the model's chat template
     // supports thinking/reasoning control, see onServerPropsUpdated()).
     m_thinkingButton = new QToolButton(m_statusBar);

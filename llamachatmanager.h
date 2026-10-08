@@ -19,6 +19,13 @@ namespace LlamaCpp {
 class Storage;
 class Tool;
 
+//! Sanitizes a conversation name (usually model‑generated) for use as a
+//! document name: newlines, tabs and other control characters become plain
+//! spaces, runs of whitespace are squeezed and the length is capped, so the
+//! name always stays on a single line in the editor tab and the document
+//! list.
+QString sanitizeConversationName(const QString &name);
+
 struct ToolCall
 {
     QString name;      // e.g. "python"
