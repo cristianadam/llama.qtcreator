@@ -1346,8 +1346,15 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
 
     if (enabled) {
         if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
-            double processed = msg.promptProgress.processed + msg.promptProgress.cache;
-            double percent = (processed / msg.promptProgress.total) * 100.0;
+            // The server reports processed tokens *including* the cached
+            // prefix (processed >= cache), so the cached part must be
+            // excluded on both sides – like the llama.cpp web UI – or a
+            // mostly-cached prompt (every turn after the first) shows ~100%
+            // from the very first event and stays there while only the small
+            // uncached delta is being processed.
+            const int actualTotal = msg.promptProgress.total - msg.promptProgress.cache;
+            const int actualDone = msg.promptProgress.processed - msg.promptProgress.cache;
+            double percent = actualTotal > 0 ? (actualDone * 100.0) / actualTotal : 100.0;
 
             percent = qBound(0.0, percent, 100.0);
 
