@@ -13,7 +13,7 @@
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+146"/>
+        <location filename="../llamaplugin.cpp" line="+148"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Aktiver llama.cpp.</translation>
     </message>
     <message>
-        <location line="+373"/>
+        <location line="+385"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -145,18 +145,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+116"/>
+        <location filename="../promptssettingswidget.cpp" line="+117"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1229"/>
+        <location line="-1241"/>
         <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+71"/>
+        <location filename="../llamasettings.cpp" line="+86"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Aktiver llama.cpp</translation>
@@ -346,7 +346,7 @@
         <translation type="vanished">Det maksimale antal gemte fuldendelser, der skal opbevares i result_cache.</translation>
     </message>
     <message>
-        <location line="-178"/>
+        <location line="-193"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Opsummarér titlen på samtalen på få ord, herunder ét emoji. Brug det sprog, der bruges i samtalen. Brug almindelig tekst, ingen markdown.</translation>
     </message>
@@ -356,7 +356,12 @@
         <translation>Generér op til fem opfølgende spørgsmål i sammenhængen med den aktuelle samtale. Spørgsmålene er fra brugerens synsvinkel. Kun spørgsmål, ingen forklaringer. Brug det sprog, der bruges i samtalen. Returnér et JSON-objekt med en enkelt nøgle &quot;follow_ups&quot;, der indeholder et array af spørgsmål som almindelig tekst, ingen markdown.</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+9"/>
+        <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
+        <translation>Ovennævnte samtale er lang og er ved at løbe tør for konteksrum. Skriv en detaljeret sammenfatning af den, der gør det muligt at fortsætte samtalen uden afbrydelser. Strukturér sammenfatningen som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, kørte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er færdigt, hvad er i gang, opståede fejl) og ## Næste skridt (hvad skal ske for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Besvar ikke brugerens sidste besked; sammenfat kun.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>Skills</source>
         <translation>Færdigheder</translation>
     </message>
@@ -887,6 +892,16 @@
         <translation>Prompt, der sendes til modellen for at generere opfølgende spørgsmål efter et fuldstændigt svar.</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Compaction Prompt</source>
+        <translation>Prompt til kompaktering</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
+        <translation>Prompt, der sendes til modellen for at sammenfatte samtalehistorikken, når den kompakteres for at passe i kontekstvinduet.</translation>
+    </message>
+    <message>
         <location line="+5"/>
         <location filename="../promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
@@ -898,7 +913,28 @@
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
+        <source>Auto-generate Conversation Title</source>
+        <translation>Auto-generér samtaletitel</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>When enabled, a short conversation title is generated by the model after the first assistant reply.</source>
+        <translation>Når det er aktiveret, genereres en kort samtaletitel af modellen efter det første svar fra assistenten.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location line="+1"/>
+        <source>Auto-compact long conversations</source>
+        <translation>Auto-kompaktere lange samtaler</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Når samtalen bruger ca. 80 % af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Locator Prompts</source>
         <translation>Prompts til lokatoren</translation>
     </message>
@@ -931,31 +967,46 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+311"/>
+        <location line="+325"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox-kommandoer</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-325"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation>Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
     </message>
     <message>
         <location line="+16"/>
         <location line="+1"/>
-        <location line="+307"/>
+        <location line="+321"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Indlæs projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-321"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
+        <source>Max consecutive tool turns</source>
+        <translation>Maksimale på hinanden følgende værktøjsrunder</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Max consecutive tool turns:</source>
+        <translation>Maksimale på hinanden følgende værktøjsrunder:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke – modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Web Search Provider</source>
         <translation>Web-søgeudbyder</translation>
     </message>
@@ -1105,7 +1156,7 @@
         <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+193"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
     </message>
@@ -1120,7 +1171,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+86"/>
+        <location filename="../llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1150,12 +1201,23 @@
         <translation>Maks</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+57"/>
+        <location line="+357"/>
+        <source>Working directory: %1</source>
+        <translation>Arbejdsmappe: %1</translation>
+    </message>
+    <message>
+        <location line="-342"/>
         <source>LLM model</source>
         <translation>LLM-model</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
+        <source>Queued messages – sent after the current step</source>
+        <translation>Beskeder i køen – sendes efter det aktuelle skridt</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Follow up</source>
         <translation>Opfølg</translation>
     </message>
@@ -1165,12 +1227,17 @@
         <translation>Generér opfølgende spørgsmål efter hvert svar</translation>
     </message>
     <message>
+        <location line="+18"/>
+        <source>Generate a conversation title after the first reply</source>
+        <translation>Generér en samtaletitel efter det første svar</translation>
+    </message>
+    <message>
         <location line="+17"/>
         <source>Thinking level</source>
         <translation>Tænkeniveau</translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+194"/>
         <source>Search in chat</source>
         <translation>Søg i chat</translation>
     </message>
@@ -1190,7 +1257,7 @@
         <translation>Send til Llama Chat</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+50"/>
         <source>Model Path: %1</source>
         <translation>Modelsti: %1</translation>
     </message>
@@ -1215,12 +1282,12 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+42"/>
         <source>Follow‑up questions:</source>
         <translation>Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="+481"/>
+        <location line="+482"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
@@ -1256,7 +1323,7 @@
         <translation>Er du sikker på, at du vil slette denne meddelelse?</translation>
     </message>
     <message>
-        <location line="+162"/>
+        <location line="+169"/>
         <source>Processing: %1%</source>
         <translation>Behandler: %1%</translation>
     </message>
@@ -1290,17 +1357,32 @@
         <translation>Kontekst: %1% brugt.&lt;br&gt;  %2 tokens fra %3.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+14"/>
+        <source>%1 queued</source>
+        <translation>%1 i køen</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Remove “%1”</source>
+        <translation>Fjern “%1”</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Remove the queued message (it will not be sent)</source>
+        <translation>Fjern beskeden i køen (den sendes ikke)</translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>LlamaCpp Chattediter</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+74"/>
+        <location filename="../llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Skriv en meddelelse (Shift+Enter for ny linje)</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+29"/>
         <location line="+6"/>
         <source>Disable Tools usage</source>
         <translation>Deaktiver værktøjsbrug</translation>
@@ -1325,6 +1407,37 @@
         <location line="+3"/>
         <source>Send message to assistant</source>
         <translation>Send meddelelse til assistenten</translation>
+    </message>
+    <message>
+        <location line="+161"/>
+        <source>Cut</source>
+        <translation>Klip</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Paste</source>
+        <translation>Indsæt</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>History</source>
+        <translation>Historik</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>No history</source>
+        <translation>Ingen historik</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+3"/>
+        <source>Clear History</source>
+        <translation>Ryd historik</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Remove all %1 saved input history entries?</source>
+        <translation>Fjern alle %1 gemte historikelementer for indtastning?</translation>
     </message>
     <message>
         <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
@@ -1405,22 +1518,19 @@ Vil du overskrive den?</translation>
         <translation type="vanished">Alle filer (*)</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsmodel.cpp" line="+73"/>
         <source>Name</source>
-        <translation>Navn</translation>
+        <translation type="vanished">Navn</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Date</source>
-        <translation>Dato</translation>
+        <translation type="vanished">Dato</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Conversation Id</source>
-        <translation>Konversations-id</translation>
+        <translation type="vanished">Konversations-id</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+113"/>
+        <location filename="../llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Opretter en ny samtale med llama.cpp</translation>
     </message>
@@ -1430,7 +1540,7 @@ Vil du overskrive den?</translation>
         <translation>Opdater</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+118"/>
         <source>Rename...</source>
         <translation>Omdøb...</translation>
     </message>
@@ -1441,12 +1551,12 @@ Vil du overskrive den?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+41"/>
+        <location line="+68"/>
         <source>Delete</source>
         <translation>Slet</translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-67"/>
         <source>Save as Markdown</source>
         <translation>Gem som Markdown</translation>
     </message>
@@ -1456,7 +1566,7 @@ Vil du overskrive den?</translation>
         <translation>Gem som HTML</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+57"/>
         <source>Delete Conversation</source>
         <translation>Slet denne samtale</translation>
     </message>
@@ -1497,7 +1607,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-896"/>
+        <location filename="../llamasettings.cpp" line="-938"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -1571,8 +1681,9 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Vis/fjern detaljer om værktøjsbrug</translation>
     </message>
     <message>
+        <location filename="../llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
-        <translation type="vanished">Kopier</translation>
+        <translation>Kopier</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1939,12 +2050,12 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Download ripgrep %1</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+70"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+172"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Værktøjerne search og find bruger ripgrep, som ikke er installeret på dette system.</translation>
     </message>
@@ -1980,7 +2091,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer → MCP i Qt Creator-indstillingerne).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+166"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2046,7 +2157,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-794"/>
+        <location filename="../toolsettingswidget.cpp" line="-815"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
@@ -2067,7 +2178,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+275"/>
+        <location filename="../toolsettingswidget.cpp" line="+295"/>
         <source>Name: %1</source>
         <translation>Navn: %1</translation>
     </message>
@@ -2118,7 +2229,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-127"/>
+        <location filename="../toolsettingswidget.cpp" line="-128"/>
         <source>Add…</source>
         <translation>Tilføj…</translation>
     </message>
@@ -2155,12 +2266,18 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Prompts:</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+35"/>
+        <source>Compaction</source>
+        <translation>Kompaktering</translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="-1286"/>
+        <location filename="../promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location filename="../promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Lokator (&quot;ll&quot;)</translation>
     </message>
@@ -2203,6 +2320,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
         <translation>navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
+    </message>
+    <message>
+        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location line="+31"/>
+        <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
+        <translation>Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
 </context>
 <context>
@@ -2264,7 +2387,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+103"/>
+        <location filename="../tools/bash_tool.cpp" line="+102"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
@@ -2299,17 +2422,17 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+110"/>
+        <location line="+114"/>
         <source>running %1</source>
         <translation>kører %1</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+45"/>
         <source>Error: the command must not be empty.</source>
         <translation>Fejl: kommandoen må ikke være tom.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+14"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Fejl: arbejdsmappe findes ikke: %1</translation>
     </message>
@@ -2321,7 +2444,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fejl: %1</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+167"/>
+        <source>Command was stopped by the user.</source>
+        <translation>Kommandoen blev stoppet af brugeren.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
         <translation>Kommandoen timed ud efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
     </message>
@@ -2332,9 +2460,9 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+269"/>
+        <location filename="../tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+339"/>
+        <location filename="../tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>ukendt fejl</translation>
@@ -2549,7 +2677,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Opgave: %1</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+22"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
     </message>
@@ -2563,7 +2691,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+158"/>
+        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>hent %1</translation>
@@ -2574,7 +2702,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Ugyldig URL &quot;%1&quot;: den skal starte med http:// eller https://</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
         <translation>Hentning af %1 fejlede: svaret er for stort (grænse 5 MB).</translation>
     </message>
@@ -2593,7 +2721,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 [... indhold beskåret ved %1 tegn ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+87"/>
+        <location filename="../tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>søg %1</translation>
@@ -2614,50 +2742,50 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <location line="+13"/>
-        <location line="+38"/>
-        <location line="+42"/>
-        <location line="+46"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
         <source>Search failed: %1</source>
         <translation>Søgning fejlede: %1</translation>
     </message>
     <message>
-        <location line="-135"/>
-        <location line="+51"/>
-        <location line="+42"/>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
         <translation>Søgning fejlede: ugyldigt svar fra søgeudbyderen.</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-88"/>
         <source>no results found for &quot;%1&quot;</source>
         <translation>ingen resultater fundet for &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Søgning fejlede: Brave-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location line="+41"/>
-        <location line="+40"/>
+        <location line="+36"/>
+        <location line="+44"/>
+        <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
         <translation>Ingen resultater fundet for &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-79"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
         <translation>Søgning fejlede: Exa-slutpunktets URL er ikke konfigureret.</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+37"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
@@ -2666,7 +2794,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location filename="../tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>find filer %1</translation>
@@ -2677,7 +2805,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-145"/>
+        <location filename="../tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Mønster: %1</translation>
     </message>
@@ -2688,30 +2816,36 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>  Stie: %1</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
         <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+18"/>
+        <location filename="../tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Fejl: mønstret må ikke være tomt.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+120"/>
+        <location filename="../tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fejl: stien er ikke en mappe: %1</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+95"/>
+        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation>[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
         <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+113"/>
+        <location filename="../tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Kunne ikke starte ripgrep: %1]</translation>
     </message>
@@ -2737,7 +2871,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location filename="../tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>Liste mappen %1</translation>
@@ -2752,7 +2886,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+53"/>
         <source>Directory is empty.</source>
         <translation>Mappen er tom.</translation>
     </message>
@@ -2842,7 +2976,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Udpakning af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location filename="../tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>søg efter %1</translation>
@@ -2857,7 +2991,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>  Glob: %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
         <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
     </message>
@@ -2867,7 +3001,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fejl: stien findes ikke: %1</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+107"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
     </message>
@@ -2912,7 +3046,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>(ingen)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+98"/>
+        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>opdater opgaveliste</translation>
@@ -2923,7 +3057,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>opdater opgaveliste (%1 opgaver)</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
     </message>
@@ -2948,7 +3082,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+61"/>
+        <location filename="../tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
     </message>

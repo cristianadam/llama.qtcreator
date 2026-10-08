@@ -13,7 +13,7 @@
         <translation>Poproś o sugestię llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+146"/>
+        <location filename="../llamaplugin.cpp" line="+148"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Poproś o sugestię llama.cpp w pozycji kursora bieżącego edytora.</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Włącz używanie llama.cpp.</translation>
     </message>
     <message>
-        <location line="+373"/>
+        <location line="+385"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Błąd pobierania wypełnienia FIM z %1: %2</translation>
     </message>
@@ -145,18 +145,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+116"/>
+        <location filename="../promptssettingswidget.cpp" line="+117"/>
         <source>Chat</source>
         <translation>Czat</translation>
     </message>
     <message>
-        <location line="-1229"/>
+        <location line="-1241"/>
         <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+51"/>
+        <location filename="../llamasettings.cpp" line="+66"/>
         <source>Tools</source>
         <translation>Narzędzia</translation>
     </message>
@@ -346,7 +346,7 @@
         <translation type="vanished">Maksymalna liczba uzupełnień w pamięci podręcznej do przechowywania.</translation>
     </message>
     <message>
-        <location line="-178"/>
+        <location line="-193"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Podsumuj tytuł konwersacji w kilku słowach, włączając jedną emoję. Użyj języka używanego w konwersacji. Użyj zwykłego tekstu, bez markdown.</translation>
     </message>
@@ -356,7 +356,12 @@
         <translation>Wygeneruj do pięciu pytań uzupełniających w kontekście bieżącej konwersacji. Pytania są z perspektywy użytkownika. Tylko pytania, bez wyjaśnień. Użyj języka używanego w konwersacji. Zwróć obiekt JSON z jednym kluczem &quot;follow_ups&quot; zawierającym tablicę ciągów tekstowych z pytaniami w zwykłym tekście, bez markdown.</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+9"/>
+        <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
+        <translation>Powyższa konwersacja jest długa i wyczerpuje miejsce na kontekst. Napisz szczegółowe podsumowanie, które pozwoli kontynuować konwersację bez przerwy. Zbuduj podsumowanie jako markdown z następującymi sekcjami: ## Zadanie (o co poprosił użytkownik i ogólny cel), ## Kluczowe decyzje (ważne decyzje, ograniczenia i preferencje), ## Wykonana praca (dotknięte pliki, wykonane polecenia, zmiany w kodzie i ich rezultaty), ## Obecny stan (co jest zakończone, co w toku, napotkane błędy) i ## Następne kroki (co należy zrobić, aby zakończyć zadanie). Bądź precyzyjny i konkretny: zachowaj ścieżki plików, nazwy funkcji i dokładne wartości. Nie odpowiadaj na ostatnią wiadomość użytkownika; tylko podsumuj.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>Skills</source>
         <translation>Umiejętności</translation>
     </message>
@@ -887,6 +892,16 @@
         <translation>Polecenie wysyłane do modelu w celu wygenerowania pytań uzupełniających po kompletnej odpowiedzi.</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Compaction Prompt</source>
+        <translation>Polecenie kompaktowania</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
+        <translation>Polecenie wysyłane do modelu w celu podsumowania historii konwersacji, gdy jest ona kompaktowana, aby zmieścić się w oknie kontekstu.</translation>
+    </message>
+    <message>
         <location line="+5"/>
         <location filename="../promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
@@ -898,7 +913,28 @@
         <translation>Po włączeniu sugestie pytań uzupełniających są generowane po każdej kompletnej odpowiedzi asystenta.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
+        <source>Auto-generate Conversation Title</source>
+        <translation>Automatyczne generowanie tytułu konwersacji</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>When enabled, a short conversation title is generated by the model after the first assistant reply.</source>
+        <translation>Po włączeniu model generuje krótki tytuł konwersacji po pierwszej odpowiedzi asystenta.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location line="+1"/>
+        <source>Auto-compact long conversations</source>
+        <translation>Automatyczne kompaktowanie długich konwersacji</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Gdy konwersacja zajmuje około 80% okna kontekstu modelu, jej historia jest podsumowywana w zwartą wiadomość-wskaznik, a od tego momentu do modelu wysyłane jest tylko podsumowanie oraz wiadomości po nim. Pełna historia pozostaje widoczna w czacie. Używane również do odzyskiwania po błędzie przekroczenia kontekstu: historia jest kompaktowana, a żądanie ponawiane jeden raz.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Locator Prompts</source>
         <translation>Polecenia lokalizatora</translation>
     </message>
@@ -931,31 +967,46 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+311"/>
+        <location line="+325"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Piaskownica poleceń</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-325"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
     </message>
     <message>
         <location line="+16"/>
         <location line="+1"/>
-        <location line="+307"/>
+        <location line="+321"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Wczytaj instrukcje projektu</translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-321"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Jeśli zaznaczone, plik instrukcji bieżącego projektu jest dołączany do systemowej wiadomości czatu. Plik to AGENTS.md, z przejściem na CLAUDE.md, i jest wyszukiwany w katalogu projektu, aż do korzenia repozytorium git, dzięki czemu monorepo może przechowywać jeden plik instrukcji dla wszystkich swoich projektów. Pliki większe niż 32 KB są przycinane.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
+        <source>Max consecutive tool turns</source>
+        <translation>Maksymalna liczba kolejnych tur narzędzi</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Max consecutive tool turns:</source>
+        <translation>Maksymalna liczba kolejnych tur narzędzi:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Lokalny model może wchodzić w nieskończoną pętlę wywołań narzędzi, więc po tak wielu kolejnych turach zawierających tylko wywołania narzędzi wywołania nie są wykonywane – model otrzymuje wynik błędu z instrukcją, aby zamiast tego zakończyć. Konwersacje zadań (podagenta) nie są limitowane. Ustaw 0, aby wyłączyć limit.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Web Search Provider</source>
         <translation>Dostawca wyszukiwania w sieci</translation>
     </message>
@@ -1105,7 +1156,7 @@
         <translation>Klucz API dla Tavily, uzyskaj go na tavily.com (wymagany dla dostawcy &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+193"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Nadpisuje globalne ustawienie &apos;Piaskownica poleceń&apos; dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co piaskownica ogranicza.</translation>
     </message>
@@ -1120,7 +1171,7 @@
         <translation>Polecenia</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+86"/>
+        <location filename="../llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Domyślny</translation>
     </message>
@@ -1150,12 +1201,23 @@
         <translation>Maksymalny</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+57"/>
+        <location line="+357"/>
+        <source>Working directory: %1</source>
+        <translation>Katalog roboczy: %1</translation>
+    </message>
+    <message>
+        <location line="-342"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
+        <source>Queued messages – sent after the current step</source>
+        <translation>Kolejkowane wiadomości – wysłane po bieżącym kroku</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Follow up</source>
         <translation>Pytanie uzupełniające</translation>
     </message>
@@ -1165,12 +1227,17 @@
         <translation>Generuj pytania uzupełniające po każdej odpowiedzi</translation>
     </message>
     <message>
+        <location line="+18"/>
+        <source>Generate a conversation title after the first reply</source>
+        <translation>Generuj tytuł konwersacji po pierwszej odpowiedzi</translation>
+    </message>
+    <message>
         <location line="+17"/>
         <source>Thinking level</source>
         <translation>Poziom myślenia</translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+194"/>
         <source>Search in chat</source>
         <translation>Wyszukaj w czacie</translation>
     </message>
@@ -1190,7 +1257,7 @@
         <translation>Wyślij do Llama Chat</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+50"/>
         <source>Model Path: %1</source>
         <translation>Ścieżka modelu: %1</translation>
     </message>
@@ -1215,12 +1282,12 @@
         <translation>nie</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+42"/>
         <source>Follow‑up questions:</source>
         <translation>Pytania uzupełniające:</translation>
     </message>
     <message>
-        <location line="+481"/>
+        <location line="+482"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Poziom myślenia: %1 (dotyczy nowych wiadomości)</translation>
     </message>
@@ -1256,7 +1323,7 @@
         <translation>Czy na pewno chcesz usunąć tę wiadomość?</translation>
     </message>
     <message>
-        <location line="+162"/>
+        <location line="+169"/>
         <source>Processing: %1%</source>
         <translation>Przetwarzanie: %1%</translation>
     </message>
@@ -1290,17 +1357,32 @@
         <translation>Kontekst: użyto %1%.&lt;br&gt;  %2 tokenów z %3.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+14"/>
+        <source>%1 queued</source>
+        <translation>%1 w kolejce</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Remove “%1”</source>
+        <translation>Usuń “%1”</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Remove the queued message (it will not be sent)</source>
+        <translation>Usuń kolejkowaną wiadomość (nie zostanie wysłana)</translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Edytor czatu LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+74"/>
+        <location filename="../llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Wpisz wiadomość (Shift+Enter dla nowej linii)</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+29"/>
         <location line="+6"/>
         <source>Disable Tools usage</source>
         <translation>Wyłącz używanie narzędzi</translation>
@@ -1325,6 +1407,37 @@
         <location line="+3"/>
         <source>Send message to assistant</source>
         <translation>Wyślij wiadomość do asystenta</translation>
+    </message>
+    <message>
+        <location line="+161"/>
+        <source>Cut</source>
+        <translation>Wytnij</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Paste</source>
+        <translation>Wklej</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>History</source>
+        <translation>Historia</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>No history</source>
+        <translation>Brak historii</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+3"/>
+        <source>Clear History</source>
+        <translation>Wyczyść historię</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Remove all %1 saved input history entries?</source>
+        <translation>Usunąć wszystkie %1 zapisanych wpisów historii wprowadzeń?</translation>
     </message>
     <message>
         <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
@@ -1402,22 +1515,19 @@ Czy chcesz go nadpisać?</translation>
         <translation type="vanished">Wszystkie pliki (*)</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsmodel.cpp" line="+73"/>
         <source>Name</source>
-        <translation>Nazwa</translation>
+        <translation type="vanished">Nazwa</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Date</source>
-        <translation>Data</translation>
+        <translation type="vanished">Data</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Conversation Id</source>
-        <translation>Identyfikator konwersacji</translation>
+        <translation type="vanished">Identyfikator konwersacji</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+113"/>
+        <location filename="../llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Tworzy nową konwersację z llama.cpp</translation>
     </message>
@@ -1427,7 +1537,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Odśwież</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+118"/>
         <source>Rename...</source>
         <translation>Zmień nazwę...</translation>
     </message>
@@ -1438,12 +1548,12 @@ Czy chcesz go nadpisać?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+41"/>
+        <location line="+68"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-67"/>
         <source>Save as Markdown</source>
         <translation>Zapisz jako Markdown</translation>
     </message>
@@ -1453,7 +1563,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Zapisz jako HTML</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+57"/>
         <source>Delete Conversation</source>
         <translation>Usuń konwersację</translation>
     </message>
@@ -1494,7 +1604,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Konwersacje llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-896"/>
+        <location filename="../llamasettings.cpp" line="-938"/>
         <source>Create a summary of {selection}</source>
         <translation>Stwórz podsumowanie {selekcji}</translation>
     </message>
@@ -1568,8 +1678,9 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pokaż/ukryj szczegóły użycia narzędzi</translation>
     </message>
     <message>
+        <location filename="../llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
-        <translation type="vanished">Kopiuj</translation>
+        <translation>Kopiuj</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1946,12 +2057,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pobierz ripgrep %1</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+70"/>
         <source>Edit</source>
         <translation>Edytuj</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+172"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Narzędzia search i find używają ripgrep, który nie jest zainstalowany na tym systemie.</translation>
     </message>
@@ -1987,7 +2098,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Wbudowany serwer MCP Qt Creator, zarządzany przez samego Qt Creator (Narzędzia → MCP w ustawieniach Qt Creator).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+166"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2053,7 +2164,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-794"/>
+        <location filename="../toolsettingswidget.cpp" line="-815"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2074,7 +2185,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+275"/>
+        <location filename="../toolsettingswidget.cpp" line="+295"/>
         <source>Name: %1</source>
         <translation>Nazwa: %1</translation>
     </message>
@@ -2125,7 +2236,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-127"/>
+        <location filename="../toolsettingswidget.cpp" line="-128"/>
         <source>Add…</source>
         <translation>Dodaj…</translation>
     </message>
@@ -2162,12 +2273,18 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Polecenia:</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+35"/>
+        <source>Compaction</source>
+        <translation>Kompaktowanie</translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="-1286"/>
+        <location filename="../promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Tytuł</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location filename="../promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Lokalizator (&quot;ll&quot;)</translation>
     </message>
@@ -2210,6 +2327,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
         <translation>nazwa &quot;%1&quot; koliduje z %2 – zachowano pierwszą</translation>
+    </message>
+    <message>
+        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location line="+31"/>
+        <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
+        <translation>Konwersacja skompaktowana – wcześniejsze wiadomości zostały podsumowane, aby zmieścić się w oknie kontekstu.</translation>
     </message>
 </context>
 <context>
@@ -2271,7 +2394,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Sukces. Zaktualizowano następujące pliki:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+103"/>
+        <location filename="../tools/bash_tool.cpp" line="+102"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nie znaleziono powłoki bash. Zainstaluj Git for Windows (https://git-scm.com/download/win) lub dodaj bash do PATH.</translation>
     </message>
@@ -2306,17 +2429,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pełne wyjście zapisano do: %1</translation>
     </message>
     <message>
-        <location line="+110"/>
+        <location line="+114"/>
         <source>running %1</source>
         <translation>uruchamianie %1</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+45"/>
         <source>Error: the command must not be empty.</source>
         <translation>Błąd: polecenie nie może być puste.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+14"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Błąd: katalog roboczy nie istnieje: %1</translation>
     </message>
@@ -2328,7 +2451,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Błąd: %1</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+167"/>
+        <source>Command was stopped by the user.</source>
+        <translation>Polecenie zostało zatrzymane przez użytkownika.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
         <translation>Polecenie przekroczyło limit czasu po %1 ms. Ponów z większym limitem czasu, jeśli polecenie ma zająć dłużej.</translation>
     </message>
@@ -2339,9 +2467,9 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+269"/>
+        <location filename="../tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+339"/>
+        <location filename="../tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>nieznany błąd</translation>
@@ -2556,7 +2684,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Zadanie: %1</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+22"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Zadanie nie powiodło się: podrozmowa &quot;%1&quot; zakończyła się bez ostatecznej odpowiedzi (mogła zostać zatrzymana lub usunięta).</translation>
     </message>
@@ -2570,7 +2698,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+158"/>
+        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>pobierz %1</translation>
@@ -2581,7 +2709,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Nieprawidłowy adres URL &quot;%1&quot;: musi zaczynać się od http:// lub https://</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
         <translation>Pobieranie %1 nie powiodło się: odpowiedź zbyt duża (limit 5 MB).</translation>
     </message>
@@ -2600,7 +2728,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
 [... zawartość skrócona do %1 znaków ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+87"/>
+        <location filename="../tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>wyszukaj %1</translation>
@@ -2621,50 +2749,50 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Wyszukiwanie nie powiodło się: moduł backendu Google nie jest skonfigurowany. Ustaw klucz API i identyfikator silnika wyszukiwania (cx) w ustawieniach Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <location line="+13"/>
-        <location line="+38"/>
-        <location line="+42"/>
-        <location line="+46"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
         <source>Search failed: %1</source>
         <translation>Wyszukiwanie nie powiodło się: %1</translation>
     </message>
     <message>
-        <location line="-135"/>
-        <location line="+51"/>
-        <location line="+42"/>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
         <translation>Wyszukiwanie nie powiodło się: nieprawidłowa odpowiedź od dostawcy wyszukiwania.</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-88"/>
         <source>no results found for &quot;%1&quot;</source>
         <translation>nie znaleziono wyników dla &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Wyszukiwanie nie powiodło się: moduł backendu Brave nie jest skonfigurowany. Ustaw klucz API w ustawieniach Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location line="+41"/>
-        <location line="+40"/>
+        <location line="+36"/>
+        <location line="+44"/>
+        <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
         <translation>Nie znaleziono wyników dla &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-79"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Wyszukiwanie nie powiodło się: moduł backendu Tavily nie jest skonfigurowany. Ustaw klucz API w ustawieniach Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
         <translation>Wyszukiwanie nie powiodło się: adres URL punktu końcowego Exa nie jest skonfigurowany.</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+37"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
@@ -2673,7 +2801,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location filename="../tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>znajdź pliki %1</translation>
@@ -2684,7 +2812,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-145"/>
+        <location filename="../tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Wzorzec: %1</translation>
     </message>
@@ -2695,30 +2823,36 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>  Ścieżka: %1</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
         <translation>Błąd: nie znaleziono ripgrep (rg). Można go pobrać ze strony ustawień narzędzi Llama.cpp Chat lub zainstalować ręcznie z https://github.com/BurntSushi/ripgrep, aby używać narzędzia find.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+18"/>
+        <location filename="../tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Błąd: wzorzec nie może być pusty.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+120"/>
+        <location filename="../tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Błąd: ścieżka nie jest katalogiem: %1</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+95"/>
+        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation>[Wyszukiwanie zostało zatrzymane przez użytkownika. Wyniki są niekompletne.]</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
         <translation>[Wyszukiwanie przekroczyło limit czasu po %1 ms. Wyniki są niekompletne; użyj bardziej szczegółowego wzorca.]</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+113"/>
+        <location filename="../tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Nie udało się uruchomić ripgrep: %1]</translation>
     </message>
@@ -2744,7 +2878,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>[Wyjście skrócone do %1 KB. Użyj bardziej szczegółowego wzorca, aby zobaczyć wszystkie wyniki.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location filename="../tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>lista katalogu %1</translation>
@@ -2759,7 +2893,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
 </translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+53"/>
         <source>Directory is empty.</source>
         <translation>Katalog jest pusty.</translation>
     </message>
@@ -2849,7 +2983,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Rozpakowanie ripgrep nie powiodło się: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location filename="../tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>wyszukaj %1</translation>
@@ -2864,7 +2998,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>  Wzorzec glob: %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
         <translation>Błąd: nie znaleziono ripgrep (rg). Można go pobrać ze strony ustawień narzędzi Llama.cpp Chat lub zainstalować ręcznie z https://github.com/BurntSushi/ripgrep, aby używać narzędzia search.</translation>
     </message>
@@ -2874,7 +3008,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Błąd: ścieżka nie istnieje: %1</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+107"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Wyszukiwanie przekroczyło limit czasu po %1 ms. Wyniki są niekompletne; zawęź ścieżkę lub doprecyzuj wzorzec.]</translation>
     </message>
@@ -2919,7 +3053,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>(brak)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+98"/>
+        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>zaktualizuj listę zadań</translation>
@@ -2930,7 +3064,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>zaktualizuj listę zadań (%1 zadań)</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Błąd narzędzia: &quot;todos&quot; musi zawierać co najmniej jedno zadanie.</translation>
     </message>
@@ -2955,7 +3089,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Lista zadań zaktualizowana: ukończono %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+61"/>
+        <location filename="../tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Zapis do &quot;%1&quot; nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu i lokalizacjach tymczasowych.</translation>
     </message>

@@ -8,7 +8,7 @@
         <translation type="vanished">llama.cpp konversation</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+135"/>
+        <location filename="../llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp konversation</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Aktivera llama.cpp.</translation>
     </message>
     <message>
-        <location line="+373"/>
+        <location line="+385"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fel vid hämtning av FIM-komplettering från %1: %2</translation>
     </message>
@@ -145,23 +145,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+116"/>
+        <location filename="../promptssettingswidget.cpp" line="+117"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
-        <location line="-1229"/>
+        <location line="-1241"/>
         <location filename="../llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+74"/>
+        <location filename="../llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Skriv ett meddelande (Shift+Enter för ny rad)</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+86"/>
+        <location filename="../llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -191,12 +191,23 @@
         <translation>Max</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+57"/>
+        <location line="+357"/>
+        <source>Working directory: %1</source>
+        <translation>Arbetskatalog: %1</translation>
+    </message>
+    <message>
+        <location line="-342"/>
         <source>LLM model</source>
         <translation>LLM-modell</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
+        <source>Queued messages – sent after the current step</source>
+        <translation>Köade meddelanden – skickas efter det aktuella steget</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Follow up</source>
         <translation>Uppföljning</translation>
     </message>
@@ -206,12 +217,17 @@
         <translation>Generera uppföljningsfrågor efter varje svar</translation>
     </message>
     <message>
+        <location line="+18"/>
+        <source>Generate a conversation title after the first reply</source>
+        <translation>Generera en konversationstitel efter det första svaret</translation>
+    </message>
+    <message>
         <location line="+17"/>
         <source>Thinking level</source>
         <translation>Tänknivå</translation>
     </message>
     <message>
-        <location line="+186"/>
+        <location line="+194"/>
         <source>Search in chat</source>
         <translation>Sök i chatten</translation>
     </message>
@@ -231,7 +247,7 @@
         <translation>Skicka till Llama-chatt</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+50"/>
         <source>Model Path: %1</source>
         <translation>Modellväg: %1</translation>
     </message>
@@ -256,12 +272,12 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+42"/>
         <source>Follow‑up questions:</source>
         <translation>Uppföljningsfrågor:</translation>
     </message>
     <message>
-        <location line="+481"/>
+        <location line="+482"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tänknivå: %1 (gäller nya meddelanden)</translation>
     </message>
@@ -297,7 +313,7 @@
         <translation>Är du säker på att du vill ta bort detta meddelande?</translation>
     </message>
     <message>
-        <location line="+162"/>
+        <location line="+169"/>
         <source>Processing: %1%</source>
         <translation>Bearbetar: %1%</translation>
     </message>
@@ -327,12 +343,27 @@
         <translation>Kontext: %1% använt.&lt;br&gt;  %2 token från %3.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+14"/>
+        <source>%1 queued</source>
+        <translation>%1 köat</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Remove “%1”</source>
+        <translation>Ta bort “%1”</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Remove the queued message (it will not be sent)</source>
+        <translation>Ta bort det köade meddelandet (det skickas inte)</translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>LlamaCpp-chattredigerare</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+16"/>
+        <location filename="../llamachatinput.cpp" line="+29"/>
         <location line="+6"/>
         <source>Disable Tools usage</source>
         <translation>Avaktivera verktyg</translation>
@@ -357,6 +388,37 @@
         <location line="+3"/>
         <source>Send message to assistant</source>
         <translation>Skicka meddelande till assistenten</translation>
+    </message>
+    <message>
+        <location line="+161"/>
+        <source>Cut</source>
+        <translation>Klipp ut</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Paste</source>
+        <translation>Klistra in</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>History</source>
+        <translation>Historik</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>No history</source>
+        <translation>Ingen historik</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+3"/>
+        <source>Clear History</source>
+        <translation>Rensa historik</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Remove all %1 saved input history entries?</source>
+        <translation>Ta bort alla %1 sparade poster i indatahistoriken?</translation>
     </message>
     <message>
         <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
@@ -436,7 +498,7 @@ Vill du överskriva den?</translation>
         <translation type="vanished">Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+40"/>
+        <location filename="../llamasettings.cpp" line="+55"/>
         <source>Create a summary of {selection}</source>
         <translation>Skapa en sammanfattning av {selection}</translation>
     </message>
@@ -510,8 +572,9 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Byta mellan att visa eller dölja detaljerna om verktygsanvändning</translation>
     </message>
     <message>
+        <location filename="../llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
-        <translation type="vanished">Kopiera</translation>
+        <translation>Kopiera</translation>
     </message>
     <message>
         <source>Save</source>
@@ -875,28 +938,28 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+399"/>
+        <location filename="../llamaconversationsview.cpp" line="+450"/>
         <source>llama.cpp Conversations</source>
         <translation>Llama.cpp-konversationer</translation>
     </message>
     <message>
-        <location line="-165"/>
+        <location line="-192"/>
         <source>Save as Markdown</source>
         <translation>Spara som Markdown</translation>
     </message>
     <message>
         <location line="-1"/>
-        <location line="+41"/>
+        <location line="+68"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location line="-37"/>
+        <location line="-64"/>
         <source>Save as HTML</source>
         <translation>Spara som HTML</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+57"/>
         <source>Delete Conversation</source>
         <translation>Ta bort konversation</translation>
     </message>
@@ -913,7 +976,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Spara konversation som HTML</translation>
     </message>
     <message>
-        <location line="-144"/>
+        <location line="-171"/>
         <source>Rename...</source>
         <translation>Byt namn...</translation>
     </message>
@@ -923,12 +986,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Sammanfatta</translation>
     </message>
     <message>
-        <location line="-115"/>
+        <location line="-119"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location line="+218"/>
+        <location line="+249"/>
         <source>Save Conversation as Markdown</source>
         <translation>Spara konversation som Markdown</translation>
     </message>
@@ -951,22 +1014,19 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsmodel.cpp" line="+73"/>
         <source>Name</source>
-        <translation>Namn</translation>
+        <translation type="vanished">Namn</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Date</source>
-        <translation>Datum</translation>
+        <translation type="vanished">Datum</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Conversation Id</source>
-        <translation>Konversations-ID</translation>
+        <translation type="vanished">Konversations-ID</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="-275"/>
+        <location line="-306"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Skapar en ny konversation för llama.cpp</translation>
     </message>
@@ -1161,7 +1221,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Maximalt antal cachade kompletteringar att behålla i result_cache.</translation>
     </message>
     <message>
-        <location line="-178"/>
+        <location line="-193"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Sammanfatta konversationens titel med några ord inklusive en emoji. Använd det språk som används i konversationen. Använd ren text, ingen markdown.</translation>
     </message>
@@ -1171,7 +1231,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Generera upp till fem uppföljningsfrågor i sammanhanget av den aktuella konversationen. Frågorna är från användarens synpunkt. Endast frågor, inga förklaringar. Använd det språk som används i konversationen. Returnera ett JSON-objekt med en enskild nyckel &quot;follow_ups&quot; som innehåller en array med strängar med frågeformuleringar i ren text, ingen markdown.</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+9"/>
+        <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. only summarize.</source>
+        <translation>Konversationen ovan är lång och är på väg att ta slut på kontextutrymme. Skriv en detaljerad sammanfattning av den som gör att konversationen kan fortsätta sömlöst. Strukturera sammanfattningen som markdown med dessa avsnitt: ## Uppgift (vad användaren bad om och det övergripande målet), ## Nyckelbeslut (viktiga beslut, begränsningar och preferenser), ## Genomfört arbete (filer som ändrats, kommandon som körts, kodändringar och deras resultat), ## Nuvarande läge (vad som är klart, vad som pågår, fel som uppstått) och ## Nästa steg (vad som ska hända härnäst för att slutföra uppgiften). Var precis och konkret: behåll filvägar, funktionsnamn och exakta värden. Svara inte på användarens senaste meddelande; sammanfatta bara.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
         <source>Skills</source>
         <translation>Färdigheter</translation>
     </message>
@@ -1702,6 +1767,16 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Prompt som skickas till modellen för att generera uppföljningsfrågor efter ett komplett svar.</translation>
     </message>
     <message>
+        <location line="+3"/>
+        <source>Compaction Prompt</source>
+        <translation>Komprimeringsprompt</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
+        <translation>Prompt som skickas till modellen för att sammanfatta konversationens historik när den komprimeras för att passa i kontextfönstret.</translation>
+    </message>
+    <message>
         <location line="+5"/>
         <location filename="../promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
@@ -1713,7 +1788,28 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>När aktiverat genereras förslag på uppföljningsfrågor efter varje komplett assistantsvar.</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+5"/>
+        <source>Auto-generate Conversation Title</source>
+        <translation>Generera konversationstitel automatiskt</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>When enabled, a short conversation title is generated by the model after the first assistant reply.</source>
+        <translation>När aktiverat genererar modellen en kort konversationstitel efter det första assistantsvaret.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location line="+1"/>
+        <source>Auto-compact long conversations</source>
+        <translation>Komprimera långa konversationer automatiskt</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>När konversationen använder cirka 80 % av modellens kontextfönster sammanfattas dess historik i ett kompakt markörmeddelande och endast sammanfattningen plus meddelandena efter det skickas till modellen från och med då. Hela historiken syns fortfarande i chatten. Används också för att återhämta sig från ett kontextöverskridandefel: historiken komprimeras och begäran försöks igen en gång.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Locator Prompts</source>
         <translation>Locator-prompts</translation>
     </message>
@@ -1746,31 +1842,46 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+311"/>
+        <location line="+325"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandboxkommandon</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-325"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation>Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivingar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win från @anthropic-ai/sandbox-runtime på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows kräver sandboxen en engångsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); srt-win-exekverbara filen måste finnas på PATH (LLAMA_SRT_WIN kan peka på den).</translation>
     </message>
     <message>
         <location line="+16"/>
         <location line="+1"/>
-        <location line="+307"/>
+        <location line="+321"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Ladda projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-321"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Om markerat läggs det aktuella projektets projektinstruktionsfil till i chattens systemmeddelande. Filen är AGENTS.md, med CLAUDE.md som reserv, och söks i projektkatalogen och uppåt till git-repoets rot, så att en monorepo kan behålla en enda instruktionsfil för alla sina projekt. Filer större än 32 KB avklipps.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+11"/>
+        <source>Max consecutive tool turns</source>
+        <translation>Max påföljande verktygsomgångar</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Max consecutive tool turns:</source>
+        <translation>Max påföljande verktygsomgångar:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>En lokal modell kan köra verktygsanrop i oändlighet, så efter så många påföljande enbart-verktygsomgångar utförs anropen inte – modellen får ett misslyckat resultat som säger att slutföra i stället. Konversationer för uppgifter (underagenter) är inte begränsade. Sätt till 0 för ingen gräns.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Web Search Provider</source>
         <translation>Webbsöksleverantör</translation>
     </message>
@@ -1920,7 +2031,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>API-nyckel för Tavily, få en på tavily.com (krävs för &quot;tavily&quot;-leverantören).</translation>
     </message>
     <message>
-        <location line="+191"/>
+        <location line="+193"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Överskrider den globala inställningen &apos;Sandboxkommandon&apos; för det här projektet. Se den globala inställningen på sidan Llama-verktyg för vad sandboxen begränsar.</translation>
     </message>
@@ -1951,7 +2062,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+152"/>
+        <location filename="../toolsettingswidget.cpp" line="+171"/>
         <source>Add…</source>
         <translation>Lägg till…</translation>
     </message>
@@ -1988,17 +2099,23 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Prompts:</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+35"/>
+        <source>Compaction</source>
+        <translation>Komprimering</translation>
+    </message>
+    <message>
+        <location filename="../llamachateditor.cpp" line="-1286"/>
+        <location filename="../promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location filename="../promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-80"/>
+        <location filename="../toolsettingswidget.cpp" line="-99"/>
         <source>Select a tool to view its definition</source>
         <translation>Välj ett verktyg för att visa dess definition</translation>
     </message>
@@ -2013,12 +2130,12 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Hämta ripgrep %1</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+70"/>
         <source>Edit</source>
         <translation>Redigera</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="+172"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Sök- och find-verktygen använder ripgrep, som inte är installerat på det här systemet.</translation>
     </message>
@@ -2054,7 +2171,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Den inbyggda Qt Creator MCP-servern, hanterad av själva Qt Creator (Verktyg → MCP i Qt Creator-inställningarna).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="+166"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2120,7 +2237,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-794"/>
+        <location filename="../toolsettingswidget.cpp" line="-815"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -2141,7 +2258,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+275"/>
+        <location filename="../toolsettingswidget.cpp" line="+295"/>
         <source>Name: %1</source>
         <translation>Namn: %1</translation>
     </message>
@@ -2215,6 +2332,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
         <translation>namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
     </message>
+    <message>
+        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location line="+31"/>
+        <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
+        <translation>Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2275,7 +2398,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Lyckades. Uppdaterade följande filer:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+103"/>
+        <location filename="../tools/bash_tool.cpp" line="+102"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Ingen bash-shell hittades. Installera Git for Windows (https://git-scm.com/download/win) eller lägg till en bash på PATH.</translation>
     </message>
@@ -2310,17 +2433,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hela utdata sparad till: %1</translation>
     </message>
     <message>
-        <location line="+110"/>
+        <location line="+114"/>
         <source>running %1</source>
         <translation>kör %1</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+45"/>
         <source>Error: the command must not be empty.</source>
         <translation>Fel: kommandot får inte vara tomt.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+14"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Fel: arbetskatalogen finns inte: %1</translation>
     </message>
@@ -2332,7 +2455,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fel: %1</translation>
     </message>
     <message>
-        <location line="+161"/>
+        <location line="+167"/>
+        <source>Command was stopped by the user.</source>
+        <translation>Kommandot stoppades av användaren.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
         <translation>Kommandot tog slut efter %1 ms. Försök igen med en längre tidsgräns om kommandot förväntas ta längre tid.</translation>
     </message>
@@ -2343,9 +2471,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+269"/>
+        <location filename="../tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+339"/>
+        <location filename="../tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>okänt fel</translation>
@@ -2560,7 +2688,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uppgift: %1</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+22"/>
         <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Uppgiften misslyckades: underkonversationen &quot;%1&quot; slutade utan ett slutligt svar (den kan ha stoppats eller raderats).</translation>
     </message>
@@ -2574,7 +2702,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+158"/>
+        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>hämta %1</translation>
@@ -2585,7 +2713,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ogiltig URL &quot;%1&quot;: den måste börja med http:// eller https://</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
         <translation>Hämtningen misslyckades för %1: svaret för stort (gräns 5 MB).</translation>
     </message>
@@ -2604,7 +2732,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... innehåll avklippt vid %1 tecken ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+87"/>
+        <location filename="../tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>sök %1</translation>
@@ -2625,50 +2753,50 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Sökningen misslyckades: Google-backenden är inte konfigurerad. Ange API-nyckeln och sökmotor-ID:et (cx) i Llama.cpp-inställningarna.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <location line="+13"/>
-        <location line="+38"/>
-        <location line="+42"/>
-        <location line="+46"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
         <source>Search failed: %1</source>
         <translation>Sökningen misslyckades: %1</translation>
     </message>
     <message>
-        <location line="-135"/>
-        <location line="+51"/>
-        <location line="+42"/>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
         <translation>Sökningen misslyckades: ogiltigt svar från sökleverantören.</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-88"/>
         <source>no results found for &quot;%1&quot;</source>
         <translation>inga resultat hittades för &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Sökningen misslyckades: Brave-backenden är inte konfigurerad. Ange API-nyckeln i Llama.cpp-inställningarna.</translation>
     </message>
     <message>
-        <location line="+34"/>
-        <location line="+41"/>
-        <location line="+40"/>
+        <location line="+36"/>
+        <location line="+44"/>
+        <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
         <translation>Inga resultat hittades för &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-72"/>
+        <location line="-79"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Sökningen misslyckades: Tavily-backenden är inte konfigurerad. Ange API-nyckeln i Llama.cpp-inställningarna.</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
         <translation>Sökningen misslyckades: Exa-slutpunkts-URL:en är inte konfigurerad.</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+37"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
@@ -2677,7 +2805,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-150"/>
+        <location filename="../tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>hitta filer %1</translation>
@@ -2688,7 +2816,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-145"/>
+        <location filename="../tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Mönster: %1</translation>
     </message>
@@ -2699,30 +2827,36 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>  Sökväg: %1</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
         <translation>Fel: ripgrep (rg) hittades inte. Det kan hämtas från inställningssidan för Llama.cpp-chattverktyg, eller installeras manuellt från https://github.com/BurntSushi/ripgrep, för att använda find-verktyget.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+18"/>
+        <location filename="../tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Fel: mönstret får inte vara tomt.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+120"/>
+        <location filename="../tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fel: sökvägen är inte en katalog: %1</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+95"/>
+        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation>[Sökningen stoppades av användaren. Resultaten är ofullständiga.]</translation>
+    </message>
+    <message>
+        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
         <translation>[Sökningen tog slut efter %1 ms. Resultaten är ofullständiga; använd ett mer specifikt mönster.]</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+113"/>
+        <location filename="../tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Kunde inte starta ripgrep: %1]</translation>
     </message>
@@ -2748,7 +2882,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Utdata avklippt till %1 KB. Använd ett mer specifikt mönster för att se alla resultat.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-30"/>
+        <location filename="../tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>lista katalog %1</translation>
@@ -2763,7 +2897,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+53"/>
         <source>Directory is empty.</source>
         <translation>Katalogen är tom.</translation>
     </message>
@@ -2853,7 +2987,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Upppackningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-158"/>
+        <location filename="../tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>sök efter %1</translation>
@@ -2868,7 +3002,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>  Glob: %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
         <translation>Fel: ripgrep (rg) hittades inte. Det kan hämtas från inställningssidan för Llama.cpp-chattverktyg, eller installeras manuellt från https://github.com/BurntSushi/ripgrep, för att använda search-verktyget.</translation>
     </message>
@@ -2878,7 +3012,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fel: sökvägen finns inte: %1</translation>
     </message>
     <message>
-        <location line="+100"/>
+        <location line="+107"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Sökningen tog slut efter %1 ms. Resultaten är ofullständiga; begränsa sökvägen eller förfin mönstret.]</translation>
     </message>
@@ -2923,7 +3057,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(inga)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+98"/>
+        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>uppdatera uppgiftslistan</translation>
@@ -2934,7 +3068,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>uppdatera uppgiftslistan (%1 uppgifter)</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Verktygsfel: &quot;todos&quot; måste innehålla åtminstone en uppgift.</translation>
     </message>
@@ -2959,7 +3093,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uppgiftslistan uppdaterad: %1 av %2 slutförda.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+61"/>
+        <location filename="../tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen och tillfälliga platser.</translation>
     </message>
