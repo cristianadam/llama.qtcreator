@@ -8,11 +8,8 @@
 #include <QFontInfo>
 #include <QFontMetricsF>
 #include <QGuiApplication>
-#include <QAudioOutput>
-#include <QFileInfo>
 #include <QHBoxLayout>
 #include <QIcon>
-#include <QMediaPlayer>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
@@ -21,10 +18,8 @@
 #include <QRegularExpression>
 #include <QResizeEvent>
 #include <QScrollBar>
-#include <QPolygonF>
 #include <QSvgRenderer>
 #include <QTextFragment>
-#include <QtMultimediaWidgets/QVideoWidget>
 
 #include <algorithm>
 
@@ -52,150 +47,6 @@ static QString fromStdString(const std::pmr::string &s)
 
 // Escape a string for safe inclusion in an HTML snippet passed to insertHtml().
 static QString escapeHtml(QString text);
-
-// 16:9 placeholder served for "llamavideo://" image URLs: a dark rounded
-// rectangle with a play triangle. It reserves the line the video occupies;
-// the QVideoWidget overlay (renderVideoElement()) covers it, letterboxing
-// videos whose aspect ratio differs.
-static QImage videoPlaceholderImage()
-{
-    constexpr int kWidth = 480;
-    constexpr int kHeight = 270;
-    QImage image(kWidth, kHeight, QImage::Format_ARGB32_Premultiplied);
-    image.fill(Qt::transparent);
-    QPainter painter(&image);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(Qt::NoPen);
-    painter.setBrush(QColor(0x1F, 0x23, 0x28));
-    painter.drawRoundedRect(QRectF(image.rect()), 10, 10);
-    painter.setBrush(QColor(255, 255, 255, 160));
-    QPolygonF triangle;
-    triangle << QPointF(kWidth * 0.45, kHeight * 0.36)
-             << QPointF(kWidth * 0.66, kHeight * 0.5)
-             << QPointF(kWidth * 0.45, kHeight * 0.64);
-    painter.drawPolygon(triangle);
-    return image;
-}
-
-// Decode the HTML entities that can occur in a quoted attribute value
-// (&amp; &lt; &gt; &quot; &apos; plus numeric references); a model-generated
-// path may carry an escaped ampersand.
-static QString decodeHtmlEntities(const QString &text)
-{
-    if (!text.contains(QLatin1Char('&')))
-        return text;
-    QString out;
-    out.reserve(text.size());
-    for (int i = 0; i < text.size(); ++i) {
-        if (text.at(i) != QLatin1Char('&')) {
-            out.append(text.at(i));
-            continue;
-        }
-        const int semi = text.indexOf(QLatin1Char(';'), i);
-        if (semi < 0 || semi - i > 12) {
-            out.append(text.at(i));
-            continue;
-        }
-        const QString entity = text.mid(i + 1, semi - i - 1);
-        QChar ch;
-        if (entity == QLatin1String("amp"))
-            ch = QLatin1Char('&');
-        else if (entity == QLatin1String("lt"))
-            ch = QLatin1Char('<');
-        else if (entity == QLatin1String("gt"))
-            ch = QLatin1Char('>');
-        else if (entity == QLatin1String("quot"))
-            ch = QLatin1Char('"');
-        else if (entity == QLatin1String("apos"))
-            ch = QLatin1Char('\'');
-        else if (entity.startsWith(QStringLiteral("#x"), Qt::CaseInsensitive))
-            ch = QChar(entity.mid(2).toInt(nullptr, 16));
-        else if (entity.startsWith(QLatin1Char('#')))
-            ch = QChar(entity.mid(1).toInt());
-        if (ch.isNull()) {
-            out.append(text.at(i));
-            continue;
-        }
-        out.append(ch);
-        i = semi;
-    }
-    return out;
-}
-
-// Parse the attributes of a <video> opening tag (the full tag, e.g.
-// "<video src=\"x.mp4\" autoplay loop/>"). Bare flags (autoplay, loop,
-// muted) may appear without a value. Chat videos are ambient, so loop and
-// autoplay default to on; a missing src fails the parse.
-static bool parseVideoAttributes(const QString &openTag, QString &src, double &width,
-                                 double &height, bool &muted, bool &loop, bool &autoplay)
-{
-    src.clear();
-    width = -1;
-    height = -1;
-    muted = false;
-    loop = true;
-    autoplay = true;
-    // The attribute body starts at the first whitespace — HTML allows a tab
-    // (or any whitespace) after the tag name, not just a space.
-    int bodyStart = -1;
-    for (int i = 0; i < openTag.size(); ++i) {
-        if (openTag.at(i).isSpace()) {
-            bodyStart = i;
-            break;
-        }
-    }
-    if (bodyStart < 0)
-        return false;
-    // Strip only the tag terminators (">" and a self-closing "/" right
-    // before it) — never slashes inside the quoted attribute values.
-    QString body = openTag.mid(bodyStart);
-    while (body.endsWith('>'))
-        body.chop(1);
-    if (body.endsWith('/'))
-        body.chop(1);
-    static const QRegularExpression attrRe(
-        QStringLiteral("([A-Za-z_:][-A-Za-z0-9_:.]*)\\s*(?:=\\s*(?:\"([^\"]*)\"|'([^']*)'|([^\\s\"']+)))?"));
-    QRegularExpressionMatchIterator it = attrRe.globalMatch(body);
-    while (it.hasNext()) {
-        const QRegularExpressionMatch m = it.next();
-        const QString name = m.captured(1).toLower();
-        QString value;
-        if (!m.captured(2).isEmpty())
-            value = m.captured(2);
-        else if (!m.captured(3).isEmpty())
-            value = m.captured(3);
-        else if (!m.captured(4).isEmpty())
-            value = m.captured(4);
-        else
-            value = QStringLiteral("true"); // bare flag
-        if (name == QLatin1String("src"))
-            src = decodeHtmlEntities(value);
-        else if (name == QLatin1String("width"))
-            width = value.toDouble();
-        else if (name == QLatin1String("height"))
-            height = value.toDouble();
-        else if (name == QLatin1String("muted"))
-            muted = true;
-        else if (name == QLatin1String("loop"))
-            loop = value != QLatin1String("false");
-        else if (name == QLatin1String("autoplay"))
-            autoplay = value != QLatin1String("false");
-    }
-    return !src.isEmpty();
-}
-
-// True if \a tag opens a <video> element: the name must be followed by a
-// delimiter (whitespace, ">", a self-closing "/") or end the node — so that
-// e.g. <videos> is not mistaken for <video>.
-static bool isVideoOpenTag(std::string_view tag)
-{
-    if (!tag.starts_with("<video"))
-        return false;
-    if (tag.size() == 6)
-        return true;
-    const char c = tag[6];
-    return c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == '>' || c == '/';
-}
 
 // Rewrite the root <svg> height/viewBox of the tightly-cropped SVGs emitted
 // by katex2svg.js to \a newHeight. The content keeps its top anchoring, so
@@ -284,8 +135,8 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
             this,
             &MarkdownRenderer::updateAllOverlaysGeometry);
     // feed()/finish() run before the document has been laid out at its final
-    // size, so the first overlay pass (video widgets in particular) usually
-    // finds no fragment rects yet; re-run it when the layout completes.
+    // size, so the first overlay pass usually finds no block rects yet;
+    // re-run it when the layout completes.
     connect(m_doc->documentLayout(),
             &QAbstractTextDocumentLayout::documentSizeChanged,
             this,
@@ -362,23 +213,6 @@ void MarkdownRenderer::reset()
     // (m_diagramCache is kept on purpose: it mirrors the SVGs persisted
     // with the message, and a divergent re-feed must not lose them.)
     m_svgStore.clear();
-
-    // Videos: the document is cleared below, so the placeholder fragments
-    // (and with them the players' reason to exist) are gone. A re-feed
-    // recreates them, restarting playback from the beginning.
-    for (auto &video : m_videos) {
-        if (video.player) {
-            video.player->stop();
-            delete video.player;
-            video.player = nullptr;
-        }
-        if (video.widget) {
-            delete video.widget;
-            video.widget = nullptr;
-        }
-    }
-    m_videos.clear();
-    m_videoStore.clear();
 
     if (m_doc) {
         m_doc->clear();
@@ -494,45 +328,6 @@ bool MarkdownRenderer::renderInlineHtmlElement(
     const markus::Document &doc,
     const std::pmr::vector<markus::InlineNodeId> &ids, size_t start, size_t &outEnd)
 {
-    // A <video> element has a dedicated rendering (a QVideoWidget overlay on
-    // a placeholder image; QTextDocument has no native video support), so it
-    // is detected before the generic balanced-element path below.
-    if (auto *first = std::get_if<markus::HtmlInline>(&doc.inline_nodes[ids[start]]);
-        first && isVideoOpenTag(first->content)) {
-        QString openTag;
-        int depth = 0;
-        for (size_t i = start; i < ids.size(); ++i) {
-            const markus::InlineNode &node = doc.inline_nodes[ids[i]];
-            if (const auto *tag = std::get_if<markus::HtmlInline>(&node)) {
-                const std::string_view t = tag->content;
-                if (depth == 0)
-                    openTag = QString::fromUtf8(t.data(), t.size());
-                depth += inlineHtmlDepthChange(t);
-                if (depth == 0) {
-                    QString src;
-                    double width = -1, height = -1;
-                    bool muted = false, loop = false, autoplay = false;
-                    if (parseVideoAttributes(openTag, src, width, height, muted, loop, autoplay)) {
-                        renderVideoElement(src, width, height, muted, loop, autoplay);
-                        outEnd = i + 1;
-                        return true;
-                    }
-                    return false; // no usable src: fall back to per-node rendering
-                }
-                if (depth < 0)
-                    return false;
-            } else if (depth > 0) {
-                // <video> content (if any) is a plain-text fallback
-                // description in browsers; ignore it here.
-                if (!std::get_if<markus::Text>(&node))
-                    return false;
-            } else {
-                return false;
-            }
-        }
-        return false; // never balanced within the available nodes
-    }
-
     QString buffer;
     int depth = 0;
     for (size_t i = start; i < ids.size(); ++i) {
@@ -1082,20 +877,6 @@ QByteArray MarkdownRenderer::svgContentForUrl(const QUrl &url) const
     return m_svgStore.value(url.authority());
 }
 
-QString MarkdownRenderer::videoPathForUrl(const QUrl &url) const
-{
-    if (url.scheme() != QLatin1String("llamavideo"))
-        return {};
-    return m_videoStore.value(url.authority());
-}
-
-QVariant MarkdownRenderer::loadResource(int type, const QUrl &name)
-{
-    if (type == QTextDocument::ImageResource && name.scheme() == QLatin1String("llamavideo"))
-        return videoPlaceholderImage();
-    return QTextBrowser::loadResource(type, name);
-}
-
 QImage MarkdownRenderer::scaledImageForDisplay(const QImage &image,
                                                double maxWidth,
                                                qreal devicePixelRatio)
@@ -1643,127 +1424,6 @@ void MarkdownRenderer::renderImage(const markus::Image &img)
     m_cursor.insertImage(imgFmt);
 }
 
-void MarkdownRenderer::renderVideoElement(const QString &src, double width, double height,
-                                          bool muted, bool loop, bool autoplay)
-{
-    // Local files only (a relative path resolves against the working
-    // directory, like the local images the preview loads).
-    const QString path = QFileInfo(src).absoluteFilePath();
-    if (!QFile::exists(path)) {
-        // No player for a missing file: leave a visible note instead of a
-        // dead placeholder.
-        m_cursor.insertText(QStringLiteral("[video not found: %1]").arg(src));
-        return;
-    }
-
-    // The key derives from the file path only, so tail re-renders of the
-    // same video reuse the image URL, the store entry and the player.
-    const QString key = QStringLiteral("vid-") + QString::fromLatin1(
-            QCryptographicHash::hash(path.toUtf8(), QCryptographicHash::Md5).toHex().left(16));
-    m_videoStore.insert(key, path);
-
-    {
-        QTextImageFormat imgFmt;
-        imgFmt.setName(QStringLiteral("llamavideo://") + key);
-        if (width > 0)
-            imgFmt.setWidth(width);
-        if (height > 0)
-            imgFmt.setHeight(height);
-        imgFmt.setVerticalAlignment(QTextCharFormat::AlignBottom);
-        // insertImage() may leave the cursor's char format set to the image
-        // format; the following text must not inherit it.
-        const QTextCharFormat prev = m_cursor.charFormat();
-        m_cursor.insertImage(imgFmt);
-        m_cursor.setCharFormat(prev);
-    }
-
-    Video &video = m_videos[key];
-    if (!video.player) {
-        video.player = new QMediaPlayer(this);
-        video.player->setSource(QUrl::fromLocalFile(path));
-        // Qt's loop counts start at 1 (Once); setLoops(0) is normalized to
-        // Once, so "no loop" is Once and looping is Infinite.
-        video.player->setLoops(loop ? QMediaPlayer::Loops::Infinite
-                                    : QMediaPlayer::Loops::Once);
-        QAudioOutput *audio = new QAudioOutput(this);
-        audio->setMuted(muted);
-        video.player->setAudioOutput(audio);
-        // The QVideoWidget is a viewport child (like the code-block
-        // overlays); updateAllOverlaysGeometry() keeps it over the
-        // placeholder fragment.
-        video.widget = new QVideoWidget(viewport());
-        video.player->setVideoOutput(video.widget);
-        video.widget->hide();
-
-        // play() before the media is loaded is ignored by the backends
-        // (the source is opened asynchronously): start once it is ready.
-        QMediaPlayer *player = video.player;
-        const auto tryPlay = [player, autoplay] {
-            if (autoplay && player->mediaStatus() == QMediaPlayer::LoadedMedia
-                && !player->isPlaying())
-                player->play();
-        };
-        connect(video.player, &QMediaPlayer::mediaStatusChanged, video.player,
-                [tryPlay](QMediaPlayer::MediaStatus) { tryPlay(); });
-        tryPlay();
-    }
-}
-
-QRectF MarkdownRenderer::videoFragmentRect(const QString &key) const
-{
-    const QString name = QStringLiteral("llamavideo://") + key;
-    // The image character is located by scanning the document (QTextLayout's
-    // fragment walker is private API in Qt 6; there is no cheaper public way
-    // to find it).  The box Qt paints it with is cursorRect() of a cursor
-    // that *selects* the character: for a selection cursorRect() covers the
-    // whole selection, while a collapsed cursor would report only the caret
-    // position, not the image box.  This runs on every scroll/resize, so the
-    // scan reuses a single cursor.
-    QTextCursor cursor(m_doc);
-    // The last character (the paragraph separator) can never be the image;
-    // skipping it also keeps the selection below in range.
-    for (int pos = 0; pos + 1 < m_doc->characterCount(); ++pos) {
-        // A *collapsed* cursor's charFormat() reports the preceding
-        // character's format (except at a block's start), so the character
-        // must be selected to query its own format — matching on a plain
-        // setPosition() would hit one character too late and place the
-        // overlay past the placeholder for images not at the line start.
-        cursor.setPosition(pos);
-        cursor.setPosition(pos + 1, QTextCursor::KeepAnchor);
-        const QTextCharFormat cf = cursor.charFormat();
-        if (!cf.isImageFormat() || cf.toImageFormat().name() != name)
-            continue;
-
-        const QTextBlock block = m_doc->findBlock(pos);
-        if (!block.isVisible() || !block.layout())
-            return {}; // collapsed <details> body
-
-        const QRectF selRect = cursorRect(cursor);
-        if (!selRect.isValid())
-            return {}; // not laid out yet
-
-        // Displayed size: the image format's explicit width/height, else the
-        // served resource's logical size.
-        const QTextImageFormat imgFmt = cf.toImageFormat();
-        double w = imgFmt.width();
-        double h = imgFmt.height();
-        if (w <= 0 || h <= 0) {
-            const QImage image = m_doc->resource(QTextDocument::ImageResource, QUrl(name))
-                                     .value<QImage>();
-            if (!image.isNull()) {
-                if (w <= 0)
-                    w = image.width() / image.devicePixelRatio();
-                if (h <= 0)
-                    h = image.height() / image.devicePixelRatio();
-            }
-        }
-        if (w <= 0 || h <= 0)
-            return {};
-        return QRectF(selRect.left(), selRect.top(), w, h);
-    }
-    return {};
-}
-
 void MarkdownRenderer::renderMath(const markus::Math &math)
 {
     const QString tex = fromStdString(math.content);
@@ -2089,7 +1749,7 @@ void MarkdownRenderer::setupDocumentSettings()
 
 void MarkdownRenderer::updateAllOverlaysGeometry()
 {
-    if (m_codeOverlays.isEmpty() && m_videos.isEmpty())
+    if (m_codeOverlays.isEmpty())
         return;
     const int margin = m_paragraphMargin / 2;
     const QPointF offset = contentOffset();
@@ -2130,22 +1790,6 @@ void MarkdownRenderer::updateAllOverlaysGeometry()
         int y = static_cast<int>(viewRect.top() + topOffset);
         overlay->move(x, y);
         overlay->show();
-    }
-
-    // Video overlays: cover the placeholder fragment exactly (the rect is
-    // already in viewport coordinates, unlike the code-block rects above).
-    for (auto it = m_videos.constBegin(); it != m_videos.constEnd(); ++it) {
-        QVideoWidget *widget = it.value().widget;
-        if (!widget)
-            continue;
-        const QRectF fragRect = videoFragmentRect(it.key());
-        if (fragRect.isEmpty()) {
-            widget->hide();
-            continue;
-        }
-        widget->setGeometry(fragRect.toAlignedRect());
-        widget->show();
-        widget->raise();
     }
 }
 

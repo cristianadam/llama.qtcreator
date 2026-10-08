@@ -5,8 +5,6 @@ add_qtc_test(llamatools_test
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Network Qt::Sql Qt::Widgets Qt::Svg
     Qt::TaskTree
-    Qt::Multimedia
-    Qt::MultimediaWidgets
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::Core
@@ -96,8 +94,6 @@ add_qtc_test(markdownrenderer_test
     ${CMAKE_CURRENT_SOURCE_DIR}/..
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Svg
-    Qt::Multimedia
-    Qt::MultimediaWidgets
     QtCreator::Utils
     QtCreator::TextEditor
     QtCreator::KSyntaxHighlighting

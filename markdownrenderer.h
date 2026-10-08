@@ -22,8 +22,6 @@
 #include <3rdparty/markus/markus.h>
 
 class QFrame;
-class QMediaPlayer;
-class QVideoWidget;
 
 namespace LlamaCpp {
 
@@ -129,15 +127,6 @@ public:
     // it into pixels.
     QByteArray svgContentForUrl(const QUrl &url) const;
 
-    // Local file path behind a "llamavideo://" image URL (see
-    // renderVideoElement); empty for unknown or foreign URLs.
-    QString videoPathForUrl(const QUrl &url) const;
-
-    // Viewport rect of the "llamavideo://" image fragment \a key (empty if
-    // not found or in a hidden block); the QVideoWidget overlay is kept
-    // exactly over it.
-    QRectF videoFragmentRect(const QString &key) const;
-
     //! Prepares \a image for inline display: scaled down to fit \a maxWidth
     //! (smaller images keep their native size), height capped at 600 px
     //! (like the SVG drawings), rasterized at \a devicePixelRatio so the
@@ -156,8 +145,6 @@ signals:
     void diagramRendered(const QString &key, const DiagramSvg &svg);
 
 protected:
-    QVariant loadResource(int type, const QUrl &name) override;
-
     void paintEvent(QPaintEvent *ev) override;
     void mousePressEvent(QMouseEvent *ev) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -244,12 +231,6 @@ private:
     // placeholder for the picture, or removes the placeholder line on
     // failure (the source stays available in the details body).
     void onMermaidRendered(const QString &key, const QByteArray &svg);
-    // Renders a <video> element: a "llamavideo://" image fragment (served as
-    // a 16:9 placeholder) plus a QMediaPlayer in a QVideoWidget overlay that
-    // updateAllOverlaysGeometry() keeps over the fragment. Missing files
-    // leave a visible note instead.
-    void renderVideoElement(const QString &src, double width, double height,
-                            bool muted, bool loop, bool autoplay);
     // The ordinal id of the next <details> section; tail sections get the
     // stable ids they will have once finalized, so user expand/collapse
     // choices survive tail re-renders.
@@ -349,16 +330,6 @@ private:
     // grown as diagrams render; unlike m_svgStore it survives reset(), so a
     // divergent re-feed does not lose the persisted SVGs.
     QHash<QString, DiagramSvg> m_diagramCache;
-    // <video> elements: "vid-<hash>" key to the local file path, and the
-    // playing QMediaPlayer + QVideoWidget overlay per key (the widget is a
-    // viewport child, re-positioned by updateAllOverlaysGeometry()).
-    struct Video
-    {
-        QMediaPlayer *player = nullptr;
-        QVideoWidget *widget = nullptr;
-    };
-    QHash<QString, QString> m_videoStore;
-    QHash<QString, Video> m_videos;
     // Ordinal counter for pending mermaid diagram keys ("mmd-<n>").
     int m_nextMermaidKey = 0;
     int m_paragraphMargin = 0;
