@@ -54,6 +54,7 @@ add_qtc_test(llamatools_test
     ../tools/find_tool.cpp
     ../tools/ls_tool.cpp
     ../tools/ripgrep.cpp
+    ../tools/mxc.cpp
     ../tools/windows_sandbox.cpp
 )
 

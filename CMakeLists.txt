@@ -112,6 +112,7 @@ add_qtc_plugin(LlamaCpp
     tools/find_tool.cpp tools/find_tool.h
     tools/ls_tool.cpp tools/ls_tool.h
     tools/ripgrep.cpp tools/ripgrep.h
+    tools/mxc.cpp tools/mxc.h
     tools/task_tool.cpp tools/task_tool.h
     tools/bash_tool.cpp tools/bash_tool.h
     tools/tool.cpp tools/tool.h

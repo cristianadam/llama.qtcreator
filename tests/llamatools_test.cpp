@@ -40,6 +40,7 @@
 #include <tools/find_tool.h>
 #include <tools/ls_tool.h>
 #include <tools/ripgrep.h>
+#include <tools/mxc.h>
 #include <tools/tool.h>
 #include <tools/search_tool.h>
 #include <tools/task_tool.h>
@@ -465,9 +466,10 @@ private slots:
     void toolResultOrdering();
     void sandboxFileTools();
     void projectSandboxOverride();
-    void windowsSandboxSpecNotProvisioned();
+    void windowsSandboxSpecProbeFailed();
     void windowsSandboxSpecUnavailable();
     void windowsSandboxSpec();
+    void quoteWindowsArgumentRules();
     void bash_truncation();
     void bash_summaries();
     void bash_detailsMarkdown();
@@ -2569,8 +2571,8 @@ private:
 void LlamaToolsTest::bash_sandbox()
 {
 #if defined(Q_OS_WIN)
-    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
-        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
+    if (Tools::Mxc::resolvedPath().isEmpty())
+        QSKIP("the Microsoft MXC runtime (wxc-exec) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2612,8 +2614,8 @@ void LlamaToolsTest::bash_sandbox()
 void LlamaToolsTest::bash_sandboxWithStub()
 {
 #if defined(Q_OS_WIN)
-    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
-        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
+    if (Tools::Mxc::resolvedPath().isEmpty())
+        QSKIP("the Microsoft MXC runtime (wxc-exec) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2658,8 +2660,8 @@ void LlamaToolsTest::bash_sandboxWithStub()
 void LlamaToolsTest::bash_sandboxDenyRead()
 {
 #if defined(Q_OS_WIN)
-    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
-        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
+    if (Tools::Mxc::resolvedPath().isEmpty())
+        QSKIP("the Microsoft MXC runtime (wxc-exec) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -2700,8 +2702,8 @@ void LlamaToolsTest::bash_sandboxDenyRead()
 void LlamaToolsTest::bash_sandboxNetwork()
 {
 #if defined(Q_OS_WIN)
-    if (QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
-        QSKIP("srt-win (@anthropic-ai/sandbox-runtime) is not installed");
+    if (Tools::Mxc::resolvedPath().isEmpty())
+        QSKIP("the Microsoft MXC runtime (wxc-exec) is not installed");
 #elif defined(Q_OS_MACOS)
     if (QStandardPaths::findExecutable(QStringLiteral("sandbox-exec")).isEmpty())
         QSKIP("sandbox-exec is not available on this system");
@@ -3160,25 +3162,35 @@ void LlamaToolsTest::projectSandboxOverride()
     ProjectExplorer::ProjectManager::resetStartupProject();
 }
 
-// Writes a fake srt-win shell script that answers `user status` with
-// \a statusJson and accepts `acl grant`/`acl revoke`, so the Windows
-// wrapper construction can be exercised on any platform. Returns the
-// script path (executable).
-static QString writeFakeSrtWin(const QString &dir, const QString &statusJson)
+static QStringList jsonArrayStrings(const QJsonArray &array)
 {
-    Q_ASSERT(!statusJson.contains(QLatin1Char('\'')));
-    const QString path = dir + QStringLiteral("/srt-win");
+    QStringList result;
+    for (const QJsonValue &value : array)
+        result << value.toString();
+    return result;
+}
+
+// Writes a fake wxc-exec shell script: it answers `--probe` (failing when
+// WXC_FAKE_PROBE_FAIL is set) and, for `--config-base64 <b64>`, stores the
+// base64 configuration in the file named by WXC_FAKE_CONFIG_OUT (when
+// set), so the Windows wrapper construction can be exercised on any
+// platform. Returns the script path (executable).
+static QString writeFakeWxcExec(const QString &dir)
+{
+    const QString path = dir + QStringLiteral("/wxc-exec");
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return {};
-    file.write((QStringLiteral("#!/bin/sh\n")
-                    + QStringLiteral("if [ \"$1\" = user ]; then\n")
-                    + QStringLiteral("  echo '")
-                    + statusJson + QStringLiteral("'\n")
-                    + QStringLiteral("elif [ \"$1\" = acl ]; then\n")
-                    + QStringLiteral("  cat > /dev/null\n")
-                    + QStringLiteral("fi\nexit 0\n"))
-                       .toUtf8());
+    file.write("#!/bin/sh\n"
+               "if [ \"$1\" = --probe ]; then\n"
+               "  if [ -n \"$WXC_FAKE_PROBE_FAIL\" ]; then exit 1; fi\n"
+               "  echo '{\"ok\":true}'\n"
+               "  exit 0\n"
+               "fi\n"
+               "if [ -n \"$WXC_FAKE_CONFIG_OUT\" ]; then\n"
+               "  printf '%s' \"$2\" > \"$WXC_FAKE_CONFIG_OUT\"\n"
+               "fi\n"
+               "exit 0\n");
     file.close();
     QFile::setPermissions(path,
                           QFile::permissions(path)
@@ -3188,114 +3200,181 @@ static QString writeFakeSrtWin(const QString &dir, const QString &statusJson)
     return path;
 }
 
-// The successful provisioning probe is cached per srt-win executable for
+// The successful capability probe is cached per wxc-exec executable for
 // the session; this test uses its own fake (a fresh QTemporaryDir path),
-// so the not-provisioned path is reachable regardless of test order.
-void LlamaToolsTest::windowsSandboxSpecNotProvisioned()
+// so the probe-failure path is reachable regardless of test order.
+void LlamaToolsTest::windowsSandboxSpecProbeFailed()
 {
+#if defined(Q_OS_WIN)
+    // The fake wxc-exec is a shell script; QProcess cannot start it on
+    // Windows.
+    QSKIP("the fake wxc-exec shell script cannot run on Windows");
+#endif
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
-    const QString fake = writeFakeSrtWin(
-        dir.path(),
-        QStringLiteral("{\"user\":{\"exists\":false},\"cred_present\":false}"));
-    qputenv("LLAMA_SRT_WIN", fake.toUtf8());
+    const QString fake = writeFakeWxcExec(dir.path());
+    qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
+    qputenv("WXC_FAKE_PROBE_FAIL", "1");
 
-    const LlamaCpp::Tools::WindowsSandboxSpec spec =
-        LlamaCpp::Tools::windowsSandboxSpec(QDir::tempPath(), QProcessEnvironment());
+    const LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+        QDir::tempPath(), QProcessEnvironment(), "bash -c echo", 1000, {});
 
-    qunsetenv("LLAMA_SRT_WIN");
+    qunsetenv("WXC_FAKE_PROBE_FAIL");
+    qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY(spec.program.isEmpty());
     QVERIFY(!spec.error.isEmpty());
-    QVERIFY(spec.error.contains("not provisioned"));
-    // The error is actionable: it points at the one-time install.
-    QVERIFY(spec.error.contains("windows-install"));
+    QVERIFY(spec.error.contains("unavailable"));
+    // The error is actionable: it points at the download.
+    QVERIFY(spec.error.contains("settings page"));
 }
 
 void LlamaToolsTest::windowsSandboxSpecUnavailable()
 {
-    if (!QStandardPaths::findExecutable(QStringLiteral("srt-win")).isEmpty())
-        QSKIP("srt-win is on the PATH");
-    qputenv("LLAMA_SRT_WIN", "/nonexistent/srt-win");
+    // A missing LLAMA_WXC_EXEC falls back to the downloaded runtime, so the
+    // unavailable path is only reachable without one.
+    if (Tools::Mxc::isDownloaded())
+        QSKIP("the MXC runtime is installed; LLAMA_WXC_EXEC falls back to it");
+    qputenv("LLAMA_WXC_EXEC", "/nonexistent/wxc-exec");
 
-    const LlamaCpp::Tools::WindowsSandboxSpec spec =
-        LlamaCpp::Tools::windowsSandboxSpec(QDir::tempPath(), QProcessEnvironment());
+    const LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+        QDir::tempPath(), QProcessEnvironment(), "bash -c echo", 1000, {});
 
-    qunsetenv("LLAMA_SRT_WIN");
+    qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY(spec.program.isEmpty());
     QVERIFY(!spec.error.isEmpty());
-    QVERIFY(spec.error.contains(QStringLiteral("srt-win")));
-    QVERIFY(spec.error.contains("windows-install"));
+    QVERIFY(spec.error.contains(QStringLiteral("wxc-exec")));
+    QVERIFY(spec.error.contains("settings page"));
 }
 
 void LlamaToolsTest::windowsSandboxSpec()
 {
-    QTemporaryDir home;
+#if defined(Q_OS_WIN)
+    // The fake wxc-exec is a shell script; QProcess cannot start it on
+    // Windows.
+    QSKIP("the fake wxc-exec shell script cannot run on Windows");
+#endif
     QTemporaryDir workdir;
-    QVERIFY(home.isValid());
     QVERIFY(workdir.isValid());
-    const QString fake = writeFakeSrtWin(
-        home.path(),
-        QStringLiteral("{\"user\":{\"exists\":true,\"sid\":\"S-1-5-21-1-10-1\"},"
-                       "\"cred_present\":true}"));
-
-    // secretReadPaths() follows $HOME.
-    const QString realHome = qEnvironmentVariable("HOME");
-    const bool hadHome = !realHome.isEmpty();
-    qputenv("HOME", home.path().toUtf8());
-    qputenv("LLAMA_SRT_WIN", fake.toUtf8());
+    const QString fake = writeFakeWxcExec(workdir.path());
+    const QString configOut = workdir.path() + QStringLiteral("/config.b64");
+    qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
+    qputenv("WXC_FAKE_CONFIG_OUT", configOut.toUtf8());
 
     QProcessEnvironment env;
     env.insert("PATH", "/usr/bin");
     env.insert("FOO", "bar baz");
+    const QString shellPath = QStringLiteral("C:\\git\\bin\\bash.exe");
+    const QString commandLine = shellPath + QStringLiteral(" -c echo hi");
 
-    const LlamaCpp::Tools::WindowsSandboxSpec spec =
-        LlamaCpp::Tools::windowsSandboxSpec(workdir.path(), env);
+    const LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+        workdir.path(), env, commandLine, 1234, shellPath);
 
-    // An oversized environment exceeds the CreateProcessW command line
-    // limit and is refused with an actionable error. (Kept before the
-    // LLAMA_SRT_WIN/HOME restore below so this call uses the fake too.)
+    // An oversized environment exceeds the wxc-exec command line bound and
+    // is refused with an actionable error. (Kept before the env restore
+    // below so this call uses the fake too.)
     QProcessEnvironment bigEnv = env;
     bigEnv.insert("BIG", QString(40000, QLatin1Char('x')));
-    const LlamaCpp::Tools::WindowsSandboxSpec bigSpec =
-        LlamaCpp::Tools::windowsSandboxSpec(workdir.path(), bigEnv);
+    const LlamaCpp::Tools::WindowsSandboxSpec bigSpec = LlamaCpp::Tools::windowsSandboxSpec(
+        workdir.path(), bigEnv, commandLine, 1234, shellPath);
 
-    qunsetenv("LLAMA_SRT_WIN");
-    if (hadHome)
-        qputenv("HOME", realHome.toUtf8());
-    else
-        qunsetenv("HOME");
+    // The spec builder only runs the capability probe; the configuration
+    // is handed to wxc-exec when the wrapper starts. Simulate that start so
+    // the fake captures the base64 config (while the env vars are still set).
+    QProcess start;
+    start.start(fake,
+                { QStringLiteral("--config-base64"),
+                  spec.arguments.at(1) });
+    QVERIFY2(start.waitForFinished(10000), qPrintable(fake));
+
+    qunsetenv("WXC_FAKE_CONFIG_OUT");
+    qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
     QCOMPARE(spec.program, fake);
-    // The `exec --quiet` wrapper; the shell and the command follow the `--`.
-    QCOMPARE((spec.arguments.mid(0, 2)),
-             (QStringList{ QStringLiteral("exec"), QStringLiteral("--quiet") }));
-    QCOMPARE(spec.arguments.last(), QStringLiteral("--"));
-    // The credential locations are denied for read and write. Directory
-    // targets carry a trailing backslash (srt-win materializes a missing
-    // deny target as an empty directory then); the .netrc file does not.
-    const int denyRead = spec.arguments.indexOf(QStringLiteral("--deny-read"));
-    QVERIFY(denyRead != -1);
-    const QString ssh = spec.arguments.at(denyRead + 1);
-    QVERIFY(ssh.startsWith(home.path() + QStringLiteral("/.ssh")));
-    QVERIFY(ssh.endsWith(QLatin1Char('\\')));
-    const QString netrc = home.path() + QStringLiteral("/.netrc");
-    const int netrcIndex = spec.arguments.indexOf(netrc);
-    QVERIFY(netrcIndex > 0);
-    QCOMPARE(spec.arguments.at(netrcIndex - 1), QStringLiteral("--deny-read"));
-    const int netrcDenyWrite = spec.arguments.indexOf(QStringLiteral("--deny-write"),
-                                                      netrcIndex);
-    QVERIFY(netrcDenyWrite != -1);
-    QCOMPARE(spec.arguments.at(netrcDenyWrite + 1), netrc);
-    // The caller's environment is passed as the --env overlay (the
-    // sandboxed child starts with the sandbox user's profile env only).
-    QVERIFY(spec.arguments.contains(QStringLiteral("PATH=/usr/bin")));
-    QVERIFY(spec.arguments.contains(QStringLiteral("FOO=bar baz")));
+    // The complete wrapper: the configuration (with the command line
+    // embedded) is the single argument, nothing follows it.
+    QCOMPARE(spec.arguments.size(), 2);
+    QCOMPARE(spec.arguments.at(0), QStringLiteral("--config-base64"));
+
+    QFile configFile(configOut);
+    QVERIFY2(configFile.open(QIODevice::ReadOnly), qPrintable(configOut));
+    const QJsonObject config
+        = QJsonDocument::fromJson(QByteArray::fromBase64(configFile.readAll())).object();
+    QCOMPARE(config.value(QStringLiteral("version")).toString(),
+             QStringLiteral("0.8.0-alpha"));
+    QCOMPARE(config.value(QStringLiteral("containment")).toString(),
+             QStringLiteral("processcontainer"));
+    const QJsonObject process = config.value(QStringLiteral("process")).toObject();
+    QCOMPARE(process.value(QStringLiteral("commandLine")).toString(), commandLine);
+    QCOMPARE(process.value(QStringLiteral("cwd")).toString(), workdir.path());
+    QCOMPARE(process.value(QStringLiteral("timeout")).toInt(), 1234);
+    // The caller's environment is passed in full (the container starts
+    // with no host environment); LOCALAPPDATA is filled in when missing.
+    const QStringList envStrings
+        = jsonArrayStrings(process.value(QStringLiteral("env")).toArray());
+    QVERIFY(envStrings.contains(QStringLiteral("PATH=/usr/bin")));
+    QVERIFY(envStrings.contains(QStringLiteral("FOO=bar baz")));
+    QVERIFY(envStrings.contains(QStringLiteral("LOCALAPPDATA=") + workdir.path()));
+    const QJsonObject filesystem = config.value(QStringLiteral("filesystem")).toObject();
+    // Writable: the temporary location; the working directory is inside it,
+    // so the nested grant is dropped.
+    const QStringList readwrite =
+        jsonArrayStrings(filesystem.value(QStringLiteral("readwritePaths")).toArray());
+    QVERIFY(readwrite.contains(QDir::tempPath()));
+    QCOMPARE(readwrite.size(), 1);
+    // Read-only: the shell's tree (the outer root wins over the inner bin/
+    // directory), nothing else.
+    const QStringList readonly =
+        jsonArrayStrings(filesystem.value(QStringLiteral("readonlyPaths")).toArray());
+    QVERIFY(readonly.contains(QStringLiteral("C:\\git")));
+    QVERIFY(!readonly.contains(QStringLiteral("C:\\git\\bin")));
+    QCOMPARE(readonly.size(), 1);
+    // No network: nothing allowed, no network capability granted.
+    QCOMPARE(config.value(QStringLiteral("network"))
+                 .toObject()
+                 .value(QStringLiteral("defaultPolicy"))
+                 .toString(),
+             QStringLiteral("deny"));
+    QCOMPARE(config.value(QStringLiteral("processContainer"))
+                 .toObject()
+                 .value(QStringLiteral("capabilities"))
+                 .toArray()
+                 .size(),
+             0);
+    // The DACL-mutation fallback tier (older Windows) is not used.
+    QCOMPARE(config.value(QStringLiteral("fallback"))
+                 .toObject()
+                 .value(QStringLiteral("allowDaclMutation"))
+                 .toBool(),
+             false);
 
     QVERIFY(!bigSpec.error.isEmpty());
     QVERIFY(bigSpec.error.contains("too long"));
+}
+
+void LlamaToolsTest::quoteWindowsArgumentRules()
+{
+    using LlamaCpp::Tools::quoteWindowsArgument;
+    // Plain arguments are kept as-is.
+    QCOMPARE(quoteWindowsArgument(QStringLiteral("echo")),
+             QString(QStringLiteral("echo")));
+    QCOMPARE(quoteWindowsArgument(QStringLiteral("C:\\git\\bin\\bash.exe")),
+             QString(QStringLiteral("C:\\git\\bin\\bash.exe")));
+    // Whitespace requires quoting.
+    QCOMPARE(quoteWindowsArgument(QStringLiteral("bar baz")),
+             QString(QStringLiteral("\"bar baz\"")));
+    // A quoted argument doubles every backslash (MSVCRT/CreateProcessW
+    // rules; an odd run before the closing quote would escape it) and
+    // escapes embedded quotes.
+    QCOMPARE(quoteWindowsArgument(QStringLiteral("a\"b")),
+             QString(QStringLiteral("\"a\\\"b\"")));
+    QCOMPARE(quoteWindowsArgument(QStringLiteral("a\\ \\")),
+             QString(QStringLiteral("\"a\\ \\\\\"")));
+    // The empty argument becomes an empty quoted string.
+    QCOMPARE(quoteWindowsArgument(QString()),
+             QString(QStringLiteral("\"\"")));
 }
 
 void LlamaToolsTest::bash_truncation()

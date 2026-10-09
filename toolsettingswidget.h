@@ -80,6 +80,7 @@ private:
     void showToolDefinition(const QModelIndex &current, const QModelIndex & /*previous*/);
     void syncGroupStates();
     void updateRipgrepStatus();
+    void updateMxcStatus();
 
     // MCP server management: every group row of the tools tree except
     // "Internal" is an MCP server; Add / Edit / Remove (like the skill
@@ -115,6 +116,8 @@ private:
     ToolsJsonHighlighter *m_jsonHighlighter = nullptr;
     QLabel *m_ripgrepLabel = nullptr;
     QPushButton *m_ripgrepButton = nullptr;
+    QLabel *m_mxcLabel = nullptr;
+    QPushButton *m_mxcButton = nullptr;
     QCheckBox *m_sandboxCheck = nullptr;
     QCheckBox *m_loadInstructionsCheck = nullptr;
     // Runaway tool-loop guard: the maximum number of consecutive tool-only

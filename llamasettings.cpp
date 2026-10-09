@@ -589,16 +589,15 @@ LlamaSettings::LlamaSettings()
     sandboxCommands.setToolTip(Tr::tr(
         "If checked, the chat tools are confined to a sandbox: bash commands "
         "run in a platform sandbox that blocks writes to system locations "
-        "(bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from "
-        "@anthropic-ai/sandbox-runtime on Windows), and the file tools may "
+        "(bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC "
+        "process container on Windows), and the file tools may "
         "only write inside the project directory and temporary locations. "
         "Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) "
         "are not readable by any tool, and sandboxed commands have no "
         "network access (the webfetch and websearch tools are not "
-        "affected). On Windows the sandbox needs a one-time install: "
-        "'npx @anthropic-ai/sandbox-runtime windows-install' (one UAC "
-        "prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN "
-        "can point to it)."));
+        "affected). On Windows the sandbox uses the pinned wxc-exec.exe "
+        "runtime, downloadable from this tools page (LLAMA_WXC_EXEC can "
+        "point to it), and needs Windows 11 24H2 or newer."));
 
     loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
     loadProjectInstructions.setDefaultValue(false);

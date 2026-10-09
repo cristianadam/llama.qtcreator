@@ -55,6 +55,8 @@ struct SandboxSpec
     QString program; // sandbox wrapper executable
     QStringList arguments; // wrapper arguments, the command follows them
     QString error; // non-empty when the sandbox is requested but unavailable
+    bool commandIncluded = false; // the arguments already carry the command
+    // (the MXC config embeds the command line) - nothing is appended
 };
 
 #if defined(Q_OS_WIN)
@@ -233,15 +235,26 @@ QString macSandboxProfile(const QString &cwd)
 // Builds the wrapper that confines the command to the working directory and
 // the temporary locations. Linux uses bubblewrap (the whole file system is
 // read-only except \a cwd and /tmp); macOS uses sandbox-exec; Windows uses
-// srt-win (the @anthropic-ai/sandbox-runtime backend): the command runs as
-// a dedicated sandbox user with no network egress and an isolated profile,
-// the home directory is readable, and \a cwd plus the temporary directory
-// are writable. \a env is the environment the (sandboxed) command gets.
-SandboxSpec sandboxSpec(const QString &cwd, const QProcessEnvironment &env)
+// Microsoft MXC (wxc-exec): the command runs in a process container that
+// sees only the working directory and the temporary location (writable),
+// the shell's own tree and the system directory (readable), and has no
+// network access. \a env is the environment the (sandboxed) command gets.
+SandboxSpec sandboxSpec(const QString &cwd,
+                        const QProcessEnvironment &env,
+                        const BashSpec &, // the command line (Windows only)
+                        const QString &, // (the MXC configuration embeds it)
+                        int) // the command timeout (Windows only)
 {
 #if defined(Q_OS_WIN)
-    const WindowsSandboxSpec windows = windowsSandboxSpec(cwd, env);
-    return { windows.program, windows.arguments, windows.error };
+    // The MXC configuration embeds the full command line, so the wrapper
+    // arguments are complete: the shell and the command do not follow.
+    const QString commandLine
+        = quoteWindowsArgument(shell.program) + QLatin1Char(' ')
+        + shell.executeFlag + QLatin1Char(' ')
+        + quoteWindowsArgument(command);
+    const WindowsSandboxSpec windows
+        = windowsSandboxSpec(cwd, env, commandLine, timeoutMs, shell.program);
+    return { windows.program, windows.arguments, windows.error, true };
 #elif defined(Q_OS_MACOS)
     const FilePath exe =
         FilePath::fromUserInput(QStandardPaths::findExecutable("sandbox-exec"));
@@ -489,8 +502,8 @@ QString BashTool::toolDefinition() const
             "and websearch tools for that. The workdir must be inside the "
             "project directory or a temporary location; on Linux /tmp is "
             "fresh and empty for each command, and on Windows the command "
-            "runs as a dedicated sandbox user with its own empty profile "
-            "and temporary directory.");
+            "runs in a process container that sees only the granted "
+            "locations.");
     return QString::fromUtf8(R"raw(
     {
         "type": "function",
@@ -612,16 +625,16 @@ void BashTool::runCommand(const QJsonObject &arguments,
     }
 
     // The environment is needed both for the process and to build the
-    // sandbox wrapper (srt-win passes it as the --env overlay for the
-    // sandboxed child, which starts with the sandbox user's own profile
-    // environment only).
+    // sandbox wrapper (it is passed to the sandboxed child, which starts
+    // with no host environment of its own).
     const QProcessEnvironment env = shellEnvironment();
 
     // Optionally confine the command to a sandbox (bubblewrap on Linux,
-    // sandbox-exec on macOS, srt-win on Windows). The wrapper becomes the
-    // program to start; the shell and the command are its arguments.
+    // sandbox-exec on macOS, Microsoft MXC on Windows). The wrapper becomes
+    // the program to start; the shell and the command are its arguments
+    // (on Windows they are embedded in the sandbox configuration).
     const SandboxSpec sandbox = sandboxEnabled(ProjectManager::startupProject())
-            ? sandboxSpec(cwdString, env)
+            ? sandboxSpec(cwdString, env, spec, command, timeoutMs)
             : SandboxSpec{};
     if (!sandbox.error.isEmpty()) {
         done(Tr::tr("Error: %1").arg(sandbox.error), false);
@@ -706,8 +719,10 @@ void BashTool::runCommand(const QJsonObject &arguments,
         QStringList arguments = {spec.executeFlag, command};
         if (!sandbox.program.isEmpty()) {
             program = sandbox.program;
-            arguments =
-                sandbox.arguments + QStringList{spec.program, spec.executeFlag, command};
+            arguments = sandbox.commandIncluded
+                    ? sandbox.arguments
+                    : sandbox.arguments
+                      + QStringList{spec.program, spec.executeFlag, command};
         }
 
         process.setWorkingDirectory(cwdString);
