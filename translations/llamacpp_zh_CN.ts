@@ -971,18 +971,22 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱化命令</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为来自 @anthropic-ai/sandbox-runtime 的 srt-win），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱需要一次性安装：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（会弹出一个 UAC 提示）；srt-win 可执行文件必须在 PATH 中（LLAMA_SRT_WIN 可以指向它）。</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为 Microsoft MXC 进程容器），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱使用固定版本的 wxc-exec.exe 运行时，可从本工具页面下载（LLAMA_WXC_EXEC 可以指向它），并且需要 Windows 11 24H2 或更高版本。</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为来自 @anthropic-ai/sandbox-runtime 的 srt-win），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱需要一次性安装：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（会弹出一个 UAC 提示）；srt-win 可执行文件必须在 PATH 中（LLAMA_SRT_WIN 可以指向它）。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1616,7 +1620,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会话</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-938"/>
+        <location filename="../llamasettings.cpp" line="-937"/>
         <source>Create a summary of {selection}</source>
         <translation>为所选内容创建摘要</translation>
     </message>
@@ -1654,7 +1658,7 @@ You can type any other prompt – they are remembered for next time.</source>
 您可以输入其他提示 – 这些提示将被记住以备下次使用。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG 图像</translation>
     </message>
@@ -1665,13 +1669,13 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Mermaid 图表</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>详细信息</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>将下方代码复制到剪贴板</translation>
     </message>
@@ -2060,7 +2064,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">选择一个工具以查看其 JSON 定义</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+74"/>
+        <location filename="../toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>选择一个工具以查看其定义</translation>
     </message>
@@ -2075,12 +2079,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下载 ripgrep %1</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>下载 MXC %1</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>search 和 find 工具使用 ripgrep，但本系统未安装 ripgrep。</translation>
     </message>
@@ -2088,6 +2097,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep：%1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>Windows 上的沙箱化 bash 工具使用 Microsoft MXC 运行时（wxc-exec），但本系统未安装它。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Windows 沙箱运行时：%1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2182,7 +2201,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2203,7 +2222,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>名称：%1</translation>
     </message>
@@ -2228,7 +2247,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 个技能</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>无描述</translation>
     </message>
@@ -2254,7 +2273,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>添加……</translation>
     </message>
@@ -2412,12 +2431,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>成功。已更新以下文件：</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>未找到 sandbox-exec 可执行文件；本系统无法使用沙箱。</translation>
     </message>
@@ -2469,7 +2488,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>错误：%1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>命令已被用户停止。</translation>
     </message>
@@ -2946,22 +2965,80 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>下载 Windows 沙箱运行时（MXC）</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>下载 Microsoft MXC 运行时 %1？</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>&apos;沙箱化命令&apos; 设置会将 Windows 上的 bash 工具限制在 Microsoft MXC 进程容器中。固定版本的 wxc-exec.exe 运行时未在本系统上安装，因此可以在此处下载。MXC 以 MIT 许可证发布。</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>项目：%1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>许可证：%1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>该包中没有 wxc-exec.exe 二进制文件。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>wxc-exec.exe 二进制文件的大小不符合预期。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>wxc-exec.exe 二进制文件与其预期的校验和不匹配。</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Microsoft MXC 运行时仅适用于 Windows x86-64。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>正在下载 MXC 运行时...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>下载 MXC 运行时失败：%1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>正在解压 MXC 运行时...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>解压 MXC 运行时失败：%1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>该包中没有 ripgrep 二进制文件。</translation>
     </message>
@@ -2981,17 +3058,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下载 ripgrep 失败：%1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>正在验证包的完整性……</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>下载的包不是预期的包。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>正在解压 ripgrep……</translation>
     </message>
@@ -3117,37 +3196,61 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>不允许读取“%1”：凭据位置在沙箱内不可读。</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>使用 &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; 一次性安装它（会弹出一个 UAC 提示）；无需注销，网络围栏基于专用沙箱用户的 SID。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+        <translation type="vanished">使用 &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; 一次性安装它（会弹出一个 UAC 提示）；无需注销，网络围栏基于专用沙箱用户的 SID。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>无法查询 Windows 沙箱后端（srt-win）（退出 %1）：%2 %3</translation>
+        <translation type="vanished">无法查询 Windows 沙箱后端（srt-win）（退出 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>Windows 沙箱用户尚未配置。%1</translation>
+        <translation type="vanished">Windows 沙箱用户尚未配置。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Windows 沙箱后端（srt-win）未报告沙箱用户的 SID。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Windows 沙箱无法授予沙箱用户对工作目录的访问权限（退出 %1）：%2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Windows 沙箱后端（wxc-exec）未能及时响应其功能探测。%1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Windows 沙箱后端（srt-win）未报告沙箱用户的 SID。%1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Windows 沙箱无法授予沙箱用户对工作目录的访问权限（退出 %1）：%2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（内部版本 %1）或更高版本；本系统为内部版本 %2。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>未找到 wxc-exec.exe（Microsoft MXC Windows 沙箱运行时）。%1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows 沙箱命令行过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>

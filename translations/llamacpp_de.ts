@@ -959,18 +959,22 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Befehle in Sandbox ausführen</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von dieser Tools-Seite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1606,7 +1610,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>llama.cpp-Konversationen</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-938"/>
+        <location filename="../llamasettings.cpp" line="-937"/>
         <source>Create a summary of {selection}</source>
         <translation>Zusammenfassung von **„{selection}“** erstellen</translation>
     </message>
@@ -1645,7 +1649,7 @@ Voreingestellte Prompts: %1
 Sie können beliebige andere Prompts eingeben – diese werden für spätere Verwendung gespeichert.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG-Bild</translation>
     </message>
@@ -1656,13 +1660,13 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation>Mermaid-Diagramm</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Kopiere den folgenden Code in die Zwischenablage</translation>
     </message>
@@ -2043,7 +2047,7 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation type="vanished">Wählen Sie ein Werkzeug aus, um dessen JSON-Definition anzuzeigen</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+74"/>
+        <location filename="../toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Wählen Sie ein Tool aus, um seine Definition anzuzeigen</translation>
     </message>
@@ -2058,12 +2062,17 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation>ripgrep %1 herunterladen</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>MXC %1 herunterladen</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Die search- und find-Tools verwenden ripgrep, das auf diesem System nicht installiert ist.</translation>
     </message>
@@ -2071,6 +2080,16 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep: %1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>Das gesandboxte bash-Tool auf Windows verwendet die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die auf diesem System nicht installiert ist.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Windows-Sandbox-Laufzeitumgebung: %1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2165,7 +2184,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2186,7 +2205,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Name: %1</translation>
     </message>
@@ -2211,7 +2230,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 Skills</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Keine Beschreibung verfügbar</translation>
     </message>
@@ -2228,7 +2247,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Hinzufügen…</translation>
     </message>
@@ -2386,12 +2405,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Erfolg. Die folgenden Dateien wurden aktualisiert:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Die sandbox-exec-Executabler wurde nicht gefunden; Sandboxing ist auf diesem System nicht verfügbar.</translation>
     </message>
@@ -2443,7 +2462,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fehler: %1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>Befehl wurde vom Benutzer gestoppt.</translation>
     </message>
@@ -2920,22 +2939,80 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Die search- und find-Tools verwenden ripgrep, um Dateiinhalte zu durchsuchen und Dateien nach Name zu lokalisieren. Es ist auf diesem System nicht installiert, kann daher hier stattdessen heruntergeladen werden. ripgrep wird unter der MIT- oder der Unlicense-Lizenz veröffentlicht.</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Windows-Sandbox-Laufzeitumgebung (MXC) herunterladen</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Microsoft-MXC-Laufzeitumgebung %1 herunterladen?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Die Einstellung &apos;Befehle in Sandbox ausführen&apos; schränkt das bash-Tool auf Windows auf einen Microsoft-MXC-Prozesscontainer ein. Die festgelegte wxc-exec.exe-Laufzeitumgebung ist auf diesem System nicht installiert und kann stattdessen hier heruntergeladen werden. MXC wird unter der MIT-Lizenz veröffentlicht.</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Lizenz: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Das Paket enthält keine wxc-exec.exe-Binärdatei.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>Die wxc-exec.exe-Binärdatei hat eine unerwartete Größe.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>Die wxc-exec.exe-Binärdatei entspricht nicht der erwarteten Prüfsumme.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Die Microsoft-MXC-Laufzeitumgebung ist nur für Windows x86-64 verfügbar.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Lade MXC-Laufzeitumgebung herunter...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Herunterladen der MXC-Laufzeitumgebung fehlgeschlagen: %1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Entpacke MXC-Laufzeitumgebung...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Entpacken der MXC-Laufzeitumgebung fehlgeschlagen: %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Das Paket enthält keine ripgrep-Binary.</translation>
     </message>
@@ -2955,17 +3032,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Herunterladen von ripgrep fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Überprüfe Paketintegrität...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Das heruntergeladene Paket ist nicht das erwartete.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Entpacke ripgrep...</translation>
     </message>
@@ -3091,37 +3170,61 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Lesen von &quot;%1&quot; ist nicht erlaubt: Credential-Positionen sind innerhalb der Sandbox nicht lesbar.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Installieren Sie es einmalig mit &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); ein Abmelden ist nicht nötig, die Netzwerk-Abgrenzung stützt sich auf die SID des dedizierten Sandbox-Benutzers. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+        <translation type="vanished">Installieren Sie es einmalig mit &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); ein Abmelden ist nicht nötig, die Netzwerk-Abgrenzung stützt sich auf die SID des dedizierten Sandbox-Benutzers. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>Das Windows-Sandbox-Backend (srt-win) konnte nicht abgefragt werden (Exit %1): %2 %3</translation>
+        <translation type="vanished">Das Windows-Sandbox-Backend (srt-win) konnte nicht abgefragt werden (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>Der Windows-Sandbox-Benutzer ist nicht eingerichtet. %1</translation>
+        <translation type="vanished">Der Windows-Sandbox-Benutzer ist nicht eingerichtet. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Das Windows-Sandbox-Backend (srt-win) hat die SID des Sandbox-Benutzers nicht gemeldet. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Die Windows-Sandbox konnte dem Sandbox-Benutzer keinen Zugriff auf das Arbeitsverzeichnis gewähren (Exit %1): %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win (das @anthropic-ai/sandbox-runtime Windows-Sandbox-Backend) wurde im PATH nicht gefunden. %1 LLAMA_SRT_WIN kann auf die Executabler verweisen.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Laden Sie es von der Llama.cpp-Chat-Tools-Einstellungsseite herunter (eine festgelegte, prüfsummenverifizierte Microsoft-MXC-Veröffentlichung); LLAMA_WXC_EXEC kann auf eine wxc-exec.exe verweisen. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Das Windows-Sandbox-Backend (wxc-exec) hat auf seine Funktionsfähigkeitsabfrage nicht rechtzeitig geantwortet. %1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Das Windows-Sandbox-Backend (srt-win) hat die SID des Sandbox-Benutzers nicht gemeldet. %1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Das Windows-Sandbox-Backend (wxc-exec) hat den MXC-Container als nicht verfügbar gemeldet (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Die Windows-Sandbox konnte dem Sandbox-Benutzer keinen Zugriff auf das Arbeitsverzeichnis gewähren (Exit %1): %2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Die Windows-Sandbox (Microsoft MXC) benötigt Windows 11 24H2 (Build %1) oder neuer; dieses System ist Build %2. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>srt-win (das @anthropic-ai/sandbox-runtime Windows-Sandbox-Backend) wurde im PATH nicht gefunden. %1 LLAMA_SRT_WIN kann auf die Executabler verweisen.</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (die Microsoft-MXC-Windows-Sandbox-Laufzeitumgebung) wurde nicht gefunden. %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Die Windows-Sandbox (Microsoft MXC) hat ihren Live-Isolationstest nicht bestanden: Es konnte nicht verifiziert werden, dass ein gesandboxter Befehl isoliert ist. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Die Windows-Sandbox-Befehlszeile ist zu lang (%1 von %2 Zeichen); die Prozessumgebung ist wahrscheinlich überdimensioniert. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>

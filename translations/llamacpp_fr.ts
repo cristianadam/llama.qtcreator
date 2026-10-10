@@ -1119,18 +1119,22 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Commandes dans un bac à sable</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, srt-win de @anthropic-ai/sandbox-runtime sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable nécessite une installation unique : &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; l&apos;exécutable srt-win doit être dans le PATH (LLAMA_SRT_WIN peut pointer vers lui).</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis cette page des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, srt-win de @anthropic-ai/sandbox-runtime sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable nécessite une installation unique : &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; l&apos;exécutable srt-win doit être dans le PATH (LLAMA_SRT_WIN peut pointer vers lui).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1327,7 +1331,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-530"/>
+        <location line="-529"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
@@ -1863,7 +1867,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Réfléchit</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>Image SVG</translation>
     </message>
@@ -1874,13 +1878,13 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Diagramme Mermaid</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Détails</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Copier le code suivant dans le presse-papiers</translation>
     </message>
@@ -1901,7 +1905,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+171"/>
+        <location filename="../toolsettingswidget.cpp" line="+202"/>
         <source>Add…</source>
         <translation>Ajouter…</translation>
     </message>
@@ -1954,7 +1958,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Localisateur (« ll »)</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-99"/>
+        <location filename="../toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Sélectionnez un outil pour afficher sa définition</translation>
     </message>
@@ -1969,12 +1973,17 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Télécharger ripgrep %1</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>Télécharger MXC %1</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Les outils de recherche et de localisation utilisent ripgrep, qui n&apos;est pas installé sur ce système.</translation>
     </message>
@@ -1982,6 +1991,16 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep : %1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>L&apos;outil bash en bac à sable sur Windows utilise le runtime Microsoft MXC (wxc-exec), qui n&apos;est pas installé sur ce système.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Runtime du bac à sable Windows : %1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2076,7 +2095,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -2097,7 +2116,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Nom : %1</translation>
     </message>
@@ -2122,7 +2141,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 compétences</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Aucune description disponible</translation>
     </message>
@@ -2601,12 +2620,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
     </message>
@@ -2658,7 +2677,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Erreur : %1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>La commande a été arrêtée par l&apos;utilisateur.</translation>
     </message>
@@ -3135,22 +3154,80 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Télécharger le runtime du bac à sable Windows (MXC)</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Télécharger le runtime Microsoft MXC %1 ?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Le paramètre « Commandes dans un bac à sable » confine l&apos;outil bash sur Windows à un conteneur de processus Microsoft MXC. Le runtime wxc-exec.exe épinglé n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. MXC est publié sous licence MIT.</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projet : %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence : %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Le paquet ne contient aucun binaire wxc-exec.exe.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>Le binaire wxc-exec.exe a une taille inattendue.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>Le binaire wxc-exec.exe ne correspond pas à la somme de contrôle attendue.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Téléchargement du runtime MXC...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Échec du téléchargement du runtime MXC : %1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Décompression du runtime MXC...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Échec de la décompression du runtime MXC : %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Le paquet ne contient aucun binaire ripgrep.</translation>
     </message>
@@ -3170,17 +3247,19 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Échec du téléchargement de ripgrep : %1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Vérification de l&apos;intégrité du paquet...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Extraction de ripgrep...</translation>
     </message>
@@ -3306,37 +3385,61 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>La lecture de « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification ne sont pas lisibles dans le bac à sable.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Installez-le une fois avec &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; aucune déconnexion n&apos;est nécessaire, la barrière réseau s&apos;appuie sur le SID de l&apos;utilisateur bac à sable dédié. À défaut, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">Installez-le une fois avec &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; aucune déconnexion n&apos;est nécessaire, la barrière réseau s&apos;appuie sur le SID de l&apos;utilisateur bac à sable dédié. À défaut, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>Le backend bac à sable Windows (srt-win) n&apos;a pas pu être interrogé (sortie %1) : %2 %3</translation>
+        <translation type="vanished">Le backend bac à sable Windows (srt-win) n&apos;a pas pu être interrogé (sortie %1) : %2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>L&apos;utilisateur bac à sable Windows n&apos;est pas provisionné. %1</translation>
+        <translation type="vanished">L&apos;utilisateur bac à sable Windows n&apos;est pas provisionné. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Le backend bac à sable Windows (srt-win) n&apos;a pas renvoyé le SID de l&apos;utilisateur bac à sable. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Le bac à sable Windows n&apos;a pas pu accorder à l&apos;utilisateur bac à sable l&apos;accès au dossier de travail (sortie %1) : %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win (le backend bac à sable Windows de @anthropic-ai/sandbox-runtime) n&apos;a pas été trouvé dans le PATH. %1 LLAMA_SRT_WIN peut pointer vers l&apos;exécutable.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Téléchargez-le depuis la page des paramètres des outils du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; LLAMA_WXC_EXEC peut pointer vers un wxc-exec.exe. Vous pouvez aussi décocher « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Le backend bac à sable Windows (wxc-exec) n&apos;a pas répondu à sa sonde de capacités à temps. %1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Le backend bac à sable Windows (srt-win) n&apos;a pas renvoyé le SID de l&apos;utilisateur bac à sable. %1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Le bac à sable Windows n&apos;a pas pu accorder à l&apos;utilisateur bac à sable l&apos;accès au dossier de travail (sortie %1) : %2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>srt-win (le backend bac à sable Windows de @anthropic-ai/sandbox-runtime) n&apos;a pas été trouvé dans le PATH. %1 LLAMA_SRT_WIN peut pointer vers l&apos;exécutable.</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>

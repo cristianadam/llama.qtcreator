@@ -967,18 +967,22 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Piaskownica poleceń</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, kontener procesów Microsoft MXC na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica używa przypiętego środowiska uruchomieniowego wxc-exec.exe, które można pobrać z tej strony narzędzi (LLAMA_WXC_EXEC może na nie wskazywać), i wymaga Windows 11 24H2 lub nowszego.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1604,7 +1608,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Konwersacje llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-938"/>
+        <location filename="../llamasettings.cpp" line="-937"/>
         <source>Create a summary of {selection}</source>
         <translation>Stwórz podsumowanie {selekcji}</translation>
     </message>
@@ -1642,7 +1646,7 @@ Wbudowane polecenia: %1
 Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>Obraz SVG</translation>
     </message>
@@ -1653,13 +1657,13 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Wykres Mermaid</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Szczegóły</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Kopiuj kod poniżej do schowka</translation>
     </message>
@@ -2042,7 +2046,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation type="vanished">Wybierz narzędzie, aby zobaczyć jego definicję w formacie JSON</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+74"/>
+        <location filename="../toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Wybierz narzędzie, aby zobaczyć jego definicję</translation>
     </message>
@@ -2057,12 +2061,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pobierz ripgrep %1</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>Pobierz MXC %1</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>Edytuj</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Narzędzia search i find używają ripgrep, który nie jest zainstalowany na tym systemie.</translation>
     </message>
@@ -2070,6 +2079,16 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep: %1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>Narzędzie bash w piaskownicy na Windowsie używa środowiska uruchomieniowego Microsoft MXC (wxc-exec), które nie jest zainstalowane na tym systemie.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Środowisko uruchomieniowe piaskownicy Windows: %1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2164,7 +2183,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2185,7 +2204,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Nazwa: %1</translation>
     </message>
@@ -2210,7 +2229,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 umiejętności</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Brak opisu</translation>
     </message>
@@ -2236,7 +2255,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Dodaj…</translation>
     </message>
@@ -2394,12 +2413,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Sukces. Zaktualizowano następujące pliki:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nie znaleziono powłoki bash. Zainstaluj Git for Windows (https://git-scm.com/download/win) lub dodaj bash do PATH.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Nie znaleziono pliku wykonywalnego sandbox-exec; piaskownica jest niedostępna na tym systemie.</translation>
     </message>
@@ -2451,7 +2470,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Błąd: %1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>Polecenie zostało zatrzymane przez użytkownika.</translation>
     </message>
@@ -2928,22 +2947,80 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Narzędzia search i find używają ripgrep do przeszukiwania zawartości plików i lokalizowania plików po nazwie. Nie jest on zainstalowany na tym systemie, więc można go pobrać tutaj. ripgrep jest wydawany na licencji MIT lub Unlicense.</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Pobierz środowisko uruchomieniowe piaskownicy Windows (MXC)</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Pobrać środowisko uruchomieniowe Microsoft MXC %1?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Ustawienie &apos;Piaskownica poleceń&apos; ogranicza narzędzie bash na Windowsie do kontenera procesów Microsoft MXC. Przypięte środowisko uruchomieniowe wxc-exec.exe nie jest zainstalowane na tym systemie, dlatego można je pobrać tutaj. MXC jest wydawany na licencji MIT.</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licencja: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Pobierz</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Pakiet nie zawiera pliku binarnego wxc-exec.exe.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>Plik binarny wxc-exec.exe ma niespodziewany rozmiar.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>Plik binarny wxc-exec.exe nie zgadza się z oczekiwaną sumą kontrolną.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Środowisko uruchomieniowe Microsoft MXC jest dostępne tylko dla systemu Windows x86-64.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Pobieranie środowiska uruchomieniowego MXC...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Pobieranie środowiska uruchomieniowego MXC nie powiodło się: %1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Rozpakowanie środowiska uruchomieniowego MXC...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Rozpakowanie środowiska uruchomieniowego MXC nie powiodło się: %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Pakiet nie zawiera pliku binarnego ripgrep.</translation>
     </message>
@@ -2963,17 +3040,19 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pobieranie ripgrep nie powiodło się: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Weryfikacja integralności pakietu...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Pobrany pakiet nie jest tym, którego oczekiwano.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Rozpakowanie ripgrep...</translation>
     </message>
@@ -3099,37 +3178,61 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Odczyt &quot;%1&quot; nie jest dozwolony: lokalizacje poświadczeń nie są czytelne w piaskownicy.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Zainstaluj go raz poleceniem &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); nie jest potrzebne wylogowanie, ogrodzenie sieciowe opiera się na SID dedykowanego użytkownika piaskownicy. Alternatywnie odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+        <translation type="vanished">Zainstaluj go raz poleceniem &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); nie jest potrzebne wylogowanie, ogrodzenie sieciowe opiera się na SID dedykowanego użytkownika piaskownicy. Alternatywnie odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>Nie udało się zapytać modułu backendu piaskownicy Windows (srt-win) (wyjście %1): %2 %3</translation>
+        <translation type="vanished">Nie udało się zapytać modułu backendu piaskownicy Windows (srt-win) (wyjście %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>Użytkownik piaskownicy Windows nie został skonfigurowany. %1</translation>
+        <translation type="vanished">Użytkownik piaskownicy Windows nie został skonfigurowany. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Moduł backendu piaskownicy Windows (srt-win) nie zgłosił SID użytkownika piaskownicy. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Piaskownica Windows nie mogła przyznać użytkownikowi piaskownicy dostępu do katalogu roboczego (wyjście %1): %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">Nie znaleziono srt-win (moduł backendu piaskownicy Windows z @anthropic-ai/sandbox-runtime) w PATH. %1 LLAMA_SRT_WIN może wskazywać na plik wykonywalny.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Pobierz je ze strony ustawień narzędzi czatu Llama.cpp (przypięte, zweryfikowane sumą kontrolną wydanie Microsoft MXC); LLAMA_WXC_EXEC może wskazywać na wxc-exec.exe. Alternatywnie odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Moduł backendu piaskownicy Windows (wxc-exec) nie odpowiedział w porę na badanie możliwości. %1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Moduł backendu piaskownicy Windows (srt-win) nie zgłosił SID użytkownika piaskownicy. %1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Moduł backendu piaskownicy Windows (wxc-exec) zgłosił kontener MXC jako niedostępny (kod zakończenia %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Piaskownica Windows nie mogła przyznać użytkownikowi piaskownicy dostępu do katalogu roboczego (wyjście %1): %2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Piaskownica Windows (Microsoft MXC) wymaga Windows 11 24H2 (build %1) lub nowszego; ten system ma build %2. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>Nie znaleziono srt-win (moduł backendu piaskownicy Windows z @anthropic-ai/sandbox-runtime) w PATH. %1 LLAMA_SRT_WIN może wskazywać na plik wykonywalny.</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>Nie znaleziono wxc-exec.exe (środowiska uruchomieniowego piaskownicy Windows Microsoft MXC). %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Piaskownica Windows (Microsoft MXC) nie przeszła testu izolacji na żywo: nie udało się zweryfikować, że polecenie w piaskownicy jest ograniczone. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Wiersz polecenia piaskownicy Windows jest za długi (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>

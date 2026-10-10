@@ -357,7 +357,12 @@
         <translation>Vygenerujte až pět doplňujících otázek v kontextu aktuální konverzace. Otázky jsou z pohledu uživatele. Pouze otázky, bez vysvětlení. Použijte jazyk, který se v konverzaci používá. Vraťte objekt JSON s jediným klíčem &quot;follow_ups&quot; obsahujícím pole textových otázek, bez markdownu.</translation>
     </message>
     <message>
+        <source></source>
+        <translation type="vanished">Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
         <translation>Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
     </message>
     <message>
@@ -962,18 +967,22 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout z této stránky nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1593,7 +1602,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-938"/>
+        <location filename="../llamasettings.cpp" line="-937"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -1632,7 +1641,7 @@ Vestavěné prompty: %1
 Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použití.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>Obrázek SVG</translation>
     </message>
@@ -1643,13 +1652,13 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Diagram Mermaid</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Podrobnosti</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Zkopírovat kód níže do schránky</translation>
     </message>
@@ -2038,7 +2047,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation type="vanished">Vyberte nástroj pro zobrazení jeho JSON definice</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+74"/>
+        <location filename="../toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Vyberte nástroj pro zobrazení jeho definice</translation>
     </message>
@@ -2053,12 +2062,17 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Stáhnout ripgrep %1</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>Stáhnout MXC %1</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Nástroje search a find používají ripgrep, který není na tomto systému nainstalován.</translation>
     </message>
@@ -2066,6 +2080,16 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep: %1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>Nástroj bash v pískovišti na Windows používá runtime Microsoft MXC (wxc-exec), který není na tomto systému nainstalován.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Runtime pískoviště Windows: %1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2160,7 +2184,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2181,7 +2205,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2206,7 +2230,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 dovedností</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Žádný popis</translation>
     </message>
@@ -2223,7 +2247,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Přidat…</translation>
     </message>
@@ -2381,12 +2405,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
@@ -2438,7 +2462,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Chyba: %1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>Příkaz byl zastaven uživatelem.</translation>
     </message>
@@ -2915,22 +2939,80 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nástroje search a find používají ripgrep k vyhledávání obsahu souborů a k lokalizaci souborů podle názvu. Na tomto systému není nainstalován, můžete ho ale stáhnout zde. ripgrep je publikován pod licencí MIT nebo Unlicense.</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Stáhnout runtime pískoviště Windows (MXC)</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Stáhnout runtime Microsoft MXC %1?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Nastavení &apos;Přikazy v pískovišti&apos; omezuje nástroj bash na Windows na procesový kontejner Microsoft MXC. Uzpřesněný runtime wxc-exec.exe není na tomto systému nainstalován, můžete ho ale stáhnout zde. MXC je publikován pod licencí MIT.</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Stáhnout</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Balíček neobsahuje binární soubor wxc-exec.exe.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>Binární soubor wxc-exec.exe má neočekávanou velikost.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>Binární soubor wxc-exec.exe neodpovídá jeho očekávanému kontrolnímu součtu.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Runtime Microsoft MXC je k dispozici pouze pro Windows x86-64.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Stahování runtime MXC...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Stahování runtime MXC selhalo: %1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Rozbalování runtime MXC...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Rozbalování runtime MXC selhalo: %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Balíček neobsahuje binárku ripgrep.</translation>
     </message>
@@ -2950,17 +3032,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stahování ripgrep selhalo: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Ověřování integrity balíčku...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Stažený balíček není ten očekávaný.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Rozbalování ripgrep...</translation>
     </message>
@@ -3086,37 +3170,61 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Čtení &quot;%1&quot; není povoleno: umístění přihlašovacích údajů nejsou uvnitř pískoviště čitelná.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Jednou ho nainstalujte pomocí &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); odhlášení není potřeba, síťová bariéra se řídí SIDem dedikovaného uživatele pískoviště. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+        <translation type="vanished">Jednou ho nainstalujte pomocí &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); odhlášení není potřeba, síťová bariéra se řídí SIDem dedikovaného uživatele pískoviště. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>Backend pískoviště Windows (srt-win) nelze dotázat (ukončení %1): %2 %3</translation>
+        <translation type="vanished">Backend pískoviště Windows (srt-win) nelze dotázat (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>Uživatel pískoviště Windows nebyl zprovisionován. %1</translation>
+        <translation type="vanished">Uživatel pískoviště Windows nebyl zprovisionován. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Backend pískoviště Windows (srt-win) neohlásil SID uživatele pískoviště. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Pískoviště Windows nemohlo udělit uživateli pískoviště přístup k pracovnímu adresáři (ukončení %1): %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Backend pískoviště Windows (wxc-exec) včas neodpověděl na dotaz na své schopnosti. %1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Backend pískoviště Windows (srt-win) neohlásil SID uživatele pískoviště. %1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Pískoviště Windows nemohlo udělit uživateli pískoviště přístup k pracovnímu adresáři (ukončení %1): %2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Pískoviště Windows (Microsoft MXC) vyžaduje Windows 11 24H2 (verze %1) nebo novější; tento systém je verze %2. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (runtime pískoviště Windows Microsoft MXC) nebyl nalezen. %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Pískoviště Windows (Microsoft MXC) nezvládlo kontrolu izolace za běhu: nepodařilo se ověřit, že je příkaz v pískovišti omezen. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Příkazový řádek pískoviště Windows je příliš dlouhý (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>

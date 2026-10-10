@@ -536,7 +536,7 @@ Fördefinierade prompts: %1
 Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+897"/>
+        <location filename="../markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG-bild</translation>
     </message>
@@ -547,13 +547,13 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Mermaid-diagram</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+478"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Detaljer</translation>
     </message>
     <message>
-        <location line="+718"/>
+        <location line="+581"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Kopiera koden nedan till urklipp</translation>
     </message>
@@ -1231,8 +1231,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Generera upp till fem uppföljningsfrågor i sammanhanget av den aktuella konversationen. Frågorna är från användarens synpunkt. Endast frågor, inga förklaringar. Använd det språk som används i konversationen. Returnera ett JSON-objekt med en enskild nyckel &quot;follow_ups&quot; som innehåller en array med strängar med frågeformuleringar i ren text, ingen markdown.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. only summarize.</source>
+        <translation type="vanished">Konversationen ovan är lång och är på väg att ta slut på kontextutrymme. Skriv en detaljerad sammanfattning av den som gör att konversationen kan fortsätta sömlöst. Strukturera sammanfattningen som markdown med dessa avsnitt: ## Uppgift (vad användaren bad om och det övergripande målet), ## Nyckelbeslut (viktiga beslut, begränsningar och preferenser), ## Genomfört arbete (filer som ändrats, kommandon som körts, kodändringar och deras resultat), ## Nuvarande läge (vad som är klart, vad som pågår, fel som uppstått) och ## Nästa steg (vad som ska hända härnäst för att slutföra uppgiften). Var precis och konkret: behåll filvägar, funktionsnamn och exakta värden. Svara inte på användarens senaste meddelande; sammanfatta bara.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
         <translation>Konversationen ovan är lång och är på väg att ta slut på kontextutrymme. Skriv en detaljerad sammanfattning av den som gör att konversationen kan fortsätta sömlöst. Strukturera sammanfattningen som markdown med dessa avsnitt: ## Uppgift (vad användaren bad om och det övergripande målet), ## Nyckelbeslut (viktiga beslut, begränsningar och preferenser), ## Genomfört arbete (filer som ändrats, kommandon som körts, kodändringar och deras resultat), ## Nuvarande läge (vad som är klart, vad som pågår, fel som uppstått) och ## Nästa steg (vad som ska hända härnäst för att slutföra uppgiften). Var precis och konkret: behåll filvägar, funktionsnamn och exakta värden. Svara inte på användarens senaste meddelande; sammanfatta bara.</translation>
     </message>
     <message>
@@ -1842,18 +1846,22 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+325"/>
+        <location line="+324"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandboxkommandon</translation>
     </message>
     <message>
-        <location line="-325"/>
-        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
-        <translation>Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivingar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win från @anthropic-ai/sandbox-runtime på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows kräver sandboxen en engångsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); srt-win-exekverbara filen måste finnas på PATH (LLAMA_SRT_WIN kan peka på den).</translation>
+        <location line="-324"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
+        <translation>Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivningar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC-processbehållare på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows använder sandboxen den fastställda wxc-exec.exe-runtime, som kan hämtas från den här verktygssidan (LLAMA_WXC_EXEC kan peka på den), och kräver Windows 11 24H2 eller nyare.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
+        <translation type="vanished">Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivingar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win från @anthropic-ai/sandbox-runtime på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows kräver sandboxen en engångsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); srt-win-exekverbara filen måste finnas på PATH (LLAMA_SRT_WIN kan peka på den).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -2062,7 +2070,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     <message>
         <location line="+13"/>
         <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+171"/>
+        <location filename="../toolsettingswidget.cpp" line="+202"/>
         <source>Add…</source>
         <translation>Lägg till…</translation>
     </message>
@@ -2115,7 +2123,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-99"/>
+        <location filename="../toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Välj ett verktyg för att visa dess definition</translation>
     </message>
@@ -2130,12 +2138,17 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Hämta ripgrep %1</translation>
     </message>
     <message>
+        <location line="+29"/>
+        <source>Download MXC %1</source>
+        <translation>Hämta MXC %1</translation>
+    </message>
+    <message>
         <location line="+70"/>
         <source>Edit</source>
         <translation>Redigera</translation>
     </message>
     <message>
-        <location line="+172"/>
+        <location line="+173"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Sök- och find-verktygen använder ripgrep, som inte är installerat på det här systemet.</translation>
     </message>
@@ -2143,6 +2156,16 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <location line="+4"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep: %1</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
+        <translation>Sandboxade bash-verktyget på Windows använder Microsofts MXC-runtime (wxc-exec), som inte är installerat på det här systemet.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Windows sandbox runtime: %1</source>
+        <translation>Windows-sandbox-runtime: %1</translation>
     </message>
     <message>
         <location line="+43"/>
@@ -2237,7 +2260,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-815"/>
+        <location filename="../toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -2258,7 +2281,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+295"/>
+        <location filename="../toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Namn: %1</translation>
     </message>
@@ -2283,7 +2306,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 färdigheter</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-97"/>
+        <location filename="../toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Ingen beskrivning</translation>
     </message>
@@ -2398,12 +2421,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Lyckades. Uppdaterade följande filer:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+102"/>
+        <location filename="../tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Ingen bash-shell hittades. Installera Git for Windows (https://git-scm.com/download/win) eller lägg till en bash på PATH.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+158"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-exekverbar fil hittades inte; sandbox är inte tillgängligt på det här systemet.</translation>
     </message>
@@ -2455,7 +2478,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fel: %1</translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+169"/>
         <source>Command was stopped by the user.</source>
         <translation>Kommandot stoppades av användaren.</translation>
     </message>
@@ -2932,22 +2955,80 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Sök- och find-verktygen använder ripgrep för att söka i filinnehåll och för att hitta filer efter namn. Det är inte installerat på det här systemet, så det kan hämtas här i stället. ripgrep publiceras under MIT- eller Unlicense-licensen.</translation>
     </message>
     <message>
+        <location filename="../tools/mxc.cpp" line="+64"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Hämta Windows-sandbox-runtime (MXC)</translation>
+    </message>
+    <message>
+        <location line="+45"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Hämta Microsofts MXC-runtime %1?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Inställningen &apos;Sandboxkommandon&apos; innesluter bash-verktyget på Windows i en Microsoft MXC-processbehållare. Den fastställda wxc-exec.exe-runtime är inte installerad på det här systemet, så den kan hämtas här i stället. MXC publiceras under MIT-licensen.</translation>
+    </message>
+    <message>
         <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Hämta</translation>
     </message>
     <message>
+        <location line="+24"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Paketet innehåller ingen wxc-exec.exe-binärfil.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>wxc-exec.exe-binärfilen har en oväntad storlek.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>wxc-exec.exe-binärfilen matchar inte den förväntade kontrollsumman.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation>Microsofts MXC-runtime finns endast tillgänglig för Windows x86-64.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Hämtar MXC-runtime...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Hämtningen av MXC-runtime misslyckades: %1</translation>
+    </message>
+    <message>
         <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Packar upp MXC-runtime...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Upppackningen av MXC-runtime misslyckades: %1</translation>
+    </message>
+    <message>
+        <location filename="../tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Paketet innehåller ingen ripgrep-binärfil.</translation>
     </message>
@@ -2967,17 +3048,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hämtningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location filename="../tools/mxc.cpp" line="-16"/>
+        <location filename="../tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Verifierar paketets integritet...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Det hämtade paketet är inte det som förväntades.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Packar upp ripgrep...</translation>
     </message>
@@ -3103,37 +3186,61 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Läsning av &quot;%1&quot; är inte tillåten: autentiseringsuppgifters platser kan inte läsas inom sandboxen.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+81"/>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Installera den en gång med &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); ingen utloggning krävs, nätverksstängselnyckeln baseras på den dedikerade sandboxanvändarens SID. Avmarkera i stället &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
+        <translation type="vanished">Installera den en gång med &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); ingen utloggning krävs, nätverksstängselnyckeln baseras på den dedikerade sandboxanvändarens SID. Avmarkera i stället &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation>Windows-sandboxbackenden (srt-win) kunde inte frågas (avslut %1): %2 %3</translation>
+        <translation type="vanished">Windows-sandboxbackenden (srt-win) kunde inte frågas (avslut %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation>Windows-sandboxanvändaren är inte provisionerad. %1</translation>
+        <translation type="vanished">Windows-sandboxanvändaren är inte provisionerad. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Windows-sandboxbackenden (srt-win) rapporterade inte sandboxanvändarens SID. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Windows-sandboxen kunde inte bevilja sandboxanvändaren åtkomst till arbetskatalogen (avslut %1): %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win (Windows-sandboxbackenden för @anthropic-ai/sandbox-runtime) hittades inte på PATH. %1 LLAMA_SRT_WIN kan peka på den exekverbara filen.</translation>
+    </message>
+    <message>
+        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Hämta den från inställningssidan för Llama.cpp-chattverktyg (en fastställd, kontrollsumma-verifierad Microsoft MXC-utgivning); LLAMA_WXC_EXEC kan peka på en wxc-exec.exe. Avmarkera i stället &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Windows-sandboxbackenden (wxc-exec) svarade inte på förmågeproben i tid. %1</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation>Windows-sandboxbackenden (srt-win) rapporterade inte sandboxanvändarens SID. %1</translation>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Windows-sandboxbackenden (wxc-exec) rapporterade MXC-behållaren som otillgänglig (avslut %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+90"/>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation>Windows-sandboxen kunde inte bevilja sandboxanvändaren åtkomst till arbetskatalogen (avslut %1): %2</translation>
+        <location line="+317"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows-sandboxen (Microsoft MXC) kräver Windows 11 24H2 (build %1) eller nyare; det här systemet har build %2. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation>srt-win (Windows-sandboxbackenden för @anthropic-ai/sandbox-runtime) hittades inte på PATH. %1 LLAMA_SRT_WIN kan peka på den exekverbara filen.</translation>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (Microsofts MXC Windows-sandbox-runtime) hittades inte. %1</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+13"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Windows-sandboxen (Microsoft MXC) misslyckades med sin live-isoleringskontroll: ett sandboxat kommando kunde inte verifieras som inneslutet. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxens kommandorad är för lång (%1 av %2 tecken); processmiljön är troligen för stor. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
