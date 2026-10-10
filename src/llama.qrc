@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../images/settingscategory_llama.png</file>
+        <file>../images/settingscategory_llama@2x.png</file>
+        <file>../images/llama.png</file>
+        <file>../images/llama@2x.png</file>
+        <file>../images/heroicons_outline.ttf</file>
+        <file alias="mermaid/mermaid.min.js">../3rdparty/mermaid/mermaid.min.js</file>
+        <file alias="mermaid/domshim.js">../3rdparty/mermaid/domshim.js</file>
+        <file alias="katex/katex.min.js">../3rdparty/katex/katex.min.js</file>
+        <file alias="katex/katex2svg.js">../3rdparty/katex/katex2svg.js</file>
+        <file alias="katex/fonts/KaTeX_AMS-Regular.ttf">../3rdparty/katex/fonts/KaTeX_AMS-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Caligraphic-Bold.ttf">../3rdparty/katex/fonts/KaTeX_Caligraphic-Bold.ttf</file>
+        <file alias="katex/fonts/KaTeX_Caligraphic-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Caligraphic-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Fraktur-Bold.ttf">../3rdparty/katex/fonts/KaTeX_Fraktur-Bold.ttf</file>
+        <file alias="katex/fonts/KaTeX_Fraktur-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Fraktur-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Main-Bold.ttf">../3rdparty/katex/fonts/KaTeX_Main-Bold.ttf</file>
+        <file alias="katex/fonts/KaTeX_Main-BoldItalic.ttf">../3rdparty/katex/fonts/KaTeX_Main-BoldItalic.ttf</file>
+        <file alias="katex/fonts/KaTeX_Main-Italic.ttf">../3rdparty/katex/fonts/KaTeX_Main-Italic.ttf</file>
+        <file alias="katex/fonts/KaTeX_Main-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Main-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Math-BoldItalic.ttf">../3rdparty/katex/fonts/KaTeX_Math-BoldItalic.ttf</file>
+        <file alias="katex/fonts/KaTeX_Math-Italic.ttf">../3rdparty/katex/fonts/KaTeX_Math-Italic.ttf</file>
+        <file alias="katex/fonts/KaTeX_SansSerif-Bold.ttf">../3rdparty/katex/fonts/KaTeX_SansSerif-Bold.ttf</file>
+        <file alias="katex/fonts/KaTeX_SansSerif-Italic.ttf">../3rdparty/katex/fonts/KaTeX_SansSerif-Italic.ttf</file>
+        <file alias="katex/fonts/KaTeX_SansSerif-Regular.ttf">../3rdparty/katex/fonts/KaTeX_SansSerif-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Script-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Script-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Size1-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Size1-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Size2-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Size2-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Size3-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Size3-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Size4-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Size4-Regular.ttf</file>
+        <file alias="katex/fonts/KaTeX_Typewriter-Regular.ttf">../3rdparty/katex/fonts/KaTeX_Typewriter-Regular.ttf</file>
+    </qresource>
+</RCC>

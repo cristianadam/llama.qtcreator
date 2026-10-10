@@ -2,6 +2,7 @@ add_qtc_test(llamatools_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Network Qt::Sql Qt::Widgets Qt::Svg
     Qt::TaskTree
@@ -15,47 +16,47 @@ add_qtc_test(llamatools_test
     markus
   SOURCES
     llamatools_test.cpp
-    ../llama.qrc
-    ../ansitext.cpp
-    ../llamachatmanager.cpp
-    ../llamasyntaxhighligher.cpp
-    ../katexengine.cpp
-    ../markdownrenderer.cpp
-    ../mermaidengine.cpp
-    ../llamasettings.cpp
-    ../llamastorage.cpp
-    ../llamahtmlexporter.cpp
-    ../llamatheme.cpp
-    ../llamathinkingsectionparser.cpp
-    ../promptssettingswidget.cpp
-    ../promptssettingswidget.h
-    ../projectinstructions.cpp
-    ../skills.cpp
-    ../skillssettingswidget.cpp
-    ../toolsettingswidget.cpp
-    ../tools/apply_patch_tool.cpp
-    ../tools/edit_file_tool.cpp
-    ../tools/mcpbridge.cpp
-    ../tools/mcpclient.cpp
-    ../tools/mcptool.cpp
-    ../tools/patch.cpp
-    ../tools/bash_tool.cpp
-    ../tools/readfile_tool.cpp
-    ../tools/skill_tool.cpp
-    ../tools/task_tool.cpp
-    ../tools/tool.cpp
-    ../tools/todowrite_tool.cpp
-    ../tools/write_tool.cpp
-    ../tools/tool_utils.cpp
-    ../tools/web_utils.cpp
-    ../tools/webfetch_tool.cpp
-    ../tools/websearch_tool.cpp
-    ../tools/search_tool.cpp
-    ../tools/find_tool.cpp
-    ../tools/ls_tool.cpp
-    ../tools/ripgrep.cpp
-    ../tools/mxc.cpp
-    ../tools/windows_sandbox.cpp
+    ../src/llama.qrc
+    ../src/ansitext.cpp
+    ../src/llamachatmanager.cpp
+    ../src/llamasyntaxhighligher.cpp
+    ../src/katexengine.cpp
+    ../src/markdownrenderer.cpp
+    ../src/mermaidengine.cpp
+    ../src/llamasettings.cpp
+    ../src/llamastorage.cpp
+    ../src/llamahtmlexporter.cpp
+    ../src/llamatheme.cpp
+    ../src/llamathinkingsectionparser.cpp
+    ../src/promptssettingswidget.cpp
+    ../src/promptssettingswidget.h
+    ../src/projectinstructions.cpp
+    ../src/skills.cpp
+    ../src/skillssettingswidget.cpp
+    ../src/toolsettingswidget.cpp
+    ../src/tools/apply_patch_tool.cpp
+    ../src/tools/edit_file_tool.cpp
+    ../src/tools/mcpbridge.cpp
+    ../src/tools/mcpclient.cpp
+    ../src/tools/mcptool.cpp
+    ../src/tools/patch.cpp
+    ../src/tools/bash_tool.cpp
+    ../src/tools/readfile_tool.cpp
+    ../src/tools/skill_tool.cpp
+    ../src/tools/task_tool.cpp
+    ../src/tools/tool.cpp
+    ../src/tools/todowrite_tool.cpp
+    ../src/tools/write_tool.cpp
+    ../src/tools/tool_utils.cpp
+    ../src/tools/web_utils.cpp
+    ../src/tools/webfetch_tool.cpp
+    ../src/tools/websearch_tool.cpp
+    ../src/tools/search_tool.cpp
+    ../src/tools/find_tool.cpp
+    ../src/tools/ls_tool.cpp
+    ../src/tools/ripgrep.cpp
+    ../src/tools/mxc.cpp
+    ../src/tools/windows_sandbox.cpp
 )
 
 # The AUTOMOC scanner (dep‑file mode) chokes on llamatools_test.cpp in this
@@ -71,28 +72,31 @@ add_qtc_test(fimcache_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
     Qt::Test Qt::Core
   SOURCES
     fimcache_test.cpp
-    ../fimcache.cpp
+    ../src/fimcache.cpp
 )
 
 add_qtc_test(autoscrollarea_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Widgets
   SOURCES
     autoscrollarea_test.cpp
-    ../autoscrollarea.cpp
+    ../src/autoscrollarea.cpp
 )
 
 add_qtc_test(markdownrenderer_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
     Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Svg
     QtCreator::Utils
@@ -102,10 +106,10 @@ add_qtc_test(markdownrenderer_test
     markus
   SOURCES
     markdownrenderer_test.cpp
-    ../ansitext.cpp
-    ../markdownrenderer.cpp
-    ../katexengine.cpp
-    ../mermaidengine.cpp
-    ../llamasyntaxhighligher.cpp
-    ../llama.qrc
+    ../src/ansitext.cpp
+    ../src/markdownrenderer.cpp
+    ../src/katexengine.cpp
+    ../src/mermaidengine.cpp
+    ../src/llamasyntaxhighligher.cpp
+    ../src/llama.qrc
 )
