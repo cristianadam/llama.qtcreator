@@ -3409,7 +3409,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">srt-win (le backend bac à sable Windows de @anthropic-ai/sandbox-runtime) n&apos;a pas été trouvé dans le PATH. %1 LLAMA_SRT_WIN peut pointer vers l&apos;exécutable.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Téléchargez-le depuis la page des paramètres des outils du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; LLAMA_WXC_EXEC peut pointer vers un wxc-exec.exe. Vous pouvez aussi décocher « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
@@ -3424,7 +3424,22 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
@@ -3434,12 +3449,17 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Le bac à sable Windows (Microsoft MXC) vérifie son isolation pour la première fois ; relancez la commande dans quelques secondes.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>

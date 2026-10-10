@@ -3194,7 +3194,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3209,7 +3209,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Pískoviště Windows nepodařilo nastavit sondu izolace za běhu (dočasný adresář nebo canary soubor v domovském adresáři). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Pískoviště Windows nepodařilo vytvořit canary soubor své sondy izolace za běhu na %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Konfigurace pískoviště Windows je příliš dlouhá (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Pískoviště Windows (Microsoft MXC) vyžaduje Windows 11 24H2 (verze %1) nebo novější; tento systém je verze %2. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3219,12 +3234,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (runtime pískoviště Windows Microsoft MXC) nebyl nalezen. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Pískoviště Windows (Microsoft MXC) nezvládlo kontrolu izolace za běhu: nepodařilo se ověřit, že je příkaz v pískovišti omezen. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Pískoviště Windows (Microsoft MXC) poprvé ověřuje svou izolaci; příkaz spusťte znovu za pár sekund.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Příkazový řádek pískoviště Windows je příliš dlouhý (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>

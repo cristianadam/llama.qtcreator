@@ -3202,7 +3202,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation type="vanished">Nie znaleziono srt-win (moduł backendu piaskownicy Windows z @anthropic-ai/sandbox-runtime) w PATH. %1 LLAMA_SRT_WIN może wskazywać na plik wykonywalny.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Pobierz je ze strony ustawień narzędzi czatu Llama.cpp (przypięte, zweryfikowane sumą kontrolną wydanie Microsoft MXC); LLAMA_WXC_EXEC może wskazywać na wxc-exec.exe. Alternatywnie odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
@@ -3217,7 +3217,22 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Moduł backendu piaskownicy Windows (wxc-exec) zgłosił kontener MXC jako niedostępny (kod zakończenia %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Piaskownica Windows nie mogła przygotować badania izolacji na żywo (katalog tymczasowy lub plik canary w katalogu domowym). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Piaskownica Windows nie mogła utworzyć pliku canary badania izolacji na żywo w %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Konfiguracja piaskownicy Windows jest za długa (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Piaskownica Windows (Microsoft MXC) wymaga Windows 11 24H2 (build %1) lub nowszego; ten system ma build %2. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
@@ -3227,12 +3242,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Nie znaleziono wxc-exec.exe (środowiska uruchomieniowego piaskownicy Windows Microsoft MXC). %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Piaskownica Windows (Microsoft MXC) nie przeszła testu izolacji na żywo: nie udało się zweryfikować, że polecenie w piaskownicy jest ograniczone. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Piaskownica Windows (Microsoft MXC) weryfikuje swoją izolację po raz pierwszy; uruchom polecenie ponownie za kilka sekund.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Wiersz polecenia piaskownicy Windows jest za długi (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>

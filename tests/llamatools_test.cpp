@@ -3268,7 +3268,15 @@ void LlamaToolsTest::windowsSandboxSpec()
     const QString shellPath = QStringLiteral("C:\\git\\bin\\bash.exe");
     const QString commandLine = shellPath + QStringLiteral(" -c echo hi");
 
-    const LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+    // The live isolation probe runs asynchronously on the container host:
+    // the first call starts it and asks for a retry, the next call picks up
+    // the result. (Off Windows the probe is a no-op, so this is a single
+    // iteration here.)
+    LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+        workdir.path(), env, commandLine, 1234, shellPath);
+    for (int i = 0; i < 120 && spec.error.contains("verifying"); ++i)
+        QTest::qWait(250);
+    spec = LlamaCpp::Tools::windowsSandboxSpec(
         workdir.path(), env, commandLine, 1234, shellPath);
 
     // An oversized environment exceeds the wxc-exec command line bound and

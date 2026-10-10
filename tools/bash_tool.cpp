@@ -241,9 +241,9 @@ QString macSandboxProfile(const QString &cwd)
 // network access. \a env is the environment the (sandboxed) command gets.
 SandboxSpec sandboxSpec(const QString &cwd,
                         const QProcessEnvironment &env,
-                        const BashSpec &, // the command line (Windows only)
-                        const QString &, // (the MXC configuration embeds it)
-                        int) // the command timeout (Windows only)
+                        const BashSpec &shell, // the command line (Windows only)
+                        const QString &command, // (the MXC configuration embeds it)
+                        int timeoutMs) // the command timeout (Windows only)
 {
 #if defined(Q_OS_WIN)
     // The MXC configuration embeds the full command line, so the wrapper

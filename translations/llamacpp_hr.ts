@@ -974,7 +974,6 @@
         <translation>Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, Microsoftov MXC procesni kontejner na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox koristi fiksirani wxc-exec.exe runtime koji se može preuzeti s ove stranice Alati (LLAMA_WXC_EXEC može ukazivati na njega) i zahtijeva Windows 11 24H2 ili noviji.</translation>
     </message>
     <message>
-        <location line="-325"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox zahtijeva jednokratnu instalaciju: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); srt-win izvedbena datoteka mora biti na PATH-u (LLAMA_SRT_WIN može ukazivati na nju).</translation>
     </message>
@@ -3154,7 +3153,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">srt-win (Windows sandbox backend @anthropic-ai/sandbox-runtime) nije pronađen na PATH-u. %1 LLAMA_SRT_WIN može ukazivati na izvedbenu datoteku.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Preuzmite ga s stranice postavaka alata Llama.cpp Chat (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); LLAMA_WXC_EXEC može ukazivati na wxc-exec.exe. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
@@ -3169,7 +3168,22 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows sandbox konfiguracija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
@@ -3179,12 +3193,17 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows sandbox komandna linija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>

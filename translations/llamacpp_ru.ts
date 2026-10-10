@@ -3211,7 +3211,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">srt-win (бэкенд песочницы Windows @anthropic-ai/sandbox-runtime) не найден в PATH. %1 Переменная LLAMA_SRT_WIN может указывать на исполняемый файл.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Скачайте его со страницы настроек инструментов чата Llama.cpp (закреплённый релиз Microsoft MXC с проверенной контрольной суммой); переменная LLAMA_WXC_EXEC может указывать на wxc-exec.exe. В качестве альтернативы снимите отметку «Песочница для команд» в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
@@ -3226,7 +3226,22 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Бэкенд песочницы Windows (wxc-exec) сообщил, что контейнер MXC недоступен (код выхода %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Песочница Windows не смогла настроить пробу изоляции в реальном времени (временный каталог или canary-файл в домашнем каталоге). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Песочница Windows не смогла создать canary-файл пробы изоляции в реальном времени в %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Конфигурация песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Для песочницы Windows (Microsoft MXC) требуется Windows 11 24H2 (сборка %1) или новее; сборка этой системы — %2. Снимите отметку «Песочница для команд» в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
@@ -3236,12 +3251,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>wxc-exec.exe (рантайм песочницы Windows Microsoft MXC) не найден. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Песочница Windows (Microsoft MXC) не прошла проверку изоляции: не удалось проверить, что команда в песочнице ограничена. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Песочница Windows (Microsoft MXC) впервые проверяет свою изоляцию; повторите команду через несколько секунд.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Командная строка песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>

@@ -29,6 +29,8 @@ constexpr int kMaxConfigBase64Chars = 24'000;
 // MXC's process container tier needs the container infrastructure of
 // Windows 11 24H2; older builds have no backend to run on.
 constexpr quint32 kMinWindowsBuild = 26100;
+// The canary content the live isolation probe hides in the home directory.
+constexpr const char *kCanaryContent = "llama-mxc-canary";
 
 /*! Locates the wxc-exec executable: the LLAMA_WXC_EXEC environment
     variable (mirroring LLAMA_SHELL_STUB), then the pinned release
@@ -142,7 +144,14 @@ QString canonicalGrantPath(const QString &path)
 QString windowsDirectoryOf(const QString &path)
 {
     const int slash = path.lastIndexOf(QLatin1Char('\\'));
-    return slash > 0 ? path.left(slash) : path;
+    if (slash > 0)
+        return path.left(slash);
+    // A path without a directory (a shell at the drive root, C:\bash.exe):
+    // the drive root itself, with the separator (a bare "C:" is a
+    // drive-relative path, not a root).
+    if (path.size() == 2 && path.at(1) == QLatin1Char(':'))
+        return path + QLatin1Char('\\');
+    return path;
 }
 
 QJsonObject buildConfig(const QString &cwd,
@@ -242,6 +251,35 @@ QJsonObject buildConfig(const QString &cwd,
     return config;
 }
 
+// The base64 configuration is the single argument of wxc-exec; both the
+// live probe and the command refuse it past the command line bound.
+QString encodedConfig(const QJsonObject &config)
+{
+    return QString::fromLatin1(
+        QJsonDocument(config).toJson(QJsonDocument::Compact).toBase64());
+}
+
+enum class LiveProbeState
+{
+    Running, // the probe command is running (a fresh entry starts here)
+    Ok,
+    Failed,
+};
+
+struct LiveProbe
+{
+    QProcess *process = nullptr;
+    LiveProbeState state = LiveProbeState::Running;
+    QString failure; // a complete, actionable message when the state is Failed
+};
+
+// Keyed by the executable, as LLAMA_WXC_EXEC may point elsewhere.
+QHash<QString, LiveProbe> &liveProbes()
+{
+    static QHash<QString, LiveProbe> probes;
+    return probes;
+}
+
 #if defined(Q_OS_WIN)
 bool windowsBuildOk()
 {
@@ -252,80 +290,139 @@ quint32 windowsBuildNumber()
     return QOperatingSystemVersion::current().buildNumber();
 }
 
-// Runs one real sandboxed command and checks the isolation with positive
-// and negative controls: a write inside the workdir must work, a read of
-// and a write to a file outside the granted paths must fail. The canary
-// lives in the home directory, which the container cannot see (a temp
-// location would be granted). The successful result is cached for the
-// session; a failure re-probes on the next call, like probeWxc(). The
-// probe is synchronous (bounded by the timeouts) and runs on the caller's
-// thread - the first sandboxed command pays for it.
-bool liveProbeOk(const QString &exe, const QString &shellPath)
+// The positive and negative controls of the live probe: a write inside the
+// workdir must have worked, the canary must not have leaked, and the write
+// outside the granted paths must have failed.
+bool liveProbePassed(const QProcess &process,
+                     const QString &workdir,
+                     const QString &outsideWrite)
 {
-    static QHash<QString, bool> s_result;
-    if (s_result.value(exe))
-        return true;
+    const QString output
+        = QString::fromLocal8Bit(process.readAllStandardOutput())
+        + QString::fromLocal8Bit(process.readAllStandardError());
+    // The `> canary-leak` redirect creates the file even when cat fails, so
+    // only content is a leak.
+    QFile leakFile(workdir + QStringLiteral("/canary-leak"));
+    const bool leaked
+        = leakFile.open(QIODevice::ReadOnly) && leakFile.readAll().contains(kCanaryContent);
+    return process.exitStatus() == QProcess::NormalExit
+        && process.exitCode() == 0
+        && output.contains(QStringLiteral("LLAMA_MXC_LIVE_PROBE_OK"))
+        && QFileInfo::exists(workdir + QStringLiteral("/canary-ok"))
+        && !leaked
+        && !QFileInfo::exists(outsideWrite);
+}
 
-    bool ok = false;
-    QTemporaryDir workdir;
+/*! Checks that the container really isolates, with one real sandboxed
+    command and positive and negative controls: a write inside the workdir
+    must work, a read of and a write to a canary file in the home directory
+    must fail (the home directory is not granted; a temp location would be).
+    The probe runs asynchronously - the first call starts it and reports
+    Running, so the command that arrived is refused with a retry hint and
+    the next ones pay nothing. The successful result is cached for the
+    session (keyed by the executable); a failure re-probes on the next
+    call, like probeWxc(). The probe uses the same environment the command
+    gets, so an oversized environment fails it with the same "too long"
+    reason the command would get. */
+LiveProbeState liveProbeState(const QString &exe,
+                              const QProcessEnvironment &env,
+                              const QString &shellPath)
+{
+    LiveProbe &probe = liveProbes()[exe];
+    if (probe.state != LiveProbeState::Failed)
+        return probe.state;
+    probe = LiveProbe{}; // a failed probe is retried on the next call
+
+    QTemporaryDir *workdir = new QTemporaryDir;
     QDir homeProbe(QDir::homePath() + QStringLiteral("/.llama-mxc-probe-")
-                             + QString::number(QCoreApplication::applicationPid()));
+                         + QString::number(QCoreApplication::applicationPid()));
     // Leftovers of a probe interrupted by a crash; the probe re-creates
     // everything it needs.
     homeProbe.removeRecursively();
-    if (workdir.isValid() && !shellPath.isEmpty() && homeProbe.mkpath(QStringLiteral("outside"))) {
-        const QString canary = homeProbe.path() + QStringLiteral("/outside/secret.txt");
-        {
-            QFile file(canary);
-            if (file.open(QIODevice::WriteOnly))
-                file.write("llama-mxc-canary");
-        }
-        const QString outsideWrite
-            = homeProbe.path() + QStringLiteral("/outside/outside-write.txt");
-        const QString probeCommand = QStringLiteral("touch canary-ok; ")
-                                   + QStringLiteral("cat '") + canary
-                                   + QStringLiteral("' > canary-leak 2>/dev/null; ")
-                                   + QStringLiteral("echo bad > '") + outsideWrite
-                                   + QStringLiteral("' 2>/dev/null; ")
-                                   + QStringLiteral("echo LLAMA_MXC_LIVE_PROBE_OK");
-        const QString commandLine
-            = quoteWindowsArgument(shellPath) + QLatin1Char(' ')
-            + QStringLiteral("-c ") + quoteWindowsArgument(probeCommand);
-        const QJsonObject config = buildConfig(workdir.path(),
-                                               QProcessEnvironment::systemEnvironment(),
-                                               commandLine,
-                                               kLiveProbeTimeoutMs,
-                                               shellPath);
-        const QByteArray encoded
-            = QJsonDocument(config).toJson(QJsonDocument::Compact).toBase64();
-        if (encoded.size() <= kMaxConfigBase64Chars) {
-            QProcess process;
-            process.start(exe,
-                          { QStringLiteral("--config-base64"),
-                            QString::fromLatin1(encoded) });
-            if (process.waitForFinished(kLiveProbeTimeoutMs + 5000)) {
-                const QString output
-                    = QString::fromLocal8Bit(process.readAllStandardOutput())
-                    + QString::fromLocal8Bit(process.readAllStandardError());
-                // The `> canary-leak` redirect creates the file even when
-                // cat fails, so only content is a leak.
-                QFile leakFile(workdir.path() + QStringLiteral("/canary-leak"));
-                const bool leaked
-                    = leakFile.open(QIODevice::ReadOnly)
-                    && leakFile.readAll().contains("llama-mxc-canary");
-                ok = process.exitStatus() == QProcess::NormalExit
-                   && process.exitCode() == 0
-                   && output.contains(QStringLiteral("LLAMA_MXC_LIVE_PROBE_OK"))
-                   && QFileInfo::exists(workdir.path() + QStringLiteral("/canary-ok"))
-                   && !leaked
-                   && !QFileInfo::exists(outsideWrite);
-            }
-        }
+
+    const auto cleanupAndFail = [probe, &workdir, &homeProbe](const QString &message) {
+        delete workdir;
         homeProbe.removeRecursively();
+        probe.state = LiveProbeState::Failed;
+        probe.failure = message;
+    };
+
+    if (!workdir->isValid() || shellPath.isEmpty()
+        || !homeProbe.mkpath(QStringLiteral("outside"))) {
+        cleanupAndFail(Tr::tr("The Windows sandbox could not set up its live isolation "
+                              "probe (temporary directory or home canary). %1")
+                          .arg(installHint()));
+        return probe.state;
     }
-    if (ok)
-        s_result.insert(exe, true);
-    return ok;
+    const QString canary = homeProbe.path() + QStringLiteral("/outside/secret.txt");
+    {
+        QFile file(canary);
+        // The negative read control needs the canary to exist; without it
+        // the probe would pass without verifying anything.
+        if (!file.open(QIODevice::WriteOnly)
+            || file.write(QLatin1String(kCanaryContent)) < 0) {
+            cleanupAndFail(Tr::tr("The Windows sandbox could not create the canary file "
+                                  "of its live isolation probe at %1. %2")
+                              .arg(canary)
+                              .arg(installHint()));
+            return probe.state;
+        }
+    }
+
+    const QString outsideWrite
+        = homeProbe.path() + QStringLiteral("/outside/outside-write.txt");
+    const QString probeCommand = QStringLiteral("touch canary-ok; ")
+                               + QStringLiteral("cat '") + canary
+                               + QStringLiteral("' > canary-leak 2>/dev/null; ")
+                               + QStringLiteral("echo bad > '") + outsideWrite
+                               + QStringLiteral("' 2>/dev/null; ")
+                               + QStringLiteral("echo LLAMA_MXC_LIVE_PROBE_OK");
+    const QString commandLine
+        = quoteWindowsArgument(shellPath) + QLatin1Char(' ')
+        + QStringLiteral("-c ") + quoteWindowsArgument(probeCommand);
+    const QString encoded
+        = encodedConfig(buildConfig(workdir->path(),
+                                    env,
+                                    commandLine,
+                                    kLiveProbeTimeoutMs,
+                                    shellPath));
+    if (encoded.size() > kMaxConfigBase64Chars) {
+        cleanupAndFail(Tr::tr("The Windows sandbox configuration is too long (%1 of %2 "
+                              "characters); the process environment is probably oversized. "
+                              "Uncheck 'Sandbox commands' in the Llama settings to run "
+                              "commands without a sandbox.")
+                          .arg(encoded.size())
+                          .arg(kMaxConfigBase64Chars));
+        return probe.state;
+    }
+
+    const QString workdirPath = workdir->path();
+    const QString homeProbePath = homeProbe.path();
+    QProcess *process = new QProcess;
+    probe.process = process;
+    const auto onFinished = [exe, workdir, workdirPath, homeProbePath, outsideWrite] {
+        QProcess *finished = qobject_cast<QProcess *>(QObject::sender());
+        const bool ok = finished && liveProbePassed(*finished, workdirPath, outsideWrite);
+        if (finished)
+            finished->deleteLater();
+        delete workdir;
+        QDir(homeProbePath).removeRecursively();
+        LiveProbe &probe = liveProbes()[exe];
+        probe.process = nullptr;
+        if (ok) {
+            probe.state = LiveProbeState::Ok;
+            probe.failure.clear();
+        } else {
+            probe.state = LiveProbeState::Failed;
+            probe.failure = Tr::tr("The Windows sandbox (Microsoft MXC) failed its live "
+                                   "isolation check: a sandboxed command could not be "
+                                   "verified to be confined. %1")
+                              .arg(installHint());
+        }
+    };
+    QObject::connect(process, &QProcess::finished, nullptr, onFinished);
+    process->start(exe, { QStringLiteral("--config-base64"), encoded });
+    return probe.state;
 }
 #else
 // The build check and the live probe only make sense against the real
@@ -338,9 +435,11 @@ quint32 windowsBuildNumber()
 {
     return 0;
 }
-bool liveProbeOk(const QString &, const QString &)
+LiveProbeState liveProbeState(const QString &,
+                              const QProcessEnvironment &,
+                              const QString &)
 {
-    return true;
+    return LiveProbeState::Ok;
 }
 #endif
 
@@ -417,17 +516,20 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
         return spec;
     }
 
-    if (!liveProbeOk(exe, shellPath)) {
-        spec.error = Tr::tr("The Windows sandbox (Microsoft MXC) failed its live "
-                            "isolation check: a sandboxed command could not be verified "
-                            "to be confined. %1")
-                          .arg(installHint());
+    const LiveProbeState liveState = liveProbeState(exe, env, shellPath);
+    if (liveState == LiveProbeState::Running) {
+        spec.error = Tr::tr("The Windows sandbox (Microsoft MXC) is verifying its "
+                            "isolation for the first time; run the command again in a "
+                            "few seconds.");
+        return spec;
+    }
+    if (liveState == LiveProbeState::Failed) {
+        spec.error = liveProbes().value(exe).failure;
         return spec;
     }
 
-    const QJsonObject config = buildConfig(cwd, env, commandLine, timeoutMs, shellPath);
-    const QByteArray encoded
-        = QJsonDocument(config).toJson(QJsonDocument::Compact).toBase64();
+    const QString encoded = encodedConfig(
+        buildConfig(cwd, env, commandLine, timeoutMs, shellPath));
     if (encoded.size() > kMaxConfigBase64Chars) {
         spec.error = Tr::tr("The Windows sandbox command line is too long (%1 of %2 "
                             "characters); the process environment is probably oversized. "
@@ -439,7 +541,7 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
     }
 
     spec.program = exe;
-    spec.arguments = { QStringLiteral("--config-base64"), QString::fromLatin1(encoded) };
+    spec.arguments = { QStringLiteral("--config-base64"), encoded };
     return spec;
 }
 

@@ -2891,7 +2891,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win（@anthropic-ai/sandbox-runtime の Windows サンドボックスバックエンド）が PATH に見つかりませんでした。%1 LLAMA_SRT_WIN で実行可能ファイルの場所を指定できます。</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -2906,7 +2906,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -2916,12 +2931,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows サンドボックス（Microsoft MXC）がはじめて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>

@@ -23,8 +23,9 @@ struct WindowsSandboxSpec
 
 /// Quotes a single argument for a Windows command line (the MSVCRT
 /// CreateProcessW rules): an argument with whitespace or quotes is wrapped
-/// in quotes, every backslash is doubled (an odd run before the closing
-/// quote would escape it), and embedded quotes are backslash-escaped.
+/// in quotes, a run of backslashes before a quote (or the end of the
+/// argument) is doubled (an odd run before the closing quote would escape
+/// it), and embedded quotes are backslash-escaped.
 QString quoteWindowsArgument(const QString &argument);
 
 /// Builds the `wxc-exec --config-base64` wrapper that confines

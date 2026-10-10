@@ -3195,7 +3195,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (Windows ozadje peskovnika @anthropic-ai/sandbox-runtime) ni bil najden na PATH. %1 LLAMA_SRT_WIN lahko kaže na izvedljivo datoteko.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Prenesite ga s strani nastavitve orodij Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); LLAMA_WXC_EXEC lahko kaže na wxc-exec.exe. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
@@ -3210,7 +3210,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows ozadje peskovnika (wxc-exec) je poročalo, da kontejner MXC ni na voljo (končna koda %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows peskovnik ni mogel nastaviti preizkusa ločitve v živo (začasni imenik ali canary datoteka v domačem imeniku). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows peskovnik ni mogel ustvariti canary datoteke svojega preizkusa ločitve v živo na %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Nastavitev Windows peskovnika je predolga (%1 od %2 znakov); okolje procesa je verjetno preveliko. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows peskovnik (Microsoft MXC) potrebuje Windows 11 24H2 (zgradba %1) ali novejšega; ta sistem je zgradbe %2. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
@@ -3220,12 +3235,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (izvedbeno okolje Windows peskovnika Microsoft MXC) ni bilo najdeno. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows peskovnik (Microsoft MXC) ni prešel preizkusa ločitve v živo: ni bilo mogoče potrditi, da je povelje v peskovniku omejeno. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows peskovnik (Microsoft MXC) prvič preverja svojo ločitev; povelje ponovno izvedite čez nekaj sekund.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows ukazna vrstica peskovnika je predolga (%1 od %2 znakov); okolje procesa je verjetno preveliko. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>

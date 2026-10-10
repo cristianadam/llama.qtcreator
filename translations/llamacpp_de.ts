@@ -3194,7 +3194,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (das @anthropic-ai/sandbox-runtime Windows-Sandbox-Backend) wurde im PATH nicht gefunden. %1 LLAMA_SRT_WIN kann auf die Executabler verweisen.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Laden Sie es von der Llama.cpp-Chat-Tools-Einstellungsseite herunter (eine festgelegte, prüfsummenverifizierte Microsoft-MXC-Veröffentlichung); LLAMA_WXC_EXEC kann auf eine wxc-exec.exe verweisen. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
@@ -3209,7 +3209,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Das Windows-Sandbox-Backend (wxc-exec) hat den MXC-Container als nicht verfügbar gemeldet (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Die Windows-Sandbox konnte ihren Live-Isolationstest nicht einrichten (temporäres Verzeichnis oder Home-Canary). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Die Windows-Sandbox konnte die Canary-Datei ihres Live-Isolationstests unter %1 nicht erstellen. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Die Windows-Sandbox-Konfiguration ist zu lang (%1 von %2 Zeichen); die Prozessumgebung ist wahrscheinlich überdimensioniert. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) benötigt Windows 11 24H2 (Build %1) oder neuer; dieses System ist Build %2. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
@@ -3219,12 +3234,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (die Microsoft-MXC-Windows-Sandbox-Laufzeitumgebung) wurde nicht gefunden. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) hat ihren Live-Isolationstest nicht bestanden: Es konnte nicht verifiziert werden, dass ein gesandboxter Befehl isoliert ist. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Die Windows-Sandbox (Microsoft MXC) verifiziert ihre Isolation zum ersten Mal; führen Sie den Befehl in wenigen Sekunden erneut aus.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Die Windows-Sandbox-Befehlszeile ist zu lang (%1 von %2 Zeichen); die Prozessumgebung ist wahrscheinlich überdimensioniert. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>

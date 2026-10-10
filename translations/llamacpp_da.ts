@@ -3195,7 +3195,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">srt-win (@anthropic-ai/sandbox-runtime Windows-sandbox-backend) blev ikke fundet på PATH. %1 LLAMA_SRT_WIN kan pege på eksekverbaren.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
@@ -3210,7 +3210,22 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows-sandboxen kunne ikke oprette canary-filen til sit live isolationstjek på %1. %2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
@@ -3220,12 +3235,17 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>

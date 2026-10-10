@@ -3199,7 +3199,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">在 PATH 上找不到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱後端）。%1 LLAMA_SRT_WIN 可以指向該可執行檔。</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+44"/>
+        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>從 Llama.cpp 聊天工具設定頁面下載（一個固定版本、已驗證檢查總和的 Microsoft MXC 發布版）；LLAMA_WXC_EXEC 可以指向 wxc-exec.exe。或者在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
@@ -3214,7 +3214,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows 沙箱後端（wxc-exec）報告 MXC 容器不可用（結束 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+317"/>
+        <location line="+270"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows 沙箱無法設定其即時隔離探測（暫存目錄或主目錄金絲雀）。%1</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows 沙箱無法在 %1 建立其即時隔離探測的金絲雀檔案。%2</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows 沙箱設定太長（%1 / %2 個字元）；程序環境可能過大。在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
+    </message>
+    <message>
+        <location line="+106"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（build %1）或更新版本；此系統為 build %2。在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
@@ -3224,12 +3239,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>找不到 wxc-exec.exe（Microsoft MXC 的 Windows 沙箱執行階段）。%1</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="-90"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows 沙箱（Microsoft MXC）的即時隔離檢查失敗：無法驗證沙箱中的命令被限制在沙箱內。%1</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+104"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows 沙箱（Microsoft MXC）正在首次驗證其隔離狀態；請在幾秒後重新執行命令。</translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows 沙箱命令列太長（%1 / %2 個字元）；程序環境可能過大。在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
