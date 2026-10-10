@@ -4,17 +4,17 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp razgovor</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Zatraži predlog za llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+11"/>
+        <location filename="../src/llamaplugin.cpp" line="+11"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Zatraži predlog za llama.cpp na trenutnoj poziciji pokazivača uređivača.</translation>
     </message>
@@ -24,7 +24,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>Uključi/isključi funkciju llama.cpp</translation>
     </message>
@@ -49,7 +49,7 @@
         <translation>Prikaži status servera</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -141,18 +141,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>Razgovor</translation>
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+66"/>
         <source>Tools</source>
         <translation>Alati</translation>
     </message>
@@ -357,7 +357,25 @@
         <translation>Prethodni razgovor je dugačak i kontekstni prostor je gotovo ispunjen. Napišite detaljan sažetak koji omogućuje nesmetano nastavak razgovora. Strukturirajte sažetak kao markdown sa sljedećim odjeljcima: ## Zadatak (što je korisnik tražio i cjeloviti cilj), ## Ključne odluke (važne odluke, ograničenja i preferencije), ## Obavljeni rad (promijenjene datoteke, izvršene komande, izmjene koda i njihovi ishodi), ## Trenutačno stanje (što je dovršeno, što je u tijeku, nastale greške) i ## Sljedeći koraci (što treba učiniti dalje za dovršetak zadatka). Budite precizni i konkretni: zadržite putanje datoteka, imena funkcija i točne vrijednosti. Ne odgovarajte na zadnju poruku korisnika; samo sažmite.</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Stvori poruku commita za nekomitirane promjene.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Ispravi sljedeće greške i upozorenja u {file}.
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>Vještine</translation>
     </message>
@@ -899,7 +917,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Dodatna pitanja</translation>
     </message>
@@ -936,11 +954,15 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim, &quot;{file}&quot; i &quot;{line}&quot; trenutnom datotekom i linijom kursora, &quot;{diagnostics}&quot; greškama i upozorenjima trenutne datoteke, a &quot;{git_diff}&quot; nekomitiranim promjenama njezina git repozitorija.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>Direktoriji vještina</translation>
     </message>
@@ -1171,7 +1193,7 @@
         <translation>Promptovi</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Zadano</translation>
     </message>
@@ -1373,7 +1395,7 @@
         <translation>Uređivač razgovora za alat LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Unesite poruku (Shift+Enter za novi red)</translation>
     </message>
@@ -1436,7 +1458,7 @@
         <translation>Ukloniti svih %1 spremljenih zapisa povijesti unosa?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Proces razmišljanja</translation>
     </message>
@@ -1450,7 +1472,7 @@
         <translation type="obsolete">Kliknite za prikazivanje / sakrivanje procesa razmišljanja</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Dodane datoteke</translation>
     </message>
@@ -1527,7 +1549,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">ID razgovora</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Stvara novi razgovor s alatom llama.cpp</translation>
     </message>
@@ -1604,17 +1626,16 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-937"/>
+        <location filename="../src/llamasettings.cpp" line="-940"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Stvori poruku za poslanu za izabrani dio {selection}</translation>
+        <translation type="vanished">Stvori poruku za poslanu za izabrani dio {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Objasni kod u izabranom dijelu {selection}</translation>
     </message>
@@ -1624,17 +1645,15 @@ Do you want to overwrite it?</source>
         <translation>Provjeri pravopis i ispravo sve pravopisne pogreške u izabranom dijelu {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Generiraj testne slučajeve za izabrani dio {selection}. Izlaz samo kod bez objašnjenja</translation>
+        <translation type="vanished">Generiraj testne slučajeve za izabrani dio {selection}. Izlaz samo kod bez objašnjenja</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Ažuriraj prijevod za izabrani dio {selection}. Izlaz je kompletna datoteka prijevoda</translation>
+        <translation type="vanished">Ažuriraj prijevod za izabrani dio {selection}. Izlaz je kompletna datoteka prijevoda</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -1643,7 +1662,12 @@ Ugrađeni prompti: %1
 Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći put.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Prikupljanje git promjena</translation>
+    </message>
+    <message>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG slika</translation>
     </message>
@@ -1674,12 +1698,12 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Kopirano u međuspremnik</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Prikaži/sakri detalje upotrebe alata</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>Kopiraj</translation>
     </message>
@@ -1688,12 +1712,12 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Spremi</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>Novi razgovor</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Pretraga</translation>
     </message>
@@ -2017,7 +2041,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Odaberite alat za prikaz njegove JSON definicije</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Odaberite alat za prikaz njegove definicije</translation>
     </message>
@@ -2142,7 +2166,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Zaglavlja:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+69"/>
         <source>Choose a Skills Directory</source>
         <translation>Odaberite direktorij vještina</translation>
     </message>
@@ -2153,7 +2177,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2174,7 +2198,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2199,7 +2223,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>%1 vještina</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Nema opisa</translation>
     </message>
@@ -2209,21 +2233,21 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Interno</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(prazno)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-353"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Dodaj…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Ukloni</translation>
     </message>
@@ -2239,11 +2263,15 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>U izborniku lokatora prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>U izborniku lokatora prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim, &quot;{file}&quot; i &quot;{line}&quot; trenutnom datotekom i linijom kursora, &quot;{diagnostics}&quot; greškama i upozorenjima trenutne datoteke, a &quot;{git_diff}&quot; nekomitiranim promjenama njezina git repozitorija.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">U izborniku lokatora prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2258,18 +2286,18 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Sažimanje</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Naslov</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Lokator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>neuspješno čitanje datoteke</translation>
     </message>
@@ -2309,7 +2337,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Razgovor je sažet – ranije poruke su sažete kako bi se uklopile u prozor konteksta.</translation>
@@ -2318,7 +2346,7 @@ Authorization: Bearer &lt;token&gt;</source>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Dodaj %1</translation>
     </message>
@@ -2374,7 +2402,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Uspješno. Ažurirane su sljedeće datoteke:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
     </message>
@@ -2447,9 +2475,9 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>nepoznata greška</translation>
@@ -2472,7 +2500,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Radni direktorij: %1\n\n</translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Uredi datoteku</translation>
     </message>
@@ -2489,7 +2517,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
     </message>
@@ -2521,7 +2549,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Uspješno zamijenjeno %1 blok(ova) u %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP server nije dostupan.</translation>
@@ -2567,7 +2595,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>MCP server vratio je praznan ili neispravan odgovor.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>čitaj cijelu datoteku %1</translation>
     </message>
@@ -2631,7 +2659,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodbazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
     </message>
@@ -2674,7 +2702,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj potagenta:\n\n%3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>dohvati %1</translation>
@@ -2702,7 +2730,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>pretraži %1</translation>
@@ -2773,7 +2801,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>pronađi datoteke %1</translation>
@@ -2784,13 +2812,13 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Obrazac: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Putanja: %1</translation>
     </message>
@@ -2801,19 +2829,19 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Greška: obrazac ne smije biti prazan.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Greška: putanja nije direktorij: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Pretraga je zaustavljena od strane korisnika. Rezultati su nepotpuni.]</translation>
     </message>
@@ -2824,13 +2852,13 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Neuspjelo pokretanje ripgrepa: %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep neuspješan (kod izlaska %1): %2]</translation>
     </message>
@@ -2850,7 +2878,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Izlaz skraćen na %1 KB. Koristite specifičniji obrazac za prikaz svih rezultata.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>izlistaj direktorij %1</translation>
@@ -2878,12 +2906,12 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP alat &quot;%1&quot; nije dostupan (nijedan povezani MCP server ga ne pruža).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Preuzmi ripgrep</translation>
     </message>
@@ -2898,7 +2926,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Alati za pretragu i pronalaženje koriste ripgrep za pretragu sadržaja datoteka i pronalaženje datoteka po imenu. Nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. ripgrep je objavljen pod MIT ili Unlicense licencom.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Preuzmi Windows sandbox runtime (MXC)</translation>
     </message>
@@ -2914,19 +2942,19 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licenca: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Preuzmi</translation>
     </message>
@@ -2971,7 +2999,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Raspakiranje MXC runtimea neuspješno: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Paket ne sadrži ripgrep binarnu datoteku.</translation>
     </message>
@@ -2991,19 +3019,19 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Preuzimanje ripgrepa neuspješno: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Vjerodostojnost paketa se provjerava...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Preuzeti paket nije onaj koji se očekivao.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Raspakiranje ripgrepa...</translation>
     </message>
@@ -3013,7 +3041,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Raspakiranje ripgrepa neuspješno: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>pretraži %1</translation>
@@ -3063,7 +3091,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>učitaj vještinu %1</translation>
     </message>
@@ -3083,7 +3111,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>(nema)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>ažuriraj popis zadataka</translation>
@@ -3119,7 +3147,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
     </message>
@@ -3153,7 +3181,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">srt-win (Windows sandbox backend @anthropic-ai/sandbox-runtime) nije pronađen na PATH-u. %1 LLAMA_SRT_WIN može ukazivati na izvedbenu datoteku.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Preuzmite ga s stranice postavaka alata Llama.cpp Chat (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); LLAMA_WXC_EXEC može ukazivati na wxc-exec.exe. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
@@ -3208,7 +3236,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Windows sandbox komandna linija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Zapiši datoteku</translation>
     </message>

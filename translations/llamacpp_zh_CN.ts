@@ -8,12 +8,12 @@
         <translation type="vanished">llama.cpp 对话</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>请求 llama.cpp 建议</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+148"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>在当前编辑器光标位置请求 llama.cpp 的建议或补全。</translation>
     </message>
@@ -23,7 +23,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>切换 llmma.cpp 的启用/禁用</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>显示服务器状态</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="-20"/>
+        <location filename="../src/llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp 对话</translation>
     </message>
@@ -145,7 +145,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>聊天</translation>
     </message>
@@ -155,12 +155,12 @@
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+66"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
@@ -365,7 +365,25 @@
         <translation>上面的对话很长，上下文空间即将用尽。请撰写一份详细的摘要，使对话能够无缝继续。将摘要组织为包含以下章节的 markdown：## 任务（用户的要求和总体目标）、## 关键决策（重要的决策、约束和偏好）、## 已完成的工作（修改的文件、运行的命令、代码更改及其结果）、## 当前状态（已完成的内容、进行中的内容、遇到的错误）和 ## 后续步骤（接下来应完成什么以结束任务）。要精确具体：保留文件路径、函数名和确切值。不要回答用户的最后一条消息；只需总结。</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>为未提交的更改创建提交消息。
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>修复 {file} 中的以下错误和警告。
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>技能</translation>
     </message>
@@ -907,7 +925,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>后续问题</translation>
     </message>
@@ -944,11 +962,15 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本，“{file}” 和 “{line}” 会被替换为当前文件和光标所在行，“{diagnostics}” 会被替换为当前文件的错误和警告，“{git_diff}” 会被替换为其 git 仓库的未提交更改。</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>技能目录</translation>
     </message>
@@ -1179,7 +1201,7 @@
         <translation>提示词</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
@@ -1385,7 +1407,7 @@
         <translation>llama.cpp 聊天编辑器</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>输入消息（Shift+Enter 换行）</translation>
     </message>
@@ -1448,7 +1470,7 @@
         <translation>删除所有 %1 条已保存的输入历史条目？</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>思考过程</translation>
     </message>
@@ -1462,7 +1484,7 @@
         <translation type="vanished">点击展开或隐藏思考过程</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>已附加文件</translation>
     </message>
@@ -1543,7 +1565,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">会话 ID</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>创建新的 llama.cpp 会话</translation>
     </message>
@@ -1620,17 +1642,16 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会话</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-937"/>
+        <location filename="../src/llamasettings.cpp" line="-940"/>
         <source>Create a summary of {selection}</source>
         <translation>为所选内容创建摘要</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>为所选内容创建提交消息</translation>
+        <translation type="vanished">为所选内容创建提交消息</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>解释所选内容中的代码</translation>
     </message>
@@ -1640,14 +1661,12 @@ Do you want to overwrite it?</source>
         <translation>为所选内容检查并修正拼写错误</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>为所选内容生成测试用例。仅输出代码，无解释</translation>
+        <translation type="vanished">为所选内容生成测试用例。仅输出代码，无解释</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>更新所选内容的翻译。输出完整的翻译文件</translation>
+        <translation type="vanished">更新所选内容的翻译。输出完整的翻译文件</translation>
     </message>
     <message>
         <source>Send the current selection to llama.cpp with a prompt.
@@ -1658,7 +1677,7 @@ You can type any other prompt – they are remembered for next time.</source>
 您可以输入其他提示 – 这些提示将被记住以备下次使用。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG 图像</translation>
     </message>
@@ -1689,12 +1708,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>切换工具使用的详细信息</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
@@ -1703,12 +1722,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">保存</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>新建会话</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
@@ -2064,7 +2083,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">选择一个工具以查看其 JSON 定义</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>选择一个工具以查看其定义</translation>
     </message>
@@ -2190,7 +2209,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>请求头：</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+69"/>
         <source>Choose a Skills Directory</source>
         <translation>选择技能目录</translation>
     </message>
@@ -2201,7 +2220,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2222,7 +2241,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>名称：%1</translation>
     </message>
@@ -2247,7 +2266,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 个技能</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>无描述</translation>
     </message>
@@ -2257,7 +2276,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>内部</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -2266,21 +2285,26 @@ You can type any other prompt – they are remembered for next time.</source>
 你可以输入任何其他提示词——它们会被记住以供下次使用。</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>正在收集 git 更改</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>（空）</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-353"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>添加……</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>删除</translation>
     </message>
@@ -2296,11 +2320,15 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>定位器菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>定位器菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本，“{file}” 和 “{line}” 会被替换为当前文件和光标所在行，“{diagnostics}” 会被替换为当前文件的错误和警告，“{git_diff}” 会被替换为其 git 仓库的未提交更改。</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">定位器菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>提示词</translation>
     </message>
@@ -2315,18 +2343,18 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>压缩</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>定位器（“ll”）</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>读取文件失败</translation>
     </message>
@@ -2366,7 +2394,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>名称“%1”与 %2 冲突——保留第一个</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>对话已压缩 – 较早的消息已被总结以适配上下文窗口。</translation>
@@ -2375,7 +2403,7 @@ You can type any other prompt – they are remembered for next time.</source>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>添加 %1</translation>
     </message>
@@ -2431,7 +2459,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>成功。已更新以下文件：</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
     </message>
@@ -2504,9 +2532,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
@@ -2531,7 +2559,7 @@ You can type any other prompt – they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>编辑文件</translation>
     </message>
@@ -2548,7 +2576,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>工具错误：“path” 必须是非空字符串。</translation>
     </message>
@@ -2580,7 +2608,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>已在 %2 中成功替换 %1 个块。</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>无法连接到 MCP 服务器。</translation>
@@ -2626,7 +2654,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP 服务器返回了空响应或格式错误的响应。</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>读取文件 %1 的全部内容</translation>
     </message>
@@ -2690,7 +2718,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation> 请继续使用 first_line=%1, last_line_inclusive=%2。</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
     </message>
@@ -2735,7 +2763,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>获取 %1</translation>
@@ -2765,7 +2793,7 @@ You can type any other prompt – they are remembered for next time.</source>
 [... 内容在 %1 个字符处截断 ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>搜索 %1</translation>
@@ -2838,7 +2866,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>查找文件 %1</translation>
@@ -2849,13 +2877,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>模式：%1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  路径：%1</translation>
     </message>
@@ -2866,19 +2894,19 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>错误：模式不能为空。</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>错误：路径不是目录：%1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[搜索已被用户停止。结果不完整。]</translation>
     </message>
@@ -2889,13 +2917,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[启动 ripgrep 失败：%1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep 失败（退出代码 %1）：%2]</translation>
     </message>
@@ -2915,7 +2943,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[输出已截断到 %1 KB。使用更具体的模式以查看所有结果。]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>列出目录 %1</translation>
@@ -2945,12 +2973,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[已达到 %1 个条目的限制。使用 limit=%2 获取更多条目。]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP 工具“%1”不可用（没有已连接的 MCP 服务器提供它）。</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>下载 ripgrep</translation>
     </message>
@@ -2965,7 +2993,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>下载 Windows 沙箱运行时（MXC）</translation>
     </message>
@@ -2981,19 +3009,19 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>项目：%1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>许可证：%1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>下载</translation>
     </message>
@@ -3038,7 +3066,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>解压 MXC 运行时失败：%1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>该包中没有 ripgrep 二进制文件。</translation>
     </message>
@@ -3058,19 +3086,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下载 ripgrep 失败：%1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>正在验证包的完整性……</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>下载的包不是预期的包。</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>正在解压 ripgrep……</translation>
     </message>
@@ -3080,7 +3108,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>解压 ripgrep 失败：%1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>搜索 %1</translation>
@@ -3130,7 +3158,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[输出已截断到 %1 KB。优化模式或减少上下文以查看所有匹配项。]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>加载技能 %1</translation>
     </message>
@@ -3150,7 +3178,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>（无）</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>更新任务列表</translation>
@@ -3186,7 +3214,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>任务列表已更新：%2 个中已完成 %1 个。</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>不允许写入“%1”：沙箱只允许在项目目录和临时位置内写入。</translation>
     </message>
@@ -3220,7 +3248,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
@@ -3275,7 +3303,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Windows 沙箱命令行过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>写入文件</translation>
     </message>

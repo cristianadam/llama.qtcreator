@@ -8,17 +8,17 @@
         <translation type="vanished">llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>llama.cpp に提案を依頼する</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+11"/>
+        <location filename="../src/llamaplugin.cpp" line="+11"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>現在のエディタのカーソル位置で llama.cpp に提案を依頼します。</translation>
     </message>
@@ -28,7 +28,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>llama.cpp の有効/無効を切り替える</translation>
     </message>
@@ -53,8 +53,8 @@
         <translation>サーバー状態を表示</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="-28"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaplugin.cpp" line="-28"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -151,7 +151,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>チャット</translation>
     </message>
@@ -160,7 +160,7 @@
         <translation type="vanished">[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+86"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>llama.cpp を有効にする</translation>
@@ -549,17 +549,16 @@
         <translation>ロケータープロンプト</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>&quot;ll&quot; ロケーターのプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
+        <translation type="vanished">&quot;ll&quot; ロケーターのプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+49"/>
         <source>If checked the chat will start with the Tools button turned on.</source>
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-275"/>
+        <location line="-278"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
@@ -579,7 +578,25 @@
         <translation>上記の会話は長くなっており、コンテキスト容量が不足しています。会話をシームレスに継続できる詳細な要約を作成してください。要約は Markdown で、以下のセクションで構成してください: ## Task (ユーザーが求めたことと全体的な目標)、## Key Decisions (重要な決定、制約、好み)、## Work Done (変更したファイル、実行したコマンド、コード変更とその結果)、## Current State (完了した内容、進行中の内容、発生したエラー)、## Next Steps (タスクを完了するために次にやるべきこと)。正確に具体的であり、ファイルパス、関数名、正確な値を保持してください。ユーザーの最後のメッセージに回答せず、要約のみを作成してください。</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>未コミットの変更に対するコミットメッセージを作成してください。
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>{file} の以下のエラーと警告を修正してください。
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>スキル</translation>
     </message>
@@ -921,7 +938,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>フォローアップ質問</translation>
     </message>
@@ -952,7 +969,12 @@
         <translation>会話がモデルのコンテキストウィンドウの約 80% を使用すると、その履歴はコンパクトなマーカーメッセージとして要約され、以降は要約とその後のメッセージのみがモデルに送信されます。完全な履歴はチャットに表示され続けます。また、コンテキストオーバーフローエラーからの回復にも使用されます: 履歴が圧縮され、リクエストが1回だけ再試行されます。</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+12"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>&quot;ll&quot; ロケーター組み込みプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>スキルディレクトリ</translation>
     </message>
@@ -1176,18 +1198,18 @@
         <translation type="vanished">秒あたりのトークン数を表示:</translation>
     </message>
     <message>
-        <location line="-529"/>
+        <location line="-532"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+120"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>チャットでツールを使用可能にする</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>メッセージを入力してください（新しい行に移動するには Shift+Enter を押してください）</translation>
     </message>
@@ -1250,7 +1272,7 @@
         <translation>保存されている入力履歴 %1 件をすべて削除しますか?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>思考プロセス</translation>
     </message>
@@ -1268,7 +1290,7 @@
         <translation type="vanished">考え中 %1</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>添付ファイル</translation>
     </message>
@@ -1345,7 +1367,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">会話 ID</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>新しい llama.cpp 会話を作成します</translation>
     </message>
@@ -1421,17 +1443,16 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-526"/>
+        <location filename="../src/llamasettings.cpp" line="-529"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>{selection} のコミットメッセージを作成</translation>
+        <translation type="vanished">{selection} のコミットメッセージを作成</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>{selection} のコードを説明</translation>
     </message>
@@ -1441,14 +1462,12 @@ Do you want to overwrite it?</source>
         <translation>{selection} でスペルチェックを行いタイポを修正</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>{selection} のテストケースを生成します。出力はコードのみで、説明はありません。</translation>
+        <translation type="vanished">{selection} のテストケースを生成します。出力はコードのみで、説明はありません。</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>{selection} の翻訳を更新します。出力として完全な翻訳ファイルを提供します。</translation>
+        <translation type="vanished">{selection} の翻訳を更新します。出力として完全な翻訳ファイルを提供します。</translation>
     </message>
     <message>
         <source>Send the current selection to llama.cpp with a prompt.
@@ -1459,7 +1478,7 @@ You can type any other prompt – they are remembered for next time.</source>
 その他のプロンプトも入力できます。入力したプロンプトは次回以降に記憶されます。</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG イメージ</translation>
     </message>
@@ -1490,12 +1509,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>クリップボードにコピーしました</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>ツールの使用詳細を表示/非表示に切り替え</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>コピー</translation>
     </message>
@@ -1504,12 +1523,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">保存</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>新規会話</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
@@ -1529,7 +1548,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>次の結果</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -1735,7 +1754,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>LlamaCpp チャットエディター</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -1744,21 +1763,26 @@ You can type any other prompt – they are remembered for next time.</source>
 その他のプロンプトを自由に输入できます – 次回以降記憶されます。</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Git の変更を収集しています</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>（空）</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+202"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+63"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+202"/>
         <source>Add…</source>
         <translation>追加...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
@@ -1774,11 +1798,15 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>ロケーターメニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>ロケーターメニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">ロケーターメニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>プロンプト</translation>
     </message>
@@ -1793,18 +1821,18 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>圧縮</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>タイトル</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>ロケーター（&quot;ll&quot;）</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>定義を表示するツールを選択してください</translation>
     </message>
@@ -1930,7 +1958,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ヘッダー:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="-11"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-11"/>
         <source>Choose a Skills Directory</source>
         <translation>スキルディレクトリを選択</translation>
     </message>
@@ -1941,7 +1969,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
@@ -1962,7 +1990,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>名前: %1</translation>
     </message>
@@ -1987,7 +2015,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>スキル %1 個</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>説明がありません</translation>
     </message>
@@ -1997,7 +2025,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>内部</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>ファイルの読み込みに失敗しました</translation>
     </message>
@@ -2037,7 +2065,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
@@ -2046,7 +2074,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>%1 を追加</translation>
     </message>
@@ -2102,7 +2130,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>成功しました。以下のファイルを更新しました:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
     </message>
@@ -2175,9 +2203,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>不明なエラー</translation>
@@ -2202,7 +2230,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>ファイルを編集</translation>
     </message>
@@ -2219,7 +2247,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>ツールエラー: &quot;path&quot; は空でない文字列でなければなりません。</translation>
     </message>
@@ -2251,7 +2279,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%2 の %1 ブロックを正常に置換しました。</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP サーバーに到達できません。</translation>
@@ -2297,7 +2325,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP サーバーが空のまたは無効な応答を返しました。</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>ファイル %1 をすべて読み込む</translation>
     </message>
@@ -2361,7 +2389,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> first_line=%1、last_line_inclusive=%2 で続行してください。</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
     </message>
@@ -2406,7 +2434,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>%1 をフェッチ</translation>
@@ -2436,7 +2464,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... 内容は %1 文字で切り詰められました ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>%1 を検索</translation>
@@ -2509,7 +2537,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>ファイル検索 %1</translation>
@@ -2520,13 +2548,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>パターン: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  パス: %1</translation>
     </message>
@@ -2537,19 +2565,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>エラー: パターンを空にすることはできません。</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>エラー: パスがディレクトリではありません: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>［検索はユーザーによって停止されました。結果は不完全です。］</translation>
     </message>
@@ -2560,13 +2588,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>［ripgrep の起動に失敗しました: %1］</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>［ripgrep が失敗しました（終了コード %1）: %2］</translation>
     </message>
@@ -2586,7 +2614,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>［出力を %1 KB に切り詰めました。すべての結果を表示するには、より具体的なパターンを使用してください。］</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>ディレクトリ %1 の一覧</translation>
@@ -2616,12 +2644,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>［%1 件エントリの上限に達しました。より多くのエントリを表示するには limit=%2 を使用してください。］</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>ripgrep をダウンロード</translation>
     </message>
@@ -2636,7 +2664,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>search ツールと find ツールは ripgrep を使用してファイル内容を検索し、ファイル名でファイルを特定します。このシステムにインストールされていないため、ここでダウンロードできます。ripgrep は MIT ライセンスまたは Unlicense ライセンスで公開されています。</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Windows サンドボックス実行ファイル（MXC）をダウンロード</translation>
     </message>
@@ -2652,19 +2680,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>プロジェクト: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>ライセンス: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>ダウンロード</translation>
     </message>
@@ -2709,7 +2737,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MXC 実行ファイルの展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>パッケージに ripgrep バイナリが含まれていません。</translation>
     </message>
@@ -2729,19 +2757,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ripgrep のダウンロードに失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>パッケージの完全性を検証中...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>ダウンロードされたパッケージは期待されるものではありません。</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>ripgrep を展開中...</translation>
     </message>
@@ -2751,7 +2779,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ripgrep の展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>%1 を検索</translation>
@@ -2801,7 +2829,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>［出力を %1 KB に切り詰めました。すべての一致を表示するには、パターンを改善するか、コンテキストを減らしてください。］</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>スキルを読み込む %1</translation>
     </message>
@@ -2821,7 +2849,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>（なし）</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>タスクリストを更新</translation>
@@ -2857,7 +2885,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
     </message>
@@ -2891,7 +2919,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win（@anthropic-ai/sandbox-runtime の Windows サンドボックスバックエンド）が PATH に見つかりませんでした。%1 LLAMA_SRT_WIN で実行可能ファイルの場所を指定できます。</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -2946,7 +2974,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>ファイルを書き込む</translation>
     </message>

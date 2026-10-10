@@ -8,12 +8,12 @@
         <translation type="vanished">чат с llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Запросить предложение от llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+148"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Запросить предложение llama.cpp по текущей позиции курсора.</translation>
     </message>
@@ -23,7 +23,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>Включить/отключить llama.cpp</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>Показать состояние сервера</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="-20"/>
+        <location filename="../src/llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
         <translation>Разговор llama.cpp</translation>
     </message>
@@ -145,7 +145,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
@@ -155,12 +155,12 @@
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+66"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
@@ -365,7 +365,25 @@
         <translation>Вышеприведённый разговор длинный, и место в контексте заканчивается. Напишите подробную сводку, позволяющую продолжить разговор без перебоев. Структурируйте сводку как markdown со следующими разделами: ## Task (что просил пользователь и общая цель), ## Key Decisions (важные решения, ограничения и предпочтения), ## Work Done (изменённые файлы, выполненные команды, изменения кода и их результаты), ## Current State (что завершено, что в процессе, возникшие ошибки) и ## Next Steps (что нужно сделать дальше, чтобы завершить задачу). Будьте точны и конкретны: сохраняйте пути к файлам, имена функций и точные значения. Не отвечайте на последнее сообщение пользователя; только сводка.</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Создайте сообщение коммита для незакоммиченных изменений.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Исправьте следующие ошибки и предупреждения в {file}.
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>Навыки</translation>
     </message>
@@ -907,7 +925,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Дополнительные вопросы</translation>
     </message>
@@ -944,11 +962,15 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Встроенные запросы локатора &quot;ll&quot;. В меню отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом.</translation>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Встроенные запросы локатора &quot;ll&quot;. В меню отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом, &quot;{file}&quot; и &quot;{line}&quot; — текущим файлом и строкой под курсором, &quot;{diagnostics}&quot; — ошибками и предупреждениями текущего файла, а &quot;{git_diff}&quot; — незакоммиченными изменениями его git-репозитория.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Встроенные запросы локатора &quot;ll&quot;. В меню отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>Каталоги навыков</translation>
     </message>
@@ -1179,7 +1201,7 @@
         <translation>Запросы</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
@@ -1385,7 +1407,7 @@
         <translation>Редактор чата llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Введите сообщение (Shift+Enter для новой строки)</translation>
     </message>
@@ -1448,7 +1470,7 @@
         <translation>Удалить все %1 сохранённых записей истории ввода?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Процесс мышления</translation>
     </message>
@@ -1458,7 +1480,7 @@
         <translation>Мышление</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Прикрепленные файлы</translation>
     </message>
@@ -1534,7 +1556,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Идентификатор разговора</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Создает новый разговор с llama.cpp</translation>
     </message>
@@ -1611,17 +1633,16 @@ Do you want to overwrite it?</source>
         <translation>Разговоры llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-937"/>
+        <location filename="../src/llamasettings.cpp" line="-940"/>
         <source>Create a summary of {selection}</source>
         <translation>Создать сводку для выделенного</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Создать сообщение коммита для выделенного</translation>
+        <translation type="vanished">Создать сообщение коммита для выделенного</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Объяснить код в выделении</translation>
     </message>
@@ -1631,14 +1652,12 @@ Do you want to overwrite it?</source>
         <translation>Проверка орфографии и исправление опечаток в выделении</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Сгенерировать тестовые примеры для выделенного. Выводить только код без объяснений</translation>
+        <translation type="vanished">Сгенерировать тестовые примеры для выделенного. Выводить только код без объяснений</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Обновить перевод для выделенного. Предоставить полный файл перевода в качестве результата</translation>
+        <translation type="vanished">Обновить перевод для выделенного. Предоставить полный файл перевода в качестве результата</translation>
     </message>
     <message>
         <source>Send the current selection to llama.cpp with a prompt.
@@ -1649,7 +1668,7 @@ You can type any other prompt – they are remembered for next time.</source>
 Вы можете ввести любой другой запрос – они будут сохранены для следующего использования.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG-изображение</translation>
     </message>
@@ -1680,12 +1699,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Скопировано в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Показывать/скрывать детали использования инструментов</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
@@ -1694,12 +1713,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Сохранить</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>Новый разговор</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Поиск</translation>
     </message>
@@ -2055,7 +2074,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Выберите инструмент, чтобы просмотреть его JSON-определение</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Выберите инструмент, чтобы просмотреть его определение</translation>
     </message>
@@ -2181,7 +2200,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Заголовки:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+69"/>
         <source>Choose a Skills Directory</source>
         <translation>Выбрать каталог навыков</translation>
     </message>
@@ -2192,7 +2211,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
@@ -2213,7 +2232,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Имя: %1</translation>
     </message>
@@ -2238,7 +2257,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 навыков</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Описание отсутствует</translation>
     </message>
@@ -2248,7 +2267,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Внутренний</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -2257,21 +2276,26 @@ You can type any other prompt – they are remembered for next time.</source>
 Можно ввести любой другой запрос – они будут сохранены для следующего использования.</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Сбор git-изменений</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(пусто)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-353"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Добавить…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
@@ -2287,11 +2311,15 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>В меню локатора отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом.</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>В меню локатора отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом, &quot;{file}&quot; и &quot;{line}&quot; — текущим файлом и строкой под курсором, &quot;{diagnostics}&quot; — ошибками и предупреждениями текущего файла, а &quot;{git_diff}&quot; — незакоммиченными изменениями его git-репозитория.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">В меню локатора отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>Запрос</translation>
     </message>
@@ -2306,18 +2334,18 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Свёртка</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Заголовок</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Локатор (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>не удалось прочитать файл</translation>
     </message>
@@ -2357,7 +2385,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>имя &quot;%1&quot; конфликтует с %2 – сохраняется первое</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Разговор свёрнут – предыдущие сообщения были суммированы для размещения в окне контекста.</translation>
@@ -2366,7 +2394,7 @@ You can type any other prompt – they are remembered for next time.</source>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Добавить %1</translation>
     </message>
@@ -2422,7 +2450,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Успешно. Обновлены следующие файлы:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Оболочка bash не найдена. Установите Git for Windows (https://git-scm.com/download/win) или добавьте bash в PATH.</translation>
     </message>
@@ -2495,9 +2523,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>неизвестная ошибка</translation>
@@ -2522,7 +2550,7 @@ You can type any other prompt – they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Редактировать файл</translation>
     </message>
@@ -2539,7 +2567,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Ошибка инструмента: &quot;path&quot; должна быть непустой строкой.</translation>
     </message>
@@ -2571,7 +2599,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Успешно заменено %1 блок(а) в %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Не удаётся подключиться к MCP-серверу.</translation>
@@ -2617,7 +2645,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP-сервер вернул пустой или некорректный ответ.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>прочитать весь файл %1</translation>
     </message>
@@ -2681,7 +2709,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation> Продолжайте с first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Вы — субагент &quot;explore&quot;, работающий в отдельном разговоре, изолированном от основного. Изучите кодовую базу и ответьте на задание с помощью доступных вам инструментов только для чтения: используйте &quot;find&quot; для поиска файлов по имени, &quot;search&quot; для поиска содержимого файлов и &quot;read_file&quot; для чтения соответствующих разделов. Не изменяйте ни один файл и не выполняйте команды, что-либо изменяющие. Работайте автономно; вы не можете задавать пользователю вопросы. По завершении ответьте одним кратким отчётом, содержащим ключевые результаты, пути к соответствующим файлам с номерами строк и всё, что нужно основному разговору, чтобы продолжить работу.</translation>
     </message>
@@ -2726,7 +2754,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>получить %1</translation>
@@ -2756,7 +2784,7 @@ You can type any other prompt – they are remembered for next time.</source>
 [... содержимое усечено на %1 символах ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>поиск %1</translation>
@@ -2829,7 +2857,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>поиск файлов %1</translation>
@@ -2840,13 +2868,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Шаблон: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Путь: %1</translation>
     </message>
@@ -2857,19 +2885,19 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Ошибка: шаблон не может быть пустым.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Ошибка: путь не является каталогом: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Поиск был остановлен пользователем. Результаты неполные.]</translation>
     </message>
@@ -2880,13 +2908,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Не удалось запустить ripgrep: %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep завершился с ошибкой (код %1): %2]</translation>
     </message>
@@ -2906,7 +2934,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[Вывод усечён до %1 КБ. Используйте более специфичный шаблон, чтобы увидеть все результаты.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>список каталога %1</translation>
@@ -2936,12 +2964,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[Достигнут лимит в %1 записей. Используйте limit=%2 для большего количества записей.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-инструмент &quot;%1&quot; недоступен (ни один подключённый MCP-сервер его не предоставляет).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Скачать ripgrep</translation>
     </message>
@@ -2956,7 +2984,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Инструменты search и find используют ripgrep для поиска содержимого файлов и локализации файлов по имени. Он не установлен на этой системе, поэтому его можно скачать здесь. ripgrep распространяется под лицензией MIT или Unlicense.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Скачать рантайм песочницы Windows (MXC)</translation>
     </message>
@@ -2972,19 +3000,19 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Проект: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Лицензия: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Скачать</translation>
     </message>
@@ -3029,7 +3057,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Не удалось распаковать рантайм MXC: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>В пакете нет исполняемого файла ripgrep.</translation>
     </message>
@@ -3049,19 +3077,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Не удалось скачать ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Проверка целостности пакета...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Скачанный пакет не совпадает с ожидаемым.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Распаковка ripgrep...</translation>
     </message>
@@ -3071,7 +3099,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Не удалось распаковать ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>поиск: %1</translation>
@@ -3121,7 +3149,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[Вывод усечён до %1 КБ. Уточните шаблон или уменьшите контекст, чтобы увидеть все совпадения.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>загрузить навык %1</translation>
     </message>
@@ -3141,7 +3169,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>(нет)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>обновить список задач</translation>
@@ -3177,7 +3205,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Список задач обновлён: выполнено %1 из %2.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Запись в &quot;%1&quot; не разрешена: песочница позволяет записывать только в каталог проекта и временные расположения.</translation>
     </message>
@@ -3211,7 +3239,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">srt-win (бэкенд песочницы Windows @anthropic-ai/sandbox-runtime) не найден в PATH. %1 Переменная LLAMA_SRT_WIN может указывать на исполняемый файл.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Скачайте его со страницы настроек инструментов чата Llama.cpp (закреплённый релиз Microsoft MXC с проверенной контрольной суммой); переменная LLAMA_WXC_EXEC может указывать на wxc-exec.exe. В качестве альтернативы снимите отметку «Песочница для команд» в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
@@ -3266,7 +3294,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Командная строка песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Записать файл</translation>
     </message>

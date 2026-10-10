@@ -8,17 +8,17 @@
         <translation type="vanished">llama.cpp konversation</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp konversation</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Begär förslag från llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+11"/>
+        <location filename="../src/llamaplugin.cpp" line="+11"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Begär förslag från llama.cpp vid markörpositionen i redigeraren.</translation>
     </message>
@@ -28,7 +28,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>Byta mellan att aktivera och inaktivera llama.cpp</translation>
     </message>
@@ -53,7 +53,7 @@
         <translation>Visa serverstatus</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Skift+G</translation>
     </message>
@@ -145,23 +145,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Skriv ett meddelande (Shift+Enter för ny rad)</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -363,7 +363,7 @@
         <translation>LlamaCpp-chattredigerare</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+29"/>
+        <location filename="../src/llamachatinput.cpp" line="+29"/>
         <location line="+6"/>
         <source>Disable Tools usage</source>
         <translation>Avaktivera verktyg</translation>
@@ -421,7 +421,7 @@
         <translation>Ta bort alla %1 sparade poster i indatahistoriken?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Tankemönster</translation>
     </message>
@@ -435,7 +435,7 @@
         <translation type="vanished">Klicka för att expandera eller dölja tankemönstret</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Bifogade filer</translation>
     </message>
@@ -498,17 +498,16 @@ Vill du överskriva den?</translation>
         <translation type="vanished">Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+55"/>
+        <location filename="../src/llamasettings.cpp" line="+55"/>
         <source>Create a summary of {selection}</source>
         <translation>Skapa en sammanfattning av {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Skapa ett commit-meddelande för {selection}</translation>
+        <translation type="vanished">Skapa ett commit-meddelande för {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Förklara koden i {selection}</translation>
     </message>
@@ -518,14 +517,12 @@ Vill du överskriva den?</translation>
         <translation>Genomför stavningskontroll och rättar stavfel i {selection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Generera testfall för {selection}. Utdata består endast av kod. Inga förklaringar.</translation>
+        <translation type="vanished">Generera testfall för {selection}. Utdata består endast av kod. Inga förklaringar.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Uppdatera översättningen för {selection}. Lämna hela översättningsfilen som utdata.</translation>
+        <translation type="vanished">Uppdatera översättningen för {selection}. Lämna hela översättningsfilen som utdata.</translation>
     </message>
     <message>
         <source>Send the current selection to llama.cpp with a prompt.
@@ -536,7 +533,7 @@ Fördefinierade prompts: %1
 Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG-bild</translation>
     </message>
@@ -567,12 +564,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Kopierat till urklipp</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Byta mellan att visa eller dölja detaljerna om verktygsanvändning</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>Kopiera</translation>
     </message>
@@ -581,12 +578,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Spara</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>Ny konversation</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Sök</translation>
     </message>
@@ -938,7 +935,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+450"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+450"/>
         <source>llama.cpp Conversations</source>
         <translation>Llama.cpp-konversationer</translation>
     </message>
@@ -1031,7 +1028,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Skapar en ny konversation för llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+6"/>
+        <location filename="../src/llamasettings.cpp" line="+7"/>
         <source>Tools</source>
         <translation>Verktyg</translation>
     </message>
@@ -1240,7 +1237,25 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Konversationen ovan är lång och är på väg att ta slut på kontextutrymme. Skriv en detaljerad sammanfattning av den som gör att konversationen kan fortsätta sömlöst. Strukturera sammanfattningen som markdown med dessa avsnitt: ## Uppgift (vad användaren bad om och det övergripande målet), ## Nyckelbeslut (viktiga beslut, begränsningar och preferenser), ## Genomfört arbete (filer som ändrats, kommandon som körts, kodändringar och deras resultat), ## Nuvarande läge (vad som är klart, vad som pågår, fel som uppstått) och ## Nästa steg (vad som ska hända härnäst för att slutföra uppgiften). Var precis och konkret: behåll filvägar, funktionsnamn och exakta värden. Svara inte på användarens senaste meddelande; sammanfatta bara.</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Skapa ett commit-meddelande för de okommittade ändringarna.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Åtgärda följande fel och varningar i {file}.
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>Färdigheter</translation>
     </message>
@@ -1782,7 +1797,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Uppföljningsfrågor</translation>
     </message>
@@ -1819,11 +1834,15 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Inbyggda prompts för &quot;ll&quot;-locatorn. Endast den första raden av en prompt visas i menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Inbyggda prompts för &quot;ll&quot;-locatorn. Endast den första raden av en prompt visas i menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten, &quot;{file}&quot; och &quot;{line}&quot; med den aktuella filen och markörraden, &quot;{diagnostics}&quot; med de aktuella filens fel och varningar, och &quot;{git_diff}&quot; med okommittade ändringar i dess git-repo.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Inbyggda prompts för &quot;ll&quot;-locatorn. Endast den första raden av en prompt visas i menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>Färdighetskataloger</translation>
     </message>
@@ -2054,7 +2073,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -2063,21 +2082,26 @@ Inbyggda prompts: %1
 Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Samlar in git-ändringar</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(tom)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+202"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+63"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+202"/>
         <source>Add…</source>
         <translation>Lägg till…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Ta bort</translation>
     </message>
@@ -2093,11 +2117,15 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Endast den första raden av en prompt visas i locator-menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Endast den första raden av en prompt visas i locator-menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten, &quot;{file}&quot; och &quot;{line}&quot; med den aktuella filen och markörraden, &quot;{diagnostics}&quot; med de aktuella filens fel och varningar, och &quot;{git_diff}&quot; med okommittade ändringar i dess git-repo.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Endast den första raden av en prompt visas i locator-menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2112,18 +2140,18 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Komprimering</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Välj ett verktyg för att visa dess definition</translation>
     </message>
@@ -2249,7 +2277,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rubriker:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="-11"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-11"/>
         <source>Choose a Skills Directory</source>
         <translation>Välj en färdighetskatalog</translation>
     </message>
@@ -2260,7 +2288,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -2281,7 +2309,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Namn: %1</translation>
     </message>
@@ -2306,7 +2334,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 färdigheter</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Ingen beskrivning</translation>
     </message>
@@ -2316,7 +2344,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>kunde inte läsa filen</translation>
     </message>
@@ -2356,7 +2384,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
@@ -2365,7 +2393,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Lägg till %1</translation>
     </message>
@@ -2421,7 +2449,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Lyckades. Uppdaterade följande filer:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Ingen bash-shell hittades. Installera Git for Windows (https://git-scm.com/download/win) eller lägg till en bash på PATH.</translation>
     </message>
@@ -2494,9 +2522,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>okänt fel</translation>
@@ -2521,7 +2549,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Redigera fil</translation>
     </message>
@@ -2538,7 +2566,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Verktygsfel: &quot;path&quot; måste vara en icke-tom sträng.</translation>
     </message>
@@ -2570,7 +2598,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ersatte %1 block i %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Kunde inte nå MCP-servern.</translation>
@@ -2616,7 +2644,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP-servern returnerade ett tomt eller felformat svar.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>läs hela filen %1</translation>
     </message>
@@ -2680,7 +2708,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> Fortsätt med first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Du är &quot;explore&quot;-subagenten, som körs i en separat konversation som är isolerad från huvudkonversationen. Utforska kodbasen och svara på uppgiften med de skrivskyddade verktyg som finns tillgängliga för dig: använd &quot;find&quot; för att hitta filer efter namn, &quot;search&quot; för att söka i filinnehåll och &quot;read_file&quot; för att läsa de relevanta sektionerna. Ändra ingen fil och kör inga kommandon som ändrar något. Arbeta autonomt; du kan inte ställa frågor till användaren. När du är klar, svara med en enda koncis rapport som innehåller de viktigaste resultaten, relevanta filsökvägar med radnummer och allt som huvudkonversationen behöver för att fortsätta arbetet.</translation>
     </message>
@@ -2725,7 +2753,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>hämta %1</translation>
@@ -2755,7 +2783,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... innehåll avklippt vid %1 tecken ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>sök %1</translation>
@@ -2828,7 +2856,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>hitta filer %1</translation>
@@ -2839,13 +2867,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Mönster: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Sökväg: %1</translation>
     </message>
@@ -2856,19 +2884,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Fel: mönstret får inte vara tomt.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fel: sökvägen är inte en katalog: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Sökningen stoppades av användaren. Resultaten är ofullständiga.]</translation>
     </message>
@@ -2879,13 +2907,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Kunde inte starta ripgrep: %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep misslyckades (avslutningskod %1): %2]</translation>
     </message>
@@ -2905,7 +2933,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Utdata avklippt till %1 KB. Använd ett mer specifikt mönster för att se alla resultat.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>lista katalog %1</translation>
@@ -2935,12 +2963,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Gränsen på %1 poster nådd. Använd limit=%2 för fler poster.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-verktyget &quot;%1&quot; är inte tillgängligt (ingen ansluten MCP-server tillhandahåller det).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Hämta ripgrep</translation>
     </message>
@@ -2955,7 +2983,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Sök- och find-verktygen använder ripgrep för att söka i filinnehåll och för att hitta filer efter namn. Det är inte installerat på det här systemet, så det kan hämtas här i stället. ripgrep publiceras under MIT- eller Unlicense-licensen.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Hämta Windows-sandbox-runtime (MXC)</translation>
     </message>
@@ -2971,19 +2999,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Hämta</translation>
     </message>
@@ -3028,7 +3056,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Upppackningen av MXC-runtime misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Paketet innehåller ingen ripgrep-binärfil.</translation>
     </message>
@@ -3048,19 +3076,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hämtningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Verifierar paketets integritet...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Det hämtade paketet är inte det som förväntades.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Packar upp ripgrep...</translation>
     </message>
@@ -3070,7 +3098,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Upppackningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>sök efter %1</translation>
@@ -3120,7 +3148,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Utdata avklippt till %1 KB. Förfin mönstret eller minska kontexten för att se alla träffar.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>ladda färdighet %1</translation>
     </message>
@@ -3140,7 +3168,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(inga)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>uppdatera uppgiftslistan</translation>
@@ -3176,7 +3204,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uppgiftslistan uppdaterad: %1 av %2 slutförda.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen och tillfälliga platser.</translation>
     </message>
@@ -3210,7 +3238,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (Windows-sandboxbackenden för @anthropic-ai/sandbox-runtime) hittades inte på PATH. %1 LLAMA_SRT_WIN kan peka på den exekverbara filen.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Hämta den från inställningssidan för Llama.cpp-chattverktyg (en fastställd, kontrollsumma-verifierad Microsoft MXC-utgivning); LLAMA_WXC_EXEC kan peka på en wxc-exec.exe. Avmarkera i stället &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
@@ -3265,7 +3293,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows-sandboxens kommandorad är för lång (%1 av %2 tecken); processmiljön är troligen för stor. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Skriv fil</translation>
     </message>

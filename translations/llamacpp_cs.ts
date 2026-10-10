@@ -4,17 +4,17 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>Konverzace s llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Požádat o návrh llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+11"/>
+        <location filename="../src/llamaplugin.cpp" line="+11"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Požádat o návrh v llama.cpp na aktuální pozici kurzoru v editoru.</translation>
     </message>
@@ -24,7 +24,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>Zapnout/vypnout llama.cpp</translation>
     </message>
@@ -49,7 +49,7 @@
         <translation>Zobrazit stav serveru</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -141,18 +141,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+86"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Povolit LlamaCpp</translation>
@@ -366,7 +366,25 @@
         <translation>Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Vytvořit zprávu pro commit necommitnutých změn.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Opravit následující chyby a varování v souboru {file}.
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>Dovednosti</translation>
     </message>
@@ -903,7 +921,7 @@
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Následující otázky</translation>
     </message>
@@ -940,11 +958,15 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem, &quot;{file}&quot; a &quot;{line}&quot; aktuálním souborem a řádkem kurzoru, &quot;{diagnostics}&quot; chybami a varováními aktuálního souboru a &quot;{git_diff}&quot; necommitnutými změnami jeho git repozitáře.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>Adresáře dovedností</translation>
     </message>
@@ -1175,7 +1197,7 @@
         <translation>Prompty</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
@@ -1377,7 +1399,7 @@
         <translation>Editor chatu LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Napište zprávu (Shift+Enter pro nový řádek)</translation>
     </message>
@@ -1440,7 +1462,7 @@
         <translation>Odebrat všech %1 uložených položek historie vstupu?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Myslící proces</translation>
     </message>
@@ -1470,7 +1492,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+232"/>
+        <location filename="../src/llamachatmessage.cpp" line="+232"/>
         <source>Edit the message</source>
         <translation>Upravit zprávu</translation>
     </message>
@@ -1527,7 +1549,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">ID konverzace</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Vytvoří novou konverzaci s LlamaCpp</translation>
     </message>
@@ -1602,17 +1624,16 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-937"/>
+        <location filename="../src/llamasettings.cpp" line="-940"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Vytvořit zprávu pro commit výběru</translation>
+        <translation type="vanished">Vytvořit zprávu pro commit výběru</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Vysvětlit kód ve výběru</translation>
     </message>
@@ -1622,17 +1643,15 @@ Chcete ho přepsat?</translation>
         <translation>Provést kontrolu pravopisu a opravit chyby ve výběru</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Generovat testovací případy pro výběr. Výstupem pouze kód. Žádná vysvětlení</translation>
+        <translation type="vanished">Generovat testovací případy pro výběr. Výstupem pouze kód. Žádná vysvětlení</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Aktualizovat překlad výběru. Poskytnout překladový soubor jako výstup</translation>
+        <translation type="vanished">Aktualizovat překlad výběru. Poskytnout překladový soubor jako výstup</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -1641,7 +1660,12 @@ Vestavěné prompty: %1
 Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použití.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Sběr git změn</translation>
+    </message>
+    <message>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>Obrázek SVG</translation>
     </message>
@@ -1672,12 +1696,12 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Zkopírováno do schránky</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Zapnout/vypnout podrobnosti použití nástrojů</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>Kopírovat</translation>
     </message>
@@ -1686,12 +1710,12 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation type="vanished">Uložit</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>Nová konverzace</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Hledat</translation>
     </message>
@@ -2047,7 +2071,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation type="vanished">Vyberte nástroj pro zobrazení jeho JSON definice</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Vyberte nástroj pro zobrazení jeho definice</translation>
     </message>
@@ -2173,7 +2197,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hlavičky:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+69"/>
         <source>Choose a Skills Directory</source>
         <translation>Vybrat adresář dovedností</translation>
     </message>
@@ -2184,7 +2208,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2205,7 +2229,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2230,7 +2254,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 dovedností</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Žádný popis</translation>
     </message>
@@ -2240,21 +2264,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Interní</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(prázdné)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-353"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Přidat…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Odebrat</translation>
     </message>
@@ -2270,11 +2294,15 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem, &quot;{file}&quot; a &quot;{line}&quot; aktuálním souborem a řádkem kurzoru, &quot;{diagnostics}&quot; chybami a varováními aktuálního souboru a &quot;{git_diff}&quot; necommitnutými změnami jeho git repozitáře.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2289,18 +2317,18 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stlačení</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Prohledávač (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>nelze načíst soubor</translation>
     </message>
@@ -2340,7 +2368,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
@@ -2349,7 +2377,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Přidat %1</translation>
     </message>
@@ -2405,7 +2433,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
@@ -2478,9 +2506,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>neznámá chyba</translation>
@@ -2505,7 +2533,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Upravit soubor</translation>
     </message>
@@ -2522,7 +2550,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Chyba nástroje: &quot;path&quot; musí být neprázdný řetězec.</translation>
     </message>
@@ -2554,7 +2582,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěšně nahrazeno %1 bloků v %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP server nelze dosáhnout.</translation>
@@ -2600,7 +2628,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP server vrátil prázdnou nebo nesprávně formátovanou odpověď.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>přečíst celý soubor %1</translation>
     </message>
@@ -2664,7 +2692,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> Pokračujte s first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Jste pod-agent &quot;explore&quot;, který běží v samostatné konverzaci izolované od hlavní. Prozkoumejte kódbázi a odpovězte na úlohu pomocí dostupných nástrojů jen pro čtení: k lokalizaci souborů podle názvu použijte &quot;find&quot;, k vyhledávání obsahu souborů &quot;search&quot; a k čtení příslušných úseků &quot;read_file&quot;. Žádný soubor nemodifikujte a nespouštějte příkazy, které cokoli mění. Pracujte autonomně; nemůžete uživatele ptát se na otázky. Až budete hotovi, odpovězte jedním stručným výstupem obsahujícím klíčové zjištění, příslušné cesty k souborům s čísly řádků a vše, co potřebuje hlavní konverzace pro pokračování v práci.</translation>
     </message>
@@ -2709,7 +2737,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>načíst %1</translation>
@@ -2739,7 +2767,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... obsah oříznut na %1 znaků ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>vyhledat %1</translation>
@@ -2812,7 +2840,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>najít soubory %1</translation>
@@ -2823,13 +2851,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Vzor: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Cesta: %1</translation>
     </message>
@@ -2840,19 +2868,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Chyba: vzor nesmí být prázdný.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Chyba: cesta není adresář: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Vyhledávání bylo zastaveno uživatelem. Výsledky jsou neúplné.]</translation>
     </message>
@@ -2863,13 +2891,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Spustení ripgrep selhalo: %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep selhal (ukončený kód %1): %2]</translation>
     </message>
@@ -2889,7 +2917,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Výstup oříznut na %1 KB. Pro zobrazení všech výsledků použijte konkrétnější vzor.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>seznam adresáře %1</translation>
@@ -2919,12 +2947,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Dosažen limit %1 položek. Pro více položek použijte limit=%2.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP nástroj &quot;%1&quot; není k dispozici (neposkytuje ho žádný připojený MCP server).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Stáhnout ripgrep</translation>
     </message>
@@ -2939,7 +2967,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nástroje search a find používají ripgrep k vyhledávání obsahu souborů a k lokalizaci souborů podle názvu. Na tomto systému není nainstalován, můžete ho ale stáhnout zde. ripgrep je publikován pod licencí MIT nebo Unlicense.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Stáhnout runtime pískoviště Windows (MXC)</translation>
     </message>
@@ -2955,19 +2983,19 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Stáhnout</translation>
     </message>
@@ -3012,7 +3040,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rozbalování runtime MXC selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Balíček neobsahuje binárku ripgrep.</translation>
     </message>
@@ -3032,19 +3060,19 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stahování ripgrep selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Ověřování integrity balíčku...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Stažený balíček není ten očekávaný.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Rozbalování ripgrep...</translation>
     </message>
@@ -3054,7 +3082,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rozbalování ripgrep selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>vyhledat %1</translation>
@@ -3104,7 +3132,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Výstup oříznut na %1 KB. Pro zobrazení všech shod upřesněte vzor nebo zmenšete kontext.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>načíst dovednost %1</translation>
     </message>
@@ -3124,7 +3152,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(žádné)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>aktualizovat seznam úloh</translation>
@@ -3160,7 +3188,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
     </message>
@@ -3194,7 +3222,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3249,7 +3277,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Příkazový řádek pískoviště Windows je příliš dlouhý (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Zapsat soubor</translation>
     </message>

@@ -8,12 +8,12 @@
         <translation type="vanished">llama.cpp samtale</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+148"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -23,7 +23,7 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-1"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
         <translation>Slå llama.cpp til/fra</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>Vis serverstatus</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="-20"/>
+        <location filename="../src/llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp-samtale</translation>
     </message>
@@ -144,19 +144,19 @@
         <translation>FIM</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/llamaplugin.cpp" line="+4"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaplugin.cpp" line="-1241"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+86"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Aktiver llama.cpp</translation>
@@ -361,7 +361,25 @@
         <translation>Ovennævnte samtale er lang og er ved at løbe tør for konteksrum. Skriv en detaljeret sammenfatning af den, der gør det muligt at fortsætte samtalen uden afbrydelser. Strukturér sammenfatningen som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, kørte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er færdigt, hvad er i gang, opståede fejl) og ## Næste skridt (hvad skal ske for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Besvar ikke brugerens sidste besked; sammenfat kun.</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+16"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Opret en commit-meddelelse for de ikke-committede ændringer.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Ret følgende fejl og advarsler i {file}.
+
+{diagnostics}</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Skills</source>
         <translation>Færdigheder</translation>
     </message>
@@ -902,13 +920,18 @@
         <translation>Prompt, der sendes til modellen for at sammenfatte samtalehistorikken, når den kompakteres for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location line="+37"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/llamasettings.cpp" line="-32"/>
         <source>Follow-Up Questions</source>
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+4"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -939,12 +962,11 @@
         <translation>Prompts til lokatoren</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
+        <translation type="vanished">Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+16"/>
         <source>Skill directories</source>
         <translation>Færdigheds-mapper</translation>
     </message>
@@ -1175,7 +1197,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1381,7 +1403,7 @@
         <translation>LlamaCpp Chattediter</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Skriv en meddelelse (Shift+Enter for ny linje)</translation>
     </message>
@@ -1444,7 +1466,7 @@
         <translation>Fjern alle %1 gemte historikelementer for indtastning?</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Tænkeproces</translation>
     </message>
@@ -1458,7 +1480,7 @@
         <translation type="vanished">Klik for at udvide / skjule tænkeprocessen</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Vedhæftede filer</translation>
     </message>
@@ -1534,7 +1556,7 @@ Vil du overskrive den?</translation>
         <translation type="vanished">Konversations-id</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Opretter en ny samtale med llama.cpp</translation>
     </message>
@@ -1611,17 +1633,16 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="-937"/>
+        <location filename="../src/llamasettings.cpp" line="-940"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Opret en commit-meddelelse for {udvalgte tekst}</translation>
+        <translation type="vanished">Opret en commit-meddelelse for {udvalgte tekst}</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Forklar koden i {udvalgte tekst}</translation>
     </message>
@@ -1631,14 +1652,12 @@ Vil du overskrive den?</translation>
         <translation>Udfør stavelæses-tjek og ret stavefejl i {udvalgte tekst}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Generer testtilfælde for {udvalgte tekst}. Lever kun kode som output. Ingen forklaringer.</translation>
+        <translation type="vanished">Generer testtilfælde for {udvalgte tekst}. Lever kun kode som output. Ingen forklaringer.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Opdater oversættelsen af {udvalgte tekst}. Lever hele oversættelsesfilen som output.</translation>
+        <translation type="vanished">Opdater oversættelsen af {udvalgte tekst}. Lever hele oversættelsesfilen som output.</translation>
     </message>
     <message>
         <source>Send the current selection to llama.cpp with a prompt.
@@ -1649,7 +1668,7 @@ Indbyggede prompts: %1
 Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>SVG-billede</translation>
     </message>
@@ -1680,12 +1699,12 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Kopieret til udklipsholderen</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Vis/fjern detaljer om værktøjsbrug</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="-39"/>
+        <location filename="../src/llamachatinput.cpp" line="-39"/>
         <source>Copy</source>
         <translation>Kopier</translation>
     </message>
@@ -1694,12 +1713,12 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Gem</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-6"/>
         <source>New Conversation</source>
         <translation>Ny samtale</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Søg</translation>
     </message>
@@ -2039,7 +2058,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Vælg et værktøj for at se dets JSON-definition</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
         <source>Select a tool to view its definition</source>
         <translation>Vælg et værktøj for at se dets definition</translation>
     </message>
@@ -2165,7 +2184,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Headers:</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="+69"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+69"/>
         <source>Choose a Skills Directory</source>
         <translation>Vælg en færdigheds-mappe</translation>
     </message>
@@ -2175,13 +2194,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vælg en færdighed for at se dens indhold</translation>
     </message>
     <message>
-        <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+13"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+0"/>
         <source>Skill</source>
         <translation>Færdighed</translation>
     </message>
@@ -2196,13 +2215,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 færdighedsfil(er) blev sprunget over: %2</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+32"/>
         <source>Name: %1</source>
         <translation>Navn: %1</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+2"/>
         <source>Description: %1</source>
         <translation>Beskrivelse: %1</translation>
     </message>
@@ -2222,7 +2241,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 færdigheder</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Ingen beskrivelse</translation>
     </message>
@@ -2232,7 +2251,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -2241,21 +2260,26 @@ Indbyggede prompts: %1
 Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Indsamler git-ændringer</translation>
+    </message>
+    <message>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(tom)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="-353"/>
-        <location filename="../toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <source>Add…</source>
         <translation>Tilføj…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
@@ -2270,12 +2294,11 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Nulstil til standard</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
+        <translation type="vanished">Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+27"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2290,18 +2313,23 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Kompaktering</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location line="-50"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Lokator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>kunne ikke læse filen</translation>
     </message>
@@ -2341,7 +2369,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
@@ -2350,7 +2378,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Tilføj %1</translation>
     </message>
@@ -2406,7 +2434,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
@@ -2479,9 +2507,9 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>ukendt fejl</translation>
@@ -2506,7 +2534,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Rediger fil</translation>
     </message>
@@ -2522,13 +2550,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>rediger %1</translation>
     </message>
     <message>
-        <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+35"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
         <translation>Værktøjsfejl: hver redigering kræver et &quot;oldText&quot; og et &quot;newText&quot;.</translation>
     </message>
@@ -2555,7 +2583,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>%1 blok/blev erstatte(t) i %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Kan ikke nå MCP-serveren.</translation>
@@ -2601,7 +2629,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>MCP-serveren returnerede et tomt eller fejlfornemt svar.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>læs hele fil %1</translation>
     </message>
@@ -2665,7 +2693,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
     </message>
@@ -2710,7 +2738,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>hent %1</translation>
@@ -2740,7 +2768,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 [... indhold beskåret ved %1 tegn ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>søg %1</translation>
@@ -2813,7 +2841,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>find filer %1</translation>
@@ -2824,13 +2852,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Mønster: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Stie: %1</translation>
     </message>
@@ -2841,19 +2869,19 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Fejl: mønstret må ikke være tomt.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fejl: stien er ikke en mappe: %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
     </message>
@@ -2864,13 +2892,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Kunne ikke starte ripgrep: %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep fejlede (afslutningskode %1): %2]</translation>
     </message>
@@ -2890,7 +2918,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>Liste mappen %1</translation>
@@ -2920,12 +2948,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Download ripgrep</translation>
     </message>
@@ -2940,7 +2968,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Download Windows-sandbox-runtime (MXC)</translation>
     </message>
@@ -2955,25 +2983,25 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/mxc.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/mxc.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/mxc.cpp" line="+8"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location filename="../src/tools/mxc.cpp" line="+24"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Pakken indeholder ingen wxc-exec.exe-binær.</translation>
     </message>
@@ -3013,7 +3041,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Udpakning af MXC-runtime fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Pakken indeholder ingen ripgrep-binær.</translation>
     </message>
@@ -3033,19 +3061,19 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Download af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
         <source>Verifying package integrity...</source>
         <translation>Verificerer pakkeintegritet ...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/mxc.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Den downloadede pakke er ikke den, der blev forventet.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Udpakker ripgrep ...</translation>
     </message>
@@ -3055,7 +3083,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Udpakning af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>søg efter %1</translation>
@@ -3105,7 +3133,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>indlæs færdighed %1</translation>
     </message>
@@ -3125,7 +3153,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>(ingen)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>opdater opgaveliste</translation>
@@ -3161,7 +3189,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
     </message>
@@ -3195,7 +3223,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">srt-win (@anthropic-ai/sandbox-runtime Windows-sandbox-backend) blev ikke fundet på PATH. %1 LLAMA_SRT_WIN kan pege på eksekverbaren.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
@@ -3250,7 +3278,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Skriv fil</translation>
     </message>

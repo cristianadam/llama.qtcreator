@@ -201,17 +201,17 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Conversation avec llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+137"/>
         <source>llama.cpp coversation</source>
         <translation>Conversation avec llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+150"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>Demander une suggestion à llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+11"/>
+        <location filename="../src/llamaplugin.cpp" line="+11"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Demander à llama.cpp une suggestion à l&apos;emplacement du curseur dans l&apos;éditeur actuel.</translation>
     </message>
@@ -221,7 +221,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.h" line="-2"/>
+        <location filename="../src/llamaplugin.h" line="-2"/>
         <source>New Conversation</source>
         <translation>Nouvelle conversation</translation>
     </message>
@@ -251,7 +251,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher l&apos;état du serveur</translation>
     </message>
     <message>
-        <location filename="../llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Maj+G</translation>
     </message>
@@ -343,18 +343,18 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../promptssettingswidget.cpp" line="+117"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
         <location line="-1241"/>
-        <location filename="../llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+86"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Activer l&apos;intégration de llama.cpp</translation>
@@ -564,12 +564,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Créer un résumé de {sélection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Create a commit message for {selection}</source>
-        <translation>Créer un message de validation pour {sélection}</translation>
+        <translation type="vanished">Créer un message de validation pour {sélection}</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Explain the code in {selection}</source>
         <translation>Expliquer le code dans {sélection}</translation>
     </message>
@@ -579,14 +578,30 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Corriger l&apos;orthographe et les fautes de frappe dans {sélection}</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Generate test cases for {selection}. Output only code. No explanations</source>
-        <translation>Générer des cas de test pour {sélection}. Résultat uniquement du code, sans explications.</translation>
+        <translation type="vanished">Générer des cas de test pour {sélection}. Résultat uniquement du code, sans explications.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Update translation in {selection}. Provide the full translation file as output</source>
-        <translation>Mettre à jour la traduction dans {sélection}. Fournir le fichier de traduction complet en sortie.</translation>
+        <translation type="vanished">Mettre à jour la traduction dans {sélection}. Fournir le fichier de traduction complet en sortie.</translation>
+    </message>
+    <message>
+        <location line="-3"/>
+        <source>Create a commit message for the uncommitted changes.
+
+{git_diff}</source>
+        <translation>Créer un message de validation pour les modifications non validées.
+
+{git_diff}</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Fix the following errors and warnings in {file}.
+
+{diagnostics}</source>
+        <translation>Corriger les erreurs et avertissements suivants dans {file}.
+
+{diagnostics}</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -1076,7 +1091,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../promptssettingswidget.cpp" line="+3"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Questions complémentaires</translation>
     </message>
@@ -1107,7 +1122,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Lorsque la conversation utilise environ 80 % de la fenêtre de contexte du modèle, son historique est résumé en un message marqueur compact, et seul le résumé ainsi que les messages qui le suivent sont envoyés au modèle par la suite. L&apos;historique complet reste visible dans le chat. Utilisé également pour récupérer d&apos;une erreur de dépassement de contexte : l&apos;historique est compacté et la requête est réessayée une fois.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+12"/>
+        <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
         <source>Skill directories</source>
         <translation>Dossiers de compétences</translation>
     </message>
@@ -1331,7 +1351,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-529"/>
+        <location line="-532"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
@@ -1391,12 +1411,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Invitations du localisateur</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
+        <translation type="vanished">Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+46"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>Activer l&apos;utilisation d&apos;outils dans le chat</translation>
@@ -1407,7 +1426,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Si cette option est cochée, la fenêtre de chat démarrera avec l&apos;outil d&apos;outils activé par défaut.</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+92"/>
         <source>Default</source>
         <translation>Par défaut</translation>
     </message>
@@ -1609,7 +1628,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Éditeur de chat pour Llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamachatinput.cpp" line="+80"/>
+        <location filename="../src/llamachatinput.cpp" line="+80"/>
         <source>Type a message (Shift+Enter for new line)</source>
         <translation>Saisir un message (Appuyez sur Maj+Entrée pour commencer une nouvelle ligne)</translation>
     </message>
@@ -1677,7 +1696,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Retirer toutes les %1 entrées de l&apos;historique de saisie enregistrées ?</translation>
     </message>
     <message>
-        <location filename="../llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+140"/>
         <source>Attached files</source>
         <translation>Fichiers joints</translation>
     </message>
@@ -1746,7 +1765,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Identifiant de la conversation</translation>
     </message>
     <message>
-        <location filename="../llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Créer une nouvelle conversation avec Llama.cpp</translation>
     </message>
@@ -1823,7 +1842,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Conversations avec Llama.cpp</translation>
     </message>
     <message>
-        <location filename="../llamalocatorfilter.cpp" line="+64"/>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
@@ -1832,12 +1851,17 @@ Invitations intégrées : %1
 Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémorisées pour la prochaine fois.</translation>
     </message>
     <message>
-        <location filename="../llamamarkdownwidget.cpp" line="+116"/>
+        <location line="+146"/>
+        <source>Collecting git changes</source>
+        <translation>Collecte des modifications git</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Afficher/masquer les détails de l&apos;utilisation de l&apos;outil</translation>
     </message>
     <message>
-        <location filename="../llamasearchtoolbar.cpp" line="+22"/>
+        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>
@@ -1857,7 +1881,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Résultat suivant</translation>
     </message>
     <message>
-        <location filename="../llamathinkingsectionparser.cpp" line="+52"/>
+        <location filename="../src/llamathinkingsectionparser.cpp" line="+52"/>
         <source>Thought Process</source>
         <translation>Processus de réflexion</translation>
     </message>
@@ -1867,7 +1891,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Réfléchit</translation>
     </message>
     <message>
-        <location filename="../markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+692"/>
         <source>SVG image</source>
         <translation>Image SVG</translation>
     </message>
@@ -1898,21 +1922,21 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Copié dans le presse-papiers</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="-99"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
         <source>(empty)</source>
         <translation>(vide)</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../skillssettingswidget.cpp" line="+63"/>
-        <location filename="../toolsettingswidget.cpp" line="+202"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+63"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+202"/>
         <source>Add…</source>
         <translation>Ajouter…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../skillssettingswidget.cpp" line="+17"/>
-        <location filename="../toolsettingswidget.cpp" line="+2"/>
+        <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Retirer</translation>
     </message>
@@ -1928,11 +1952,15 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
     </message>
     <message>
         <location line="+16"/>
-        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
-        <translation>Seule la première ligne d&apos;une invitation est affichée dans le menu du localisateur ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
+        <translation>Seule la première ligne d&apos;une invitation est affichée dans le menu du localisateur ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
+        <translation type="vanished">Seule la première ligne d&apos;une invitation est affichée dans le menu du localisateur ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Prompt</source>
         <translation>Invitation</translation>
     </message>
@@ -1947,18 +1975,18 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Compaction</translation>
     </message>
     <message>
-        <location filename="../llamachateditor.cpp" line="-1286"/>
-        <location filename="../promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
     <message>
-        <location filename="../promptssettingswidget.cpp" line="+11"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+11"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Localisateur (« ll »)</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Sélectionnez un outil pour afficher sa définition</translation>
     </message>
@@ -2084,7 +2112,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>En-têtes :</translation>
     </message>
     <message>
-        <location filename="../skillssettingswidget.cpp" line="-11"/>
+        <location filename="../src/skillssettingswidget.cpp" line="-11"/>
         <source>Choose a Skills Directory</source>
         <translation>Choisir un dossier de compétences</translation>
     </message>
@@ -2095,7 +2123,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -2116,7 +2144,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Nom : %1</translation>
     </message>
@@ -2141,7 +2169,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 compétences</translation>
     </message>
     <message>
-        <location filename="../toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
         <source>No description</source>
         <translation>Aucune description disponible</translation>
     </message>
@@ -2151,7 +2179,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Interne</translation>
     </message>
     <message>
-        <location filename="../skills.cpp" line="+78"/>
+        <location filename="../src/skills.cpp" line="+78"/>
         <source>failed to read file</source>
         <translation>échec de la lecture du fichier</translation>
     </message>
@@ -2191,7 +2219,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
     <message>
-        <location filename="../llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Conversation compactée – les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
@@ -2564,7 +2592,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
         <source>Add %1</source>
         <translation>Ajouter %1</translation>
     </message>
@@ -2620,7 +2648,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
     <message>
-        <location filename="../tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
@@ -2693,9 +2721,9 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+288"/>
         <location line="+7"/>
-        <location filename="../tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+362"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>erreur inconnue</translation>
@@ -2720,7 +2748,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 </translation>
     </message>
     <message>
-        <location filename="../tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
         <source>Edit file</source>
         <translation>Modifier un fichier</translation>
     </message>
@@ -2737,7 +2765,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
     </message>
@@ -2769,7 +2797,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
     </message>
     <message>
-        <location filename="../tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Impossible de joindre le serveur MCP.</translation>
@@ -2815,7 +2843,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
     </message>
     <message>
-        <location filename="../tools/readfile_tool.cpp" line="+83"/>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
         <translation>lire tout le fichier %1</translation>
     </message>
@@ -2879,7 +2907,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../tools/task_tool.cpp" line="+38"/>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
     </message>
@@ -2924,7 +2952,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 %3</translation>
     </message>
     <message>
-        <location filename="../tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>récupérer %1</translation>
@@ -2954,7 +2982,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 [... contenu tronqué à %1 caractères ...]</translation>
     </message>
     <message>
-        <location filename="../tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>rechercher %1</translation>
@@ -3027,7 +3055,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 %2</translation>
     </message>
     <message>
-        <location filename="../tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-166"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>localiser les fichiers %1</translation>
@@ -3038,13 +3066,13 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-161"/>
         <source>Pattern: %1</source>
         <translation>Motif : %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../tools/search_tool.cpp" line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
         <translation>  Chemin : %1</translation>
     </message>
@@ -3055,19 +3083,19 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/search_tool.cpp" line="+27"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
         <translation>Erreur : le motif ne doit pas être vide.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Erreur : le chemin n&apos;est pas un dossier : %1</translation>
     </message>
     <message>
         <location line="+95"/>
-        <location filename="../tools/search_tool.cpp" line="+112"/>
+        <location filename="../src/tools/search_tool.cpp" line="+112"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[La recherche a été arrêtée par l&apos;utilisateur. Les résultats sont incomplets.]</translation>
     </message>
@@ -3078,13 +3106,13 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/search_tool.cpp" line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
         <translation>[Échec du démarrage de ripgrep : %1]</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../tools/search_tool.cpp" line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
         <translation>[ripgrep a échoué (code de sortie %1) : %2]</translation>
     </message>
@@ -3104,7 +3132,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
     </message>
     <message>
-        <location filename="../tools/ls_tool.cpp" line="-39"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
         <location line="+7"/>
         <source>list directory %1</source>
         <translation>lister le dossier %1</translation>
@@ -3134,12 +3162,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d&apos;entrées.]</translation>
     </message>
     <message>
-        <location filename="../tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>L&apos;outil MCP « %1 » n&apos;est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
         <source>Download ripgrep</source>
         <translation>Télécharger ripgrep</translation>
     </message>
@@ -3154,7 +3182,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+64"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Télécharger le runtime du bac à sable Windows (MXC)</translation>
     </message>
@@ -3170,19 +3198,19 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projet : %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../tools/ripgrep.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence : %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../tools/ripgrep.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
@@ -3227,7 +3255,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Échec de la décompression du runtime MXC : %1</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+27"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
         <translation>Le paquet ne contient aucun binaire ripgrep.</translation>
     </message>
@@ -3247,19 +3275,19 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Échec du téléchargement de ripgrep : %1</translation>
     </message>
     <message>
-        <location filename="../tools/mxc.cpp" line="-16"/>
-        <location filename="../tools/ripgrep.cpp" line="+18"/>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Vérification de l&apos;intégrité du paquet...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../tools/ripgrep.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
     </message>
     <message>
-        <location filename="../tools/ripgrep.cpp" line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Extraction de ripgrep...</translation>
     </message>
@@ -3269,7 +3297,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Échec de l&apos;extraction de ripgrep : %1</translation>
     </message>
     <message>
-        <location filename="../tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-174"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>rechercher %1</translation>
@@ -3319,7 +3347,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
     </message>
     <message>
-        <location filename="../tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
         <source>load skill %1</source>
         <translation>charger la compétence %1</translation>
     </message>
@@ -3339,7 +3367,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>(aucun)</translation>
     </message>
     <message>
-        <location filename="../tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>mettre à jour la liste des tâches</translation>
@@ -3375,7 +3403,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
     </message>
     <message>
-        <location filename="../tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
     </message>
@@ -3409,7 +3437,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">srt-win (le backend bac à sable Windows de @anthropic-ai/sandbox-runtime) n&apos;a pas été trouvé dans le PATH. %1 LLAMA_SRT_WIN peut pointer vers l&apos;exécutable.</translation>
     </message>
     <message>
-        <location filename="../tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Téléchargez-le depuis la page des paramètres des outils du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; LLAMA_WXC_EXEC peut pointer vers un wxc-exec.exe. Vous pouvez aussi décocher « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
@@ -3464,7 +3492,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location filename="../tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
         <translation>Écrire un fichier</translation>
     </message>
