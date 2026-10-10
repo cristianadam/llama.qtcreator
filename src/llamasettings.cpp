@@ -53,11 +53,11 @@ QString defaultCompactPrompt()
 QStringList defaultLocatorPrompts()
 {
     return {Tr::tr("Create a summary of {selection}"),
-            Tr::tr("Create a commit message for {selection}"),
+            Tr::tr("Create a commit message for the uncommitted changes.\n\n"
+                   "{git_diff}"),
             Tr::tr("Explain the code in {selection}"),
             Tr::tr("Do spell checking and fix any typos in {selection}"),
-            Tr::tr("Generate test cases for {selection}. Output only code. No explanations"),
-            Tr::tr("Update translation in {selection}. Provide the full translation file as output")};
+            Tr::tr("Fix the following errors and warnings in {file}.\n\n{diagnostics}")};
 }
 
 ToolsSettingsPage::ToolsSettingsPage()
@@ -540,7 +540,10 @@ LlamaSettings::LlamaSettings()
     locatorPrompts.setToolTip(
         Tr::tr("Built-in prompts of the \"ll\" locator. Only the first line of a "
                "prompt is shown in the menu; the full text is sent to the model. "
-               "\"{selection}\" is replaced with the selected text."));
+               "\"{selection}\" is replaced with the selected text, \"{file}\" and "
+               "\"{line}\" with the current file and cursor line, \"{diagnostics}\" "
+               "with the errors and warnings of the current file, and \"{git_diff}\" "
+               "with the uncommitted changes of its git repository."));
 
     //
     // Skills

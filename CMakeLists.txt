@@ -15,7 +15,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # (resolved at runtime via the app's rpath).
 find_package(QtCreator REQUIRED COMPONENTS Core TextEditor ProjectExplorer yaml-cpp)
 find_package(Qt6 COMPONENTS Widgets LinguistTools Sql Test HttpServer Network TaskTree Svg
-               REQUIRED)
+               Concurrent REQUIRED)
 
 # Add a CMake option that enables building your plugin with tests.
 # You don't want your released plugin binaries to contain tests,
@@ -63,6 +63,7 @@ add_qtc_plugin(LlamaCpp
     QtCreator::KSyntaxHighlighting
     QtCreator::quickjsng
     Qt::TaskTree
+    Qt::Concurrent
     Qt::Svg
     markus
     LlamaSpinner
@@ -77,6 +78,7 @@ add_qtc_plugin(LlamaCpp
     src/llamachatmanager.cpp src/llamachatmanager.h
     src/llamachatmessage.cpp src/llamachatmessage.h
     src/llamalocatorfilter.cpp src/llamalocatorfilter.h
+    src/llamalocatorprompts.cpp src/llamalocatorprompts.h
     src/llamaconversationsmodel.cpp src/llamaconversationsmodel.h
     src/llamaconversationsview.cpp src/llamaconversationsview.h
     src/llamaconstants.h

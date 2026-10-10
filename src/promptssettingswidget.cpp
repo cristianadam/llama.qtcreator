@@ -71,7 +71,10 @@ PromptsSettingsWidget::PromptsSettingsWidget()
     m_hintLabel = new QLabel(
             Tr::tr("Only the first line of a prompt is shown in the locator menu; the "
                    "full text is sent to the model. \"{selection}\" is replaced "
-                   "with the selected text."),
+                   "with the selected text, \"{file}\" and \"{line}\" with the "
+                   "current file and cursor line, \"{diagnostics}\" with the errors "
+                   "and warnings of the current file, and \"{git_diff}\" with the "
+                   "uncommitted changes of its git repository."),
             this);
     m_hintLabel->setVisible(false); // only shown for locator prompts
 

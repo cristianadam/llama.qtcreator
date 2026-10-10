@@ -69,6 +69,18 @@ if (TARGET llamatools_test)
   qt_wrap_cpp(llamatools_test_moc llamatools_test.cpp TARGET llamatools_test)
 endif()
 
+add_qtc_test(llamalocator_test
+  INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
+  DEPENDS
+    Qt::Test Qt::Core
+  SOURCES
+    llamalocator_test.cpp
+    ../src/llamalocatorprompts.cpp
+)
+
 add_qtc_test(fimcache_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}

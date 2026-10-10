@@ -2695,6 +2695,13 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         realTool->run(doc.object(), std::move(toolFinished));
 }
 
+bool ChatManager::conversationExists(const QString &convId)
+{
+    // getOneConversation() returns a default‑constructed Conversation (empty
+    // id) when the conversation is unknown.
+    return m_storage->getOneConversation(convId).id == convId;
+}
+
 void ChatManager::deleteConversation(const QString &convId)
 {
     // Stop the running stream (abort() finishes it synchronously) and the

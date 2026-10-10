@@ -205,6 +205,7 @@ public:
 
     void deleteConversation(const QString &convId);
     void renameConversation(const QString &convId, const QString &name);
+    bool conversationExists(const QString &convId);
     void deleteMessageBranch(const QString &convId, qint64 msgId);
     QPair<int,int> getBranchStats(const QString &convId, qint64 msgId) const;
 
