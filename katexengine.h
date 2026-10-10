@@ -22,10 +22,10 @@ namespace LlamaCpp {
 
 // Renders LaTeX math to a standalone SVG by running KaTeX (katex.min.js)
 // inside the QuickJS engine that Qt Creator ships (QtCreator::quickjsng) and
-// flattening KaTeX's HTML output to SVG (katex/katex2svg.js, in the same
-// context). Text measurement is bridged to Qt via a host function so glyph
-// widths use the real KaTeX font faces, which are bundled as resources
-// (katex/fonts/) and registered as application fonts.
+// flattening KaTeX's HTML output to SVG (3rdparty/katex/katex2svg.js, in the
+// same context). Text measurement is bridged to Qt via a host function so
+// glyph widths use the real KaTeX font faces, which are bundled as resources
+// (3rdparty/katex/fonts/) and registered as application fonts.
 //
 // Like MermaidEngine, the QuickJS runtime is confined to a dedicated worker
 // thread: the one-time cost of evaluating the bundles (warmUp()) and every

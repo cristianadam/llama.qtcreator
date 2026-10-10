@@ -40,7 +40,7 @@ constexpr qint64 kRenderTimeoutMs = 10'000;
 // UI. Ready engines get the full timeout.
 constexpr qint64 kNotReadyTimeoutMs = 2'000;
 
-// The KaTeX font faces bundled in katex/fonts/ (MIT, see katex/ATTRIBUTION.md).
+// The KaTeX font faces bundled in 3rdparty/katex/fonts/ (MIT, see 3rdparty/katex/ATTRIBUTION.md).
 // The family names match the @font-face names of KaTeX's own stylesheet
 // (katex.css), which katex2svg.js maps glyph classes to.
 const char *const kKatexFontFiles[] = {

@@ -22,7 +22,7 @@ namespace LlamaCpp {
 
 // Renders mermaid diagrams to SVG by running the mermaid.js bundle inside the
 // QuickJS engine that Qt Creator ships (QtCreator::quickjsng). Mermaid's
-// render() pipeline expects a DOM, so a minimal DOM shim (mermaid/domshim.js,
+// render() pipeline expects a DOM, so a minimal DOM shim (3rdparty/mermaid/domshim.js,
 // loaded into the same context) provides one; text measurement is bridged to
 // Qt via a host function so diagram layout uses the real system fonts.
 //
