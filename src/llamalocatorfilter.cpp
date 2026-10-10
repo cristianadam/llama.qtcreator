@@ -128,6 +128,9 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
     QString message = prompt;
     QString text;
     QString language;
+    QString path;
+    int startLine = 0;
+    int endLine = 0;
     if (TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget()) {
         text = TextDocument::convertToPlainText(editor->selectedText());
 
@@ -140,9 +143,26 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
 
         if (editor->textDocument()->id() == Git::Constants::GIT_LOG_EDITOR_ID)
             language = "diff";
+
+        if (!text.isEmpty()) {
+            path = editor->textDocument()->filePath().nativePath();
+            const QTextCursor cursor = editor->textCursor();
+            const QTextDocument *doc = editor->document();
+            // blockNumber() is 0‑based; +1 for the 1‑based line the model sees.
+            startLine = doc->findBlock(cursor.selectionStart()).blockNumber() + 1;
+            endLine = doc->findBlock(cursor.selectionEnd() - 1).blockNumber() + 1;
+        }
     }
 
-    message.replace("{selection}", QString("\n```%1\n%2\n```\n").arg(language, text));
+    // The fence info string carries the file location (path + line range) so the
+    // model knows where the selection comes from; it degrades to just the language
+    // when there is no selection (the placeholder is always replaced).
+    QString info = language;
+    if (!path.isEmpty())
+        info += QLatin1Char(' ') + path;
+    if (startLine > 0)
+        info += QStringLiteral(":%1-%2").arg(startLine).arg(endLine);
+    message.replace("{selection}", QString("\n```%1\n%2\n```\n").arg(info, text));
 
     // The conversation is named after the (single‑line) prompt as displayed
     // in the locator menu, not after the full multi‑line prompt text.
