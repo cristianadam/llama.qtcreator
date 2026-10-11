@@ -17,6 +17,10 @@
 #include <QTemporaryDir>
 #include <QUuid>
 
+#if defined(Q_OS_WIN)
+#include <windows.h>
+#endif
+
 namespace LlamaCpp::Tools {
 namespace {
 
@@ -281,19 +285,32 @@ QHash<QString, LiveProbe> &liveProbes()
 }
 
 #if defined(Q_OS_WIN)
-bool windowsBuildOk()
-{
-    return QOperatingSystemVersion::current().buildNumber() >= kMinWindowsBuild;
-}
 quint32 windowsBuildNumber()
 {
-    return QOperatingSystemVersion::current().buildNumber();
+    // QOperatingSystemVersion has no build number accessor; RtlGetVersion
+    // is the documented replacement for the sandboxed GetVersionExW.
+    OSVERSIONINFOEXW info{};
+    info.dwOSVersionInfoSize = sizeof(info);
+    using RtlGetVersionFn = LONG(WINAPI *)(POSVERSIONINFOEXW);
+    static RtlGetVersionFn rtlGetVersion = [] {
+        HMODULE ntdll = GetModuleHandleW(L"ntdll.dll");
+        return ntdll ? reinterpret_cast<RtlGetVersionFn>(
+                           GetProcAddress(ntdll, "RtlGetVersion"))
+                     : nullptr;
+    }();
+    if (rtlGetVersion && rtlGetVersion(&info) == 0)
+        return info.dwBuildNumber;
+    return 0;
+}
+bool windowsBuildOk()
+{
+    return windowsBuildNumber() >= kMinWindowsBuild;
 }
 
 // The positive and negative controls of the live probe: a write inside the
 // workdir must have worked, the canary must not have leaked, and the write
 // outside the granted paths must have failed.
-bool liveProbePassed(const QProcess &process,
+bool liveProbePassed(QProcess &process,
                      const QString &workdir,
                      const QString &outsideWrite)
 {
@@ -340,7 +357,7 @@ LiveProbeState liveProbeState(const QString &exe,
     // everything it needs.
     homeProbe.removeRecursively();
 
-    const auto cleanupAndFail = [probe, &workdir, &homeProbe](const QString &message) {
+    const auto cleanupAndFail = [&probe, &workdir, &homeProbe](const QString &message) {
         delete workdir;
         homeProbe.removeRecursively();
         probe.state = LiveProbeState::Failed;
@@ -360,7 +377,7 @@ LiveProbeState liveProbeState(const QString &exe,
         // The negative read control needs the canary to exist; without it
         // the probe would pass without verifying anything.
         if (!file.open(QIODevice::WriteOnly)
-            || file.write(QLatin1String(kCanaryContent)) < 0) {
+            || file.write(kCanaryContent) < 0) {
             cleanupAndFail(Tr::tr("The Windows sandbox could not create the canary file "
                                   "of its live isolation probe at %1. %2")
                               .arg(canary)
@@ -400,11 +417,10 @@ LiveProbeState liveProbeState(const QString &exe,
     const QString homeProbePath = homeProbe.path();
     QProcess *process = new QProcess;
     probe.process = process;
-    const auto onFinished = [exe, workdir, workdirPath, homeProbePath, outsideWrite] {
-        QProcess *finished = qobject_cast<QProcess *>(QObject::sender());
-        const bool ok = finished && liveProbePassed(*finished, workdirPath, outsideWrite);
-        if (finished)
-            finished->deleteLater();
+    const auto onFinished = [exe, process, workdir, workdirPath, homeProbePath,
+                             outsideWrite] {
+        const bool ok = liveProbePassed(*process, workdirPath, outsideWrite);
+        process->deleteLater();
         delete workdir;
         QDir(homeProbePath).removeRecursively();
         LiveProbe &probe = liveProbes()[exe];
