@@ -3603,6 +3603,34 @@ void LlamaToolsTest::sandboxSymlinkEscape()
                                 /*isWrite=*/true)
                  .isEmpty());
 
+    // A RELATIVE link into the credential location, nested one level below
+    // the project root (relative targets are resolved against the link's
+    // own directory, not the working directory).
+    QVERIFY(QDir(projectDir.path()).mkpath(QStringLiteral("sub")));
+    const QString homeName = QFileInfo(fakeHome.path()).fileName();
+    QVERIFY(QFile::link(QStringLiteral("../../") + homeName + QStringLiteral("/.ssh"),
+                        projectDir.filePath(QStringLiteral("sub/link"))));
+    QJsonObject relReadArgs;
+    relReadArgs["file_path"] = projectDir.filePath(QStringLiteral("sub/link/id_test"));
+    const auto relReadRes = runTool<Tools::ReadFileTool>(relReadArgs);
+    QVERIFY(!relReadRes.second);
+    QVERIFY(!relReadRes.first.contains("llama-secret-key"));
+
+    // A DANGLING RELATIVE link: a write through it would create its target,
+    // so the checks must resolve the target against the link's directory.
+    // fakeHome and the project are siblings below the temp base, so the
+    // target is <tempBase>/<homeName>/.ssh-dangle - resolving against the
+    // project directory instead would give <tempBase>/../<homeName>/....
+    QVERIFY(QDir(projectDir.path()).mkpath(QStringLiteral("sub2")));
+    QVERIFY(QFile::link(QStringLiteral("../../") + homeName + QStringLiteral("/.ssh-dangle"),
+                        projectDir.filePath(QStringLiteral("sub2/link"))));
+    const QString resolved = resolvedPath(
+        projectDir.filePath(QStringLiteral("sub2/link/evil")));
+    const QString expected = QDir(fakeHome.path()).canonicalPath()
+            + QStringLiteral("/.ssh-dangle/evil");
+    QVERIFY2(resolved == expected,
+             qPrintable(QStringLiteral("%1 != %2").arg(resolved, expected)));
+
     ProjectExplorer::ProjectManager::resetStartupProject();
 }
 
