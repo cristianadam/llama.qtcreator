@@ -8,7 +8,7 @@
         <translation type="vanished">llama.cpp konversation</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+138"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp konversation</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Aktivera llama.cpp.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fel vid hämtning av FIM-komplettering från %1: %2</translation>
     </message>
@@ -150,8 +150,8 @@
         <translation>Chatt</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -161,7 +161,7 @@
         <translation>Skriv ett meddelande (Shift+Enter för ny rad)</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -192,12 +192,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Arbetskatalog: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM-modell</translation>
     </message>
@@ -227,7 +227,7 @@
         <translation>Tänknivå</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Sök i chatten</translation>
     </message>
@@ -247,7 +247,7 @@
         <translation>Skicka till Llama-chatt</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Modellväg: %1</translation>
     </message>
@@ -277,7 +277,7 @@
         <translation>Uppföljningsfrågor:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tänknivå: %1 (gäller nya meddelanden)</translation>
     </message>
@@ -293,7 +293,7 @@
         <translation>Redigera meddelande</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Detta tar bort %1 meddelanden, inklusive: %2 användarmeddelanden och %3 assistantsvar ...</translation>
     </message>
@@ -2094,7 +2094,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     <message>
         <location line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+202"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+204"/>
         <source>Add…</source>
         <translation>Lägg till…</translation>
     </message>
@@ -2140,7 +2140,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Komprimering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2151,7 +2151,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Select a tool to view its definition</source>
         <translation>Välj ett verktyg för att visa dess definition</translation>
     </message>
@@ -2171,7 +2171,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Hämta MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Redigera</translation>
     </message>
@@ -2288,7 +2288,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -2309,7 +2309,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Namn: %1</translation>
     </message>
@@ -2384,10 +2384,120 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Fel:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Automatisk komprimering är inaktiverad.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Konversationen komprimeras redan.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>Konversationen har inga meddelanden att komprimera.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Konversationen komprimerades nyligen och kan inte komprimeras ytterligare.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Komprimeringsbegäran misslyckades: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Komprimeringsbegäran returnerade ett ogiltigt svar.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Komprimeringsbegäran returnerade ingen sammanfattning.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Komprimeringsbegäran returnerade en tom sammanfattning.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Konversationen passar inte längre i modellens kontextfönster.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Automatisk komprimering är inaktiverad; förkorta eller komprimera konversationen och försök igen.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Konversationen komprimeras redan; skicka meddelandet igen när komprimeringen är klar.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Obs:** Svaret avklipptes: modellen nådde maximalt antal producerade token.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Obs:** Modellen avslutade sin tur utan svar.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>Microsofts MXC-runtime (wxc-exec), som Windows-sandboxen använder, är bara tillgänglig för Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>Microsofts MXC-runtime (wxc-exec) är inte installerad; hämta den på inställningssidan för Llama-verktyg</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>sandbox-exec-exekverbar fil hittades inte</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) hittades inte; installera det (t.ex. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;Sandboxkommandon&quot; är aktiverat, men %1. Bash-verktyget vägrar köra kommandon förrän sandboxen är tillgänglig eller inställningen inaktiverats.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp-sandbox</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Problem med sandboxen för llama.cpp-chattverktygen.</translation>
     </message>
 </context>
 <context>
@@ -2444,17 +2554,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>raderad</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Lyckades. Uppdaterade följande filer:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Ingen bash-shell hittades. Installera Git for Windows (https://git-scm.com/download/win) eller lägg till en bash på PATH.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-exekverbar fil hittades inte; sandbox är inte tillgängligt på det här systemet.</translation>
     </message>
@@ -2464,7 +2574,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) hittades inte. Installera det (t.ex. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Utdata avklippt: %1]</translation>
     </message>
@@ -2484,29 +2594,34 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hela utdata sparad till: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>kör %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Fel: kommandot får inte vara tomt.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Fel: arbetskatalogen finns inte: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Fel: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Fel: sandboxen kan inte göra &quot;%1&quot; skrivbar: det är (eller innehåller) hemkatalogen eller en filsystemrot. Öppna ett projekt för att köra kommandon i dess katalog.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Kommandot stoppades av användaren.</translation>
     </message>
@@ -2522,9 +2637,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>okänt fel</translation>
@@ -2598,7 +2713,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ersatte %1 block i %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Kunde inte nå MCP-servern.</translation>
@@ -2624,17 +2739,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP-servern är inte tillgänglig. Kontrollera att servern körs och är nåbar, och försök sedan igen.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP-verktyget &quot;%1&quot; misslyckades: MCP-servern svarade inte (anslutningsfel eller tidsgräns överskreds).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP-servern startade om; anropet utfördes inte. Försök igen.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP-verktyget &quot;%1&quot; misslyckades: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP-servern returnerade HTTP %1 för verktygsanropet.</translation>
     </message>
@@ -2856,7 +2976,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>hitta filer %1</translation>
@@ -2867,7 +2987,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Mönster: %1</translation>
     </message>
@@ -2890,13 +3010,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fel: sökvägen är inte en katalog: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Sökningen stoppades av användaren. Resultaten är ofullständiga.]</translation>
     </message>
@@ -2948,7 +3068,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Katalogen är tom.</translation>
     </message>
@@ -2963,7 +3083,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Gränsen på %1 poster nådd. Använd limit=%2 för fler poster.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-verktyget &quot;%1&quot; är inte tillgängligt (ingen ansluten MCP-server tillhandahåller det).</translation>
     </message>
@@ -3098,7 +3218,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Upppackningen av ripgrep misslyckades: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>sök efter %1</translation>
@@ -3123,7 +3243,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fel: sökvägen finns inte: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Sökningen tog slut efter %1 ms. Resultaten är ofullständiga; begränsa sökvägen eller förfin mönstret.]</translation>
     </message>
@@ -3204,9 +3324,29 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uppgiftslistan uppdaterad: %1 av %2 slutförda.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Åtkomst av &quot;%1&quot; är inte tillåten: enhetssökvägar och administrativa delar är inte åtkomliga inom sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Skrivning till &quot;%1&quot; är inte tillåten: inget projekt är öppet, så sandboxen tillåter endast skrivningar inom tillfälliga platser. Öppna ett projekt för att arbeta med dess filer.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen och tillfälliga platser.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Skrivning till &quot;%1&quot; är inte tillåten: .git, .qtcreator och *.user-filer är skyddade inom sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Skrivning till &quot;%1&quot; är inte tillåten: autentiseringsuppgifters platser är skyddade inom sandboxen.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3238,7 +3378,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (Windows-sandboxbackenden för @anthropic-ai/sandbox-runtime) hittades inte på PATH. %1 LLAMA_SRT_WIN kan peka på den exekverbara filen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Hämta den från inställningssidan för Llama.cpp-chattverktyg (en fastställd, kontrollsumma-verifierad Microsoft MXC-utgivning); LLAMA_WXC_EXEC kan peka på en wxc-exec.exe. Avmarkera i stället &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
@@ -3253,7 +3393,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows-sandboxbackenden (wxc-exec) rapporterade MXC-behållaren som otillgänglig (avslut %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows-sandboxen kunde inte upprätta sin live-isoleringsproben (tillfällig katalog eller home-canary). %1</translation>
     </message>
@@ -3268,7 +3408,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows-sandboxens konfiguration är för lång (%1 av %2 tecken); processmiljön är troligen för stor. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash på &quot;%1&quot; är inte en del av en identifierad Git for Windows- eller MSYS2-installation, så Windows-sandboxen kan inte bevilja den en smal skrivskyddad plats. Installera Git for Windows (https://git-scm.com/download/win) och placera dess bash först på PATH, eller avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxen (Microsoft MXC) kräver Windows 11 24H2 (build %1) eller nyare; det här systemet har build %2. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
@@ -3278,12 +3423,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (Microsofts MXC Windows-sandbox-runtime) hittades inte. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows-sandboxen (Microsoft MXC) misslyckades med sin live-isoleringskontroll: ett sandboxat kommando kunde inte verifieras som inneslutet. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows-sandboxen (Microsoft MXC) verifierar sin isolering för första gången; kör kommandot igen om några sekunder.</translation>
     </message>
@@ -3327,6 +3472,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>Skrev %1 byte till %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP-verktyget &quot;%1&quot; stoppades av användaren.</translation>
     </message>
 </context>
 </TS>

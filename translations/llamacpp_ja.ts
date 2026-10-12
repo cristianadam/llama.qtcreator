@@ -8,7 +8,7 @@
         <translation type="vanished">llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+138"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp 会話</translation>
     </message>
@@ -54,7 +54,7 @@
     </message>
     <message>
         <location filename="../src/llamaplugin.cpp" line="-28"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -99,7 +99,7 @@
         <translation>llama.cpp を有効にします。</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
@@ -1548,7 +1548,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>次の結果</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -1579,12 +1579,12 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>作業ディレクトリ: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM モデル</translation>
     </message>
@@ -1614,7 +1614,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>思考レベル</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>チャット内で検索</translation>
     </message>
@@ -1634,7 +1634,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Llama チャットに送信</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>モデルパス: %1</translation>
     </message>
@@ -1664,7 +1664,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>フォローアップ質問:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
@@ -1680,7 +1680,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>メッセージを編集</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>%1 個のメッセージが削除されます。内訳: ユーザーメッセージ %2 件、アシスタントの応答 %3 件 ...</translation>
     </message>
@@ -1775,7 +1775,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+202"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+204"/>
         <source>Add…</source>
         <translation>追加...</translation>
     </message>
@@ -1821,7 +1821,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -1832,7 +1832,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>ロケーター（&quot;ll&quot;）</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Select a tool to view its definition</source>
         <translation>定義を表示するツールを選択してください</translation>
     </message>
@@ -1852,7 +1852,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MXC %1 をダウンロード</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
@@ -1969,7 +1969,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
@@ -1990,7 +1990,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>名前: %1</translation>
     </message>
@@ -2065,10 +2065,120 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>エラー:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>自動圧縮は無効になっています。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>会話はすでに圧縮されています。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>会話は圧縮できるメッセージがありません。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>会話は最近圧縮されたばかりのため、これ以上圧縮できません。</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>圧縮リクエストが失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>圧縮リクエストが不正な形式の返信を返しました。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>圧縮リクエストは要約を返していません。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>圧縮リクエストは空の要約を返しました。</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>会話はもはやモデルのコンテキストウィンドウに収まりません。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>自動圧縮は無効になっています。会話を短くするか圧縮してから、再試行してください。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>会話はすでに圧縮されています。圧縮が完了したら、メッセージを再送信してください。</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**注意:** 返信は切り詰められました: モデルが出力トークンの最大数に達しました。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**注意:** モデルは回答なしでターンを終了しました。</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>Windows サンドボックスが使用する Microsoft MXC 実行ファイル（wxc-exec）は Windows x86-64 のみで利用できます</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>Microsoft MXC 実行ファイル（wxc-exec）がインストールされていません。Llama Tools 設定ページからダウンロードしてください</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>sandbox-exec 実行ファイルが見つかりませんでした</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;コマンドをサンドボックス化する&quot; は有効になっていますが、%1 です。サンドボックスが利用可能になるかこの設定が無効になるまで、bash ツールはコマンドの実行を拒否します。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp サンドボックス</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>llama.cpp チャットツールのサンドボックスの問題。</translation>
     </message>
 </context>
 <context>
@@ -2125,17 +2235,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>削除済み</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>成功しました。以下のファイルを更新しました:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
     </message>
@@ -2145,7 +2255,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>［出力が切り詰められました: %1］</translation>
     </message>
@@ -2165,29 +2275,34 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完全な出力を以下に保存しました: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>%1 を実行中</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>エラー: コマンドを空にすることはできません。</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>エラー: 作業ディレクトリが存在しません: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>エラー: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>エラー: サンドボックスは &quot;%1&quot; を書き込み可能にできません: これはホームディレクトリまたはファイルシステムのルートであるか、それらを含んでいます。プロジェクトを開いて、そのディレクトリ内でコマンドを実行してください。</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>コマンドはユーザーによって停止されました。</translation>
     </message>
@@ -2203,9 +2318,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>不明なエラー</translation>
@@ -2279,7 +2394,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%2 の %1 ブロックを正常に置換しました。</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP サーバーに到達できません。</translation>
@@ -2305,17 +2420,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP サーバーが利用できません。サーバーが実行されていて到達可能であることを確認してから、再試行してください。</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP ツール &quot;%1&quot; が失敗しました: MCP サーバーが応答しませんでした（接続エラーまたはタイムアウト）。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP サーバーが再起動されたため、呼び出しは実行されませんでした。再試行してください。</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP ツール &quot;%1&quot; が失敗しました: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP サーバーがツール呼び出しに対して HTTP %1 を返しました。</translation>
     </message>
@@ -2537,7 +2657,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>ファイル検索 %1</translation>
@@ -2548,7 +2668,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>パターン: %1</translation>
     </message>
@@ -2571,13 +2691,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>エラー: パスがディレクトリではありません: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>［検索はユーザーによって停止されました。結果は不完全です。］</translation>
     </message>
@@ -2629,7 +2749,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>ディレクトリは空です。</translation>
     </message>
@@ -2644,7 +2764,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>［%1 件エントリの上限に達しました。より多くのエントリを表示するには limit=%2 を使用してください。］</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
     </message>
@@ -2779,7 +2899,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ripgrep の展開に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>%1 を検索</translation>
@@ -2804,7 +2924,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>エラー: パスが存在しません: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。パスを絞るか、パターンを改善してください。］</translation>
     </message>
@@ -2885,9 +3005,29 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所への書き込みのみが許可されます。プロジェクトを開くと、そのファイルで作業できます。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: 認証情報のある場所はサンドボックス内で保護されています。</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -2919,7 +3059,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win（@anthropic-ai/sandbox-runtime の Windows サンドボックスバックエンド）が PATH に見つかりませんでした。%1 LLAMA_SRT_WIN で実行可能ファイルの場所を指定できます。</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -2934,7 +3074,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
     </message>
@@ -2949,7 +3089,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>&quot;%1&quot; の bash は認識された Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはそれに狭い読み取り専用領域を与えることができません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に追加するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -2959,12 +3104,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows サンドボックス（Microsoft MXC）がはじめて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
     </message>
@@ -3008,6 +3153,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>%2 に %1 バイトを正常に書き込みました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
     </message>
 </context>
 <context>

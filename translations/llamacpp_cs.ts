@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+138"/>
         <source>llama.cpp coversation</source>
         <translation>Konverzace s llama.cpp</translation>
     </message>
@@ -89,7 +89,7 @@
         <translation>Zapnout llama.cpp.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Chyba při načítání dokončení FIM z %1: %2</translation>
     </message>
@@ -146,8 +146,8 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
     </message>
@@ -1197,7 +1197,7 @@
         <translation>Prompty</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
@@ -1228,12 +1228,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Pracovní adresář: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1263,7 +1263,7 @@
         <translation>Úroveň přemýšlení</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Hledat v chatu</translation>
     </message>
@@ -1283,7 +1283,7 @@
         <translation>Odeslat do chatu Llama</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Cesta k modelu: %1</translation>
     </message>
@@ -1313,7 +1313,7 @@
         <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Úroveň přemýšlení: %1 (platí pro nové zprávy)</translation>
     </message>
@@ -1329,7 +1329,7 @@
         <translation>Upravit zprávu</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Tím se smaže %1 zpráv, včetně: %2 uživatelských zpráv a %3 odpovědí asistenta ...</translation>
     </message>
@@ -2071,7 +2071,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation type="vanished">Vyberte nástroj pro zobrazení jeho JSON definice</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>Vyberte nástroj pro zobrazení jeho definice</translation>
     </message>
@@ -2091,7 +2091,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Stáhnout MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
@@ -2208,7 +2208,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2229,7 +2229,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2317,7 +2317,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Název</translation>
@@ -2368,10 +2368,120 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Chyba:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Automatické stlačení je vypnuto.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Konverzace se právě stlačuje.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>Konverzace nemá žádné zprávy ke stlačení.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Konverzace byla nedávno stlačena a nelze ji dále stlačovat.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Požadavek na stlačení selhal: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Požadavek na stlačení vrátil nesprávně formátovanou odpověď.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Požadavek na stlačení nevrátil žádné shrnutí.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Požadavek na stlačení vrátil prázdné shrnutí.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Konverzace se již nevešla do okna kontextu modelu.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Automatické stlačení je vypnuto; zkrátte nebo stlačte konverzaci a zkuste to znovu.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Konverzace se právě stlačuje; pošlete zprávu znovu, až se stlačení dokončí.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Poznámka:** Odpověď byla oříznuta: model dosáhl maximálního počtu výstupních tokenů.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Poznámka:** Model ukončil své kolo bez odpovědi.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>runtime Microsoft MXC (wxc-exec), který používá pískoviště Windows, je k dispozici pouze pro Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>runtime Microsoft MXC (wxc-exec) není nainstalován; stáhněte ho na stránce nastavení nástrojů Llama</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>spustitelný soubor sandbox-exec nebyl nalezen</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) nebyl nalezen; nainstalujte ho (např. &apos;apt install bubblewrap&apos; nebo &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;Přikazy v pískovišti&quot; je zapnuto, ale %1. Nástroj bash odmítá spouštět příkazy, dokud není pískoviště k dispozici nebo není nastavení vypnuto.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Pískoviště Llama.cpp</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Problémy s pískovištěm nástrojů Llama.cpp Chat.</translation>
     </message>
 </context>
 <context>
@@ -2428,17 +2538,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>smazáno</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
@@ -2448,7 +2558,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) nebyl nalezen. Nainstalujte ho (např. &apos;apt install bubblewrap&apos; nebo &apos;dnf install bubblewrap&apos;) nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Výstup oříznut: %1]</translation>
     </message>
@@ -2468,29 +2578,34 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úplný výstup uložen do: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>spouštění %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Chyba: příkaz nesmí být prázdný.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Chyba: pracovní adresář neexistuje: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Chyba: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Chyba: pískoviště nemůže učinit &quot;%1&quot; zapisovatelným: jedná se o (nebo obsahuje) domovský adresář nebo kořen souborového systému. Otevřete projekt, abyste mohli spouštět příkazy v jeho adresáři.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Příkaz byl zastaven uživatelem.</translation>
     </message>
@@ -2506,9 +2621,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>neznámá chyba</translation>
@@ -2582,7 +2697,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěšně nahrazeno %1 bloků v %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP server nelze dosáhnout.</translation>
@@ -2608,17 +2723,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP server není k dispozici. Zkontrolujte, že server běží a je dosažitelný, a zkuste to znovu.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP nástroj &quot;%1&quot; selhal: MCP server neodpověděl (chyba připojení nebo časový limit).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP server byl restartován; volání nebylo provedeno. Zkuste to prosím znovu.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP nástroj &quot;%1&quot; selhal: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP server vrátil pro volání nástroje HTTP %1.</translation>
     </message>
@@ -2840,7 +2960,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>najít soubory %1</translation>
@@ -2851,7 +2971,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Vzor: %1</translation>
     </message>
@@ -2874,13 +2994,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Chyba: cesta není adresář: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Vyhledávání bylo zastaveno uživatelem. Výsledky jsou neúplné.]</translation>
     </message>
@@ -2932,7 +3052,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Adresář je prázdný.</translation>
     </message>
@@ -2947,7 +3067,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Dosažen limit %1 položek. Pro více položek použijte limit=%2.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP nástroj &quot;%1&quot; není k dispozici (neposkytuje ho žádný připojený MCP server).</translation>
     </message>
@@ -3082,7 +3202,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rozbalování ripgrep selhalo: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>vyhledat %1</translation>
@@ -3107,7 +3227,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Chyba: cesta neexistuje: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Vyhledávání vypršelo po %1 ms. Výsledky jsou neúplné; zúžte cestu nebo upřesněte vzor.]</translation>
     </message>
@@ -3188,9 +3308,29 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Přístup k &quot;%1&quot; není povolen: cesty k zařízením a administrativní sdílené složky nejsou uvnitř pískoviště dostupné.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Zápis do &quot;%1&quot; není povolen: soubory .git, .qtcreator a *.user jsou uvnitř pískoviště chráněny.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Zápis do &quot;%1&quot; není povolen: umístění přihlašovacích údajů jsou uvnitř pískoviště chráněna.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3222,7 +3362,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3237,7 +3377,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Pískoviště Windows nepodařilo nastavit sondu izolace za běhu (dočasný adresář nebo canary soubor v domovském adresáři). %1</translation>
     </message>
@@ -3252,7 +3392,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Konfigurace pískoviště Windows je příliš dlouhá (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash na &quot;%1&quot; není součástí rozpoznané instalace Git for Windows nebo MSYS2, takže pískoviště Windows mu nemůže udělit úzké umístění pouze pro čtení. Nainstalujte Git for Windows (https://git-scm.com/download/win) a umístěte jeho bash jako první v PATH, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Pískoviště Windows (Microsoft MXC) vyžaduje Windows 11 24H2 (verze %1) nebo novější; tento systém je verze %2. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3262,12 +3407,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (runtime pískoviště Windows Microsoft MXC) nebyl nalezen. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Pískoviště Windows (Microsoft MXC) nezvládlo kontrolu izolace za běhu: nepodařilo se ověřit, že je příkaz v pískovišti omezen. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Pískoviště Windows (Microsoft MXC) poprvé ověřuje svou izolaci; příkaz spusťte znovu za pár sekund.</translation>
     </message>
@@ -3311,6 +3456,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>Úspěšně zapsáno %1 bajtů do %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP nástroj &quot;%1&quot; byl zastaven uživatelem.</translation>
     </message>
 </context>
 </TS>

@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+138"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp razgovor</translation>
     </message>
@@ -89,7 +89,7 @@
         <translation>Omogući funkciju llama.cpp.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -146,8 +146,8 @@
         <translation>Razgovor</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -1193,7 +1193,7 @@
         <translation>Promptovi</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>Zadano</translation>
     </message>
@@ -1224,12 +1224,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Radni direktorij: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM model</translation>
     </message>
@@ -1259,7 +1259,7 @@
         <translation>Razina razmišljanja</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Pretraga u razgovoru</translation>
     </message>
@@ -1279,7 +1279,7 @@
         <translation>Pošalji u Llama razgovor</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Putanja modela: %1</translation>
     </message>
@@ -1309,7 +1309,7 @@
         <translation>Nadaljnja pitanja:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Razina razmišljanja: %1 (primjenjuje se na nove poruke)</translation>
     </message>
@@ -1325,7 +1325,7 @@
         <translation>Uredi poruku</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Ovo će izbrisati %1 poruka uključujući: %2 korisničke poruke i %3 odgovora asistenta ...</translation>
     </message>
@@ -2041,7 +2041,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Odaberite alat za prikaz njegove JSON definicije</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>Odaberite alat za prikaz njegove definicije</translation>
     </message>
@@ -2061,7 +2061,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Preuzmi MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
@@ -2177,7 +2177,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2198,7 +2198,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2286,7 +2286,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -2337,10 +2337,120 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Greška:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Automatsko sažimanje je isključeno.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Razgovor se već sažima.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>Razgovor nema poruka za sažimanje.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Razgovor je nedavno sažet i ne može se dalje sažimati.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Zahtjev za sažimanje nije uspio: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Zahtjev za sažimanje vratio je neispravan odgovor.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Zahtjev za sažimanje nije vratio sažetak.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Zahtjev za sažimanje vratio je prazan sažetak.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Razgovor je sažet – ranije poruke su sažete kako bi se uklopile u prozor konteksta.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Razgovor se više ne uklapa u prozor konteksta modela.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Automatsko sažimanje je isključeno; skratite ili sažmite razgovor i pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Razgovor se već sažima; pošaljite poruku ponovno kada sažimanje završi.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Napomena:** Odgovor je skraćen: model je postigao najveći broj izlaznih tokena.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Napomena:** Model je završio svoje okretanje bez odgovora.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>Microsoftov MXC runtime (wxc-exec) koji Windows sandbox koristi dostupan je samo za Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>Microsoftov MXC runtime (wxc-exec) nije instaliran; preuzmite ga na stranici postavaka Llama Alati</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>izvedbena datoteka sandbox-exec nije pronađena</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) nije pronađen; instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;Sandbox komande&quot; je omogućeno, ali %1. Bash alat odbija izvršavati komande dok sandbox nije dostupan ili dok se postavka ne onemogući.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp sandbox</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Problemi s sandboxom alata za razgovor u llama.cpp-u.</translation>
     </message>
 </context>
 <context>
@@ -2397,17 +2507,17 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>izbrisano</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Uspješno. Ažurirane su sljedeće datoteke:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
     </message>
@@ -2417,7 +2527,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Izlaz skraćen: %1]</translation>
     </message>
@@ -2437,29 +2547,34 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Puni izlaz spremljen u: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>izvršavanje %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Greška: komanda ne smije biti prazna.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Greška: radni direktorij ne postoji: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Greška: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Greška: sandbox ne može učiniti &quot;%1&quot; upisivim: to je (ili sadrži) domaći direktorij ili korijen datotečnog sustava. Otvorite projekt za izvršavanje komandi u njegovu direktoriju.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Komanda je zaustavljena od strane korisnika.</translation>
     </message>
@@ -2475,9 +2590,9 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>nepoznata greška</translation>
@@ -2549,7 +2664,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Uspješno zamijenjeno %1 blok(ova) u %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>MCP server nije dostupan.</translation>
@@ -2575,17 +2690,22 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>MCP server nije dostupan. Provjerite je li server pokrenut i dostupan, zatim pokušajte ponovno.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP alat &quot;%1&quot; neuspješan: MCP server nije odgovorio (greška povezanja ili istek vremena).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP server je ponovno pokrenut; poziv nije izvršen. Molimo pokušajte ponovno.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP alat &quot;%1&quot; neuspješan: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP server vratio je HTTP %1 za poziv alata.</translation>
     </message>
@@ -2801,7 +2921,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>pronađi datoteke %1</translation>
@@ -2812,7 +2932,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Obrazac: %1</translation>
     </message>
@@ -2835,13 +2955,13 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Greška: putanja nije direktorij: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Pretraga je zaustavljena od strane korisnika. Rezultati su nepotpuni.]</translation>
     </message>
@@ -2891,7 +3011,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Putanja: `%1`\n\n</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Direktorij je prazan.</translation>
     </message>
@@ -2906,7 +3026,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP alat &quot;%1&quot; nije dostupan (nijedan povezani MCP server ga ne pruža).</translation>
     </message>
@@ -3041,7 +3161,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Raspakiranje ripgrepa neuspješno: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>pretraži %1</translation>
@@ -3066,7 +3186,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Greška: putanja ne postoji: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Pretraga je istekla nakon %1 ms. Rezultati su nepotpuni; suzite putanju ili usavršite obrazac.]</translation>
     </message>
@@ -3147,9 +3267,29 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativne mrežne podjele nisu dostupne unutar sandboka.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija. Otvorite projekt za rad na njegovim datotekama.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: lokacije vjerodajnica zaštićene su unutar sandboka.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3181,7 +3321,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">srt-win (Windows sandbox backend @anthropic-ai/sandbox-runtime) nije pronađen na PATH-u. %1 LLAMA_SRT_WIN može ukazivati na izvedbenu datoteku.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Preuzmite ga s stranice postavaka alata Llama.cpp Chat (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); LLAMA_WXC_EXEC može ukazivati na wxc-exec.exe. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
@@ -3196,7 +3336,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
     </message>
@@ -3211,7 +3351,12 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Windows sandbox konfiguracija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash na &quot;%1&quot; nije dio prepoznate instalacije Git for Windows ili MSYS2, pa Windows sandbox ne može mu dodijeliti usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash na prvo mjesto na PATH-u, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
@@ -3221,12 +3366,12 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
     </message>
@@ -3270,6 +3415,11 @@ Authorization: Bearer &lt;token&gt;</source>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>Uspješno zapisano %1 bajtova u %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
     </message>
 </context>
 </TS>

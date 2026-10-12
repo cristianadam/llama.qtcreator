@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+137"/>
+        <location filename="../src/llamaplugin.cpp" line="+138"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp-Konversation</translation>
     </message>
@@ -89,7 +89,7 @@
         <translation>llama.cpp aktivieren.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fehler beim Abrufen der FIM-Vervollständigung von %1: %2</translation>
     </message>
@@ -146,8 +146,8 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -1189,7 +1189,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1220,12 +1220,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Arbeitsverzeichnis: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM-Modell</translation>
     </message>
@@ -1255,7 +1255,7 @@
         <translation>Denkstufe</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Im Chat suchen</translation>
     </message>
@@ -1275,7 +1275,7 @@
         <translation>An Llama-Chat senden</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Modellpfad: %1</translation>
     </message>
@@ -1305,7 +1305,7 @@
         <translation>Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Denkstufe: %1 (gilt für neue Nachrichten)</translation>
     </message>
@@ -1321,7 +1321,7 @@
         <translation>Nachricht bearbeiten</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Dadurch werden %1 Nachrichten gelöscht, einschließlich: %2 Nutznachrichten und %3 Assistentenantworten ...</translation>
     </message>
@@ -2071,7 +2071,7 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation type="vanished">Wählen Sie ein Werkzeug aus, um dessen JSON-Definition anzuzeigen</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>Wählen Sie ein Tool aus, um seine Definition anzuzeigen</translation>
     </message>
@@ -2091,7 +2091,7 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation>MXC %1 herunterladen</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
@@ -2208,7 +2208,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2229,7 +2229,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Name: %1</translation>
     </message>
@@ -2317,7 +2317,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Kompaktierung</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2368,10 +2368,120 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Name &quot;%1&quot; kollidiert mit %2 – der erste bleibt erhalten</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Fehler:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Automatische Kompaktierung ist deaktiviert.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Die Konversation wird bereits kompaktiert.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>Die Konversation hat keine Nachrichten, die kompaktiert werden könnten.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Die Konversation wurde kürzlich kompaktiert und kann nicht weiter kompaktiert werden.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Die Kompaktierungsanfrage ist fehlgeschlagen: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Die Kompaktierungsanfrage hat eine fehlerhafte Antwort zurückgegeben.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Die Kompaktierungsanfrage hat keine Zusammenfassung zurückgegeben.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Die Kompaktierungsanfrage hat eine leere Zusammenfassung zurückgegeben.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Konversation kompaktiert – frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Die Konversation passt nicht mehr in das Kontextfenster des Modells.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Automatische Kompaktierung ist deaktiviert; kürzen oder kompaktieren Sie die Konversation und versuchen Sie es erneut.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Die Konversation wird bereits kompaktiert; senden Sie die Nachricht erneut, sobald die Kompaktierung abgeschlossen ist.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Hinweis:** Die Antwort wurde gekürzt: Das Modell hat die maximale Anzahl an Ausgabetokens erreicht.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Hinweis:** Das Modell hat seinen Zug ohne Antwort beendet.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die die Windows-Sandbox verwendet, ist nur für Windows x86-64 verfügbar</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec) ist nicht installiert; laden Sie sie auf der Llama-Tools-Einstellungsseite herunter</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>die sandbox-exec-Executabler wurde nicht gefunden</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) wurde nicht gefunden; installieren Sie es (z. B. &apos;apt install bubblewrap&apos; oder &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;Befehle in Sandbox ausführen&quot; ist aktiviert, aber %1. Das bash-Tool verweigert die Ausführung von Befehlen, bis die Sandbox verfügbar ist oder die Einstellung deaktiviert wurde.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp-Sandbox</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Probleme mit der Sandbox der llama.cpp-Chat-Tools.</translation>
     </message>
 </context>
 <context>
@@ -2428,17 +2538,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>gelöscht</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Erfolg. Die folgenden Dateien wurden aktualisiert:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Die sandbox-exec-Executabler wurde nicht gefunden; Sandboxing ist auf diesem System nicht verfügbar.</translation>
     </message>
@@ -2448,7 +2558,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) wurde nicht gefunden. Installieren Sie es (z. B. &apos;apt install bubblewrap&apos; oder &apos;dnf install bubblewrap&apos;) oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Ausgabe gekürzt: %1]</translation>
     </message>
@@ -2468,29 +2578,34 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vollständige Ausgabe gespeichert unter: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>führe %1 aus</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Fehler: Der Befehl darf nicht leer sein.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Fehler: Arbeitsverzeichnis existiert nicht: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Fehler: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Fehler: Die Sandbox kann &quot;%1&quot; nicht schreibbar machen: Es handelt sich um (oder es enthält) das Home-Verzeichnis oder eine Dateisystemwurzel. Öffnen Sie ein Projekt, um Befehle in seinem Verzeichnis auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Befehl wurde vom Benutzer gestoppt.</translation>
     </message>
@@ -2506,9 +2621,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>unbekannter Fehler</translation>
@@ -2582,7 +2697,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ersetzt erfolgreich %1 Block(e) in %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Der MCP-Server ist nicht erreichbar.</translation>
@@ -2608,17 +2723,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Der MCP-Server ist nicht verfügbar. Stellen Sie sicher, dass der Server läuft und erreichbar ist, und versuchen Sie es dann erneut.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP-Tool &quot;%1&quot; fehlgeschlagen: Der MCP-Server hat nicht geantwortet (Verbindungsfehler oder Timeout).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>Der MCP-Server wurde neu gestartet; der Aufruf wurde nicht ausgeführt. Bitte versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP-Tool &quot;%1&quot; fehlgeschlagen: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>Der MCP-Server hat für den Tool-Aufruf HTTP %1 zurückgegeben.</translation>
     </message>
@@ -2840,7 +2960,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>Dateien %1 finden</translation>
@@ -2851,7 +2971,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Muster: %1</translation>
     </message>
@@ -2874,13 +2994,13 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fehler: Pfad ist kein Verzeichnis: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Die Suche wurde vom Benutzer gestoppt. Die Ergebnisse sind unvollständig.]</translation>
     </message>
@@ -2932,7 +3052,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Verzeichnis ist leer.</translation>
     </message>
@@ -2947,7 +3067,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Eintragslimit von %1 erreicht. Verwenden Sie limit=%2 für mehr Einträge.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>Das MCP-Tool &quot;%1&quot; ist nicht verfügbar (kein verbundener MCP-Server stellt es bereit).</translation>
     </message>
@@ -3082,7 +3202,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Entpacken von ripgrep fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>Suche nach %1</translation>
@@ -3107,7 +3227,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Fehler: Pfad existiert nicht: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Suche ist nach %1 ms abgelaufen. Die Ergebnisse sind unvollständig; grenzen Sie den Pfad ein oder verfeinern Sie das Muster.]</translation>
     </message>
@@ -3188,9 +3308,29 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Aufgabenliste aktualisiert: %1 von %2 abgeschlossen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Zugriff auf &quot;%1&quot; ist nicht erlaubt: Gerätepfade und administrative Freigaben sind innerhalb der Sandbox nicht zugänglich.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Es ist kein Projekt geöffnet, daher erlaubt die Sandbox Schreibvorgänge nur in temporären Positionen. Öffnen Sie ein Projekt, um an seinen Dateien zu arbeiten.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Die Sandbox erlaubt Schreibvorgänge nur innerhalb des Projektverzeichnisses und in temporären Positionen.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: .git-, .qtcreator- und *.user-Dateien sind innerhalb der Sandbox geschützt.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Credential-Positionen sind innerhalb der Sandbox geschützt.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3222,7 +3362,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (das @anthropic-ai/sandbox-runtime Windows-Sandbox-Backend) wurde im PATH nicht gefunden. %1 LLAMA_SRT_WIN kann auf die Executabler verweisen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Laden Sie es von der Llama.cpp-Chat-Tools-Einstellungsseite herunter (eine festgelegte, prüfsummenverifizierte Microsoft-MXC-Veröffentlichung); LLAMA_WXC_EXEC kann auf eine wxc-exec.exe verweisen. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
@@ -3237,7 +3377,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Das Windows-Sandbox-Backend (wxc-exec) hat den MXC-Container als nicht verfügbar gemeldet (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Die Windows-Sandbox konnte ihren Live-Isolationstest nicht einrichten (temporäres Verzeichnis oder Home-Canary). %1</translation>
     </message>
@@ -3252,7 +3392,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Die Windows-Sandbox-Konfiguration ist zu lang (%1 von %2 Zeichen); die Prozessumgebung ist wahrscheinlich überdimensioniert. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Das Bash unter &quot;%1&quot; ist Teil keiner erkannten Git-for-Windows- oder MSYS2-Installation, daher kann die Windows-Sandbox ihm keinen engen schreibgeschützten Zugriff gewähren. Installieren Sie Git for Windows (https://git-scm.com/download/win) und stellen Sie dessen Bash an erste Stelle im PATH, oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) benötigt Windows 11 24H2 (Build %1) oder neuer; dieses System ist Build %2. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
@@ -3262,12 +3407,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (die Microsoft-MXC-Windows-Sandbox-Laufzeitumgebung) wurde nicht gefunden. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) hat ihren Live-Isolationstest nicht bestanden: Es konnte nicht verifiziert werden, dass ein gesandboxter Befehl isoliert ist. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) verifiziert ihre Isolation zum ersten Mal; führen Sie den Befehl in wenigen Sekunden erneut aus.</translation>
     </message>
@@ -3311,6 +3456,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>Erfolgreich %1 Bytes nach %2 geschrieben.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP-Tool &quot;%1&quot; wurde vom Benutzer gestoppt.</translation>
     </message>
 </context>
 </TS>

@@ -13,7 +13,7 @@
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+149"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Aktiver llama.cpp.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -144,14 +144,14 @@
         <translation>FIM</translation>
     </message>
     <message>
+        <location line="+4"/>
         <location filename="../src/promptssettingswidget.cpp" line="+120"/>
-        <location filename="../src/llamaplugin.cpp" line="+4"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -925,13 +925,13 @@
         <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
     <message>
+        <location line="-32"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
-        <location filename="../src/llamasettings.cpp" line="-32"/>
         <source>Follow-Up Questions</source>
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -1197,7 +1197,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1228,12 +1228,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Arbejdsmappe: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM-model</translation>
     </message>
@@ -1263,7 +1263,7 @@
         <translation>Tænkeniveau</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Søg i chat</translation>
     </message>
@@ -1283,7 +1283,7 @@
         <translation>Send til Llama Chat</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Modelsti: %1</translation>
     </message>
@@ -1313,7 +1313,7 @@
         <translation>Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
@@ -1329,7 +1329,7 @@
         <translation>Rediger meddelelse</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Dette vil slette %1 meddelelser, herunder: %2 brugermeddelelser og %3 assistentsvar ...</translation>
     </message>
@@ -2058,7 +2058,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Vælg et værktøj for at se dets JSON-definition</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>Vælg et værktøj for at se dets definition</translation>
     </message>
@@ -2078,7 +2078,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Download MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
@@ -2194,13 +2194,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vælg en færdighed for at se dens indhold</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
-        <location filename="../src/skillssettingswidget.cpp" line="+13"/>
+        <location line="+13"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
     <message>
-        <location filename="../src/skillssettingswidget.cpp" line="+0"/>
+        <location line="+0"/>
         <source>Skill</source>
         <translation>Færdighed</translation>
     </message>
@@ -2215,13 +2215,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 færdighedsfil(er) blev sprunget over: %2</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
-        <location filename="../src/skillssettingswidget.cpp" line="+32"/>
+        <location line="+32"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Navn: %1</translation>
     </message>
     <message>
-        <location filename="../src/skillssettingswidget.cpp" line="+2"/>
+        <location line="+2"/>
         <source>Description: %1</source>
         <translation>Beskrivelse: %1</translation>
     </message>
@@ -2271,15 +2271,15 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
         <translation>Tilføj…</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
         <translation>Fjern</translation>
     </message>
@@ -2313,13 +2313,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Kompaktering</translation>
     </message>
     <message>
-        <location line="-5"/>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location line="-50"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-50"/>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
@@ -2369,10 +2369,120 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Fejl:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Automatisk kompaktering er deaktiveret.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Samtalen er allerede ved at blive kompakteret.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>Samtalen har ingen beskeder, der skal kompakteres.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Samtalen blev kompakteret for nylig og kan ikke kompakteres yderligere.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Kompakteringsanmodningen fejlede: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Kompakteringsanmodningen returnerede et fejlfornemt svar.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Kompakteringsanmodningen returnerede ingen sammenfatning.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Kompakteringsanmodningen returnerede en tom sammenfatning.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Samtalen passer ikke længere i modellens kontekstvindue.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Automatisk kompaktering er deaktiveret; forkort eller kompakter samtalen og prøv igen.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Samtalen er allerede ved at blive kompakteret; send beskeden igen, når kompakteringen er færdig.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Bemærk:** Svaret blev beskåret: modellen nåede det maksimale antal output-tokens.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Bemærk:** Modellen afsluttede sin runde uden et svar.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>Microsoft MXC-runtime (wxc-exec), som Windows-sandboxen bruger, er kun tilgængelig til Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>Microsoft MXC-runtime (wxc-exec) er ikke installeret; download den på indstillingssiden for Llama-værktøjerne</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>sandbox-exec-eksekverbaren blev ikke fundet</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) blev ikke fundet; installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>&quot;Sandbox-kommandoer&quot; er aktiveret, men %1. Bash-værktøjet refuserer at køre kommandoer, indtil sandboxen er tilgængelig, eller indstillingen er deaktiveret.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp-sandbox</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Problemer med sandboxen for llama.cpp chat-værktøjerne.</translation>
     </message>
 </context>
 <context>
@@ -2429,17 +2539,17 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>slettet</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
     </message>
@@ -2449,7 +2559,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Output beskåret: %1]</translation>
     </message>
@@ -2469,29 +2579,34 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>kører %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Fejl: kommandoen må ikke være tom.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Fejl: arbejdsmappe findes ikke: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Fejl: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Fejl: sandboxen kan ikke gøre &quot;%1&quot; skrivbar: det er (eller indeholder) hjemmemappen eller en filsystemrod. Åbn et projekt for at køre kommandoer i dets mappe.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Kommandoen blev stoppet af brugeren.</translation>
     </message>
@@ -2507,9 +2622,9 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>ukendt fejl</translation>
@@ -2550,13 +2665,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>rediger %1</translation>
     </message>
     <message>
+        <location line="+35"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+35"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+30"/>
+        <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
         <translation>Værktøjsfejl: hver redigering kræver et &quot;oldText&quot; og et &quot;newText&quot;.</translation>
     </message>
@@ -2583,7 +2698,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>%1 blok/blev erstatte(t) i %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Kan ikke nå MCP-serveren.</translation>
@@ -2609,17 +2724,22 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>MCP-serveren er ikke tilgængelig. Tjek, at serveren kører og kan nås, og prøv derefter igen.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP-værktøjet &quot;%1&quot; fejlede: MCP-serveren svarede ikke (forbindelsesfejl eller timeout).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP-serveren genstartede; opkaldet blev ikke udført. Prøv venligst igen.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP-serveren returnerede HTTP %1 for værktøjsopkaldet.</translation>
     </message>
@@ -2841,7 +2961,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>find filer %1</translation>
@@ -2852,7 +2972,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Mønster: %1</translation>
     </message>
@@ -2875,13 +2995,13 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Fejl: stien er ikke en mappe: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
     </message>
@@ -2933,7 +3053,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Mappen er tom.</translation>
     </message>
@@ -2948,7 +3068,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
     </message>
@@ -2983,25 +3103,25 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
-        <location filename="../src/tools/mxc.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/mxc.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+24"/>
+        <location line="+24"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Pakken indeholder ingen wxc-exec.exe-binær.</translation>
     </message>
@@ -3061,19 +3181,19 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Download af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
         <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Verificerer pakkeintegritet ...</translation>
     </message>
     <message>
         <location line="+5"/>
-        <location filename="../src/tools/mxc.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Den downloadede pakke er ikke den, der blev forventet.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
         <translation>Udpakker ripgrep ...</translation>
     </message>
@@ -3083,7 +3203,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Udpakning af ripgrep fejlede: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>søg efter %1</translation>
@@ -3108,7 +3228,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Fejl: stien findes ikke: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
     </message>
@@ -3189,9 +3309,29 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fælles ressourcer kan ikke adgås i sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer. Åbn et projekt for at arbejde med dets filer.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: .git, .qtcreator og *.user-filer er beskyttet i sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger er beskyttet i sandboxen.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3223,7 +3363,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">srt-win (@anthropic-ai/sandbox-runtime Windows-sandbox-backend) blev ikke fundet på PATH. %1 LLAMA_SRT_WIN kan pege på eksekverbaren.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
@@ -3238,7 +3378,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
     </message>
@@ -3253,7 +3393,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash på &quot;%1&quot; er ikke en del af en genkendt installation af Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
@@ -3263,12 +3408,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
     </message>
@@ -3312,6 +3457,11 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>%1 bytes blev skrevet til %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
     </message>
 </context>
 </TS>

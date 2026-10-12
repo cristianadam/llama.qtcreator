@@ -13,7 +13,7 @@
         <translation>请求 llama.cpp 建议</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+149"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>在当前编辑器光标位置请求 llama.cpp 的建议或补全。</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>启用 llama.cpp。</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
@@ -154,8 +154,8 @@
         <translation type="vanished">[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -1201,7 +1201,7 @@
         <translation>提示词</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
@@ -1232,12 +1232,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>工作目录：%1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>LLM 模型</translation>
     </message>
@@ -1267,7 +1267,7 @@
         <translation>思考级别</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>聊天中搜索</translation>
     </message>
@@ -1287,7 +1287,7 @@
         <translation>发送到 Llama 聊天</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>模型路径：%1</translation>
     </message>
@@ -1317,7 +1317,7 @@
         <translation>后续问题：</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考级别：%1（适用于新消息）</translation>
     </message>
@@ -1333,7 +1333,7 @@
         <translation>编辑消息</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>这将删除 %1 条消息，包括：%2 条用户消息和 %3 条助手回复……</translation>
     </message>
@@ -2083,7 +2083,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">选择一个工具以查看其 JSON 定义</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>选择一个工具以查看其定义</translation>
     </message>
@@ -2103,7 +2103,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下载 MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
@@ -2220,7 +2220,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2241,7 +2241,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>名称：%1</translation>
     </message>
@@ -2343,7 +2343,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>压缩</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>标题</translation>
@@ -2394,10 +2394,120 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>名称“%1”与 %2 冲突——保留第一个</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>错误：</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>自动压缩已禁用。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>对话正在压缩中。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>对话中没有可压缩的消息。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>对话最近已被压缩，无法进一步压缩。</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>压缩请求失败：%1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>压缩请求返回了格式错误的回复。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>压缩请求没有返回摘要。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>压缩请求返回了空摘要。</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>对话已压缩 – 较早的消息已被总结以适配上下文窗口。</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>对话已超出模型的上下文窗口。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>自动压缩已禁用；请缩短或压缩对话后重试。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>对话正在压缩中；压缩完成后再重新发送该消息。</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**注意：** 回复被截断：模型已达到最大输出令牌数。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**注意：** 模型未作答便结束了本轮。</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>Windows 沙箱所使用的 Microsoft MXC 运行时（wxc-exec）仅适用于 Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>未安装 Microsoft MXC 运行时（wxc-exec）；请在 Llama.cpp 聊天工具设置页面下载</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>未找到 sandbox-exec 可执行文件</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>未找到 bubblewrap（bwrap）；请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;）</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>已启用“沙箱化命令”，但 %1。在沙箱可用或禁用该设置之前，bash 工具将拒绝运行命令。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Llama.cpp 沙箱</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>llama.cpp 聊天工具沙箱的问题。</translation>
     </message>
 </context>
 <context>
@@ -2454,17 +2564,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>已删除</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>成功。已更新以下文件：</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>未找到 sandbox-exec 可执行文件；本系统无法使用沙箱。</translation>
     </message>
@@ -2474,7 +2584,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>未找到 bubblewrap（bwrap）。请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[输出已截断：%1]</translation>
     </message>
@@ -2494,29 +2604,34 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>完整输出已保存到：%1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>正在运行 %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>错误：命令不能为空。</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>错误：工作目录不存在：%1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>错误：%1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>错误：沙箱无法使“%1”可写：它是（或包含）主目录或文件系统根目录。请打开一个项目，在其目录中运行命令。</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>命令已被用户停止。</translation>
     </message>
@@ -2532,9 +2647,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>未知错误</translation>
@@ -2608,7 +2723,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>已在 %2 中成功替换 %1 个块。</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>无法连接到 MCP 服务器。</translation>
@@ -2634,17 +2749,22 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP 服务器不可用。请检查服务器是否正在运行且可访问，然后重试。</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP 工具“%1”失败：MCP 服务器未响应（连接错误或超时）。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP 服务器已重启；该调用未被执行。请重试。</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP 工具“%1”失败：%2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP 服务器对工具调用返回了 HTTP %1。</translation>
     </message>
@@ -2866,7 +2986,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>查找文件 %1</translation>
@@ -2877,7 +2997,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>模式：%1</translation>
     </message>
@@ -2900,13 +3020,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>错误：路径不是目录：%1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[搜索已被用户停止。结果不完整。]</translation>
     </message>
@@ -2958,7 +3078,7 @@ You can type any other prompt – they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>目录为空。</translation>
     </message>
@@ -2973,7 +3093,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[已达到 %1 个条目的限制。使用 limit=%2 获取更多条目。]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP 工具“%1”不可用（没有已连接的 MCP 服务器提供它）。</translation>
     </message>
@@ -3108,7 +3228,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>解压 ripgrep 失败：%1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>搜索 %1</translation>
@@ -3133,7 +3253,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>错误：路径不存在：%1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[搜索在 %1 毫秒后超时。结果不完整；请缩小路径范围或优化模式。]</translation>
     </message>
@@ -3214,9 +3334,29 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>任务列表已更新：%2 个中已完成 %1 个。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>不允许访问“%1”：设备路径和管理共享在沙箱内不可访问。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置内写入。请打开一个项目以操作其文件。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>不允许写入“%1”：沙箱只允许在项目目录和临时位置内写入。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>不允许写入“%1”：.git、.qtcreator 和 *.user 文件在沙箱内受保护。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>不允许写入“%1”：凭据位置在沙箱内受保护。</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3248,7 +3388,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
@@ -3263,7 +3403,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows 沙箱无法设置其实时隔离探测（临时目录或主目录金丝雀）。%1</translation>
     </message>
@@ -3278,7 +3418,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Windows 沙箱配置过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>“%1” 处的 bash 不属于受认可的 Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个狭窄的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 放在 PATH 最前，或在 Llama 设置中取消勾选&apos;沙箱化命令&apos;。</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（内部版本 %1）或更高版本；本系统为内部版本 %2。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
@@ -3288,12 +3433,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>未找到 wxc-exec.exe（Microsoft MXC Windows 沙箱运行时）。%1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows 沙箱（Microsoft MXC）正在首次验证其隔离状态；请在几秒后重新运行命令。</translation>
     </message>
@@ -3337,6 +3482,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>已成功写入 %1 字节到 %2。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP 工具“%1”已被用户停止。</translation>
     </message>
 </context>
 </TS>

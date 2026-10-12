@@ -13,7 +13,7 @@
         <translation>Запитати пропозицію у llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+148"/>
+        <location filename="../src/llamaplugin.cpp" line="+149"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Запитати пропозицію від llama.cpp на поточній позиції курсора.</translation>
     </message>
@@ -93,7 +93,7 @@
         <translation>Увімкнути llama.cpp.</translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+388"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Помилка отримання завершення FIM з %1: %2</translation>
     </message>
@@ -150,8 +150,8 @@
         <translation>Чат</translation>
     </message>
     <message>
-        <location line="-1241"/>
-        <location filename="../src/llamaprojectpanel.cpp" line="+63"/>
+        <location line="-1244"/>
+        <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
@@ -1197,7 +1197,7 @@
         <translation>Запити</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+92"/>
+        <location filename="../src/llamachateditor.cpp" line="+94"/>
         <source>Default</source>
         <translation>За замовчуванням</translation>
     </message>
@@ -1228,12 +1228,12 @@
     </message>
     <message>
         <location line="+57"/>
-        <location line="+357"/>
+        <location line="+386"/>
         <source>Working directory: %1</source>
         <translation>Робочий каталог: %1</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-371"/>
         <source>LLM model</source>
         <translation>Модель LLM</translation>
     </message>
@@ -1263,7 +1263,7 @@
         <translation>Рівень мислення</translation>
     </message>
     <message>
-        <location line="+194"/>
+        <location line="+218"/>
         <source>Search in chat</source>
         <translation>Пошук у чаті</translation>
     </message>
@@ -1283,7 +1283,7 @@
         <translation>Надіслати в Llama Chat</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+55"/>
         <source>Model Path: %1</source>
         <translation>Шлях до моделі: %1</translation>
     </message>
@@ -1313,7 +1313,7 @@
         <translation>Запитання продовження:</translation>
     </message>
     <message>
-        <location line="+482"/>
+        <location line="+486"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Рівень мислення: %1 (стосується нових повідомлень)</translation>
     </message>
@@ -1329,7 +1329,7 @@
         <translation>Редагувати повідомлення</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+63"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Буде видалено %1 повідомлень, зокрема: %2 повідомлення користувача та %3 відповіді асистента ...</translation>
     </message>
@@ -2039,7 +2039,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Оберіть інструмент, щоб переглянути його визначення у форматі JSON</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+76"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
         <source>Select a tool to view its definition</source>
         <translation>Оберіть інструмент, щоб переглянути його визначення</translation>
     </message>
@@ -2059,7 +2059,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Завантажити MXC %1</translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+71"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
@@ -2176,7 +2176,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-865"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
@@ -2197,7 +2197,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
         <source>Name: %1</source>
         <translation>Назва: %1</translation>
     </message>
@@ -2299,7 +2299,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Стиснення</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1286"/>
+        <location filename="../src/llamachateditor.cpp" line="-1322"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Назва</translation>
@@ -2350,10 +2350,120 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1292"/>
+        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <source>Error:</source>
+        <translation>Помилка:</translation>
+    </message>
+    <message>
+        <location line="+351"/>
+        <source>Automatic compaction is disabled.</source>
+        <translation>Автостиснення вимкнено.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The conversation is already being compacted.</source>
+        <translation>Розмову вже стискають.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to compact.</source>
+        <translation>У розмові немає повідомлень для стиснення.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was compacted recently and cannot be compacted further.</source>
+        <translation>Розмову щойно стиснуто, її не можна стиснути ще.</translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>The compaction request failed: %1</source>
+        <translation>Запит на стиснення не вдалося виконати: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The compaction request returned a malformed reply.</source>
+        <translation>Запит на стиснення повернув некоректну відповідь.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The compaction request returned no summary.</source>
+        <translation>Запит на стиснення не повернув підсумку.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>The compaction request returned an empty summary.</source>
+        <translation>Запит на стиснення повернув порожній підсумок.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
         <location line="+31"/>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation>Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
+    </message>
+    <message>
+        <location line="+795"/>
+        <source>The conversation no longer fits the model&apos;s context window.</source>
+        <translation>Розмова більше не вміщується в контекстне вікно моделі.</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
+        <translation>Автостиснення вимкнено; скоротіть або стисніть розмову і повторіть спробу.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation>Розмову вже стискають; надішліть повідомлення ще раз, коли стиснення завершиться.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
+        <translation>**Примітка:** Відповідь обрізано: модель досягла максимальної кількості токенів виводу.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>**Note:** The model ended its turn without an answer.</source>
+        <translation>**Примітка:** Модель завершила свій хід без відповіді.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
+        <translation>середовище виконання Microsoft MXC (wxc-exec), яке використовує пісочниця Windows, доступне лише для Windows x86-64</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation>середовище виконання Microsoft MXC (wxc-exec) не встановлено; завантажте його на сторінці налаштувань інструментів Llama</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>the sandbox-exec executable was not found</source>
+        <translation>виконуваний файл sandbox-exec не знайдено</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>bubblewrap (bwrap) was not found; install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;)</source>
+        <translation>bubblewrap (bwrap) не знайдено; встановіть його (наприклад, &apos;apt install bubblewrap&apos; або &apos;dnf install bubblewrap&apos;)</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>&quot;Sandbox commands&quot; is enabled, but %1. The bash tool refuses to run commands until the sandbox is available or the setting is disabled.</source>
+        <translation>Параметр «Команди в пісочниці» увімкнено, але %1. Інструмент bash відмовляється виконувати команди, доки пісочниця буде доступна або параметр не буде вимкнено.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>[llama.cpp] %1</source>
+        <translation>[llama.cpp] %1</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Llama.cpp Sandbox</source>
+        <translation>Пісочниця Llama.cpp</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Issues with the sandbox of the llama.cpp chat tools.</source>
+        <translation>Проблеми з пісочницею інструментів чату llama.cpp.</translation>
     </message>
 </context>
 <context>
@@ -2410,17 +2520,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>видалено</translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+201"/>
         <source>Success. Updated the following files:</source>
         <translation>Успішно. Оновлено такі файли:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+104"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Оболонку bash не знайдено. Встановіть Git for Windows (https://git-scm.com/download/win) або додайте bash до PATH.</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+136"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Виконуваний файл sandbox-exec не знайдено; пісочниця недоступна на цій системі.</translation>
     </message>
@@ -2430,7 +2540,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>bubblewrap (bwrap) не знайдено. Встановіть його (наприклад, &apos;apt install bubblewrap&apos; або &apos;dnf install bubblewrap&apos;) або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+204"/>
         <source>[Output truncated: %1]</source>
         <translation>[Вивід обрізано: %1]</translation>
     </message>
@@ -2450,29 +2560,34 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Повний вивід збережено у: %1</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+116"/>
         <source>running %1</source>
         <translation>виконується %1</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
         <translation>Помилка: команда не повинна бути порожньою.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Помилка: робочий каталог не існує: %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+9"/>
-        <location line="+17"/>
+        <location line="+26"/>
+        <location line="+29"/>
         <source>Error: %1</source>
         <translation>Помилка: %1</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Помилка: пісочниця не може зробити &quot;%1&quot; доступним для запису: це домашній каталог або кореневий каталог файлової системи, або їх містить. Відкрийте проєкт, щоб виконувати команди в його каталозі.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
         <translation>Команду зупинено користувачем.</translation>
     </message>
@@ -2488,9 +2603,9 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+288"/>
+        <location filename="../src/tools/find_tool.cpp" line="+308"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+362"/>
+        <location filename="../src/tools/search_tool.cpp" line="+382"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>невідома помилка</translation>
@@ -2564,7 +2679,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Успішно замінено %1 блок(и) в %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+83"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
         <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
         <translation>Не вдається встановити з&apos;єднання з MCP-сервером.</translation>
@@ -2590,17 +2705,22 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MCP-сервер недоступний. Переконайтеся, що сервер запущено і до нього можна встановити з&apos;єднання, а потім повторіть спробу.</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP-інструмент &quot;%1&quot; не вдалося виконати: MCP-сервер не відповів (помилка з&apos;єднання або час очікування вичерпано).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
         <translation>MCP-сервер перезапущено; виклик не виконано. Повторіть спробу.</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
         <translation>MCP-інструмент &quot;%1&quot; не вдалося виконати: %2</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP-сервер повернув HTTP %1 для виклику інструмента.</translation>
     </message>
@@ -2822,7 +2942,7 @@ You can type any other prompt – they are remembered for next time.</source>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-166"/>
+        <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>знайти файли %1</translation>
@@ -2833,7 +2953,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-161"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
         <translation>Взірець: %1</translation>
     </message>
@@ -2856,13 +2976,13 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+129"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Помилка: шлях не є каталогом: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
-        <location filename="../src/tools/search_tool.cpp" line="+112"/>
+        <location line="+108"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Пошук зупинено користувачем. Результати неповні.]</translation>
     </message>
@@ -2914,7 +3034,7 @@ You can type any other prompt – they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+60"/>
         <source>Directory is empty.</source>
         <translation>Каталог порожній.</translation>
     </message>
@@ -2929,7 +3049,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>[Досягнуто ліміту записів %1. Скористайтеся limit=%2, щоб отримати більше записів.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+119"/>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
         <translation>MCP-інструмент &quot;%1&quot; недоступний (жоден підключений MCP-сервер його не надає).</translation>
     </message>
@@ -3064,7 +3184,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Не вдалося розпакувати ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-174"/>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
         <location line="+8"/>
         <source>search for %1</source>
         <translation>пошук: %1</translation>
@@ -3089,7 +3209,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Помилка: шлях не існує: %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
         <translation>[Час пошуку перевищено (%1 мс). Результати неповні; звузьте шлях або уточніть взірець.]</translation>
     </message>
@@ -3170,9 +3290,29 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Список завдань оновлено: завершено %1 з %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+67"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Доступ до &quot;%1&quot; не дозволено: шляхи до пристроїв та адміністративні розподіли недоступні в пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation>Запис у &quot;%1&quot; не дозволено: жоден проєкт не відкрито, тому пісочниця дозволяє запис лише в тимчасові розташування. Відкрийте проєкт, щоб працювати з його файлами.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
         <translation>Запис у &quot;%1&quot; не дозволено: пісочниця дозволяє запис лише в каталог проєкту та тимчасові розташування.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Запис у &quot;%1&quot; не дозволено: файли .git, .qtcreator і *.user захищені в пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Запис у &quot;%1&quot; не дозволено: розташування облікових даних захищені в пісочниці.</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -3204,7 +3344,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">srt-win (бекенд пісочниці Windows @anthropic-ai/sandbox-runtime) не знайдено в PATH. %1 LLAMA_SRT_WIN може вказувати на виконуваний файл.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+46"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Завантажте його зі сторінки налаштувань інструментів Llama.cpp Chat (закріплений випуск Microsoft MXC з перевіреною контрольною сумою); LLAMA_WXC_EXEC може вказувати на wxc-exec.exe. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
@@ -3219,7 +3359,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Бекенд пісочниці Windows (wxc-exec) повідомив, що контейнер MXC недоступний (вихід %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+270"/>
+        <location line="+297"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Пісочниця Windows не змогла налаштувати пробу ізоляції в реальному часі (тимчасовий каталог або canary-файл у домашньому каталозі). %1</translation>
     </message>
@@ -3234,7 +3374,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Конфігурація пісочниці Windows надто довга (%1 з %2 символів); середовище процесу, ймовірно, надто велике. Зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location line="+106"/>
+        <location line="+63"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>bash за адресою &quot;%1&quot; не належить до розпізнаних установок Git for Windows або MSYS2, тому пісочниця Windows не може надати йому вузьке розташування лише для читання. Встановіть Git for Windows (https://git-scm.com/download/win) і помістіть його bash першим у PATH, або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama.</translation>
+    </message>
+    <message>
+        <location line="+93"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Пісочниці Windows (Microsoft MXC) потрібна Windows 11 24H2 (збірка %1) або новіша; ця система — збірка %2. Зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
@@ -3244,12 +3389,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>wxc-exec.exe (середовище виконання пісочниці Windows Microsoft MXC) не знайдено. %1</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-141"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Пісочниця Windows (Microsoft MXC) не пройшла перевірку ізоляції: не вдалося перевірити, що команда в пісочниці ізольована. %1</translation>
     </message>
     <message>
-        <location line="+104"/>
+        <location line="+168"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Пісочниця Windows (Microsoft MXC) вперше перевіряє свою ізоляцію; повторіть команду через кілька секунд.</translation>
     </message>
@@ -3293,6 +3438,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>Успішно записано %1 байтів у %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP-інструмент &quot;%1&quot; зупинено користувачем.</translation>
     </message>
 </context>
 </TS>
