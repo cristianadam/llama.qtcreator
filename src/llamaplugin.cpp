@@ -208,6 +208,13 @@ void LlamaPlugin::initialize()
         Tr::tr("Query the llama.cpp servers and report which models are loaded."));
     connect(&m_statusAction, &QAction::triggered, this, [this] { checkServerStatus(); });
 
+    Core::Command *preferencesCmd
+        = ActionManager::registerAction(&m_preferencesAction, Constants::LLAMACPP_SHOW_PREFERENCES);
+    m_preferencesAction.setToolTip(Tr::tr("Open the llama.cpp settings page."));
+    connect(&m_preferencesAction, &QAction::triggered, this, [] {
+        ICore::showSettings(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
+    });
+
     auto menuContainer = ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID);
     menuContainer->addAction(newConversationCmd);
     menuContainer->addSeparator();
@@ -215,6 +222,8 @@ void LlamaPlugin::initialize()
     menuContainer->addAction(toggleCmd);
     menuContainer->addAction(toggleAutoFimCmd);
     menuContainer->addAction(statusCmd);
+    menuContainer->addSeparator();
+    menuContainer->addAction(preferencesCmd);
 
     auto updateActions = [this] {
         const bool enabled = settings().enableLlamaCpp();
@@ -242,6 +251,8 @@ void LlamaPlugin::initialize()
     statusMenu->addAction(&m_toggleAction);
     statusMenu->addAction(&m_toogleAutoFimAction);
     statusMenu->addAction(&m_statusAction);
+    statusMenu->addSeparator();
+    statusMenu->addAction(&m_preferencesAction);
     toggleButton->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(toggleButton, &QToolButton::customContextMenuRequested,
             toggleButton, [statusMenu](const QPoint &) { statusMenu->exec(QCursor::pos()); });

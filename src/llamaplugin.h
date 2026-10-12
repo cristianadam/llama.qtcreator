@@ -152,6 +152,7 @@ private:
     QAction m_nextCompletionAction{Tr::tr("Next Completion")};
     QAction m_prevCompletionAction{Tr::tr("Previous Completion")};
     QAction m_statusAction{Tr::tr("Show Server Status")};
+    QAction m_preferencesAction{Tr::tr("Preferences")};
 };
 
 } // namespace LlamaCpp

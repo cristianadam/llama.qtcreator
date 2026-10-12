@@ -15,6 +15,7 @@ namespace LlamaCpp::Constants {
     const char LLAMACPP_NEXT_COMPLETION[] = "LlamaCpp.NextCompletion";
     const char LLAMACPP_PREV_COMPLETION[] = "LlamaCpp.PrevCompletion";
     const char LLAMACPP_SHOW_SERVER_STATUS[] = "LlamaCpp.ShowServerStatus";
+    const char LLAMACPP_SHOW_PREFERENCES[] = "LlamaCpp.ShowPreferences";
 
     const char LLAMACPP_MENU_ID[] = "LlamaCpp.Menu";
     const char LLAMACPP_NEW_CONVERSATION[] = "LlamaCpp.NewConversation";
