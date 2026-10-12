@@ -21,6 +21,22 @@ struct WindowsSandboxSpec
     QString error; // actionable, non-empty on failure
 };
 
+/// Result of locating the installation root of the sandboxed shell.
+struct ShellInstallRoot
+{
+    QString root; // the directory granted read-only; empty when \a error is set
+    QString error; // actionable, non-empty when the shell is not recognized
+};
+
+/// The installation root of a Git for Windows or MSYS2 bash (\a shellPath
+/// is <root>\usr\bin\bash.exe or <root>\bin\bash.exe). On Windows the root
+/// must also look like such an installation (usr\bin\bash.exe plus
+/// git-cmd.exe, cmd\git.exe, msys2.exe or msys2_shell.cmd) and must not be
+/// a drive root, the Windows directory or cover the user profile; anything
+/// else fails closed. Elsewhere only the path layout is checked (so the
+/// wrapper construction stays testable).
+ShellInstallRoot windowsShellInstallRoot(const QString &shellPath);
+
 /// Quotes a single argument for a Windows command line (the MSVCRT
 /// CreateProcessW rules): an argument with whitespace or quotes is wrapped
 /// in quotes, a run of backslashes before a quote (or the end of the
@@ -34,7 +50,8 @@ QString quoteWindowsArgument(const QString &argument);
 /// shell's own tree (\a shellPath, e.g. Git Bash) and the Windows system
 /// directory are readable, nothing else exists in the container, and there
 /// is no network access. \a env is the environment the sandboxed command
-/// gets (the container starts with no host environment); \a timeoutMs is the
+/// gets (the container starts with no host environment; credential
+/// variables are dropped, see withoutSecretVariables()); \a timeoutMs is the
 /// container's backstop timeout for the command.
 ///
 /// Portable on purpose (no Win32 calls; all the security work happens inside

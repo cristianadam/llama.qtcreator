@@ -3,6 +3,8 @@
 #include "mcpbridge.h"
 #include "tool.h"
 
+#include <memory>
+
 namespace LlamaCpp::Tools {
 
 /*!
@@ -28,9 +30,19 @@ public:
 
     void run(const QJsonObject &arguments,
              std::function<void(const QString &output, bool ok)> done) const override;
+    void abort() override;
 
 private:
+    //! State of the in-flight call, shared with its done callback so the
+    //! callback never touches a destroyed McpTool.
+    struct CallState
+    {
+        McpBridge::ToolCallHandle handle;
+        bool finished = false; // done was invoked
+    };
+
     QString m_name;
+    mutable std::shared_ptr<CallState> m_call; // null before run()
 };
 
 } // namespace LlamaCpp::Tools

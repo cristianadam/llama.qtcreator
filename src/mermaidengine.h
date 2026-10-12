@@ -4,6 +4,8 @@
 #include <QByteArray>
 #include <QHash>
 #include <QMutex>
+#include <QObject>
+#include <QPointer>
 #include <QSemaphore>
 #include <QString>
 #include <QWaitCondition>
@@ -55,11 +57,10 @@ public:
     // never inline) with the resulting SVG, or with an empty QByteArray when
     // the diagram is invalid or the render times out. A cached result is
     // delivered immediately (still queued, so the callback can never reenter
-    // a document edit in flight). \a context must live on a thread with a
-    // running event loop; if it is destroyed before the render finishes the
-    // queued invocation is simply dropped (callers should treat a missing
-    // callback as "the document moved on", as
-    // MarkdownRenderer::onMermaidRendered does).
+    // a document edit in flight). \a context must live on the GUI thread; if
+    // it is destroyed before the result arrives the callback is simply not
+    // invoked (callers should treat a missing callback as "the document moved
+    // on", as MarkdownRenderer::onMermaidRendered does).
     void renderAsync(const QString &source, const QString &theme, QObject *context,
                      const std::function<void(const QByteArray &svg)> &callback);
 
@@ -91,9 +92,13 @@ private:
         QByteArray result;
         QSemaphore done;      // released by the worker once result is filled
         QSemaphore consumed;  // released by the reader (skipped on timeout)
-        // Async jobs: the worker invokes the callback on the context's thread
-        // (done/consumed are unused for those).
-        QObject *context = nullptr;
+        // Async jobs: the worker posts the callback to the application object
+        // and it only runs if the context is still alive by then
+        // (done/consumed are unused for those). The guard is set and checked
+        // on the GUI thread only: the worker never dereferences it, since
+        // that would race with the context's destruction.
+        bool async = false;
+        QPointer<QObject> context;
         std::function<void(const QByteArray &svg)> callback;
     };
 

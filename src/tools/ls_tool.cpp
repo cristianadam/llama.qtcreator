@@ -3,6 +3,7 @@
 #include "llamatr.h"
 #include "tool_utils.h"
 
+#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 #include <QDir>
@@ -142,14 +143,21 @@ void LsTool::run(const QJsonObject &args,
                   return a.compare(b, Qt::CaseInsensitive) < 0;
               });
 
+    // The credential locations are not listed when the sandbox is enabled
+    // (e.g. .ssh when listing the home directory).
+    const bool sandboxed = sandboxEnabled(ProjectExplorer::ProjectManager::startupProject());
+    const QStringList secretSpellings = sandboxed ? secretPathSpellings() : QStringList();
+
     QStringList lines;
     bool limitReached = false;
     for (const QString &entry : sorted) {
+        const QFileInfo info(dirString, entry);
+        if (sandboxed && isSecretPath(info.filePath(), secretSpellings))
+            continue;
         if (lines.size() >= limit) {
             limitReached = true;
             break;
         }
-        const QFileInfo info(dirString, entry);
         lines << (info.isDir() ? entry + QStringLiteral("/") : entry);
     }
 

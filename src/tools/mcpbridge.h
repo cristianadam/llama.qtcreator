@@ -7,6 +7,7 @@
 #include "tool.h"
 
 #include <QPair>
+#include <QPointer>
 #include <QUrl>
 #include <QVector>
 #include <memory>
@@ -62,10 +63,23 @@ public:
     QString serverForTool(const QString &name) const;
     Tools::McpToolInfo toolInfo(const QString &name) const;
 
-    /*! Forwards a tool call to the server that serves it. */
-    void callTool(const QString &name,
-                  const QJsonObject &arguments,
-                  std::function<void(const QString &output, bool ok)> callback);
+    //! Identifies an in-flight tool call, for cancelToolCall().
+    struct ToolCallHandle
+    {
+        QPointer<Tools::McpClient> client; // null once the client is gone
+        quint32 requestId = 0;             // 0: no call in flight
+    };
+
+    /*! Forwards a tool call to the server that serves it. The returned
+        handle is empty when \a callback was already invoked synchronously
+        (no server serves the tool, or it is unavailable). */
+    ToolCallHandle callTool(const QString &name,
+                            const QJsonObject &arguments,
+                            std::function<void(const QString &output, bool ok)> callback);
+
+    /*! Aborts the call identified by \a handle; its callback is invoked
+        with \a reason and ok=false unless it already finished. */
+    static void cancelToolCall(const ToolCallHandle &handle, const QString &reason);
 
     /*! All servers (builtin first, then the configured ones in stored
         order) with their current connection state. */

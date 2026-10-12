@@ -1,5 +1,6 @@
 #include "mermaidengine.h"
 
+#include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QElapsedTimer>
 #include <QFile>
@@ -981,6 +982,10 @@ void MermaidEngine::renderAsync(const QString &source, const QString &theme,
                                 QObject *context,
                                 const std::function<void(const QByteArray &svg)> &callback)
 {
+    // The worker delivers results via the application object (see
+    // workerMain), so the context must share its thread.
+    Q_ASSERT(context && context->thread() == QCoreApplication::instance()->thread());
+
     const QByteArray keySource = source.toUtf8();
     const QByteArray cacheInput = keySource + '\0' + theme.toUtf8();
     const QString cacheKey = QString::fromLatin1(
@@ -1001,6 +1006,7 @@ void MermaidEngine::renderAsync(const QString &source, const QString &theme,
     RenderJob *job = new RenderJob;
     job->source = source;
     job->theme = theme;
+    job->async = true;
     job->context = context;
     job->callback = callback;
     m_jobs.push(job);
@@ -1029,10 +1035,10 @@ void MermaidEngine::workerMain()
             continue;
 
         job->result = ready ? workerRender(job->source, job->theme) : QByteArray();
-        if (job->context) {
-            // Async job: cache the result and deliver it on the context's
-            // thread (queued, so the callback never runs while the worker is
-            // holding this job).
+        if (job->async) {
+            // Async job: cache the result and deliver it on the GUI thread
+            // (queued, so the callback never runs while the worker is holding
+            // this job).
             if (!job->result.isEmpty()) {
                 QMutexLocker locker(&m_mutex);
                 const QByteArray cacheInput = job->source.toUtf8() + '\0'
@@ -1045,12 +1051,21 @@ void MermaidEngine::workerMain()
                     m_cache.clear();
                 m_cache.insert(cacheKey, job->result);
             }
-            QMetaObject::invokeMethod(job->context,
-                                      [cb = std::move(job->callback),
-                                       svg = std::move(job->result)]() mutable {
-                                          cb(svg);
-                                      },
-                                      Qt::QueuedConnection);
+            // Post to the application object rather than to the context: the
+            // context may be destroyed on the GUI thread at any time while
+            // this thread renders, so it must not be touched here. The guard
+            // is only checked inside the lambda, which runs on the GUI thread
+            // (where the context is destroyed), so the check cannot race.
+            if (QObject *app = QCoreApplication::instance()) {
+                QMetaObject::invokeMethod(app,
+                                          [guard = std::move(job->context),
+                                           cb = std::move(job->callback),
+                                           svg = std::move(job->result)]() mutable {
+                                              if (guard)
+                                                  cb(svg);
+                                          },
+                                          Qt::QueuedConnection);
+            }
         } else {
             job->done.release();
             // Hand the job back to the reader; it may have timed out and given

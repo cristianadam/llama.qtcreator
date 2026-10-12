@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QTimer>
 
+#include <algorithm>
 #include <optional>
 
 #include <coreplugin/documentmanager.h>
@@ -792,38 +793,188 @@ static bool isContextOverflowError(const QString &msg)
             || lower.contains(QLatin1String("tokens"));
 }
 
+// The error message of a JSON error object: {"error": {"message": ...}},
+// {"error": "..."} or a bare {"message": ...}.
+static QString errorMessageFromJson(const QJsonObject &obj)
+{
+    const QJsonValue err = obj.value(QStringLiteral("error"));
+    if (err.isString())
+        return err.toString();
+    const QJsonObject errObj = err.isObject() ? err.toObject() : obj;
+    QString msg = errObj.value(QStringLiteral("message")).toString();
+    if (msg.isEmpty())
+        msg = errObj.value(QStringLiteral("type")).toString();
+    return msg;
+}
+
+static bool parseJsonObject(const QByteArray &text, QJsonObject *obj)
+{
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(text, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject())
+        return false;
+    *obj = doc.object();
+    return true;
+}
+
+// Dispatches one complete SSE event (the text between two blank lines):
+// "data:" lines (with or without the space, possibly several) form the
+// payload, ":" lines are comments / keep-alives.  An "error:" field or an
+// "event: error" event is reported as an {"error": ...} chunk (or through
+// \a onError when it is not JSON).  A block without any SSE field is a raw
+// response body – the JSON error object of an HTTP 4xx/5xx reply – and is
+// handed over as a chunk as well.  A payload that does not parse is logged
+// and skipped; it never ends the stream.
+static void dispatchSSEEvent(const QByteArray &event,
+                             const std::function<void(const QJsonObject &)> &onChunk,
+                             const std::function<void(const QString &)> &onError)
+{
+    QByteArray data;
+    QByteArray errorData;
+    QByteArray eventType;
+    bool haveData = false;
+    bool haveField = false;
+    for (const QByteArray &line : event.split('\n')) {
+        if (line.isEmpty())
+            continue;
+        if (line.startsWith(':')) {
+            haveField = true; // comment / keep-alive
+            continue;
+        }
+        const int colon = line.indexOf(':');
+        const QByteArray field = colon < 0 ? line : line.left(colon);
+        QByteArray value = colon < 0 ? QByteArray() : line.mid(colon + 1);
+        if (value.startsWith(' '))
+            value.remove(0, 1);
+        if (field == "data") {
+            if (haveData)
+                data += '\n';
+            data += value;
+            haveData = true;
+            haveField = true;
+        } else if (field == "error") {
+            if (!errorData.isEmpty())
+                errorData += '\n';
+            errorData += value;
+            haveField = true;
+        } else if (field == "event") {
+            eventType = value.trimmed();
+            haveField = true;
+        } else if (field == "id" || field == "retry") {
+            haveField = true;
+        }
+    }
+
+    if (!haveField) {
+        const QByteArray raw = event.trimmed();
+        if (raw.isEmpty())
+            return;
+        QJsonObject obj;
+        if (parseJsonObject(raw, &obj))
+            onChunk(obj);
+        else
+            onError(QString::fromUtf8(raw.left(500)));
+        return;
+    }
+
+    if (eventType == "error" && haveData) {
+        errorData = data;
+        data.clear();
+    }
+
+    if (!errorData.trimmed().isEmpty()) {
+        QJsonObject obj;
+        if (parseJsonObject(errorData, &obj))
+            onChunk(obj.contains(QStringLiteral("error"))
+                        ? obj
+                        : QJsonObject{{QStringLiteral("error"), obj}});
+        else
+            onError(QString::fromUtf8(errorData.trimmed().left(500)));
+    }
+
+    data = data.trimmed();
+    if (data.isEmpty() || data == "[DONE]")
+        return;
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        qCWarning(llamaChatNetwork).noquote()
+            << "Skipping malformed SSE event:" << err.errorString() << data.left(200);
+        return;
+    }
+    onChunk(doc.object());
+}
+
+// Must be called before any other finished() handler is connected to
+// \a reply: the event left in the buffer when the reply ends is flushed by
+// a finished() connection, which has to run before the handler that
+// consumes the stream's result.
 static void readSSEStream(QNetworkReply *reply,
                           std::function<void(const QJsonObject &)> onChunk,
                           std::function<void(const QString &)> onError)
 {
-    QObject::connect(reply, &QNetworkReply::readyRead, [reply, onChunk, onError]() {
-        QByteArray buffer = reply->readAll();
+    // Persistent per-reply buffer: a read can end in the middle of an
+    // event, whose remainder arrives with the next read.
+    auto buffer = std::make_shared<QByteArray>();
 
-        qCDebug(llamaChatNetwork).noquote() << "readSSEStream:" << buffer;
-
-        // split on \n\n (SSE format)
+    auto drain = [buffer, onChunk, onError](bool flush) {
+        // A "\r" at the end of a read stays in the buffer until its "\n"
+        // arrives, so normalizing the whole buffer every time is enough.
+        buffer->replace("\r\n", "\n");
         while (true) {
-            int pos = buffer.indexOf("\n\n");
+            const int pos = buffer->indexOf("\n\n");
             if (pos < 0)
                 break;
-            QByteArray line = buffer.left(pos);
-            buffer.remove(0, pos + 2);
-
-            // parse the data line
-            if (line.startsWith("data: "))
-                line = line.mid(6);
-            if (line.isEmpty() || line == "[DONE]")
-                continue;
-
-            QJsonParseError err;
-            QJsonDocument doc = QJsonDocument::fromJson(line, &err);
-            if (err.error != QJsonParseError::NoError) {
-                onError(err.errorString());
-                return;
-            }
-            onChunk(doc.object());
+            const QByteArray event = buffer->left(pos);
+            buffer->remove(0, pos + 2);
+            dispatchSSEEvent(event, onChunk, onError);
         }
+        if (flush && !buffer->trimmed().isEmpty()) {
+            const QByteArray event = *buffer;
+            buffer->clear();
+            dispatchSSEEvent(event, onChunk, onError);
+        }
+    };
+
+    QObject::connect(reply, &QNetworkReply::readyRead, reply, [reply, buffer, drain]() {
+        const QByteArray data = reply->readAll();
+        qCDebug(llamaChatNetwork).noquote() << "readSSEStream:" << data;
+        buffer->append(data);
+        drain(false);
     });
+    QObject::connect(reply, &QNetworkReply::finished, reply, [reply, buffer, drain]() {
+        buffer->append(reply->readAll());
+        drain(true);
+    });
+}
+
+// Appends a visible note (a Markdown block quote) to the assistant message
+// \a pm, closing a still-open thinking section first so the note is not
+// folded into the "Thought" block.
+static void appendNoteToMessage(Message &pm, const QString &note)
+{
+    if (!pm.haveContent && pm.content.startsWith(ThinkingSectionParser::startToken())) {
+        pm.content += ThinkingSectionParser::endToken();
+        pm.haveContent = true;
+    }
+    QString quoted = note.trimmed();
+    quoted.replace(QLatin1Char('\n'), QLatin1String("\n> "));
+    if (!pm.content.trimmed().isEmpty())
+        pm.content += QStringLiteral("\n\n");
+    pm.content += QStringLiteral("> ") + quoted;
+}
+
+static QString errorNote(const QString &error)
+{
+    return QStringLiteral("**%1** %2").arg(Tr::tr("Error:"), error.trimmed());
+}
+
+// Drops the tool calls of \a extra (a stopped or failed turn must not
+// leave tool calls without matching tool results in the history).
+static void removeToolCalls(QList<QVariantMap> &extra)
+{
+    extra.removeIf([](const QVariantMap &e) { return e.contains(QStringLiteral("tool_calls")); });
 }
 
 void ChatManager::generateMessage(const QString &convId,
@@ -866,6 +1017,7 @@ void ChatManager::generateMessage(const QString &convId,
     // Fresh tool-call aggregation state for this stream (per conversation –
     // several chats may stream in parallel).
     m_streamingToolCalls.insert(convId, {});
+    m_streamStatus.insert(convId, {});
 
     m_abortControllers[convId] = nullptr; // will hold the reply
 
@@ -1157,16 +1309,22 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
 void ChatManager::compactConversation(const QString &convId,
                                       qint64 leafNodeId,
                                       bool force,
-                                      std::function<void(qint64)> onDone)
+                                      std::function<void(qint64)> onDone,
+                                      std::function<void(const QString &)> onFailed)
 {
+    const auto fail = [onFailed](const QString &reason) {
+        if (onFailed)
+            onFailed(reason);
+    };
+
     if (!force && !settings().autoCompact.value())
-        return;
+        return fail(Tr::tr("Automatic compaction is disabled."));
     if (m_compacting.contains(convId))
-        return;
+        return fail(Tr::tr("The conversation is already being compacted."));
 
     auto msgs = m_storage->getMessages(convId);
     if (msgs.isEmpty())
-        return;
+        return fail(Tr::tr("The conversation has no messages to compact."));
     auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
     // Nothing new to fold in since the last compaction (or the history is
@@ -1189,7 +1347,8 @@ void ChatManager::compactConversation(const QString &convId,
             << "Skipping compaction of" << convId << ": only"
             << leafMsgs.size() - markerIndex
             << "messages since the last summary";
-        return;
+        return fail(Tr::tr("The conversation was compacted recently and cannot be "
+                           "compacted further."));
     }
 
     // In the overflow‑recovery path the full history does not fit the
@@ -1234,22 +1393,31 @@ void ChatManager::compactConversation(const QString &convId,
     QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
     m_compactReplies.insert(convId, reply);
 
-    QObject::connect(reply, &QNetworkReply::finished, [reply, this, convId, leafNodeId, onDone]() {
+    QObject::connect(reply, &QNetworkReply::finished, [reply, this, convId, leafNodeId, onDone, fail]() {
         m_compacting.remove(convId);
         m_compactReplies.remove(convId);
         reply->deleteLater();
 
+        // Canceled: the conversation is being deleted, nobody waits for it.
+        if (reply->error() == QNetworkReply::OperationCanceledError)
+            return;
+
         if (reply->error() != QNetworkReply::NoError) {
             qCWarning(llamaChatNetwork) << "Compaction request failed:" << reply->errorString();
-            return;
+            QJsonObject errObj;
+            QString reason = parseJsonObject(reply->readAll(), &errObj)
+                    ? errorMessageFromJson(errObj) : QString();
+            if (reason.isEmpty())
+                reason = reply->errorString();
+            return fail(Tr::tr("The compaction request failed: %1").arg(reason));
         }
 
         QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
         if (!doc.isObject())
-            return;
+            return fail(Tr::tr("The compaction request returned a malformed reply."));
         const QJsonArray choices = doc.object().value("choices").toArray();
         if (choices.isEmpty())
-            return;
+            return fail(Tr::tr("The compaction request returned no summary."));
 
         QString summary = choices.first().toObject().value("message").toObject()
                               .value("content").toString().trimmed();
@@ -1263,7 +1431,7 @@ void ChatManager::compactConversation(const QString &convId,
             summary = summary.trimmed();
         }
         if (summary.isEmpty())
-            return;
+            return fail(Tr::tr("The compaction request returned an empty summary."));
 
         // A new message may have landed while the summary was being
         // generated: appending the marker after \a leafNodeId now would
@@ -1332,6 +1500,27 @@ void ChatManager::drainPendingCompactMarker(const QString &convId)
         pending.onDone(marker.id);
 }
 
+void ChatManager::failTurn(Message pm, const QString &error)
+{
+    const QString convId = pm.convId;
+    // A new turn may have started meanwhile (e.g. the user sent a message
+    // while the history was being compacted); committing the error now
+    // would graft it onto the old branch.
+    if (isGenerating(convId)) {
+        qCWarning(llamaChatNetwork) << "Turn of" << convId << "failed:" << error;
+        return;
+    }
+    if (m_storage->getOneConversation(convId).currNode < 0)
+        return; // conversation gone
+
+    removeToolCalls(pm.extra);
+    appendNoteToMessage(pm, errorNote(error));
+    m_storage->appendMsg(pm, pm.parent);
+
+    if (m_taskConversations.contains(convId))
+        emit taskConversationFinished(convId, pm.content, false);
+}
+
 void ChatManager::stopGenerating(const QString &convId)
 {
     // While a tool is running there is no pending message (the assistant
@@ -1340,10 +1529,15 @@ void ChatManager::stopGenerating(const QString &convId)
     if (!m_pendingMessages.contains(convId) && m_runningTools.value(convId) == 0)
         return;
 
-    if (m_abortControllers.contains(convId)) {
-        auto controller = m_abortControllers.take(convId);
+    // Taken out of the map first: abort() emits finished() synchronously,
+    // and the finished handler must see the stream as stopped (no tool
+    // execution, no further turn).
+    if (const QPointer<QNetworkReply> controller = m_abortControllers.take(convId)) {
+        if (m_streamStatus.contains(convId))
+            m_streamStatus[convId].stopped = true;
         controller->abort();
-        controller->deleteLater();
+        if (controller)
+            controller->deleteLater();
     }
 
     // Tools that are running cannot be aborted the network way – ask each
@@ -1416,7 +1610,7 @@ void ChatManager::commitHumanEditorMessage(const QString &convId, const QString 
 
 void ChatManager::abortHumanEditorMessage(const QString &convId)
 {
-    if (m_pendingMessages.remove(convId) > 0)
+    if (m_pendingMessages.remove(convId))
         emit humanEditorAborted(convId);
 }
 
@@ -1792,6 +1986,25 @@ QList<const Message *> ChatManager::orderedToolResults(
     return ordered;
 }
 
+// Appends \a tool (streamed into slot \a index) to \a committed as a
+// single-entry "tool_calls" extra.  The extras are kept in slot (call)
+// order, not completion order: a later call can finish streaming before an
+// earlier one.
+static void commitToolCall(QList<QVariantMap> *committed, const ToolCall &tool, int index)
+{
+    QVariantMap extra;
+    extra["tool_calls"] = QJsonArray{
+        QJsonObject{{"id", tool.id},
+                    {"type", "function"},
+                    {"function",
+                     QJsonObject{{"name", tool.name}, {"arguments", tool.arguments}}}}};
+    extra["tool_call_index"] = index;
+    int pos = committed->size();
+    while (pos > 0 && committed->at(pos - 1).value("tool_call_index").toInt() > index)
+        --pos;
+    committed->insert(pos, extra);
+}
+
 void ChatManager::mergeToolCallDeltas(StreamingToolCalls &state,
                                       const QJsonArray &deltas,
                                       QList<QVariantMap> *committed)
@@ -1853,24 +2066,8 @@ void ChatManager::mergeToolCallDeltas(StreamingToolCalls &state,
                 // omits one, so the tool result can reference its call.
                 if (tool.id.isEmpty())
                     tool.id = QStringLiteral("tool_%1").arg(index);
-                if (committed) {
-                    QVariantMap extra;
-                    extra["tool_calls"] = QJsonArray{
-                        QJsonObject{{"id", tool.id},
-                                    {"type", "function"},
-                                    {"function",
-                                     QJsonObject{{"name", tool.name},
-                                                 {"arguments", tool.arguments}}}}};
-                    // Keep the extras in slot (call) order, not completion
-                    // order: a later call can finish streaming before an
-                    // earlier one.
-                    extra["tool_call_index"] = index;
-                    int pos = committed->size();
-                    while (pos > 0
-                           && committed->at(pos - 1).value("tool_call_index").toInt() > index)
-                        --pos;
-                    committed->insert(pos, extra);
-                }
+                if (committed)
+                    commitToolCall(committed, tool, index);
                 state.done.insert(index);
             }
         }
@@ -1903,12 +2100,19 @@ void ChatManager::sendChatRequest(const QString &convId,
         reply,
         [this, convId, onChunk](const QJsonObject &chunk) {
             if (chunk.contains("error")) {
-                const QString errMsg = chunk["error"].toObject()["message"].toString();
+                const QString errMsg = errorMessageFromJson(chunk);
+                const QString errType = chunk["error"].toObject()["type"].toString();
                 qCWarning(llamaChatNetwork) << "SSE error:" << errMsg;
+                // Recorded for the finished handler, which shows it with
+                // the reply (the turn ends without visible feedback
+                // otherwise).
+                if (m_streamStatus.contains(convId) && m_streamStatus[convId].error.isEmpty())
+                    m_streamStatus[convId].error = errMsg.isEmpty() ? errType : errMsg;
                 // Context overflow (the history no longer fits): flag the
                 // pending message so the finished handler can compact the
                 // history and retry, instead of committing an empty reply.
-                if (isContextOverflowError(errMsg) && m_pendingMessages.contains(convId))
+                if ((isContextOverflowError(errMsg) || isContextOverflowError(errType))
+                        && m_pendingMessages.contains(convId))
                     m_pendingMessages[convId].overflowError = true;
                 return;
             }
@@ -1938,6 +2142,10 @@ void ChatManager::sendChatRequest(const QString &convId,
 
             QJsonArray choices = chunk["choices"].toArray();
             if (!choices.isEmpty()) {
+                const QString finishReason = choices[0].toObject()["finish_reason"].toString();
+                if (!finishReason.isEmpty() && m_streamStatus.contains(convId))
+                    m_streamStatus[convId].finishReason = finishReason;
+
                 const QJsonObject &delta = choices[0].toObject()["delta"].toObject();
 
                 if (delta.contains("reasoning_content")) {
@@ -2013,44 +2221,142 @@ void ChatManager::sendChatRequest(const QString &convId,
             onChunk(-1); // UI scroll‑to‑bottom
         },
         [this, convId](const QString &err) {
+            // Never delete (or abort) the reply here: a reply deleted while
+            // running never emits finished(), which would leave the
+            // conversation "generating" forever.  The error is recorded and
+            // shown when the stream ends.
             qCWarning(llamaChatNetwork) << "SSE stream error:" << err;
-
-            if (m_abortControllers.contains(convId))
-                m_abortControllers[convId]->deleteLater();
+            if (m_streamStatus.contains(convId) && m_streamStatus[convId].error.isEmpty())
+                m_streamStatus[convId].error = err;
+            if (isContextOverflowError(err) && m_pendingMessages.contains(convId))
+                m_pendingMessages[convId].overflowError = true;
         });
 
+    // Connected after readSSEStream(): its finished() handler flushes the
+    // last buffered event first.
     QObject::connect(reply, &QNetworkReply::finished, [this, convId, reply, onChunk] {
         reply->deleteLater();
         m_abortControllers.remove(convId);
 
+        if (!m_pendingMessages.contains(convId))
+            return; // already handled (should not happen)
+
         Message pm = m_pendingMessages.take(convId);
-        m_streamingToolCalls.remove(convId);
+        const StreamingToolCalls streaming = m_streamingToolCalls.take(convId);
+        StreamStatus status = m_streamStatus.take(convId);
+
+        // Stopped by the user (stopGenerating() / a deleted conversation):
+        // abort() emits finished() synchronously with OperationCanceledError.
+        const bool stopped = status.stopped
+                || reply->error() == QNetworkReply::OperationCanceledError;
+
+        // HTTP / transport error.  The JSON error body of a non-streamed
+        // 4xx/5xx reply is normally handed over by readSSEStream() as an
+        // error chunk already; whatever is left is parsed here.
+        if (!stopped && reply->error() != QNetworkReply::NoError) {
+            const QByteArray body = reply->readAll().trimmed();
+            if (status.error.isEmpty() && !body.isEmpty()) {
+                QJsonObject errObj;
+                status.error = parseJsonObject(body, &errObj)
+                        ? errorMessageFromJson(errObj)
+                        : QString::fromUtf8(body.left(500));
+            }
+            if (status.error.isEmpty())
+                status.error = reply->errorString();
+            if (isContextOverflowError(status.error))
+                pm.overflowError = true;
+        }
 
         // Context overflow: the server refused the request because the
         // history no longer fits.  Drop the assistant message (including
         // any partial content streamed before the error), compact the
-        // history and retry once.  (compactConversation() does nothing –
-        // and does not call the callback – when a summary was just created
-        // and the history still overflows, so this cannot loop.)
-        if (pm.overflowError) {
+        // history and retry once.  (compactConversation() does not call the
+        // retry callback when a summary was just created and the history
+        // still overflows, so this cannot loop.)  Every path that does not
+        // retry ends the turn with a visible error.
+        if (pm.overflowError && !stopped) {
             if (!pm.content.trimmed().isEmpty())
                 qCWarning(llamaChatNetwork)
                     << "Context overflow in" << convId << "– dropping the partial "
                     << "reply (" << pm.content.size() << " chars) and compacting "
                     << "the history.";
-            if (settings().autoCompact.value() && !m_compacting.contains(convId))
+            pm.content.clear();
+            pm.haveContent = false;
+
+            QString overflowText = Tr::tr(
+                "The conversation no longer fits the model's context window.");
+            if (!status.error.isEmpty())
+                overflowText += QStringLiteral(" (%1)").arg(status.error);
+            const auto fail = [this, pm, overflowText](const QString &reason) {
+                qCWarning(llamaChatNetwork)
+                    << "Context overflow in" << pm.convId << "– the request was not "
+                    << "retried:" << reason;
+                failTurn(pm, overflowText + QLatin1Char(' ') + reason);
+            };
+
+            if (!settings().autoCompact.value())
+                fail(Tr::tr("Automatic compaction is disabled; shorten or compact the "
+                            "conversation and try again."));
+            else if (m_compacting.contains(convId))
+                fail(Tr::tr("The conversation is already being compacted; send the "
+                            "message again once the compaction has finished."));
+            else
                 compactConversation(convId,
                                     pm.parent,
                                     /*force=*/true,
                                     [this, convId, onChunk](qint64 leaf) {
                                         generateMessage(convId, leaf, onChunk);
-                                    });
-            else
-                qCWarning(llamaChatNetwork)
-                    << "Context overflow in" << convId
-                    << "and the history cannot be compacted further; the "
-                       "request was not retried.";
+                                    },
+                                    fail);
             return;
+        }
+
+        // A stopped or failed turn ends here: its tool calls are neither
+        // executed nor stored, so the history never carries a tool call
+        // without a matching tool result.
+        const bool failed = !stopped && !status.error.isEmpty();
+        if (stopped || failed) {
+            removeToolCalls(pm.extra);
+        } else {
+            // Tool calls whose arguments never parsed as strict JSON were
+            // not committed during the stream.  Commit them now (in call
+            // order), so executeToolAndSendResult() repairs them or hands
+            // the model a failed result instead of dropping them silently.
+            for (int i = 0; i < streaming.calls.size(); ++i) {
+                if (streaming.done.contains(i) || streaming.calls.at(i).name.isEmpty())
+                    continue;
+                ToolCall tool = streaming.calls.at(i);
+                if (tool.id.isEmpty())
+                    tool.id = QStringLiteral("tool_%1").arg(i);
+                if (tool.arguments.trimmed().isEmpty())
+                    tool.arguments = QStringLiteral("{}");
+                commitToolCall(&pm.extra, tool, i);
+            }
+        }
+
+        // The model's answer without the thinking section (before any
+        // note is added).
+        QString answer = pm.content;
+        if (answer.startsWith(ThinkingSectionParser::startToken())) {
+            const int end = answer.indexOf(ThinkingSectionParser::endToken());
+            answer = end < 0 ? QString()
+                             : answer.mid(end + ThinkingSectionParser::endToken().size());
+        }
+        const bool hasToolCalls = std::any_of(pm.extra.cbegin(),
+                                              pm.extra.cend(),
+                                              [](const QVariantMap &e) {
+                                                  return e.contains("tool_calls");
+                                              });
+
+        // Tell the user why the turn ended when it did not end normally.
+        if (failed) {
+            appendNoteToMessage(pm, errorNote(status.error));
+        } else if (!stopped && status.finishReason == QLatin1String("length")) {
+            appendNoteToMessage(pm,
+                                Tr::tr("**Note:** The reply was truncated: the model "
+                                       "reached the maximum number of output tokens."));
+        } else if (!stopped && !hasToolCalls && answer.trimmed().isEmpty()) {
+            appendNoteToMessage(pm, Tr::tr("**Note:** The model ended its turn without an answer."));
         }
 
         m_storage->appendMsg(pm, pm.parent);
@@ -2155,22 +2461,22 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // Mid‑run steering: messages queued while this reply was
                 // generated keep the loop alive (pi's follow‑up messages /
                 // opencode's queued inputs) – unless the user stopped the
-                // generation, in which case the queue waits for the next
-                // user action (like the tool path in
+                // generation (or it failed), in which case the queue waits
+                // for the next user action (like the tool path in
                 // executeToolAndSendResult()).
-                const bool aborted = (reply->error() == QNetworkReply::OperationCanceledError);
-                const bool continueLoop = !aborted && steeringQueueSize(convId) > 0;
+                const bool continueLoop = !stopped && !failed && steeringQueueSize(convId) > 0;
+                const bool complete = !stopped && !failed
+                        && reply->error() == QNetworkReply::NoError
+                        && !answer.trimmed().isEmpty();
                 if (continueLoop)
                     generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
                 else if (isTaskConversation) {
                     // The sub‑agent reached its final answer (or the stream
-                    // was aborted / produced nothing) – hand the result back
-                    // to the "task" tool waiting in the parent conversation.
-                    const bool ok = (reply->error() == QNetworkReply::NoError)
-                            && !pm.content.trimmed().isEmpty();
-                    emit taskConversationFinished(convId, pm.content, ok);
-                } else if (reply->error() == QNetworkReply::NoError
-                           && !pm.content.trimmed().isEmpty()) {
+                    // was stopped / failed / produced nothing) – hand the
+                    // result back to the "task" tool waiting in the parent
+                    // conversation.
+                    emit taskConversationFinished(convId, pm.content, complete);
+                } else if (complete) {
                     // Only suggest follow‑ups for complete generations.
                     followUpQuestions(convId,
                                       pm.id,
@@ -2232,6 +2538,22 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                                   << "was called but is disabled – skipping.";
         sendFailedToolResult(QStringLiteral("Tool disabled"));
         return;
+    }
+
+    // Task (sub‑agent) conversations may only use their whitelisted tools –
+    // the payload advertises just those, but a model can still call any
+    // tool by name – and never "task" itself (no sub‑agent recursion).
+    if (const auto it = m_taskConfigs.constFind(convId); it != m_taskConfigs.constEnd()) {
+        const bool recursion = tool.name == QLatin1String("task");
+        if (recursion || (!it->allowedTools.isEmpty() && !it->allowedTools.contains(tool.name))) {
+            qCWarning(llamaChatTools) << "Tool" << tool.name
+                                      << "is not available in task conversation" << convId;
+            sendFailedToolResult(
+                QStringLiteral("Tool \"%1\" is not available in this task. Use only the "
+                               "tools you were given.")
+                    .arg(tool.name));
+            return;
+        }
     }
 
     QJsonParseError err;
@@ -2358,7 +2680,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
             // deleteConversation does), or the parent would stay busy
             // forever: its stop flag is only cleared when that tool has
             // reported back as well.
-            if (m_taskConversations.remove(convId) > 0)
+            if (m_taskConversations.remove(convId))
                 emit taskConversationFinished(convId, {}, false);
             return;
         }
@@ -2375,6 +2697,10 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
 void ChatManager::deleteConversation(const QString &convId)
 {
+    // Stop the running stream (abort() finishes it synchronously) and the
+    // running tools first, so nothing continues the deleted conversation.
+    stopGenerating(convId);
+
     // A task conversation deleted while its sub‑agent is still running must
     // fail the waiting "task" tool in the parent conversation.
     if (m_taskConversations.contains(convId)) {
@@ -2383,9 +2709,15 @@ void ChatManager::deleteConversation(const QString &convId)
     }
     m_taskConfigs.remove(convId);
     m_streamingToolCalls.remove(convId);
+    m_streamStatus.remove(convId);
+    m_abortControllers.remove(convId);
     m_consecutiveToolTurns.remove(convId);
     m_activeTools.remove(convId);
-    m_stopRequested.remove(convId);
+    // Tools that are still winding down after abort() must find the stop
+    // flag when they report back, or they would start a new turn in the
+    // deleted conversation; the last one clears it.
+    if (m_runningTools.value(convId) == 0)
+        m_stopRequested.remove(convId);
     m_steeringQueue.remove(convId);
     m_compacting.remove(convId);
     m_pendingCompactMarkers.remove(convId);

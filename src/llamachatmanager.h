@@ -1,7 +1,9 @@
 #pragma once
 
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QObject>
+#include <QPointer>
 #include <QTimer>
 #include <QVariantMap>
 
@@ -281,11 +283,21 @@ private:
     //! summary request to the messages after the last marker (or the most
     //! recent half, without a marker), so it fits even when the full
     //! history no longer does.  \a onDone is called with the marker's id
-    //! when the compaction succeeded.
+    //! when the compaction succeeded; \a onFailed is called with the reason
+    //! on every path that does not produce a marker (skipped, disabled,
+    //! already running, request failed, empty summary), so a caller waiting
+    //! for the retry can end the turn visibly.  Neither is called when the
+    //! request was canceled (the conversation was deleted).
     void compactConversation(const QString &convId,
                              qint64 leafNodeId,
                              bool force,
-                             std::function<void(qint64)> onDone = {});
+                             std::function<void(qint64)> onDone = {},
+                             std::function<void(const QString &)> onFailed = {});
+
+    //! Ends a turn that could not produce a reply: commits \a pm (without
+    //! tool calls) with a visible error note, and reports the failure to
+    //! the waiting "task" tool when \a pm belongs to a task conversation.
+    void failTurn(Message pm, const QString &error);
 
     //! Appends a deferred compaction marker (see m_pendingCompactMarkers)
     //! after the conversation's current leaf.  Only valid at a quiet point
@@ -316,10 +328,23 @@ private:
     QString m_activeConvId;
 
     QHash<QString, Message> m_pendingMessages;
-    QHash<QString, QNetworkReply *> m_abortControllers;
+    //! The in‑flight chat stream of each conversation.  Guarded pointers:
+    //! the reply deletes itself (deleteLater) when it finishes, so an entry
+    //! can outlive it.
+    QHash<QString, QPointer<QNetworkReply>> m_abortControllers;
     QHash<QString, QNetworkReply *> m_titleSummaryReplies;
     QHash<QString, QNetworkReply *> m_followUpReplies;
     QHash<QString, StreamingToolCalls> m_streamingToolCalls;
+
+    //! Per‑stream bookkeeping the finished handler needs besides the pending
+    //! message (kept here: Message is shared with storage and the UI).
+    struct StreamStatus
+    {
+        QString finishReason; // last "finish_reason" reported by the server
+        QString error;        // first error reported (SSE error chunk, HTTP error body)
+        bool stopped = false; // stopGenerating() aborted the stream
+    };
+    QHash<QString, StreamStatus> m_streamStatus;
     QHash<QString, std::shared_ptr<LlamaCpp::Tool>> m_streamingTools;
 
     //! Consecutive tool-call turns per conversation (runaway guard, see the

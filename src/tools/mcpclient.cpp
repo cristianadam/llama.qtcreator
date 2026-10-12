@@ -9,6 +9,8 @@
 #include <QNetworkRequest>
 #include <QPointer>
 
+#include <utility>
+
 namespace LlamaCpp::Tools {
 
 Q_LOGGING_CATEGORY(lmcp, "llama.cpp.mcp", QtInfoMsg)
@@ -17,6 +19,15 @@ namespace {
 
 // The MCP protocol version spoken to the Qt Creator MCP server.
 constexpr char kProtocolVersion[] = "2025-06-18";
+
+// Transfer timeouts (no data exchanged for that long aborts the request).
+// Protocol requests (initialize, tools/list, notifications) are answered
+// right away; tool calls may legitimately run for a long time (e.g. a
+// project build on the Qt Creator MCP server), and the user can stop them
+// with Esc (McpTool::abort()), so their timeout is only a safety net
+// against a server that never answers.
+constexpr int kRequestTimeoutMs = 30 * 1000;
+constexpr int kToolCallTimeoutMs = 10 * 60 * 1000;
 
 QJsonObject rpcRequest(quint32 id, const QString &method, const QJsonObject &params)
 {
@@ -187,15 +198,15 @@ McpToolInfo McpClient::toolInfo(const QString &name) const
     return {};
 }
 
-void McpClient::callTool(const QString &name,
-                         const QJsonObject &arguments,
-                         ToolCallback callback)
+quint32 McpClient::callTool(const QString &name,
+                            const QJsonObject &arguments,
+                            ToolCallback callback)
 {
     if (m_state != State::Ready) {
         callback(Tr::tr("The MCP server is not available. Check that the server "
                         "is running and reachable, then try again."),
                  false);
-        return;
+        return 0;
     }
 
     QJsonObject params;
@@ -243,52 +254,74 @@ void McpClient::callTool(const QString &name,
             cb(output, !isError);
     };
 
-    post(rpcRequest(requestId, QStringLiteral("tools/call"), params),
-         [this, requestId](int httpStatus, const QByteArray &contentType, const QByteArray &body) {
-             if (httpStatus == 404) {
-                 // The server restarted and our session is stale – redo the
-                 // handshake so subsequent calls work, and ask for a retry.
-                 m_pending.remove(requestId);
-                 const ToolCallback cb = m_pendingToolCalls.take(requestId);
-                 if (cb) {
-                     qCWarning(lmcp) << "Stale MCP session detected – re-handshaking.";
-                     startHandshake();
-                     cb(Tr::tr("The MCP server restarted; the call was not "
-                               "executed. Please try again."),
-                        false);
-                 }
-                 return;
-             }
+    QNetworkReply *reply = post(
+        rpcRequest(requestId, QStringLiteral("tools/call"), params),
+        [this, requestId, name](int httpStatus,
+                                const QByteArray &contentType,
+                                const QByteArray &body) {
+            m_toolCallReplies.remove(requestId);
 
-             if (httpStatus >= 400) {
-                 m_pending.remove(requestId);
-                 const ToolCallback cb = m_pendingToolCalls.take(requestId);
-                 if (cb)
-                     cb(Tr::tr("MCP server returned HTTP %1 for tool call.").arg(httpStatus),
-                        false);
-                 return;
-             }
+            if (httpStatus == 0) {
+                // No HTTP response at all: connection error, transfer
+                // timeout, or the call was cancelled (cancelToolCall() has
+                // taken the callback already in that case).
+                m_pending.remove(requestId);
+                const ToolCallback cb = m_pendingToolCalls.take(requestId);
+                if (cb)
+                    cb(Tr::tr("MCP tool \"%1\" failed: the MCP server did not respond "
+                              "(connection error or timeout).")
+                           .arg(name),
+                       false);
+                return;
+            }
 
-             const QJsonObject response = extractJsonRpcResponse(body, contentType, requestId);
-             if (response.isEmpty()) {
-                 m_pending.remove(requestId);
-                 const ToolCallback cb = m_pendingToolCalls.take(requestId);
-                 if (cb)
-                     cb(Tr::tr("MCP server returned an empty or malformed response."), false);
-                 return;
-             }
+            if (httpStatus == 404) {
+                // The server restarted and our session is stale – redo the
+                // handshake so subsequent calls work, and ask for a retry.
+                m_pending.remove(requestId);
+                const ToolCallback cb = m_pendingToolCalls.take(requestId);
+                if (cb) {
+                    qCWarning(lmcp) << "Stale MCP session detected – re-handshaking.";
+                    startHandshake();
+                    cb(Tr::tr("The MCP server restarted; the call was not "
+                              "executed. Please try again."),
+                       false);
+                }
+                return;
+            }
 
-             auto pendingIt = m_pending.find(requestId);
-             if (pendingIt == m_pending.end())
-                 return;
-             // Move the handler out of the map before erasing it: the closure
-             // is too large to fit in std::function's small buffer, so it is
-             // heap-allocated and would be freed mid-execution if the map
-             // entry were destroyed while the handler is still running.
-             const auto handler = std::move(pendingIt.value());
-             m_pending.erase(pendingIt);
-             handler(response);
-         });
+            if (httpStatus >= 400) {
+                m_pending.remove(requestId);
+                const ToolCallback cb = m_pendingToolCalls.take(requestId);
+                if (cb)
+                    cb(Tr::tr("MCP server returned HTTP %1 for tool call.").arg(httpStatus),
+                       false);
+                return;
+            }
+
+            const QJsonObject response = extractJsonRpcResponse(body, contentType, requestId);
+            if (response.isEmpty()) {
+                m_pending.remove(requestId);
+                const ToolCallback cb = m_pendingToolCalls.take(requestId);
+                if (cb)
+                    cb(Tr::tr("MCP server returned an empty or malformed response."), false);
+                return;
+            }
+
+            auto pendingIt = m_pending.find(requestId);
+            if (pendingIt == m_pending.end())
+                return;
+            // Move the handler out of the map before erasing it: the closure
+            // is too large to fit in std::function's small buffer, so it is
+            // heap-allocated and would be freed mid-execution if the map
+            // entry were destroyed while the handler is still running.
+            const auto handler = std::move(pendingIt.value());
+            m_pending.erase(pendingIt);
+            handler(response);
+        },
+        kToolCallTimeoutMs);
+    m_toolCallReplies.insert(requestId, reply);
+    return requestId;
 }
 
 void McpClient::sendRequest(
@@ -321,7 +354,21 @@ void McpClient::sendRequest(
              m_pending.erase(it);
              // An empty response indicates a malformed body.
              handler(response);
-         });
+         },
+         kRequestTimeoutMs);
+}
+
+void McpClient::cancelToolCall(quint32 requestId, const QString &reason)
+{
+    // Take the callback first: aborting the reply emits finished()
+    // synchronously, and the reply handler then finds nothing to call.
+    const ToolCallback cb = m_pendingToolCalls.take(requestId);
+    m_pending.remove(requestId);
+    const QPointer<QNetworkReply> reply = m_toolCallReplies.take(requestId);
+    if (reply)
+        reply->abort();
+    if (cb)
+        cb(reason, false);
 }
 
 void McpClient::sendNotification(const QString &method, const QJsonObject &params)
@@ -330,11 +377,13 @@ void McpClient::sendNotification(const QString &method, const QJsonObject &param
     message["jsonrpc"] = QStringLiteral("2.0");
     message["method"] = method;
     message["params"] = params;
-    post(message, [](int, const QByteArray &, const QByteArray &) {});
+    post(message, [](int, const QByteArray &, const QByteArray &) {}, kRequestTimeoutMs);
 }
 
-void McpClient::post(const QJsonObject &rpcMessage,
-                     const std::function<void(int, const QByteArray &, const QByteArray &)> &handler)
+QNetworkReply *McpClient::post(
+    const QJsonObject &rpcMessage,
+    const std::function<void(int, const QByteArray &, const QByteArray &)> &handler,
+    int transferTimeoutMs)
 {
     QNetworkRequest request(m_url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -351,6 +400,9 @@ void McpClient::post(const QJsonObject &rpcMessage,
     }
     if (!m_sessionId.isEmpty())
         request.setRawHeader("mcp-session-id", m_sessionId.toUtf8());
+    // Without a timeout a server that accepts the connection but never
+    // answers would keep the request (and the conversation) busy forever.
+    request.setTransferTimeout(transferTimeoutMs);
 
     QNetworkReply *reply = m_network.post(request,
                                           QJsonDocument(rpcMessage).toJson(QJsonDocument::Compact));
@@ -372,6 +424,7 @@ void McpClient::post(const QJsonObject &rpcMessage,
         handler(status, contentType, body);
         reply->deleteLater();
     });
+    return reply;
 }
 
 void McpClient::setTools(const QList<McpToolInfo> &newTools)
@@ -405,6 +458,12 @@ void McpClient::failPending(const QString &reason)
     const auto toolCallbacks = m_pendingToolCalls.values();
     m_pendingToolCalls.clear();
     m_pending.clear();
+    // The calls are reported as failed below; do not leave their requests
+    // running (their reply handlers find nothing to call any more).
+    const auto toolCallReplies = std::exchange(m_toolCallReplies, {});
+    for (const QPointer<QNetworkReply> &reply : toolCallReplies)
+        if (reply)
+            reply->abort();
     for (const ToolCallback &cb : toolCallbacks)
         if (cb)
             cb(reason, false);

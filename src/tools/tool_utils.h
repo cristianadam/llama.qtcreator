@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QList>
+#include <QProcessEnvironment>
 #include <QString>
 #include <QStringList>
 
@@ -16,8 +17,32 @@ class Project;
 //! resolution on all platforms, including Windows).
 bool sandboxEnabled(ProjectExplorer::Project *project);
 
-//! True when \a path equals \a prefix or is located inside it.
+//! True when \a path equals \a prefix or is located inside it. Both are
+//! lexically cleaned first; the comparison is case-insensitive on Windows
+//! and macOS. An empty prefix covers nothing.
 bool pathCovers(const QString &prefix, const QString &path);
+
+//! Lexically normalized absolute spelling of \a path ('/' separators, "."
+//! and ".." resolved); a relative path is taken relative to the tools
+//! working directory. Links are not resolved, see resolvedPath().
+QString cleanedPath(const QString &path);
+
+//! \a path with symlinks and junctions resolved: the deepest existing
+//! ancestor is canonicalized and the non-existing tail re-appended (a
+//! dangling link is followed to its target, as a write through it would
+//! create the target). Empty when the path cannot be resolved (link loop).
+QString resolvedPath(const QString &path);
+
+//! True for paths whose content is executed or loaded outside the sandbox
+//! and which the sandbox therefore never lets tools write: any component
+//! named .git or .qtcreator (case-insensitively) and Qt Creator's
+//! per-project settings files (*.user, *.user.*).
+bool isProtectedWritePath(const QString &path);
+
+//! The existing protected locations directly inside \a dir (dir/.git,
+//! dir/.qtcreator, dir/ *.user*) for the platform sandboxes to mount
+//! read-only.
+QStringList protectedSubpaths(const QString &dir);
 
 //! A credential location that sandboxed tools must not read.
 struct SecretReadPath
@@ -31,6 +56,29 @@ struct SecretReadPath
 //! not read.
 QList<SecretReadPath> secretReadPaths();
 
+//! The credential locations in both spellings (cleaned and link-resolved),
+//! for repeated isSecretPath() checks.
+QStringList secretPathSpellings();
+
+//! True when \a path (in its cleaned or its link-resolved spelling) lies in
+//! one of the credential locations \a secretSpellings.
+bool isSecretPath(const QString &path, const QStringList &secretSpellings);
+bool isSecretPath(const QString &path);
+
+//! The credential locations below \a root, relative to it ('/'
+//! separators), e.g. ".ssh" for the home directory; used to exclude them
+//! from recursive searches.
+QStringList secretPathsInside(const QString &root);
+
+//! True for environment variable names that typically carry credentials
+//! (*_KEY, *_TOKEN, *SECRET*, *PASSWORD*, AWS_*, OPENAI*, ...) or agent
+//! sockets (SSH_AUTH_SOCK, DBUS_SESSION_BUS_ADDRESS, ...); case-insensitive.
+bool isSecretEnvironmentVariable(const QString &name);
+
+//! \a env without the variables isSecretEnvironmentVariable() matches; the
+//! environment sandboxed commands get.
+QProcessEnvironment withoutSecretVariables(const QProcessEnvironment &env);
+
 //! The directory the tools operate in: the startup project directory when a
 //! project is open, otherwise the default projects directory.
 Utils::FilePath toolsWorkingDirectory();
@@ -38,8 +86,10 @@ Utils::FilePath toolsWorkingDirectory();
 //! Model-facing error when the (enabled) sandbox forbids \a isWrite access
 //! to \a path; an empty string when the access is allowed or the sandbox is
 //! disabled. Mirrors the bash sandbox: writes are restricted to the project
-//! directory and the temporary locations, reads are denied for the
-//! credential locations.
+//! directory and the temporary locations (only the latter when no project
+//! is open) minus the protected and credential locations, reads are denied
+//! for the credential locations. Both the cleaned and the link-resolved
+//! spelling of \a path are checked.
 QString sandboxAccessError(const Utils::FilePath &path, bool isWrite);
 
 //! The effectively enabled local tools: the stored EnabledToolsList plus

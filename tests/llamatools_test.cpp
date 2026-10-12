@@ -470,6 +470,16 @@ private slots:
     void windowsSandboxSpecUnavailable();
     void windowsSandboxSpec();
     void quoteWindowsArgumentRules();
+    void sandboxPathCovers();
+    void sandboxPathTraversal();
+    void sandboxProtectedWrites();
+    void sandboxSecretPaths();
+    void sandboxSymlinkEscape();
+    void sandboxApplyPatchMoveSource();
+    void sandboxEnvironmentFilter();
+    void windowsShellInstallRootLayout();
+    void webutils_isPublicAddress();
+    void webfetch_refusesLocalAddresses();
     void bash_truncation();
     void bash_summaries();
     void bash_detailsMarkdown();
@@ -3383,6 +3393,315 @@ void LlamaToolsTest::quoteWindowsArgumentRules()
     // The empty argument becomes an empty quoted string.
     QCOMPARE(quoteWindowsArgument(QString()),
              QString(QStringLiteral("\"\"")));
+}
+
+void LlamaToolsTest::sandboxPathCovers()
+{
+    QVERIFY(pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj")));
+    QVERIFY(pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj/a/b")));
+    QVERIFY(pathCovers(QStringLiteral("/proj/"), QStringLiteral("/proj/a")));
+    QVERIFY(pathCovers(QStringLiteral("/"), QStringLiteral("/anything")));
+    // A sibling sharing the prefix is not inside.
+    QVERIFY(!pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj-evil")));
+    QVERIFY(!pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj-evil/a")));
+    // ".." segments are resolved before the comparison.
+    QVERIFY(!pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj/../etc/passwd")));
+    QVERIFY(!pathCovers(QStringLiteral("/proj"), QStringLiteral("/proj/a/../../etc")));
+    // An empty prefix covers nothing.
+    QVERIFY(!pathCovers(QString(), QStringLiteral("/anything")));
+#if defined(Q_OS_WIN)
+    QVERIFY(pathCovers(QStringLiteral("C:/Proj"), QStringLiteral("c:/proj/file.txt")));
+    QVERIFY(pathCovers(QStringLiteral("C:/Proj"), QStringLiteral("C:\\Proj\\file.txt")));
+    QVERIFY(!pathCovers(QStringLiteral("C:/Proj"), QStringLiteral("C:/Proj-evil/file.txt")));
+#elif !defined(Q_OS_MACOS)
+    // Case-sensitive file systems: a different spelling is a different path.
+    QVERIFY(!pathCovers(QStringLiteral("/proj"), QStringLiteral("/PROJ/file.txt")));
+#endif
+    QCOMPARE(cleanedPath(QStringLiteral("/a/b/../c/./d")), QStringLiteral("/a/c/d"));
+    // ".." above the root is the root, as for the file system (QDir::cleanPath
+    // keeps such segments).
+    QCOMPARE(cleanedPath(QStringLiteral("/a/../../../etc/passwd")), QStringLiteral("/etc/passwd"));
+}
+
+void LlamaToolsTest::sandboxPathTraversal()
+{
+    QTemporaryDir projectDir;
+    QVERIFY(projectDir.isValid());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.path());
+    const SandboxTestEnv env;
+
+    // Enough ".." segments to climb to the file system root from any
+    // temporary directory.
+    QString climb;
+    for (int i = 0; i < 32; ++i)
+        climb += QStringLiteral("../");
+
+    // Relative paths are cleaned while they are resolved, so the sandbox
+    // sees where they really point.
+    const Utils::FilePath escaped = absoluteProjectPath(
+        Utils::FilePath::fromUserInput(climb + QStringLiteral("usr/llama-sandbox-traversal")),
+        /*mustExist=*/false);
+    QVERIFY2(!escaped.toFSPathString().contains(QStringLiteral("..")),
+             qPrintable(escaped.toFSPathString()));
+    QVERIFY(!sandboxAccessError(escaped, /*isWrite=*/true).isEmpty());
+    // An uncleaned spelling is refused just the same.
+    QVERIFY(!sandboxAccessError(Utils::FilePath::fromString(projectDir.path() + QLatin1Char('/')
+                                                            + climb + QStringLiteral("usr/x")),
+                                /*isWrite=*/true)
+                 .isEmpty());
+    // Harmless ".." segments that stay inside the project are fine.
+    QVERIFY(sandboxAccessError(Utils::FilePath::fromString(projectDir.path()
+                                                           + QStringLiteral("/sub/../file.txt")),
+                               /*isWrite=*/true)
+                .isEmpty());
+
+    QJsonObject writeArgs;
+    writeArgs["path"] = QString(climb + QStringLiteral("usr/llama-sandbox-traversal"));
+    writeArgs["content"] = QStringLiteral("x");
+    const auto writeRes = runTool<Tools::WriteTool>(writeArgs);
+    QVERIFY(!writeRes.second);
+
+    // A relative bash workdir climbing out of the project would widen the
+    // writable sandbox location.
+    QJsonObject bashArgs;
+    bashArgs["command"] = QStringLiteral("echo sandbox-traversal");
+    bashArgs["workdir"] = climb;
+    const auto bashRes = runBashTool(bashArgs);
+    QVERIFY(!bashRes.second);
+    QVERIFY2(bashRes.first.contains("not allowed"), qPrintable(bashRes.first));
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
+
+void LlamaToolsTest::sandboxProtectedWrites()
+{
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/.git")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/.git/hooks/pre-commit")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/.GIT/config")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/sub/.qtcreator/settings.json")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/CMakeLists.txt.user")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("/p/app.pro.user.4.8-pre1")));
+    QVERIFY(!isProtectedWritePath(QStringLiteral("/p/CMakeLists.txt")));
+    QVERIFY(!isProtectedWritePath(QStringLiteral("/p/.github/workflows/ci.yml")));
+    QVERIFY(!isProtectedWritePath(QStringLiteral("/p/.gitignore")));
+    QVERIFY(!isProtectedWritePath(QStringLiteral("/p/username.txt")));
+#if defined(Q_OS_WIN)
+    // Spellings Windows maps onto .git.
+    QVERIFY(isProtectedWritePath(QStringLiteral("C:/p/.git./config")));
+    QVERIFY(isProtectedWritePath(QStringLiteral("C:/p/.git::$INDEX_ALLOCATION/config")));
+#endif
+
+    QTemporaryDir projectDir;
+    QVERIFY(projectDir.isValid());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.path());
+    const SandboxTestEnv env;
+
+    QJsonObject hookArgs;
+    hookArgs["path"] = QStringLiteral(".git/hooks/pre-commit");
+    hookArgs["content"] = QStringLiteral("#!/bin/sh\necho pwned\n");
+    const auto hookRes = runTool<Tools::WriteTool>(hookArgs);
+    QVERIFY(!hookRes.second);
+    QVERIFY(!QFile::exists(projectDir.filePath(QStringLiteral(".git/hooks/pre-commit"))));
+
+    QJsonObject userArgs;
+    userArgs["patchText"] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: CMakeLists.txt.user\n"
+        "+<qtcreator/>\n"
+        "*** End Patch");
+    const auto userRes = runTool(userArgs);
+    QVERIFY(!userRes.second);
+    QVERIFY(!QFile::exists(projectDir.filePath(QStringLiteral("CMakeLists.txt.user"))));
+
+    // Regular project files stay writable.
+    QJsonObject cmakeArgs;
+    cmakeArgs["path"] = QStringLiteral("CMakeLists.txt");
+    cmakeArgs["content"] = QStringLiteral("project(x)\n");
+    const auto cmakeRes = runTool<Tools::WriteTool>(cmakeArgs);
+    QVERIFY2(cmakeRes.second, qPrintable(cmakeRes.first));
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
+
+void LlamaToolsTest::sandboxSecretPaths()
+{
+    const SandboxTestEnv env;
+    // Path checks only - nothing below the real home directory is touched.
+    const QString home = QDir::homePath();
+    const auto readError = [](const QString &path) {
+        return sandboxAccessError(Utils::FilePath::fromString(path), /*isWrite=*/false);
+    };
+    QVERIFY(!readError(home + QStringLiteral("/.ssh/llama-nonexistent")).isEmpty());
+    QVERIFY(!readError(home + QStringLiteral("/projects/../.ssh/llama-nonexistent")).isEmpty());
+    QVERIFY(!readError(home + QStringLiteral("/.git-credentials")).isEmpty());
+    QVERIFY(!readError(home + QStringLiteral("/.config/gh/hosts.yml")).isEmpty());
+    QVERIFY(!readError(home + QStringLiteral("/.docker/config.json")).isEmpty());
+    // Prefix confusion: a sibling of a credential location is readable.
+    QVERIFY(readError(home + QStringLiteral("/.sshconfig")).isEmpty());
+    QVERIFY(!isSecretPath(home + QStringLiteral("/.awsome")));
+    QVERIFY(isSecretPath(home + QStringLiteral("/.aws/credentials")));
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+    // Case-insensitive file systems.
+    QVERIFY(!readError(home + QStringLiteral("/.SSH/id_rsa")).isEmpty());
+#endif
+    // The credential locations below a search root, for the exclusion globs.
+    const QStringList inHome = secretPathsInside(home);
+    QVERIFY(inHome.contains(QStringLiteral(".ssh")));
+    QVERIFY(inHome.contains(QStringLiteral(".config/gh")));
+    const QStringList inConfig = secretPathsInside(home + QStringLiteral("/.config"));
+    QVERIFY(inConfig.contains(QStringLiteral("gh")));
+    QVERIFY(!inConfig.contains(QStringLiteral(".ssh")));
+}
+
+void LlamaToolsTest::sandboxSymlinkEscape()
+{
+#if defined(Q_OS_WIN)
+    QSKIP("QFile::link creates .lnk shortcuts on Windows, not symbolic links");
+#endif
+    QTemporaryDir fakeHome;
+    QVERIFY(fakeHome.isValid());
+    QDir(fakeHome.path()).mkpath(QStringLiteral(".ssh"));
+    QVERIFY(writeTextFile(fakeHome.path() + QStringLiteral("/.ssh/id_test"),
+                          QStringLiteral("llama-secret-key")));
+
+    QTemporaryDir projectDir;
+    QVERIFY(projectDir.isValid());
+    ProjectExplorer::ProjectManager::setStartupProject(projectDir.path());
+    const SandboxTestEnv env(/* restoreHome = */ true);
+    qputenv("HOME", fakeHome.path().toUtf8());
+
+    // A link into a credential location (e.g. created by a sandboxed
+    // command) does not make its content readable.
+    QVERIFY(QFile::link(fakeHome.path() + QStringLiteral("/.ssh"),
+                        projectDir.filePath(QStringLiteral("keys"))));
+    QJsonObject readArgs;
+    readArgs["file_path"] = projectDir.filePath(QStringLiteral("keys/id_test"));
+    const auto readRes = runTool<Tools::ReadFileTool>(readArgs);
+    QVERIFY(!readRes.second);
+    QVERIFY(!readRes.first.contains("llama-secret-key"));
+
+    // Links out of the writable locations, also dangling ones (a write
+    // through them would create the target).
+    QVERIFY(QFile::link(QStringLiteral("/usr"), projectDir.filePath(QStringLiteral("escape"))));
+    QVERIFY(!sandboxAccessError(Utils::FilePath::fromString(
+                                    projectDir.filePath(QStringLiteral("escape/llama-x"))),
+                                /*isWrite=*/true)
+                 .isEmpty());
+    QVERIFY(QFile::link(QStringLiteral("/usr/llama-sandbox-dangling"),
+                        projectDir.filePath(QStringLiteral("dangling"))));
+    QVERIFY(!sandboxAccessError(Utils::FilePath::fromString(
+                                    projectDir.filePath(QStringLiteral("dangling"))),
+                                /*isWrite=*/true)
+                 .isEmpty());
+
+    // A link into the protected .git directory.
+    QVERIFY(QDir(projectDir.path()).mkpath(QStringLiteral(".git/hooks")));
+    QVERIFY(QFile::link(projectDir.filePath(QStringLiteral(".git/hooks")),
+                        projectDir.filePath(QStringLiteral("hooks"))));
+    QVERIFY(!sandboxAccessError(Utils::FilePath::fromString(
+                                    projectDir.filePath(QStringLiteral("hooks/pre-commit"))),
+                                /*isWrite=*/true)
+                 .isEmpty());
+
+    ProjectExplorer::ProjectManager::resetStartupProject();
+}
+
+void LlamaToolsTest::sandboxApplyPatchMoveSource()
+{
+    // A move deletes its source, so the source needs write access: moving
+    // a readable file from outside the writable locations into them must
+    // not delete the original.
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+    const SandboxTestEnv env;
+
+    const QString source = QDir::homePath() + QStringLiteral("/llama-sandbox-move-source.txt");
+    QVERIFY(writeTextFile(source, QStringLiteral("a\n")));
+    const QString target = workdir.filePath(QStringLiteral("moved.txt"));
+
+    QJsonObject args;
+    args["patchText"] = QStringLiteral("*** Begin Patch\n"
+                                       "*** Update File: %1\n"
+                                       "*** Move to: %2\n"
+                                       "@@\n"
+                                       "-a\n"
+                                       "+b\n"
+                                       "*** End Patch")
+                            .arg(source, target);
+    const auto res = runTool<LlamaCpp::ApplyPatchTool>(args);
+    const bool sourceKept = QFile::exists(source);
+    QFile::remove(source);
+
+    QVERIFY(!res.second);
+    QVERIFY(sourceKept);
+    QVERIFY(!QFile::exists(target));
+}
+
+void LlamaToolsTest::sandboxEnvironmentFilter()
+{
+    for (const char *name : {"OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GITHUB_TOKEN", "GH_TOKEN",
+                             "HF_TOKEN", "aws_secret_access_key", "AWS_PROFILE", "DB_PASSWORD",
+                             "MY_SECRET_THING", "LLAMA_API_KEY", "SSH_AUTH_SOCK"})
+        QVERIFY2(isSecretEnvironmentVariable(QString::fromLatin1(name)), name);
+    for (const char *name : {"PATH", "HOME", "TEMP", "TMP", "TMPDIR", "LANG", "USER",
+                             "SystemRoot", "LOCALAPPDATA", "TERM", "KEYBOARD_LAYOUT"})
+        QVERIFY2(!isSecretEnvironmentVariable(QString::fromLatin1(name)), name);
+
+    QProcessEnvironment env;
+    env.insert(QStringLiteral("PATH"), QStringLiteral("/usr/bin"));
+    env.insert(QStringLiteral("OPENAI_API_KEY"), QStringLiteral("sk-secret"));
+    const QProcessEnvironment filtered = withoutSecretVariables(env);
+    QVERIFY(filtered.contains(QStringLiteral("PATH")));
+    QVERIFY(!filtered.contains(QStringLiteral("OPENAI_API_KEY")));
+}
+
+void LlamaToolsTest::windowsShellInstallRootLayout()
+{
+    using LlamaCpp::Tools::windowsShellInstallRoot;
+    // WSL's launcher and shells outside a bin directory are not recognized.
+    QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\Windows\\System32\\bash.exe"))
+                 .error.isEmpty());
+    QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\bash.exe")).error.isEmpty());
+    QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\tools\\bash.exe")).error.isEmpty());
+#if defined(Q_OS_WIN)
+    // A drive root is never granted, whatever its layout.
+    QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\bin\\bash.exe")).error.isEmpty());
+#else
+    // Off Windows only the layout is checked (no installation to inspect).
+    QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\git\\bin\\bash.exe")).root,
+             QStringLiteral("C:\\git"));
+    QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\msys64\\usr\\bin\\bash.exe")).root,
+             QStringLiteral("C:\\msys64"));
+#endif
+}
+
+void LlamaToolsTest::webutils_isPublicAddress()
+{
+    using LlamaCpp::Tools::isPublicAddress;
+    for (const char *address : {"127.0.0.1", "10.1.2.3", "172.16.0.1", "172.31.255.255",
+                                "192.168.1.1", "169.254.169.254", "100.64.0.1", "0.0.0.0",
+                                "255.255.255.255", "224.0.0.1", "::", "::1", "fe80::1",
+                                "fd00::1", "ff02::1", "::ffff:127.0.0.1", "::ffff:10.0.0.1",
+                                "64:ff9b::7f00:1", "2002:a9fe:a9fe::1"})
+        QVERIFY2(!isPublicAddress(QHostAddress(QString::fromLatin1(address))), address);
+    for (const char *address : {"8.8.8.8", "1.1.1.1", "172.32.0.1", "2606:4700:4700::1111",
+                                "::ffff:8.8.8.8"})
+        QVERIFY2(isPublicAddress(QHostAddress(QString::fromLatin1(address))), address);
+    QVERIFY(!isPublicAddress(QHostAddress()));
+}
+
+void LlamaToolsTest::webfetch_refusesLocalAddresses()
+{
+    // Address literals are refused before any request is made (and
+    // synchronously, so the tool can be run without an event loop).
+    for (const char *url : {"http://127.0.0.1:9/", "http://169.254.169.254/latest/meta-data/",
+                            "http://[::1]:9/", "http://[::ffff:192.168.0.1]/"}) {
+        QJsonObject args;
+        args["url"] = QString::fromLatin1(url);
+        const auto [output, ok] = runTool<Tools::WebFetchTool>(args);
+        QVERIFY2(!ok, url);
+        QVERIFY2(output.contains("local or private"), qPrintable(output));
+    }
 }
 
 void LlamaToolsTest::bash_truncation()

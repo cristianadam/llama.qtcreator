@@ -4,11 +4,14 @@
 #include "ripgrep.h"
 #include "tool_utils.h"
 
+#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 #include <QFileInfo>
 #include <QProcess>
 #include <QTimer>
+
+#include <memory>
 
 using namespace Utils;
 
@@ -86,6 +89,10 @@ struct FindState : public QObject
     QString stderrText;
     QStringList outputLines;
     QByteArray pending; // incomplete output line
+    bool finished = false; // done() was called (finished or failed to start)
+    // Credential locations whose files are dropped (sandbox enabled).
+    bool sandboxed = false;
+    QStringList secretSpellings;
 };
 
 const bool registered = [] {
@@ -185,25 +192,37 @@ void FindTool::run(const QJsonObject &args,
 
     const int limit = qBound(1, args.value("limit").toInt(kDefaultLimit), kMaxLimit);
 
-    const QStringList rgArgs{QStringLiteral("--files"),
-                             QStringLiteral("--color=never"),
-                             // Same hidden-file policy as the search tool: dotfiles
-                             // are listed ...
-                             QStringLiteral("--hidden"),
-                             QStringLiteral("--glob"),
-                             pattern,
-                             // ... but never the .git directory itself. The negation
-                             // must come last: ripgrep applies the last matching
-                             // glob, so a broad pattern like "*" would otherwise
-                             // re-include .git.
-                             QStringLiteral("--glob"),
-                             QStringLiteral("!.git"),
-                             QStringLiteral("--"),
-                             rootString};
+    QStringList rgArgs{QStringLiteral("--files"),
+                       QStringLiteral("--color=never"),
+                       // Same hidden-file policy as the search tool: dotfiles
+                       // are listed ...
+                       QStringLiteral("--hidden"),
+                       QStringLiteral("--glob"),
+                       pattern,
+                       // ... but never the .git directory itself. The negation
+                       // must come last: ripgrep applies the last matching
+                       // glob, so a broad pattern like "*" would otherwise
+                       // re-include .git.
+                       QStringLiteral("--glob"),
+                       QStringLiteral("!.git")};
+    // Likewise never the credential locations inside the searched directory
+    // (e.g. ~/.ssh when listing the home directory).
+    const bool sandboxed = sandboxEnabled(ProjectExplorer::ProjectManager::startupProject());
+    if (sandboxed) {
+        for (const QString &secret : secretPathsInside(rootString)) {
+            rgArgs << QStringLiteral("--glob") << QString(QStringLiteral("!") + secret)
+                   << QStringLiteral("--glob")
+                   << QString(QStringLiteral("!") + secret + QStringLiteral("/**"));
+        }
+    }
+    rgArgs << QStringLiteral("--") << rootString;
 
     auto *state = new FindState;
     state->searchRoot = rootString;
     state->limit = limit;
+    state->sandboxed = sandboxed;
+    if (sandboxed)
+        state->secretSpellings = secretPathSpellings();
     m_state = state;
 
     QProcess *process = new QProcess(state);
@@ -231,6 +250,13 @@ void FindTool::run(const QJsonObject &args,
                              state->pending.remove(0, idx + 1);
                              if (line.isEmpty())
                                  continue;
+                             // The exclusion globs keep ripgrep out of the
+                             // credential locations; this also catches other
+                             // spellings of them (links, case variants).
+                             if (state->sandboxed
+                                 && isSecretPath(QString::fromUtf8(line),
+                                                 state->secretSpellings))
+                                 continue;
                              state->outputLines
                                  << relativizePath(QString::fromUtf8(line), state->searchRoot);
                              state->resultCount++;
@@ -251,21 +277,15 @@ void FindTool::run(const QJsonObject &args,
                      state,
                      [state] { state->stderrText += QString::fromUtf8(state->process->readAllStandardError()); });
 
-    QObject::connect(process,
-                     &QProcess::errorOccurred,
-                     state,
-                     [state](QProcess::ProcessError error) {
-                         state->processError = error;
-                         state->errorString = state->process->errorString();
-                     });
-
-    // No context object: the connection dies with the process. The tool
-    // itself is kept alive by ChatManager until done() runs, so capturing
-    // this is safe (and Tool is not a QObject, so it cannot be the context).
-    QObject::connect(
-        process,
-        qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
-        [this, state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+    // Reports the result exactly once: when ripgrep finished, or when it
+    // failed to start (QProcess emits no finished() then). The tool itself
+    // is kept alive by ChatManager until done() runs, so capturing this is
+    // safe (and Tool is not a QObject, so it cannot be a context object).
+    const auto finish = std::make_shared<std::function<void(int)>>(
+        [this, state, done = std::move(done)](int exitCode) mutable {
+            if (state->finished)
+                return;
+            state->finished = true;
             m_state = nullptr;
             state->stderrText += QString::fromUtf8(state->process->readAllStandardError());
 
@@ -326,6 +346,21 @@ void FindTool::run(const QJsonObject &args,
             state->deleteLater();
             done(result, ok);
         });
+
+    QObject::connect(process,
+                     &QProcess::errorOccurred,
+                     state,
+                     [state, finish](QProcess::ProcessError error) {
+                         state->processError = error;
+                         state->errorString = state->process->errorString();
+                         if (error == QProcess::FailedToStart)
+                             (*finish)(-1);
+                     });
+
+    // No context object: the connection dies with the process.
+    QObject::connect(process,
+                     qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+                     [finish](int exitCode, QProcess::ExitStatus) { (*finish)(exitCode); });
 
     timer->start(kTimeoutMs);
     process->start(rgPath.toUserOutput(), rgArgs);

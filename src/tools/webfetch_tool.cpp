@@ -166,7 +166,7 @@ QString WebFetchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "webfetch",
-            "description": "Fetches a URL and returns its content as compact, LLM‑friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as‑is. The returned content is truncated at 50000 characters.",
+            "description": "Fetches a URL and returns its content as compact, LLM‑friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as‑is. The returned content is truncated at 50000 characters. Local and private network addresses (localhost, 10.x, 192.168.x, link-local, ...) cannot be fetched.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -306,7 +306,7 @@ void WebFetchTool::run(const QJsonObject &args,
 
     const int timeoutSec = qBound(1, args.value("timeout").toInt(kDefaultTimeoutSec), kMaxTimeoutSec);
 
-    httpGet(url,
+    httpGetPublic(url,
             timeoutSec,
             kMaxResponseBytes,
             [this, url, format, done](const QByteArray &body,

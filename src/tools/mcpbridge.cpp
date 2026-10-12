@@ -110,9 +110,10 @@ Tools::McpToolInfo McpBridge::toolInfo(const QString &name) const
     return server ? server->client->toolInfo(name) : Tools::McpToolInfo{};
 }
 
-void McpBridge::callTool(const QString &name,
-                         const QJsonObject &arguments,
-                         std::function<void(const QString &output, bool ok)> callback)
+McpBridge::ToolCallHandle McpBridge::callTool(
+    const QString &name,
+    const QJsonObject &arguments,
+    std::function<void(const QString &output, bool ok)> callback)
 {
     const Server *server = findServerForTool(name);
     if (!server) {
@@ -120,11 +121,23 @@ void McpBridge::callTool(const QString &name,
                         "server serves it).")
                        .arg(name),
                  false);
-        return;
+        return {};
     }
     // The call mutates only the client's own state (pending calls, …), not
     // the bridge's server list, so the const-ness can be dropped there.
-    const_cast<Tools::McpClient *>(server->client)->callTool(name, arguments, std::move(callback));
+    Tools::McpClient *client = const_cast<Tools::McpClient *>(server->client);
+    const quint32 requestId = client->callTool(name, arguments, std::move(callback));
+    if (requestId == 0)
+        return {};
+    return {client, requestId};
+}
+
+void McpBridge::cancelToolCall(const ToolCallHandle &handle, const QString &reason)
+{
+    // A client removed from the bridge has already failed its pending
+    // calls (disconnectFromServer()) before being deleted.
+    if (handle.client && handle.requestId != 0)
+        handle.client->cancelToolCall(handle.requestId, reason);
 }
 
 QList<McpBridge::ServerStatus> McpBridge::serverStatuses() const

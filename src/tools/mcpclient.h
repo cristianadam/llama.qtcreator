@@ -2,9 +2,12 @@
 
 #include <QJsonObject>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QPointer>
 #include <QTimer>
 #include <QUrl>
 
+#include <QHash>
 #include <QList>
 #include <QMap>
 #include <QMultiMap>
@@ -60,8 +63,15 @@ public:
     McpToolInfo toolInfo(const QString &name) const;
 
     /*! Calls the given tool. \a callback is invoked exactly once, on the
-        main thread, with the textual result and a success flag. */
-    void callTool(const QString &name, const QJsonObject &arguments, ToolCallback callback);
+        main thread, with the textual result and a success flag. Returns
+        the id of the call for cancelToolCall(), or 0 when \a callback was
+        already invoked (synchronously) because the server is unavailable. */
+    quint32 callTool(const QString &name, const QJsonObject &arguments, ToolCallback callback);
+
+    /*! Aborts the in-flight tool call \a requestId and invokes its callback
+        with \a reason and ok=false. A no-op when the call already finished
+        (its callback is never invoked twice). */
+    void cancelToolCall(quint32 requestId, const QString &reason);
 
 signals:
     void connectedChanged();
@@ -75,10 +85,13 @@ private:
         const QJsonObject &params,
         const std::function<void(const QJsonObject &response)> &onResponse);
     void sendNotification(const QString &method, const QJsonObject &params);
-    void post(const QJsonObject &rpcMessage,
-              const std::function<void(int httpStatus,
-                                       const QByteArray &contentType,
-                                       const QByteArray &body)> &handler);
+    // A \a transferTimeoutMs without any data exchanged aborts the request;
+    // \a handler then sees HTTP status 0 and an empty body.
+    QNetworkReply *post(const QJsonObject &rpcMessage,
+                        const std::function<void(int httpStatus,
+                                                 const QByteArray &contentType,
+                                                 const QByteArray &body)> &handler,
+                        int transferTimeoutMs);
 
     void startHandshake();
     void requestToolList();
@@ -101,6 +114,8 @@ private:
     QMap<quint32, std::function<void(const QJsonObject &)>> m_pending;
     // Tool calls in flight (kept so they can be failed on disconnect)
     QMultiMap<quint32, ToolCallback> m_pendingToolCalls;
+    // Their network replies (so cancelToolCall() can abort them)
+    QHash<quint32, QPointer<QNetworkReply>> m_toolCallReplies;
     // Set once tools/list returned an empty list (a retry is in flight or
     // done); reset on each handshake.
     bool m_toolListRetried = false;

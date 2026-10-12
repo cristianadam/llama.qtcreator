@@ -1,6 +1,7 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/coreconstants.h>
 #include <coreplugin/documentmanager.h>
+#include <coreplugin/editormanager/documentmodel.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
 #include <coreplugin/find/textfindconstants.h>
 #include <coreplugin/icore.h>
@@ -31,6 +32,7 @@
 #include <QKeySequence>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QPointer>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
@@ -414,13 +416,37 @@ ChatEditor::ChatEditor()
             &EditorManager::editorAboutToClose,
             this,
             [this](Core::IEditor *editor) {
-                if (editor == this) {
-                    ChatManager::instance().stopGenerating(m_viewingConvId);
-                    ChatManager::instance().cancelTitleSummary(m_viewingConvId);
-                    ChatManager::instance().cancelFollowUp(m_viewingConvId);
-                }
+                // Only this chat's own close matters: closing any other editor
+                // must not stop the conversation shown here.
+                if (editor != this)
+                    return;
 
-                onStopRequested();
+                ChatManager::instance().stopGenerating(m_viewingConvId);
+                ChatManager::instance().cancelTitleSummary(m_viewingConvId);
+                ChatManager::instance().cancelFollowUp(m_viewingConvId);
+
+                // A pending "Human Editor" reply of this chat is discarded by
+                // closing its editor. Never close it from here: this runs
+                // inside EditorManager::closeEditors(), and a nested call
+                // could close (and delete) an editor that the outer call
+                // ("Close All") is about to close as well. Defer it, and
+                // re-check that the editor is still open by then.
+                if (IEditor *humanEditor
+                    = ChatManager::instance().humanEditorEditor(m_viewingConvId,
+                                                                /*pendingOnly=*/true)) {
+                    QPointer<IEditor> guard(humanEditor);
+                    QMetaObject::invokeMethod(
+                        EditorManager::instance(),
+                        [guard] {
+                            if (guard
+                                && DocumentModel::editorsForOpenedDocuments().contains(
+                                    guard.data())) {
+                                EditorManager::closeEditors({guard.data()},
+                                                            /*askAboutModifiedEditors=*/false);
+                            }
+                        },
+                        Qt::QueuedConnection);
+                }
             });
 
     // Search in chat  (Ctrl+F)
@@ -464,6 +490,11 @@ ChatEditor::~ChatEditor()
 {
     clearSearch();
     delete widget();
+    // The editor tool bar only detaches the status bar (setParent(nullptr))
+    // when the editor is removed from a view, it never deletes it. The guard
+    // covers the case where it is still parented and was deleted with that
+    // parent already.
+    delete m_statusBar.data();
 }
 
 Core::IDocument *ChatEditor::document() const
@@ -968,8 +999,12 @@ void ChatEditor::onFileDropped(const QStringList &files)
     QMessageBox::information(widget(), "Files dropped", files.join("\n"));
 }
 
-void ChatEditor::onEditRequested(const Message &msg)
+void ChatEditor::onEditRequested(const Message &sentMsg)
 {
+    // \a sentMsg is owned by the sending ChatMessage widget; opening the
+    // "Human Editor" below can change the current editor and so refresh
+    // (and delete) the message widgets.
+    const Message msg = sentMsg;
     // "Human Editor" mode: assistant messages are edited in place in a
     // regular text editor (split next to the chat) – the whole message is
     // editable (the user can type anywhere), not just appended to and
@@ -1188,8 +1223,11 @@ void ChatEditor::onServerPropsUpdated()
     }
 }
 
-void ChatEditor::onDeleteMessageRequested(const Message &msg)
+void ChatEditor::onDeleteMessageRequested(const Message &sentMsg)
 {
+    // \a sentMsg is owned by the sending ChatMessage widget, which a view
+    // refresh during the (modal) confirmation below would delete.
+    const Message msg = sentMsg;
     auto [userMessages, assistantMessages] = ChatManager::instance().getBranchStats(msg.convId,
                                                                                     msg.id);
     int totalMessages = userMessages + assistantMessages;

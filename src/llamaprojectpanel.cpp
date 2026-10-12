@@ -2,6 +2,7 @@
 
 #include "llamaconstants.h"
 #include "llamasettings.h"
+#include "sandboxstatus.h"
 #include "llamatr.h"
 
 #include <projectexplorer/project.h>
@@ -35,6 +36,11 @@ public:
 
         applyGlobalState();
         m_settings->useGlobalSettings.addOnChanged(this, [this] { applyGlobalState(); });
+
+        // Registered after the settings' own save handlers, so the check
+        // reads the stored values.
+        m_settings->useGlobalSettings.addOnChanged(this, &SandboxStatus::check);
+        m_settings->sandboxCommands.addOnChanged(this, &SandboxStatus::check);
     }
 
 private:

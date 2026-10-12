@@ -5,6 +5,7 @@
 #include <QString>
 #include <functional>
 
+class QHostAddress;
 class QNetworkReply;
 
 namespace LlamaCpp::Tools {
@@ -26,6 +27,29 @@ void httpGet(const QString &url,
              qint64 maxResponseBytes,
              HttpResponseCallback done,
              QNetworkReply **replyOut = nullptr);
+
+/*! True when \a address may be fetched on behalf of the model: not
+    loopback, link-local, private (RFC 1918, CGNAT 100.64/10, IPv6 ULA),
+    unspecified, multicast, broadcast or otherwise reserved, also when the
+    IPv4 address is embedded in an IPv6 one (IPv4-mapped, -compatible,
+    NAT64, 6to4). */
+bool isPublicAddress(const QHostAddress &address);
+
+/*! Like httpGet, but for untrusted (model-supplied) URLs, against
+    server-side request forgery: only http and https are allowed, and the
+    host is resolved and refused unless all of its addresses are public
+    (isPublicAddress()) - before the request and again for every redirect
+    target. Configured endpoints (llama-server, search providers) use
+    httpGet/httpPost and are not restricted.
+
+    Known limit: the network stack resolves the host once more for the
+    connection, so a DNS rebinding attack with a very short TTL can still
+    race the check. */
+void httpGetPublic(const QString &url,
+                   int timeoutSeconds,
+                   qint64 maxResponseBytes,
+                   HttpResponseCallback done,
+                   QNetworkReply **replyOut = nullptr);
 
 /*! Like httpGet, but also sends the given raw headers. */
 void httpGet(const QString &url,

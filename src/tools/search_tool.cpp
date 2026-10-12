@@ -4,6 +4,7 @@
 #include "ripgrep.h"
 #include "tool_utils.h"
 
+#include <projectexplorer/projectmanager.h>
 #include <utils/filepath.h>
 
 #include <QFileInfo>
@@ -12,6 +13,8 @@
 #include <QProcess>
 #include <QSet>
 #include <QTimer>
+
+#include <memory>
 
 using namespace Utils;
 
@@ -96,6 +99,10 @@ struct SearchState : public QObject
     QStringList outputLines;
     QSet<QString> emittedLines; // "file\x0c<line>" of already printed lines
     QByteArray pending;         // incomplete output line
+    bool finished = false;      // done() was called (finished or failed to start)
+    // Credential locations whose matches are dropped (sandbox enabled).
+    bool sandboxed = false;
+    QStringList secretSpellings;
 };
 
 namespace {
@@ -115,6 +122,12 @@ void handleRgEvent(SearchState *state, const QByteArray &line)
         return;
     const QJsonObject data = event.value("data").toObject();
     const QString filePath = data.value("path").toObject().value("text").toString();
+    // The exclusion globs keep ripgrep out of the credential locations; this
+    // also catches other spellings of them (links, case variants). A path
+    // that is not valid UTF-8 has no "text" and cannot be checked.
+    if (state->sandboxed
+        && (filePath.isEmpty() || isSecretPath(filePath, state->secretSpellings)))
+        return;
     const int lineNumber = data.value("line_number").toInt();
     const QJsonObject lines = data.value("lines").toObject();
     if (!lines.contains("text"))
@@ -251,6 +264,7 @@ void SearchTool::run(const QJsonObject &args,
 
     const int limit = qBound(1, args.value("limit").toInt(kDefaultLimit), kMaxLimit);
     const int context = qBound(0, args.value("context").toInt(0), kMaxContext);
+    const bool sandboxed = sandboxEnabled(ProjectExplorer::ProjectManager::startupProject());
 
     const QStringList rgArgs = [&] {
         QStringList a;
@@ -270,6 +284,15 @@ void SearchTool::run(const QJsonObject &args,
         // the last matching glob, so a broad user glob would otherwise
         // re-include .git.
         a << QStringLiteral("--glob") << QStringLiteral("!.git");
+        // Likewise never the credential locations inside the searched
+        // directory (e.g. ~/.ssh when searching the home directory).
+        if (sandboxed && rootIsDir) {
+            for (const QString &secret : secretPathsInside(rootString)) {
+                a << QStringLiteral("--glob") << QString(QStringLiteral("!") + secret)
+                  << QStringLiteral("--glob")
+                  << QString(QStringLiteral("!") + secret + QStringLiteral("/**"));
+            }
+        }
         if (context > 0)
             a << QStringLiteral("--context") << QString::number(context);
         a << QStringLiteral("--") << pattern << rootString;
@@ -280,6 +303,9 @@ void SearchTool::run(const QJsonObject &args,
     state->searchRoot = rootString;
     state->rootIsDir = rootIsDir;
     state->limit = limit;
+    state->sandboxed = sandboxed;
+    if (sandboxed)
+        state->secretSpellings = secretPathSpellings();
     m_state = state;
 
     QProcess *process = new QProcess(state);
@@ -325,21 +351,15 @@ void SearchTool::run(const QJsonObject &args,
                      state,
                      [state] { state->stderrText += QString::fromUtf8(state->process->readAllStandardError()); });
 
-    QObject::connect(process,
-                     &QProcess::errorOccurred,
-                     state,
-                     [state](QProcess::ProcessError error) {
-                         state->processError = error;
-                         state->errorString = state->process->errorString();
-                     });
-
-    // No context object: the connection dies with the process. The tool
-    // itself is kept alive by ChatManager until done() runs, so capturing
-    // this is safe (and Tool is not a QObject, so it cannot be the context).
-    QObject::connect(
-        process,
-        qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
-        [this, state, done = std::move(done)](int exitCode, QProcess::ExitStatus) mutable {
+    // Reports the result exactly once: when ripgrep finished, or when it
+    // failed to start (QProcess emits no finished() then). The tool itself
+    // is kept alive by ChatManager until done() runs, so capturing this is
+    // safe (and Tool is not a QObject, so it cannot be a context object).
+    const auto finish = std::make_shared<std::function<void(int)>>(
+        [this, state, done = std::move(done)](int exitCode) mutable {
+            if (state->finished)
+                return;
+            state->finished = true;
             m_state = nullptr;
             state->stderrText += QString::fromUtf8(state->process->readAllStandardError());
 
@@ -404,6 +424,21 @@ void SearchTool::run(const QJsonObject &args,
             state->deleteLater();
             done(result, ok);
         });
+
+    QObject::connect(process,
+                     &QProcess::errorOccurred,
+                     state,
+                     [state, finish](QProcess::ProcessError error) {
+                         state->processError = error;
+                         state->errorString = state->process->errorString();
+                         if (error == QProcess::FailedToStart)
+                             (*finish)(-1);
+                     });
+
+    // No context object: the connection dies with the process.
+    QObject::connect(process,
+                     qOverload<int, QProcess::ExitStatus>(&QProcess::finished),
+                     [finish](int exitCode, QProcess::ExitStatus) { (*finish)(exitCode); });
 
     timer->start(kTimeoutMs);
     process->start(rgPath.toUserOutput(), rgArgs);

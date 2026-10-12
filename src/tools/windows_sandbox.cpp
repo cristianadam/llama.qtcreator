@@ -158,15 +158,32 @@ QString windowsDirectoryOf(const QString &path)
     return path;
 }
 
+#if defined(Q_OS_WIN)
+// A drive root (C:\) or a UNC share root (\\server\share).
+bool isFileSystemRoot(const QString &path)
+{
+    const QString folded = normalizedPath(path);
+    if (folded.size() <= 3 && folded.size() >= 2 && folded.at(1) == QLatin1Char(':'))
+        return true;
+    return folded.startsWith(QLatin1String("//"))
+           && folded.mid(2).split(QLatin1Char('/'), Qt::SkipEmptyParts).size() <= 2;
+}
+#endif
+
 QJsonObject buildConfig(const QString &cwd,
                         const QProcessEnvironment &env,
                         const QString &commandLine,
                         int timeoutMs,
-                        const QString &shellPath)
+                        const QString &shellRoot)
 {
     const QString canonicalCwd = canonicalGrantPath(cwd);
     // Writable: the working directory and the temporary location (the same
     // coverage as the other platforms).
+    // Note: unlike bubblewrap and Seatbelt, the protected locations inside
+    // the working directory (.git, .qtcreator, *.user) stay writable here:
+    // the MXC configuration has no documented semantics for a read-only or
+    // denied path nested in a read-write grant (and deniedPaths would hide
+    // .git from git entirely). The file tools still refuse those writes.
     QStringList readwrite = { canonicalCwd, canonicalGrantPath(QDir::tempPath()) };
     readwrite = withoutNested(readwrite);
 
@@ -176,14 +193,8 @@ QJsonObject buildConfig(const QString &cwd,
     // credential locations need no explicit deny, unlike the deny-list
     // profiles of the other platforms.
     QStringList readonly;
-    if (!shellPath.isEmpty()) {
-        // Grant the shell's installation root (the parent of the directory
-        // holding the executable, e.g. C:\git for C:\git\bin\bash.exe) so
-        // the whole tree the shell may load from is visible.
-        const QString shellDir = canonicalGrantPath(
-            windowsDirectoryOf(windowsDirectoryOf(shellPath)));
-        readonly << shellDir;
-    }
+    if (!shellRoot.isEmpty())
+        readonly << canonicalGrantPath(shellRoot);
     const QString systemRoot = env.value(QStringLiteral("SystemRoot"),
                                          env.value(QStringLiteral("WINDIR")));
     if (!systemRoot.isEmpty())
@@ -193,7 +204,9 @@ QJsonObject buildConfig(const QString &cwd,
     // The container starts with no host environment; pass the caller's
     // environment explicitly. MXC's validator requires LOCALAPPDATA; point
     // it at the workdir when the caller has none.
-    QProcessEnvironment workloadEnv = env;
+    // Credentials never reach the container (the caller strips them
+    // already; this keeps the probe and any other caller honest).
+    QProcessEnvironment workloadEnv = withoutSecretVariables(env);
     if (!workloadEnv.contains(QStringLiteral("LOCALAPPDATA")))
         workloadEnv.insert(QStringLiteral("LOCALAPPDATA"), canonicalCwd);
     QStringList envList; // keys() is sorted
@@ -343,7 +356,8 @@ bool liveProbePassed(QProcess &process,
     reason the command would get. */
 LiveProbeState liveProbeState(const QString &exe,
                               const QProcessEnvironment &env,
-                              const QString &shellPath)
+                              const QString &shellPath,
+                              const QString &shellRoot)
 {
     LiveProbe &probe = liveProbes()[exe];
     if (probe.state != LiveProbeState::Failed)
@@ -402,7 +416,7 @@ LiveProbeState liveProbeState(const QString &exe,
                                     env,
                                     commandLine,
                                     kLiveProbeTimeoutMs,
-                                    shellPath));
+                                    shellRoot));
     if (encoded.size() > kMaxConfigBase64Chars) {
         cleanupAndFail(Tr::tr("The Windows sandbox configuration is too long (%1 of %2 "
                               "characters); the process environment is probably oversized. "
@@ -453,6 +467,7 @@ quint32 windowsBuildNumber()
 }
 LiveProbeState liveProbeState(const QString &,
                               const QProcessEnvironment &,
+                              const QString &,
                               const QString &)
 {
     return LiveProbeState::Ok;
@@ -460,6 +475,56 @@ LiveProbeState liveProbeState(const QString &,
 #endif
 
 } // namespace
+
+ShellInstallRoot windowsShellInstallRoot(const QString &shellPath)
+{
+    QString shell = shellPath;
+    shell.replace(QLatin1Char('/'), QLatin1Char('\\'));
+    const QString unrecognized
+        = Tr::tr("The bash at \"%1\" is not part of a recognized Git for Windows or "
+                 "MSYS2 installation, so the Windows sandbox cannot grant it a narrow "
+                 "read-only location. Install Git for Windows "
+                 "(https://git-scm.com/download/win) and put its bash first on PATH, "
+                 "or uncheck 'Sandbox commands' in the Llama settings.")
+              .arg(shellPath);
+
+    // <root>\usr\bin\bash.exe (MSYS2 and Git for Windows) or
+    // <root>\bin\bash.exe (the Git for Windows launcher).
+    const QString bashDir = windowsDirectoryOf(shell);
+    const QString foldedDir = normalizedPath(bashDir);
+    QString root;
+    if (foldedDir.endsWith(QLatin1String("/usr/bin")))
+        root = windowsDirectoryOf(windowsDirectoryOf(bashDir));
+    else if (foldedDir.endsWith(QLatin1String("/bin")))
+        root = windowsDirectoryOf(bashDir);
+    if (root.isEmpty() || root == bashDir)
+        return { {}, unrecognized };
+
+#if defined(Q_OS_WIN)
+    // The grant must stay narrow: never a drive root, the Windows directory
+    // (WSL's System32\bash.exe), or anything covering the user profile.
+    const QString systemRoot = qEnvironmentVariable("SystemRoot",
+                                                    qEnvironmentVariable("WINDIR"));
+    const QString home = QDir::homePath();
+    if (isFileSystemRoot(root)
+        || (!systemRoot.isEmpty()
+            && (pathCoversInsensitive(systemRoot, root)
+                || pathCoversInsensitive(root, systemRoot)))
+        || (!home.isEmpty() && pathCoversInsensitive(root, home))) {
+        return { {}, unrecognized };
+    }
+    const QDir rootDir(root);
+    const bool hasUsrBash = QFileInfo(rootDir.filePath(QStringLiteral("usr/bin/bash.exe"))).isFile();
+    const bool hasMarker
+        = QFileInfo::exists(rootDir.filePath(QStringLiteral("git-cmd.exe")))
+          || QFileInfo::exists(rootDir.filePath(QStringLiteral("cmd/git.exe")))
+          || QFileInfo::exists(rootDir.filePath(QStringLiteral("msys2.exe")))
+          || QFileInfo::exists(rootDir.filePath(QStringLiteral("msys2_shell.cmd")));
+    if (!hasUsrBash || !hasMarker)
+        return { {}, unrecognized };
+#endif
+    return { root, {} };
+}
 
 QString quoteWindowsArgument(const QString &argument)
 {
@@ -532,7 +597,20 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
         return spec;
     }
 
-    const LiveProbeState liveState = liveProbeState(exe, env, shellPath);
+    // Only a recognized shell installation is granted (read-only); the
+    // grandparent of an arbitrary bash.exe could be a whole drive or the
+    // user profile.
+    QString shellRoot;
+    if (!shellPath.isEmpty()) {
+        const ShellInstallRoot root = windowsShellInstallRoot(shellPath);
+        if (!root.error.isEmpty()) {
+            spec.error = root.error;
+            return spec;
+        }
+        shellRoot = root.root;
+    }
+
+    const LiveProbeState liveState = liveProbeState(exe, env, shellPath, shellRoot);
     if (liveState == LiveProbeState::Running) {
         spec.error = Tr::tr("The Windows sandbox (Microsoft MXC) is verifying its "
                             "isolation for the first time; run the command again in a "
@@ -545,7 +623,7 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
     }
 
     const QString encoded = encodedConfig(
-        buildConfig(cwd, env, commandLine, timeoutMs, shellPath));
+        buildConfig(cwd, env, commandLine, timeoutMs, shellRoot));
     if (encoded.size() > kMaxConfigBase64Chars) {
         spec.error = Tr::tr("The Windows sandbox command line is too long (%1 of %2 "
                             "characters); the process environment is probably oversized. "

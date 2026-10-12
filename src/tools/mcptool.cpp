@@ -97,7 +97,39 @@ QString McpTool::detailsMarkdown(const QJsonObject &arguments, const QString &re
 void McpTool::run(const QJsonObject &arguments,
                   std::function<void(const QString &output, bool ok)> done) const
 {
-    McpBridge::instance().callTool(m_name, arguments, std::move(done));
+    auto call = std::make_shared<CallState>();
+    m_call = call;
+    // Weak: the callback is owned by the client's pending call map, so a
+    // strong reference would only keep the state alive for nothing.
+    std::weak_ptr<CallState> weakCall = call;
+    const McpBridge::ToolCallHandle handle = McpBridge::instance().callTool(
+        m_name,
+        arguments,
+        [weakCall, done = std::move(done)](const QString &output, bool ok) {
+            if (const auto state = weakCall.lock()) {
+                if (state->finished)
+                    return;
+                state->finished = true;
+            }
+            done(output, ok);
+        });
+    // The callback may already have run synchronously (server unavailable),
+    // in which case there is nothing left to abort.
+    if (!call->finished)
+        call->handle = handle;
+}
+
+void McpTool::abort()
+{
+    // Safe before run(), after the call finished, and more than once: the
+    // client invokes the done callback at most once (cancelToolCall() is a
+    // no-op for a finished call).
+    if (!m_call || m_call->finished)
+        return;
+    // Copies: the done callback may destroy this tool.
+    const McpBridge::ToolCallHandle handle = m_call->handle;
+    McpBridge::cancelToolCall(handle,
+                              Tr::tr("MCP tool \"%1\" was stopped by the user.").arg(m_name));
 }
 
 } // namespace LlamaCpp::Tools

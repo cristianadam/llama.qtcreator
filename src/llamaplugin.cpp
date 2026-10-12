@@ -40,6 +40,7 @@
 #include "llamachateditor.h"
 #include "llamachatmanager.h"
 #include "llamaconstants.h"
+#include "sandboxstatus.h"
 #include "llamaconversationsview.h"
 #include "llamaicons.h"
 #include "llamalocatorfilter.h"
@@ -297,6 +298,9 @@ void LlamaPlugin::extensionsInitialized()
 
     // Same for the KaTeX math engine (smaller bundle, same pattern).
     KaTeXEngine::instance()->warmUp();
+
+    // Warn when "Sandbox commands" is on but the sandbox backend is missing.
+    SandboxStatus::setup();
 }
 
 bool LlamaPlugin::delayedInitialize()

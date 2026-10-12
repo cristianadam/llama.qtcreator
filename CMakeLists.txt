@@ -85,6 +85,7 @@ add_qtc_plugin(LlamaCpp
     src/llamamarkdownwidget.cpp src/llamamarkdownwidget.h
     src/llamaplugin.cpp src/llamaplugin.h
     src/llamaprojectpanel.cpp src/llamaprojectpanel.h
+    src/sandboxstatus.cpp src/sandboxstatus.h
     src/llamasearchtoolbar.cpp src/llamasearchtoolbar.h
     src/llamasettings.cpp src/llamasettings.h
     src/llamastorage.cpp src/llamastorage.h

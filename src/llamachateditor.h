@@ -1,4 +1,5 @@
 #pragma once
+#include <QPointer>
 #include <QVector>
 
 #include <coreplugin/editormanager/ieditor.h>
@@ -112,7 +113,7 @@ private:
     QWidget *m_propsWidget{nullptr};
     QLabel *m_workingDirLabel{nullptr}; // "Working directory" label in m_propsWidget
     QWidget *m_followUpWidget{nullptr};
-    QWidget *m_statusBar{nullptr};
+    QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};

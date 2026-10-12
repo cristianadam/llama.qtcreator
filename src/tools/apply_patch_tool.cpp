@@ -431,6 +431,15 @@ void ApplyPatchTool::run(const QJsonObject &args,
                 return done(QStringLiteral("apply_patch verification failed: %1").arg(error),
                             false);
         }
+        // A move removes the source after writing the target, so the source
+        // needs write access as well, or any readable file could be deleted
+        // by "moving" it into the project.
+        if (!op.target.isEmpty() && op.target != op.source) {
+            const QString error = sandboxAccessError(op.source, /*isWrite=*/true);
+            if (!error.isEmpty())
+                return done(QStringLiteral("apply_patch verification failed: %1").arg(error),
+                            false);
+        }
 
         ops.append(op);
     }

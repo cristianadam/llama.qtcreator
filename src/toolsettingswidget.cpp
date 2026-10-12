@@ -2,6 +2,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "llamasyntaxhighlighter.h"
+#include "sandboxstatus.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/mxc.h"
@@ -144,6 +145,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
                                      [this, mxcDownloader](QtTaskTree::DoneWith) {
                                          m_mxcButton->setEnabled(true);
                                          updateMxcStatus();
+                                         SandboxStatus::check();
                                      });
             });
     auto *mxcRow = new QWidget(this);

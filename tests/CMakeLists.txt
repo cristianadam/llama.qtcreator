@@ -33,6 +33,7 @@ add_qtc_test(llamatools_test
     ../src/projectinstructions.cpp
     ../src/skills.cpp
     ../src/skillssettingswidget.cpp
+    sandboxstatus_stub.cpp
     ../src/toolsettingswidget.cpp
     ../src/tools/apply_patch_tool.cpp
     ../src/tools/edit_file_tool.cpp
