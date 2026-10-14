@@ -53,6 +53,11 @@
         <translation>サーバー状態を表示</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>設定</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="-28"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
@@ -89,7 +94,12 @@
         <translation>llama.cpp サーバーを照会して、どのモデルが読み込まれているかを報告します。</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>llama.cpp の設定ページを開きます。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>llama.cpp を無効にします。</translation>
     </message>
@@ -99,7 +109,7 @@
         <translation>llama.cpp を有効にします。</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
@@ -151,7 +161,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>チャット</translation>
     </message>
@@ -160,7 +170,7 @@
         <translation type="vanished">[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+96"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>llama.cpp を有効にする</translation>
@@ -171,7 +181,7 @@
         <translation>llama.cpp の統合を有効にします。</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>エンドポイント</translation>
     </message>
@@ -215,12 +225,12 @@
         <translation type="vanished">カーソル位置の後に含めるコード行数を指定します。</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="-90"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location line="+135"/>
+        <location line="+145"/>
         <location line="+2"/>
         <source>Auto FIM</source>
         <translation>自動 FIM</translation>
@@ -563,7 +573,7 @@
         <translation>温度</translation>
     </message>
     <message>
-        <location line="-283"/>
+        <location line="-293"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>会話のタイトルを絵文字1つを含む数語で要約してください。会話で使用されている言語を使用してください。プレーンテキストで、Markdown は使用しないでください。</translation>
     </message>
@@ -601,7 +611,12 @@
         <translation>スキル</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>サンドボックス</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>FIM モデル</translation>
     </message>
@@ -986,22 +1001,66 @@
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>コマンドをサンドボックス化する</translation>
     </message>
     <message>
-        <location line="-324"/>
+        <location line="-364"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。ツール設定ページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>サンドボックス書き込み可能ディレクトリ</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>プロジェクトディレクトリと一時場所に加え、サンドボックス化されたツールが書き込めるディレクトリ。サンドボックス設定ページで管理します。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>サンドボックス読み取り専用ディレクトリ</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>サンドボックス内で読み取り可能な追加ディレクトリ。読み取りを制限するのは Windows のプロセスコンテナのみ（他のプラットフォームはすでにファイルシステムを読み取り専用として公開している）ため、これは Windows で有効になります。サンドボックス設定ページで管理します。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>サンドボックス読み取り拒否ディレクトリ</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>組み込みの認証情報のある場所（常に保護されます）に加え、どのツールも読み取れない（書き込めない）追加ディレクトリ。サンドボックス設定ページで管理します。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>サンドボックス: ネットワークアクセスを許可</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>チェックされている場合、サンドボックス化された bash コマンドはネットワークを使用できます（例: &apos;curl&apos; や &apos;npm install&apos;）。既定では無効: サンドボックスにはネットワークアクセスがありません。webfetch と websearch ツールは常にサンドボックスの外で実行され、影響を受けません。サンドボックス設定ページで管理します。</translation>
+    </message>
+    <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。このツールページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。</translation>
+        <translation type="vanished">チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。このツールページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では @anthropic-ai/sandbox-runtime の srt-win）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows ではサンドボックスの初回インストールが必要です: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（UAC プロンプト1回）。srt-win 実行可能ファイルは PATH に含まれている必要があります（LLAMA_SRT_WIN でその場所を指定できます）。</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+9"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1198,7 +1257,7 @@
         <translation type="vanished">秒あたりのトークン数を表示:</translation>
     </message>
     <message>
-        <location line="-532"/>
+        <location line="-572"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
@@ -1443,7 +1502,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-529"/>
+        <location filename="../src/llamasettings.cpp" line="-539"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -1523,7 +1582,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">保存</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>新規会話</translation>
     </message>
@@ -1768,19 +1827,21 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Git の変更を収集しています</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>（空）</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+204"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+203"/>
         <source>Add…</source>
         <translation>追加...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -1806,7 +1867,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">ロケーターメニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>プロンプト</translation>
     </message>
@@ -1832,7 +1893,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>ロケーター（&quot;ll&quot;）</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>定義を表示するツールを選択してください</translation>
     </message>
@@ -1852,7 +1913,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>MXC %1 をダウンロード</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>サンドボックス化（コマンド、ディレクトリ、ネットワーク）は、サンドボックス設定ページで設定します。</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
@@ -1903,7 +1969,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Qt Creator 本体が管理する組み込みの Qt Creator MCP サーバー（Qt Creator 設定の Tools → MCP）。</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -1969,7 +2035,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
@@ -1990,7 +2056,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>名前: %1</translation>
     </message>
@@ -2180,6 +2246,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>llama.cpp チャットツールのサンドボックスの問題。</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>書き込み可能ディレクトリ:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>プロジェクトディレクトリと一時場所に加え、サンドボックス化されたツールが書き込めるディレクトリ。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>読み取り専用ディレクトリ:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>サンドボックス内で読み取り可能な追加ディレクトリ。読み取りを制限するのは Windows のプロセスコンテナのみ（他のプラットフォームはすでにファイルシステムを読み取り専用として公開している）ため、これは Windows で有効になります。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>読み取り拒否ディレクトリ:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>組み込みの認証情報のある場所（常に保護されます）に加え、どのツールも読み取れない（書き込めない）追加ディレクトリ。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>webfetch と websearch ツールは常にサンドボックスの外で実行され、この設定の影響を受けません。</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>ファイルシステム</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>ネットワーク</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>ディレクトリを選択</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2245,7 +2361,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
     </message>
@@ -2255,7 +2371,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>［出力が切り詰められました: %1］</translation>
     </message>
@@ -2275,7 +2391,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完全な出力を以下に保存しました: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>%1 を実行中</translation>
     </message>
@@ -3005,22 +3121,30 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所への書き込みのみが許可されます。プロジェクトを開くと、そのファイルで作業できます。</translation>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所への書き込みのみが許可されます。プロジェクトを開くと、そのファイルで作業できます。</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内、一時場所、およびサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
     </message>
@@ -3074,17 +3198,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>

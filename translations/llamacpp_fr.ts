@@ -251,6 +251,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher l&apos;état du serveur</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Préférences</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Maj+G</translation>
@@ -281,7 +286,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Interroger les serveurs llama.cpp et indiquer quels modèles sont chargés.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Ouvrir la page des paramètres de llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Désactive l&apos;intégration de llama.cpp.</translation>
     </message>
@@ -291,7 +301,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Active l&apos;intégration de llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Erreur lors de la récupération de la complétion FIM depuis %1 : %2</translation>
     </message>
@@ -343,18 +353,18 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+96"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Activer l&apos;intégration de llama.cpp</translation>
@@ -365,7 +375,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Active l&apos;intégration avec le serveur llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Point d&apos;accès (Endpoint)</translation>
     </message>
@@ -409,12 +419,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="-90"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+62"/>
         <source>API Key</source>
         <translation>Clé API</translation>
     </message>
@@ -544,7 +554,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre maximal de complétions mises en cache à conserver dans le cache des résultats.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Résumez le titre de la conversation en quelques mots, en incluant un emoji. Utilisez la langue utilisée dans la conversation. Utilisez du texte brut, sans Markdown.</translation>
     </message>
@@ -609,7 +619,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Compétences</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Bac à sable</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>Modèle FIM</translation>
     </message>
@@ -1139,22 +1154,66 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Commandes dans un bac à sable</translation>
     </message>
     <message>
-        <location line="-324"/>
+        <location line="-364"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis la page des paramètres des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente. Les dossiers supplémentaires et la politique réseau sont configurés sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Dossiers en écriture du bac à sable</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Dossiers vers lesquels les outils en bac à sable peuvent écrire, en plus du dossier du projet et des emplacements temporaires. Géré sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Dossiers en lecture seule du bac à sable</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Dossiers supplémentaires lisibles dans le bac à sable. Seul le conteneur de processus Windows restreint les lectures (les autres plateformes exposent déjà le système de fichiers en lecture seule), donc cela ne prend effet que sur Windows. Géré sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Dossiers en lecture refusée du bac à sable</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Dossiers supplémentaires que nul outil ne peut lire (ni écrire), en plus des emplacements de jetons d&apos;authentification intégrés, qui sont toujours protégés. Géré sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Bac à sable : autoriser l&apos;accès au réseau</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Si cette option est cochée, les commandes bash en bac à sable peuvent utiliser le réseau (par ex. « curl » ou « npm install »). Désactivée par défaut : le bac à sable n&apos;a pas d&apos;accès au réseau. Les outils webfetch et websearch s&apos;exécutent toujours hors du bac à sable et ne sont pas affectés. Géré sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis cette page des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente.</translation>
+        <translation type="vanished">Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis cette page des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, srt-win de @anthropic-ai/sandbox-runtime sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable nécessite une installation unique : &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; l&apos;exécutable srt-win doit être dans le PATH (LLAMA_SRT_WIN peut pointer vers lui).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+9"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1351,7 +1410,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-532"/>
+        <location line="-572"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
@@ -1922,19 +1981,21 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Copié dans le presse-papiers</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(vide)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+204"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+203"/>
         <source>Add…</source>
         <translation>Ajouter…</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -1960,7 +2021,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation type="vanished">Seule la première ligne d&apos;une invitation est affichée dans le menu du localisateur ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Invitation</translation>
     </message>
@@ -1986,7 +2047,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Localisateur (« ll »)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Sélectionnez un outil pour afficher sa définition</translation>
     </message>
@@ -2006,7 +2067,12 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Télécharger MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Le bac à sable (commandes, dossiers, réseau) est configuré sur la page des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
@@ -2057,7 +2123,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils → MCP dans les paramètres de Qt Creator).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2123,7 +2189,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -2144,7 +2210,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Nom : %1</translation>
     </message>
@@ -2333,6 +2399,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+1"/>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Problèmes avec le bac à sable des outils du chat llama.cpp.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Dossiers en écriture :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Dossiers vers lesquels les outils en bac à sable peuvent écrire, en plus du dossier du projet et des emplacements temporaires.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Dossiers en lecture seule :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Dossiers supplémentaires lisibles dans le bac à sable. Seul le conteneur de processus Windows restreint les lectures (les autres plateformes exposent déjà le système de fichiers en lecture seule), donc cela ne prend effet que sur Windows.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Dossiers en lecture refusée :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Dossiers supplémentaires que nul outil ne peut lire (ni écrire), en plus des emplacements de jetons d&apos;authentification intégrés, qui sont toujours protégés.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Les outils webfetch et websearch s&apos;exécutent toujours hors du bac à sable et ne sont pas affectés par ce paramètre.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Système de fichiers</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Réseau</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Choisir un dossier</translation>
     </message>
 </context>
 <context>
@@ -2763,7 +2879,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
     </message>
@@ -2773,7 +2889,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Sortie tronquée : %1]</translation>
     </message>
@@ -2793,7 +2909,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Sortie complète enregistrée dans : %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>exécution de %1</translation>
     </message>
@@ -3523,22 +3639,30 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires. Ouvrez un projet pour travailler sur ses fichiers.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires. Ouvrez un projet pour travailler sur ses fichiers.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet, les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : les fichiers .git, .qtcreator et *.user sont protégés dans le bac à sable.</translation>
     </message>
@@ -3592,17 +3716,17 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>

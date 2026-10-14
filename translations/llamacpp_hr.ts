@@ -49,6 +49,11 @@
         <translation>Prikaži status servera</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Postavke</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
@@ -79,7 +84,12 @@
         <translation>Upita llama.cpp servere i prijavi koji su modeli učitani.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Otvorite stranicu postavaka llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Onemogući funkciju llama.cpp.</translation>
     </message>
@@ -89,7 +99,7 @@
         <translation>Omogući funkciju llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -141,23 +151,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Razgovor</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+67"/>
         <source>Tools</source>
         <translation>Alati</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Omogući alat llama.cpp</translation>
@@ -168,7 +178,7 @@
         <translation>Omogućava integraciju s alatom llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Krajnja točka</translation>
     </message>
@@ -342,7 +352,7 @@
         <translation type="vanished">Maksimalan broj generiranih odgovora koji se čuvaju u kešu rezultata.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Sažmi naslov razgovora u nekoliko riječi uključujući jedan emoji. Koristi jezik koji se koristi u razgovoru. Koristi običan tekst, bez markdowna.</translation>
     </message>
@@ -380,7 +390,12 @@
         <translation>Vještine</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Sandbox</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>FIM model</translation>
     </message>
@@ -958,11 +973,56 @@
         <translation>Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim, &quot;{file}&quot; i &quot;{line}&quot; trenutnom datotekom i linijom kursora, &quot;{diagnostics}&quot; greškama i upozorenjima trenutne datoteke, a &quot;{git_diff}&quot; nekomitiranim promjenama njezina git repozitorija.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, Microsoftov MXC procesni kontejner na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox koristi fiksirani wxc-exec.exe runtime koji se može preuzeti s stranice postavaka alata (LLAMA_WXC_EXEC može ukazivati na njega) i zahtijeva Windows 11 24H2 ili noviji. Dodatni direktoriji i mrežna politika konfiguriraju se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Sandbox upisivi direktoriji</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Direktoriji u koje alati u sandboxu mogu pisati, uz direktorij projekta i privremene lokacije. Upravlja se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Sandbox direktoriji samo za čitanje</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Dodatni direktoriji čitljivi unutar sandboka. Samo Windows procesni kontejner ograničava čitanje (ostale platforme već izlažu datotečni sustav samo za čitanje), pa ovo stupa na snagu na Windowsu. Upravlja se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Sandbox direktoriji s zabranom čitanja</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Dodatni direktoriji koje nijedan alat ne smije čitati (niti pisati u njih), uz ugrađene lokacije vjerodajnica koje su uvijek zaštićene. Upravlja se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Sandbox: dopusti pristup mreži</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Ako je označeno, sandbox bash komande mogu koristiti mrežu (npr. &apos;curl&apos; ili &apos;npm install&apos;). Isključeno po zadanoj postavci: sandbox nema pristup mreži. Alati webfetch i websearch uvijek se izvršavaju izvan sandboka i nisu pogođeni. Upravlja se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Direktoriji vještina</translation>
     </message>
@@ -985,22 +1045,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox komande</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, Microsoftov MXC procesni kontejner na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox koristi fiksirani wxc-exec.exe runtime koji se može preuzeti s ove stranice Alati (LLAMA_WXC_EXEC može ukazivati na njega) i zahtijeva Windows 11 24H2 ili noviji.</translation>
+        <translation type="vanished">Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, Microsoftov MXC procesni kontejner na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox koristi fiksirani wxc-exec.exe runtime koji se može preuzeti s ove stranice Alati (LLAMA_WXC_EXEC može ukazivati na njega) i zahtijeva Windows 11 24H2 ili noviji.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox zahtijeva jednokratnu instalaciju: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); srt-win izvedbena datoteka mora biti na PATH-u (LLAMA_SRT_WIN može ukazivati na nju).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1626,7 +1685,7 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
@@ -1712,7 +1771,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Spremi</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Novi razgovor</translation>
     </message>
@@ -2061,7 +2120,12 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Preuzmi MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Sandbox (komande, direktoriji, mreža) konfigurira se na stranici postavaka Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
@@ -2112,7 +2176,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Ugrađeni Qt Creator MCP server kojim upravlja sam Qt Creator (Alati → MCP u postavkama Qt Creatora).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2177,7 +2241,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2198,7 +2262,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2233,12 +2297,13 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Interno</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(prazno)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2246,6 +2311,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2271,7 +2337,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">U izborniku lokatora prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2452,6 +2518,56 @@ Authorization: Bearer &lt;token&gt;</source>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Problemi s sandboxom alata za razgovor u llama.cpp-u.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Upisivi direktoriji:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Direktoriji u koje alati u sandboxu mogu pisati, uz direktorij projekta i privremene lokacije.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Direktoriji samo za čitanje:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Dodatni direktoriji čitljivi unutar sandboka. Samo Windows procesni kontejner ograničava čitanje (ostale platforme već izlažu datotečni sustav samo za čitanje), pa ovo stupa na snagu na Windowsu.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Direktoriji s zabranom čitanja:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Dodatni direktoriji koje nijedan alat ne smije čitati (niti pisati u njih), uz ugrađene lokacije vjerodajnica koje su uvijek zaštićene.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Alati webfetch i websearch uvijek se izvršavaju izvan sandboka i nisu pogođeni ovom postavkom.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Datotečni sustav</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Mreža</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Odaberite direktorij</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2517,7 +2633,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
     </message>
@@ -2527,7 +2643,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Izlaz skraćen: %1]</translation>
     </message>
@@ -2547,7 +2663,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Puni izlaz spremljen u: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>izvršavanje %1</translation>
     </message>
@@ -3267,22 +3383,30 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativne mrežne podjele nisu dostupne unutar sandboka.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija. Otvorite projekt za rad na njegovim datotekama.</translation>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija. Otvorite projekt za rad na njegovim datotekama.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta, privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
     </message>
@@ -3336,17 +3460,17 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows sandbox konfiguracija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>

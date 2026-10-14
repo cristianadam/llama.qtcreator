@@ -53,6 +53,11 @@
         <translation>Visa serverstatus</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Inställningar</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Skift+G</translation>
@@ -83,7 +88,12 @@
         <translation>Fråga llama.cpp-serverna och rapportera vilka modeller som är laddade.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Öppna inställningssidan för llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Inaktivera llama.cpp.</translation>
     </message>
@@ -93,7 +103,7 @@
         <translation>Aktivera llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fel vid hämtning av FIM-komplettering från %1: %2</translation>
     </message>
@@ -145,12 +155,12 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chatt</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -498,7 +508,7 @@ Vill du överskriva den?</translation>
         <translation type="vanished">Alla filer (*)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+55"/>
+        <location filename="../src/llamasettings.cpp" line="+56"/>
         <source>Create a summary of {selection}</source>
         <translation>Skapa en sammanfattning av {selection}</translation>
     </message>
@@ -578,7 +588,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Spara</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Ny konversation</translation>
     </message>
@@ -1033,7 +1043,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Verktyg</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Aktivera llama.cpp</translation>
@@ -1044,7 +1054,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Aktiverar integrationen med llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Slutpunkt</translation>
     </message>
@@ -1218,7 +1228,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Maximalt antal cachade kompletteringar att behålla i result_cache.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Sammanfatta konversationens titel med några ord inklusive en emoji. Använd det språk som används i konversationen. Använd ren text, ingen markdown.</translation>
     </message>
@@ -1260,7 +1270,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Färdigheter</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Sandbox</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>FIM-modell</translation>
     </message>
@@ -1838,11 +1853,56 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Inbyggda prompts för &quot;ll&quot;-locatorn. Endast den första raden av en prompt visas i menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten, &quot;{file}&quot; och &quot;{line}&quot; med den aktuella filen och markörraden, &quot;{diagnostics}&quot; med de aktuella filens fel och varningar, och &quot;{git_diff}&quot; med okommittade ändringar i dess git-repo.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Om markerat är chattverktygen inneslutna i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivningar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC-processbehållare på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows använder sandboxen den fastställda wxc-exec.exe-runtime, som kan hämtas från inställningssidan för verktyg (LLAMA_WXC_EXEC kan peka på den), och kräver Windows 11 24H2 eller nyare. De extra katalogerna och nätverkspolicyn konfigureras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Sandbox: skrivbara kataloger</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Kataloger som sandboxade verktyg får skriva till, utöver projektkatalogen och tillfälliga platser. Hanteras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Sandbox: skrivskyddade kataloger</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Ytterligare kataloger som går att läsa inom sandboxen. Endast Windows processbehållare begränsar läsning (andra plattformar exponerar redan filsystemet skrivskyddat), så detta har effekt på Windows. Hanteras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Sandbox: kataloger där läsning förbjuds</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Ytterligare kataloger som inget verktyg får läsa (eller skriva till), utöver de inbyggda autentiseringsuppgifters platserna, som alltid är skyddade. Hanteras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Sandbox: tillåt nätverksåtkomst</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Om markerat får sandboxade bash-kommandon använda nätverket (t.ex. &apos;curl&apos; eller &apos;npm install&apos;). Avstängt som standard: sandboxen har ingen nätverksåtkomst. Verktygen webfetch och websearch körs alltid utanför sandboxen och påverkas inte. Hanteras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Inbyggda prompts för &quot;ll&quot;-locatorn. Endast den första raden av en prompt visas i menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Färdighetskataloger</translation>
     </message>
@@ -1865,22 +1925,21 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandboxkommandon</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivningar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC-processbehållare på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows använder sandboxen den fastställda wxc-exec.exe-runtime, som kan hämtas från den här verktygssidan (LLAMA_WXC_EXEC kan peka på den), och kräver Windows 11 24H2 eller nyare.</translation>
+        <translation type="vanished">Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivningar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC-processbehållare på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows använder sandboxen den fastställda wxc-exec.exe-runtime, som kan hämtas från den här verktygssidan (LLAMA_WXC_EXEC kan peka på den), och kräver Windows 11 24H2 eller nyare.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivingar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win från @anthropic-ai/sandbox-runtime på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows kräver sandboxen en engångsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); srt-win-exekverbara filen måste finnas på PATH (LLAMA_SRT_WIN kan peka på den).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -2087,19 +2146,21 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Samlar in git-ändringar</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(tom)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+204"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+203"/>
         <source>Add…</source>
         <translation>Lägg till…</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2125,7 +2186,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation type="vanished">Endast den första raden av en prompt visas i locator-menyn; hela texten skickas till modellen. &quot;{selection}&quot; ersätts med den markerade texten.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2151,7 +2212,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Select a tool to view its definition</source>
         <translation>Välj ett verktyg för att visa dess definition</translation>
     </message>
@@ -2171,7 +2232,12 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Hämta MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Sandboxning (kommandon, kataloger, nätverk) konfigureras på inställningssidan för Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Redigera</translation>
     </message>
@@ -2222,7 +2288,7 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>Den inbyggda Qt Creator MCP-servern, hanterad av själva Qt Creator (Verktyg → MCP i Qt Creator-inställningarna).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2288,7 +2354,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -2309,7 +2375,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Namn: %1</translation>
     </message>
@@ -2499,6 +2565,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Problem med sandboxen för llama.cpp-chattverktygen.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Skrivbara kataloger:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Kataloger som sandboxade verktyg får skriva till, utöver projektkatalogen och tillfälliga platser.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Skrivskyddade kataloger:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Ytterligare kataloger som går att läsa inom sandboxen. Endast Windows processbehållare begränsar läsning (andra plattformar exponerar redan filsystemet skrivskyddat), så detta har effekt på Windows.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Kataloger där läsning förbjuds:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Ytterligare kataloger som inget verktyg får läsa (eller skriva till), utöver de inbyggda autentiseringsuppgifters platserna, som alltid är skyddade.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Verktygen webfetch och websearch körs alltid utanför sandboxen och påverkas inte av den här inställningen.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Filsystem</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Nätverk</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Välj en katalog</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2564,7 +2680,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ingen bash-shell hittades. Installera Git for Windows (https://git-scm.com/download/win) eller lägg till en bash på PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-exekverbar fil hittades inte; sandbox är inte tillgängligt på det här systemet.</translation>
     </message>
@@ -2574,7 +2690,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) hittades inte. Installera det (t.ex. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Utdata avklippt: %1]</translation>
     </message>
@@ -2594,7 +2710,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hela utdata sparad till: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>kör %1</translation>
     </message>
@@ -3324,22 +3440,30 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uppgiftslistan uppdaterad: %1 av %2 slutförda.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Åtkomst av &quot;%1&quot; är inte tillåten: enhetssökvägar och administrativa delar är inte åtkomliga inom sandboxen.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Skrivning till &quot;%1&quot; är inte tillåten: inget projekt är öppet, så sandboxen tillåter endast skrivningar inom tillfälliga platser. Öppna ett projekt för att arbeta med dess filer.</translation>
+        <translation type="vanished">Skrivning till &quot;%1&quot; är inte tillåten: inget projekt är öppet, så sandboxen tillåter endast skrivningar inom tillfälliga platser. Öppna ett projekt för att arbeta med dess filer.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen och tillfälliga platser.</translation>
+        <translation type="vanished">Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen och tillfälliga platser.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Skrivning till &quot;%1&quot; är inte tillåten: inget projekt är öppet, så sandboxen tillåter endast skrivningar inom tillfälliga platser och de extra skrivbara katalogerna från Sandbox-inställningarna. Öppna ett projekt för att arbeta med dess filer.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Skrivning till &quot;%1&quot; är inte tillåten: sandboxen tillåter endast skrivningar inom projektkatalogen, tillfälliga platser och de extra skrivbara katalogerna från Sandbox-inställningarna.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Skrivning till &quot;%1&quot; är inte tillåten: .git, .qtcreator och *.user-filer är skyddade inom sandboxen.</translation>
     </message>
@@ -3393,17 +3517,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows-sandboxbackenden (wxc-exec) rapporterade MXC-behållaren som otillgänglig (avslut %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows-sandboxen kunde inte upprätta sin live-isoleringsproben (tillfällig katalog eller home-canary). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows-sandboxen kunde inte skapa canary-filen för sin live-isoleringsproben på %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows-sandboxens konfiguration är för lång (%1 av %2 tecken); processmiljön är troligen för stor. Avmarkera &apos;Sandboxkommandon&apos; i Llama-inställningarna för att köra kommandon utan sandbox.</translation>
     </message>

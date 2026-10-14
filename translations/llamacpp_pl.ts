@@ -48,6 +48,11 @@
         <translation>Pokaż status serwera</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Preferencje</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
         <translation>Konwersacja llama.cpp</translation>
@@ -83,7 +88,12 @@
         <translation>Zapytaj serwery llama.cpp i zgłoś, które modele są załadowane.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Otwórz stronę ustawień llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Wyłącz używanie llama.cpp.</translation>
     </message>
@@ -93,7 +103,7 @@
         <translation>Włącz używanie llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Błąd pobierania wypełnienia FIM z %1: %2</translation>
     </message>
@@ -145,23 +155,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Czat</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+67"/>
         <source>Tools</source>
         <translation>Narzędzia</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Włącz llama.cpp</translation>
@@ -172,7 +182,7 @@
         <translation>Włącza integrację z llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Punkt końcowy</translation>
     </message>
@@ -346,7 +356,7 @@
         <translation type="vanished">Maksymalna liczba uzupełnień w pamięci podręcznej do przechowywania.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Podsumuj tytuł konwersacji w kilku słowach, włączając jedną emoję. Użyj języka używanego w konwersacji. Użyj zwykłego tekstu, bez markdown.</translation>
     </message>
@@ -384,7 +394,12 @@
         <translation>Umiejętności</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Piaskownica</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>Model FIM</translation>
     </message>
@@ -962,11 +977,56 @@
         <translation>Wbudowane polecenia lokalizatora &quot;ll&quot;. W menu wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. &quot;{selection}&quot; jest zastępowane zaznaczonym tekstem, &quot;{file}&quot; i &quot;{line}&quot; bieżącym plikiem i linią kursora, &quot;{diagnostics}&quot; błędami i ostrzeżeniami bieżącego pliku, a &quot;{git_diff}&quot; zmianami bez commita jego repozytorium git.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, kontener procesów Microsoft MXC na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica używa przypiętego środowiska uruchomieniowego wxc-exec.exe, które można pobrać ze strony ustawień narzędzi (LLAMA_WXC_EXEC może na nie wskazywać), i wymaga Windows 11 24H2 lub nowszego. Dodatkowe katalogi i polityka sieci są konfigurowane na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Katalogi do zapisu w piaskownicy</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Katalogi, do których mogą zapisywać narzędzia w piaskownicy, oprócz katalogu projektu i lokalizacji tymczasowych. Zarządzane na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Katalogi tylko do odczytu w piaskownicy</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Dodatkowe katalogi dostępne do odczytu wewnątrz piaskownicy. Tylko kontener procesów Windows ogranicza odczyt (inne platformy już udostępniają system plików tylko do odczytu), więc ma to skutek na Windowsie. Zarządzane na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Katalogi z zabronionym odczytem w piaskownicy</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Dodatkowe katalogi, których żadne narzędzie nie może czytać (ani do nich zapisywać), oprócz wbudowanych lokalizacji poświadczeń, które są zawsze chronione. Zarządzane na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Piaskownica: zezwalaj na dostęp do sieci</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Jeśli zaznaczone, polecenia bash w piaskownicy mogą korzystać z sieci (np. &apos;curl&apos; lub &apos;npm install&apos;). Wyłączone domyślnie: piaskownica nie ma dostępu do sieci. Narzędzia webfetch i websearch są zawsze uruchamiane poza piaskownicą i nie są dotknięte. Zarządzane na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Wbudowane polecenia lokalizatora &quot;ll&quot;. W menu wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. &quot;{selection}&quot; jest zastępowane zaznaczonym tekstem.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Katalogi umiejętności</translation>
     </message>
@@ -989,22 +1049,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Piaskownica poleceń</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, kontener procesów Microsoft MXC na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica używa przypiętego środowiska uruchomieniowego wxc-exec.exe, które można pobrać z tej strony narzędzi (LLAMA_WXC_EXEC może na nie wskazywać), i wymaga Windows 11 24H2 lub nowszego.</translation>
+        <translation type="vanished">Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, kontener procesów Microsoft MXC na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica używa przypiętego środowiska uruchomieniowego wxc-exec.exe, które można pobrać z tej strony narzędzi (LLAMA_WXC_EXEC może na nie wskazywać), i wymaga Windows 11 24H2 lub nowszego.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1630,7 +1689,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Konwersacje llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>Stwórz podsumowanie {selekcji}</translation>
     </message>
@@ -1710,7 +1769,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation type="vanished">Zapisz</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Nowa konwersacja</translation>
     </message>
@@ -2085,7 +2144,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pobierz MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Piaskownica (polecenia, katalogi, sieć) jest konfigurowana na stronie ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Edytuj</translation>
     </message>
@@ -2136,7 +2200,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Wbudowany serwer MCP Qt Creator, zarządzany przez samego Qt Creator (Narzędzia → MCP w ustawieniach Qt Creator).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2202,7 +2266,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2223,7 +2287,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Nazwa: %1</translation>
     </message>
@@ -2272,12 +2336,13 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Zbieranie zmian git</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(pusto)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2285,6 +2350,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2310,7 +2376,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation type="vanished">W menu lokalizatora wyświetlana jest tylko pierwsza linia polecenia; pełny tekst jest wysyłany do modelu. &quot;{selection}&quot; jest zastępowane zaznaczonym tekstem.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Polecenie</translation>
     </message>
@@ -2491,6 +2557,56 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Problemy z piaskownicą narzędzi czatu llama.cpp.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Katalogi do zapisu:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Katalogi, do których mogą zapisywać narzędzia w piaskownicy, oprócz katalogu projektu i lokalizacji tymczasowych.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Katalogi tylko do odczytu:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Dodatkowe katalogi dostępne do odczytu wewnątrz piaskownicy. Tylko kontener procesów Windows ogranicza odczyt (inne platformy już udostępniają system plików tylko do odczytu), więc ma to skutek na Windowsie.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Katalogi z zabronionym odczytem:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Dodatkowe katalogi, których żadne narzędzie nie może czytać (ani do nich zapisywać), oprócz wbudowanych lokalizacji poświadczeń, które są zawsze chronione.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Narzędzia webfetch i websearch są zawsze uruchamiane poza piaskownicą i nie są dotknięte przez to ustawienie.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>System plików</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Sieć</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Wybierz katalog</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2556,7 +2672,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Nie znaleziono powłoki bash. Zainstaluj Git for Windows (https://git-scm.com/download/win) lub dodaj bash do PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Nie znaleziono pliku wykonywalnego sandbox-exec; piaskownica jest niedostępna na tym systemie.</translation>
     </message>
@@ -2566,7 +2682,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Nie znaleziono bubblewrap (bwrap). Zainstaluj go (np. &apos;apt install bubblewrap&apos; lub &apos;dnf install bubblewrap&apos;) lub odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Wyjście skrócone: %1]</translation>
     </message>
@@ -2586,7 +2702,7 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Pełne wyjście zapisano do: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>uruchamianie %1</translation>
     </message>
@@ -3316,22 +3432,30 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Lista zadań zaktualizowana: ukończono %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Dostęp do &quot;%1&quot; nie jest dozwolony: ścieżki urządzeń i udostępnień administracyjnych nie są dostępne w piaskownicy.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Zapis do &quot;%1&quot; nie jest dozwolony: żaden projekt nie jest otwarty, więc piaskownica pozwala na zapisywanie tylko w lokalizacjach tymczasowych. Otwórz projekt, aby pracować z jego plikami.</translation>
+        <translation type="vanished">Zapis do &quot;%1&quot; nie jest dozwolony: żaden projekt nie jest otwarty, więc piaskownica pozwala na zapisywanie tylko w lokalizacjach tymczasowych. Otwórz projekt, aby pracować z jego plikami.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Zapis do &quot;%1&quot; nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu i lokalizacjach tymczasowych.</translation>
+        <translation type="vanished">Zapis do &quot;%1&quot; nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu i lokalizacjach tymczasowych.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Zapis do &quot;%1&quot; nie jest dozwolony: żaden projekt nie jest otwarty, więc piaskownica pozwala na zapisywanie tylko w lokalizacjach tymczasowych i dodatkowych katalogach do zapisu z ustawień Piaskownicy. Otwórz projekt, aby pracować z jego plikami.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Zapis do &quot;%1&quot; nie jest dozwolony: piaskownica pozwala na zapisywanie tylko w katalogu projektu, lokalizacjach tymczasowych i dodatkowych katalogach do zapisu z ustawień Piaskownicy.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Zapis do &quot;%1&quot; nie jest dozwolony: pliki .git, .qtcreator i *.user są chronione w piaskownicy.</translation>
     </message>
@@ -3385,17 +3509,17 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Moduł backendu piaskownicy Windows (wxc-exec) zgłosił kontener MXC jako niedostępny (kod zakończenia %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Piaskownica Windows nie mogła przygotować badania izolacji na żywo (katalog tymczasowy lub plik canary w katalogu domowym). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Piaskownica Windows nie mogła utworzyć pliku canary badania izolacji na żywo w %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Konfiguracja piaskownicy Windows jest za długa (%1 z %2 znaków); środowisko procesu jest prawdopodobnie zbyt duże. Odznacz &apos;Piaskownica poleceń&apos; w ustawieniach Llama, aby uruchamiać polecenia bez piaskownicy.</translation>
     </message>

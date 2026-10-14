@@ -49,6 +49,11 @@
         <translation>顯示伺服器狀態</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>偏好設定</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
@@ -79,7 +84,12 @@
         <translation>查詢 llama.cpp 伺服器並報告已載入的模型。</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>開啟 llama.cpp 設定頁面。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>停用 llama.cpp。</translation>
     </message>
@@ -89,7 +99,7 @@
         <translation>啟用 llama.cpp。</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 從 %1 獲取 FIM 完成時出錯：%2</translation>
     </message>
@@ -141,23 +151,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>聊天</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+67"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>啟用 llama.cpp</translation>
@@ -168,7 +178,7 @@
         <translation>啟用 llama.cpp 整合功能。</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>端點</translation>
     </message>
@@ -342,7 +352,7 @@
         <translation type="vanished">在 result_cache 中要保留的最大快取完成數量。</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>用幾個字（包含一個 emoji）概括對話標題。使用對話中使用的語言。使用純文字，不要 markdown。</translation>
     </message>
@@ -380,7 +390,12 @@
         <translation>技能</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>沙箱</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>FIM 模型</translation>
     </message>
@@ -958,11 +973,56 @@
         <translation>「ll」定位器的內建提示。選單中僅顯示提示的第一行；完整文字會發送給模型。&quot;{selection}&quot; 會替換為選取的文字，&quot;{file}&quot; 和 &quot;{line}&quot; 會替換為目前檔案和游標行，&quot;{diagnostics}&quot; 會替換為目前檔案的錯誤和警告，&quot;{git_diff}&quot; 會替換為其 git 儲存庫未提交的變更。</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 Microsoft MXC 程序容器），檔案工具只能寫入專案目錄和暫存位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱使用固定版本的 wxc-exec.exe 執行階段，可從工具設定頁面下載（LLAMA_WXC_EXEC 可以指向它），並需要 Windows 11 24H2 或更新版本。其他目錄和網路策略在沙箱設定頁面上設定。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>沙箱可寫入目錄</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>除專案目錄和暫存位置外，沙箱工具可以寫入的目錄。在沙箱設定頁面上管理。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>沙箱唯讀目錄</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>沙箱內可讀取的其他目錄。只有 Windows 程序容器會限制讀取（其他平台已經以唯讀方式暴露檔案系統），所以這只在 Windows 上生效。在沙箱設定頁面上管理。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>沙箱禁止讀取目錄</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>除內建的憑證位置（始終受保護）外，任何工具都不可讀取（或寫入）的其他目錄。在沙箱設定頁面上管理。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>沙箱：允許網路存取</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>選中後，沙箱中的 bash 命令可以使用網路（例如 &apos;curl&apos; 或 &apos;npm install&apos;）。預設關閉：沙箱沒有網路存取。webfetch 和 websearch 工具始終在沙箱外執行，不受影響。在沙箱設定頁面上管理。</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">「ll」定位器的內建提示。選單中僅顯示提示的第一行；完整文字會發送給模型。&quot;{selection}&quot; 會替換為選取的文字。</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>技能目錄</translation>
     </message>
@@ -985,22 +1045,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱命令</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 Microsoft MXC 程序容器），檔案工具只能寫入專案目錄和臨時位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱使用固定版本的 wxc-exec.exe 執行階段，可從此工具頁面下載（LLAMA_WXC_EXEC 可以指向它），並需要 Windows 11 24H2 或更新版本。</translation>
+        <translation type="vanished">選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 Microsoft MXC 程序容器），檔案工具只能寫入專案目錄和臨時位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱使用固定版本的 wxc-exec.exe 執行階段，可從此工具頁面下載（LLAMA_WXC_EXEC 可以指向它），並需要 Windows 11 24H2 或更新版本。</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 @anthropic-ai/sandbox-runtime 的 srt-win），檔案工具只能寫入專案目錄和臨時位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱需要一次性的安裝：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（一次 UAC 提示）；srt-win 可執行檔必須在 PATH 上（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1629,7 +1688,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 對話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>建立 {selection} 的摘要</translation>
     </message>
@@ -1715,7 +1774,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">儲存</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>新對話</translation>
     </message>
@@ -2096,7 +2155,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下載 MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>沙箱（命令、目錄、網路）在沙箱設定頁面上設定。</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>編輯</translation>
     </message>
@@ -2147,7 +2211,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Qt Creator 內建的 MCP 伺服器，由 Qt Creator 本身管理（Qt Creator 設定中的工具 → MCP）。</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2213,7 +2277,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2234,7 +2298,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>名稱：%1</translation>
     </message>
@@ -2269,12 +2333,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>內部</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>（空）</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2282,6 +2347,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2307,7 +2373,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">定位選單中僅顯示提示的第一行；完整文字會發送給模型。&quot;{selection}&quot; 會替換為選取的文字。</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>提示</translation>
     </message>
@@ -2488,6 +2554,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>llama.cpp 聊天工具的沙箱問題。</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>可寫入目錄：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>除專案目錄和暫存位置外，沙箱工具可以寫入的目錄。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>唯讀目錄：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>沙箱內可讀取的其他目錄。只有 Windows 程序容器會限制讀取（其他平台已經以唯讀方式暴露檔案系統），所以這只在 Windows 上生效。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>禁止讀取目錄：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>除內建的憑證位置（始終受保護）外，任何工具都不可讀取（或寫入）的其他目錄。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>webfetch 和 websearch 工具始終在沙箱外執行，不受此設定影響。</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>檔案系統</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>網路</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>選擇目錄</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2553,7 +2669,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>找不到 bash shell。請安裝 Git for Windows（https://git-scm.com/download/win）或在 PATH 中加入 bash。</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>找不到 sandbox-exec 可執行檔；此系統無法使用沙箱。</translation>
     </message>
@@ -2563,7 +2679,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>找不到 bubblewrap（bwrap）。請安裝它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[輸出已截斷：%1]</translation>
     </message>
@@ -2583,7 +2699,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完整輸出已儲存至：%1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>正在執行 %1</translation>
     </message>
@@ -3313,22 +3429,30 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>任務列表已更新：%1 / %2 已完成。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>不允許存取「%1」：裝置路徑和管理共用在沙箱中無法存取。</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>不允許寫入「%1」：沒有已開啟的專案，因此沙箱只允許寫入臨時位置。請開啟專案以處理其檔案。</translation>
+        <translation type="vanished">不允許寫入「%1」：沒有已開啟的專案，因此沙箱只允許寫入臨時位置。請開啟專案以處理其檔案。</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>不允許寫入「%1」：沙箱只允許寫入專案目錄和臨時位置。</translation>
+        <translation type="vanished">不允許寫入「%1」：沙箱只允許寫入專案目錄和臨時位置。</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>不允許寫入「%1」：未開啟專案，所以沙箱只允許寫入暫存位置和沙箱設定中的其他可寫入目錄。請開啟專案以處理其檔案。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>不允許寫入「%1」：沙箱只允許寫入專案目錄、暫存位置和沙箱設定中的其他可寫入目錄。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>不允許寫入「%1」：.git、.qtcreator 和 *.user 檔案在沙箱中受到保護。</translation>
     </message>
@@ -3382,17 +3506,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows 沙箱後端（wxc-exec）報告 MXC 容器不可用（結束 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows 沙箱無法設定其即時隔離探測（暫存目錄或主目錄金絲雀）。%1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows 沙箱無法在 %1 建立其即時隔離探測的金絲雀檔案。%2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows 沙箱設定太長（%1 / %2 個字元）；程序環境可能過大。在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>

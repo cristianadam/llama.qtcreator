@@ -48,6 +48,11 @@
         <translation>Показати стан сервера</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Параметри</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="-20"/>
         <source>llama.cpp coversation</source>
         <translation>розмова з llama.cpp</translation>
@@ -83,7 +88,12 @@
         <translation>Запитати сервери llama.cpp і повідомити, які моделі завантажено.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Відкрийте сторінку налаштувань llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Вимкнути llama.cpp.</translation>
     </message>
@@ -93,7 +103,7 @@
         <translation>Увімкнути llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Помилка отримання завершення FIM з %1: %2</translation>
     </message>
@@ -145,18 +155,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+96"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Увімкнути llama.cpp</translation>
@@ -167,7 +177,7 @@
         <translation>Увімкнення інтеграції з llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Кінцева точка</translation>
     </message>
@@ -226,12 +236,12 @@
         <translation type="vanished">Кількість рядків коду після позиції курсора для включення до локального суфіксу.</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="-90"/>
         <source>Tools</source>
         <translation>Інструменти</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+96"/>
         <source>Max Token Predictions</source>
         <translation>Максимальна кількість передбачень токенів</translation>
     </message>
@@ -346,7 +356,7 @@
         <translation type="vanished">Максимальна кількість завершень у кеші, які зберігаються в result_cache.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Узагальніть назву розмови кількома словами, включаючи один емодзі. Використовуйте мову, якою ведеться розмова. Використовуйте звичайний текст без Markdown.</translation>
     </message>
@@ -384,7 +394,12 @@
         <translation>Навички</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Пісочниця</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>Модель FIM</translation>
     </message>
@@ -962,11 +977,56 @@
         <translation>Вбудовані запити локалятора &quot;ll&quot;. У меню показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст, &quot;{file}&quot; та &quot;{line}&quot; — на поточний файл і рядок курсора, &quot;{diagnostics}&quot; — на помилки та попередження поточного файлу, а &quot;{git_diff}&quot; — на незакомітовані зміни його репозиторію git.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити зі сторінки налаштувань інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша. Додаткові каталоги та політику мережі налаштовують на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Пісочниця: каталоги запису</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Каталоги, куди інструменти в пісочниці можуть записувати, окрім каталогу проєкту та тимчасових розташувань. Керується на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Пісочниця: каталоги лише для читання</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Додаткові каталоги, доступні для читання в пісочниці. Читання обмежує лише контейнер процесів Windows (інші платформи й так відкривають файлову систему лише для читання), тому це діє на Windows. Керується на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Пісочниця: каталоги із забороненим читанням</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Додаткові каталоги, які жоден інструмент не може читати (або записувати), окрім вбудованих розташувань облікових даних, які завжди захищені. Керується на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Пісочниця: дозволити доступ до мережі</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Якщо позначено, команди bash в пісочниці можуть використовувати мережу (наприклад, &apos;curl&apos; або &apos;npm install&apos;). Вимкнено за замовчуванням: пісочниця не має доступу до мережі. Інструменти webfetch та websearch завжди працюють поза пісочницею і не зачіпаються. Керується на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Вбудовані запити локалятора &quot;ll&quot;. У меню показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Каталоги навичок</translation>
     </message>
@@ -989,22 +1049,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Команди в пісочниці</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити з цієї сторінки інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша.</translation>
+        <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити з цієї сторінки інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, srt-win з @anthropic-ai/sandbox-runtime на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочницю потрібно встановити один раз: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); виконуваний файл srt-win має бути в PATH (LLAMA_SRT_WIN може вказувати на нього).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1638,7 +1697,7 @@ Do you want to overwrite it?</source>
         <translation>Розмови з llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>Створити підсумок для вибраного {selection}</translation>
     </message>
@@ -1718,7 +1777,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Зберегти</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Нова розмова</translation>
     </message>
@@ -2059,7 +2118,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Завантажити MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Параметри пісочниці (команди, каталоги, мережа) налаштовуються на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
@@ -2110,7 +2174,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Вбудований MCP-сервер Qt Creator, яким керує сам Qt Creator (Інструменти → MCP у налаштуваннях Qt Creator).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2176,7 +2240,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
@@ -2197,7 +2261,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Назва: %1</translation>
     </message>
@@ -2246,12 +2310,13 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Збирання змін git</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(порожньо)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2259,6 +2324,7 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2284,7 +2350,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">У меню локалятора показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Запит</translation>
     </message>
@@ -2465,6 +2531,56 @@ You can type any other prompt – they are remembered for next time.</source>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Проблеми з пісочницею інструментів чату llama.cpp.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Каталоги запису:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Каталоги, куди інструменти в пісочниці можуть записувати, окрім каталогу проєкту та тимчасових розташувань.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Каталоги лише для читання:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Додаткові каталоги, доступні для читання в пісочниці. Читання обмежує лише контейнер процесів Windows (інші платформи й так відкривають файлову систему лише для читання), тому це діє на Windows.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Каталоги із забороненим читанням:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Додаткові каталоги, які жоден інструмент не може читати (або записувати), окрім вбудованих розташувань облікових даних, які завжди захищені.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Інструменти webfetch та websearch завжди працюють поза пісочницею і не зачіпаються цим параметром.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Файлова система</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Мережа</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Виберіть каталог</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2530,7 +2646,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Оболонку bash не знайдено. Встановіть Git for Windows (https://git-scm.com/download/win) або додайте bash до PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Виконуваний файл sandbox-exec не знайдено; пісочниця недоступна на цій системі.</translation>
     </message>
@@ -2540,7 +2656,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>bubblewrap (bwrap) не знайдено. Встановіть його (наприклад, &apos;apt install bubblewrap&apos; або &apos;dnf install bubblewrap&apos;) або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Вивід обрізано: %1]</translation>
     </message>
@@ -2560,7 +2676,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Повний вивід збережено у: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>виконується %1</translation>
     </message>
@@ -3290,22 +3406,30 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Список завдань оновлено: завершено %1 з %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Доступ до &quot;%1&quot; не дозволено: шляхи до пристроїв та адміністративні розподіли недоступні в пісочниці.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Запис у &quot;%1&quot; не дозволено: жоден проєкт не відкрито, тому пісочниця дозволяє запис лише в тимчасові розташування. Відкрийте проєкт, щоб працювати з його файлами.</translation>
+        <translation type="vanished">Запис у &quot;%1&quot; не дозволено: жоден проєкт не відкрито, тому пісочниця дозволяє запис лише в тимчасові розташування. Відкрийте проєкт, щоб працювати з його файлами.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Запис у &quot;%1&quot; не дозволено: пісочниця дозволяє запис лише в каталог проєкту та тимчасові розташування.</translation>
+        <translation type="vanished">Запис у &quot;%1&quot; не дозволено: пісочниця дозволяє запис лише в каталог проєкту та тимчасові розташування.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Запис у &quot;%1&quot; не дозволено: жоден проєкт не відкрито, тому пісочниця дозволяє запис лише в тимчасові розташування та додаткові каталоги запису з налаштувань пісочниці. Відкрийте проєкт, щоб працювати з його файлами.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Запис у &quot;%1&quot; не дозволено: пісочниця дозволяє запис лише в каталог проєкту, тимчасові розташування та додаткові каталоги запису з налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Запис у &quot;%1&quot; не дозволено: файли .git, .qtcreator і *.user захищені в пісочниці.</translation>
     </message>
@@ -3359,17 +3483,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Бекенд пісочниці Windows (wxc-exec) повідомив, що контейнер MXC недоступний (вихід %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Пісочниця Windows не змогла налаштувати пробу ізоляції в реальному часі (тимчасовий каталог або canary-файл у домашньому каталозі). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Пісочниця Windows не змогла створити canary-файл проби ізоляції в реальному часі в %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Конфігурація пісочниці Windows надто довга (%1 з %2 символів); середовище процесу, ймовірно, надто велике. Зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>

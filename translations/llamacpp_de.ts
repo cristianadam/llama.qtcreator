@@ -49,6 +49,11 @@
         <translation>Serverstatus anzeigen</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Einstellungen</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Strg+Umschalt+G</translation>
@@ -79,7 +84,12 @@
         <translation>Fragt die llama.cpp-Server ab und meldet, welche Modelle geladen sind.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Öffnet die llama.cpp-Einstellungsseite.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>llama.cpp deaktivieren.</translation>
     </message>
@@ -89,7 +99,7 @@
         <translation>llama.cpp aktivieren.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fehler beim Abrufen der FIM-Vervollständigung von %1: %2</translation>
     </message>
@@ -141,23 +151,23 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+67"/>
         <source>Tools</source>
         <translation>Werkzeuge</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+29"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>llama.cpp-Integration aktivieren</translation>
@@ -168,7 +178,7 @@
         <translation>Aktiviert die Integration von llama.cpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Endpoint</translation>
     </message>
@@ -343,7 +353,7 @@
         <translation type="vanished">Maximale Anzahl der zwischengespeicherten Vervollständigungen, die im Ergebnis-Cache behalten werden sollen.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Fassen Sie den Titel der Konversation in wenigen Worten zusammen, einschließlich eines Emojis. Verwenden Sie die in der Konversation verwendete Sprache. Verwenden Sie reinen Text, kein Markdown.</translation>
     </message>
@@ -381,7 +391,12 @@
         <translation>Skills</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Sandbox</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>FIM-Modell</translation>
     </message>
@@ -954,11 +969,56 @@
         <translation>Eingebaute Prompts des &quot;ll&quot;-Locators. Im Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt, &quot;{file}&quot; und &quot;{line}&quot; durch die aktuelle Datei und die Cursorzeile, &quot;{diagnostics}&quot; durch die Fehler und Warnungen der aktuellen Datei und &quot;{git_diff}&quot; durch die nicht committeten Änderungen des zugehörigen Git-Repositories.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Orten schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von der Llama.cpp-Chat-Tools-Einstellungsseite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer. Die zusätzlichen Verzeichnisse und die Netzwerkrichtlinie werden auf der Sandbox-Einstellungsseite konfiguriert.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Schreibbare Sandbox-Verzeichnisse</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Verzeichnisse, in die die gesandboxten Tools schreiben dürfen, zusätzlich zum Projektverzeichnis und den temporären Orten. Wird auf der Sandbox-Einstellungsseite verwaltet.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Schreibgeschützte Sandbox-Verzeichnisse</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Zusätzliche Verzeichnisse, die innerhalb der Sandbox lesbar sind. Nur der Windows-Prozesscontainer schränkt Lesevorgänge ein (die anderen Plattformen stellen das Dateisystem bereits schreibgeschützt dar), daher greift dies nur auf Windows. Wird auf der Sandbox-Einstellungsseite verwaltet.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Sandbox-Verzeichnisse ohne Lesezugriff</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Zusätzliche Verzeichnisse, die kein Tool lesen (oder schreiben) darf, zusätzlich zu den eingebauten Credential-Positionen, die immer geschützt sind. Wird auf der Sandbox-Einstellungsseite verwaltet.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Sandbox: Netzwerkzugriff erlauben</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Wenn aktiviert, dürfen gesandboxte Bash-Befehle das Netzwerk verwenden (z. B. &apos;curl&apos; oder &apos;npm install&apos;). Standardmäßig deaktiviert: Die Sandbox hat keinen Netzwerkzugriff. Die webfetch- und websearch-Tools werden immer außerhalb der Sandbox ausgeführt und sind nicht betroffen. Wird auf der Sandbox-Einstellungsseite verwaltet.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Eingebaute Prompts des &quot;ll&quot;-Locators. Im Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Skill-Verzeichnisse</translation>
     </message>
@@ -981,22 +1041,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Befehle in Sandbox ausführen</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von dieser Tools-Seite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer.</translation>
+        <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von dieser Tools-Seite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1632,7 +1691,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>llama.cpp-Konversationen</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>Zusammenfassung von **„{selection}“** erstellen</translation>
     </message>
@@ -1718,7 +1777,7 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation type="vanished">Speichern</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Neue Konversation</translation>
     </message>
@@ -2091,7 +2150,12 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation>MXC %1 herunterladen</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Sandboxing (Befehle, Verzeichnisse, Netzwerk) wird auf der Sandbox-Einstellungsseite konfiguriert.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
@@ -2142,7 +2206,7 @@ Sie können beliebige andere Prompts eingeben – diese werden für spätere Ver
         <translation>Der eingebaute Qt Creator-MCP-Server, der von Qt Creator selbst verwaltet wird (Tools → MCP in den Qt Creator-Einstellungen).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2208,7 +2272,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2229,7 +2293,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Name: %1</translation>
     </message>
@@ -2264,12 +2328,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Interner</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(leer)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2277,6 +2342,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2302,7 +2368,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Im Locator-Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2483,6 +2549,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Probleme mit der Sandbox der llama.cpp-Chat-Tools.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Schreibbare Verzeichnisse:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Verzeichnisse, in die die gesandboxten Tools schreiben dürfen, zusätzlich zum Projektverzeichnis und den temporären Orten.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Schreibgeschützte Verzeichnisse:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Zusätzliche Verzeichnisse, die innerhalb der Sandbox lesbar sind. Nur der Windows-Prozesscontainer schränkt Lesevorgänge ein (die anderen Plattformen stellen das Dateisystem bereits schreibgeschützt dar), daher greift dies nur auf Windows.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Verzeichnisse ohne Lesezugriff:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Zusätzliche Verzeichnisse, die kein Tool lesen (oder schreiben) darf, zusätzlich zu den eingebauten Credential-Positionen, die immer geschützt sind.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Die webfetch- und websearch-Tools werden immer außerhalb der Sandbox ausgeführt und sind von dieser Einstellung nicht betroffen.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Dateisystem</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Netzwerk</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Verzeichnis auswählen</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2548,7 +2664,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Die sandbox-exec-Executabler wurde nicht gefunden; Sandboxing ist auf diesem System nicht verfügbar.</translation>
     </message>
@@ -2558,7 +2674,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) wurde nicht gefunden. Installieren Sie es (z. B. &apos;apt install bubblewrap&apos; oder &apos;dnf install bubblewrap&apos;) oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Ausgabe gekürzt: %1]</translation>
     </message>
@@ -2578,7 +2694,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vollständige Ausgabe gespeichert unter: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>führe %1 aus</translation>
     </message>
@@ -3308,22 +3424,30 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Aufgabenliste aktualisiert: %1 von %2 abgeschlossen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Zugriff auf &quot;%1&quot; ist nicht erlaubt: Gerätepfade und administrative Freigaben sind innerhalb der Sandbox nicht zugänglich.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Es ist kein Projekt geöffnet, daher erlaubt die Sandbox Schreibvorgänge nur in temporären Positionen. Öffnen Sie ein Projekt, um an seinen Dateien zu arbeiten.</translation>
+        <translation type="vanished">Schreiben nach &quot;%1&quot; ist nicht erlaubt: Es ist kein Projekt geöffnet, daher erlaubt die Sandbox Schreibvorgänge nur in temporären Positionen. Öffnen Sie ein Projekt, um an seinen Dateien zu arbeiten.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Die Sandbox erlaubt Schreibvorgänge nur innerhalb des Projektverzeichnisses und in temporären Positionen.</translation>
+        <translation type="vanished">Schreiben nach &quot;%1&quot; ist nicht erlaubt: Die Sandbox erlaubt Schreibvorgänge nur innerhalb des Projektverzeichnisses und in temporären Positionen.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Es ist kein Projekt geöffnet, daher erlaubt die Sandbox Schreibvorgänge nur in temporären Orten und den zusätzlichen schreibbaren Verzeichnissen aus den Sandbox-Einstellungen. Öffnen Sie ein Projekt, um an seinen Dateien zu arbeiten.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Die Sandbox erlaubt Schreibvorgänge nur innerhalb des Projektverzeichnisses, in temporären Orten und den zusätzlichen schreibbaren Verzeichnissen aus den Sandbox-Einstellungen.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: .git-, .qtcreator- und *.user-Dateien sind innerhalb der Sandbox geschützt.</translation>
     </message>
@@ -3377,17 +3501,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Das Windows-Sandbox-Backend (wxc-exec) hat den MXC-Container als nicht verfügbar gemeldet (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Die Windows-Sandbox konnte ihren Live-Isolationstest nicht einrichten (temporäres Verzeichnis oder Home-Canary). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Die Windows-Sandbox konnte die Canary-Datei ihres Live-Isolationstests unter %1 nicht erstellen. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Die Windows-Sandbox-Konfiguration ist zu lang (%1 von %2 Zeichen); die Prozessumgebung ist wahrscheinlich überdimensioniert. Deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>

@@ -49,6 +49,11 @@
         <translation>Zobrazit stav serveru</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>Preferences</source>
+        <translation>Nastavení</translation>
+    </message>
+    <message>
         <location filename="../src/llamaplugin.cpp" line="+29"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
@@ -79,7 +84,12 @@
         <translation>Dotáhnout se na servery llama.cpp a nahlásit, které modely jsou načteny.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp settings page.</source>
+        <translation>Otevřít stránku nastavení llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Disable llama.cpp.</source>
         <translation>Vypnout llama.cpp.</translation>
     </message>
@@ -89,7 +99,7 @@
         <translation>Zapnout llama.cpp.</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+390"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Chyba při načítání dokončení FIM z %1: %2</translation>
     </message>
@@ -141,18 +151,18 @@
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/promptssettingswidget.cpp" line="+120"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1244"/>
+        <location line="-1255"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+86"/>
+        <location filename="../src/llamasettings.cpp" line="+96"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Povolit LlamaCpp</translation>
@@ -163,7 +173,7 @@
         <translation>Povoluje integraci LlamaCpp.</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>Endpoint</source>
         <translation>Konečný bod</translation>
     </message>
@@ -222,12 +232,12 @@
         <translation type="vanished">Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
     </message>
     <message>
-        <location line="-80"/>
+        <location line="-90"/>
         <source>Tools</source>
         <translation>Nástroje</translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+93"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
     </message>
@@ -347,7 +357,7 @@
         <translation type="vanished">Maximální počet uložených dokončení, které mají zůstat v mezipaměti výsledků.</translation>
     </message>
     <message>
-        <location line="-193"/>
+        <location line="-203"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Shrňte název konverzace v několika slovech včetně jednoho emotikonu. Použijte jazyk, který se v konverzaci používá. Použijte obyčejný text, bez markdownu.</translation>
     </message>
@@ -389,7 +399,12 @@
         <translation>Dovednosti</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+9"/>
+        <source>Sandbox</source>
+        <translation>Pískoviště</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>FIM Model</source>
         <translation>Model FIM</translation>
     </message>
@@ -962,11 +977,56 @@
         <translation>Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem, &quot;{file}&quot; a &quot;{line}&quot; aktuálním souborem a řádkem kurzoru, &quot;{diagnostics}&quot; chybami a varováními aktuálního souboru a &quot;{git_diff}&quot; necommitnutými změnami jeho git repozitáře.</translation>
     </message>
     <message>
+        <location line="+51"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout ze stránky nastavení nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější. Další adresáře a síťová pravidla se nastavují na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Sandbox writable directories</source>
+        <translation>Zapisovatelné adresáře pískoviště</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
+        <translation>Adresáře, do kterých mohou nástroje v pískovišti zapisovat, kromě adresáře projektu a dočasných umístění. Spravuje se na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox read-only directories</source>
+        <translation>Adresáře pískoviště pouze pro čtení</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
+        <translation>Další adresáře čitelné uvnitř pískoviště. Čtení omezuje pouze procesový kontejner Windows (ostatní platformy již souborový systém vystavují pouze pro čtení), takže toto nastavení platí na Windows. Spravuje se na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Sandbox deny-read directories</source>
+        <translation>Adresáře pískoviště se zakázaným čtením</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
+        <translation>Další adresáře, které žádný nástroj nesmí číst (ani do nich zapisovat), kromě vestavěných umístění přihlašovacích údajů, která jsou vždy chráněna. Spravuje se na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Sandbox: allow network access</source>
+        <translation>Pískoviště: povolit přístup do sítě</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
+        <translation>Pokud je zaškrtnuto, příkazy bash v pískovišti mohou používat síť (např. &apos;curl&apos; nebo &apos;npm install&apos;). Výchozí stav je vypnuto: pískoviště nemá přístup k síti. Nástroje webfetch a websearch se vždy spouštějí mimo pískoviště a nejsou ovlivněny. Spravuje se na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-85"/>
         <source>Skill directories</source>
         <translation>Adresáře dovedností</translation>
     </message>
@@ -989,22 +1049,21 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+324"/>
+        <location line="+364"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
     </message>
     <message>
-        <location line="-324"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from this tools page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer.</source>
-        <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout z této stránky nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější.</translation>
+        <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout z této stránky nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější.</translation>
     </message>
     <message>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, srt-win from @anthropic-ai/sandbox-runtime on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox needs a one-time install: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); the srt-win executable must be on the PATH (LLAMA_SRT_WIN can point to it).</source>
         <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-309"/>
         <location line="+1"/>
         <location line="+321"/>
         <location line="+1"/>
@@ -1624,7 +1683,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-940"/>
+        <location filename="../src/llamasettings.cpp" line="-990"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -1710,7 +1769,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation type="vanished">Uložit</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-6"/>
+        <location filename="../src/llamaplugin.h" line="-7"/>
         <source>New Conversation</source>
         <translation>Nová konverzace</translation>
     </message>
@@ -2091,7 +2150,12 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Stáhnout MXC %1</translation>
     </message>
     <message>
-        <location line="+71"/>
+        <location line="+28"/>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation>Pískoviště (příkazy, adresáře, síť) se nastavuje na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
@@ -2142,7 +2206,7 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
         <translation>Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje → MCP v nastavení Qt Creator).</translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+165"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2208,7 +2272,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-866"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2229,7 +2293,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+346"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2264,12 +2328,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Interní</translation>
     </message>
     <message>
-        <location filename="../src/promptssettingswidget.cpp" line="-102"/>
+        <location filename="../src/promptssettingswidget.cpp" line="-103"/>
         <source>(empty)</source>
         <translation>(prázdné)</translation>
     </message>
     <message>
         <location line="+13"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add…</source>
@@ -2277,6 +2342,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+13"/>
         <location filename="../src/skillssettingswidget.cpp" line="+17"/>
         <location filename="../src/toolsettingswidget.cpp" line="+2"/>
         <source>Remove</source>
@@ -2302,7 +2368,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2483,6 +2549,56 @@ Authorization: Bearer &lt;token&gt;</translation>
         <source>Issues with the sandbox of the llama.cpp chat tools.</source>
         <translation>Problémy s pískovištěm nástrojů Llama.cpp Chat.</translation>
     </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <source>Writable directories:</source>
+        <translation>Zapisovatelné adresáře:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
+        <translation>Adresáře, do kterých mohou nástroje v pískovišti zapisovat, kromě adresáře projektu a dočasných umístění.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Read-only directories:</source>
+        <translation>Adresáře pouze pro čtení:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
+        <translation>Další adresáře čitelné uvnitř pískoviště. Čtení omezuje pouze procesový kontejner Windows (ostatní platformy již souborový systém vystavují pouze pro čtení), takže toto nastavení platí na Windows.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Deny-read directories:</source>
+        <translation>Adresáře se zakázaným čtením:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
+        <translation>Další adresáře, které žádný nástroj nesmí číst (ani do nich zapisovat), kromě vestavěných umístění přihlašovacích údajů, která jsou vždy chráněna.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
+        <translation>Nástroje webfetch a websearch se vždy spouštějí mimo pískoviště a tímto nastavením nejsou ovlivněny.</translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Filesystem</source>
+        <translation>Souborový systém</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Network</source>
+        <translation>Síť</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Choose a Directory</source>
+        <translation>Vyberte adresář</translation>
+    </message>
 </context>
 <context>
     <name>Tr</name>
@@ -2548,7 +2664,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+146"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
@@ -2558,7 +2674,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>bubblewrap (bwrap) nebyl nalezen. Nainstalujte ho (např. &apos;apt install bubblewrap&apos; nebo &apos;dnf install bubblewrap&apos;) nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+204"/>
+        <location line="+217"/>
         <source>[Output truncated: %1]</source>
         <translation>[Výstup oříznut: %1]</translation>
     </message>
@@ -2578,7 +2694,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úplný výstup uložen do: %1</translation>
     </message>
     <message>
-        <location line="+116"/>
+        <location line="+123"/>
         <source>running %1</source>
         <translation>spouštění %1</translation>
     </message>
@@ -3308,22 +3424,30 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+396"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Přístup k &quot;%1&quot; není povolen: cesty k zařízením a administrativní sdílené složky nejsou uvnitř pískoviště dostupné.</translation>
     </message>
     <message>
-        <location line="+17"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation>Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
+        <translation type="vanished">Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation>Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
+        <translation type="vanished">Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění a do dalších zapisovatelných adresářů ze nastavení Pískoviště. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu, do dočasných umístění a do dalších zapisovatelných adresářů ze nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Zápis do &quot;%1&quot; není povolen: soubory .git, .qtcreator a *.user jsou uvnitř pískoviště chráněny.</translation>
     </message>
@@ -3377,17 +3501,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+297"/>
+        <location line="+324"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Pískoviště Windows nepodařilo nastavit sondu izolace za běhu (dočasný adresář nebo canary soubor v domovském adresáři). %1</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Pískoviště Windows nepodařilo vytvořit canary soubor své sondy izolace za běhu na %1. %2</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Konfigurace pískoviště Windows je příliš dlouhá (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
