@@ -77,6 +77,7 @@ PromptsSettingsWidget::PromptsSettingsWidget()
                    "uncommitted changes of its git repository."),
             this);
     m_hintLabel->setVisible(false); // only shown for locator prompts
+    m_hintLabel->setWordWrap(true);
 
     // model
     m_model = new TreeModel<>(m_view);
