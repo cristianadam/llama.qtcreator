@@ -156,15 +156,14 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     mxcLayout->addWidget(m_mxcButton);
     updateMxcStatus();
 
-    // Sandbox for the chat tools (bubblewrap on Linux, sandbox-exec on
-    // macOS, a Microsoft MXC process container on Windows).
-    m_sandboxCheck = new QCheckBox(settings().sandboxCommands.displayName(), this);
-    m_sandboxCheck->setToolTip(settings().sandboxCommands.toolTip());
-    m_sandboxCheck->setChecked(settings().sandboxCommands());
-    connect(m_sandboxCheck,
-            &QCheckBox::toggled,
-            this,
-            [](bool checked) { settings().sandboxCommands.setValue(checked); });
+    // The "Sandbox commands" toggle and the sandbox details (extra
+    // directories, network policy) live on the dedicated Sandbox settings
+    // page; a hint keeps them discoverable from here.
+    auto *sandboxHint = new QLabel(Tr::tr(
+        "Sandboxing (commands, directories, network) is configured on the "
+        "Sandbox settings page."),
+        this);
+    sandboxHint->setToolTip(settings().sandboxCommands.toolTip());
 
     // Project instructions (AGENTS.md / CLAUDE.md) appended to the chat
     // system message.
@@ -224,7 +223,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
          m_detailEdit,
          ripgrepRow,
          mxcRow,
-         m_sandboxCheck,
+         sandboxHint,
          m_loadInstructionsCheck,
          maxToolTurnsRow,
      }
@@ -591,7 +590,6 @@ void ToolsSettingsWidget::cancel()
 {
     // Re‑load the stored value – this discards any UI changes.
     settings().readSettings(); // reload from .ini
-    m_sandboxCheck->setChecked(settings().sandboxCommands());
     m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
     m_maxToolTurnsSpin->setValue(settings().maxToolTurns());
     fillModel(); // also drop server groups that were added but not applied

@@ -92,8 +92,22 @@ public:
     // Run the chat tools in a sandbox: bash commands in a platform sandbox
     // (bubblewrap on Linux, sandbox-exec on macOS, a Microsoft MXC process
     // container on Windows), and the file tools restricted to the project
-    // directory and the temporary locations.
+    // directory and the temporary locations. The details (extra directories,
+    // network policy) are managed on the "Sandbox" settings page.
     Utils::BoolAspect sandboxCommands{this};
+    // Sandbox details (see the "Sandbox" settings page): directories the
+    // sandbox grants on top of the project directory and the temporary
+    // locations, and the network policy of the sandboxed commands.
+    //   sandboxWritableDirs – extra locations the tools may write to;
+    //   sandboxReadOnlyDirs – extra locations readable inside the sandbox
+    //                         (only the Windows container restricts reads);
+    //   sandboxDenyReadDirs – extra locations no tool may read, on top of
+    //                         the built-in credential locations;
+    //   sandboxAllowNetwork – let sandboxed bash use the network (default off).
+    Utils::StringListAspect sandboxWritableDirs{this};
+    Utils::StringListAspect sandboxReadOnlyDirs{this};
+    Utils::StringListAspect sandboxDenyReadDirs{this};
+    Utils::BoolAspect sandboxAllowNetwork{this};
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
     Utils::BoolAspect loadProjectInstructions{this};
@@ -182,6 +196,12 @@ class SkillsSettingsPage : public Core::IOptionsPage
 {
 public:
     SkillsSettingsPage();
+};
+
+class SandboxSettingsPage : public Core::IOptionsPage
+{
+public:
+    SandboxSettingsPage();
 };
 
 } // namespace LlamaCpp

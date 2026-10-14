@@ -154,6 +154,34 @@ bool coveredByAny(const QStringList &prefixes, const QString &path)
     return false;
 }
 
+// A directory entry from the Sandbox settings page, cleaned: trimmed, '~'
+// expanded, made absolute and cleaned to the platform separator. Empty
+// entries, relative paths (ambiguous without a project) and file system
+// roots (granting one would make the whole drive writable) are dropped.
+// The result has no duplicates.
+QStringList cleanSandboxDirs(const QStringList &raw)
+{
+    QStringList result;
+    const QString home = QDir::homePath();
+    for (const QString &entry : raw) {
+        QString dir = entry.trimmed();
+        if (dir.isEmpty())
+            continue;
+        if (dir == QLatin1String("~"))
+            dir = home;
+        else if (dir.startsWith(QLatin1String("~/")))
+            dir = home + dir.mid(1);
+        if (!QDir::isAbsolutePath(dir))
+            continue;
+        dir = QDir::cleanPath(dir);
+        if (QFileInfo(dir).isRoot())
+            continue;
+        if (!result.contains(dir))
+            result << dir;
+    }
+    return result;
+}
+
 // A path component as the file system sees it: on Windows, trailing dots
 // and spaces are dropped (".git." opens ".git") and so is an NTFS stream
 // suffix (".git::$INDEX_ALLOCATION" is the .git directory itself).
@@ -250,10 +278,40 @@ QList<SecretReadPath> secretReadPaths()
     return paths;
 }
 
+QStringList sandboxDenyReadDirs()
+{
+    return cleanSandboxDirs(settings().sandboxDenyReadDirs());
+}
+
+QList<SecretReadPath> denyReadPaths()
+{
+    QList<SecretReadPath> paths = secretReadPaths();
+    for (const QString &dir : sandboxDenyReadDirs())
+        paths << SecretReadPath{ dir, /* isFile = */ false };
+    return paths;
+}
+
+QStringList sandboxWritableDirs()
+{
+    return cleanSandboxDirs(settings().sandboxWritableDirs());
+}
+
+QStringList sandboxReadOnlyDirs()
+{
+    return cleanSandboxDirs(settings().sandboxReadOnlyDirs());
+}
+
+bool sandboxAllowsNetwork()
+{
+    return settings().sandboxAllowNetwork();
+}
+
 QStringList secretPathSpellings()
 {
     QStringList spellings;
-    for (const SecretReadPath &secret : secretReadPaths())
+    // The user-configured deny-read directories are protected like the
+    // built-in credential locations, so the file tools honour them here.
+    for (const SecretReadPath &secret : denyReadPaths())
         spellings << pathSpellings(secret.path);
     return spellings;
 }
@@ -407,18 +465,24 @@ QString sandboxAccessError(const FilePath &path, bool isWrite)
         if (project)
             roots << pathSpellings(project->projectDirectory().toFSPathString());
         roots << pathSpellings(QDir::tempPath());
+        // Extra writable directories from the Sandbox settings page.
+        for (const QString &dir : sandboxWritableDirs())
+            roots << pathSpellings(dir);
         // An unresolvable path (a link loop) fails closed.
         if (!coveredByAny(roots, lexical) || !coveredByAny(roots, resolved)) {
             if (!project)
                 return Tr::tr(
                            "Writing to \"%1\" is not allowed: no project is open, "
                            "so the sandbox only permits writes inside temporary "
-                           "locations. Open a project to work on its files.")
+                           "locations and the extra writable directories from "
+                           "the Sandbox settings. Open a project to work on its "
+                           "files.")
                         .arg(p);
             return Tr::tr(
                        "Writing to \"%1\" is not allowed: the sandbox only permits "
-                       "writes inside the project directory and temporary "
-                       "locations.")
+                       "writes inside the project directory, temporary locations "
+                       "and the extra writable directories from the Sandbox "
+                       "settings.")
                     .arg(p);
         }
         // Locations whose content is executed or loaded outside the sandbox

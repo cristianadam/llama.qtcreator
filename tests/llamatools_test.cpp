@@ -477,6 +477,9 @@ private slots:
     void sandboxSymlinkEscape();
     void sandboxApplyPatchMoveSource();
     void sandboxEnvironmentFilter();
+    void sandboxSettingsHelpers();
+    void sandboxWritableDirFileTools();
+    void windowsSandboxSpecExtraDirs();
     void windowsShellInstallRootLayout();
     void webutils_isPublicAddress();
     void webfetch_refusesLocalAddresses();
@@ -3681,6 +3684,246 @@ void LlamaToolsTest::sandboxEnvironmentFilter()
     const QProcessEnvironment filtered = withoutSecretVariables(env);
     QVERIFY(filtered.contains(QStringLiteral("PATH")));
     QVERIFY(!filtered.contains(QStringLiteral("OPENAI_API_KEY")));
+}
+
+// The Sandbox settings page stores the extra directories and the network
+// policy; these helpers clean the user input and combine it with the
+// built-in defaults. Pure path checks, no sandbox backend involved.
+void LlamaToolsTest::sandboxSettingsHelpers()
+{
+    const QStringList oldWritable = settings().sandboxWritableDirs();
+    const QStringList oldReadOnly = settings().sandboxReadOnlyDirs();
+    const QStringList oldDenyRead = settings().sandboxDenyReadDirs();
+    const bool oldNetwork = settings().sandboxAllowNetwork();
+    struct Guard
+    {
+        QStringList w, ro, dr;
+        bool net;
+        ~Guard()
+        {
+            settings().sandboxWritableDirs.setValue(w);
+            settings().sandboxReadOnlyDirs.setValue(ro);
+            settings().sandboxDenyReadDirs.setValue(dr);
+            settings().sandboxAllowNetwork.setValue(net);
+        }
+    } guard{ oldWritable, oldReadOnly, oldDenyRead, oldNetwork };
+
+    const QString home = QDir::homePath();
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString abs = dir.path();
+
+    // Cleaning: '~' expanded, relative entries and file system roots
+    // dropped, duplicates removed, whitespace trimmed, absolute paths kept
+    // (in input order).
+    settings().sandboxWritableDirs.setValue({ QStringLiteral("~"),
+                                              QStringLiteral("~/sub"),
+                                              QStringLiteral("relative/path"), // dropped
+                                              QDir::rootPath(), // dropped
+                                              abs,
+                                              abs + QStringLiteral("/"), // duplicate
+                                              QStringLiteral("  ") }); // dropped
+    QCOMPARE(sandboxWritableDirs(),
+             (QStringList{ home, home + QStringLiteral("/sub"), abs }));
+
+    // Read-only and deny-read use the same cleaning.
+    settings().sandboxReadOnlyDirs.setValue({ QStringLiteral("~/ro") });
+    QCOMPARE(sandboxReadOnlyDirs(), (QStringList{ home + QStringLiteral("/ro") }));
+    settings().sandboxDenyReadDirs.setValue({ QStringLiteral("~/dr") });
+    QCOMPARE(sandboxDenyReadDirs(), (QStringList{ home + QStringLiteral("/dr") }));
+
+    // denyReadPaths() is the built-in credential locations plus the user
+    // deny-read directories.
+    bool foundUser = false;
+    bool foundSsh = false;
+    const QList<SecretReadPath> deny = denyReadPaths();
+    for (const SecretReadPath &p : deny) {
+        if (p.path == home + QStringLiteral("/dr"))
+            foundUser = true;
+        if (p.path == home + QStringLiteral("/.ssh"))
+            foundSsh = true;
+    }
+    QVERIFY(foundUser);
+    QVERIFY(foundSsh);
+
+    // The network flag round-trips.
+    settings().sandboxAllowNetwork.setValue(true);
+    QVERIFY(sandboxAllowsNetwork());
+    settings().sandboxAllowNetwork.setValue(false);
+    QVERIFY(!sandboxAllowsNetwork());
+}
+
+// The file tools honour the extra directories from the Sandbox settings
+// page: a configured writable directory is writable (even outside the
+// project and the temporary locations), a configured deny-read directory is
+// neither readable nor writable. The fixtures live in the real home (a
+// QTemporaryDir is writable by design and would not prove the grant).
+void LlamaToolsTest::sandboxWritableDirFileTools()
+{
+    const QStringList oldWritable = settings().sandboxWritableDirs();
+    const QStringList oldDenyRead = settings().sandboxDenyReadDirs();
+    const QString home = QDir::homePath();
+    // A pid suffix keeps the fixtures out of the way of a directory a user
+    // might actually have under that name.
+    const QString suffix = QStringLiteral("-") + QString::number(QCoreApplication::applicationPid());
+    const QString writableDir = home + QStringLiteral("/llama-sandbox-writable-test") + suffix;
+    const QString denyDir = home + QStringLiteral("/llama-sandbox-denyread-test") + suffix;
+    const QString denyFile = denyDir + QStringLiteral("/secret.txt");
+    QDir().mkpath(writableDir);
+    QDir().mkpath(denyDir);
+    {
+        QFile f(denyFile);
+        QVERIFY(f.open(QIODevice::WriteOnly));
+        f.write("llama-deny-read");
+    }
+    // A leftover of a crashed run would make the "still refused" check below
+    // fail, so remove it up front.
+    const QString outside = home + QStringLiteral("/llama-sandbox-still-denied.txt") + suffix;
+    QFile::remove(outside);
+    struct Guard
+    {
+        QStringList w, dr;
+        QString writableDir, denyDir;
+        ~Guard()
+        {
+            settings().sandboxWritableDirs.setValue(w);
+            settings().sandboxDenyReadDirs.setValue(dr);
+            QDir(writableDir).removeRecursively();
+            QDir(denyDir).removeRecursively();
+        }
+    } guard{ oldWritable, oldDenyRead, writableDir, denyDir };
+
+    const SandboxTestEnv env; // sandbox on
+
+    settings().sandboxWritableDirs.setValue({ writableDir });
+    settings().sandboxDenyReadDirs.setValue({ denyDir });
+
+    // Writing into the configured writable directory is allowed, even though
+    // it is outside the project directory and the temporary locations.
+    const QString target = writableDir + QStringLiteral("/allowed.txt");
+    QJsonObject writeArgs;
+    writeArgs["path"] = target;
+    writeArgs["content"] = QStringLiteral("fine");
+    const auto writeRes = runTool<Tools::WriteTool>(writeArgs);
+    QVERIFY2(writeRes.second, qPrintable(writeRes.first));
+    QVERIFY(QFile::exists(target));
+
+    // A home-directory file that is not inside a granted location is still
+    // refused.
+    QJsonObject outsideArgs;
+    outsideArgs["path"] = outside;
+    outsideArgs["content"] = QStringLiteral("no");
+    const auto outsideRes = runTool<Tools::WriteTool>(outsideArgs);
+    QVERIFY(!outsideRes.second);
+    QVERIFY(!QFile::exists(outside));
+
+    // The configured deny-read directory is not readable (its content does
+    // not leak) and not writable.
+    QJsonObject readArgs;
+    readArgs["file_path"] = denyFile;
+    const auto readRes = runTool<Tools::ReadFileTool>(readArgs);
+    QVERIFY(!readRes.second);
+    QVERIFY(!readRes.first.contains("llama-deny-read"));
+
+    QJsonObject denyWriteArgs;
+    denyWriteArgs["path"] = QString(denyDir + QStringLiteral("/new.txt"));
+    denyWriteArgs["content"] = QStringLiteral("no");
+    const auto denyWriteRes = runTool<Tools::WriteTool>(denyWriteArgs);
+    QVERIFY(!denyWriteRes.second);
+}
+
+// The Windows container grants the extra directories from the Sandbox
+// settings page (read-write, read-only and denied) and lifts the network
+// restriction when the setting is on. Exercised cross-platform with the fake
+// wxc-exec, like windowsSandboxSpec(); the extra paths are host-absolute so
+// the cleaning keeps them.
+void LlamaToolsTest::windowsSandboxSpecExtraDirs()
+{
+#if defined(Q_OS_WIN)
+    // The fake wxc-exec is a shell script; QProcess cannot start it on
+    // Windows.
+    QSKIP("the fake wxc-exec shell script cannot run on Windows");
+#endif
+    const QStringList oldWritable = settings().sandboxWritableDirs();
+    const QStringList oldReadOnly = settings().sandboxReadOnlyDirs();
+    const QStringList oldDenyRead = settings().sandboxDenyReadDirs();
+    const bool oldNetwork = settings().sandboxAllowNetwork();
+    struct Guard
+    {
+        QStringList w, ro, dr;
+        bool net;
+        ~Guard()
+        {
+            settings().sandboxWritableDirs.setValue(w);
+            settings().sandboxReadOnlyDirs.setValue(ro);
+            settings().sandboxDenyReadDirs.setValue(dr);
+            settings().sandboxAllowNetwork.setValue(net);
+        }
+    } guard{ oldWritable, oldReadOnly, oldDenyRead, oldNetwork };
+
+    const QString root = QDir::rootPath();
+    const QString writableDir = root + QStringLiteral("llama-mxc-writable");
+    const QString readOnlyDir = root + QStringLiteral("llama-mxc-readonly");
+    const QString denyReadDir = root + QStringLiteral("llama-mxc-denied");
+    settings().sandboxWritableDirs.setValue({ writableDir });
+    settings().sandboxReadOnlyDirs.setValue({ readOnlyDir });
+    settings().sandboxDenyReadDirs.setValue({ denyReadDir });
+    settings().sandboxAllowNetwork.setValue(true);
+
+    QTemporaryDir workdir;
+    QVERIFY(workdir.isValid());
+    const QString fake = writeFakeWxcExec(workdir.path());
+    const QString configOut = workdir.path() + QStringLiteral("/config.b64");
+    qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
+    qputenv("WXC_FAKE_CONFIG_OUT", configOut.toUtf8());
+    struct EnvGuard
+    {
+        ~EnvGuard()
+        {
+            qunsetenv("WXC_FAKE_CONFIG_OUT");
+            qunsetenv("LLAMA_WXC_EXEC");
+        }
+    } envGuard;
+
+    QProcessEnvironment env;
+    env.insert("PATH", "/usr/bin");
+    const QString shellPath = QStringLiteral("C:\\git\\bin\\bash.exe");
+    const QString commandLine = shellPath + QStringLiteral(" -c echo hi");
+
+    LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+        workdir.path(), env, commandLine, 1234, shellPath);
+    for (int i = 0; i < 120 && spec.error.contains("verifying"); ++i)
+        QTest::qWait(250);
+    spec = LlamaCpp::Tools::windowsSandboxSpec(
+        workdir.path(), env, commandLine, 1234, shellPath);
+    QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
+
+    QProcess start;
+    start.start(fake, { QStringLiteral("--config-base64"), spec.arguments.at(1) });
+    QVERIFY2(start.waitForFinished(10000), qPrintable(fake));
+
+    QFile configFile(configOut);
+    QVERIFY2(configFile.open(QIODevice::ReadOnly), qPrintable(configOut));
+    const QJsonObject config
+        = QJsonDocument::fromJson(QByteArray::fromBase64(configFile.readAll())).object();
+    const QJsonObject filesystem = config.value(QStringLiteral("filesystem")).toObject();
+    const QStringList readwrite
+        = jsonArrayStrings(filesystem.value(QStringLiteral("readwritePaths")).toArray());
+    const QStringList readonly
+        = jsonArrayStrings(filesystem.value(QStringLiteral("readonlyPaths")).toArray());
+    const QStringList denied
+        = jsonArrayStrings(filesystem.value(QStringLiteral("deniedPaths")).toArray());
+    // The extra writable directory is granted read-write, the read-only one
+    // read-only, the deny-read one denied.
+    QVERIFY(readwrite.contains(writableDir));
+    QVERIFY(readonly.contains(readOnlyDir));
+    QVERIFY(denied.contains(denyReadDir));
+    // Network is allowed (the setting is on).
+    QCOMPARE(config.value(QStringLiteral("network"))
+                 .toObject()
+                 .value(QStringLiteral("defaultPolicy"))
+                 .toString(),
+             QStringLiteral("allow"));
 }
 
 void LlamaToolsTest::windowsShellInstallRootLayout()

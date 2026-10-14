@@ -2,6 +2,7 @@
 #include "llamaconstants.h"
 #include "llamatr.h"
 #include "promptssettingswidget.h"
+#include "sandboxsettingswidget.h"
 #include "skillssettingswidget.h"
 #include "tools/factory.h"
 #include "tools/tool.h"
@@ -78,6 +79,15 @@ SkillsSettingsPage::SkillsSettingsPage()
     setWidgetCreator([] { return new LlamaCpp::SkillsSettingsWidget; });
 }
 
+SandboxSettingsPage::SandboxSettingsPage()
+{
+    setId(Constants::LLAMACPP_SANDBOX_OPTIONS_ID); // unique identifier
+    setDisplayName(Tr::tr("Sandbox"));             // title shown in the Settings dialog
+    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+    setSettingsProvider([] { return &LlamaCpp::settings(); });
+    setWidgetCreator([] { return new LlamaCpp::SandboxSettingsWidget; });
+}
+
 // The static instance makes the page appear automatically.
 
 static void initEnableAspect(BoolAspect &enableLlamaCpp)
@@ -93,6 +103,7 @@ LlamaSettings &settings()
 {
     static ToolsSettingsPage theToolsPage;
     static SkillsSettingsPage theSkillsPage;
+    static SandboxSettingsPage theSandboxPage;
 
     static LlamaSettings settings;
     return settings;
@@ -599,8 +610,48 @@ LlamaSettings::LlamaSettings()
         "are not readable by any tool, and sandboxed commands have no "
         "network access (the webfetch and websearch tools are not "
         "affected). On Windows the sandbox uses the pinned wxc-exec.exe "
-        "runtime, downloadable from this tools page (LLAMA_WXC_EXEC can "
-        "point to it), and needs Windows 11 24H2 or newer."));
+        "runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC "
+        "can point to it), and needs Windows 11 24H2 or newer. The "
+        "additional directories and the network policy are configured on "
+        "the Sandbox settings page."));
+
+    // Sandbox details (managed on the "Sandbox" settings page, not in the
+    // auto-generated layout): extra writable / read-only / deny-read
+    // directories and the network policy of the sandboxed commands.
+    sandboxWritableDirs.setSettingsKey("SandboxWritableDirs");
+    sandboxWritableDirs.setDefaultValue(QStringList());
+    sandboxWritableDirs.setDisplayName(Tr::tr("Sandbox writable directories"));
+    sandboxWritableDirs.setToolTip(Tr::tr(
+        "Directories the sandboxed tools may write to, in addition to the "
+        "project directory and the temporary locations. Managed on the "
+        "Sandbox settings page."));
+
+    sandboxReadOnlyDirs.setSettingsKey("SandboxReadOnlyDirs");
+    sandboxReadOnlyDirs.setDefaultValue(QStringList());
+    sandboxReadOnlyDirs.setDisplayName(Tr::tr("Sandbox read-only directories"));
+    sandboxReadOnlyDirs.setToolTip(Tr::tr(
+        "Additional directories readable inside the sandbox. Only the "
+        "Windows process container restricts reads (the other platforms "
+        "already expose the file system read-only), so this takes effect "
+        "on Windows. Managed on the Sandbox settings page."));
+
+    sandboxDenyReadDirs.setSettingsKey("SandboxDenyReadDirs");
+    sandboxDenyReadDirs.setDefaultValue(QStringList());
+    sandboxDenyReadDirs.setDisplayName(Tr::tr("Sandbox deny-read directories"));
+    sandboxDenyReadDirs.setToolTip(Tr::tr(
+        "Additional directories that no tool may read (or write to), on top "
+        "of the built-in credential locations, which are always protected. "
+        "Managed on the Sandbox settings page."));
+
+    sandboxAllowNetwork.setSettingsKey("SandboxAllowNetwork");
+    sandboxAllowNetwork.setDefaultValue(false);
+    sandboxAllowNetwork.setDisplayName(Tr::tr("Sandbox: allow network access"));
+    sandboxAllowNetwork.setToolTip(Tr::tr(
+        "If checked, sandboxed bash commands may use the network (e.g. "
+        "'curl' or 'npm install'). Off by default: the sandbox has no "
+        "network access. The webfetch and websearch tools always run "
+        "outside the sandbox and are not affected. Managed on the Sandbox "
+        "settings page."));
 
     loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
     loadProjectInstructions.setDefaultValue(false);

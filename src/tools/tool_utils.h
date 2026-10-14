@@ -56,12 +56,40 @@ struct SecretReadPath
 //! not read.
 QList<SecretReadPath> secretReadPaths();
 
-//! The credential locations in both spellings (cleaned and link-resolved),
-//! for repeated isSecretPath() checks.
+//! The user-configured deny-read directories (Sandbox settings page),
+//! cleaned to absolute paths with the platform separator; empty entries,
+//! relative entries and file system roots are dropped, '~' is expanded,
+//! duplicates removed.
+QStringList sandboxDenyReadDirs();
+
+//! The full deny-read set: the built-in credential locations plus the
+//! user-configured deny-read directories. Everything it covers is
+//! unreadable and unwritable by the sandboxed tools.
+QList<SecretReadPath> denyReadPaths();
+
+//! The user-configured writable directories (Sandbox settings page): extra
+//! locations the sandboxed tools may write to, on top of the project
+//! directory and the temporary locations (cleaned, see sandboxDenyReadDirs).
+QStringList sandboxWritableDirs();
+
+//! The user-configured read-only directories (Sandbox settings page): extra
+//! locations readable inside the sandbox. Only the Windows process container
+//! restricts reads, so this takes effect on Windows (cleaned, see
+//! sandboxDenyReadDirs).
+QStringList sandboxReadOnlyDirs();
+
+//! True when sandboxed bash commands may use the network (Sandbox settings
+//! page); false by default, in which case the sandbox blocks all network
+//! access.
+bool sandboxAllowsNetwork();
+
+//! The deny-read locations (the built-in credential locations plus the
+//! user-configured deny-read directories) in both spellings (cleaned and
+//! link-resolved), for repeated isSecretPath() checks.
 QStringList secretPathSpellings();
 
 //! True when \a path (in its cleaned or its link-resolved spelling) lies in
-//! one of the credential locations \a secretSpellings.
+//! one of the deny-read locations \a secretSpellings.
 bool isSecretPath(const QString &path, const QStringList &secretSpellings);
 bool isSecretPath(const QString &path);
 

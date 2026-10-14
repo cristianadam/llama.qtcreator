@@ -30,6 +30,7 @@ add_qtc_test(llamatools_test
     ../src/llamathinkingsectionparser.cpp
     ../src/promptssettingswidget.cpp
     ../src/promptssettingswidget.h
+    ../src/sandboxsettingswidget.cpp
     ../src/projectinstructions.cpp
     ../src/skills.cpp
     ../src/skillssettingswidget.cpp

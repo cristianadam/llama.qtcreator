@@ -174,21 +174,26 @@ QJsonObject buildConfig(const QString &cwd,
                         const QProcessEnvironment &env,
                         const QString &commandLine,
                         int timeoutMs,
-                        const QString &shellRoot)
+                        const QString &shellRoot,
+                        const QStringList &extraDenied = {})
 {
     const QString canonicalCwd = canonicalGrantPath(cwd);
     // Writable: the working directory and the temporary location (the same
-    // coverage as the other platforms).
+    // coverage as the other platforms), plus the extra writable directories
+    // from the Sandbox settings page.
     // Note: unlike bubblewrap and Seatbelt, the protected locations inside
     // the working directory (.git, .qtcreator, *.user) stay writable here:
     // the MXC configuration has no documented semantics for a read-only or
     // denied path nested in a read-write grant (and deniedPaths would hide
     // .git from git entirely). The file tools still refuse those writes.
     QStringList readwrite = { canonicalCwd, canonicalGrantPath(QDir::tempPath()) };
+    for (const QString &dir : sandboxWritableDirs())
+        readwrite << canonicalGrantPath(dir);
     readwrite = withoutNested(readwrite);
 
     // Read-only: the shell's own tree (Git for Windows: bash.dll,
-    // msys-2.0.dll, the usr/ hierarchy) and the Windows system directory.
+    // msys-2.0.dll, the usr/ hierarchy), the Windows system directory and
+    // the extra read-only directories from the Sandbox settings page.
     // Everything else does not exist in the container - in particular the
     // credential locations need no explicit deny, unlike the deny-list
     // profiles of the other platforms.
@@ -199,7 +204,22 @@ QJsonObject buildConfig(const QString &cwd,
                                          env.value(QStringLiteral("WINDIR")));
     if (!systemRoot.isEmpty())
         readonly << canonicalGrantPath(systemRoot);
+    for (const QString &dir : sandboxReadOnlyDirs())
+        readonly << canonicalGrantPath(dir);
     readonly = withoutNested(readonly);
+
+    // Denied: the user-configured deny-read directories (Sandbox settings
+    // page) plus the paths the caller denies explicitly (the live probe's
+    // canary directory, so its negative controls keep working even when a
+    // user writable grant covers the canary location). Only meaningful for a
+    // location the container would otherwise see (inside a grant); a path
+    // outside all grants does not exist in the container anyway, so denying
+    // it is harmless.
+    QStringList denied;
+    for (const QString &dir : sandboxDenyReadDirs())
+        denied << canonicalGrantPath(dir);
+    for (const QString &dir : extraDenied)
+        denied << canonicalGrantPath(dir);
 
     // The container starts with no host environment; pass the caller's
     // environment explicitly. MXC's validator requires LOCALAPPDATA; point
@@ -233,14 +253,20 @@ QJsonObject buildConfig(const QString &cwd,
     QJsonObject filesystem;
     filesystem[QStringLiteral("readwritePaths")] = QJsonArray::fromStringList(readwrite);
     filesystem[QStringLiteral("readonlyPaths")] = QJsonArray::fromStringList(readonly);
-    filesystem[QStringLiteral("deniedPaths")] = QJsonArray();
+    filesystem[QStringLiteral("deniedPaths")] = QJsonArray::fromStringList(denied);
     config[QStringLiteral("filesystem")] = filesystem;
-    // No network access, like (deny network*) on macOS: nothing is allowed
-    // and no network capability is granted. Web access stays available
-    // through the webfetch/websearch tools, which run outside the sandbox.
+    // No network access by default, like (deny network*) on macOS: nothing
+    // is allowed and no network capability is granted. Web access stays
+    // available through the webfetch/websearch tools, which run outside the
+    // sandbox. The Sandbox settings page can lift the restriction.
     QJsonObject network;
-    network[QStringLiteral("defaultPolicy")] = QStringLiteral("deny");
-    network[QStringLiteral("allowLocalNetwork")] = false;
+    if (sandboxAllowsNetwork()) {
+        network[QStringLiteral("defaultPolicy")] = QStringLiteral("allow");
+        network[QStringLiteral("allowLocalNetwork")] = true;
+    } else {
+        network[QStringLiteral("defaultPolicy")] = QStringLiteral("deny");
+        network[QStringLiteral("allowLocalNetwork")] = false;
+    }
     network[QStringLiteral("allowedHosts")] = QJsonArray();
     network[QStringLiteral("blockedHosts")] = QJsonArray();
     network[QStringLiteral("enforcementMode")] = QStringLiteral("capabilities");
@@ -346,8 +372,9 @@ bool liveProbePassed(QProcess &process,
 /*! Checks that the container really isolates, with one real sandboxed
     command and positive and negative controls: a write inside the workdir
     must work, a read of and a write to a canary file in the home directory
-    must fail (the home directory is not granted; a temp location would be).
-    The probe runs asynchronously - the first call starts it and reports
+    must fail (the canary's directory is denied in the probe configuration,
+    so this holds even when a user writable grant covers it; a temp location
+    would be granted and cannot be used). The probe runs asynchronously - the first call starts it and reports
     Running, so the command that arrived is refused with a retry hint and
     the next ones pay nothing. The successful result is cached for the
     session (keyed by the executable); a failure re-probes on the next
@@ -386,6 +413,11 @@ LiveProbeState liveProbeState(const QString &exe,
         return probe.state;
     }
     const QString canary = homeProbe.path() + QStringLiteral("/outside/secret.txt");
+    // The probe directory is denied in the probe configuration: a user
+    // writable grant covering the home directory would otherwise make the
+    // negative controls (the canary read and the outside write) succeed and
+    // fail the probe, and with it every sandboxed command.
+    const QStringList probeDenied = { homeProbe.path() };
     {
         QFile file(canary);
         // The negative read control needs the canary to exist; without it
@@ -416,7 +448,8 @@ LiveProbeState liveProbeState(const QString &exe,
                                     env,
                                     commandLine,
                                     kLiveProbeTimeoutMs,
-                                    shellRoot));
+                                    shellRoot,
+                                    probeDenied));
     if (encoded.size() > kMaxConfigBase64Chars) {
         cleanupAndFail(Tr::tr("The Windows sandbox configuration is too long (%1 of %2 "
                               "characters); the process environment is probably oversized. "

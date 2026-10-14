@@ -118,7 +118,6 @@ private:
     QPushButton *m_ripgrepButton = nullptr;
     QLabel *m_mxcLabel = nullptr;
     QPushButton *m_mxcButton = nullptr;
-    QCheckBox *m_sandboxCheck = nullptr;
     QCheckBox *m_loadInstructionsCheck = nullptr;
     // Runaway tool-loop guard: the maximum number of consecutive tool-only
     // turns before the calls are no longer executed (0 = no limit).

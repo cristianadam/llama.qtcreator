@@ -130,6 +130,7 @@ add_qtc_plugin(LlamaCpp
     src/tools/windows_sandbox.cpp src/tools/windows_sandbox.h
     src/projectinstructions.cpp src/projectinstructions.h
     src/promptssettingswidget.cpp src/promptssettingswidget.h
+    src/sandboxsettingswidget.cpp src/sandboxsettingswidget.h
     src/skills.cpp src/skills.h
     src/skillssettingswidget.cpp src/skillssettingswidget.h
     src/toolsettingswidget.cpp src/toolsettingswidget.h
