@@ -4,8 +4,8 @@ on: [push]
 
 env:
   PLUGIN_NAME: LlamaCpp
-  QT_VERSION: 6.11.1
-  QT_CREATOR_VERSION: 21.0.0-beta1
+  QT_VERSION: 6.12.0
+  QT_CREATOR_VERSION: 21.0.0-beta2
   MACOS_DEPLOYMENT_TARGET: "13.3"
   CMAKE_VERSION: "3.30.3"
   NINJA_VERSION: "1.12.1"
@@ -120,7 +120,7 @@ jobs:
             set(url_os "mac_x64")
             set(qt_package_arch_suffix "clang_64")
             set(qt_dir_prefix "${qt_version}/macos")
-            set(qt_package_suffix "-MacOS-MacOS_15-Clang-MacOS-MacOS_15-X86_64-ARM64")
+            set(qt_package_suffix "-MacOS-MacOS_26-Clang-MacOS-MacOS_26-X86_64-ARM64")
           endif()
 
           set(qt_base_url "https://download.qt.io/online/qtsdkrepository/${url_os}/desktop/qt6_${qt_version_dotless}/qt6_${qt_version_dotless}${qt_compiler_suffix}")
