@@ -130,6 +130,10 @@ public:
     // "ll" locator prompts: only the first line of a prompt is shown in the
     // menu, the full text is sent to the model.
     Utils::StringListAspect locatorPrompts{this};
+    // When text is selected in an editor, a small button appears at the bottom
+    // of the selection; clicking it opens the "ll" locator so the selection
+    // can be sent to llama.cpp with one of the prompts.
+    Utils::BoolAspect selectionPromptButton{this};
 
     // Auto-compaction: when the conversation approaches the model's context
     // window, its history is summarized into a marker message and only the

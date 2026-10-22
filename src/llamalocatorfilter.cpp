@@ -365,9 +365,23 @@ void LocatorFilter::restoreState(const QJsonObject &object)
                                      &QVariant::toString);
 }
 
-void setupLocatorFilter()
+// The filter is a function-local static so it is constructed once and torn
+// down at application shutdown. Both setupLocatorFilter() and locatorFilter()
+// funnel through here.
+static LocatorFilter *locatorFilterInstance()
 {
     static LocatorFilter theFilter;
+    return &theFilter;
+}
+
+void setupLocatorFilter()
+{
+    locatorFilterInstance();
+}
+
+Core::ILocatorFilter *locatorFilter()
+{
+    return locatorFilterInstance();
 }
 
 } // namespace LlamaCpp

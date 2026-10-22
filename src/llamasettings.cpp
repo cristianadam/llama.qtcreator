@@ -556,6 +556,14 @@ LlamaSettings::LlamaSettings()
                "with the errors and warnings of the current file, and \"{git_diff}\" "
                "with the uncommitted changes of its git repository."));
 
+    selectionPromptButton.setDisplayName(Tr::tr("Selection prompt button"));
+    selectionPromptButton.setSettingsKey("SelectionPromptButton");
+    selectionPromptButton.setDefaultValue(true);
+    selectionPromptButton.setToolTip(
+        Tr::tr("Show a small button at the bottom of a text selection in the editor. "
+               "Clicking it opens the \"ll\" locator so the selection can be sent to "
+               "llama.cpp with one of the prompts."));
+
     //
     // Skills
     //
@@ -842,6 +850,7 @@ LlamaSettings::LlamaSettings()
     followUpPrompt.setEnabler(&enableLlamaCpp);
     compactPrompt.setEnabler(&enableLlamaCpp);
     locatorPrompts.setEnabler(&enableLlamaCpp);
+    selectionPromptButton.setEnabler(&enableLlamaCpp);
 
     setLayouter([this] {
         using namespace Layouting;
@@ -902,6 +911,7 @@ LlamaSettings::LlamaSettings()
                 hr, br,
                 showTokensPerSecond, br,
                 toolsEnabled, br,
+                selectionPromptButton, br,
                 customJson, br,
             },
         };

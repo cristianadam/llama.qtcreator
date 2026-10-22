@@ -79,6 +79,7 @@ add_qtc_plugin(LlamaCpp
     src/llamachatmessage.cpp src/llamachatmessage.h
     src/llamalocatorfilter.cpp src/llamalocatorfilter.h
     src/llamalocatorprompts.cpp src/llamalocatorprompts.h
+    src/llamaselectionbutton.cpp src/llamaselectionbutton.h
     src/llamaconversationsmodel.cpp src/llamaconversationsmodel.h
     src/llamaconversationsview.cpp src/llamaconversationsview.h
     src/llamaconstants.h
