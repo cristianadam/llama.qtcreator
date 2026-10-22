@@ -64,6 +64,13 @@ namespace LlamaCpp {
 
 namespace {
 
+// The generation speed (predicted_n / predicted_ms) arrives live with every
+// SSE chunk and predicted_ms counts from the end of prompt processing: in the
+// first chunks it covers only the (fastest) first tokens, so the ratio briefly
+// shows hundreds or thousands of t/s before settling. Wait for a small sample
+// before displaying it.
+constexpr int kMinTokensForSpeed = 10;
+
 // "Human Editor" documents are backed by a throw‑away file in the temp dir
 // so the regular text editor treats them as ordinary, saveable files (no
 // "Save As" dialog, which a file‑less document would trigger).  The file is
@@ -1428,10 +1435,9 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
             hasData = true;
         } else if (!msg.content.isEmpty()) {
             const auto &t = msg.timings;
-            if (t.predicted_ms > 0 && t.prompt_ms > 0) {
-                qreal tokensPerSec = (t.predicted_n + t.prompt_n) * 1000.0
-                                     / (t.predicted_ms + t.prompt_ms);
-                text = Tr::tr("Speed: %1 t/s").arg(tokensPerSec, 0, 'f', 1);
+            if (t.predicted_n >= kMinTokensForSpeed && t.predicted_ms > 0 && t.prompt_ms > 0) {
+                const qreal genTokensPerSec = t.predicted_n * 1000.0 / t.predicted_ms;
+                text = Tr::tr("Speed: %1 t/s").arg(genTokensPerSec, 0, 'f', 1);
 
                 tooltip = Tr::tr(
                     "<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
@@ -1441,7 +1447,7 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
                               .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
                               .arg(t.predicted_n)
                               .arg(t.predicted_ms)
-                              .arg(t.predicted_n * 1000.0 / t.predicted_ms, 0, 'f', 1);
+                              .arg(genTokensPerSec, 0, 'f', 1);
                 hasData = true;
             }
         }
