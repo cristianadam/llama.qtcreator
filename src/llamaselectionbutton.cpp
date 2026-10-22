@@ -10,6 +10,7 @@
 #include <coreplugin/locator/locatormanager.h>
 #include <texteditor/texteditor.h>
 
+#include <QEvent>
 #include <QScrollBar>
 #include <QTextCursor>
 
@@ -25,7 +26,7 @@ SelectionPromptButton::SelectionPromptButton(TextEditorWidget *editor)
     setFocusPolicy(Qt::NoFocus); // never steal the keyboard focus from the editor
     setCursor(Qt::PointingHandCursor);
     setIcon(LLAMACPP_ICON.icon());
-    setToolTip(Tr::tr("Prompt llama.cpp about the selection (\"ll\" locator)"));
+    setToolTip(Tr::tr("Prompt llama.cpp about the selection (opens the llama.cpp locator)"));
 
     connect(this, &QToolButton::clicked, this, [this] {
         if (Core::ILocatorFilter *filter = locatorFilter())
@@ -36,6 +37,9 @@ SelectionPromptButton::SelectionPromptButton(TextEditorWidget *editor)
     connect(m_editor, &TextEditorWidget::selectionChanged, this, &SelectionPromptButton::updateState);
     connect(m_editor, &TextEditorWidget::cursorPositionChanged, this, &SelectionPromptButton::updateState);
     connect(m_editor, &TextEditorWidget::textChanged, this, &SelectionPromptButton::updateState);
+    // The viewport can change size without a scroll or selection change (split
+    // dragged, wrap toggled): reposition so the button stays within it.
+    m_editor->viewport()->installEventFilter(this);
     if (QScrollBar *vbar = m_editor->verticalScrollBar())
         connect(vbar, &QScrollBar::valueChanged, this, &SelectionPromptButton::updateState);
     if (QScrollBar *hbar = m_editor->horizontalScrollBar())
@@ -52,7 +56,7 @@ void SelectionPromptButton::updateState()
     }
 
     // Only the editor the locator will actually read the selection from gets
-    // the button: the "ll" prompts use the current text editor's selection.
+    // the button: the locator prompts use the current text editor's selection.
     const bool enabled = settings().enableLlamaCpp() && settings().selectionPromptButton();
     const bool isCurrent = m_editor == TextEditorWidget::currentTextEditorWidget();
     const QTextCursor cursor = m_editor->textCursor();
@@ -74,17 +78,30 @@ void SelectionPromptButton::updateState()
     const int vw = m_editor->viewport()->width();
     const int vh = m_editor->viewport()->height();
 
-    // Just below the end of the selection, hugging its right edge; clamp to
-    // the viewport so the button never overflows.
+    // Just below the end of the selection, hugging its right edge. If there is
+    // no room below, hide the button instead of clamping it up onto the
+    // selection itself.
+    if (rect.bottom() + 2 + sz.height() > vh) {
+        hide();
+        return;
+    }
     int x = rect.right() + 2 - sz.width();
     x = qBound(1, x, qMax(1, vw - sz.width() - 1));
-    int y = rect.bottom() + 2;
-    y = qBound(1, y, qMax(1, vh - sz.height() - 1));
+    const int y = rect.bottom() + 2;
 
     move(x, y);
     if (!isVisible())
         show();
     raise();
+}
+
+bool SelectionPromptButton::eventFilter(QObject *watched, QEvent *event)
+{
+    // The viewport has no geometry-changed signal; catch its resize event so
+    // the button is repositioned (or hidden) when the editor pane is resized.
+    if (m_editor && watched == m_editor->viewport() && event->type() == QEvent::Resize)
+        updateState();
+    return QToolButton::eventFilter(watched, event);
 }
 
 SelectionPromptButtonManager &SelectionPromptButtonManager::instance()

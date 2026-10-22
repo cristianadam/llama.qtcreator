@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QEvent>
 #include <QHash>
 #include <QObject>
 #include <QPointer>
@@ -16,7 +17,7 @@ class TextEditorWidget;
 namespace LlamaCpp {
 
 //! A small floating button that appears at the bottom of a non-empty text
-//! selection in a text editor. Clicking it opens the "ll" locator so the
+//! selection in a text editor. Clicking it opens the llama.cpp locator so the
 //! selection can be sent to llama.cpp with one of the prompts.
 class SelectionPromptButton : public QToolButton
 {
@@ -27,6 +28,9 @@ public:
 
     //! Recompute whether the button should be visible and, if so, where.
     void updateState();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     TextEditor::TextEditorWidget *m_editor;

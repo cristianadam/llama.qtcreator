@@ -561,8 +561,8 @@ LlamaSettings::LlamaSettings()
     selectionPromptButton.setDefaultValue(true);
     selectionPromptButton.setToolTip(
         Tr::tr("Show a small button at the bottom of a text selection in the editor. "
-               "Clicking it opens the \"ll\" locator so the selection can be sent to "
-               "llama.cpp with one of the prompts."));
+               "Clicking it opens the llama.cpp locator so the selection can be "
+               "sent to llama.cpp with one of the prompts."));
 
     //
     // Skills

@@ -187,6 +187,18 @@ void LlamaPlugin::initialize()
     });
     toggleAutoFimCmd->setDefaultKeySequence(Tr::tr("Ctrl+Shift+G"));
 
+    Core::Command *toggleSelectionPromptButtonCmd = ActionManager::registerAction(
+        &m_selectionPromptButtonAction, Constants::LLAMACPP_TOGGLE_SELECTION_PROMPT_BUTTON);
+    m_selectionPromptButtonAction.setCheckable(true);
+    m_selectionPromptButtonAction.setChecked(settings().selectionPromptButton());
+    m_selectionPromptButtonAction.setToolTip(Tr::tr(
+        "Show a small button at the bottom of a text selection in the editor that opens "
+        "the llama.cpp locator."));
+    connect(&m_selectionPromptButtonAction, &QAction::triggered, this, [this](bool checked) {
+        settings().selectionPromptButton.setValue(checked);
+        settings().apply();
+    });
+
     Core::Command *nextCompletionCmd =
         ActionManager::registerAction(&m_nextCompletionAction, Constants::LLAMACPP_NEXT_COMPLETION);
     m_nextCompletionAction.setToolTip(Tr::tr(
@@ -222,6 +234,7 @@ void LlamaPlugin::initialize()
     menuContainer->addAction(requestCmd);
     menuContainer->addAction(toggleCmd);
     menuContainer->addAction(toggleAutoFimCmd);
+    menuContainer->addAction(toggleSelectionPromptButtonCmd);
     menuContainer->addAction(statusCmd);
     menuContainer->addSeparator();
     menuContainer->addAction(preferencesCmd);
@@ -232,11 +245,15 @@ void LlamaPlugin::initialize()
         m_toggleAction.setChecked(enabled);
         m_requestAction.setEnabled(enabled);
         m_toogleAutoFimAction.setEnabled(enabled);
+        m_selectionPromptButtonAction.setEnabled(enabled);
         m_nextCompletionAction.setEnabled(enabled);
         m_prevCompletionAction.setEnabled(enabled);
     };
 
     settings().enableLlamaCpp.addOnChanged(this, updateActions);
+    settings().selectionPromptButton.addOnChanged(this, [this] {
+        m_selectionPromptButtonAction.setChecked(settings().selectionPromptButton());
+    });
 
     updateActions();
 
@@ -251,6 +268,7 @@ void LlamaPlugin::initialize()
     statusMenu->addAction(&m_requestAction);
     statusMenu->addAction(&m_toggleAction);
     statusMenu->addAction(&m_toogleAutoFimAction);
+    statusMenu->addAction(&m_selectionPromptButtonAction);
     statusMenu->addAction(&m_statusAction);
     statusMenu->addSeparator();
     statusMenu->addAction(&m_preferencesAction);

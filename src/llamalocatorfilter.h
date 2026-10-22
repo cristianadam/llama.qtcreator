@@ -7,7 +7,7 @@ class ILocatorFilter;
 namespace LlamaCpp {
 void setupLocatorFilter();
 
-//! The "ll" locator filter instance (registered by setupLocatorFilter). Used
-//! to open the locator directly, e.g. from the selection prompt button.
+//! The llama.cpp locator filter instance (registered by setupLocatorFilter).
+//! Used to open the locator directly, e.g. from the selection prompt button.
 Core::ILocatorFilter *locatorFilter();
 } // namespace LlamaCpp
