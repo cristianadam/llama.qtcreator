@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+138"/>
+        <location filename="../src/llamaplugin.cpp" line="+139"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp-Konversation</translation>
     </message>
@@ -49,7 +49,7 @@
         <translation>Serverstatus anzeigen</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Einstellungen</translation>
     </message>
@@ -59,7 +59,12 @@
         <translation>Strg+Umschalt+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Zeigt einen kleinen Button am unteren Rand einer Textauswahl im Editor an, der den llama.cpp-Locator öffnet.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Wechselt zum nächsten zwischengespeicherten Vervollständigungskandidaten an der aktuellen Position (Strg+G drücken, dann Pfeil nach unten).</translation>
     </message>
@@ -89,7 +94,7 @@
         <translation>Öffnet die llama.cpp-Einstellungsseite.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>llama.cpp deaktivieren.</translation>
     </message>
@@ -99,7 +104,7 @@
         <translation>llama.cpp aktivieren.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fehler beim Abrufen der FIM-Vervollständigung von %1: %2</translation>
     </message>
@@ -156,7 +161,7 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -969,7 +974,18 @@
         <translation>Eingebaute Prompts des &quot;ll&quot;-Locators. Im Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt, &quot;{file}&quot; und &quot;{line}&quot; durch die aktuelle Datei und die Cursorzeile, &quot;{diagnostics}&quot; durch die Fehler und Warnungen der aktuellen Datei und &quot;{git_diff}&quot; durch die nicht committeten Änderungen des zugehörigen Git-Repositories.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Prompt-Button für die Auswahl</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Zeigt einen kleinen Button am unteren Rand einer Textauswahl im Editor an. Ein Klick öffnet den llama.cpp-Locator, sodass die Auswahl mit einem der Prompts an llama.cpp gesendet werden kann.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Orten schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von der Llama.cpp-Chat-Tools-Einstellungsseite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer. Die zusätzlichen Verzeichnisse und die Netzwerkrichtlinie werden auf der Sandbox-Einstellungsseite konfiguriert.</translation>
     </message>
@@ -1041,7 +1057,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Befehle in Sandbox ausführen</translation>
@@ -1055,15 +1071,15 @@
         <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Projektanweisungen laden</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Wenn aktiviert, wird die Projektanweisungsdatei des aktuellen Projekts an die Chat-Systemnachricht angehängt. Die Datei ist AGENTS.md, mit CLAUDE.md als Fallback, und wird im Projektverzeichnis gesucht und bis zur Wurzel des Git-Repositories hochsuchend verfolgt, sodass ein Monorepo eine einzige Anweisungsdatei für alle seine Projekte verwenden kann. Dateien größer als 32 KB werden abgeschnitten.</translation>
     </message>
@@ -1233,7 +1249,7 @@
         <translation>API-Schlüssel für Tavily, erhältlich unter tavily.com (erforderlich für den &quot;tavily&quot;-Anbieter).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Überschreibt die globale Einstellung &apos;Befehle in Sandbox ausführen&apos; für dieses Projekt. Was die Sandbox beschränkt, zeigt die globale Einstellung auf der Llama-Tools-Seite.</translation>
     </message>
@@ -1248,7 +1264,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1410,7 +1426,7 @@
         <translation>&lt;b&gt;Prompt-Verarbeitung:&lt;/b&gt;&lt;br&gt;Tokens gesamt: %1&lt;br&gt;Verarbeitet: %2&lt;br&gt;Zwischengespeichert: %3&lt;br&gt;Zeit: %4 ms</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Geschwindigkeit: %1 Tokens/s</translation>
     </message>
@@ -1691,7 +1707,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>llama.cpp-Konversationen</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Zusammenfassung von **„{selection}“** erstellen</translation>
     </message>
@@ -2383,7 +2399,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Kompaktierung</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2598,6 +2614,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Verzeichnis auswählen</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>llama.cpp zur Auswahl abfragen (öffnet den llama.cpp-Locator)</translation>
     </message>
 </context>
 <context>

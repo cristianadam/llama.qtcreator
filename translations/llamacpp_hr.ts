@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+138"/>
+        <location filename="../src/llamaplugin.cpp" line="+139"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp razgovor</translation>
     </message>
@@ -49,7 +49,7 @@
         <translation>Prikaži status servera</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Postavke</translation>
     </message>
@@ -59,7 +59,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Prikaži mali gumb na dnu izabranog teksta u uređivaču koji otvara lokator llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Prebaci na sljedećeg keširanog kandidata za dovršenje na trenutnoj poziciji (pritisnite Ctrl+G, zatim Down).</translation>
     </message>
@@ -89,7 +94,7 @@
         <translation>Otvorite stranicu postavaka llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Onemogući funkciju llama.cpp.</translation>
     </message>
@@ -99,7 +104,7 @@
         <translation>Omogući funkciju llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -156,7 +161,7 @@
         <translation>Razgovor</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -973,7 +978,18 @@
         <translation>Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim, &quot;{file}&quot; i &quot;{line}&quot; trenutnom datotekom i linijom kursora, &quot;{diagnostics}&quot; greškama i upozorenjima trenutne datoteke, a &quot;{git_diff}&quot; nekomitiranim promjenama njezina git repozitorija.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Gumb za prompt izabranog teksta</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Prikaži mali gumb na dnu izabranog teksta u uređivaču. Klik na njega otvara lokator llama.cpp kako bi se izabrani tekst mogao poslati u llama.cpp s jednim od promptova.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, Microsoftov MXC procesni kontejner na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox koristi fiksirani wxc-exec.exe runtime koji se može preuzeti s stranice postavaka alata (LLAMA_WXC_EXEC može ukazivati na njega) i zahtijeva Windows 11 24H2 ili noviji. Dodatni direktoriji i mrežna politika konfiguriraju se na stranici postavaka Sandbox.</translation>
     </message>
@@ -1045,7 +1061,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox komande</translation>
@@ -1059,15 +1075,15 @@
         <translation type="vanished">Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox zahtijeva jednokratnu instalaciju: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); srt-win izvedbena datoteka mora biti na PATH-u (LLAMA_SRT_WIN može ukazivati na nju).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Učitaj upute projekta</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Ako je označeno, datoteka s uputama projekta trenutnog projekta dodaje se na sustavnu poruku razgovora. Datoteka je AGENTS.md, s povlačenjem na CLAUDE.md, i traži se u direktoriju projekta uz penjanje prema korijenu git repozitorija, tako da monorepo može zadržati jednu datoteku s uputama za sve svoje projekte. Datoteke veće od 32 KB se skraćuju.</translation>
     </message>
@@ -1237,7 +1253,7 @@
         <translation>API ključ za Tavily, dobije se na tavily.com (obavezan za pružatelja &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Prepisuje globalnu postavku &apos;Sandbox komande&apos; za ovaj projekt. Pogledajte globalnu postavku na stranici Llama Alati za ono što sandbox ograničava.</translation>
     </message>
@@ -1252,7 +1268,7 @@
         <translation>Promptovi</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>Zadano</translation>
     </message>
@@ -1414,7 +1430,7 @@
         <translation>&lt;b&gt;Obrađivanje prompta:&lt;/b&gt;&lt;br&gt;Ukupno tokena: %1&lt;br&gt;Obrađeno: %2&lt;br&gt;Keširano: %3&lt;br&gt;Vrijeme: %4 ms</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Brzina: %1 tokena/s</translation>
     </message>
@@ -1685,7 +1701,7 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
@@ -2352,7 +2368,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -2567,6 +2583,11 @@ Authorization: Bearer &lt;token&gt;</source>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Odaberite direktorij</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Promptiraj llama.cpp o izabranom tekstu (otvara lokator llama.cpp)</translation>
     </message>
 </context>
 <context>

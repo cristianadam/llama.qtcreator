@@ -13,7 +13,7 @@
         <translation>请求 llama.cpp 建议</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>在当前编辑器光标位置请求 llama.cpp 的建议或补全。</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>显示服务器状态</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>首选项</translation>
     </message>
@@ -63,7 +63,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>在编辑器中文本选区的底部显示一个小按钮，用于打开 llama.cpp 定位器。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>循环到当前位置的下一个已缓存补全候选（按 Ctrl+G，然后按向下键）。</translation>
     </message>
@@ -93,7 +98,7 @@
         <translation>打开 llama.cpp 设置页面。</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>禁用 llama.cpp。</translation>
     </message>
@@ -103,7 +108,7 @@
         <translation>启用 llama.cpp。</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
@@ -164,7 +169,7 @@
         <translation type="vanished">[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -981,7 +986,18 @@
         <translation>“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本，“{file}” 和 “{line}” 会被替换为当前文件和光标所在行，“{diagnostics}” 会被替换为当前文件的错误和警告，“{git_diff}” 会被替换为其 git 仓库的未提交更改。</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>选区提示词按钮</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>在编辑器中文本选区的底部显示一个小按钮。点击它可打开 llama.cpp 定位器，以便使用其中一个提示词将选区发送给 llama.cpp。</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为 Microsoft MXC 进程容器），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱使用固定版本的 wxc-exec.exe 运行时，可从工具设置页面下载（LLAMA_WXC_EXEC 可以指向它），并且需要 Windows 11 24H2 或更高版本。附加目录和网络策略在沙箱设置页面上配置。</translation>
     </message>
@@ -1053,7 +1069,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱化命令</translation>
@@ -1067,15 +1083,15 @@
         <translation type="vanished">如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为来自 @anthropic-ai/sandbox-runtime 的 srt-win），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱需要一次性安装：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（会弹出一个 UAC 提示）；srt-win 可执行文件必须在 PATH 中（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>加载项目说明</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>如果选中，当前项目的项目说明文件会被追加到聊天系统消息中。该文件为 AGENTS.md，回退到 CLAUDE.md，并在项目目录中查找，然后逐级向上查找直到 git 仓库根目录，因此一个 monorepo 可以为所有项目保留单一说明文件。大于 32 KB 的文件会被截断。</translation>
     </message>
@@ -1245,7 +1261,7 @@
         <translation>Tavily 的 API 密钥，可在 tavily.com 获取（“tavily” 提供方所需）。</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>为该项目覆盖全局“沙箱化命令”设置。有关沙箱限制的内容，请参阅 Llama 工具页面上的全局设置。</translation>
     </message>
@@ -1260,7 +1276,7 @@
         <translation>提示词</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
@@ -1426,7 +1442,7 @@
         <translation type="vanished">后续问题：</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>速度：%1 令牌/秒</translation>
     </message>
@@ -1701,7 +1717,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会话</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>为所选内容创建摘要</translation>
     </message>
@@ -2409,7 +2425,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>压缩</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>标题</translation>
@@ -2624,6 +2640,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>选择目录</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>就选区向 llama.cpp 提问（打开 llama.cpp 定位器）</translation>
     </message>
 </context>
 <context>

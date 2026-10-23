@@ -8,7 +8,7 @@
         <translation type="vanished">llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+138"/>
+        <location filename="../src/llamaplugin.cpp" line="+139"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp 会話</translation>
     </message>
@@ -53,7 +53,7 @@
         <translation>サーバー状態を表示</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>設定</translation>
     </message>
@@ -69,7 +69,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>エディタのテキスト選択範囲の下部に、llama.cpp ロケーターを開く小さなボタンを表示します。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>現在の位置でキャッシュされた次の補完候補に切り替えます（Ctrl+G のあと Down を押してください）。</translation>
     </message>
@@ -99,7 +104,7 @@
         <translation>llama.cpp の設定ページを開きます。</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>llama.cpp を無効にします。</translation>
     </message>
@@ -109,7 +114,7 @@
         <translation>llama.cpp を有効にします。</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
@@ -563,12 +568,12 @@
         <translation type="vanished">&quot;ll&quot; ロケーターのプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+57"/>
         <source>If checked the chat will start with the Tools button turned on.</source>
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-278"/>
+        <location line="-286"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
@@ -989,7 +994,18 @@
         <translation>&quot;ll&quot; ロケーター組み込みプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>選択プロンプトボタン</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>エディタのテキスト選択範囲の下部に小さなボタンを表示します。クリックすると llama.cpp ロケーターが開き、選択されたテキストをプロンプトのいずれかを付けて llama.cpp に送信できます。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
         <source>Skill directories</source>
         <translation>スキルディレクトリ</translation>
     </message>
@@ -1001,13 +1017,13 @@
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>コマンドをサンドボックス化する</translation>
     </message>
     <message>
-        <location line="-364"/>
+        <location line="-366"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。ツール設定ページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
     </message>
@@ -1062,13 +1078,13 @@
     <message>
         <location line="+9"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>プロジェクト指示を読み込む</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>チェックされている場合、現在のプロジェクトのプロジェクト指示ファイルがチャットのシステムメッセージに追加されます。ファイルは AGENTS.md（見つからない場合は CLAUDE.md）で、プロジェクトディレクトリから git リポジトリのルートまで上層を探索するため、モノレポではすべてのプロジェクトで単一の指示ファイルを保持できます。32 KB を超えるファイルは切り詰められます。</translation>
     </message>
@@ -1238,7 +1254,7 @@
         <translation>Tavily の API キー。tavily.com で取得できます（&quot;tavily&quot; プロバイダーに必要）。</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>このプロジェクトに対して、グローバルの &apos;コマンドをサンドボックス化する&apos; 設定を上書きします。サンドボックスが何を制限するのかは、Llama Tools ページのグローバル設定を参照してください。</translation>
     </message>
@@ -1257,12 +1273,12 @@
         <translation type="vanished">秒あたりのトークン数を表示:</translation>
     </message>
     <message>
-        <location line="-572"/>
+        <location line="-582"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
     <message>
-        <location line="+120"/>
+        <location line="+128"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>チャットでツールを使用可能にする</translation>
@@ -1502,7 +1518,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-539"/>
+        <location filename="../src/llamasettings.cpp" line="-547"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -1607,7 +1623,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>次の結果</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -1773,7 +1789,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">続きの質問:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>速度: %1 トークン/秒</translation>
     </message>
@@ -1882,7 +1898,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -2295,6 +2311,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>ディレクトリを選択</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>選択中のテキストをプロンプト付きで llama.cpp に送信します（llama.cpp ロケーターを開きます）</translation>
     </message>
 </context>
 <context>

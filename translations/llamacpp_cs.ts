@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+138"/>
+        <location filename="../src/llamaplugin.cpp" line="+139"/>
         <source>llama.cpp coversation</source>
         <translation>Konverzace s llama.cpp</translation>
     </message>
@@ -49,7 +49,7 @@
         <translation>Zobrazit stav serveru</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Nastavení</translation>
     </message>
@@ -59,7 +59,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Zobrazit malé tlačítko pod vybraným textem v editoru, které otevře prohledávač llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Přepnout na další navrhované dokončení v mezipaměti na aktuální pozici (stiskněte Ctrl+G a pak šipku dolů).</translation>
     </message>
@@ -89,7 +94,7 @@
         <translation>Otevřít stránku nastavení llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Vypnout llama.cpp.</translation>
     </message>
@@ -99,7 +104,7 @@
         <translation>Zapnout llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Chyba při načítání dokončení FIM z %1: %2</translation>
     </message>
@@ -156,7 +161,7 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
@@ -977,7 +982,18 @@
         <translation>Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem, &quot;{file}&quot; a &quot;{line}&quot; aktuálním souborem a řádkem kurzoru, &quot;{diagnostics}&quot; chybami a varováními aktuálního souboru a &quot;{git_diff}&quot; necommitnutými změnami jeho git repozitáře.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Tlačítko promptu výběru</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Zobrazit malé tlačítko pod vybraným textem v editoru. Kliknutím na něj se otevře prohledávač llama.cpp, aby se výběr mohl odeslat do llama.cpp s jedním z promptů.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout ze stránky nastavení nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější. Další adresáře a síťová pravidla se nastavují na stránce nastavení Pískoviště.</translation>
     </message>
@@ -1049,7 +1065,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
@@ -1063,15 +1079,15 @@
         <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Načíst instrukce projektu</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Pokud je zaškrtnuto, soubor s instrukcemi projektu aktuálního projektu se připojí ke systémové zprávě chatu. Souborem je AGENTS.md, případně CLAUDE.md, a hledá se v adresáři projektu a směrem nahoru až ke kořeni git repozitáře, takže monorepo může mít jediný soubor s instrukcemi pro všechny své projekty. Soubory větší než 32 KB se oříznou.</translation>
     </message>
@@ -1241,7 +1257,7 @@
         <translation>API klíč pro Tavily, získáte ho na tavily.com (vyžadován u poskytovatele &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Přepisuje globální nastavení &apos;Přikazy v pískovišti&apos; pro tento projekt. O tom, co pískoviště omezuje, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
@@ -1256,7 +1272,7 @@
         <translation>Prompty</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
@@ -1418,7 +1434,7 @@
         <translation>&lt;b&gt;Zpracování promptu:&lt;/b&gt;&lt;br&gt;Celkem tokánů: %1&lt;br&gt;Zpracováno: %2&lt;br&gt;V mezipaměti: %3&lt;br&gt;Čas: %4 ms</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Rychlost: %1 tokenů za sekundu</translation>
     </message>
@@ -1683,7 +1699,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -2383,7 +2399,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Název</translation>
@@ -2598,6 +2614,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Vyberte adresář</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Vyslat prompt do llama.cpp o výběr (otevře prohledávač llama.cpp)</translation>
     </message>
 </context>
 <context>

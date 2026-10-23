@@ -13,7 +13,7 @@
         <translation>Запросить предложение от llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Запросить предложение llama.cpp по текущей позиции курсора.</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>Показать состояние сервера</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
@@ -63,7 +63,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Показывать небольшую кнопку внизу текстового выделения в редакторе, которая открывает локатор llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Переключиться на следующий кэшированный вариант предсказания в текущей позиции (нажмите Ctrl+G, затем Down).</translation>
     </message>
@@ -93,7 +98,7 @@
         <translation>Открыть страницу настроек llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Отключить llama.cpp.</translation>
     </message>
@@ -103,7 +108,7 @@
         <translation>Включить llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Ошибка получения FIM-предсказания от %1: %2</translation>
     </message>
@@ -164,7 +169,7 @@
         <translation type="vanished">[llama.cpp] Ошибка получения завершения FIM от %1: %2</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -981,7 +986,18 @@
         <translation>Встроенные запросы локатора &quot;ll&quot;. В меню отображается только первая строка запроса; полный текст отправляется модели. &quot;{selection}&quot; заменяется выделенным текстом, &quot;{file}&quot; и &quot;{line}&quot; — текущим файлом и строкой под курсором, &quot;{diagnostics}&quot; — ошибками и предупреждениями текущего файла, а &quot;{git_diff}&quot; — незакоммиченными изменениями его git-репозитория.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Кнопка запроса выделения</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Показывать небольшую кнопку внизу текстового выделения в редакторе. При нажатии на неё открывается локатор llama.cpp, и выделение можно отправить в llama.cpp с одним из запросов.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Если отмечено, инструменты чата ограничены песочницей: команды bash выполняются в платформенной песочнице, блокирующей запись в системные расположения (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процессов Microsoft MXC на Windows), а файловые инструменты могут записывать только в каталог проекта и временные расположения. Расположения с учётными данными (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) не читаются ни одним инструментом, а команды в песочнице не имеют сетевого доступа (на инструменты webfetch и websearch это не распространяется). На Windows песочница использует закреплённый рантайм wxc-exec.exe, который можно скачать на странице настроек инструментов (переменная LLAMA_WXC_EXEC может указывать на него), и требуется Windows 11 24H2 или новее. Дополнительные каталоги и сетевая политика настраиваются на странице настроек песочницы.</translation>
     </message>
@@ -1053,7 +1069,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Песочница для команд</translation>
@@ -1067,15 +1083,15 @@
         <translation type="vanished">Если отмечено, инструменты чата ограничены песочницей: команды bash выполняются в системной песочнице, блокирующей запись в системные расположения (bubblewrap/bwrap на Linux, sandbox-exec на macOS, srt-win из @anthropic-ai/sandbox-runtime на Windows), а файловые инструменты могут записывать только в каталог проекта и временные расположения. Расположения с учётными данными (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) не читаются ни одним инструментом, а команды в песочнице не имеют сетевого доступа (на инструменты webfetch и websearch это не распространяется). На Windows песочница требует однократной установки: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запрос UAC); исполняемый файл srt-win должен находиться в PATH (переменная LLAMA_SRT_WIN может указывать на него).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Загружать инструкции проекта</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Если отмечено, файл инструкций проекта текущего проекта добавляется к системному сообщению чата. Файл — AGENTS.md, при его отсутствии CLAUDE.md; поиск начинается в каталоге проекта и продолжается до корня git-репозитория, чтобы в monorepo можно было хранить один файл инструкций для всех проектов. Файлы больше 32 КБ усекаются.</translation>
     </message>
@@ -1245,7 +1261,7 @@
         <translation>Ключ API для Tavily, его можно получить на tavily.com (требуется для поставщика &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Переопределяет глобальную настройку &apos;Песочница для команд&apos; для этого проекта. О том, что ограничивает песочница, см. глобальную настройку на странице инструментов Llama.</translation>
     </message>
@@ -1260,7 +1276,7 @@
         <translation>Запросы</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
@@ -1426,7 +1442,7 @@
         <translation type="vanished">Продолжение разговора:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Скорость генерации: %1 токенов/с</translation>
     </message>
@@ -1692,7 +1708,7 @@ Do you want to overwrite it?</source>
         <translation>Разговоры llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Создать сводку для выделенного</translation>
     </message>
@@ -2400,7 +2416,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Свёртка</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Заголовок</translation>
@@ -2615,6 +2631,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Выбрать каталог</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Запросить у llama.cpp информацию о выделении (открывает локатор llama.cpp)</translation>
     </message>
 </context>
 <context>

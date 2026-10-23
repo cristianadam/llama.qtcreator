@@ -201,7 +201,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Conversation avec llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+138"/>
+        <location filename="../src/llamaplugin.cpp" line="+139"/>
         <source>llama.cpp coversation</source>
         <translation>Conversation avec llama.cpp</translation>
     </message>
@@ -251,7 +251,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher l&apos;état du serveur</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
@@ -261,7 +261,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Ctrl+Maj+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Afficher un petit bouton en bas d&apos;une sélection de texte dans l&apos;éditeur qui ouvre le localisateur llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Passer au candidat de complétion suivante en cache à la position actuelle (appuyez sur Ctrl+G, puis sur la flèche bas).</translation>
     </message>
@@ -291,7 +296,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Ouvrir la page des paramètres de llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Désactive l&apos;intégration de llama.cpp.</translation>
     </message>
@@ -301,7 +306,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Active l&apos;intégration de llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Erreur lors de la récupération de la complétion FIM depuis %1 : %2</translation>
     </message>
@@ -358,7 +363,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -1142,7 +1147,18 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Bouton d&apos;invitation sur la sélection</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Afficher un petit bouton en bas d&apos;une sélection de texte dans l&apos;éditeur. En cliquant dessus, le localisateur llama.cpp s&apos;ouvre afin que la sélection puisse être envoyée à llama.cpp avec l&apos;une des invitations.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
         <source>Skill directories</source>
         <translation>Dossiers de compétences</translation>
     </message>
@@ -1154,13 +1170,13 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Commandes dans un bac à sable</translation>
     </message>
     <message>
-        <location line="-364"/>
+        <location line="-366"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis la page des paramètres des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente. Les dossiers supplémentaires et la politique réseau sont configurés sur la page des paramètres Bac à sable.</translation>
     </message>
@@ -1215,13 +1231,13 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+9"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Charger les instructions du projet</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Si cette option est cochée, le fichier d&apos;instructions du projet actuel est ajouté au message du système du chat. Le fichier est AGENTS.md, avec CLAUDE.md en secours, et est recherché dans le dossier du projet puis en remontant jusqu&apos;à la racine du dépôt git, afin qu&apos;un monorepo puisse conserver un seul fichier d&apos;instructions pour tous ses projets. Les fichiers de plus de 32 Ko sont tronqués.</translation>
     </message>
@@ -1391,7 +1407,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Clé API pour Tavily, à obtenir sur tavily.com (requise pour le fournisseur « tavily »).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Remplace le paramètre global « Commandes dans un bac à sable » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce que le bac à sable restreint.</translation>
     </message>
@@ -1410,7 +1426,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-572"/>
+        <location line="-582"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
@@ -1474,7 +1490,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+54"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>Activer l&apos;utilisation d&apos;outils dans le chat</translation>
@@ -1485,7 +1501,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Si cette option est cochée, la fenêtre de chat démarrera avec l&apos;outil d&apos;outils activé par défaut.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>Par défaut</translation>
     </message>
@@ -1647,7 +1663,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>&lt;b&gt;Traitement de l&apos;invitation :&lt;/b&gt;&lt;br&gt;Jetons au total : %1&lt;br&gt;Traités : %2&lt;br&gt;En cache : %3&lt;br&gt;Durée : %4 ms</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Vitesse : %1 jetons/seconde</translation>
     </message>
@@ -2036,7 +2052,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>Compaction</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titre</translation>
@@ -2449,6 +2465,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Choisir un dossier</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Interroger llama.cpp au sujet de la sélection (ouvre le localisateur llama.cpp)</translation>
     </message>
 </context>
 <context>

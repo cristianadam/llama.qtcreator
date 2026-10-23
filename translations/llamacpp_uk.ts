@@ -13,7 +13,7 @@
         <translation>Запитати пропозицію у llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Запитати пропозицію від llama.cpp на поточній позиції курсора.</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>Показати стан сервера</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Параметри</translation>
     </message>
@@ -63,7 +63,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Показувати невелику кнопку внизу текстового виділення в редакторі, яка відкриває локалятор llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Перейти до наступного збереженого в кеші варіанта завершення на поточній позиції (натисніть Ctrl+G, а потім клавішу вниз).</translation>
     </message>
@@ -93,7 +98,7 @@
         <translation>Відкрийте сторінку налаштувань llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Вимкнути llama.cpp.</translation>
     </message>
@@ -103,7 +108,7 @@
         <translation>Увімкнути llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Помилка отримання завершення FIM з %1: %2</translation>
     </message>
@@ -160,7 +165,7 @@
         <translation>Чат</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -977,7 +982,18 @@
         <translation>Вбудовані запити локалятора &quot;ll&quot;. У меню показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст, &quot;{file}&quot; та &quot;{line}&quot; — на поточний файл і рядок курсора, &quot;{diagnostics}&quot; — на помилки та попередження поточного файлу, а &quot;{git_diff}&quot; — на незакомітовані зміни його репозиторію git.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Кнопка запиту виділення</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Показувати невелику кнопку внизу текстового виділення в редакторі. Натискання на неї відкриває локалятор llama.cpp, щоб виділення можна було надіслати до llama.cpp з одним із запитів.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити зі сторінки налаштувань інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша. Додаткові каталоги та політику мережі налаштовують на сторінці налаштувань пісочниці.</translation>
     </message>
@@ -1049,7 +1065,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Команди в пісочниці</translation>
@@ -1063,15 +1079,15 @@
         <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, srt-win з @anthropic-ai/sandbox-runtime на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочницю потрібно встановити один раз: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); виконуваний файл srt-win має бути в PATH (LLAMA_SRT_WIN може вказувати на нього).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Завантажити інструкції проєкту</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Якщо позначено, файл інструкцій поточного проєкту додається до системного повідомлення чату. Файл — AGENTS.md, з резервним варіантом CLAUDE.md; його шукають у каталозі проєкту, а потім вгору до кореня репозиторію git, щоб у monorepo можна було тримати один файл інструкцій для всіх проєктів. Файли більші за 32 КБ обрізаються.</translation>
     </message>
@@ -1241,7 +1257,7 @@
         <translation>Ключ API для Tavily, отримати його можна на tavily.com (потрібен для постачальника &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Перевизначає глобальний параметр «Команди в пісочниці» для цього проєкту. Див. глобальний параметр на сторінці інструментів Llama, щоб дізнатися, що обмежує пісочниця.</translation>
     </message>
@@ -1256,7 +1272,7 @@
         <translation>Запити</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>За замовчуванням</translation>
     </message>
@@ -1422,7 +1438,7 @@
         <translation type="vanished">Додаткові запитання:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Швидкість: %1 токенів/секунду</translation>
     </message>
@@ -1697,7 +1713,7 @@ Do you want to overwrite it?</source>
         <translation>Розмови з llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Створити підсумок для вибраного {selection}</translation>
     </message>
@@ -2365,7 +2381,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Стиснення</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Назва</translation>
@@ -2580,6 +2596,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Виберіть каталог</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Запитати llama.cpp щодо виділення (відкриває локалятор llama.cpp)</translation>
     </message>
 </context>
 <context>

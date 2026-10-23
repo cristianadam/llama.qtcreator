@@ -13,7 +13,7 @@
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -48,7 +48,7 @@
         <translation>Vis serverstatus</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Preferences</source>
         <translation>Præferencer</translation>
     </message>
@@ -63,7 +63,12 @@
         <translation>Ctrl+Shift+G</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
+        <source>Show a small button at the bottom of a text selection in the editor that opens the llama.cpp locator.</source>
+        <translation>Vis en lille knap i bunden af den valgte tekst i editoren, der åbner llama.cpp-lokatoren.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Skift til den næste cachelagrede fuldendelseskandidat på den aktuelle position (tryk på Ctrl+G, derefter Ned).</translation>
     </message>
@@ -93,7 +98,7 @@
         <translation>Åbn indstillingssiden for llama.cpp.</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Disable llama.cpp.</source>
         <translation>Deaktiver llama.cpp.</translation>
     </message>
@@ -103,7 +108,7 @@
         <translation>Aktiver llama.cpp.</translation>
     </message>
     <message>
-        <location line="+390"/>
+        <location line="+396"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -160,7 +165,7 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1274"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
@@ -940,7 +945,18 @@
         <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Selection prompt button</source>
+        <translation>Prompt-knap for markering</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
+        <translation>Vis en lille knap i bunden af den valgte tekst i editoren. Ved et klik åbnes llama.cpp-lokatoren, så markeringen kan sendes til llama.cpp med en af prompts.</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC procescontainer på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows bruger sandboxen den fastlåste wxc-exec.exe-runtime, der kan downloades fra indstillingssiden for Llama-værktøjerne (LLAMA_WXC_EXEC kan pege på den), og der kræves Windows 11 24H2 eller nyere. De yderligere mapper og netværkspolitikken konfigureres på indstillingssiden for sandboxen.</translation>
     </message>
@@ -985,7 +1001,7 @@
         <translation>Hvis markeret, må de sandboxede bash-kommandoer bruge netværket (f.eks. &apos;curl&apos; eller &apos;npm install&apos;). Slået fra som standard: sandboxen har ingen netværksadgang. Værktøjerne webfetch og websearch køres altid uden for sandboxen og påvirkes ikke. Håndteres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="-129"/>
+        <location line="-137"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Opfølgende spørgsmål</translation>
@@ -1026,7 +1042,7 @@
         <translation type="vanished">Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+24"/>
         <source>Skill directories</source>
         <translation>Færdigheds-mapper</translation>
     </message>
@@ -1049,7 +1065,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+364"/>
+        <location line="+366"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox-kommandoer</translation>
@@ -1063,15 +1079,15 @@
         <translation type="vanished">Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
     </message>
     <message>
-        <location line="-309"/>
+        <location line="-311"/>
         <location line="+1"/>
-        <location line="+321"/>
+        <location line="+323"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Indlæs projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-323"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
     </message>
@@ -1241,7 +1257,7 @@
         <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+193"/>
+        <location line="+195"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
     </message>
@@ -1256,7 +1272,7 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+94"/>
+        <location filename="../src/llamachateditor.cpp" line="+101"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1422,7 +1438,7 @@
         <translation type="vanished">Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Speed: %1 t/s</source>
         <translation>Hastighed: %1 tokens pr. sekund</translation>
     </message>
@@ -1692,7 +1708,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-990"/>
+        <location filename="../src/llamasettings.cpp" line="-1000"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -2379,7 +2395,7 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1322"/>
+        <location filename="../src/llamachateditor.cpp" line="-1321"/>
         <location filename="../src/promptssettingswidget.cpp" line="-5"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2599,6 +2615,11 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <location line="+40"/>
         <source>Choose a Directory</source>
         <translation>Vælg en mappe</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
+        <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
+        <translation>Spørg llama.cpp om markeringen (åbner llama.cpp-lokatoren)</translation>
     </message>
 </context>
 <context>
