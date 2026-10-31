@@ -566,6 +566,7 @@ LlamaSettings::LlamaSettings()
                "with the uncommitted changes of its git repository."));
 
     selectionPromptButton.setDisplayName(Tr::tr("Selection prompt button"));
+    selectionPromptButton.setLabelText(Tr::tr("Selection prompt button"));
     selectionPromptButton.setSettingsKey("SelectionPromptButton");
     selectionPromptButton.setDefaultValue(true);
     selectionPromptButton.setToolTip(
