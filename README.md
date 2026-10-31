@@ -1,6 +1,8 @@
 # llama.qtcreator
 
-Local LLM-assisted text completion for Qt Creator.
+Local LLM assistance for Qt Creator: FIM text completion in the editor and an
+agentic chat, both powered by a [llama.cpp](https://github.com/ggml-org/llama.cpp)
+server.
 
 ![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text@2x.webp)
 
@@ -11,10 +13,13 @@ Local LLM-assisted text completion for Qt Creator.
 
 ## Features
 
+### Text completion
+
 - Auto-suggest on cursor movement. Toggle enable / disable with `Ctrl+Shift+G`
 - Trigger the suggestion manually by pressing `Ctrl+G`
 - Accept a suggestion with `Tab`
 - Accept the first line of a suggestion with `Shift+Tab`
+- Cycle through alternative completions with `Ctrl+G Down` / `Ctrl+G Up`
 - Control max text generation time
 - Configure scope of context around the cursor
 - Ring context with chunks from open and edited files and yanked text
@@ -22,11 +27,37 @@ Local LLM-assisted text completion for Qt Creator.
 - Speculative FIM support
 - Speculative Decoding support
 - Display performance stats
+
+### Chat
+
 - Chat support (including [Mermaid](https://mermaid.js.org/) diagrams and [KaTeX](https://katex.org/) math, rendered to SVG with a bundled QuickJS runtime - no browser required)
 - "Human Editor" endpoint: select it in the chat's model dropdown to use the chat as a Markdown editor - replies are written by you in a regular text editor opened in a split next to the chat (save to send), and assistant messages can be edited in place the same way
 - Source and Image drag & drop support
-- Current editor selection predefined and custom LLM prompts
+- "ll" locator (type `ll` in the locator, or use the selection prompt button in the editor): send the current editor selection to the model with a built-in or custom prompt - prompts support `{selection}`, `{file}`, `{line}`, `{diagnostics}` and `{git_diff}` placeholders, and are editable on the "Prompts" settings page
+- Project instructions: the project's `AGENTS.md` / `CLAUDE.md` (searched up to the git repository root) is loaded and appended to the chat system message; can be disabled globally or per project
+- [Skills](https://agentskills.io): configure skill directories on the "Skills" settings page; skills (`SKILL.md` files) are advertised to the model and loaded on demand via the `skill` tool
+- Conversations get automatic titles, long conversations are compacted automatically to fit the context window, and messages sent while a reply is in progress are queued
+- Export a conversation as Markdown or HTML
 - [Tools usage](https://github.com/cristianadam/llama.qtcreator/wiki/Tools)
+
+### Chat tools
+
+- File tools (`read_file`, `write`, `edit_file`, `apply_patch`), code
+  navigation (`search`, `find`, `ls`), `bash`, `todo_write`, and `task`
+  (delegates a self-contained subtask to a subagent that works in a separate
+  conversation, shown nested under its parent in the conversation list)
+- Web access: `webfetch` retrieves and reads pages, `websearch` queries
+  Exa, Google, Brave or Tavily (API keys configured on the "Tools" settings
+  page)
+- [MCP](https://modelcontextprotocol.io/) support: configure multiple MCP
+  servers on the "Tools" settings page and enable their tools individually
+- Sandboxing: optionally run the chat tools in a sandbox (per-project
+  setting) - `bwrap` on Linux, `sandbox-exec` on macOS and
+  [Microsoft MXC](https://github.com/microsoft/mxc) on Windows. Writes are
+  restricted to the project directory and temp locations, credential
+  locations (e.g. `~/.ssh`, `~/.aws`) are denied, and network access is
+  blocked by default; extra writable/readable/deny-read directories and the
+  network policy are configured on the "Sandbox" settings page
 
 ### llama.cpp setup
 
@@ -78,7 +109,10 @@ Use `llama-server --help` for more details.
 
 ### Recommended LLMs
 
-The plugin requires FIM-compatible models: [HF collection](https://huggingface.co/collections/ggml-org/llamavim-6720fece33898ac10544ecf9)
+The plugin requires FIM-compatible models for the text completion: [HF collection](https://huggingface.co/collections/ggml-org/llamavim-6720fece33898ac10544ecf9)
+
+The chat works with any chat model supported by `llama-server` (a separate
+endpoint can be configured for it).
 
 ## Examples
 
