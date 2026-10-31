@@ -1458,7 +1458,7 @@ void ChatManager::compactConversation(const QString &convId,
         marker.timestamp = QDateTime::currentMSecsSinceEpoch();
         marker.role = "assistant";
         marker.content = Tr::tr(
-            "Conversation compacted – earlier messages were "
+            "Conversation compacted - earlier messages were "
             "summarized to fit the context window.");
         QVariantMap entry;
         entry[QStringLiteral("compaction")] = summary;
@@ -1489,7 +1489,7 @@ void ChatManager::drainPendingCompactMarker(const QString &convId)
     marker.timestamp = QDateTime::currentMSecsSinceEpoch();
     marker.role = "assistant";
     marker.content = Tr::tr(
-        "Conversation compacted – earlier messages were "
+        "Conversation compacted - earlier messages were "
         "summarized to fit the context window.");
     QVariantMap entry;
     entry[QStringLiteral("compaction")] = pending.summary;

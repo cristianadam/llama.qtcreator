@@ -200,7 +200,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // builtin "Qt Creator" server cannot be edited or removed). Tool names
     // must be unique across servers: the Qt Creator server and servers
     // listed earlier take priority.
-    m_addServerButton = new QPushButton(Tr::tr("Add…"), this);
+    m_addServerButton = new QPushButton(Tr::tr("Add..."), this);
     m_editServerButton = new QPushButton(Tr::tr("Edit"), this);
     m_removeServerButton = new QPushButton(Tr::tr("Remove"), this);
     m_editServerButton->setEnabled(false);
@@ -455,7 +455,7 @@ void ToolsSettingsWidget::showToolDefinition(const QModelIndex &current,
                     parts << Tr::tr("URL: %1").arg(status.url.toString());
             parts << QString();
             parts << Tr::tr("The builtin Qt Creator MCP server, managed by Qt Creator "
-                            "itself (Tools → MCP in the Qt Creator settings).");
+                            "itself (Tools > MCP in the Qt Creator settings).");
         }
 
         m_detailEdit->setPlainText(parts.join(QLatin1Char('\n')));

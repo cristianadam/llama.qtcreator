@@ -490,7 +490,7 @@ LlamaSettings::LlamaSettings()
     utilityModel.setDisplayStyle(StringAspect::LineEditDisplay);
     utilityModel.setToolTip(
         Tr::tr("Model used for auxiliary requests such as conversation titles and "
-               "follow‑up suggestions. Use a small model to keep the main chat "
+               "follow-up suggestions. Use a small model to keep the main chat "
                "model free. Leave empty to use the active chat model."));
     utilityModel.setHistoryCompleter("LlamaCpp.UtilityModel.History");
 
@@ -690,7 +690,7 @@ LlamaSettings::LlamaSettings()
     maxToolTurns.setLabelText(Tr::tr("Max consecutive tool turns:"));
     maxToolTurns.setToolTip(Tr::tr(
         "A local model can loop tool calls forever, so after this many "
-        "consecutive tool-only turns the calls are not executed – the model "
+        "consecutive tool-only turns the calls are not executed - the model "
         "gets a failed result telling it to finish instead. Task "
         "(sub-agent) conversations are not limited. Set to 0 for no "
         "limit."));
@@ -725,7 +725,7 @@ LlamaSettings::LlamaSettings()
     webSearchExaApiKey.setLabelText(Tr::tr("Exa API Key:"));
     webSearchExaApiKey.setDefaultValue("");
     webSearchExaApiKey.setToolTip(Tr::tr(
-        "Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used."));
+        "Optional Exa API key. Without a key the shared (rate-limited) endpoint is used."));
     webSearchExaApiKey.setHistoryCompleter("LlamaCpp.WebSearchExaApiKey.History");
 
     webSearchGoogleUrl.setDisplayName(Tr::tr("Google Endpoint"));

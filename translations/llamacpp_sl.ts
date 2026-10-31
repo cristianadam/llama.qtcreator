@@ -898,11 +898,45 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Model, ki se uporablja za pomožne zahteve, kot so naslovi pogovorov in predlogi vprašanj za nadaljevanje. Za sprostitev glavnega modela za pogovor uporabite majhen model. Pustite prazno, da se uporabi aktiven model za pogovor.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Ko pogovor uporabi več kot nastavljen prag okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Prag samodejnega stiskanja</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Prag samodejnega stiskanja:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Pogovor se samodejno stisne, ko njegova zgodovina uporabi več kot ta odstotek okna konteksta modela.</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Lokalni model lahko večno zanka klice orodij, zato se po toliko zaporednih potez samo z orodji klici ne izvedejo - model prejme neuspešen rezultat, ki ga usmeri, da namesto tega konča. Pogovori nalog (podagentov) niso omejeni. Za brez omejitve nastavite 0.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Neobvezen API ključ Exa. Brez ključa se uporabi skupna (omejena po hitrosti) konecna točka.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Model, ki se uporablja za pomožne zahteve, kot so naslovi pogovorov in predlogi vprašanj za nadaljevanje. Za sprostitev glavnega modela za pogovor uporabite majhen model. Pustite prazno, da se uporabi aktiven model za pogovor.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Navodilo za naslov pogovora</translation>
     </message>
@@ -959,12 +993,11 @@
         <translation>Samodejno stiskanje dolgih pogovorov</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Ko pogovor uporabi približno 80 % okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
+        <translation type="vanished">Ko pogovor uporabi približno 80 % okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Navodila lokatorja</translation>
     </message>
@@ -975,6 +1008,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Gumb za navodilo izbire</translation>
@@ -1057,7 +1091,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Povelja v peskovniku</translation>
@@ -1071,15 +1105,15 @@
         <translation type="vanished">Če je zaznamovano, so orodja za pogovor omejena v peskovnik: povelja bash se izvajajo v platformskem peskovniku, ki onemogoča pisanje na sistemske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), orodja za datoteke pa lahko pišejo samo znotraj imenika projekta in na začasne lokacije. Lokacije verig (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nobeno orodje ne more prebrati, povelja v peskovniku pa nimajo dostopa do omrežja (orodji webfetch in websearch to ni prizadeto). Na Windowsu peskovnik zahteva enkratno namestitev: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en sam UAC poziv); izvedljiva datoteka srt-win mora biti na PATH (LLAMA_SRT_WIN lahko kaže nanjo).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Naloži navodila projekta</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Če je zaznamovano, se datoteka z navodili projekta trenutnega projekta doda k sistemskemu sporočilu pogovora. Datoteka je AGENTS.md, s povratkom na CLAUDE.md, in se išče v imeniku projekta ter navzgor do korena git skladišča, zato lahko monorepo ohrani samo eno datoteko z navodili za vse svoje projekte. Datoteke, večje od 32 KB, se okrajšajo.</translation>
     </message>
@@ -1094,12 +1128,11 @@
         <translation>Največje število zaporednih potez z orodji:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>Lokalni model lahko večno zanka klice orodij, zato se po toliko zaporednih potez samo z orodji klici ne izvedejo – model prejme neuspešen rezultat, ki ga usmeri, da namesto tega konča. Pogovori nalog (podagentov) niso omejeni. Za brez omejitve nastavite 0.</translation>
+        <translation type="vanished">Lokalni model lahko večno zanka klice orodij, zato se po toliko zaporednih potez samo z orodji klici ne izvedejo – model prejme neuspešen rezultat, ki ga usmeri, da namesto tega konča. Pogovori nalog (podagentov) niso omejeni. Za brez omejitve nastavite 0.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Ponudnik iskanja po spletu</translation>
     </message>
@@ -1139,12 +1172,11 @@
         <translation>API ključ Exa:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Neobvezen API ključ Exa. Brez ključa se uporabi skupna (omejena po hitrosti) konecna točka.</translation>
+        <translation type="vanished">Neobvezen API ključ Exa. Brez ključa se uporabi skupna (omejena po hitrosti) konecna točka.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Konecna točka Google</translation>
     </message>
@@ -1249,7 +1281,7 @@
         <translation>API ključ za Tavily, pridobite ga na tavily.com (obvezen za ponudnika &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Prepiše globalno nastavo &apos;Povelja v peskovniku&apos; za ta projekt. Kaj peskovnik omejuje, si oglejte v globalni nastavi na strani Llama Orodja.</translation>
     </message>
@@ -1305,12 +1337,11 @@
         <translation>LLM model</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Sporočila v čakalni vrsti – poslana po trenutnem koraku</translation>
+        <translation type="vanished">Sporočila v čakalni vrsti – poslana po trenutnem koraku</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Nadaljuj</translation>
     </message>
@@ -1375,8 +1406,17 @@
         <translation>ne</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Follow‑up questions:</source>
+        <translation type="vanished">Dodatna vprašanja:</translation>
+    </message>
+    <message>
+        <location line="-346"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Sporočila v čakalni vrsti - poslana po trenutnem koraku</translation>
+    </message>
+    <message>
+        <location line="+388"/>
+        <source>Follow-up questions:</source>
         <translation>Dodatna vprašanja:</translation>
     </message>
     <message>
@@ -1452,8 +1492,12 @@
     </message>
     <message>
         <location line="+14"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Odstrani &quot;%1&quot;</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
-        <translation>Odstrani “%1”</translation>
+        <translation type="vanished">Odstrani “%1”</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1700,7 +1744,7 @@ Do you want to overwrite it?</source>
         <translation>Pogovori programa llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>Ustvari povzetek izbora {selection}</translation>
     </message>
@@ -1727,13 +1771,21 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Posodobi prevod za izbor {selection}. Predstavi polno datoteko prevoda kot izhod.</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Pošlji trenutni izbor programu llama.cpp z povabilom.
+        <translation type="vanished">Pošlji trenutni izbor programu llama.cpp z povabilom.
 Vgrajena povabila: %1
 Lahko vpišete katerikoli drugo povabilo – bodo zapomnjena za naslednjič.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Pošlji trenutni izbor programu llama.cpp z povabilom.
+Vgrajena povabila: %1
+Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2219,8 +2271,12 @@ Lahko vpišete katerikoli drugo povabilo – bodo zapomnjena za naslednjič.</tr
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Vgrajeni MCP strežnik programa Qt Creator, ki ga upravlja sam Qt Creator (Orodja &gt; MCP v nastavitvah Qt Creator).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Vgrajeni MCP strežnik programa Qt Creator, ki ga upravlja sam Qt Creator (Orodja → MCP v nastavitvah Qt Creator).</translation>
+        <translation type="vanished">Vgrajeni MCP strežnik programa Qt Creator, ki ga upravlja sam Qt Creator (Orodja → MCP v nastavitvah Qt Creator).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2350,12 +2406,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(prazno)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Dodaj…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>Dodaj…</translation>
+        <source>Add...</source>
+        <translation>Dodaj...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2437,18 +2497,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
         <translation>neveljavno ime &quot;%1&quot; (samo male črke a-z, 0-9 in črtice, največ %2 znakov, brez začetnih, končnih ali zaporednih črtic)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>ime &quot;%1&quot; je v koliziji z %2 - ohranjen je prvi</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">neveljavno ime &quot;%1&quot; (samo male črke a-z, 0-9 in črtice, največ %2 znakov, brez začetnih, končnih ali zaporednih črtic)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>ime &quot;%1&quot; ne ustreza njegovemu imeniku &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>ime &quot;%1&quot; je v koliziji z %2 – ohranjen je prvi</translation>
+        <translation type="vanished">ime &quot;%1&quot; je v koliziji z %2 – ohranjen je prvi</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2498,8 +2566,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Pogovor je stisnjen - prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Pogovor je stisnjen – prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
+        <translation type="vanished">Pogovor je stisnjen – prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2982,15 +3054,27 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Naloga ni uspešna: podpogovor &quot;%1&quot; se je končal brez končnega odgovora (morda je bil ustavljen ali izbrisan).</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>Naloga je zaključena v podpogovoru &quot;%1&quot; (id: %2). Pogovor se ohrani v seznamu pogovorov in ga je mogoče odpreti za nadaljnje delo. Končno poročilo podagenta:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Naloga ni uspešna: podpogovor &quot;%1&quot; se je končal brez končnega odgovora (morda je bil ustavljen ali izbrisan).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Naloga je zaključena v podpogovoru &quot;%1&quot; (id: %2). Pogovor se ohrani v seznamu pogovorov in ga je mogoče odpreti za nadaljnje delo. Končno poročilo podagenta:
 
 %3</translation>
     </message>
@@ -3036,8 +3120,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Rezultati iskanja za &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Napaka orodja: &quot;query&quot; mora biti neprazen niz.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Napaka orodja: &quot;query&quot; mora biti neprazen niz.</translation>
     </message>
     <message>

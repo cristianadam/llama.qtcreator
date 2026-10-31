@@ -31,7 +31,7 @@ PromptsSettingsWidget::PromptsSettingsWidget()
     // Add/Remove buttons, in a column to the right of the tree (like the
     // Skills settings page). They manage the locator prompts, which are
     // the children of the "Locator" group row; the chat prompts are fixed.
-    m_addButton = new QPushButton(Tr::tr("Add…"), this);
+    m_addButton = new QPushButton(Tr::tr("Add..."), this);
     m_addButton->setFocusPolicy(Qt::ClickFocus);
     m_addButton->setEnabled(false); // only enabled on the locator group and its prompts
     connect(m_addButton, &QPushButton::clicked, this, &PromptsSettingsWidget::addLocatorPrompt);

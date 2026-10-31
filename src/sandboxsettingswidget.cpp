@@ -125,7 +125,7 @@ SandboxSettingsWidget::DirList SandboxSettingsWidget::makeDirList(const QString 
         saveLists();
     });
 
-    dir.addButton = new QPushButton(Tr::tr("Add…"), this);
+    dir.addButton = new QPushButton(Tr::tr("Add..."), this);
     connect(dir.addButton, &QPushButton::clicked, this, [this, dir] {
         const QString path = QFileDialog::getExistingDirectory(
             this, Tr::tr("Choose a Directory"), QDir::homePath());

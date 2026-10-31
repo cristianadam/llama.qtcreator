@@ -905,12 +905,21 @@
         <translation>Standard: chat-model</translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
+        <location line="+202"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke - modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Valgfri Exa-API-nøgle. Uden en nøgle bruges det fælles (ratebegrænsede) slutpunkt.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt til samtaletitel</translation>
     </message>
@@ -940,12 +949,33 @@
         <translation>Prompt, der sendes til modellen for at sammenfatte samtalehistorikken, når den kompakteres for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+25"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Når samtalen bruger mere end den indstillede tærskel af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Auto-kompakteringstærskel</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Auto-kompakteringstærskel:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Samtalen auto-kompakteres, når historikken bruger mere end denne procentdel af modellens kontekstvindue.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Prompt-knap for markering</translation>
@@ -1001,13 +1031,18 @@
         <translation>Hvis markeret, må de sandboxede bash-kommandoer bruge netværket (f.eks. &apos;curl&apos; eller &apos;npm install&apos;). Slået fra som standard: sandboxen har ingen netværksadgang. Værktøjerne webfetch og websearch køres altid uden for sandboxen og påvirkes ikke. Håndteres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="-137"/>
+        <location line="-147"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-28"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation>Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
+    </message>
+    <message>
+        <location line="+32"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -1028,12 +1063,11 @@
         <translation>Auto-kompaktere lange samtaler</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Når samtalen bruger ca. 80 % af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
+        <translation type="vanished">Når samtalen bruger ca. 80 % af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Prompts til lokatoren</translation>
     </message>
@@ -1042,7 +1076,7 @@
         <translation type="vanished">Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst.</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>Skill directories</source>
         <translation>Færdigheds-mapper</translation>
     </message>
@@ -1065,7 +1099,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox-kommandoer</translation>
@@ -1079,15 +1113,15 @@
         <translation type="vanished">Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Indlæs projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
     </message>
@@ -1102,12 +1136,11 @@
         <translation>Maksimale på hinanden følgende værktøjsrunder:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke – modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
+        <translation type="vanished">En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke – modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Web-søgeudbyder</translation>
     </message>
@@ -1147,12 +1180,11 @@
         <translation>Exa-API-nøgle:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Valgfri Exa-API-nøgle. Uden en nøgle bruges det fælles (ratebegrænsede) slutpunkt.</translation>
+        <translation type="vanished">Valgfri Exa-API-nøgle. Uden en nøgle bruges det fælles (ratebegrænsede) slutpunkt.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Google-slutpunkt</translation>
     </message>
@@ -1257,7 +1289,7 @@
         <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
     </message>
@@ -1313,12 +1345,11 @@
         <translation>LLM-model</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Beskeder i køen – sendes efter det aktuelle skridt</translation>
+        <translation type="vanished">Beskeder i køen – sendes efter det aktuelle skridt</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Opfølg</translation>
     </message>
@@ -1383,12 +1414,16 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>Follow‑up questions:</source>
-        <translation>Opfølgende spørgsmål:</translation>
+        <location line="+978"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Fjern &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <source>Follow‑up questions:</source>
+        <translation type="vanished">Opfølgende spørgsmål:</translation>
+    </message>
+    <message>
+        <location line="-450"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
@@ -1434,11 +1469,17 @@
         <translation>&lt;b&gt;Prompt-behandling:&lt;/b&gt;&lt;br&gt;Samlede tokens: %1&lt;br&gt;Behandlet: %2&lt;br&gt;Cachelagret: %3&lt;br&gt;Tid: %4 ms</translation>
     </message>
     <message>
+        <location line="-841"/>
         <source>Follow-up questions:</source>
-        <translation type="vanished">Følgende spørgsmål:</translation>
+        <translation>Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-388"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Beskeder i køen - sendes efter det aktuelle skridt</translation>
+    </message>
+    <message>
+        <location line="+1243"/>
         <source>Speed: %1 t/s</source>
         <translation>Hastighed: %1 tokens pr. sekund</translation>
     </message>
@@ -1463,12 +1504,11 @@
         <translation>%1 i køen</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Remove “%1”</source>
-        <translation>Fjern “%1”</translation>
+        <translation type="vanished">Fjern “%1”</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Fjern beskeden i køen (den sendes ikke)</translation>
     </message>
@@ -1708,7 +1748,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -2205,8 +2245,12 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer &gt; MCP i Qt Creator-indstillingerne).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer → MCP i Qt Creator-indstillingerne).</translation>
+        <translation type="vanished">Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer → MCP i Qt Creator-indstillingerne).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2331,13 +2375,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Send det aktuelle udvalg til llama.cpp med en prompt.
+        <translation type="vanished">Send det aktuelle udvalg til llama.cpp med en prompt.
 Indbyggede prompts: %1
 Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Send det aktuelle udvalg til llama.cpp med en prompt.
+Indbyggede prompts: %1
+Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2350,12 +2402,16 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>(tom)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Tilføj…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>Tilføj…</translation>
+        <source>Add...</source>
+        <translation>Tilføj...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2437,18 +2493,26 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>ugyldigt navn &quot;%1&quot; (kun små bogstaver a‑z, 0‑9 og bindestreger, maks. %2 tegn, ingen bindestreger i begyndelse/slut eller i træk)</translation>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>ugyldigt navn &quot;%1&quot; (kun små bogstaver a-z, 0-9 og bindestreger, maks. %2 tegn, ingen bindestreger i begyndelse/slut eller i træk)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>navnet &quot;%1&quot; kolliderer med %2 - den første beholdes</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">ugyldigt navn &quot;%1&quot; (kun små bogstaver a‑z, 0‑9 og bindestreger, maks. %2 tegn, ingen bindestreger i begyndelse/slut eller i træk)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>navnet &quot;%1&quot; svarer ikke til mappen &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
+        <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2498,8 +2562,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Samtalen kompakteret - tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
+        <translation type="vanished">Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2982,15 +3050,27 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
 
 %3</translation>
     </message>
@@ -3036,8 +3116,12 @@ Du kan skrive enhver anden prompt – de huskes til næste gang.</translation>
         <translation>Søgeresultater for &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>

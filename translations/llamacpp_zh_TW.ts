@@ -902,11 +902,45 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>用於輔助請求（如對話標題和後續建議）的模型。使用小模型以釋放主要聊天模型。留空則使用目前活躍的聊天模型。</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>當對話使用的模型上下文窗口超過設定的閾值時，其歷史會被摘要為一條壓縮標記訊息，之後只將摘要及其後的訊息發送給模型。完整歷史仍可在聊天中顯示。也用於從上下文溢出錯誤中恢復：歷史會被壓縮，並重試一次請求。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>自動壓縮閾值</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>自動壓縮閾值：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>當對話歷史使用的模型上下文窗口超過此百分比時，對話會被自動壓縮。</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>本地模型可能永遠循環呼叫工具，因此在連續進行如此多輪僅含工具的輪次後，呼叫將不再執行 - 模型會收到一個失敗結果，告訴它改為完成任務。任務（子代理）對話不受限制。設為 0 表示不限。</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>可選的 Exa API 金鑰。沒有金鑰時使用共享（限流）端點。</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">用於輔助請求（如對話標題和後續建議）的模型。使用小模型以釋放主要聊天模型。留空則使用目前活躍的聊天模型。</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>對話標題提示</translation>
     </message>
@@ -963,12 +997,11 @@
         <translation>自動壓縮長對話</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>當對話使用了模型上下文窗口約 80% 的空間時，其歷史會被摘要為一條壓縮標記訊息，之後只將摘要及其後的訊息發送給模型。完整歷史仍可在聊天中顯示。也用於從上下文溢出錯誤中恢復：歷史會被壓縮，並重試一次請求。</translation>
+        <translation type="vanished">當對話使用了模型上下文窗口約 80% 的空間時，其歷史會被摘要為一條壓縮標記訊息，之後只將摘要及其後的訊息發送給模型。完整歷史仍可在聊天中顯示。也用於從上下文溢出錯誤中恢復：歷史會被壓縮，並重試一次請求。</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>定位提示</translation>
     </message>
@@ -979,6 +1012,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>選取提示按鈕</translation>
@@ -1061,7 +1095,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱命令</translation>
@@ -1075,15 +1109,15 @@
         <translation type="vanished">選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 @anthropic-ai/sandbox-runtime 的 srt-win），檔案工具只能寫入專案目錄和臨時位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱需要一次性的安裝：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（一次 UAC 提示）；srt-win 可執行檔必須在 PATH 上（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>載入專案指令</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>選中後，目前專案的專案指令檔案會附加到聊天系統訊息中。該檔案是 AGENTS.md，若不存在則回退到 CLAUDE.md，從專案目錄開始向上查找直到 git 儲存庫根目錄，因此 monorepo 可以為所有專案保持單一指令檔案。超過 32 KB 的檔案會被截斷。</translation>
     </message>
@@ -1098,12 +1132,11 @@
         <translation>最大連續工具輪次：</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>本地模型可能永遠循環呼叫工具，因此在連續進行如此多輪僅含工具的輪次後，呼叫將不再執行 – 模型會收到一個失敗結果，告訴它改為完成任務。任務（子代理）對話不受限制。設為 0 表示不限。</translation>
+        <translation type="vanished">本地模型可能永遠循環呼叫工具，因此在連續進行如此多輪僅含工具的輪次後，呼叫將不再執行 – 模型會收到一個失敗結果，告訴它改為完成任務。任務（子代理）對話不受限制。設為 0 表示不限。</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>網路搜尋供應商</translation>
     </message>
@@ -1143,12 +1176,11 @@
         <translation>Exa API 金鑰：</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>可選的 Exa API 金鑰。沒有金鑰時使用共享（限流）端點。</translation>
+        <translation type="vanished">可選的 Exa API 金鑰。沒有金鑰時使用共享（限流）端點。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Google 端點</translation>
     </message>
@@ -1253,7 +1285,7 @@
         <translation>Tavily 的 API 金鑰，可至 tavily.com 取得（「tavily」供應商所需）。</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>覆寫此專案的全域「沙箱命令」設定。請參閱 Llama 工具頁面上的全域設定以了解沙箱的限制。</translation>
     </message>
@@ -1309,12 +1341,11 @@
         <translation>LLM 模型</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>佇列中的訊息 – 在目前的步驟之後發送</translation>
+        <translation type="vanished">佇列中的訊息 – 在目前的步驟之後發送</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>後續</translation>
     </message>
@@ -1379,8 +1410,17 @@
         <translation>否</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Follow‑up questions:</source>
+        <translation type="vanished">後續問題：</translation>
+    </message>
+    <message>
+        <location line="-346"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>佇列中的訊息 - 在目前的步驟之後發送</translation>
+    </message>
+    <message>
+        <location line="+388"/>
+        <source>Follow-up questions:</source>
         <translation>後續問題：</translation>
     </message>
     <message>
@@ -1456,8 +1496,12 @@
     </message>
     <message>
         <location line="+14"/>
-        <source>Remove “%1”</source>
+        <source>Remove &quot;%1&quot;</source>
         <translation>移除「%1」</translation>
+    </message>
+    <message>
+        <source>Remove “%1”</source>
+        <translation type="vanished">移除「%1」</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1704,7 +1748,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 對話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>建立 {selection} 的摘要</translation>
     </message>
@@ -1731,10 +1775,18 @@ Do you want to overwrite it?</source>
         <translation type="vanished">更新 {selection} 中的翻譯。以完整的翻譯文件作為輸出</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
+        <translation type="vanished">使用提示將當前選擇發送給 llama.cpp。
+內建提示：%1
+您可以輸入其他任何提示 - 它們將被記住以備下次使用。</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
         <translation>使用提示將當前選擇發送給 llama.cpp。
 內建提示：%1
 您可以輸入其他任何提示 - 它們將被記住以備下次使用。</translation>
@@ -2223,8 +2275,12 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Qt Creator 內建的 MCP 伺服器，由 Qt Creator 本身管理（Qt Creator 設定中的工具 > MCP）。</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Qt Creator 內建的 MCP 伺服器，由 Qt Creator 本身管理（Qt Creator 設定中的工具 → MCP）。</translation>
+        <translation type="vanished">Qt Creator 內建的 MCP 伺服器，由 Qt Creator 本身管理（Qt Creator 設定中的工具 → MCP）。</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2354,12 +2410,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>（空）</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">新增…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>新增…</translation>
+        <source>Add...</source>
+        <translation>新增...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2441,18 +2501,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
         <translation>無效的名稱「%1」（僅限小寫 a-z、0-9 和連字號，最多 %2 個字元，不得有開頭/結尾/連續連字號）</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>名稱「%1」與 %2 衝突 - 保留第一個</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">無效的名稱「%1」（僅限小寫 a-z、0-9 和連字號，最多 %2 個字元，不得有開頭/結尾/連續連字號）</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>名稱「%1」與其目錄「%2」不符</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>名稱「%1」與 %2 衝突 – 保留第一個</translation>
+        <translation type="vanished">名稱「%1」與 %2 衝突 – 保留第一個</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2502,8 +2570,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>對話已壓縮 - 較早的訊息已被摘要以適配上下文窗口。</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>對話已壓縮 – 較早的訊息已被摘要以適配上下文窗口。</translation>
+        <translation type="vanished">對話已壓縮 – 較早的訊息已被摘要以適配上下文窗口。</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2986,15 +3058,27 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>任務失敗：子對話「%1」結束時沒有最終答案（可能已被停止或刪除）。</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>任務已在子對話「%1」（id：%2）中完成。對話保留在對話列表中，可以開啟以繼續工作。子代理的最終報告：
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">任務失敗：子對話「%1」結束時沒有最終答案（可能已被停止或刪除）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">任務已在子對話「%1」（id：%2）中完成。對話保留在對話列表中，可以開啟以繼續工作。子代理的最終報告：
 
 %3</translation>
     </message>
@@ -3040,8 +3124,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>「%1」的搜尋結果：</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">工具錯誤：&quot;query&quot; 必須是非空字串。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>工具錯誤：&quot;query&quot; 必須是非空字串。</translation>
     </message>
     <message>

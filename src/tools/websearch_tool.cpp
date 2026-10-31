@@ -249,7 +249,7 @@ void WebSearchTool::run(const QJsonObject &args,
 {
     const QString query = args.value("query").toString().trimmed();
     if (query.isEmpty())
-        return done(Tr::tr("Tool error: \"query\" must be a non‑empty string."), false);
+        return done(Tr::tr("Tool error: \"query\" must be a non-empty string."), false);
 
     const int maxResults = qBound(1,
                                   args.value("max_results").toInt(kDefaultMaxResults),

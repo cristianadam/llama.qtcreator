@@ -194,7 +194,7 @@ ChatEditor::ChatEditor()
     // removed before it is handed to the model.
     m_steeringButton = new QToolButton(m_statusBar);
     m_steeringButton->setPopupMode(QToolButton::InstantPopup);
-    m_steeringButton->setToolTip(Tr::tr("Queued messages – sent after the current step"));
+    m_steeringButton->setToolTip(Tr::tr("Queued messages - sent after the current step"));
     m_steeringButton->setVisible(false);
     m_steeringMenu = new QMenu(m_steeringButton);
     m_steeringButton->setMenu(m_steeringMenu);
@@ -582,7 +582,7 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
     QVBoxLayout *lay = new QVBoxLayout(m_followUpWidget);
     lay->setContentsMargins(0, 0, 0, 0);
 
-    QLabel *title = new QLabel(Tr::tr("Follow‑up questions:"), m_followUpWidget);
+    QLabel *title = new QLabel(Tr::tr("Follow-up questions:"), m_followUpWidget);
     title->setObjectName("FollowUpLabel");
     lay->addWidget(title);
 
@@ -1518,7 +1518,7 @@ void ChatEditor::updateSteeringButton()
                 : firstLine;
         auto *action = m_steeringMenu->addAction(
             Utils::Icon::fromTheme(QLatin1String("SP.TrashIcon")),
-            Tr::tr("Remove “%1”").arg(label));
+            Tr::tr("Remove \"%1\"").arg(label));
         action->setStatusTip(text);
         action->setToolTip(Tr::tr("Remove the queued message (it will not be sent)"));
         connect(action, &QAction::triggered, this, [this, i] {

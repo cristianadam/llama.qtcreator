@@ -130,7 +130,7 @@ Skill loadSkillFromFile(const QString &filePath, bool isDeclaredSkill,
                      .arg(kMaxDescriptionLength)
                      .arg(description.length());
     if (!isValidName(name))
-        *error = Tr::tr("invalid name \"%1\" (lowercase a‑z, 0‑9 and hyphens only, "
+        *error = Tr::tr("invalid name \"%1\" (lowercase a-z, 0-9 and hyphens only, "
                         "max %2 characters, no leading/trailing/consecutive hyphens)")
                      .arg(name)
                      .arg(kMaxNameLength);
@@ -171,7 +171,7 @@ void scanDir(const QString &dir,
         const auto owner = nameOwners.constFind(skill.name);
         if (owner != nameOwners.constEnd()) {
             out.diagnostics.append({path,
-                                    Tr::tr("name \"%1\" collides with %2 – keeping the "
+                                    Tr::tr("name \"%1\" collides with %2 - keeping the "
                                            "first one")
                                             .arg(skill.name, owner.value())});
             return;

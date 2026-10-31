@@ -534,12 +534,11 @@
         <translation>デフォルト: チャットモデル</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
+        <translation type="vanished">会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>Conversation Title Prompt</source>
         <translation>会話タイトルプロンプト</translation>
     </message>
@@ -559,7 +558,27 @@
         <translation>完全な返信後にフォローアップ質問を生成するためにモデルに送信されるプロンプト。</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+32"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>会話がモデルのコンテキストウィンドウの設定された閾値を超えて使用すると、その履歴はコンパクトなマーカーメッセージとして要約され、以降は要約とその後のメッセージのみがモデルに送信されます。完全な履歴はチャットに表示され続けます。また、コンテキストオーバーフローエラーからの回復にも使用されます: 履歴が圧縮され、リクエストが1回だけ再試行されます。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>自動圧縮の閾値</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>自動圧縮の閾値:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>会話の履歴がモデルのコンテキストウィンドウのこのパーセンテージを超えて使用すると、自動的に圧縮されます。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Locator Prompts</source>
         <translation>ロケータープロンプト</translation>
     </message>
@@ -568,12 +587,12 @@
         <translation type="vanished">&quot;ll&quot; ロケーターのプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられます。</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+58"/>
         <source>If checked the chat will start with the Tools button turned on.</source>
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-286"/>
+        <location line="-296"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
@@ -947,7 +966,12 @@
         <translation>秒あたりのトークン数を表示</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+20"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation>会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source>Compaction Prompt</source>
         <translation>圧縮プロンプト</translation>
     </message>
@@ -984,17 +1008,27 @@
         <translation>長い会話を自動圧縮する</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>会話がモデルのコンテキストウィンドウの約 80% を使用すると、その履歴はコンパクトなマーカーメッセージとして要約され、以降は要約とその後のメッセージのみがモデルに送信されます。完全な履歴はチャットに表示され続けます。また、コンテキストオーバーフローエラーからの回復にも使用されます: 履歴が圧縮され、リクエストが1回だけ再試行されます。</translation>
+        <location line="+152"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>ローカルモデルはツール呼び出しを永遠にループさせる可能性があるため、ツール呼び出しのみの連続ターンがこの回数に達すると、呼び出しは実行されません - モデルには代わりに終了するよう指示する失敗結果が返されます。タスク（サブエージェント）の会話は制限されません。0 を設定すると無制限です。</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>任意の Exa API キー。キーがない場合は、共有（レート制限付き）のエンドポイントが使用されます。</translation>
+    </message>
+    <message>
+        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">会話がモデルのコンテキストウィンドウの約 80% を使用すると、その履歴はコンパクトなマーカーメッセージとして要約され、以降は要約とその後のメッセージのみがモデルに送信されます。完全な履歴はチャットに表示され続けます。また、コンテキストオーバーフローエラーからの回復にも使用されます: 履歴が圧縮され、リクエストが1回だけ再試行されます。</translation>
+    </message>
+    <message>
+        <location line="-166"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>&quot;ll&quot; ロケーター組み込みプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>選択プロンプトボタン</translation>
@@ -1017,13 +1051,13 @@
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>コマンドをサンドボックス化する</translation>
     </message>
     <message>
-        <location line="-366"/>
+        <location line="-393"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。ツール設定ページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
     </message>
@@ -1078,13 +1112,13 @@
     <message>
         <location line="+9"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>プロジェクト指示を読み込む</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>チェックされている場合、現在のプロジェクトのプロジェクト指示ファイルがチャットのシステムメッセージに追加されます。ファイルは AGENTS.md（見つからない場合は CLAUDE.md）で、プロジェクトディレクトリから git リポジトリのルートまで上層を探索するため、モノレポではすべてのプロジェクトで単一の指示ファイルを保持できます。32 KB を超えるファイルは切り詰められます。</translation>
     </message>
@@ -1099,12 +1133,11 @@
         <translation>連続ツールターン数の上限:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>ローカルモデルはツール呼び出しを永遠にループさせる可能性があるため、ツール呼び出しのみの連続ターンがこの回数に達すると、呼び出しは実行されません – モデルには代わりに終了するよう指示する失敗結果が返されます。タスク（サブエージェント）の会話は制限されません。0 を設定すると無制限です。</translation>
+        <translation type="vanished">ローカルモデルはツール呼び出しを永遠にループさせる可能性があるため、ツール呼び出しのみの連続ターンがこの回数に達すると、呼び出しは実行されません – モデルには代わりに終了するよう指示する失敗結果が返されます。タスク（サブエージェント）の会話は制限されません。0 を設定すると無制限です。</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Web 検索プロバイダー</translation>
     </message>
@@ -1144,12 +1177,11 @@
         <translation>Exa API キー:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>任意の Exa API キー。キーがない場合は、共有（レート制限付き）のエンドポイントが使用されます。</translation>
+        <translation type="vanished">任意の Exa API キー。キーがない場合は、共有（レート制限付き）のエンドポイントが使用されます。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Google エンドポイント</translation>
     </message>
@@ -1254,7 +1286,7 @@
         <translation>Tavily の API キー。tavily.com で取得できます（&quot;tavily&quot; プロバイダーに必要）。</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>このプロジェクトに対して、グローバルの &apos;コマンドをサンドボックス化する&apos; 設定を上書きします。サンドボックスが何を制限するのかは、Llama Tools ページのグローバル設定を参照してください。</translation>
     </message>
@@ -1273,12 +1305,12 @@
         <translation type="vanished">秒あたりのトークン数を表示:</translation>
     </message>
     <message>
-        <location line="-582"/>
+        <location line="-619"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+138"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>チャットでツールを使用可能にする</translation>
@@ -1518,7 +1550,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-547"/>
+        <location filename="../src/llamasettings.cpp" line="-557"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -1664,12 +1696,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>LLM モデル</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>キューに入ったメッセージ – 現在のステップの後に送信されます</translation>
+        <translation type="vanished">キューに入ったメッセージ – 現在のステップの後に送信されます</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>フォローアップ</translation>
     </message>
@@ -1734,12 +1765,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>Follow‑up questions:</source>
-        <translation>フォローアップ質問:</translation>
+        <location line="+978"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>「%1」を削除</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <source>Follow‑up questions:</source>
+        <translation type="vanished">フォローアップ質問:</translation>
+    </message>
+    <message>
+        <location line="-450"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
@@ -1785,11 +1820,17 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>&lt;b&gt;プロンプト処理:&lt;/b&gt;&lt;br&gt;総トークン数: %1&lt;br&gt;処理済み: %2&lt;br&gt;キャッシュ: %3&lt;br&gt;時間: %4 ミリ秒</translation>
     </message>
     <message>
+        <location line="-841"/>
         <source>Follow-up questions:</source>
-        <translation type="vanished">続きの質問:</translation>
+        <translation>続きの質問:</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-388"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>キューに入ったメッセージ - 現在のステップの後に送信されます</translation>
+    </message>
+    <message>
+        <location line="+1243"/>
         <source>Speed: %1 t/s</source>
         <translation>速度: %1 トークン/秒</translation>
     </message>
@@ -1814,12 +1855,11 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>%1 がキューに追加されました</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Remove “%1”</source>
-        <translation>“%1” を削除</translation>
+        <translation type="vanished">“%1” を削除</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>キューに入ったメッセージを削除します（送信されません）</translation>
     </message>
@@ -1829,13 +1869,21 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>LlamaCpp チャットエディター</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>選択中のテキストをプロンプト付きで llama.cpp に送信します。
+        <translation type="vanished">選択中のテキストをプロンプト付きで llama.cpp に送信します。
 組み込みプロンプト: %1
 その他のプロンプトを自由に输入できます – 次回以降記憶されます。</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>現在の選択にプロンプトを付けて llama.cpp に送信します。
+組み込みプロンプト: %1
+その他のプロンプトも入力できます。入力したプロンプトは次回以降に記憶されます。</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -1848,11 +1896,15 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>（空）</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">追加...</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
         <location filename="../src/toolsettingswidget.cpp" line="+203"/>
-        <source>Add…</source>
+        <source>Add...</source>
         <translation>追加...</translation>
     </message>
     <message>
@@ -1981,8 +2033,12 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Qt Creator 本体が管理する組み込みの Qt Creator MCP サーバー（Qt Creator 設定の Tools > MCP）。</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Qt Creator 本体が管理する組み込みの Qt Creator MCP サーバー（Qt Creator 設定の Tools → MCP）。</translation>
+        <translation type="vanished">Qt Creator 本体が管理する組み込みの Qt Creator MCP サーバー（Qt Creator 設定の Tools → MCP）。</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2133,18 +2189,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>無効な名前 &quot;%1&quot;（小文字 a‑z、0‑9、ハイフンのみ、最大 %2 文字、先頭/末尾/連続ハイフン不可）</translation>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>無効な名前 &quot;%1&quot;（小文字 a-z、0-9、ハイフンのみ、最大 %2 文字、先頭/末尾/連続ハイフン不可）</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>名前 &quot;%1&quot; が %2 と競合します - 最初に指定された方を保持します</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">無効な名前 &quot;%1&quot;（小文字 a‑z、0‑9、ハイフンのみ、最大 %2 文字、先頭/末尾/連続ハイフン不可）</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>名前 &quot;%1&quot; がディレクトリ &quot;%2&quot; と一致しません</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
+        <translation type="vanished">名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2194,8 +2258,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>会話が圧縮されました - 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
+        <translation type="vanished">会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2678,15 +2746,27 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
 
 %3</translation>
     </message>
@@ -2732,8 +2812,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>&quot;%1&quot; の検索結果:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
     </message>
     <message>

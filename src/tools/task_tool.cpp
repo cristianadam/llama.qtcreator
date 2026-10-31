@@ -201,13 +201,13 @@ void TaskTool::run(const QJsonObject &args,
                                        const QString report = taskFinalReport(content);
                                        if (!ok || report.isEmpty())
                                            return done(
-                                               Tr::tr("Task failed: the sub‑conversation \"%1\" ended "
+                                               Tr::tr("Task failed: the sub-conversation \"%1\" ended "
                                                       "without a final answer (it may have been "
                                                       "stopped or deleted).")
                                                    .arg(convName),
                                                false);
                                        return done(
-                                           Tr::tr("Task completed in the sub‑conversation \"%1\" "
+                                           Tr::tr("Task completed in the sub-conversation \"%1\" "
                                                   "(id: %2). The conversation is kept in the "
                                                   "conversation list and can be opened for "
                                                   "further work. Final report from the subagent:\n\n%3")

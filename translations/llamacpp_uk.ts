@@ -906,11 +906,45 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Модель, яку використовується для допоміжних запитів, таких як назви розмов і пропозиції запитань для продовження. Використовуйте невелику модель, щоб не навантажувати основну модель чату. Залиште порожнім, щоб використовувати активну модель чату.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Коли розмова використовує більше ніж налаштований поріг контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Поріг автостиснення</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Поріг автостиснення:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Розмову стискають автоматично, коли її історія використовує більше ніж цей відсоток контекстного вікна моделі.</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Локальна модель може викликати інструменти в нескінченному циклі, тому після цієї кількості послідовних ходів лише з інструментами виклики не виконуються - модель отримує невдалий результат із наказом завершити замість цього. Розмови завдань (субагентів) не обмежуються. Встановіть 0, щоб не було обмеження.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Необов&apos;язковий ключ API Exa. Без ключа використовується спільна (з обмеженням частоти) кінцева точка.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Модель, яку використовується для допоміжних запитів, таких як назви розмов і пропозиції запитань для продовження. Використовуйте невелику модель, щоб не навантажувати основну модель чату. Залиште порожнім, щоб використовувати активну модель чату.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Запит для назви розмови</translation>
     </message>
@@ -967,12 +1001,11 @@
         <translation>Автостиснення довгих розмов</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Коли розмова використовує приблизно 80 % контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
+        <translation type="vanished">Коли розмова використовує приблизно 80 % контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Запити локалятора</translation>
     </message>
@@ -983,6 +1016,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Кнопка запиту виділення</translation>
@@ -1065,7 +1099,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Команди в пісочниці</translation>
@@ -1079,15 +1113,15 @@
         <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, srt-win з @anthropic-ai/sandbox-runtime на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочницю потрібно встановити один раз: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); виконуваний файл srt-win має бути в PATH (LLAMA_SRT_WIN може вказувати на нього).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Завантажити інструкції проєкту</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Якщо позначено, файл інструкцій поточного проєкту додається до системного повідомлення чату. Файл — AGENTS.md, з резервним варіантом CLAUDE.md; його шукають у каталозі проєкту, а потім вгору до кореня репозиторію git, щоб у monorepo можна було тримати один файл інструкцій для всіх проєктів. Файли більші за 32 КБ обрізаються.</translation>
     </message>
@@ -1102,12 +1136,11 @@
         <translation>Макс. послідовних ходів інструментів:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>Локальна модель може викликати інструменти в нескінченному циклі, тому після цієї кількості послідовних ходів лише з інструментами виклики не виконуються – модель отримує невдалий результат із наказом завершити замість цього. Розмови завдань (субагентів) не обмежуються. Встановіть 0, щоб не було обмеження.</translation>
+        <translation type="vanished">Локальна модель може викликати інструменти в нескінченному циклі, тому після цієї кількості послідовних ходів лише з інструментами виклики не виконуються – модель отримує невдалий результат із наказом завершити замість цього. Розмови завдань (субагентів) не обмежуються. Встановіть 0, щоб не було обмеження.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Постачальник веб-пошуку</translation>
     </message>
@@ -1147,12 +1180,11 @@
         <translation>Ключ API Exa:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Необов&apos;язковий ключ API Exa. Без ключа використовується спільна (з обмеженням частоти) кінцева точка.</translation>
+        <translation type="vanished">Необов&apos;язковий ключ API Exa. Без ключа використовується спільна (з обмеженням частоти) кінцева точка.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Кінцева точка Google</translation>
     </message>
@@ -1257,7 +1289,7 @@
         <translation>Ключ API для Tavily, отримати його можна на tavily.com (потрібен для постачальника &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Перевизначає глобальний параметр «Команди в пісочниці» для цього проєкту. Див. глобальний параметр на сторінці інструментів Llama, щоб дізнатися, що обмежує пісочниця.</translation>
     </message>
@@ -1313,12 +1345,11 @@
         <translation>Модель LLM</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Повідомлення в черзі – надсилаються після поточного кроку</translation>
+        <translation type="vanished">Повідомлення в черзі – надсилаються після поточного кроку</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Продовження</translation>
     </message>
@@ -1383,12 +1414,16 @@
         <translation>ні</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>Follow‑up questions:</source>
-        <translation>Запитання продовження:</translation>
+        <location line="+978"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Видалити &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <source>Follow‑up questions:</source>
+        <translation type="vanished">Запитання продовження:</translation>
+    </message>
+    <message>
+        <location line="-450"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Рівень мислення: %1 (стосується нових повідомлень)</translation>
     </message>
@@ -1434,11 +1469,17 @@
         <translation>&lt;b&gt;Обробка запиту:&lt;/b&gt;&lt;br&gt;Всього токенів: %1&lt;br&gt;Оброблено: %2&lt;br&gt;З кешу: %3&lt;br&gt;Час: %4 мс</translation>
     </message>
     <message>
+        <location line="-841"/>
         <source>Follow-up questions:</source>
-        <translation type="vanished">Додаткові запитання:</translation>
+        <translation>Додаткові запитання:</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-388"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Повідомлення в черзі - надсилаються після поточного кроку</translation>
+    </message>
+    <message>
+        <location line="+1243"/>
         <source>Speed: %1 t/s</source>
         <translation>Швидкість: %1 токенів/секунду</translation>
     </message>
@@ -1463,12 +1504,11 @@
         <translation>%1 у черзі</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Remove “%1”</source>
-        <translation>Видалити “%1”</translation>
+        <translation type="vanished">Видалити “%1”</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Видалити повідомлення з черги (воно не буде надіслано)</translation>
     </message>
@@ -1713,7 +1753,7 @@ Do you want to overwrite it?</source>
         <translation>Розмови з llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>Створити підсумок для вибраного {selection}</translation>
     </message>
@@ -2186,8 +2226,12 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Вбудований MCP-сервер Qt Creator, яким керує сам Qt Creator (Інструменти &gt; MCP у налаштуваннях Qt Creator).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Вбудований MCP-сервер Qt Creator, яким керує сам Qt Creator (Інструменти → MCP у налаштуваннях Qt Creator).</translation>
+        <translation type="vanished">Вбудований MCP-сервер Qt Creator, яким керує сам Qt Creator (Інструменти → MCP у налаштуваннях Qt Creator).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2312,13 +2356,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Внутрішнє</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Надіслати поточне виділення до llama.cpp з запитом.
+        <translation type="vanished">Надіслати поточне виділення до llama.cpp з запитом.
 Вбудовані запити: %1
 Ви можете ввести будь-який інший запит – він буде запам&apos;ятовано для наступного разу.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Надіслати поточне виділення до llama.cpp з запитом.
+Вбудовані запити: %1
+Ви можете ввести будь-який інший запит - він буде запам&apos;ятовано для наступного разу.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2331,12 +2383,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>(порожньо)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Додати…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>Додати…</translation>
+        <source>Add...</source>
+        <translation>Додати...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2418,18 +2474,26 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>некоректна назва &quot;%1&quot; (тільки малі літери a‑z, цифри 0‑9 та дефіси, максимум %2 символи, без дефісів на початку/в кінці або підряд)</translation>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>некоректна назва &quot;%1&quot; (тільки малі літери a-z, цифри 0-9 та дефіси, максимум %2 символи, без дефісів на початку/в кінці або підряд)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>назва &quot;%1&quot; конфліктує з %2 - збережено першу</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">некоректна назва &quot;%1&quot; (тільки малі літери a‑z, цифри 0‑9 та дефіси, максимум %2 символи, без дефісів на початку/в кінці або підряд)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>назва &quot;%1&quot; не збігається з її каталогом &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
+        <translation type="vanished">назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2479,8 +2543,12 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Розмову стиснено - попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
+        <translation type="vanished">Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2963,15 +3031,27 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Завдання не вдалося: суб‑розмова &quot;%1&quot; завершилася без кінцевої відповіді (її, можливо, зупинено або видалено).</translation>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>Завдання не вдалося: суб-розмова &quot;%1&quot; завершилася без кінцевої відповіді (її, можливо, зупинено або видалено).</translation>
     </message>
     <message>
         <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>Завдання виконано в суб-розмові &quot;%1&quot; (id: %2). Розмову збережено у списку розмов, і її можна відкрити для подальшої роботи. Кінцевий звіт від субагента:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Завдання не вдалося: суб‑розмова &quot;%1&quot; завершилася без кінцевої відповіді (її, можливо, зупинено або видалено).</translation>
+    </message>
+    <message>
         <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation>Завдання виконано в суб‑розмові &quot;%1&quot; (id: %2). Розмову збережено у списку розмов, і її можна відкрити для подальшої роботи. Кінцевий звіт від субагента:
+        <translation type="vanished">Завдання виконано в суб‑розмові &quot;%1&quot; (id: %2). Розмову збережено у списку розмов, і її можна відкрити для подальшої роботи. Кінцевий звіт від субагента:
 
 %3</translation>
     </message>
@@ -3017,8 +3097,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Результати пошуку для &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Помилка інструмента: &quot;query&quot; має бути непорожнім рядком.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Помилка інструмента: &quot;query&quot; має бути непорожнім рядком.</translation>
     </message>
     <message>

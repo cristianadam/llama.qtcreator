@@ -60,7 +60,7 @@ SkillsSettingsWidget::SkillsSettingsWidget()
     // Add/Remove buttons, in a column to the right of the tree (like the
     // CMake tools settings page). They manage the skill directories, which
     // are the tree's top-level rows.
-    m_addButton = new QPushButton(Tr::tr("Add…"), this);
+    m_addButton = new QPushButton(Tr::tr("Add..."), this);
     connect(m_addButton,
             &QPushButton::clicked,
             this,

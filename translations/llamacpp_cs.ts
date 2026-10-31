@@ -906,11 +906,45 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Když konverzace využije více než konfigurovaný prah okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Prah automatického stlačování</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Prah automatického stlačování:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Konverzace se automaticky stlačí, když její historie využije více než tento procentuální podíl okna kontextu modelu.</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou - model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Volitelný API klíč Exa. Bez klíče se používá sdílený (s omezenou frekvencí) konečný bod.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt názvu konverzace</translation>
     </message>
@@ -967,12 +1001,11 @@
         <translation>Automaticky stlačovat dlouhé konverzace</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Když konverzace využije přibližně 80 % okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
+        <translation type="vanished">Když konverzace využije přibližně 80 % okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Prohledávací prompty</translation>
     </message>
@@ -983,6 +1016,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Tlačítko promptu výběru</translation>
@@ -1065,7 +1099,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
@@ -1079,15 +1113,15 @@
         <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Načíst instrukce projektu</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Pokud je zaškrtnuto, soubor s instrukcemi projektu aktuálního projektu se připojí ke systémové zprávě chatu. Souborem je AGENTS.md, případně CLAUDE.md, a hledá se v adresáři projektu a směrem nahoru až ke kořeni git repozitáře, takže monorepo může mít jediný soubor s instrukcemi pro všechny své projekty. Soubory větší než 32 KB se oříznou.</translation>
     </message>
@@ -1102,12 +1136,11 @@
         <translation>Maximální počet po sobě jdoucích kol nástrojů:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou – model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
+        <translation type="vanished">Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou – model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Poskytovatel webového vyhledávání</translation>
     </message>
@@ -1147,12 +1180,11 @@
         <translation>API klíč Exa:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Volitelný API klíč Exa. Bez klíče se používá sdílený (s omezenou frekvencí) konečný bod.</translation>
+        <translation type="vanished">Volitelný API klíč Exa. Bez klíče se používá sdílený (s omezenou frekvencí) konečný bod.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Konečný bod Google</translation>
     </message>
@@ -1257,7 +1289,7 @@
         <translation>API klíč pro Tavily, získáte ho na tavily.com (vyžadován u poskytovatele &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Přepisuje globální nastavení &apos;Přikazy v pískovišti&apos; pro tento projekt. O tom, co pískoviště omezuje, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
@@ -1313,12 +1345,11 @@
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Zprávy ve frontě – odešlou se po aktuálním kroku</translation>
+        <translation type="vanished">Zprávy ve frontě – odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Následující otázky</translation>
     </message>
@@ -1383,8 +1414,17 @@
         <translation>ne</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Follow‑up questions:</source>
+        <translation type="vanished">Následující otázky:</translation>
+    </message>
+    <message>
+        <location line="-346"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Zprávy ve frontě - odešlou se po aktuálním kroku</translation>
+    </message>
+    <message>
+        <location line="+388"/>
+        <source>Follow-up questions:</source>
         <translation>Následující otázky:</translation>
     </message>
     <message>
@@ -1460,8 +1500,12 @@
     </message>
     <message>
         <location line="+14"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Odebrat &quot;%1&quot;</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
-        <translation>Odebrat “%1”</translation>
+        <translation type="vanished">Odebrat “%1”</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1699,7 +1743,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -1726,13 +1770,21 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">Aktualizovat překlad výběru. Poskytnout překladový soubor jako výstup</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Odeslat aktuální výběr do LlamaCpp s promptem.
+        <translation type="vanished">Odeslat aktuální výběr do LlamaCpp s promptem.
 Vestavěné prompty: %1
 Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použití.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Odeslat aktuální výběr do llama.cpp s promptem.
+Vestavěné prompty: %1
+Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2218,8 +2270,12 @@ Můžete zadat jakýkoli jiný prompt – budou uloženy pro příští použit�
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje &gt; MCP v nastavení Qt Creator).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje → MCP v nastavení Qt Creator).</translation>
+        <translation type="vanished">Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje → MCP v nastavení Qt Creator).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2349,12 +2405,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(prázdné)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Přidat…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>Přidat…</translation>
+        <source>Add...</source>
+        <translation>Přidat...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2436,18 +2496,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>neplatný název &quot;%1&quot; (pouze malá písmena a‑z, 0‑9 a pomlčky, maximálně %2 znaky, bez pomlček na začátku, na konci a po sobě jdoucích)</translation>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>neplatný název &quot;%1&quot; (pouze malá písmena a-z, 0-9 a pomlčky, maximálně %2 znaky, bez pomlček na začátku, na konci a po sobě jdoucích)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>název &quot;%1&quot; kolizuje s %2 - zachovává se první</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">neplatný název &quot;%1&quot; (pouze malá písmena a‑z, 0‑9 a pomlčky, maximálně %2 znaky, bez pomlček na začátku, na konci a po sobě jdoucích)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>název &quot;%1&quot; neodpovídá jeho adresáři &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
+        <translation type="vanished">název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2497,8 +2565,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Konverzace stlačena - dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
+        <translation type="vanished">Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2981,15 +3053,27 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Úloha selhala: pod‑konverzace &quot;%1&quot; skončila bez závěrečné odpovědi (mohla být zastavena nebo smazána).</translation>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>Úloha selhala: pod-konverzace &quot;%1&quot; skončila bez závěrečné odpovědi (mohla být zastavena nebo smazána).</translation>
     </message>
     <message>
         <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>Úloha byla dokončena v pod-konverzaci &quot;%1&quot; (id: %2). Konverzace je ponechána v seznamu konverzací a lze ji otevřít pro další práci. Závěrečná zpráva od pod-agenta:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Úloha selhala: pod‑konverzace &quot;%1&quot; skončila bez závěrečné odpovědi (mohla být zastavena nebo smazána).</translation>
+    </message>
+    <message>
         <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation>Úloha byla dokončena v pod‑konverzaci &quot;%1&quot; (id: %2). Konverzace je ponechána v seznamu konverzací a lze ji otevřít pro další práci. Závěrečná zpráva od pod-agenta:
+        <translation type="vanished">Úloha byla dokončena v pod‑konverzaci &quot;%1&quot; (id: %2). Konverzace je ponechána v seznamu konverzací a lze ji otevřít pro další práci. Závěrečná zpráva od pod-agenta:
 
 %3</translation>
     </message>
@@ -3035,8 +3119,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Výsledky vyhledávání pro &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Chyba nástroje: &quot;query&quot; musí být neprázdný řetězec.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Chyba nástroje: &quot;query&quot; musí být neprázdný řetězec.</translation>
     </message>
     <message>

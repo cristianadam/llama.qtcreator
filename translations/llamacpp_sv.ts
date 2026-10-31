@@ -217,12 +217,11 @@
         <translation>LLM-modell</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Köade meddelanden – skickas efter det aktuella steget</translation>
+        <translation type="vanished">Köade meddelanden – skickas efter det aktuella steget</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Uppföljning</translation>
     </message>
@@ -287,8 +286,17 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Follow‑up questions:</source>
+        <translation type="vanished">Uppföljningsfrågor:</translation>
+    </message>
+    <message>
+        <location line="-346"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Köade meddelanden - skickas efter det aktuella steget</translation>
+    </message>
+    <message>
+        <location line="+388"/>
+        <source>Follow-up questions:</source>
         <translation>Uppföljningsfrågor:</translation>
     </message>
     <message>
@@ -364,8 +372,12 @@
     </message>
     <message>
         <location line="+14"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Ta bort &quot;%1&quot;</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
-        <translation>Ta bort “%1”</translation>
+        <translation type="vanished">Ta bort “%1”</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1782,11 +1794,45 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Modell som används för hjälpfrågor som konversationstitlar och uppföljningsförslag. Använd en liten modell för att behålla den huvudsakliga chattmodellen ledig. Lämna tomt för att använda den aktiva chattmodellen.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>När konversationen använder mer än den konfigurerade gränsen av modellens kontextfönster sammanfattas dess historik i ett kompakt markörmeddelande och endast sammanfattningen plus meddelandena efter det skickas till modellen från och med då. Hela historiken syns fortfarande i chatten. Används också för att återhämta sig från ett kontextöverskridandefel: historiken komprimeras och begäran försöks igen en gång.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Komprimeringsgräns</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Komprimeringsgräns:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Konversationen komprimeras automatiskt när dess historik använder mer än denna procentandel av modellens kontextfönster.</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>En lokal modell kan köra verktygsanrop i oändlighet, så efter så många påföljande enbart-verktygsomgångar utförs anropen inte - modellen får ett misslyckat resultat som säger att slutföra i stället. Konversationer för uppgifter (underagenter) är inte begränsade. Sätt till 0 för ingen gräns.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Valfri Exa API-nyckel. Utan nyckel används den delade (hastighetsbegränsade) slutpunkten.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Modell som används för hjälpfrågor som konversationstitlar och uppföljningsförslag. Använd en liten modell för att behålla den huvudsakliga chattmodellen ledig. Lämna tomt för att använda den aktiva chattmodellen.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt för konversationstitel</translation>
     </message>
@@ -1843,12 +1889,11 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Komprimera långa konversationer automatiskt</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>När konversationen använder cirka 80 % av modellens kontextfönster sammanfattas dess historik i ett kompakt markörmeddelande och endast sammanfattningen plus meddelandena efter det skickas till modellen från och med då. Hela historiken syns fortfarande i chatten. Används också för att återhämta sig från ett kontextöverskridandefel: historiken komprimeras och begäran försöks igen en gång.</translation>
+        <translation type="vanished">När konversationen använder cirka 80 % av modellens kontextfönster sammanfattas dess historik i ett kompakt markörmeddelande och endast sammanfattningen plus meddelandena efter det skickas till modellen från och med då. Hela historiken syns fortfarande i chatten. Används också för att återhämta sig från ett kontextöverskridandefel: historiken komprimeras och begäran försöks igen en gång.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Locator-prompts</translation>
     </message>
@@ -1859,6 +1904,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="+7"/>
         <source>Selection prompt button</source>
         <translation>Markeringspromptknapp</translation>
@@ -1941,7 +1987,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandboxkommandon</translation>
@@ -1955,15 +2001,15 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Om markerat är chattverktygen innesluta i en sandbox: bash-kommandon körs i en plattformssandbox som blockerar skrivingar till systemplatser (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win från @anthropic-ai/sandbox-runtime på Windows), och filverktygen kan endast skriva inom projektkatalogen och tillfälliga platser. Autentiseringsuppgifters platser (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan inte läsas av något verktyg, och sandboxade kommandon har ingen nätverksåtkomst (verktygen webfetch och websearch påverkas inte). På Windows kräver sandboxen en engångsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en UAC-fråga); srt-win-exekverbara filen måste finnas på PATH (LLAMA_SRT_WIN kan peka på den).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Ladda projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Om markerat läggs det aktuella projektets projektinstruktionsfil till i chattens systemmeddelande. Filen är AGENTS.md, med CLAUDE.md som reserv, och söks i projektkatalogen och uppåt till git-repoets rot, så att en monorepo kan behålla en enda instruktionsfil för alla sina projekt. Filer större än 32 KB avklipps.</translation>
     </message>
@@ -1978,12 +2024,11 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Max påföljande verktygsomgångar:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>En lokal modell kan köra verktygsanrop i oändlighet, så efter så många påföljande enbart-verktygsomgångar utförs anropen inte – modellen får ett misslyckat resultat som säger att slutföra i stället. Konversationer för uppgifter (underagenter) är inte begränsade. Sätt till 0 för ingen gräns.</translation>
+        <translation type="vanished">En lokal modell kan köra verktygsanrop i oändlighet, så efter så många påföljande enbart-verktygsomgångar utförs anropen inte – modellen får ett misslyckat resultat som säger att slutföra i stället. Konversationer för uppgifter (underagenter) är inte begränsade. Sätt till 0 för ingen gräns.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Webbsöksleverantör</translation>
     </message>
@@ -2023,12 +2068,11 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Exa API-nyckel:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Valfri Exa API-nyckel. Utan nyckel används den delade (hastighetsbegränsade) slutpunkten.</translation>
+        <translation type="vanished">Valfri Exa API-nyckel. Utan nyckel används den delade (hastighetsbegränsade) slutpunkten.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Google-slutpunkt</translation>
     </message>
@@ -2133,7 +2177,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>API-nyckel för Tavily, få en på tavily.com (krävs för &quot;tavily&quot;-leverantören).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Överskrider den globala inställningen &apos;Sandboxkommandon&apos; för det här projektet. Se den globala inställningen på sidan Llama-verktyg för vad sandboxen begränsar.</translation>
     </message>
@@ -2148,13 +2192,21 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Skicka den aktuella markeringen till llama.cpp med en prompt.
+        <translation type="vanished">Skicka den aktuella markeringen till llama.cpp med en prompt.
 Inbyggda prompts: %1
 Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Skicka den aktuella markeringen till llama.cpp med en prompt.
+Fördefinierade prompts: %1
+Du kan ange andra prompts - de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2167,12 +2219,16 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
         <translation>(tom)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Lägg till…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
         <location filename="../src/toolsettingswidget.cpp" line="+203"/>
-        <source>Add…</source>
-        <translation>Lägg till…</translation>
+        <source>Add...</source>
+        <translation>Lägg till...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2300,8 +2356,12 @@ Du kan ange valfri annan prompt – de minns för nästa gång.</translation>
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Den inbyggda Qt Creator MCP-servern, hanterad av själva Qt Creator (Verktyg &gt; MCP i Qt Creator-inställningarna).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Den inbyggda Qt Creator MCP-servern, hanterad av själva Qt Creator (Verktyg → MCP i Qt Creator-inställningarna).</translation>
+        <translation type="vanished">Den inbyggda Qt Creator MCP-servern, hanterad av själva Qt Creator (Verktyg → MCP i Qt Creator-inställningarna).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2452,18 +2512,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
-        <translation>ogiltigt namn &quot;%1&quot; (endast gemener a‑z, 0‑9 och bindestreck, max %2 tecken, inga inledande/avslutande/konsekutiva bindestreck)</translation>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation>ogiltigt namn &quot;%1&quot; (endast gemener a-z, 0-9 och bindestreck, max %2 tecken, inga inledande/avslutande/konsekutiva bindestreck)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>namnet &quot;%1&quot; krockar med %2 - behåller den första</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">ogiltigt namn &quot;%1&quot; (endast gemener a‑z, 0‑9 och bindestreck, max %2 tecken, inga inledande/avslutande/konsekutiva bindestreck)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>namnet &quot;%1&quot; matchar inte dess katalog &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
+        <translation type="vanished">namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2513,8 +2581,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Konversationen komprimerad - tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
+        <translation type="vanished">Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2997,15 +3069,27 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Uppgiften misslyckades: underkonversationen &quot;%1&quot; slutade utan ett slutligt svar (den kan ha stoppats eller raderats).</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>Uppgiften slutfördes i underkonversationen &quot;%1&quot; (id: %2). Konversationen behålls i konversationslistan och kan öppnas för vidare arbete. Slutlig rapport från subagenten:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Uppgiften misslyckades: underkonversationen &quot;%1&quot; slutade utan ett slutligt svar (den kan ha stoppats eller raderats).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Uppgiften slutfördes i underkonversationen &quot;%1&quot; (id: %2). Konversationen behålls i konversationslistan och kan öppnas för vidare arbete. Slutlig rapport från subagenten:
 
 %3</translation>
     </message>
@@ -3051,8 +3135,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Sökresultat för &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Verktygsfel: &quot;query&quot; måste vara en icke-tom sträng.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Verktygsfel: &quot;query&quot; måste vara en icke-tom sträng.</translation>
     </message>
     <message>

@@ -906,11 +906,45 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Model używany do żądań pomocniczych, takich jak tytuły konwersacji i sugestie pytań uzupełniających. Użyj małego modelu, aby główny model czatu pozostał wolny. Zostaw puste, aby użyć aktywnego modelu czatu.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+48"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Gdy konwersacja zajmuje więcej niż skonfigurowany próg okna kontekstu modelu, jej historia jest podsumowywana w zwartą wiadomość-wskaznik, a od tego momentu do modelu wysyłane jest tylko podsumowanie oraz wiadomości po nim. Pełna historia pozostaje widoczna w czacie. Używane również do odzyskiwania po błędzie przekroczenia kontekstu: historia jest kompaktowana, a żądanie ponawiane jeden raz.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Próg automatycznego kompaktowania</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Próg automatycznego kompaktowania:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Konwersacja jest automatycznie kompaktowana, gdy jej historia zajmuje więcej niż ten procent okna kontekstu modelu.</translation>
+    </message>
+    <message>
+        <location line="+138"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Lokalny model może wchodzić w nieskończoną pętlę wywołań narzędzi, więc po tak wielu kolejnych turach zawierających tylko wywołania narzędzi wywołania nie są wykonywane - model otrzymuje wynik błędu z instrukcją, aby zamiast tego zakończyć. Konwersacje zadań (podagenta) nie są limitowane. Ustaw 0, aby wyłączyć limit.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Opcjonalny klucz API Exa. Bez klucza używany jest współdzielony (ograniczony przepustowością) punkt końcowy.</translation>
+    </message>
+    <message>
+        <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation type="vanished">Model używany do żądań pomocniczych, takich jak tytuły konwersacji i sugestie pytań uzupełniających. Użyj małego modelu, aby główny model czatu pozostał wolny. Zostaw puste, aby użyć aktywnego modelu czatu.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Conversation Title Prompt</source>
         <translation>Polecenie tytułu konwersacji</translation>
     </message>
@@ -967,12 +1001,11 @@
         <translation>Automatyczne kompaktowanie długich konwersacji</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Gdy konwersacja zajmuje około 80% okna kontekstu modelu, jej historia jest podsumowywana w zwartą wiadomość-wskaznik, a od tego momentu do modelu wysyłane jest tylko podsumowanie oraz wiadomości po nim. Pełna historia pozostaje widoczna w czacie. Używane również do odzyskiwania po błędzie przekroczenia kontekstu: historia jest kompaktowana, a żądanie ponawiane jeden raz.</translation>
+        <translation type="vanished">Gdy konwersacja zajmuje około 80% okna kontekstu modelu, jej historia jest podsumowywana w zwartą wiadomość-wskaznik, a od tego momentu do modelu wysyłane jest tylko podsumowanie oraz wiadomości po nim. Pełna historia pozostaje widoczna w czacie. Używane również do odzyskiwania po błędzie przekroczenia kontekstu: historia jest kompaktowana, a żądanie ponawiane jeden raz.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+18"/>
         <source>Locator Prompts</source>
         <translation>Polecenia lokalizatora</translation>
     </message>
@@ -983,6 +1016,7 @@
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Przycisk polecenia zaznaczenia</translation>
@@ -1065,7 +1099,7 @@
     <message>
         <location line="+4"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Piaskownica poleceń</translation>
@@ -1079,15 +1113,15 @@
         <translation type="vanished">Jeśli zaznaczone, narzędzia czatu są ograniczone do piaskownicy: polecenia bash są uruchamiane w piaskownicy platformy, która blokuje zapisywanie w lokalizacjach systemowych (bubblewrap/bwrap na Linuxie, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windowsie), a narzędzia plikowe mogą zapisywać tylko w katalogu projektu i lokalizacjach tymczasowych. Lokalizacje poświadczeń (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nie są czytelne dla żadnego narzędzia, a polecenia w piaskownicy nie mają dostępu do sieci (narzędzia webfetch i websearch nie są dotknięte). Na Windowsie piaskownica wymaga jednorazowej instalacji: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); plik wykonywalny srt-win musi być w PATH (LLAMA_SRT_WIN może na niego wskazywać).</translation>
     </message>
     <message>
-        <location line="-311"/>
+        <location line="-338"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Wczytaj instrukcje projektu</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Jeśli zaznaczone, plik instrukcji bieżącego projektu jest dołączany do systemowej wiadomości czatu. Plik to AGENTS.md, z przejściem na CLAUDE.md, i jest wyszukiwany w katalogu projektu, aż do korzenia repozytorium git, dzięki czemu monorepo może przechowywać jeden plik instrukcji dla wszystkich swoich projektów. Pliki większe niż 32 KB są przycinane.</translation>
     </message>
@@ -1102,12 +1136,11 @@
         <translation>Maksymalna liczba kolejnych tur narzędzi:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>Lokalny model może wchodzić w nieskończoną pętlę wywołań narzędzi, więc po tak wielu kolejnych turach zawierających tylko wywołania narzędzi wywołania nie są wykonywane – model otrzymuje wynik błędu z instrukcją, aby zamiast tego zakończyć. Konwersacje zadań (podagenta) nie są limitowane. Ustaw 0, aby wyłączyć limit.</translation>
+        <translation type="vanished">Lokalny model może wchodzić w nieskończoną pętlę wywołań narzędzi, więc po tak wielu kolejnych turach zawierających tylko wywołania narzędzi wywołania nie są wykonywane – model otrzymuje wynik błędu z instrukcją, aby zamiast tego zakończyć. Konwersacje zadań (podagenta) nie są limitowane. Ustaw 0, aby wyłączyć limit.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Dostawca wyszukiwania w sieci</translation>
     </message>
@@ -1147,12 +1180,11 @@
         <translation>Klucz API Exa:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Opcjonalny klucz API Exa. Bez klucza używany jest współdzielony (ograniczony przepustowością) punkt końcowy.</translation>
+        <translation type="vanished">Opcjonalny klucz API Exa. Bez klucza używany jest współdzielony (ograniczony przepustowością) punkt końcowy.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Punkt końcowy Google</translation>
     </message>
@@ -1257,7 +1289,7 @@
         <translation>Klucz API dla Tavily, uzyskaj go na tavily.com (wymagany dla dostawcy &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Nadpisuje globalne ustawienie &apos;Piaskownica poleceń&apos; dla tego projektu. Patrz globalne ustawienie na stronie Narzędzia Llama, aby dowiedzieć się, co piaskownica ogranicza.</translation>
     </message>
@@ -1313,12 +1345,11 @@
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Kolejkowane wiadomości – wysłane po bieżącym kroku</translation>
+        <translation type="vanished">Kolejkowane wiadomości – wysłane po bieżącym kroku</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Pytanie uzupełniające</translation>
     </message>
@@ -1383,12 +1414,16 @@
         <translation>nie</translation>
     </message>
     <message>
-        <location line="+42"/>
-        <source>Follow‑up questions:</source>
-        <translation>Pytania uzupełniające:</translation>
+        <location line="+978"/>
+        <source>Remove &quot;%1&quot;</source>
+        <translation>Usuń &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <source>Follow‑up questions:</source>
+        <translation type="vanished">Pytania uzupełniające:</translation>
+    </message>
+    <message>
+        <location line="-450"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Poziom myślenia: %1 (dotyczy nowych wiadomości)</translation>
     </message>
@@ -1434,11 +1469,17 @@
         <translation>&lt;b&gt;Przetwarzanie polecenia:&lt;/b&gt;&lt;br&gt;Wszystkie tokeny: %1&lt;br&gt;Przetworzone: %2&lt;br&gt;W pamięci podręcznej: %3&lt;br&gt;Czas: %4 ms</translation>
     </message>
     <message>
+        <location line="-841"/>
         <source>Follow-up questions:</source>
-        <translation type="vanished">Dodatkowe pytania:</translation>
+        <translation>Dodatkowe pytania:</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="-388"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Kolejkowane wiadomości - wysłane po bieżącym kroku</translation>
+    </message>
+    <message>
+        <location line="+1243"/>
         <source>Speed: %1 t/s</source>
         <translation>Prędkość: %1 t/s</translation>
     </message>
@@ -1463,12 +1504,11 @@
         <translation>%1 w kolejce</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Remove “%1”</source>
-        <translation>Usuń “%1”</translation>
+        <translation type="vanished">Usuń “%1”</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+16"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Usuń kolejkowaną wiadomość (nie zostanie wysłana)</translation>
     </message>
@@ -1705,7 +1745,7 @@ Czy chcesz go nadpisać?</translation>
         <translation>Konwersacje llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1000"/>
+        <location filename="../src/llamasettings.cpp" line="-1037"/>
         <source>Create a summary of {selection}</source>
         <translation>Stwórz podsumowanie {selekcji}</translation>
     </message>
@@ -2212,8 +2252,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Wbudowany serwer MCP Qt Creator, zarządzany przez samego Qt Creator (Narzędzia &gt; MCP w ustawieniach Qt Creator).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Wbudowany serwer MCP Qt Creator, zarządzany przez samego Qt Creator (Narzędzia → MCP w ustawieniach Qt Creator).</translation>
+        <translation type="vanished">Wbudowany serwer MCP Qt Creator, zarządzany przez samego Qt Creator (Narzędzia → MCP w ustawieniach Qt Creator).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2338,13 +2382,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Wewnętrzne</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Wyślij aktualnie zaznaczony fragment do llama.cpp z poleceniem.
+        <translation type="vanished">Wyślij aktualnie zaznaczony fragment do llama.cpp z poleceniem.
 Wbudowane polecenia: %1
 Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Wyślij aktualnie zaznaczony fragment do llama.cpp z poleceniem.
+Wbudowane polecenia: %1
+Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2357,12 +2409,16 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>(pusto)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Dodaj…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
         <location filename="../src/toolsettingswidget.cpp" line="-129"/>
-        <source>Add…</source>
-        <translation>Dodaj…</translation>
+        <source>Add...</source>
+        <translation>Dodaj...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2444,18 +2500,26 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
         <translation>nieprawidłowa nazwa &quot;%1&quot; (tylko małe litery a-z, cyfry 0-9 i myślniki, maks. %2 znaki, bez myślników na początku, na końcu lub z rzędu)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>nazwa &quot;%1&quot; koliduje z %2 - zachowano pierwszą</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">nieprawidłowa nazwa &quot;%1&quot; (tylko małe litery a-z, cyfry 0-9 i myślniki, maks. %2 znaki, bez myślników na początku, na końcu lub z rzędu)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>nazwa &quot;%1&quot; nie odpowiada jej katalogowi &quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>nazwa &quot;%1&quot; koliduje z %2 – zachowano pierwszą</translation>
+        <translation type="vanished">nazwa &quot;%1&quot; koliduje z %2 – zachowano pierwszą</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2505,8 +2569,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Konwersacja skompaktowana - wcześniejsze wiadomości zostały podsumowane, aby zmieścić się w oknie kontekstu.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Konwersacja skompaktowana – wcześniejsze wiadomości zostały podsumowane, aby zmieścić się w oknie kontekstu.</translation>
+        <translation type="vanished">Konwersacja skompaktowana – wcześniejsze wiadomości zostały podsumowane, aby zmieścić się w oknie kontekstu.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -2989,15 +3057,27 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Zadanie nie powiodło się: podrozmowa &quot;%1&quot; zakończyła się bez ostatecznej odpowiedzi (mogła zostać zatrzymana lub usunięta).</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>Zadanie ukończone w podrozmowie &quot;%1&quot; (id: %2). Rozmowa jest zachowywana na liście rozmów i można ją otworzyć, aby kontynuować pracę. Ostateczny raport subagenta:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Zadanie nie powiodło się: podrozmowa &quot;%1&quot; zakończyła się bez ostatecznej odpowiedzi (mogła zostać zatrzymana lub usunięta).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Zadanie ukończone w podrozmowie &quot;%1&quot; (id: %2). Rozmowa jest zachowywana na liście rozmów i można ją otworzyć, aby kontynuować pracę. Ostateczny raport subagenta:
 
 %3</translation>
     </message>
@@ -3043,8 +3123,12 @@ Możesz wpisać inne polecenie – zostaną zapamiętane na kolejny raz.</transl
         <translation>Wyniki wyszukiwania dla &quot;%1&quot;:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Błąd narzędzia: &quot;query&quot; musi być niepustym ciągiem tekstowym.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Błąd narzędzia: &quot;query&quot; musi być niepustym ciągiem tekstowym.</translation>
     </message>
     <message>

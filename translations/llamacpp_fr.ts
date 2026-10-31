@@ -1100,7 +1100,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher le nombre de jetons générés par seconde</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+20"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
+        <translation>Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source>Compaction Prompt</source>
         <translation>Invitation de compaction</translation>
     </message>
@@ -1137,17 +1142,27 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Compacter automatiquement les longues conversations</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Lorsque la conversation utilise environ 80 % de la fenêtre de contexte du modèle, son historique est résumé en un message marqueur compact, et seul le résumé ainsi que les messages qui le suivent sont envoyés au modèle par la suite. L&apos;historique complet reste visible dans le chat. Utilisé également pour récupérer d&apos;une erreur de dépassement de contexte : l&apos;historique est compacté et la requête est réessayée une fois.</translation>
+        <location line="+152"/>
+        <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
+        <translation>Un modèle local peut boucler indéfiniment sur des appels d&apos;outils, donc après ce nombre de tours consécutifs ne faisant que des appels d&apos;outils, les appels ne sont plus exécutés - le modèle reçoit un résultat en échec l&apos;invitant à terminer à la place. Les conversations de tâche (sous-agent) ne sont pas limitées. Définissez la valeur sur 0 pour aucune limite.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+36"/>
+        <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
+        <translation>Clé API Exa facultative. Sans clé, le point d&apos;accès partagé (avec limitation de débit) est utilisé.</translation>
+    </message>
+    <message>
+        <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">Lorsque la conversation utilise environ 80 % de la fenêtre de contexte du modèle, son historique est résumé en un message marqueur compact, et seul le résumé ainsi que les messages qui le suivent sont envoyés au modèle par la suite. L&apos;historique complet reste visible dans le chat. Utilisé également pour récupérer d&apos;une erreur de dépassement de contexte : l&apos;historique est compacté et la requête est réessayée une fois.</translation>
+    </message>
+    <message>
+        <location line="-166"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
     </message>
     <message>
         <location line="+7"/>
+        <location line="+1"/>
         <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>Bouton d&apos;invitation sur la sélection</translation>
@@ -1170,13 +1185,13 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+36"/>
         <location line="+1"/>
-        <location line="+366"/>
+        <location line="+393"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Commandes dans un bac à sable</translation>
     </message>
     <message>
-        <location line="-366"/>
+        <location line="-393"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis la page des paramètres des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente. Les dossiers supplémentaires et la politique réseau sont configurés sur la page des paramètres Bac à sable.</translation>
     </message>
@@ -1231,13 +1246,13 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+9"/>
         <location line="+1"/>
-        <location line="+323"/>
+        <location line="+350"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Charger les instructions du projet</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-350"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Si cette option est cochée, le fichier d&apos;instructions du projet actuel est ajouté au message du système du chat. Le fichier est AGENTS.md, avec CLAUDE.md en secours, et est recherché dans le dossier du projet puis en remontant jusqu&apos;à la racine du dépôt git, afin qu&apos;un monorepo puisse conserver un seul fichier d&apos;instructions pour tous ses projets. Les fichiers de plus de 32 Ko sont tronqués.</translation>
     </message>
@@ -1252,12 +1267,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Nombre maximal de tours d&apos;outils consécutifs :</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed – the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
-        <translation>Un modèle local peut boucler indéfiniment sur des appels d&apos;outils, donc après ce nombre de tours consécutifs ne faisant que des appels d&apos;outils, les appels ne sont plus exécutés – le modèle reçoit un résultat en échec l&apos;invitant à terminer à la place. Les conversations de tâche (sous-agent) ne sont pas limitées. Définissez la valeur sur 0 pour aucune limite.</translation>
+        <translation type="vanished">Un modèle local peut boucler indéfiniment sur des appels d&apos;outils, donc après ce nombre de tours consécutifs ne faisant que des appels d&apos;outils, les appels ne sont plus exécutés – le modèle reçoit un résultat en échec l&apos;invitant à terminer à la place. Les conversations de tâche (sous-agent) ne sont pas limitées. Définissez la valeur sur 0 pour aucune limite.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>Web Search Provider</source>
         <translation>Fournisseur de recherche web</translation>
     </message>
@@ -1297,12 +1311,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Clé API Exa :</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Optional Exa API key. Without a key the shared (rate‑limited) endpoint is used.</source>
-        <translation>Clé API Exa facultative. Sans clé, le point d&apos;accès partagé (avec limitation de débit) est utilisé.</translation>
+        <translation type="vanished">Clé API Exa facultative. Sans clé, le point d&apos;accès partagé (avec limitation de débit) est utilisé.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Google Endpoint</source>
         <translation>Point d&apos;accès Google</translation>
     </message>
@@ -1407,7 +1420,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Clé API pour Tavily, à obtenir sur tavily.com (requise pour le fournisseur « tavily »).</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+222"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Remplace le paramètre global « Commandes dans un bac à sable » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce que le bac à sable restreint.</translation>
     </message>
@@ -1426,7 +1439,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-582"/>
+        <location line="-619"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
@@ -1456,12 +1469,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Par défaut : modèle de chat</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow‑up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
+        <translation type="vanished">Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+8"/>
         <source>Conversation Title Prompt</source>
         <translation>Invitation pour le titre de conversation</translation>
     </message>
@@ -1481,7 +1493,27 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Invitation envoyée au modèle pour générer des questions complémentaires après une réponse complète.</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+32"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation>Lorsque la conversation utilise plus du seuil configuré de la fenêtre de contexte du modèle, son historique est résumé en un message marqueur compact, et seul le résumé ainsi que les messages qui le suivent sont envoyés au modèle par la suite. L&apos;historique complet reste visible dans le chat. Utilisé également pour récupérer d&apos;une erreur de dépassement de contexte : l&apos;historique est compacté et la requête est réessayée une fois.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Auto-compact Threshold</source>
+        <translation>Seuil de compaction automatique</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Auto-compact Threshold:</source>
+        <translation>Seuil de compaction automatique :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>La conversation est compactée automatiquement lorsque son historique utilise plus de ce pourcentage de la fenêtre de contexte du modèle.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Locator Prompts</source>
         <translation>Invitations du localisateur</translation>
     </message>
@@ -1490,7 +1522,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné.</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+55"/>
         <location line="+1"/>
         <source>Enable Tools in Chat</source>
         <translation>Activer l&apos;utilisation d&apos;outils dans le chat</translation>
@@ -1542,12 +1574,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Modèle LLM</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Queued messages – sent after the current step</source>
-        <translation>Messages en file d&apos;attente – envoyés après l&apos;étape en cours</translation>
+        <translation type="vanished">Messages en file d&apos;attente – envoyés après l&apos;étape en cours</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+29"/>
         <source>Follow up</source>
         <translation>Questions complémentaires</translation>
     </message>
@@ -1612,9 +1643,18 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>non</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>Follow‑up questions:</source>
-        <translation>Questions supplémentaires :</translation>
+        <translation type="vanished">Questions supplémentaires :</translation>
+    </message>
+    <message>
+        <location line="-346"/>
+        <source>Queued messages - sent after the current step</source>
+        <translation>Messages en file d&apos;attente - envoyés après l&apos;étape en cours</translation>
+    </message>
+    <message>
+        <location line="+388"/>
+        <source>Follow-up questions:</source>
+        <translation>Questions complémentaires :</translation>
     </message>
     <message>
         <location line="+486"/>
@@ -1689,8 +1729,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+14"/>
-        <source>Remove “%1”</source>
+        <source>Remove &quot;%1&quot;</source>
         <translation>Retirer « %1 »</translation>
+    </message>
+    <message>
+        <source>Remove “%1”</source>
+        <translation type="vanished">Retirer « %1 »</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1917,13 +1961,21 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Conversations avec Llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
         <source>Send the current selection to llama.cpp with a prompt.
 Built‑in prompts: %1
 You can type any other prompt – they are remembered for next time.</source>
-        <translation>Envoyer la sélection actuelle à llama.cpp avec une invitation.
+        <translation type="vanished">Envoyer la sélection actuelle à llama.cpp avec une invitation.
 Invitations intégrées : %1
 Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémorisées pour la prochaine fois.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamalocatorfilter.cpp" line="+179"/>
+        <source>Send the current selection to llama.cpp with a prompt.
+Built-in prompts: %1
+You can type any other prompt - they are remembered for next time.</source>
+        <translation>Envoyer la sélection actuelle à llama.cpp avec une invitation.
+Invitations intégrées : %1
+Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémorisées pour la prochaine fois.</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -2002,12 +2054,16 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
         <translation>(vide)</translation>
     </message>
     <message>
+        <source>Add…</source>
+        <translation type="vanished">Ajouter…</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
         <location filename="../src/toolsettingswidget.cpp" line="+203"/>
-        <source>Add…</source>
-        <translation>Ajouter…</translation>
+        <source>Add...</source>
+        <translation>Ajouter...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -2135,8 +2191,12 @@ Vous pouvez saisir n&apos;importe quelle autre invitation – elles sont mémori
     </message>
     <message>
         <location line="+8"/>
+        <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
+        <translation>Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils &gt; MCP dans les paramètres de Qt Creator).</translation>
+    </message>
+    <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
-        <translation>Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils → MCP dans les paramètres de Qt Creator).</translation>
+        <translation type="vanished">Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils → MCP dans les paramètres de Qt Creator).</translation>
     </message>
     <message>
         <location line="+165"/>
@@ -2287,18 +2347,26 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <source>invalid name &quot;%1&quot; (lowercase a-z, 0-9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
         <translation>nom non valide « %1 » (minuscules a-z, chiffres 0-9 et tirets seulement, %2 caractères au maximum, pas de tirets en début/fin ou consécutifs)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+41"/>
+        <source>name &quot;%1&quot; collides with %2 - keeping the first one</source>
+        <translation>le nom « %1 » entre en conflit avec %2 - le premier est conservé</translation>
+    </message>
+    <message>
+        <source>invalid name &quot;%1&quot; (lowercase a‑z, 0‑9 and hyphens only, max %2 characters, no leading/trailing/consecutive hyphens)</source>
+        <translation type="vanished">nom non valide « %1 » (minuscules a-z, chiffres 0-9 et tirets seulement, %2 caractères au maximum, pas de tirets en début/fin ou consécutifs)</translation>
+    </message>
+    <message>
+        <location line="-30"/>
         <source>name &quot;%1&quot; does not match its directory &quot;%2&quot;</source>
         <translation>le nom « %1 » ne correspond pas à son dossier « %2 »</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>name &quot;%1&quot; collides with %2 – keeping the first one</source>
-        <translation>le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
+        <translation type="vanished">le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="+970"/>
@@ -2348,8 +2416,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location line="+26"/>
         <location line="+31"/>
+        <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
+        <translation>Conversation compactée - les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
+    </message>
+    <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
-        <translation>Conversation compactée – les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
+        <translation type="vanished">Conversation compactée – les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
     </message>
     <message>
         <location line="+795"/>
@@ -3196,15 +3268,27 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+22"/>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
         <translation>Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
     </message>
     <message>
         <location line="+6"/>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
         <translation>Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
 
 %3</translation>
     </message>
@@ -3250,8 +3334,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Résultats de recherche pour « %1 » :</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
     </message>
     <message>

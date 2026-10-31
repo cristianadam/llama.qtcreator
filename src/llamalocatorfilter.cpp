@@ -177,8 +177,8 @@ LocatorFilter::LocatorFilter()
     setId(Constants::LLAMACPP_LOCATOR_ID);
     setDisplayName("llama.cpp – Prompt ...");
     setDescription(Tr::tr("Send the current selection to llama.cpp with a prompt.\n"
-                          "Built‑in prompts: %1\n"
-                          "You can type any other prompt – they are remembered for next time.")
+                          "Built-in prompts: %1\n"
+                          "You can type any other prompt - they are remembered for next time.")
                        .arg(transform(predefinedPrompts(),
                                       [](const QString &p) {
                                           return p.section(QLatin1Char('\n'), 0, 0).trimmed();
