@@ -140,6 +140,13 @@ public:
     // summary (plus the messages after it) is sent to the model from then
     // on. Also used to recover from a context-overflow error.
     Utils::BoolAspect autoCompact{this};
+    // Context-window usage (in percent of the model's n_ctx) at which the
+    // auto-compaction kicks in.
+    Utils::IntegerAspect compactThreshold{this};
+    // Derived, non-persisted (no settings key) mirror of
+    // enableLlamaCpp && autoCompact; Utils::Aspect::setEnabler only takes a
+    // single BoolAspect, so this is what gates the auto-compact threshold.
+    Utils::BoolAspect autoCompactEnabled{this};
 
     // Web search (websearch tool)
     Utils::StringAspect webSearchProvider{this};

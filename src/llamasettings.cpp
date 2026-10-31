@@ -538,12 +538,21 @@ LlamaSettings::LlamaSettings()
     autoCompact.setDisplayName(Tr::tr("Auto-compact long conversations"));
     autoCompact.setLabelText(Tr::tr("Auto-compact long conversations"));
     autoCompact.setToolTip(Tr::tr(
-        "When the conversation uses about 80% of the model's context window, its "
-        "history is summarized into a compact marker message and only the summary "
-        "plus the messages after it are sent to the model from then on. The full "
-        "history stays visible in the chat. Also used to recover from a "
-        "context-overflow error: the history is compacted and the request is "
-        "retried once."));
+        "When the conversation uses more than the configured threshold of the "
+        "model's context window, its history is summarized into a compact marker "
+        "message and only the summary plus the messages after it are sent to the "
+        "model from then on. The full history stays visible in the chat. Also "
+        "used to recover from a context-overflow error: the history is compacted "
+        "and the request is retried once."));
+
+    compactThreshold.setSettingsKey("CompactThreshold");
+    compactThreshold.setDefaultValue(80);
+    compactThreshold.setRange(10, 100);
+    compactThreshold.setDisplayName(Tr::tr("Auto-compact Threshold"));
+    compactThreshold.setLabelText(Tr::tr("Auto-compact Threshold:"));
+    compactThreshold.setToolTip(Tr::tr(
+        "The conversation is auto-compacted when its history uses more than this "
+        "percentage of the model's context window."));
 
     locatorPrompts.setDisplayName(Tr::tr("Locator Prompts"));
     locatorPrompts.setSettingsKey("LocatorPrompts");
@@ -790,6 +799,30 @@ LlamaSettings::LlamaSettings()
 
     readSettings();
 
+    // Keep the derived, non-persisted autoCompactEnabled in sync with
+    // enableLlamaCpp && autoCompact (the enabler of the threshold aspect).
+    // The default is true so the page's Reset button (which resets every
+    // aspect to its default) cannot leave it in a stale disabled state.
+    autoCompactEnabled.setDefaultValue(true);
+    // Read the volatile (not the internal) values: the lambda runs from
+    // volatileValueChanged, i.e. before Apply copies the volatile values
+    // into the internal ones; the internal autoCompact() would still hold
+    // the previous value and the enabler would end up inverted.
+    const auto updateAutoCompactEnabled = [this] {
+        autoCompactEnabled.setVolatileValue(
+            enableLlamaCpp.volatileValue() && autoCompact.volatileValue(),
+            Utils::BaseAspect::DoEmit);
+    };
+    // Follow volatileValueChanged (not changed) so the threshold row reacts
+    // live while the settings page is open, like the rows gated directly on
+    // enableLlamaCpp (the enabler reads the checker's volatile value).
+    connect(&enableLlamaCpp, &Utils::BaseAspect::volatileValueChanged, this, updateAutoCompactEnabled);
+    connect(&autoCompact, &Utils::BaseAspect::volatileValueChanged, this, updateAutoCompactEnabled);
+    // Re-assert if something writes the derived value directly (the page's
+    // Reset button resets every aspect to its default, bypassing the sync).
+    connect(&autoCompactEnabled, &Utils::BaseAspect::volatileValueChanged, this, updateAutoCompactEnabled);
+    updateAutoCompactEnabled();
+
     endpoint.setEnabler(&enableLlamaCpp);
     apiKey.setEnabler(&enableLlamaCpp);
     nPrefix.setEnabler(&enableLlamaCpp);
@@ -849,6 +882,7 @@ LlamaSettings::LlamaSettings()
     titlePrompt.setEnabler(&enableLlamaCpp);
     followUpPrompt.setEnabler(&enableLlamaCpp);
     compactPrompt.setEnabler(&enableLlamaCpp);
+    compactThreshold.setEnabler(&autoCompactEnabled);
     locatorPrompts.setEnabler(&enableLlamaCpp);
     selectionPromptButton.setEnabler(&enableLlamaCpp);
 
@@ -912,6 +946,8 @@ LlamaSettings::LlamaSettings()
                 showTokensPerSecond, br,
                 toolsEnabled, br,
                 selectionPromptButton, br,
+                Row {autoCompact}, br,
+                Row {compactThreshold}, br,
                 customJson, br,
             },
         };

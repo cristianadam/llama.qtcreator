@@ -2496,7 +2496,8 @@ void ChatManager::sendChatRequest(const QString &convId,
                     if (usedTokens <= 0)
                         usedTokens = pm.promptProgress.total;
                     const int maxCtx = serverProps().n_ctx;
-                    if (maxCtx > 0 && usedTokens > maxCtx * 4 / 5)
+                    const int threshold = settings().compactThreshold();
+                    if (maxCtx > 0 && qint64(usedTokens) * 100 > qint64(maxCtx) * threshold)
                         compactConversation(convId, pm.id, /*force=*/false);
                 }
             }
