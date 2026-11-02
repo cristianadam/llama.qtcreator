@@ -408,6 +408,12 @@ private:
         QString systemPrompt;
         QStringList allowedTools; // empty = every enabled tool
     };
+    //! Task conversations whose sub‑agent is still running, i.e. whose
+    //! parent's "task" tool is still waiting for the result: cleared when
+    //! the task finishes, fails, is stopped or is deleted.  The
+    //! persistent sub‑agent identity of a (finished) task conversation
+    //! lives in m_taskConfigs, so it can be reopened and worked on with
+    //! the same system prompt and tool whitelist.
     QSet<QString> m_taskConversations;
     QHash<QString, TaskConversationConfig> m_taskConfigs;
     bool m_taskConvCreationPending{false};

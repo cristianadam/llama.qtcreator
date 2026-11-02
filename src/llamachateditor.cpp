@@ -980,12 +980,14 @@ void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &
 
 void ChatEditor::onStopRequested(bool fromKey)
 {
-    const Conversation conv = ChatManager::instance().currentConversation();
+    // This editor's own conversation, not the globally "current" one: the
+    // stop button and Escape act on the chat shown in this editor.
+    const QString convId = m_viewingConvId;
 
     // Stopping a running task (sub‑agent) conversation fails the "task" tool
     // waiting in the parent conversation, so an Escape key (easy to press
     // by accident) asks for confirmation first; the stop button does not.
-    if (fromKey && ChatManager::instance().isTaskConversationRunning(conv.id)
+    if (fromKey && ChatManager::instance().isTaskConversationRunning(convId)
             && QMessageBox::question(widget(),
                                      Tr::tr("Stop Task"),
                                      Tr::tr("The task is still running. Do you really want "
@@ -996,13 +998,13 @@ void ChatEditor::onStopRequested(bool fromKey)
 
     // A "Human Editor" reply in progress: closing its (unsaved) editor
     // discards the pending message.
-    if (IEditor *editor = ChatManager::instance().humanEditorEditor(conv.id,
+    if (IEditor *editor = ChatManager::instance().humanEditorEditor(convId,
                                                                     /*pendingOnly=*/true)) {
         EditorManager::closeEditors({editor}, /*askAboutModifiedEditors=*/false);
         return;
     }
 
-    ChatManager::instance().stopGenerating(conv.id);
+    ChatManager::instance().stopGenerating(convId);
 
     m_input->setIsGenerating(false);
 }

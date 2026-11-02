@@ -1009,7 +1009,7 @@ void ChatManager::generateMessage(const QString &convId,
     // message is committed (or discarded) by
     // commitHumanEditorMessage()/abortHumanEditorMessage().  Task
     // conversations always run against a real model.
-    if (isHumanEditor() && !m_taskConversations.contains(convId)) {
+    if (isHumanEditor() && !m_taskConfigs.contains(convId)) {
         emit humanEditorReplyReady(convId);
         return;
     }
@@ -1517,7 +1517,7 @@ void ChatManager::failTurn(Message pm, const QString &error)
     appendNoteToMessage(pm, errorNote(error));
     m_storage->appendMsg(pm, pm.parent);
 
-    if (m_taskConversations.contains(convId))
+    if (m_taskConversations.remove(convId))
         emit taskConversationFinished(convId, pm.content, false);
 }
 
@@ -1770,7 +1770,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
 
     QString sysMsgText = LlamaCpp::settings().systemMessage.value();
     const bool isTaskConversation = !msgs.isEmpty()
-            && m_taskConversations.contains(msgs.first().convId);
+            && m_taskConfigs.contains(msgs.first().convId);
     if (!msgs.isEmpty()) {
         // Task conversations run with their own (sub‑agent) system prompt.
         const auto it = m_taskConfigs.constFind(msgs.first().convId);
@@ -2475,6 +2475,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     // was stopped / failed / produced nothing) – hand the
                     // result back to the "task" tool waiting in the parent
                     // conversation.
+                    m_taskConversations.remove(convId);
                     emit taskConversationFinished(convId, pm.content, complete);
                 } else if (complete) {
                     // Only suggest follow‑ups for complete generations.
