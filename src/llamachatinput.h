@@ -26,6 +26,10 @@ signals:
     void sendRequested(const QString &text, const QList<QVariantMap> &extra);
     void editingCancelled();
     void stopRequested();
+    //! Escape was pressed while a reply was being generated (as opposed to
+    //! the stop button being clicked); the receiver may ask for
+    //! confirmation before actually stopping.
+    void stopKeyPressed();
     void fileDropped(const QStringList &filePaths);
     void pasteLongText(const QString &text);
     void pasteFiles(const QStringList &filePaths);

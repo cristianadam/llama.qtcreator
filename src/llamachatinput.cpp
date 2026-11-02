@@ -537,7 +537,7 @@ bool ChatInput::eventFilter(QObject *obj, QEvent *event)
             // generated (LLM streaming or a running tool); otherwise it
             // cancels the pending input / message edit.
             if (m_isGenerating)
-                emit stopRequested();
+                emit stopKeyPressed();
             else
                 emit editingCancelled();
             return true;

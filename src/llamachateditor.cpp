@@ -373,7 +373,8 @@ ChatEditor::ChatEditor()
             });
 
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
-    connect(m_input, &ChatInput::stopRequested, this, &ChatEditor::onStopRequested);
+    connect(m_input, &ChatInput::stopRequested, this, [this] { onStopRequested(false); });
+    connect(m_input, &ChatInput::stopKeyPressed, this, [this] { onStopRequested(true); });
     connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
     connect(m_input, &ChatInput::editingCancelled, this, &ChatEditor::onEditingCancelled);
 
@@ -426,6 +427,16 @@ ChatEditor::ChatEditor()
                 // Only this chat's own close matters: closing any other editor
                 // must not stop the conversation shown here.
                 if (editor != this)
+                    return;
+
+                // A task (sub‑agent) conversation that is still working keeps
+                // running in the background when its editor is closed: the
+                // sub‑agent finishes on its own and reports back to the parent
+                // conversation.  The stop button and Escape still stop it, as
+                // does deleting the conversation.  Task conversations never
+                // have a title summary, follow‑ups or a "Human Editor"
+                // session, so skipping the cancels below is safe.
+                if (ChatManager::instance().isTaskConversationRunning(m_viewingConvId))
                     return;
 
                 ChatManager::instance().stopGenerating(m_viewingConvId);
@@ -967,9 +978,21 @@ void ChatEditor::onSendRequested(const QString &text, const QList<QVariantMap> &
     scrollToBottom();
 }
 
-void ChatEditor::onStopRequested()
+void ChatEditor::onStopRequested(bool fromKey)
 {
     const Conversation conv = ChatManager::instance().currentConversation();
+
+    // Stopping a running task (sub‑agent) conversation fails the "task" tool
+    // waiting in the parent conversation, so an Escape key (easy to press
+    // by accident) asks for confirmation first; the stop button does not.
+    if (fromKey && ChatManager::instance().isTaskConversationRunning(conv.id)
+            && QMessageBox::question(widget(),
+                                     Tr::tr("Stop Task"),
+                                     Tr::tr("The task is still running. Do you really want "
+                                            "to stop it?"))
+            != QMessageBox::Yes) {
+        return;
+    }
 
     // A "Human Editor" reply in progress: closing its (unsaved) editor
     // discards the pending message.
@@ -993,7 +1016,7 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
     if (obj == widget() && event->type() == QEvent::ShortcutOverride) {
         if (auto *keyEvent = static_cast<QKeyEvent *>(event);
             keyEvent->key() == Qt::Key_Escape && m_input->isGenerating()) {
-            onStopRequested();
+            onStopRequested(true);
             return true;
         }
     }

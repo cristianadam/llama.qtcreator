@@ -2703,6 +2703,17 @@ bool ChatManager::conversationExists(const QString &convId)
     return m_storage->getOneConversation(convId).id == convId;
 }
 
+bool ChatManager::isTaskConversationRunning(const QString &convId) const
+{
+    if (!m_taskConversations.contains(convId))
+        return false;
+    // The same "busy" condition stopGenerating() checks: a pending
+    // (streaming) message or a tool that has not reported back yet.  The
+    // sub‑agent's tool loop never goes quiet while it works (the stream and
+    // the tool hand over synchronously), so this is true for the whole run.
+    return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
+}
+
 void ChatManager::deleteConversation(const QString &convId)
 {
     // Stop the running stream (abort() finishes it synchronously) and the

@@ -60,7 +60,10 @@ public slots:
     void onMessageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void onPendingMessageChanged(const LlamaCpp::Message &pm);
     void onSendRequested(const QString &text, const QList<QVariantMap> &extra);
-    void onStopRequested();
+    // \a fromKey is true when the stop was triggered by the Escape key
+    // rather than the stop button; stopping a running task (sub‑agent)
+    // conversation then asks for confirmation first.
+    void onStopRequested(bool fromKey);
     void onFileDropped(const QStringList &files);
     void onEditRequested(const LlamaCpp::Message &msg);
     void onEditingCancelled();

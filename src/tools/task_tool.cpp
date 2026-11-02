@@ -123,7 +123,7 @@ QString TaskTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "task",
-            "description": "Launches a new agent that handles a self-contained subtask in a separate conversation, isolated from the current one. The subagent cannot see this conversation, so the prompt must be fully self-contained (include all relevant context). While it works, the current conversation is paused; when the subagent finishes, its final report is returned as the tool result. Use this for exploratory or long-running work that would clutter the current conversation, e.g. exploring an unfamiliar codebase.",
+            "description": "Launches a new agent that handles a self-contained subtask in a separate conversation, isolated from the current one. The subagent cannot see this conversation, so the prompt must be fully self-contained (include all relevant context). While it works, the current conversation is paused; when the subagent finishes, its final report is returned as the tool result. The sub-conversation can be opened and closed at any time without interrupting the task. Use this for exploratory or long-running work that would clutter the current conversation, e.g. exploring an unfamiliar codebase.",
             "parameters": {
                 "type": "object",
                 "properties": {

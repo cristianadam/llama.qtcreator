@@ -206,6 +206,13 @@ public:
     void deleteConversation(const QString &convId);
     void renameConversation(const QString &convId, const QString &name);
     bool conversationExists(const QString &convId);
+
+    //! True when \a convId is a task (sub‑agent) conversation that is still
+    //! working (streaming a reply or running a tool).  Such a conversation
+    //! keeps running in the background when its editor is closed: the
+    //! sub‑agent finishes on its own and reports back to the parent
+    //! conversation.
+    bool isTaskConversationRunning(const QString &convId) const;
     void deleteMessageBranch(const QString &convId, qint64 msgId);
     QPair<int,int> getBranchStats(const QString &convId, qint64 msgId) const;
 
