@@ -1,0 +1,22 @@
+# Normalize line endings for text files
+* text=auto
+
+# Force CRLF for Windows batch/script files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Keep scripts executable with LF
+*.sh text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.7z binary
+*.gz binary
+*.ttf binary
+*.otf binary
