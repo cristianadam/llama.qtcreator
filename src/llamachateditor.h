@@ -52,9 +52,12 @@ public:
 
     // Font zoom for the conversation (see LlamaSettings::chatFontZoom).
     // These act on every visible chat editor so all open conversations stay
-    // in sync; \a direction is +1 (zoom in) or -1 (zoom out).
-    static void zoomFont(int direction);
-    static void resetFontZoom();
+    // in sync; \a direction is +1 (zoom in) or -1 (zoom out).  A fading
+    // "Zoom: NN%" indicator (the same one the text editor shows) is displayed
+    // on \a indicatorWidget, or on the focused chat editor when it is null
+    // (the keyboard commands).
+    static void zoomFont(int direction, QWidget *indicatorWidget = nullptr);
+    static void resetFontZoom(QWidget *indicatorWidget = nullptr);
     QWidget *displayServerProps();
     void createFollowUpWidget(const QString &convId,
                               qint64 leafNodeId,
@@ -114,6 +117,10 @@ private:
     // Re-renders this editor's conversation at the current font zoom, keeping
     // the scroll position (called by zoomFont()/resetFontZoom(), debounced).
     void applyFontZoom();
+    // Shows the fading "Zoom: NN%" indicator on \a widget (or the focused
+    // chat editor when \a widget is null), like the text editor and the
+    // markdown browser do.
+    static void showZoomIndicator(QWidget *widget, int zoom);
     void syncThinkingLevel();
     void updateModelCombo();
     // Toggles the in‑place edit button on all assistant message widgets

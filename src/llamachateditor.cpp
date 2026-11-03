@@ -9,6 +9,7 @@
 #include <projectexplorer/projectmanager.h>
 
 #include <utils/action.h>
+#include <utils/fadingindicator.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/icon.h>
 #include <utils/utilsicons.h>
@@ -17,6 +18,7 @@
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 
+#include <QApplication>
 #include <QCoreApplication>
 #include <QAction>
 #include <QDir>
@@ -791,12 +793,15 @@ void ChatEditor::fixMessageHeights()
 // Font zoom
 // ---------------------------------------------------------------------------
 
-void ChatEditor::zoomFont(int direction)
+void ChatEditor::zoomFont(int direction, QWidget *indicatorWidget)
 {
     // 10% per step, clamped to the aspect's range.  The value is persisted
     // immediately; the (expensive) re-render is debounced per editor so a
     // burst of Ctrl+mouse-wheel notches only re-renders once the user pauses.
     const int newZoom = qBound(50, settings().chatFontZoom.value() + direction * 10, 300);
+    // Show the resulting size right away – also at the clamped ends, as
+    // feedback – even though the re-render is still debounced.
+    showZoomIndicator(indicatorWidget, newZoom);
     if (newZoom == settings().chatFontZoom.value())
         return;
     settings().chatFontZoom.setValue(newZoom);
@@ -806,8 +811,9 @@ void ChatEditor::zoomFont(int direction)
             editor->m_zoomDebounceTimer->start();
 }
 
-void ChatEditor::resetFontZoom()
+void ChatEditor::resetFontZoom(QWidget *indicatorWidget)
 {
+    showZoomIndicator(indicatorWidget, 100);
     if (settings().chatFontZoom.value() == 100)
         return;
     settings().chatFontZoom.setValue(100);
@@ -815,6 +821,28 @@ void ChatEditor::resetFontZoom()
     for (ChatEditor *editor : std::as_const(s_instances))
         if (editor->widget() && editor->widget()->isVisible())
             editor->m_zoomDebounceTimer->start();
+}
+
+void ChatEditor::showZoomIndicator(QWidget *widget, int zoom)
+{
+    // The indicator is centered on its parent, so parent it to the chat
+    // editor the user is interacting with.  The keyboard commands leave
+    // \a widget null; there the focused chat editor is the one being zoomed
+    // (the commands are only bound to the chat context).
+    if (!widget) {
+        const QWidget *focusWidget = QApplication::focusWidget();
+        for (ChatEditor *editor : std::as_const(s_instances)) {
+            QWidget *w = editor->widget();
+            if (w && (w == focusWidget || w->isAncestorOf(focusWidget))) {
+                widget = w;
+                break;
+            }
+        }
+    }
+    if (!widget)
+        return;
+    Utils::FadingIndicator::showText(widget, Tr::tr("Zoom: %1%").arg(zoom),
+                                     Utils::FadingIndicator::SmallText);
 }
 
 void ChatEditor::applyFontZoom()
@@ -1115,7 +1143,9 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
         if (auto *wheelEvent = static_cast<QWheelEvent *>(event);
             (wheelEvent->modifiers() & Qt::ControlModifier) != 0
             && wheelEvent->angleDelta().y() != 0) {
-            zoomFont(wheelEvent->angleDelta().y() > 0 ? +1 : -1);
+            // The keyboard focus may be elsewhere, so show the indicator on
+            // the editor the wheel actually happened on.
+            zoomFont(wheelEvent->angleDelta().y() > 0 ? +1 : -1, widget());
             return true;
         }
     }

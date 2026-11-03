@@ -19,6 +19,11 @@ public:
 
     void setMarkdown(const QString &markdown, bool completed);
     void resizeEvent(QResizeEvent *event) override;
+    // The label never scrolls internally: it is always sized to show the
+    // whole document, and the conversation view (ChatEditor's scroll area)
+    // owns the scrolling.  See the .cpp for why the base implementation
+    // cannot be left in place.
+    void wheelEvent(QWheelEvent *event) override;
     int heightForWidth(int w) const override;
     void invalidate();
     QSize sizeHint() const override;

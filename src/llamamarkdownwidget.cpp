@@ -16,6 +16,7 @@
 #include <QTextBlock>
 #include <QTextDocumentFragment>
 #include <QToolTip>
+#include <QWheelEvent>
 
 #include <algorithm>
 
@@ -234,6 +235,25 @@ void MarkdownLabel::notifyGeometryChanged()
         p->layout()->invalidate();
         p->updateGeometry();
     }
+}
+
+void MarkdownLabel::wheelEvent(QWheelEvent *event)
+{
+    // Never scroll the message internally: it is always sized to show the
+    // whole document, and the conversation view (ChatEditor's scroll area)
+    // owns the scrolling.  Ignoring the event makes it propagate up to the
+    // conversation view.
+    //
+    // The base implementation cannot be left in place: Qt 6 forwards every
+    // wheel event on a QAbstractScrollArea to its own scroll bars
+    // (QAbstractScrollArea::wheelEvent), and a scroll bar accepts the event
+    // as long as its value can still move – even when its policy is
+    // ScrollBarAlwaysOff, which only controls visibility.  A document that
+    // is a single pixel taller than the viewport (streaming, an in-flight
+    // height fix-up) is therefore enough to swallow the notch – and with
+    // Ctrl held, scrollByDelta() would even scroll the message by a whole
+    // page instead of letting the zoom handler in ChatEditor see the event.
+    event->ignore();
 }
 
 int MarkdownLabel::heightForWidth(int w) const
