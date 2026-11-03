@@ -524,6 +524,11 @@ bool ChatManager::isGenerating(const QString &convId) const
     return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
 }
 
+bool ChatManager::isHandingOff(const QString &convId) const
+{
+    return m_handingOff.contains(convId);
+}
+
 ViewingChat ChatManager::getViewingChat(const QString &convId) const
 {
     ViewingChat vc{m_storage->getOneConversation(convId), m_storage->getMessages(convId)};
@@ -1306,6 +1311,52 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     });
 }
 
+// Rough token estimate of a normalized message array (the same array that
+// goes into the request's "messages" field, system message included):
+// visible text is counted at ~3 chars/token – a deliberately
+// over‑estimating rate, so the fit check errs on the side of trimming –
+// while base64 image/audio payloads get a flat per‑item cost, since their
+// byte size says nothing about their token cost.
+static void estimateTokensOf(const QJsonValue &value,
+                             const QString &key,
+                             int &chars,
+                             int &mediaItems)
+{
+    switch (value.type()) {
+    case QJsonValue::String: {
+        const QString s = value.toString();
+        // Base64 payloads ("image_url.url", "input_audio.data")
+        if ((key == QLatin1String("url") || key == QLatin1String("data"))
+                && s.size() > 1024)
+            ++mediaItems;
+        else
+            chars += s.size();
+        break;
+    }
+    case QJsonValue::Array:
+        for (const QJsonValue &e : value.toArray())
+            estimateTokensOf(e, key, chars, mediaItems);
+        break;
+    case QJsonValue::Object: {
+        const QJsonObject obj = value.toObject();
+        for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
+            estimateTokensOf(it.value(), it.key(), chars, mediaItems);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static int estimatePromptTokens(const QJsonArray &msgs)
+{
+    int chars = 0;
+    int mediaItems = 0;
+    for (const QJsonValue &m : msgs)
+        estimateTokensOf(m, QString(), chars, mediaItems);
+    return chars / 3 + mediaItems * 1500;
+}
+
 void ChatManager::handoffConversation(const QString &convId,
                                       qint64 leafNodeId,
                                       bool force,
@@ -1354,11 +1405,11 @@ void ChatManager::handoffConversation(const QString &convId,
     }
 
     m_handingOff.insert(convId);
+    emit handoffProgress(convId, true);
 
     // The summary request sees the full history plus the handoff prompt; a
     // capped token budget and thinking off keep the housekeeping call
     // short, like the title and follow-up requests.
-    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
@@ -1370,7 +1421,36 @@ void ChatManager::handoffConversation(const QString &convId,
     QJsonObject promptMsg;
     promptMsg["role"] = "user";
     promptMsg["content"] = parts;
+
+    // The request must fit the context window even when the history
+    // already does not: the overflow error now points here, and the model
+    // may have been switched to a smaller context mid‑conversation.  Drop
+    // the oldest messages until the payload fits – the document then
+    // covers only the recent part of the conversation, which is what the
+    // next steps mostly depend on.  Trimming stops at a user message, so a
+    // tool call/result pair is never split.
+    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
     msgArray.append(promptMsg);
+    const int maxCtx = serverProps().n_ctx;
+    // Reserve for the 1500‑token document and a margin.
+    const int budget = maxCtx - 2000;
+    const int totalMessages = leafMsgs.size();
+    while (maxCtx > 0 && budget > 0 && estimatePromptTokens(msgArray) > budget
+            && leafMsgs.size() > 1) {
+        int drop = 1;
+        while (drop < leafMsgs.size() && leafMsgs.at(drop).role != "user")
+            ++drop;
+        if (drop >= leafMsgs.size())
+            break; // no user message left to trim to
+        leafMsgs = leafMsgs.mid(drop);
+        msgArray = normalizeMsgsForAPI(leafMsgs);
+        msgArray.append(promptMsg);
+    }
+    if (leafMsgs.size() < totalMessages)
+        qCWarning(llamaChatNetwork)
+            << "Handoff of" << convId << ": the full history does not fit the "
+            << "context window, summarizing only the most recent"
+            << leafMsgs.size() << "of" << totalMessages << "messages";
 
     QJsonObject payload;
     payload["messages"] = msgArray;
@@ -1392,6 +1472,7 @@ void ChatManager::handoffConversation(const QString &convId,
         m_handingOff.remove(convId);
         m_handoffReplies.remove(convId);
         reply->deleteLater();
+        emit handoffProgress(convId, false);
 
         // Canceled: the conversation is being deleted, nobody waits for it.
         if (reply->error() == QNetworkReply::OperationCanceledError)

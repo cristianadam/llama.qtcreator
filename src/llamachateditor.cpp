@@ -372,6 +372,11 @@ ChatEditor::ChatEditor()
                     updateSteeringButton();
             });
 
+    connect(&chatManager,
+            &ChatManager::handoffProgress,
+            this,
+            &ChatEditor::onHandoffProgress);
+
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, [this] { onStopRequested(false); });
     connect(m_input, &ChatInput::stopKeyPressed, this, [this] { onStopRequested(true); });
@@ -394,6 +399,9 @@ ChatEditor::ChatEditor()
                     refreshMessages(chat.messages, chat.conv.currNode);
                 } else {
                     ChatManager::instance().refreshServerProps();
+                    // refreshMessages() did not run, so sync the transient
+                    // "creating continuation" note for the new conversation.
+                    updateHandoffLabel();
                 }
 
                 ChatManager::instance().setCurrentConversation(m_viewingConvId);
@@ -702,6 +710,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
             updateSpeedLabel(lastMsg);
         updateContextLabel(lastMsg);
     }
+    updateHandoffLabel();
     updateSteeringButton();
 
     // If there were no messages, show the server props
@@ -1550,6 +1559,40 @@ void ChatEditor::updateSteeringButton()
             ChatManager::instance().removeSteeringMessage(m_viewingConvId, i);
         });
     }
+}
+
+void ChatEditor::onHandoffProgress(const QString &convId, bool active)
+{
+    Q_UNUSED(active); // the label is driven by the ChatManager's state
+    if (convId != m_viewingConvId)
+        return;
+    updateHandoffLabel();
+}
+
+void ChatEditor::updateHandoffLabel()
+{
+    // Always rebuild: a view refresh (new message, branch switch) re‑adds
+    // the message widgets after a surviving note, so the note must be
+    // re‑inserted at the end of the list.
+    if (m_handoffLabel) {
+        m_messageLayout->removeWidget(m_handoffLabel);
+        m_handoffLabel->deleteLater();
+        m_handoffLabel = nullptr;
+    }
+    if (!ChatManager::instance().isHandingOff(m_viewingConvId))
+        return;
+
+    // Transient (never persisted) note at the end of the conversation: the
+    // original conversation stays untouched and idle while its history is
+    // being summarized into the seed message of the new one, and that can
+    // take a while for a long conversation on a small model.
+    m_handoffLabel = new MarkdownLabel(widget());
+    m_handoffLabel->setMarkdown(
+        QStringLiteral("<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/> ")
+        + Tr::tr("*Creating a new conversation to continue this one – summarizing "
+                 "the conversation…"),
+        true);
+    m_messageLayout->addWidget(m_handoffLabel);
 }
 
 void ChatEditor::scrollToBottom()

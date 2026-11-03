@@ -56,6 +56,9 @@ public:
     void refreshServerProps();
 
     bool isGenerating(const QString &convId) const;
+    //! True while a handoff summary request is in flight for \a convId
+    //! (see handoffConversation()).
+    bool isHandingOff(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
     //! Renders a single message as Markdown for the conversation export
     //! ("Save as Markdown" in the conversations view and the editor's save
@@ -230,8 +233,11 @@ public:
     //! the handoff prompt (task, key decisions, work done, current state,
     //! next steps), creates a new conversation whose first message is the
     //! handoff document and opens it in an editor.  The original
-    //! conversation stays untouched.  \a force bypasses the "recently handed
-    //! off" guard (manual "Continue in New Conversation" action).  \a onDone
+    //! conversation stays untouched.  When the history does not fit the
+    //! context window (overflow recovery, or the model was switched to a
+    //! smaller context), only the most recent messages that fit are
+    //! summarized.  \a force bypasses the "recently handed off" guard
+    //! (manual "Continue in New Conversation" action).  \a onDone
     //! is called with the new conversation's id when the handoff succeeded;
     //! \a onFailed is called with the reason on every path that does not
     //! create a conversation (skipped, disabled, already running, request
@@ -257,6 +263,13 @@ signals:
 
     //! The number of queued (steering) user messages of \a convId changed.
     void steeringQueueChanged(const QString &convId, int count);
+
+    //! A handoff summary request for \a convId started (\a active is true)
+    //! or finished (\a active is false): the chat UI shows a transient note
+    //! in the (untouched) original conversation while its history is being
+    //! summarized into the seed message of the new one – the summarization
+    //! of a long conversation can take a while.
+    void handoffProgress(const QString &convId, bool active);
 
     //! The "Human Editor" endpoint is ready for a reply: a pending
     //! assistant message exists for \a convId and the UI should open the
