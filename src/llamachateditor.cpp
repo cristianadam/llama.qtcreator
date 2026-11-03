@@ -41,6 +41,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QWheelEvent>
 
 #include "llamachateditor.h"
 #include "llamachatinput.h"
@@ -118,9 +119,20 @@ QString thinkingLevelDisplay(const QString &level)
 
 } // namespace
 
+QSet<ChatEditor *> ChatEditor::s_instances;
+
 ChatEditor::ChatEditor()
     : m_document(new TextDocument())
 {
+    s_instances.insert(this);
+
+    // Coalesces rapid font-zoom changes (Ctrl+mouse-wheel notches) into a
+    // single re-render; the timer is single-shot and (re)starts on every
+    // zoom step, so the conversation only re-renders once the user pauses.
+    m_zoomDebounceTimer = new QTimer(this);
+    m_zoomDebounceTimer->setSingleShot(true);
+    m_zoomDebounceTimer->setInterval(40);
+    connect(m_zoomDebounceTimer, &QTimer::timeout, this, &ChatEditor::applyFontZoom);
     setContext(Context(Constants::LLAMACPP_VIEWER_ID));
     setDuplicateSupported(false);
 
@@ -153,6 +165,18 @@ ChatEditor::ChatEditor()
     // Catch Esc from any widget in the editor (the ChatInput handles it
     // itself when one of its children has focus).
     widget->installEventFilter(this);
+    // Catch Ctrl+mouse-wheel over the conversation to zoom the font.  The
+    // QScrollArea installs its own viewport event filter (for scrolling) at
+    // construction, which runs before any filter we add later and would
+    // consume a Ctrl+wheel on a scrollable view.  So we also filter the
+    // message container: the message labels are read‑only text with no
+    // internal scroll, so a plain wheel event propagates up to the container
+    // (and is seen there) before it ever reaches the viewport.  The viewport
+    // filter covers the non‑scrollable case, where the scroll filter does not
+    // consume the event.  A Ctrl+wheel is consumed here so the view does not
+    // scroll instead.
+    m_scrollArea->viewport()->installEventFilter(this);
+    m_messageContainer->installEventFilter(this);
 
     // The "Working directory" label in the empty-conversation props widget
     // is created once, so keep it in sync when the startup project changes.
@@ -514,6 +538,7 @@ ChatEditor::ChatEditor()
 
 ChatEditor::~ChatEditor()
 {
+    s_instances.remove(this);
     clearSearch();
     delete widget();
     // The editor tool bar only detaches the status bar (setParent(nullptr))
@@ -643,7 +668,9 @@ void ChatEditor::createFollowUpWidget(const QString &convId,
     m_messageLayout->addWidget(m_followUpWidget);
 }
 
-void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNodeId)
+void ChatEditor::refreshMessages(const QVector<Message> &messages,
+                                 qint64 leafNodeId,
+                                 bool pinToBottom)
 {
     // Clean old widgets
     qDeleteAll(m_messageWidgets);
@@ -723,7 +750,10 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages, qint64 leafNo
     if (m_searchActive)
         performSearch(m_searchQuery);
 
-    scrollToBottom();
+    // Only pin the view to the bottom when asked; a font-zoom rebuild
+    // (pinToBottom == false) must keep the user where they were reading.
+    if (pinToBottom)
+        scrollToBottom();
 
     // Let Qt's layout system run its first sizing pass before reading the
     // document heights (see MarkdownLabel::notifyGeometryChanged() for why
@@ -755,6 +785,49 @@ void ChatEditor::fixMessageHeights()
 
     m_messageContainer->updateGeometry();
     m_messageLayout->activate();
+}
+
+// ---------------------------------------------------------------------------
+// Font zoom
+// ---------------------------------------------------------------------------
+
+void ChatEditor::zoomFont(int direction)
+{
+    // 10% per step, clamped to the aspect's range.  The value is persisted
+    // immediately; the (expensive) re-render is debounced per editor so a
+    // burst of Ctrl+mouse-wheel notches only re-renders once the user pauses.
+    const int newZoom = qBound(50, settings().chatFontZoom.value() + direction * 10, 300);
+    if (newZoom == settings().chatFontZoom.value())
+        return;
+    settings().chatFontZoom.setValue(newZoom);
+    settings().apply();
+    for (ChatEditor *editor : std::as_const(s_instances))
+        if (editor->widget() && editor->widget()->isVisible())
+            editor->m_zoomDebounceTimer->start();
+}
+
+void ChatEditor::resetFontZoom()
+{
+    if (settings().chatFontZoom.value() == 100)
+        return;
+    settings().chatFontZoom.setValue(100);
+    settings().apply();
+    for (ChatEditor *editor : std::as_const(s_instances))
+        if (editor->widget() && editor->widget()->isVisible())
+            editor->m_zoomDebounceTimer->start();
+}
+
+void ChatEditor::applyFontZoom()
+{
+    if (m_viewingConvId.isEmpty())
+        return;
+    // Re-render every message at the new font size.  Rebuild the view the
+    // same way refreshMessages() does, but keep the current scroll position
+    // instead of jumping to the bottom (zooming should not yank the view).
+    const int scrollValue = m_scrollArea->verticalScrollBar()->value();
+    ViewingChat chat = ChatManager::instance().getViewingChat(m_viewingConvId);
+    refreshMessages(chat.messages, chat.conv.currNode, /* pinToBottom */ false);
+    m_scrollArea->verticalScrollBar()->setValue(scrollValue);
 }
 
 void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
@@ -1031,6 +1104,22 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
             return true;
         }
     }
+
+    // Ctrl+mouse-wheel over the conversation zooms the font (in or out).
+    // See the constructor for why both the viewport and the message container
+    // are filtered: the container catches the event before the scroll area's
+    // own scroll filter can consume it on a scrollable view, the viewport
+    // covers the non‑scrollable case.
+    if ((obj == m_scrollArea->viewport() || obj == m_messageContainer)
+        && event->type() == QEvent::Wheel) {
+        if (auto *wheelEvent = static_cast<QWheelEvent *>(event);
+            (wheelEvent->modifiers() & Qt::ControlModifier) != 0
+            && wheelEvent->angleDelta().y() != 0) {
+            zoomFont(wheelEvent->angleDelta().y() > 0 ? +1 : -1);
+            return true;
+        }
+    }
+
     return Core::IEditor::eventFilter(obj, event);
 }
 

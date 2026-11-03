@@ -1,5 +1,6 @@
 #pragma once
 #include <QPointer>
+#include <QSet>
 #include <QVector>
 
 #include <coreplugin/editormanager/ieditor.h>
@@ -14,6 +15,7 @@ class QLabel;
 class QLineEdit;
 class QMenu;
 class QPushButton;
+class QTimer;
 class QToolButton;
 class QVBoxLayout;
 
@@ -40,11 +42,19 @@ public:
 
     bool isDesignModePreferred() const override;
 
-    void refreshMessages(const QVector<Message> &messages, qint64 leafNodeId);
+    void refreshMessages(const QVector<Message> &messages,
+                         qint64 leafNodeId,
+                         bool pinToBottom = true);
     // Explicitly set message row heights to bypass Qt's heightForWidth caching
     // which causes long messages to be clamped at wrong heights.
     void fixMessageHeights();
     void scrollToBottom();
+
+    // Font zoom for the conversation (see LlamaSettings::chatFontZoom).
+    // These act on every visible chat editor so all open conversations stay
+    // in sync; \a direction is +1 (zoom in) or -1 (zoom out).
+    static void zoomFont(int direction);
+    static void resetFontZoom();
     QWidget *displayServerProps();
     void createFollowUpWidget(const QString &convId,
                               qint64 leafNodeId,
@@ -101,6 +111,9 @@ private:
     // so its first size hint is already correct (call before adding the
     // widget to m_messageWidgets / the layout).
     void preWrapDocument(ChatMessage *w);
+    // Re-renders this editor's conversation at the current font zoom, keeping
+    // the scroll position (called by zoomFont()/resetFontZoom(), debounced).
+    void applyFontZoom();
     void syncThinkingLevel();
     void updateModelCombo();
     // Toggles the in‑place edit button on all assistant message widgets
@@ -144,6 +157,13 @@ private:
 
     SearchToolbar *m_searchToolbar{nullptr};
     QString m_viewingConvId;
+
+    // All live chat editors; used so a font-zoom change can re-render every
+    // visible conversation and so the zoom commands can tell whether the
+    // active editor is a chat.
+    static QSet<ChatEditor *> s_instances;
+    // Coalesces rapid Ctrl+mouse-wheel notches into a single re-render.
+    QTimer *m_zoomDebounceTimer{nullptr};
 };
 
 void setupChatEditor();

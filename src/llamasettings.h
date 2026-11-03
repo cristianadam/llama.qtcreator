@@ -71,6 +71,12 @@ public:
     // "default", "off", "low", "medium", "high" or "max" (sent to the
     // server as the OAI "reasoning_effort" field).
     Utils::StringAspect thinkingLevel{this};
+    // Size of the chat conversation font, as a percentage of the editor
+    // font size (100 = exactly the editor font size). The conversation uses
+    // the editor's font, so this only scales its size. Adjusted with
+    // Ctrl+mouse-wheel over the chat or the chat zoom commands; there is no
+    // options-page entry for it (like thinkingLevel).
+    Utils::IntegerAspect chatFontZoom{this};
 
     // Skills (see the "Skills" settings page): the directories scanned for
     // SKILL.md files, and the discovered skills the user turned off (by

@@ -26,6 +26,7 @@
 #include <texteditor/fontsettings.h>
 
 #include "llamamarkdownwidget.h"
+#include "llamasettings.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -35,14 +36,19 @@ using namespace Utils;
 namespace LlamaCpp {
 
 namespace {
-// The editor's font (family + size).  It is used as the conversation's
-// monospace (code) font, and its size drives the proportional (prose) font
-// so the two stay consistent.  Using the editor font's size – instead of a
-// fixed one – keeps the chat text the same size as the code the user is
-// writing.
+// The editor's font (family + size), scaled by the chat font zoom.  It is
+// used as the conversation's monospace (code) font, and its size drives the
+// proportional (prose) font so the two stay consistent.  Using the editor
+// font's size – instead of a fixed one – keeps the chat text the same size
+// as the code the user is writing, and lets Ctrl+mouse-wheel / the zoom
+// commands rescale it around that base.
 QFont editorFont()
 {
-    return globalFontSettings().data().font();
+    QFont font = globalFontSettings().data().font();
+    const int zoom = settings().chatFontZoom();
+    if (zoom != 100)
+        font.setPointSizeF(font.pointSizeF() * zoom / 100.0);
+    return font;
 }
 } // namespace
 

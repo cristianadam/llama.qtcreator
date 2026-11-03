@@ -239,6 +239,23 @@ void LlamaPlugin::initialize()
     menuContainer->addSeparator();
     menuContainer->addAction(preferencesCmd);
 
+    // Make the standard Zoom In / Zoom Out / Reset shortcuts (Ctrl++, Ctrl+-,
+    // Ctrl+0) also rescale the chat conversation when a chat editor is
+    // focused.  The core commands already own the key sequences; binding a
+    // context action to the chat context activates them there (the same way
+    // the text editor binds them to its own context), so there is no key
+    // conflict and the shortcuts stay consistent with the editor's.
+    const Context chatContext(Constants::LLAMACPP_VIEWER_ID);
+    ActionBuilder(this, Core::Constants::ZOOM_IN)
+        .setContext(chatContext)
+        .addOnTriggered(this, [this] { ChatEditor::zoomFont(+1); });
+    ActionBuilder(this, Core::Constants::ZOOM_OUT)
+        .setContext(chatContext)
+        .addOnTriggered(this, [this] { ChatEditor::zoomFont(-1); });
+    ActionBuilder(this, Core::Constants::ZOOM_RESET)
+        .setContext(chatContext)
+        .addOnTriggered(this, [this] { ChatEditor::resetFontZoom(); });
+
     auto updateActions = [this] {
         const bool enabled = settings().enableLlamaCpp();
         m_toggleAction.setToolTip(enabled ? Tr::tr("Disable llama.cpp.") : Tr::tr("Enable llama.cpp."));

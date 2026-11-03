@@ -483,6 +483,17 @@ LlamaSettings::LlamaSettings()
         "Thinking (reasoning) level for thinking-capable models: "
         "\"default\", \"off\", \"low\", \"medium\", \"high\" or \"max\"."));
 
+    // No options-page entry: the chat font zoom is adjusted with
+    // Ctrl+mouse-wheel over the conversation or the chat zoom commands.
+    chatFontZoom.setDisplayName(Tr::tr("Chat Font Zoom"));
+    chatFontZoom.setSettingsKey("ChatFontZoom");
+    chatFontZoom.setDefaultValue(100);
+    chatFontZoom.setRange(50, 300);
+    chatFontZoom.setToolTip(
+        Tr::tr("Size of the chat conversation font, as a percentage of the editor "
+               "font size. Adjust with Ctrl+mouse-wheel over the chat or the chat "
+               "zoom in/out commands."));
+
     utilityModel.setDisplayName(Tr::tr("Utility Model"));
     utilityModel.setSettingsKey("UtilityModel");
     utilityModel.setLabelText(Tr::tr("Utility Model:"));
