@@ -2166,6 +2166,12 @@ void MarkdownRenderer::setBaseFont(const QFont &f)
     m_baseFont = f;
     setFont(f);
     m_baseFontSize = f.pointSizeF();
+    // Keep the document's default font and the derived paragraph margin in
+    // sync (setupDocumentSettings() runs once in the constructor, before the
+    // derived class has a chance to pick a real font – see MarkdownLabel).
+    m_paragraphMargin = m_baseFontSize * 2 / 3;
+    if (m_doc)
+        m_doc->setDefaultFont(m_baseFont);
 }
 void MarkdownRenderer::setMonoFont(const QFont &f)
 {

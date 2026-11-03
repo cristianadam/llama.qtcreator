@@ -1,4 +1,5 @@
 #include <QAbstractTextDocumentLayout>
+#include <QApplication>
 #include <QBuffer>
 #include <QClipboard>
 #include <QDesktopServices>
@@ -22,6 +23,8 @@
 #include <repository.h>
 #include <utils/theme/theme.h>
 
+#include <texteditor/fontsettings.h>
+
 #include "llamamarkdownwidget.h"
 #include "llamatheme.h"
 #include "llamatr.h"
@@ -30,6 +33,18 @@ using namespace TextEditor;
 using namespace Utils;
 
 namespace LlamaCpp {
+
+namespace {
+// The editor's font (family + size).  It is used as the conversation's
+// monospace (code) font, and its size drives the proportional (prose) font
+// so the two stay consistent.  Using the editor font's size – instead of a
+// fixed one – keeps the chat text the same size as the code the user is
+// writing.
+QFont editorFont()
+{
+    return globalFontSettings().data().font();
+}
+} // namespace
 
 class HoverFilter : public QObject
 {
@@ -70,6 +85,17 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
 
     setReadOnly(true);
     setOpenLinks(false);
+
+    // Code uses the editor font.  Prose keeps the platform's default
+    // (sans‑serif) family but is sized to match the editor font, so the
+    // reading text stays proportional while still matching the size of the
+    // code the user is writing.
+    const QFont monoFont = editorFont();
+    QFont baseFont = QApplication::font();
+    baseFont.setPointSizeF(monoFont.pointSizeF());
+    setBaseFont(baseFont);
+    setMonoFont(monoFont);
+
     setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     // Align content to the top so that when the label is taller than the
     // document (due to heightAdjustment / contentsMargins) the extra space
