@@ -95,6 +95,7 @@ private:
     bool deleteConversation();
     bool renameConversation();
     bool summarizeConversation();
+    bool continueInNewConversation();
     bool saveConversationAsMarkdown();
     bool saveConversationAsHtml();
 
@@ -254,6 +255,9 @@ void ConversationsView::contextMenuAtPoint(const QPoint &point)
     QMenu contextMenu;
     contextMenu.addAction(Tr::tr("Rename..."), this, &ConversationsView::renameConversation);
     contextMenu.addAction(Tr::tr("Summarize"), this, &ConversationsView::summarizeConversation);
+    contextMenu.addAction(Tr::tr("Continue in New Conversation"),
+                          this,
+                          &ConversationsView::continueInNewConversation);
     contextMenu.addAction(Tr::tr("Delete"), this, &ConversationsView::deleteConversation);
     contextMenu.addAction(Tr::tr("Save as Markdown"),
                           this,
@@ -360,6 +364,34 @@ bool ConversationsView::summarizeConversation()
         .summarizeConversationTitle(convId, chat.messages.last().id, [convId](const QString &title) {
             auto [thinking, shortTitle] = ThinkingSectionParser::parseThinkingSection(title);
             ChatManager::instance().renameConversation(convId, shortTitle);
+        });
+
+    return true;
+}
+
+bool ConversationsView::continueInNewConversation()
+{
+    const QModelIndex selected = selectedIndex();
+    if (!selected.isValid())
+        return false;
+
+    const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
+    ViewingChat chat = ChatManager::instance().getViewingChat(convId);
+    if (chat.messages.isEmpty())
+        return false;
+
+    // Manual handoff: force bypasses the "recently handed off" guard, and
+    // ChatManager::handoffConversation() opens the new conversation itself
+    // (this view refreshes via the conversationCreated signal).
+    ChatManager::instance().handoffConversation(
+        convId,
+        chat.messages.last().id,
+        /*force=*/true,
+        {},
+        [this](const QString &reason) {
+            QMessageBox::warning(this,
+                                 Tr::tr("Continue in New Conversation"),
+                                 reason);
         });
 
     return true;

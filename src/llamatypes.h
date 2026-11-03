@@ -77,7 +77,8 @@ struct Message
 
     // Transient (not persisted): the stream reported a context-overflow
     // error, so the (empty) assistant message must not be committed – the
-    // history is compacted and the request retried instead.
+    // turn ends with a visible error suggesting to continue in a new
+    // conversation instead.
     bool overflowError = false;
 };
 

@@ -118,9 +118,11 @@ public:
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};
     Utils::StringAspect followUpPrompt{this};
-    // Prompt used to summarize the history when a conversation is compacted
-    // to fit the context window (auto‑compaction / overflow recovery).
-    Utils::StringAspect compactPrompt{this};
+    // Prompt used to write the handoff document when a conversation is
+    // continued in a new one (auto-handoff at the context threshold, or the
+    // manual "Continue in New Conversation" action).  The document seeds
+    // the first message of the continuation conversation.
+    Utils::StringAspect handoffPrompt{this};
     // Toggled by the "Follow up" button in the chat status bar: when on,
     // follow-up question suggestions are generated after each complete reply.
     Utils::BoolAspect followUpEnabled{this};
@@ -135,18 +137,19 @@ public:
     // can be sent to llama.cpp with one of the prompts.
     Utils::BoolAspect selectionPromptButton{this};
 
-    // Auto-compaction: when the conversation approaches the model's context
-    // window, its history is summarized into a marker message and only the
-    // summary (plus the messages after it) is sent to the model from then
-    // on. Also used to recover from a context-overflow error.
-    Utils::BoolAspect autoCompact{this};
+    // Auto-handoff: when the conversation approaches the model's context
+    // window, its history is summarized into a handoff document (task,
+    // current state, next steps), a new conversation seeded with it is
+    // created and opened, and the original conversation stays untouched.
+    // This lets a long task keep going on a model with a small context.
+    Utils::BoolAspect autoHandoff{this};
     // Context-window usage (in percent of the model's n_ctx) at which the
-    // auto-compaction kicks in.
-    Utils::IntegerAspect compactThreshold{this};
+    // auto-handoff kicks in.
+    Utils::IntegerAspect handoffThreshold{this};
     // Derived, non-persisted (no settings key) mirror of
-    // enableLlamaCpp && autoCompact; Utils::Aspect::setEnabler only takes a
-    // single BoolAspect, so this is what gates the auto-compact threshold.
-    Utils::BoolAspect autoCompactEnabled{this};
+    // enableLlamaCpp && autoHandoff; Utils::Aspect::setEnabler only takes a
+    // single BoolAspect, so this is what gates the handoff threshold.
+    Utils::BoolAspect autoHandoffEnabled{this};
 
     // Web search (websearch tool)
     Utils::StringAspect webSearchProvider{this};
@@ -167,7 +170,7 @@ LlamaSettings &settings();
 //! by the "Reset to Default" button there.
 QString defaultTitlePrompt();
 QString defaultFollowUpPrompt();
-QString defaultCompactPrompt();
+QString defaultHandoffPrompt();
 QStringList defaultLocatorPrompts();
 
 class LlamaProjectSettings : public Utils::AspectContainer

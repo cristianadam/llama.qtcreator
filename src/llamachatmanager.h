@@ -226,6 +226,23 @@ public:
                            qint64 leafNodeId,
                            std::function<void(const QStringList &)> onSuccess);
 
+    //! Continues the conversation in a new one: summarizes the history with
+    //! the handoff prompt (task, key decisions, work done, current state,
+    //! next steps), creates a new conversation whose first message is the
+    //! handoff document and opens it in an editor.  The original
+    //! conversation stays untouched.  \a force bypasses the "recently handed
+    //! off" guard (manual "Continue in New Conversation" action).  \a onDone
+    //! is called with the new conversation's id when the handoff succeeded;
+    //! \a onFailed is called with the reason on every path that does not
+    //! create a conversation (skipped, disabled, already running, request
+    //! failed, empty summary).  Neither is called when the request was
+    //! canceled (the conversation was deleted).
+    void handoffConversation(const QString &convId,
+                             qint64 leafNodeId,
+                             bool force,
+                             std::function<void(const QString &)> onDone = {},
+                             std::function<void(const QString &)> onFailed = {});
+
     void cancelTitleSummary(const QString &convId);
     void cancelFollowUp(const QString &convId);
 
@@ -283,34 +300,10 @@ private:
     //! last persisted message, or \a afterId when the queue is empty.
     qint64 flushSteeringQueue(const QString &convId, qint64 afterId);
 
-    //! Summarizes the conversation history so far into a compaction marker
-    //! message appended after \a leafNodeId; requests sent after the marker
-    //! carry the summary instead of the compacted history (see
-    //! normalizeMsgsForAPI()).  \a force bypasses the token‑threshold check
-    //! (emergency recovery from a context‑overflow error) and caps the
-    //! summary request to the messages after the last marker (or the most
-    //! recent half, without a marker), so it fits even when the full
-    //! history no longer does.  \a onDone is called with the marker's id
-    //! when the compaction succeeded; \a onFailed is called with the reason
-    //! on every path that does not produce a marker (skipped, disabled,
-    //! already running, request failed, empty summary), so a caller waiting
-    //! for the retry can end the turn visibly.  Neither is called when the
-    //! request was canceled (the conversation was deleted).
-    void compactConversation(const QString &convId,
-                             qint64 leafNodeId,
-                             bool force,
-                             std::function<void(qint64)> onDone = {},
-                             std::function<void(const QString &)> onFailed = {});
-
     //! Ends a turn that could not produce a reply: commits \a pm (without
     //! tool calls) with a visible error note, and reports the failure to
     //! the waiting "task" tool when \a pm belongs to a task conversation.
     void failTurn(Message pm, const QString &error);
-
-    //! Appends a deferred compaction marker (see m_pendingCompactMarkers)
-    //! after the conversation's current leaf.  Only valid at a quiet point
-    //! (no in‑flight message), so the marker stays at the end of the branch.
-    void drainPendingCompactMarker(const QString &convId);
 
     void sendChatRequest(const QString &convId,
                          const std::function<void(QJsonObject &payload)> &payloadBuilder,
@@ -386,21 +379,18 @@ private:
     };
     QHash<QString, QList<SteeringMessage>> m_steeringQueue;
 
-    //! Conversations whose history is currently being summarized
-    //! (auto‑compaction), and the in‑flight summary requests.
-    QSet<QString> m_compacting;
-    QHash<QString, QNetworkReply *> m_compactReplies;
+    //! Conversations whose history is currently being summarized into a
+    //! handoff document ("continue in a new conversation"), and the
+    //! in‑flight summary requests.
+    QSet<QString> m_handingOff;
+    QHash<QString, QNetworkReply *> m_handoffReplies;
 
-    //! Compaction markers whose summary arrived while the conversation was
-    //! busy again (a new message landed before the summary request
-    //! finished).  Appended at the next quiet point, so the marker always
-    //! sits at the end of the branch and never becomes an orphan sibling.
-    struct PendingCompactMarker
-    {
-        QString summary;
-        std::function<void(qint64)> onDone;
-    };
-    QHash<QString, PendingCompactMarker> m_pendingCompactMarkers;
+    //! The leaf node at the time of the last handoff per conversation.  The
+    //! original conversation stays above the threshold after a handoff (it
+    //! is deliberately left untouched), so without this a later reply in it
+    //! would spawn yet another continuation: the threshold trigger only
+    //! hands off again once the branch has grown since the last handoff.
+    QHash<QString, qint64> m_lastHandoffLeaf;
 
     // Task‑conversation (sub‑agent) state
     struct TaskConversationConfig

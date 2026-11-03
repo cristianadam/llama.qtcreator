@@ -1306,10 +1306,10 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     });
 }
 
-void ChatManager::compactConversation(const QString &convId,
+void ChatManager::handoffConversation(const QString &convId,
                                       qint64 leafNodeId,
                                       bool force,
-                                      std::function<void(qint64)> onDone,
+                                      std::function<void(const QString &)> onDone,
                                       std::function<void(const QString &)> onFailed)
 {
     const auto fail = [onFailed](const QString &reason) {
@@ -1317,65 +1317,60 @@ void ChatManager::compactConversation(const QString &convId,
             onFailed(reason);
     };
 
-    if (!force && !settings().autoCompact.value())
-        return fail(Tr::tr("Automatic compaction is disabled."));
-    if (m_compacting.contains(convId))
-        return fail(Tr::tr("The conversation is already being compacted."));
+    if (!force && !settings().autoHandoff.value())
+        return fail(Tr::tr("Automatic handoff is disabled."));
+    if (m_handingOff.contains(convId))
+        return fail(Tr::tr("A new conversation is already being created for this one."));
 
     auto msgs = m_storage->getMessages(convId);
     if (msgs.isEmpty())
-        return fail(Tr::tr("The conversation has no messages to compact."));
+        return fail(Tr::tr("The conversation has no messages to hand off."));
     auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
-    // Nothing new to fold in since the last compaction (or the history is
-    // too short to be worth summarizing): another summary would not shrink
-    // the context, it would only burn tokens – and in the overflow-retry
-    // path this is what stops the compact/retry cycle from looping.
-    int markerIndex = -1;
-    for (int i = leafMsgs.size() - 1; i >= 0; --i) {
-        for (const QVariantMap &e : leafMsgs.at(i).extra) {
-            if (e.contains(QStringLiteral("compaction"))) {
-                markerIndex = i;
-                break;
+    // The original conversation is left untouched, so it stays above the
+    // threshold after a handoff: without this guard every later reply in it
+    // would spawn yet another continuation.  Only hand off again once the
+    // branch has grown since the last handoff (a handoff from a different
+    // branch is always allowed, the old leaf is not on the current path).
+    if (!force) {
+        const auto it = m_lastHandoffLeaf.constFind(convId);
+        if (it != m_lastHandoffLeaf.constEnd()) {
+            int handoffIndex = -1;
+            for (int i = 0; i < leafMsgs.size(); ++i) {
+                if (leafMsgs.at(i).id == it.value()) {
+                    handoffIndex = i;
+                    break;
+                }
+            }
+            if (handoffIndex >= 0 && leafMsgs.size() - handoffIndex < 6) {
+                qCInfo(llamaChatNetwork)
+                    << "Skipping handoff of" << convId << ": only"
+                    << leafMsgs.size() - handoffIndex
+                    << "messages since the last handoff";
+                return fail(Tr::tr("The conversation was handed off recently; "
+                                   "send a few more messages first."));
             }
         }
-        if (markerIndex >= 0)
-            break;
-    }
-    if (markerIndex >= 0 && leafMsgs.size() - markerIndex < 6) {
-        qCInfo(llamaChatNetwork)
-            << "Skipping compaction of" << convId << ": only"
-            << leafMsgs.size() - markerIndex
-            << "messages since the last summary";
-        return fail(Tr::tr("The conversation was compacted recently and cannot be "
-                           "compacted further."));
     }
 
-    // In the overflow‑recovery path the full history does not fit the
-    // context window, so the summary request must not carry it all: keep
-    // only the messages from the last marker on (its summary covers the
-    // rest – normalizeMsgsForAPI() re‑emits it) or, without a marker, only
-    // the most recent half of the messages.
-    if (force) {
-        const int start = (markerIndex >= 0) ? markerIndex : leafMsgs.size() / 2;
-        leafMsgs = leafMsgs.mid(start);
-    }
+    m_handingOff.insert(convId);
 
-    m_compacting.insert(convId);
-
-    // The summary request sees the full (not yet compacted) history plus
-    // the compaction prompt; a capped token budget and thinking off keep
-    // the housekeeping call short, like the title and follow-up requests.
+    // The summary request sees the full history plus the handoff prompt; a
+    // capped token budget and thinking off keep the housekeeping call
+    // short, like the title and follow-up requests.
     QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
     QJsonArray parts;
     QJsonObject txt;
     txt["type"] = "text";
-    txt["text"] = settings().compactPrompt.value();
+    // User-editable prompt ("Prompts" settings page); fall back to the
+    // built-in default if it was cleared.
+    const QString prompt = settings().handoffPrompt.value().trimmed();
+    txt["text"] = prompt.isEmpty() ? defaultHandoffPrompt() : prompt;
     parts.append(txt);
-    QJsonObject prompt;
-    prompt["role"] = "user";
-    prompt["content"] = parts;
-    msgArray.append(prompt);
+    QJsonObject promptMsg;
+    promptMsg["role"] = "user";
+    promptMsg["content"] = parts;
+    msgArray.append(promptMsg);
 
     QJsonObject payload;
     payload["messages"] = msgArray;
@@ -1391,11 +1386,11 @@ void ChatManager::compactConversation(const QString &convId,
         req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
 
     QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
-    m_compactReplies.insert(convId, reply);
+    m_handoffReplies.insert(convId, reply);
 
     QObject::connect(reply, &QNetworkReply::finished, [reply, this, convId, leafNodeId, onDone, fail]() {
-        m_compacting.remove(convId);
-        m_compactReplies.remove(convId);
+        m_handingOff.remove(convId);
+        m_handoffReplies.remove(convId);
         reply->deleteLater();
 
         // Canceled: the conversation is being deleted, nobody waits for it.
@@ -1403,108 +1398,74 @@ void ChatManager::compactConversation(const QString &convId,
             return;
 
         if (reply->error() != QNetworkReply::NoError) {
-            qCWarning(llamaChatNetwork) << "Compaction request failed:" << reply->errorString();
+            qCWarning(llamaChatNetwork) << "Handoff request failed:" << reply->errorString();
             QJsonObject errObj;
             QString reason = parseJsonObject(reply->readAll(), &errObj)
                     ? errorMessageFromJson(errObj) : QString();
             if (reason.isEmpty())
                 reason = reply->errorString();
-            return fail(Tr::tr("The compaction request failed: %1").arg(reason));
+            return fail(Tr::tr("The handoff request failed: %1").arg(reason));
         }
 
         QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
         if (!doc.isObject())
-            return fail(Tr::tr("The compaction request returned a malformed reply."));
+            return fail(Tr::tr("The handoff request returned a malformed reply."));
         const QJsonArray choices = doc.object().value("choices").toArray();
         if (choices.isEmpty())
-            return fail(Tr::tr("The compaction request returned no summary."));
+            return fail(Tr::tr("The handoff request returned no document."));
 
-        QString summary = choices.first().toObject().value("message").toObject()
+        QString handoff = choices.first().toObject().value("message").toObject()
                               .value("content").toString().trimmed();
-        // Small models sometimes wrap the summary in a markdown code fence.
-        if (summary.startsWith(QLatin1String("```"))) {
-            const int nl = summary.indexOf(QLatin1Char('\n'));
+        // Small models sometimes wrap the document in a markdown code fence.
+        if (handoff.startsWith(QLatin1String("```"))) {
+            const int nl = handoff.indexOf(QLatin1Char('\n'));
             if (nl > 0)
-                summary = summary.mid(nl + 1);
-            if (summary.endsWith(QLatin1String("```")))
-                summary.chop(3);
-            summary = summary.trimmed();
+                handoff = handoff.mid(nl + 1);
+            if (handoff.endsWith(QLatin1String("```")))
+                handoff.chop(3);
+            handoff = handoff.trimmed();
         }
-        if (summary.isEmpty())
-            return fail(Tr::tr("The compaction request returned an empty summary."));
+        if (handoff.isEmpty())
+            return fail(Tr::tr("The handoff request returned an empty document."));
 
-        // A new message may have landed while the summary was being
-        // generated: appending the marker after \a leafNodeId now would
-        // make it an orphan sibling of the newer branch.  Defer it to the
-        // next quiet point, where it is appended after the current leaf.
-        if (isGenerating(convId)) {
-            if (m_pendingCompactMarkers.contains(convId))
-                qCWarning(llamaChatNetwork)
-                    << "Deferring a second compaction summary for" << convId
-                    << "– the first pending marker (and its callback) is "
-                       "replaced by the newer one.";
-            m_pendingCompactMarkers.insert(convId, PendingCompactMarker{summary, onDone});
+        // The original conversation stays untouched; if it was deleted
+        // meanwhile there is nothing to continue.
+        const Conversation original = m_storage->getOneConversation(convId);
+        if (original.currNode < 0) {
+            qCWarning(llamaChatNetwork)
+                << "Handoff of" << convId << "discarded: the conversation was deleted";
             return;
         }
 
-        // The marker joins the branch chain after \a leafNodeId: the next
-        // user message (and the overflow retry) is appended after it, so
-        // every later request carries the summary instead of the
-        // compacted history.  It renders as a small assistant note in the
-        // chat; the full history stays visible in the UI.
-        Message marker;
-        marker.convId = convId;
-        marker.type = "text";
-        marker.timestamp = QDateTime::currentMSecsSinceEpoch();
-        marker.role = "assistant";
-        marker.content = Tr::tr(
-            "Conversation compacted - earlier messages were "
-            "summarized to fit the context window.");
-        QVariantMap entry;
-        entry[QStringLiteral("compaction")] = summary;
-        marker.extra << entry;
+        // The handoff document becomes the first user message of the
+        // continuation: sendMessage() generates the reply right away, so
+        // the new conversation picks up the work at the next steps.
+        QString newName = sanitizeConversationName(
+            Tr::tr("Continuation of %1").arg(original.name));
+        Conversation fresh = createConversation(newName);
+        const QString seed = Tr::tr(
+            "This conversation continues the work of a previous conversation "
+            "whose context window ran out. The handoff document below "
+            "describes the task, the current state and the next steps. "
+            "Continue from the next steps.\n\n") + handoff;
+        sendMessage(fresh.id, fresh.currNode, seed, {}, [](qint64) {});
 
-        m_storage->appendMsg(marker, leafNodeId);
+        m_lastHandoffLeaf.insert(convId, leafNodeId);
+
+        Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
+                                                    &newName,
+                                                    fresh.id.toUtf8(),
+                                                    fresh.id);
         if (onDone)
-            onDone(marker.id);
+            onDone(fresh.id);
     });
-}
-
-void ChatManager::drainPendingCompactMarker(const QString &convId)
-{
-    auto it = m_pendingCompactMarkers.find(convId);
-    if (it == m_pendingCompactMarkers.end())
-        return;
-
-    const Conversation conv = m_storage->getOneConversation(convId);
-    if (conv.currNode < 0)
-        return; // conversation gone; drop the marker
-
-    const PendingCompactMarker pending = it.value();
-    m_pendingCompactMarkers.erase(it);
-
-    Message marker;
-    marker.convId = convId;
-    marker.type = "text";
-    marker.timestamp = QDateTime::currentMSecsSinceEpoch();
-    marker.role = "assistant";
-    marker.content = Tr::tr(
-        "Conversation compacted - earlier messages were "
-        "summarized to fit the context window.");
-    QVariantMap entry;
-    entry[QStringLiteral("compaction")] = pending.summary;
-    marker.extra << entry;
-
-    m_storage->appendMsg(marker, conv.currNode);
-    if (pending.onDone)
-        pending.onDone(marker.id);
 }
 
 void ChatManager::failTurn(Message pm, const QString &error)
 {
     const QString convId = pm.convId;
     // A new turn may have started meanwhile (e.g. the user sent a message
-    // while the history was being compacted); committing the error now
+    // while the history was being summarized); committing the error now
     // would graft it onto the old branch.
     if (isGenerating(convId)) {
         qCWarning(llamaChatNetwork) << "Turn of" << convId << "failed:" << error;
@@ -1808,41 +1769,10 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(sys);
     }
 
-    // Auto‑compaction: the last compaction marker on the path replaces
-    // everything before it with its summary, emitted as a short
-    // user/assistant pair so the role alternation stays natural.  (The
-    // marker only ever sits at a quiet point – no in‑flight tool calls –
-    // so no tool call before it has a result after it.)
-    int compactStart = 0;
-    QString compactSummary;
-    for (int i = msgs.size() - 1; i >= 0; --i) {
-        for (const QVariantMap &e : msgs.at(i).extra) {
-            if (e.contains(QStringLiteral("compaction"))) {
-                compactStart = i + 1;
-                compactSummary = e.value(QStringLiteral("compaction")).toString();
-                break;
-            }
-        }
-        if (!compactSummary.isEmpty())
-            break;
-    }
-    if (!compactSummary.isEmpty()) {
-        QJsonObject su;
-        su["role"] = QStringLiteral("user");
-        su["content"] = QStringLiteral("Here is a summary of the conversation "
-                                       "so far:\n\n%1")
-                                 .arg(compactSummary);
-        res.append(su);
-        QJsonObject sa;
-        sa["role"] = QStringLiteral("assistant");
-        sa["content"] = QStringLiteral("Understood, I will continue from this summary.");
-        res.append(sa);
-    }
-
     // Tool results re‑emitted in call order after their assistant message
     // (must not be emitted again at their natural position in \a msgs).
     QSet<qint64> emittedToolMsgIds;
-    for (int i = compactStart; i < msgs.size(); ++i) {
+    for (int i = 0; i < msgs.size(); ++i) {
         const Message &msg = msgs.at(i);
         if (msg.role == "tool" && emittedToolMsgIds.contains(msg.id))
             continue;
@@ -2109,8 +2039,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                 if (m_streamStatus.contains(convId) && m_streamStatus[convId].error.isEmpty())
                     m_streamStatus[convId].error = errMsg.isEmpty() ? errType : errMsg;
                 // Context overflow (the history no longer fits): flag the
-                // pending message so the finished handler can compact the
-                // history and retry, instead of committing an empty reply.
+                // pending message so the finished handler ends the turn
+                // with a visible error instead of committing an empty
+                // reply.
                 if ((isContextOverflowError(errMsg) || isContextOverflowError(errType))
                         && m_pendingMessages.contains(convId))
                     m_pendingMessages[convId].overflowError = true;
@@ -2269,17 +2200,15 @@ void ChatManager::sendChatRequest(const QString &convId,
 
         // Context overflow: the server refused the request because the
         // history no longer fits.  Drop the assistant message (including
-        // any partial content streamed before the error), compact the
-        // history and retry once.  (compactConversation() does not call the
-        // retry callback when a summary was just created and the history
-        // still overflows, so this cannot loop.)  Every path that does not
-        // retry ends the turn with a visible error.
+        // any partial content streamed before the error) and end the turn
+        // with a visible error pointing at the handoff: the conversation
+        // can be continued in a new one (auto-handoff fires at the
+        // threshold, or via the "Continue in New Conversation" action).
         if (pm.overflowError && !stopped) {
             if (!pm.content.trimmed().isEmpty())
                 qCWarning(llamaChatNetwork)
                     << "Context overflow in" << convId << "– dropping the partial "
-                    << "reply (" << pm.content.size() << " chars) and compacting "
-                    << "the history.";
+                    << "reply (" << pm.content.size() << " chars).";
             pm.content.clear();
             pm.haveContent = false;
 
@@ -2287,27 +2216,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                 "The conversation no longer fits the model's context window.");
             if (!status.error.isEmpty())
                 overflowText += QStringLiteral(" (%1)").arg(status.error);
-            const auto fail = [this, pm, overflowText](const QString &reason) {
-                qCWarning(llamaChatNetwork)
-                    << "Context overflow in" << pm.convId << "– the request was not "
-                    << "retried:" << reason;
-                failTurn(pm, overflowText + QLatin1Char(' ') + reason);
-            };
-
-            if (!settings().autoCompact.value())
-                fail(Tr::tr("Automatic compaction is disabled; shorten or compact the "
-                            "conversation and try again."));
-            else if (m_compacting.contains(convId))
-                fail(Tr::tr("The conversation is already being compacted; send the "
-                            "message again once the compaction has finished."));
-            else
-                compactConversation(convId,
-                                    pm.parent,
-                                    /*force=*/true,
-                                    [this, convId, onChunk](qint64 leaf) {
-                                        generateMessage(convId, leaf, onChunk);
-                                    },
-                                    fail);
+            overflowText += QLatin1Char(' ')
+                    + Tr::tr("Continue in a new conversation to keep working.");
+            failTurn(pm, overflowText);
             return;
         }
 
@@ -2454,10 +2365,6 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
 
             if (!haveToolExecution) {
-                // A compaction summary that arrived while the conversation
-                // was busy again is appended now, at this quiet point.
-                drainPendingCompactMarker(convId);
-
                 // Mid‑run steering: messages queued while this reply was
                 // generated keep the loop alive (pi's follow‑up messages /
                 // opencode's queued inputs) – unless the user stopped the
@@ -2486,20 +2393,22 @@ void ChatManager::sendChatRequest(const QString &convId,
                                       });
                 }
 
-                // Auto‑compaction at a quiet point (no in‑flight tool
-                // calls, the reply would end): summarize the history before
-                // it fills the model's context window.  Skipped when the
-                // loop continues – the next turn's (larger) prompt is
-                // checked the same way once it ends.
-                if (!continueLoop && settings().autoCompact.value()) {
+                // Auto‑handoff at a quiet point (no in‑flight tool calls,
+                // the reply would end): hand the conversation over to a new
+                // one before it fills the model's context window.  Skipped
+                // when the loop continues – the next turn's (larger) prompt
+                // is checked the same way once it ends.  Sub‑agents are
+                // skipped: a visible continuation conversation would not
+                // make sense for a background task.
+                if (!continueLoop && !isTaskConversation && settings().autoHandoff.value()) {
                     const auto &t = pm.timings;
                     int usedTokens = int(t.cache_n + t.prompt_n + t.predicted_n);
                     if (usedTokens <= 0)
                         usedTokens = pm.promptProgress.total;
                     const int maxCtx = serverProps().n_ctx;
-                    const int threshold = settings().compactThreshold();
+                    const int threshold = settings().handoffThreshold();
                     if (maxCtx > 0 && qint64(usedTokens) * 100 > qint64(maxCtx) * threshold)
-                        compactConversation(convId, pm.id, /*force=*/false);
+                        handoffConversation(convId, pm.id, /*force=*/false);
                 }
             }
         }
@@ -2739,12 +2648,12 @@ void ChatManager::deleteConversation(const QString &convId)
     if (m_runningTools.value(convId) == 0)
         m_stopRequested.remove(convId);
     m_steeringQueue.remove(convId);
-    m_compacting.remove(convId);
-    m_pendingCompactMarkers.remove(convId);
-    if (auto it = m_compactReplies.find(convId); it != m_compactReplies.end()) {
+    m_handingOff.remove(convId);
+    m_lastHandoffLeaf.remove(convId);
+    if (auto it = m_handoffReplies.find(convId); it != m_handoffReplies.end()) {
         it.value()->abort();
         it.value()->deleteLater();
-        m_compactReplies.erase(it);
+        m_handoffReplies.erase(it);
     }
 
     m_storage->deleteConversation(convId);

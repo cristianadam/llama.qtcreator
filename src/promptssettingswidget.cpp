@@ -125,9 +125,9 @@ void PromptsSettingsWidget::rebuild()
                                           s.followUpPrompt.value(),
                                           defaultFollowUpPrompt(),
                                           false));
-    chatGroup->appendChild(new PromptItem(Tr::tr("Compaction"),
-                                          s.compactPrompt.value(),
-                                          defaultCompactPrompt(),
+    chatGroup->appendChild(new PromptItem(Tr::tr("Handoff"),
+                                          s.handoffPrompt.value(),
+                                          defaultHandoffPrompt(),
                                           false));
     m_model->rootItem()->appendChild(chatGroup);
 
@@ -247,14 +247,14 @@ void PromptsSettingsWidget::writeSettingsFromModel()
                 continue;
             if (group->groupId() == chatGroupId()) {
                 // The chat prompts are fixed: the first child is the title
-                // prompt, the second the follow-up prompt, the third the
-                // compaction prompt.
+                // prompt, the second the follow-up prompt and the third the
+                // handoff prompt.
                 if (c == 0)
                     s.titlePrompt.setValue(prompt->text());
                 else if (c == 1)
                     s.followUpPrompt.setValue(prompt->text());
                 else
-                    s.compactPrompt.setValue(prompt->text());
+                    s.handoffPrompt.setValue(prompt->text());
             } else {
                 locator << prompt->text();
             }
