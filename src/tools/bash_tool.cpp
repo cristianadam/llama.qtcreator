@@ -94,18 +94,17 @@ QString findGitBash()
 
 /*! Resolves a bash executable on all platforms so that commands behave
     identically for the model: /bin/bash on Unix, Git Bash on Windows.
-    Never uses $SHELL or cmd.exe. With \a sandboxed on Windows, a bash on
-    PATH that is not part of a recognized Git for Windows / MSYS2
-    installation (e.g. WSL's System32\bash.exe) is skipped in favor of Git
-    for Windows' own bash, as the sandbox grants the shell's installation
-    root. */
-BashSpec bashSpec(bool sandboxed)
+    Never uses $SHELL or cmd.exe. On Windows a bash on PATH that is not
+    part of a recognized Git for Windows / MSYS2 installation (e.g. WSL's
+    System32\bash.exe, which mishandles Windows paths) is always skipped
+    in favor of Git for Windows' own bash. */
+BashSpec bashSpec()
 {
 #if defined(Q_OS_WIN)
     const FilePath onPath =
         FilePath::fromUserInput(QStandardPaths::findExecutable("bash.exe"));
     if (onPath.exists()
-        && (!sandboxed || windowsShellInstallRoot(onPath.toUserOutput()).error.isEmpty()))
+        && windowsShellInstallRoot(onPath.toUserOutput()).error.isEmpty())
         return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
     const QString gitBash = findGitBash();
     if (!gitBash.isEmpty())
@@ -121,7 +120,6 @@ BashSpec bashSpec(bool sandboxed)
         FilePath::fromUserInput(QStandardPaths::findExecutable("bash"));
     if (onPath.exists())
         return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
-    Q_UNUSED(sandboxed)
     return { QStringLiteral("/bin/sh"), QStringLiteral("-c"), {} };
 #endif
 }
@@ -712,7 +710,7 @@ void BashTool::runCommand(const QJsonObject &arguments,
     int timeoutMs = arguments.value("timeout").toInt(kDefaultTimeoutMs);
     timeoutMs = qBound(1, timeoutMs, kMaxTimeoutMs);
 
-    const BashSpec spec = bashSpec(sandboxed);
+    const BashSpec spec = bashSpec();
     if (!spec.error.isEmpty()) {
         done(Tr::tr("Error: %1").arg(spec.error), false);
         return;
