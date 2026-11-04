@@ -429,6 +429,11 @@ QProcessEnvironment withoutSecretVariables(const QProcessEnvironment &env)
 
 FilePath toolsWorkingDirectory()
 {
+    // An explicit override (set from the chat welcome screen or the settings
+    // page) wins over the project-derived directory.
+    const QString override = settings().workingDirectory.value();
+    if (!override.isEmpty())
+        return FilePath::fromUserInput(override);
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *project = ProjectManager::startupProject())
         cwd = project->projectDirectory();

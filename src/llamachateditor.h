@@ -121,6 +121,27 @@ private:
     static void showZoomIndicator(QWidget *widget, int zoom);
     void syncThinkingLevel();
     void updateModelCombo();
+    // Rebuilds the "You are connected to <model> in the <directory>" line of
+    // the welcome screen (the model name and the directory are links; see
+    // displayServerProps()).  Called from displayServerProps() and whenever
+    // the startup project or the working-directory override changes.
+    void updateConnectionLabel();
+    // Removes the welcome screen (m_propsWidget) if it is showing and clears
+    // the member references (the label is a child of the widget, and
+    // deleteLater() is asynchronous).  Restores the message layout's top
+    // alignment.  Call before adding a message.
+    void removePropsWidget();
+    // Creates the welcome screen and shows it centred in the message area
+    // (the layout is aligned to the centre while it is the only item).
+    void showWelcomeScreen();
+    // The display name of the active model (router id, the loaded model's
+    // file name in single-model mode, or "Human Editor").
+    QString selectedModelDisplayName() const;
+    // Shows the model details dialog (the llama.cpp web‑UI model info: path,
+    // context, modalities, build).
+    void showModelDetails();
+    // Opens a folder picker to change the working directory the tools run in.
+    void changeWorkingDirectory();
     // Toggles the in‑place edit button on all assistant message widgets
     // after the "Human Editor" endpoint was (de)selected.
     void applyHumanEditorMode();
@@ -139,7 +160,7 @@ private:
     QVector<ChatMessage *> m_messageWidgets; // keep for cleanup
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
-    QLabel *m_workingDirLabel{nullptr}; // "Working directory" label in m_propsWidget
+    QLabel *m_connectionLabel{nullptr}; // "You are connected to …" line in m_propsWidget
     QWidget *m_followUpWidget{nullptr};
     QPointer<MarkdownLabel> m_handoffLabel; // transient "creating continuation" note
     QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor

@@ -27,7 +27,11 @@
 #include <QAction>
 #include <limits>
 #include <QDir>
+#include <QDialog>
+#include <QFileDialog>
 #include <QFile>
+#include <QFormLayout>
+#include <QFrame>
 #include <QHash>
 #include <QActionGroup>
 #include <QHBoxLayout>
@@ -105,6 +109,19 @@ QString humanEditorFilePath(const QString &uniqueId)
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         file.close();
     return path;
+}
+
+// Escapes the HTML metacharacters so a value (a model id or a directory that
+// may contain '&', '<' or '>') can be embedded in the welcome screen's
+// rich‑text label without being interpreted as markup.
+QString escapeHtml(const QString &text)
+{
+    QString result = text;
+    result.replace(QLatin1String("&"), QLatin1String("&amp;"));
+    result.replace(QLatin1String("<"), QLatin1String("&lt;"));
+    result.replace(QLatin1String(">"), QLatin1String("&gt;"));
+    result.replace(QLatin1Char('"'), QLatin1String("&quot;"));
+    return result;
 }
 
 // The thinking levels and their display names, shared by the status bar
@@ -438,15 +455,12 @@ ChatEditor::ChatEditor()
     m_scrollArea->viewport()->installEventFilter(this);
     m_messageContainer->installEventFilter(this);
 
-    // The "Working directory" label in the empty-conversation props widget
-    // is created once, so keep it in sync when the startup project changes.
+    // The "You are connected to ..." line in the empty‑conversation welcome
+    // screen is created once, so keep it in sync when the startup project
+    // changes (the welcome widget itself is created once and not rebuilt).
     connect(ProjectExplorer::ProjectManager::instance(),
             &ProjectExplorer::ProjectManager::startupProjectChanged, this,
-            [this](ProjectExplorer::Project *) {
-                if (m_workingDirLabel)
-                    m_workingDirLabel->setText(Tr::tr("Working directory: %1")
-                                                   .arg(toolsWorkingDirectory().toUserOutput()));
-            });
+            [this](ProjectExplorer::Project *) { updateConnectionLabel(); });
 
     m_statusBar = new Utils::StyledBar;
     auto statusLayout = new QHBoxLayout(m_statusBar);
@@ -801,46 +815,173 @@ bool ChatEditor::isDesignModePreferred() const
 
 QWidget *ChatEditor::displayServerProps()
 {
-    QWidget *w = new QWidget(widget());
-    w->setObjectName("ServerProps");
-    auto lay = new QVBoxLayout(w);
-    lay->setContentsMargins(8, 8, 8, 8);
-    lay->setAlignment(Qt::AlignTop);
+    // A single rich‑text label, laid out like Qt Creator's "Open a document"
+    // placeholder (see Locator::updateEditorManagerPlaceholderText()): a
+    // centred heading, a separator and a left‑aligned list.  The model name
+    // and the directory in the list are links; the model name opens the model
+    // details dialog and the directory a folder picker.  The label is centred
+    // in the message area by the layout (see showWelcomeScreen()), the way
+    // Qt Creator centres its placeholder when no editor is open.
+    m_connectionLabel = new QLabel(widget());
+    m_connectionLabel->setObjectName("ServerPropsStatus");
+    m_connectionLabel->setTextFormat(Qt::RichText);
+    m_connectionLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    m_connectionLabel->setOpenExternalLinks(false);
+    connect(m_connectionLabel,
+            &QLabel::linkActivated,
+            this,
+            [this](const QString &link) {
+                if (link == QLatin1String("model"))
+                    showModelDetails();
+                else if (link == QLatin1String("dir"))
+                    changeWorkingDirectory();
+            });
 
+    updateConnectionLabel();
+
+    return m_connectionLabel;
+}
+
+QString ChatEditor::selectedModelDisplayName() const
+{
+    const ChatManager &cm = ChatManager::instance();
+    if (cm.isHumanEditor())
+        return Tr::tr("Human Editor");
+    const QString selected = cm.selectedModel();
+    if (!selected.isEmpty())
+        return selected;
+    // Single‑model server that does not expose /models: fall back to the
+    // loaded model's file name from the server props.
+    const QString name = FilePath::fromUserInput(cm.serverProps().model_path).fileName();
+    return name.isEmpty() ? QStringLiteral("model") : name;
+}
+
+void ChatEditor::updateConnectionLabel()
+{
+    if (!m_connectionLabel)
+        return;
+    const QString model = selectedModelDisplayName();
+    const QString dir = toolsWorkingDirectory().toUserOutput();
+    // The model name and the directory are links (the model name opens the
+    // model details dialog, the directory a folder picker).  The link markup
+    // is not translatable, so it is built here and substituted into the
+    // translatable sentence through its placeholders – a translation can put
+    // the placeholders where they read best.  The values are escaped so a
+    // file name with HTML metacharacters is not interpreted.
+    const QString modelLink =
+        QStringLiteral("<a href=\"model\" style=\"color:Token_Accent_Default\">%1</a>")
+            .arg(escapeHtml(model));
+    const QString dirLink =
+        QStringLiteral("<a href=\"dir\" style=\"color:Token_Accent_Default\">%1</a>")
+            .arg(escapeHtml(dir));
+    const QString connectionLine =
+        Tr::tr("You are connected to %1 using %2 as current directory").arg(modelLink, dirLink);
+    // Laid out like Qt Creator's "Open a document" placeholder (see
+    // Locator::updateEditorManagerPlaceholderText()): a centred heading, a
+    // separator and a left‑aligned list.  Each piece of visible text is its
+    // own translatable string (no markup in them); the theme tokens in the
+    // structural HTML are resolved afterwards.
+    m_connectionLabel->setText(replaceThemeColorNamesWithRGBNames(
+        Tr::tr("<html><body style=\"color:Token_Text_Muted; font-size:14px\">"
+               "<div align='center'>"
+               "<div style=\"font-size:20px; font-weight:bold; "
+               "color:Token_Text_Default\">%1</div>"
+               "<table><tr><td>"
+               "<hr/>"
+               "<div style=\"margin-top: 5px\">%2</div>"
+               "<div style=\"margin-top: 5px\">%3</div>"
+               "</td></tr></table>"
+               "</div>"
+               "</body></html>")
+            .arg(Tr::tr("Hello there"),
+                 connectionLine,
+                 Tr::tr("Type a message or upload files to get started"))));
+    m_connectionLabel->setToolTip(Tr::tr(
+        "Click the model name to see its details, or the directory to change "
+        "where the tools run."));
+}
+
+void ChatEditor::removePropsWidget()
+{
+    if (m_propsWidget) {
+        m_propsWidget->deleteLater();
+        m_propsWidget = nullptr;
+        // The connection label is a child of the welcome widget; drop the
+        // reference now so a (deferred) deleteLater() cannot leave it
+        // dangling while a project/model change tries to refresh it.
+        m_connectionLabel = nullptr;
+        // The welcome screen centred the message area; messages are top
+        // aligned, so restore the layout's default alignment.
+        m_messageLayout->setAlignment(Qt::AlignTop);
+    }
+}
+
+void ChatEditor::showWelcomeScreen()
+{
+    removePropsWidget();
+    if (m_propsWidget)
+        return;
+    m_propsWidget = displayServerProps();
+    // The welcome screen is the only item in the message area, so centre it
+    // (the messages themselves are top aligned, see removePropsWidget()).
+    m_messageLayout->setAlignment(Qt::AlignCenter);
+    m_messageLayout->insertWidget(0, m_propsWidget);
+}
+
+void ChatEditor::showModelDetails()
+{
     const auto &sp = ChatManager::instance().serverProps();
 
-    auto addLabel = [&](const QString &label) -> QLabel * {
-        QLabel *l = new QLabel(label, w);
-        l->setObjectName("ServerPropsLabel");
-        l->setWordWrap(true);
-        l->setTextInteractionFlags(Qt::TextSelectableByMouse);
-        lay->addWidget(l);
-        return l;
+    QDialog dialog(widget());
+    dialog.setWindowTitle(Tr::tr("Model Details"));
+    dialog.setMinimumWidth(420);
+
+    auto *layout = new QVBoxLayout(&dialog);
+    auto *form = new QFormLayout;
+    form->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
+
+    auto addRow = [&](const QString &label, const QString &value) {
+        auto *valueLabel = new QLabel(value.isEmpty() ? QStringLiteral("–") : value, &dialog);
+        valueLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        valueLabel->setWordWrap(true);
+        form->addRow(label, valueLabel);
     };
 
-    addLabel(Tr::tr("Model Path: %1").arg(FilePath::fromUserInput(sp.model_path).fileName()));
-    addLabel(Tr::tr("Context: %L1").arg(sp.n_ctx));
-    addLabel(Tr::tr("Vision: %1").arg(sp.modalities.vision ? Tr::tr("yes") : Tr::tr("no")));
+    addRow(Tr::tr("Model:"), selectedModelDisplayName());
+    addRow(Tr::tr("Model path:"), FilePath::fromUserInput(sp.model_path).toUserOutput());
+    addRow(Tr::tr("Context:"), sp.n_ctx > 0 ? QString(" %L1").arg(sp.n_ctx) : QString());
+    addRow(Tr::tr("Vision:"), sp.modalities.vision ? Tr::tr("yes") : Tr::tr("no"));
+    addRow(Tr::tr("Audio:"), sp.modalities.audio ? Tr::tr("yes") : Tr::tr("no"));
+    if (!sp.build_info.isEmpty())
+        addRow(Tr::tr("Build:"), sp.build_info);
 
-    // The directory the tools operate in: the startup project when one is
-    // open, otherwise the default projects directory. Kept in a member so
-    // it can be refreshed when the startup project changes (the props
-    // widget itself is created once and not rebuilt).
-    m_workingDirLabel = addLabel(Tr::tr("Working directory: %1")
-                                     .arg(toolsWorkingDirectory().toUserOutput()));
+    layout->addLayout(form);
+    layout->addStretch();
 
-    w->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
-        QWidget#ServerProps {
-            border: 1px solid Token_Foreground_Muted;
-            border-radius: 8px;
-        }
+    auto *buttons = new QHBoxLayout;
+    buttons->addStretch();
+    auto *closeButton = new QPushButton(Tr::tr("Close"), &dialog);
+    connect(closeButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    buttons->addWidget(closeButton);
+    layout->addLayout(buttons);
 
-        QLabel#ServerPropsLabel {
-            color: Token_Text_Subtle;
-        }
-    )"));
+    dialog.exec();
+}
 
-    return w;
+void ChatEditor::changeWorkingDirectory()
+{
+    const QString startDir = toolsWorkingDirectory().toUserOutput();
+    const QString dir = QFileDialog::getExistingDirectory(widget(),
+                                                          Tr::tr("Select Working Directory"),
+                                                          startDir,
+                                                          QFileDialog::ShowDirsOnly
+                                                              | QFileDialog::DontUseNativeDialog);
+    if (dir.isEmpty())
+        return;
+
+    settings().workingDirectory.setValue(dir);
+    settings().writeSettings();
+    updateConnectionLabel();
 }
 
 void ChatEditor::createFollowUpWidget(const QString &convId,
@@ -912,11 +1053,8 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
     qDeleteAll(m_messageWidgets);
     m_messageWidgets.clear();
 
-    // Delete old server‑props widget if it exists
-    if (m_propsWidget) {
-        m_propsWidget->deleteLater();
-        m_propsWidget = nullptr;
-    }
+    // Delete old welcome screen if it exists
+    removePropsWidget();
 
     if (m_followUpWidget) {
         m_followUpWidget->deleteLater();
@@ -976,12 +1114,10 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
     updateHandoffLabel();
     updateSteeringButton();
 
-    // If there were no messages, show the server props
-    if (m_messageWidgets.isEmpty() && !m_propsWidget) {
-        m_propsWidget = displayServerProps();
-        // Place it at the top of the layout
-        m_messageLayout->insertWidget(0, m_propsWidget);
-    }
+    // If there were no messages, show the welcome screen (centred in the
+    // message area, like Qt Creator's "Welcome" page).
+    if (m_messageWidgets.isEmpty() && !m_propsWidget)
+        showWelcomeScreen();
 
     // The message widgets were rebuilt, which dropped any active find
     // highlights; bring them back if a find is in progress.
@@ -1113,11 +1249,8 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         return;
     }
 
-    // Delete old server‑props widget if it exists
-    if (m_propsWidget) {
-        m_propsWidget->deleteLater();
-        m_propsWidget = nullptr;
-    }
+    // Delete old welcome screen if it exists
+    removePropsWidget();
 
     if (m_followUpWidget) {
         m_followUpWidget->deleteLater();
@@ -1480,6 +1613,8 @@ void ChatEditor::onModelsUpdated()
 {
     updateModelCombo();
     applyHumanEditorMode();
+    // The active model is part of the welcome screen's connection line.
+    updateConnectionLabel();
 }
 
 void ChatEditor::applyHumanEditorMode()
@@ -1618,15 +1753,10 @@ void ChatEditor::onServerPropsUpdated()
     // supports thinking/reasoning control.
     m_thinkingButton->setVisible(ChatManager::instance().serverSupportsThinking());
 
-    if (m_propsWidget) {
-        m_propsWidget->deleteLater();
-        m_propsWidget = nullptr;
-    }
+    removePropsWidget();
 
-    if (m_messageWidgets.isEmpty() && !m_propsWidget) {
-        m_propsWidget = displayServerProps();
-        m_messageLayout->insertWidget(0, m_propsWidget);
-    }
+    if (m_messageWidgets.isEmpty() && !m_propsWidget)
+        showWelcomeScreen();
 
     // Now that n_ctx is known, refresh the context-usage label
     if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()

@@ -627,6 +627,18 @@ LlamaSettings::LlamaSettings()
     toolsEnabled.setToolTip(
         Tr::tr("If checked the chat will start with the Tools button turned on."));
 
+    workingDirectory.setSettingsKey("WorkingDirectory");
+    workingDirectory.setDefaultValue(QString());
+    workingDirectory.setDisplayName(Tr::tr("Working directory"));
+    workingDirectory.setLabelText(Tr::tr("Working directory:"));
+    workingDirectory.setDisplayStyle(StringAspect::LineEditDisplay);
+    workingDirectory.setHistoryCompleter("LlamaCpp.WorkingDirectory.History");
+    workingDirectory.setToolTip(Tr::tr(
+        "Directory the chat tools operate in. Leave empty to use the startup "
+        "project's directory (or the default projects directory when no "
+        "project is open). It can also be changed by clicking the working "
+        "directory in the chat welcome screen."));
+
     sandboxCommands.setSettingsKey("SandboxCommands");
     sandboxCommands.setDefaultValue(false);
     sandboxCommands.setDisplayName(Tr::tr("Sandbox commands"));
