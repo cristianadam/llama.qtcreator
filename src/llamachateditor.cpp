@@ -12,6 +12,7 @@
 
 #include <utils/action.h>
 #include <utils/aggregate.h>
+#include <utils/dropsupport.h>
 #include <utils/fadingindicator.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/icon.h>
@@ -28,6 +29,7 @@
 #include <limits>
 #include <QDir>
 #include <QDialog>
+#include <QDropEvent>
 #include <QFileDialog>
 #include <QFile>
 #include <QFormLayout>
@@ -428,6 +430,13 @@ ChatEditor::ChatEditor()
     m_messageLayout->setSpacing(0);           // no gap between message rows
     m_messageLayout->setAlignment(Qt::AlignTop);
     m_scrollArea->setWidget(m_messageContainer);
+    // Accept file drops anywhere in the conversation, not just on the
+    // input: the container covers the message area, the viewport the empty
+    // space around/under the messages.  Without this the drop would bubble
+    // up to the editor manager, which opens the dropped file in a text
+    // editor (see eventFilter()).
+    m_scrollArea->viewport()->setAcceptDrops(true);
+    m_messageContainer->setAcceptDrops(true);
 
     m_input = new ChatInput(widget);
     m_input->setMaximumHeight(80);
@@ -667,7 +676,6 @@ ChatEditor::ChatEditor()
     connect(m_input, &ChatInput::sendRequested, this, &ChatEditor::onSendRequested);
     connect(m_input, &ChatInput::stopRequested, this, [this] { onStopRequested(false); });
     connect(m_input, &ChatInput::stopKeyPressed, this, [this] { onStopRequested(true); });
-    connect(m_input, &ChatInput::fileDropped, this, &ChatEditor::onFileDropped);
     connect(m_input, &ChatInput::editingCancelled, this, &ChatEditor::onEditingCancelled);
 
     // Connect to the document to get the conversation id
@@ -1535,13 +1543,25 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    return Core::IEditor::eventFilter(obj, event);
-}
+    // File drops anywhere in the conversation (on a message, the welcome
+    // screen or the empty space) attach the files to the input, exactly
+    // like dropping them on the input itself.
+    if ((obj == m_scrollArea->viewport() || obj == m_messageContainer)
+        && (event->type() == QEvent::DragEnter || event->type() == QEvent::DragMove
+            || event->type() == QEvent::Drop)) {
+        auto *dropEvent = static_cast<QDropEvent *>(event);
+        if (event->type() == QEvent::Drop) {
+            m_input->addFilesFromMimeData(dropEvent->mimeData());
+            return true;
+        }
+        const bool droppable = dynamic_cast<const Utils::DropMimeData *>(dropEvent->mimeData())
+                               || dropEvent->mimeData()->hasUrls();
+        if (droppable)
+            dropEvent->acceptProposedAction();
+        return true;
+    }
 
-void ChatEditor::onFileDropped(const QStringList &files)
-{
-    // Pass to your context / backend
-    QMessageBox::information(widget(), "Files dropped", files.join("\n"));
+    return Core::IEditor::eventFilter(obj, event);
 }
 
 void ChatEditor::onEditRequested(const Message &sentMsg)

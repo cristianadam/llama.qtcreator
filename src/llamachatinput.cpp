@@ -486,11 +486,11 @@ static void collectFilesFromProjectNode(const ProjectNode *projectNode, QStringL
         [&outPaths](FolderNode *folderNode) { collectFilesFromFolderNode(folderNode, outPaths); });
 }
 
-void ChatInput::dropEvent(QDropEvent *e)
+void ChatInput::addFilesFromMimeData(const QMimeData *mimeData)
 {
     QStringList localPaths;
 
-    const auto *dropData = dynamic_cast<const DropMimeData *>(e->mimeData());
+    const auto *dropData = dynamic_cast<const DropMimeData *>(mimeData);
     if (dropData) {
         using NodesList = QList<const Node *>;
         NodesList nodes = transform<QList<const Node *>>(dropData->values(), [](const QVariant &v) {
@@ -516,7 +516,7 @@ void ChatInput::dropEvent(QDropEvent *e)
         }
     } else {
         // Fallback to URL-based handling
-        for (const QUrl &url : e->mimeData()->urls()) {
+        for (const QUrl &url : mimeData->urls()) {
             FilePath fp = FilePath::fromUrl(url);
             if (fp.isLocal())
                 localPaths.append(fp.toFSPathString());
@@ -524,6 +524,11 @@ void ChatInput::dropEvent(QDropEvent *e)
     }
 
     addFilesFromLocalPaths(localPaths);
+}
+
+void ChatInput::dropEvent(QDropEvent *e)
+{
+    addFilesFromMimeData(e->mimeData());
 
     e->acceptProposedAction();
 }

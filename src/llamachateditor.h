@@ -80,7 +80,6 @@ public slots:
     // rather than the stop button; stopping a running task (sub‑agent)
     // conversation then asks for confirmation first.
     void onStopRequested(bool fromKey);
-    void onFileDropped(const QStringList &files);
     void onEditRequested(const LlamaCpp::Message &msg);
     void onEditingCancelled();
     void onRegenerateRequested(const LlamaCpp::Message &msg);

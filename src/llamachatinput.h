@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <utils/filepath.h>
 
+class QMimeData;
 class QTabBar;
 class QTextEdit;
 class QToolButton;
@@ -21,6 +22,11 @@ public:
 
     void updateMaximumHeight();
     QList<QVariantMap> getExtraFromAttachedFiles();
+    //! Attaches all local files referenced by \a mimeData (URLs, project
+    //! tree file nodes, folder and project nodes).  Shared by the input's
+    //! own drop handler and the conversation area's, so dropping a file
+    //! anywhere in the chat attaches it the same way.
+    void addFilesFromMimeData(const QMimeData *mimeData);
 
     //! The message text edit (the ChatEditor moves the focus back to it
     //! when the in‑chat find bar is closed with Escape).
@@ -34,7 +40,6 @@ signals:
     //! the stop button being clicked); the receiver may ask for
     //! confirmation before actually stopping.
     void stopKeyPressed();
-    void fileDropped(const QStringList &filePaths);
     void pasteLongText(const QString &text);
     void pasteFiles(const QStringList &filePaths);
 
