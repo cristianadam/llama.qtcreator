@@ -3,15 +3,19 @@
 #include <coreplugin/documentmanager.h>
 #include <coreplugin/editormanager/documentmodel.h>
 #include <coreplugin/editormanager/ieditorfactory.h>
-#include <coreplugin/find/textfindconstants.h>
+#include <coreplugin/find/findplugin.h>
+#include <coreplugin/find/ifindsupport.h>
+#include <coreplugin/findplaceholder.h>
 #include <coreplugin/icore.h>
 #include <projectexplorer/project.h>
 #include <projectexplorer/projectmanager.h>
 
 #include <utils/action.h>
+#include <utils/aggregate.h>
 #include <utils/fadingindicator.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/icon.h>
+#include <utils/theme/theme.h>
 #include <utils/utilsicons.h>
 #include <utils/widgets.h>
 
@@ -21,6 +25,7 @@
 #include <QApplication>
 #include <QCoreApplication>
 #include <QAction>
+#include <limits>
 #include <QDir>
 #include <QFile>
 #include <QHash>
@@ -34,12 +39,18 @@
 #include <QKeySequence>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QPoint>
 #include <QPointer>
+#include <QRect>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QSignalBlocker>
+#include <QTextCharFormat>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextEdit>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -120,6 +131,253 @@ QString thinkingLevelDisplay(const QString &level)
 }
 
 } // namespace
+
+// ---------------------------------------------------------------------------
+// ChatEditorFindSupport
+//
+// The Core::IFindSupport that backs the standard in‑chat "Find" bar.  It
+// searches across every ChatMessage's markdown label (a QTextBrowser), the
+// same way ACP's MessageViewFindSupport searches across its MarkdownBrowser
+// widgets.  It is aggregated with the editor widget (see the ChatEditor
+// constructor) so that, when focus is anywhere in the editor, the
+// CurrentDocumentFind of the Find plugin can locate it and the FindToolBar
+// docks into the FindToolBarPlaceHolder instead of floating.
+// ---------------------------------------------------------------------------
+
+class ChatEditorFindSupport : public Core::IFindSupport
+{
+public:
+    explicit ChatEditorFindSupport(ChatEditor *editor)
+        : m_editor(editor)
+    {}
+
+    bool supportsReplace() const override { return false; }
+
+    Utils::FindFlags supportedFindFlags() const override
+    {
+        return Utils::FindCaseSensitively | Utils::FindWholeWords
+               | Utils::FindRegularExpression;
+    }
+
+    void resetIncrementalSearch() override { m_incrementalStart = {nullptr, {}}; }
+
+    void highlightAll(const QString &txt, Utils::FindFlags findFlags) override
+    {
+        if (txt.isEmpty()) {
+            clearHighlights();
+            return;
+        }
+        m_active = true;
+        m_lastFindText = txt;
+
+        const QTextDocument::FindFlags docFlags = toDocFlags(findFlags);
+        QTextCharFormat format;
+        format.setBackground(Utils::creatorColor(
+            Utils::Theme::OutputPanes_SearchResultBackgroundColor));
+        for (ChatMessage *msg : messages()) {
+            auto *label = msg->markdownLabel();
+            if (!label)
+                continue;
+            QList<QTextEdit::ExtraSelection> selections;
+            QTextCursor found = findInLabel(label, txt, 0, findFlags, docFlags);
+            while (!found.isNull()) {
+                selections.append({found, format});
+                int pos = found.selectionEnd();
+                if (found.position() == found.anchor())
+                    ++pos; // avoid an infinite loop on a zero‑length match
+                found = findInLabel(label, txt, pos, findFlags, docFlags);
+            }
+            label->setExtraSelections(selections);
+        }
+    }
+
+    void clearHighlights() override
+    {
+        m_active = false;
+        for (ChatMessage *msg : messages())
+            if (auto *label = msg->markdownLabel())
+                label->setExtraSelections({});
+    }
+
+    QString currentFindString() const override { return m_lastFindText; }
+    QString completedFindString() const override { return {}; }
+
+    Result findIncremental(const QString &txt, Utils::FindFlags findFlags) override
+    {
+        if (txt.isEmpty()) {
+            clearHighlights();
+            return NotFound;
+        }
+
+        // The first keystroke of a fresh search starts from the top of the
+        // message that is currently visible, so the first hit is not scrolled
+        // far away from where the user is reading.
+        if (m_incrementalStart.first == nullptr) {
+            if (ChatMessage *msg = topmostVisibleMessage()) {
+                auto *label = msg->markdownLabel();
+                if (label) {
+                    QWidget *viewport = m_editor->scrollArea()->viewport();
+                    const int labelTopInViewport = label->mapTo(viewport, QPoint(0, 0)).y();
+                    const QPoint visibleTopInLabel(0, qMax(0, -labelTopInViewport));
+                    m_incrementalStart = {msg, label->cursorForPosition(visibleTopInLabel)};
+                }
+            }
+        }
+
+        const Result result = findText(txt, findFlags, true);
+        highlightAll(result == Found ? txt : QString(), findFlags);
+        return result;
+    }
+
+    Result findStep(const QString &txt, Utils::FindFlags findFlags) override
+    {
+        if (txt.isEmpty())
+            return NotFound;
+        m_lastFindText = txt;
+        return findText(txt, findFlags, false);
+    }
+
+    //! Re‑applies the current highlights.  The message widgets are rebuilt on
+    //! every refresh (new message, font zoom, …), which drops the extra
+    //! selections; call this after a rebuild to bring them back while a find
+    //! is active.
+    void reapplyHighlights()
+    {
+        if (m_active && !m_lastFindText.isEmpty())
+            highlightAll(m_lastFindText, Core::Find::findFlags());
+    }
+
+private:
+    QList<ChatMessage *> messages() const
+    {
+        return m_editor->messageWidgets().toList();
+    }
+
+    ChatMessage *topmostVisibleMessage()
+    {
+        QWidget *viewport = m_editor->scrollArea()->viewport();
+        const QRect viewportRect = viewport->rect();
+        ChatMessage *topmost = nullptr;
+        int topmostY = std::numeric_limits<int>::max();
+        for (ChatMessage *msg : messages()) {
+            auto *label = msg->markdownLabel();
+            if (!label)
+                continue;
+            const QRect labelRect(label->mapTo(viewport, QPoint(0, 0)), label->size());
+            if (labelRect.intersects(viewportRect) && labelRect.top() < topmostY) {
+                topmostY = labelRect.top();
+                topmost = msg;
+            }
+        }
+        return topmost;
+    }
+
+    static QRegularExpression searchRegex(const QString &txt, Utils::FindFlags findFlags)
+    {
+        return QRegularExpression(
+            (findFlags & Utils::FindRegularExpression) ? txt : QRegularExpression::escape(txt),
+            (findFlags & Utils::FindCaseSensitively) ? QRegularExpression::NoPatternOption
+                                                     : QRegularExpression::CaseInsensitiveOption);
+    }
+
+    static QTextDocument::FindFlags toDocFlags(Utils::FindFlags findFlags)
+    {
+        QTextDocument::FindFlags flags;
+        if (findFlags & Utils::FindWholeWords)
+            flags |= QTextDocument::FindWholeWords;
+        return flags;
+    }
+
+    QTextCursor findInLabel(const MarkdownLabel *label,
+                            const QString &txt,
+                            int startPos,
+                            Utils::FindFlags findFlags,
+                            QTextDocument::FindFlags docFlags)
+    {
+        if (startPos < 0)
+            startPos = findFlags & Utils::FindBackward ? label->document()->characterCount() - 1
+                                                       : 0;
+        return label->document()->find(searchRegex(txt, findFlags), startPos, docFlags);
+    }
+
+    void scrollToMatch(const MarkdownLabel *label, const QTextCursor &cursor)
+    {
+        QWidget *outerViewport = m_editor->scrollArea()->viewport();
+        const QRect selRect = label->cursorRect(cursor);
+        const QPoint topLeftInOuter =
+            label->viewport()->mapTo(outerViewport, selRect.topLeft());
+        int targetY = topLeftInOuter.y() + selRect.height() / 2
+                     - outerViewport->height() / 2; // centre vertically
+        QScrollBar *vbar = m_editor->scrollArea()->verticalScrollBar();
+        vbar->setValue(qBound(0, targetY, vbar->maximum()));
+    }
+
+    Result findText(const QString &txt, Utils::FindFlags findFlags, bool incremental)
+    {
+        const QList<ChatMessage *> allMsgs = messages();
+        const int count = allMsgs.size();
+        if (count == 0)
+            return NotFound;
+
+        const bool backward = findFlags & Utils::FindBackward;
+        QTextDocument::FindFlags docFlags = toDocFlags(findFlags);
+        if (backward)
+            docFlags |= QTextDocument::FindBackward;
+
+        int startIdx = -1;
+
+        auto findIn = [&](int msgIdx, int startPos = -1) -> bool {
+            ChatMessage *msg = allMsgs[msgIdx];
+            auto *label = msg->markdownLabel();
+            if (!label)
+                return false;
+            const QTextCursor found = findInLabel(label, txt, startPos, findFlags, docFlags);
+            if (found.isNull())
+                return false;
+            m_currentResult = {msg, found};
+            label->setTextCursor(found);
+            scrollToMatch(label, found);
+            return true;
+        };
+
+        if (incremental && m_incrementalStart.first != nullptr) {
+            if (startIdx = allMsgs.indexOf(m_incrementalStart.first); startIdx >= 0) {
+                int startPos = backward ? m_incrementalStart.second.selectionEnd()
+                                        : m_incrementalStart.second.selectionStart();
+                if (findIn(startIdx, startPos))
+                    return Found;
+                startIdx = (backward ? startIdx - 1 + count : startIdx + 1) % count;
+            }
+        } else if (!incremental && m_currentResult.first != nullptr) {
+            if (startIdx = allMsgs.indexOf(m_currentResult.first); startIdx >= 0) {
+                int startPos = backward ? m_currentResult.second.selectionStart()
+                                        : m_currentResult.second.selectionEnd();
+                if (findIn(startIdx, startPos))
+                    return Found;
+                startIdx = (backward ? startIdx - 1 + count : startIdx + 1) % count;
+            }
+        }
+
+        if (startIdx < 0)
+            startIdx = backward ? count - 1 : 0;
+
+        // Search from the current position, then wrap around.
+        for (int i = 0; i < count; ++i) {
+            const int idx = backward ? (startIdx - i + count) % count : (startIdx + i) % count;
+            if (findIn(idx))
+                return Found;
+        }
+
+        m_currentResult = {nullptr, QTextCursor()};
+        return NotFound;
+    }
+
+    ChatEditor *m_editor;
+    QPair<ChatMessage *, QTextCursor> m_currentResult;
+    QPair<ChatMessage *, QTextCursor> m_incrementalStart;
+    QString m_lastFindText;
+    bool m_active{false};
+};
 
 QSet<ChatEditor *> ChatEditor::s_instances;
 
@@ -295,28 +553,17 @@ ChatEditor::ChatEditor()
 
     updateModelCombo();
 
-    m_searchToolbar = new SearchToolbar(widget);
-
-    connect(m_searchToolbar,
-            &SearchToolbar::onPrevSearchClicked,
-            this,
-            &ChatEditor::prevSearchResult);
-    connect(m_searchToolbar,
-            &SearchToolbar::onNextSearchClicked,
-            this,
-            &ChatEditor::nextSearchResult);
-    connect(m_searchToolbar, &SearchToolbar::onCloseEvent, this, [this]() { clearSearch(); });
-    connect(m_searchToolbar, &SearchToolbar::onSearchTextChanged, this, [this](const QString &text) {
-        if (text.isEmpty()) {
-            clearSearch();
-            return;
-        }
-        m_searchQuery = text;
-        performSearch(text);
-        m_searchActive = true;
-        m_currentResult = 0;
-        jumpToResult(m_currentResult);
-    });
+    // In‑chat search uses the standard Qt Creator "Find" bar instead of a
+    // floating tool window.  The FindToolBar of the Find plugin locates the
+    // editor through the focused widget: it walks up the parent chain looking
+    // for a Core::IFindSupport (found by aggregating it with the editor
+    // widget) and for a FindToolBarPlaceHolder owned by an ancestor, which it
+    // then docks into.  The owner is the top‑level editor widget so the bar
+    // works no matter whether focus is in the conversation or in the input.
+    m_findSupport = new ChatEditorFindSupport(this);
+    Utils::Aggregation::aggregate({widget, m_findSupport});
+    m_findPlaceHolder = new Core::FindToolBarPlaceHolder(widget);
+    layout->insertWidget(1, m_findPlaceHolder);
 
     ChatManager &chatManager = ChatManager::instance();
     connect(m_modelCombo, qOverload<int>(&QComboBox::activated), this, [this](int idx) {
@@ -501,23 +748,11 @@ ChatEditor::ChatEditor()
                 }
             });
 
-    // Search in chat  (Ctrl+F)
-    ActionBuilder startSearchAction(this, Core::Constants::FIND_IN_DOCUMENT);
-    startSearchAction.setText(Tr::tr("Search in chat"));
-    startSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
-    startSearchAction.addOnTriggered(this, [this] { startSearch(); });
-
-    // Next search result (F3)
-    ActionBuilder nextSearchAction(this, Core::Constants::FIND_NEXT);
-    nextSearchAction.setText(Tr::tr("Next search result"));
-    nextSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
-    nextSearchAction.addOnTriggered(this, [this] { nextSearchResult(); });
-
-    // Previous search result (Shift+F3)
-    ActionBuilder prevSearchAction(this, Core::Constants::FIND_PREVIOUS);
-    prevSearchAction.setText(Tr::tr("Previous search result"));
-    prevSearchAction.setContext(Context(Constants::LLAMACPP_VIEWER_ID));
-    prevSearchAction.addOnTriggered(this, [this] { prevSearchResult(); });
+    // In‑chat search is provided by the standard Find/Replace bar of the Find
+    // plugin (Ctrl+F, F3, Shift+F3).  The editor registers a
+    // Core::IFindSupport and a FindToolBarPlaceHolder (see the constructor),
+    // so no chat‑specific find actions are needed here – the global actions
+    // pick the chat up through the focused widget automatically.
 
     // Global "Send to Llama Chat" action: commits the current "Human
     // Editor" document (the split text editor) as a chat message, the same
@@ -541,7 +776,6 @@ ChatEditor::ChatEditor()
 ChatEditor::~ChatEditor()
 {
     s_instances.remove(this);
-    clearSearch();
     delete widget();
     // The editor tool bar only detaches the status bar (setParent(nullptr))
     // when the editor is removed from a view, it never deletes it. The guard
@@ -749,8 +983,10 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
         m_messageLayout->insertWidget(0, m_propsWidget);
     }
 
-    if (m_searchActive)
-        performSearch(m_searchQuery);
+    // The message widgets were rebuilt, which dropped any active find
+    // highlights; bring them back if a find is in progress.
+    if (m_findSupport)
+        m_findSupport->reapplyHighlights();
 
     // Only pin the view to the bottom when asked; a font-zoom rebuild
     // (pinToBottom == false) must keep the user where they were reading.
@@ -1124,12 +1360,28 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
     // Esc stops an in‑progress generation (LLM streaming or a running
     // tool) no matter which widget in the chat editor has focus.  The
     // ChatInput consumes the event first when one of its children is
-    // focused, so this only fires for the message area, status bar, ….
+    // focused, so this only fires for the message area, find bar, status
+    // bar, ….
     if (obj == widget() && event->type() == QEvent::ShortcutOverride) {
         if (auto *keyEvent = static_cast<QKeyEvent *>(event);
-            keyEvent->key() == Qt::Key_Escape && m_input->isGenerating()) {
-            onStopRequested(true);
-            return true;
+            keyEvent->key() == Qt::Key_Escape) {
+            if (m_findPlaceHolder->isVisible()) {
+                // One Escape hides the in‑chat find bar and puts the focus
+                // back on the input.  The standard Find bar does not do
+                // this: its Escape (the global "Return to Editor"
+                // shortcut) only moves the focus out of the bar, so a
+                // second press would be needed to hide it.  Accepting the
+                // shortcut override also keeps that global action (and the
+                // Find bar's own "return to find support" context action)
+                // from firing.
+                Core::Find::hideFindToolBar();
+                m_input->textEdit()->setFocus();
+                return true;
+            }
+            if (m_input->isGenerating()) {
+                onStopRequested(true);
+                return true;
+            }
         }
     }
 
@@ -1414,57 +1666,6 @@ void ChatEditor::onDeleteMessageRequested(const Message &sentMsg)
     ChatManager::instance().deleteMessageBranch(msg.convId, msg.id);
 }
 
-void ChatEditor::startSearch()
-{
-    // Show the floating search toolbar
-    m_searchToolbar->show();
-    m_searchToolbar->raise();
-    m_searchToolbar->activateWindow();
-
-    // If we already have a query, run a search to highlight it
-    if (!m_searchQuery.isEmpty()) {
-        performSearch(m_searchQuery);
-        m_searchActive = true;
-        m_currentResult = 0;
-        jumpToResult(m_currentResult);
-    } else {
-        clearSearch(); // clear any old highlights
-    }
-}
-
-void ChatEditor::nextSearchResult()
-{
-    if (!m_searchActive || m_searchResults.isEmpty())
-        return;
-
-    jumpToResult(m_currentResult, false);
-
-    m_currentResult = (m_currentResult + 1) % m_searchResults.size();
-    jumpToResult(m_currentResult);
-}
-
-void ChatEditor::prevSearchResult()
-{
-    if (!m_searchActive || m_searchResults.isEmpty())
-        return;
-
-    jumpToResult(m_currentResult, false);
-
-    m_currentResult = (m_currentResult - 1 + m_searchResults.size()) % m_searchResults.size();
-    jumpToResult(m_currentResult);
-}
-
-void ChatEditor::clearSearch()
-{
-    for (ChatMessage *w : std::as_const(m_messageWidgets))
-        w->clearHighlight();
-
-    m_searchResults.clear();
-    m_currentResult = 0;
-    m_searchActive = false;
-    m_searchQuery.clear();
-}
-
 void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantMap> &newExtra)
 {
     if (msg.convId != m_viewingConvId)
@@ -1482,73 +1683,6 @@ void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantM
         // when the tool result appears.
         w->recomputeFixedHeight();
     }
-}
-
-void ChatEditor::performSearch(const QString &query)
-{
-    clearSearch(); // wipe old highlights
-
-    QRegularExpression re(query, QRegularExpression::CaseInsensitiveOption);
-    for (ChatMessage *w : std::as_const(m_messageWidgets)) {
-        const QString txt = w->plainText();
-        QRegularExpressionMatchIterator it = re.globalMatch(txt);
-        while (it.hasNext()) {
-            QRegularExpressionMatch m = it.next();
-            SearchResult r;
-            r.widget = w;
-            r.start = m.capturedStart();
-            r.length = m.capturedLength();
-            m_searchResults.append(r);
-        }
-        // highlight all matches inside the widget
-        w->highlightAllMatches(query);
-    }
-}
-
-void ChatEditor::jumpToResult(int idx, bool selected)
-{
-    if (m_searchResults.isEmpty())
-        m_searchToolbar->setIndexLabel(QString("0/0"));
-    else
-        m_searchToolbar->setIndexLabel(QString("%1/%2").arg(idx + 1).arg(m_searchResults.size()));
-
-    if (idx < 0 || idx >= m_searchResults.size())
-        return;
-
-    const SearchResult &r = m_searchResults[idx];
-    if (!r.widget)
-        return;
-
-    // Find the QTextEdit inside the widget (MarkdownLabel is a QTextBrowser)
-    QTextEdit *te = r.widget->findChild<QTextEdit *>();
-    if (!te)
-        return;
-
-    QTextCursor cursor(te->document());
-    cursor.setPosition(r.start);
-    cursor.setPosition(r.start + r.length, QTextCursor::KeepAnchor);
-
-    QRect selRect = te->cursorRect(cursor);
-
-    // Map that rectangle to the outer viewport coordinates We must map from the viewport,
-    // otherwise the widget's own scroll position is ignored and the coordinates are wrong.
-    QPoint topLeftInOuter = te->viewport()->mapTo(m_scrollArea->viewport(), selRect.topLeft());
-
-    // Centre the rectangle vertically in the outer viewport ---
-    int viewportHeight = m_scrollArea->viewport()->height();
-
-    int targetY = topLeftInOuter.y()     // top of the selection
-                  + selRect.height() / 2 // centre of the selection
-                  - viewportHeight / 2;  // centre of the viewport
-
-    // Clamp to the valid scroll‑bar range
-    QScrollBar *vbar = m_scrollArea->verticalScrollBar();
-    targetY = qBound(0, targetY, vbar->maximum());
-
-    vbar->setValue(targetY);
-
-    // Highlight only the current hit inside the widget
-    r.widget->highlightMatch(r.start, r.length, selected);
 }
 
 void ChatEditor::updateSpeedLabel(const Message &msg)

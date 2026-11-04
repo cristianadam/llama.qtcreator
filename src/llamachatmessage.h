@@ -34,15 +34,11 @@ public:
 
     void setSiblingIdx(int newSiblingIdx);
 
-    QString plainText() const;
     // (Re)computes and applies the widget's fixed height from the current
     // document size, contents margins, layout spacing and action row height.
     void recomputeFixedHeight();
     MarkdownLabel *markdownLabel() const { return m_markdownLabel; }
     QHBoxLayout *actionLayout() const { return m_actionLayout; }
-    void highlightAllMatches(const QString &query);
-    void highlightMatch(int start, int length, bool selected = true);
-    void clearHighlight();
 
     bool isTool() const;
 

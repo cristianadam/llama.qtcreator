@@ -7,7 +7,6 @@
 #include <texteditor/textdocument.h>
 
 #include "autoscrollarea.h"
-#include "llamasearchtoolbar.h"
 #include "llamatypes.h"
 
 class QComboBox;
@@ -23,8 +22,13 @@ namespace TextEditor {
 class IDocument;
 }
 
+namespace Core {
+class FindToolBarPlaceHolder;
+}
+
 namespace LlamaCpp {
 
+class ChatEditorFindSupport;
 class ChatInput;
 class ChatMessage;
 class MarkdownLabel;
@@ -63,12 +67,10 @@ public:
                               qint64 leafNodeId,
                               const QStringList &questions);
 
-    struct SearchResult
-    {
-        ChatMessage *widget{nullptr}; // which widget contains the hit
-        int start{0};                 // offset inside the widget's plain text
-        int length{0};                // length of the match
-    };
+    // Accessors used by ChatEditorFindSupport (the Core::IFindSupport that
+    // backs the in‑chat "Find" bar, see llamachateditor.cpp).
+    const QVector<ChatMessage *> &messageWidgets() const { return m_messageWidgets; }
+    AutoScrollArea *scrollArea() const { return m_scrollArea; }
 
 public slots:
     void onMessageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
@@ -87,10 +89,6 @@ public slots:
     void onModelsUpdated();
     void onDeleteMessageRequested(const LlamaCpp::Message &msg);
 
-    void startSearch();
-    void nextSearchResult();
-    void prevSearchResult();
-    void clearSearch();
     void onMessageExtraUpdated(const LlamaCpp::Message &msg, const QList<QVariantMap> &newExtra);
     void onHumanEditorReplyReady(const QString &convId);
     void onHumanEditorAborted(const QString &convId);
@@ -130,8 +128,6 @@ private:
     // split next to the chat.  \a msgId > 0: in‑place edit of that stored
     // message; otherwise a new pending reply for \a convId.
     void openHumanEditorDocument(const QString &convId, qint64 msgId, const QString &text);
-    void performSearch(const QString &query);
-    void jumpToResult(int idx, bool selected = true);
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
@@ -157,12 +153,14 @@ private:
     QToolButton *m_titleButton{nullptr};
     QComboBox *m_modelCombo{nullptr};
 
-    QVector<SearchResult> m_searchResults; // all matches of the current query
-    int m_currentResult{0};                // index into m_searchResults
-    QString m_searchQuery;                 // the string that is active
-    bool m_searchActive{false};
-
-    SearchToolbar *m_searchToolbar{nullptr};
+    // Core::IFindSupport backing the standard in‑chat "Find" bar.  It is
+    // aggregated with the editor widget so the FindToolBar of the current
+    // document can locate it (and the FindToolBarPlaceHolder it docks into).
+    ChatEditorFindSupport *m_findSupport{nullptr};
+    // The placeholder the Find bar docks into; its visibility tells whether
+    // the bar is currently shown in this editor (Escape closes it, see
+    // eventFilter()).
+    Core::FindToolBarPlaceHolder *m_findPlaceHolder{nullptr};
     QString m_viewingConvId;
 
     // All live chat editors; used so a font-zoom change can re-render every

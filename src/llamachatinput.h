@@ -22,6 +22,10 @@ public:
     void updateMaximumHeight();
     QList<QVariantMap> getExtraFromAttachedFiles();
 
+    //! The message text edit (the ChatEditor moves the focus back to it
+    //! when the in‑chat find bar is closed with Escape).
+    QTextEdit *textEdit() const { return m_txt; }
+
 signals:
     void sendRequested(const QString &text, const QList<QVariantMap> &extra);
     void editingCancelled();
