@@ -2,6 +2,11 @@
 
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "sandboxstatus.h"
+#include "tools/mxc.h"
+
+#include <QtTaskTree/QTaskTree>
+#include <QtTaskTree/qtasktreerunner.h>
 
 #include <QDir>
 #include <QFileDialog>
@@ -55,9 +60,64 @@ SandboxSettingsWidget::SandboxSettingsWidget()
         this);
     networkNote->setWordWrap(true);
 
+    using namespace Layouting;
+
+    // The Windows sandbox runs commands in a Microsoft MXC process
+    // container; like the terminal plugin's console host, a pinned
+    // wxc-exec.exe can be downloaded here, or a runtime of one's own can
+    // be pointed to (the group is shown on supported platforms only).
+    QWidget *mxcGroup = nullptr;
+    if (Tools::Mxc::isSupportedPlatform()) {
+        m_mxcStatus = new QLabel(this);
+        m_mxcStatus->setWordWrap(true);
+        m_mxcDownloadButton = new QPushButton(Tr::tr("Download..."), this);
+
+        // The path chooser is for a runtime of one's own; when it is
+        // empty the downloaded one is taken, and showing that as the
+        // placeholder is what tells where it came from.
+        const auto showMxc = [this] {
+            const Utils::FilePath inUse = Tools::Mxc::resolvedPath();
+            m_mxcStatus->setText(inUse.isEmpty()
+                ? Tr::tr("The sandboxed bash tool on Windows uses the Microsoft "
+                         "MXC runtime (wxc-exec), which is not installed on this "
+                         "system.")
+                : Tr::tr("The sandboxed bash tool on Windows runs in a Microsoft "
+                         "MXC process container."));
+            settings().mxcPath.setPlaceHolderText(inUse.toUserOutput());
+        };
+        showMxc();
+        connect(&settings().mxcPath, &Utils::BaseAspect::changed, this, showMxc);
+
+        const auto mxcDownloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
+        connect(m_mxcDownloadButton,
+                &QPushButton::clicked,
+                m_mxcDownloadButton,
+                [this, showMxc, mxcDownloader] {
+                    m_mxcDownloadButton->setEnabled(false);
+                    mxcDownloader->start({Tools::Mxc::downloadRecipe()}, {},
+                                         [this, showMxc, mxcDownloader](
+                                             QtTaskTree::DoneWith result) {
+                                             m_mxcDownloadButton->setEnabled(true);
+                                             if (result == QtTaskTree::DoneWith::Success)
+                                                 settings().mxcPath.setValue(
+                                                     Tools::Mxc::downloadedPath());
+                                             showMxc();
+                                             SandboxStatus::check();
+                                         });
+                });
+
+        mxcGroup = Group{
+            title(Tr::tr("Windows runtime")),
+            Column{
+                m_mxcStatus,
+                settings().mxcPath,
+                Row{m_mxcDownloadButton, st},
+            },
+        }.emerge();
+    }
+
     // The detail groups are gated by the master toggle, so they live in a
     // single container that is enabled / disabled as a whole.
-    using namespace Layouting;
     m_detailsContainer = new QWidget(this);
     Group fsGroup {
         Column{
@@ -90,7 +150,11 @@ SandboxSettingsWidget::SandboxSettingsWidget()
     };
     netGroup.setTitle(Tr::tr("Network"));
 
+    // The Windows runtime group leads the details (a null item on other
+    // platforms, which the layout drops, the way the terminal plugin does
+    // for its console host), then the filesystem and the network policy.
     Column{
+        mxcGroup,
         fsGroup,
         br,
         netGroup,

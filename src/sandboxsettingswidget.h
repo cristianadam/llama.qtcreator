@@ -15,6 +15,13 @@ namespace LlamaCpp {
 //! The "Sandbox" settings page: the master "Sandbox commands" toggle plus
 //! the details of the sandbox that the chat tools run in.
 //!
+//! Windows runtime – the Microsoft MXC runtime (wxc-exec) the Windows
+//! sandbox runs commands in, laid out like the terminal plugin's console
+//! host: a status line, a path chooser for a runtime of one's own, and an
+//! offer to download the pinned release (the group is shown on supported
+//! platforms only). It leads the details, as it is what makes the Windows
+//! sandbox usable in the first place.
+//!
 //! Filesystem – directories the sandbox grants on top of the project
 //! directory and the temporary locations:
 //!   - writable: the tools may write there (all platforms);
@@ -62,6 +69,11 @@ private:
     DirList m_readOnly;
     DirList m_denyRead;
     QWidget *m_detailsContainer = nullptr; // the groups gated by the master
+    // Windows runtime group (shown on supported platforms only): the
+    // status line and the download button (the path chooser is the
+    // mxcPath aspect of the settings).
+    QLabel *m_mxcStatus = nullptr;
+    QPushButton *m_mxcDownloadButton = nullptr;
 };
 
 } // namespace LlamaCpp

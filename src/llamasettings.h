@@ -119,6 +119,10 @@ public:
     Utils::StringListAspect sandboxReadOnlyDirs{this};
     Utils::StringListAspect sandboxDenyReadDirs{this};
     Utils::BoolAspect sandboxAllowNetwork{this};
+    // Windows sandbox runtime: a wxc-exec.exe launcher of one's own. When
+    // empty, the runtime downloaded from the Sandbox settings page is
+    // used.
+    Utils::FilePathAspect mxcPath{this};
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
     Utils::BoolAspect loadProjectInstructions{this};

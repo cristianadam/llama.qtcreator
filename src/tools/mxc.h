@@ -16,8 +16,12 @@ QString version();
 Utils::FilePath downloadDirectory();
 bool isDownloaded();
 
-// A usable wxc-exec.exe: the LLAMA_WXC_EXEC environment variable, then the
-// downloaded one, then empty.
+// The wxc-exec.exe of the downloaded runtime (empty while it is not
+// installed).
+Utils::FilePath downloadedPath();
+
+// A usable wxc-exec.exe: the one chosen on the Sandbox settings page, then
+// the downloaded one, then empty.
 Utils::FilePath resolvedPath();
 
 // Fetches and unpacks the pinned release, after asking for the license.

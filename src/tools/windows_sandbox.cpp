@@ -36,9 +36,8 @@ constexpr quint32 kMinWindowsBuild = 26100;
 // The canary content the live isolation probe hides in the home directory.
 constexpr const char *kCanaryContent = "llama-mxc-canary";
 
-/*! Locates the wxc-exec executable: the LLAMA_WXC_EXEC environment
-    variable (mirroring LLAMA_SHELL_STUB), then the pinned release
-    downloaded from the tools settings page. */
+/*! Locates the wxc-exec executable: the runtime chosen on the Sandbox
+    settings page (if any), or the pinned release downloaded from there. */
 QString findWxcExec()
 {
     const Utils::FilePath resolved = Mxc::resolvedPath();
@@ -48,10 +47,11 @@ QString findWxcExec()
 QString installHint()
 {
     return Tr::tr(
-        "Download it from the Llama.cpp Chat tools settings page (a pinned, "
-        "checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point "
-        "to a wxc-exec.exe. Alternatively uncheck 'Sandbox commands' in the "
-        "Llama settings to run commands without a sandbox.");
+        "Download it from the Llama.cpp Chat Sandbox settings page (a "
+        "pinned, checksum-verified Microsoft MXC release); a runtime of "
+        "one's own can be pointed to there. Alternatively uncheck "
+        "'Sandbox commands' in the Llama settings to run commands without "
+        "a sandbox.");
 }
 
 struct WxcStatus
@@ -61,10 +61,10 @@ struct WxcStatus
 };
 
 /*! Checks that the MXC container can run on this host. The successful
-    result is cached for the session (keyed by the executable, as
-    LLAMA_WXC_EXEC may point elsewhere); a failure re-probes on every call,
-    so a runtime installed while the editor is running takes effect on the
-    next command. */
+    result is cached for the session (keyed by the executable, as the
+    Sandbox settings page may point elsewhere); a failure re-probes on
+    every call, so a runtime installed while the editor is running takes
+    effect on the next command. */
 WxcStatus probeWxc(const QString &exe)
 {
     static QHash<QString, bool> s_probed;
@@ -316,7 +316,8 @@ struct LiveProbe
     QString failure; // a complete, actionable message when the state is Failed
 };
 
-// Keyed by the executable, as LLAMA_WXC_EXEC may point elsewhere.
+// Keyed by the executable, as the Sandbox settings page may point
+// elsewhere.
 QHash<QString, LiveProbe> &liveProbes()
 {
     static QHash<QString, LiveProbe> probes;

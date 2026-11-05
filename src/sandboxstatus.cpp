@@ -31,7 +31,7 @@ QString unavailableReason()
                           "uses is available for Windows x86-64 only");
         if (Tools::Mxc::resolvedPath().isEmpty())
             return Tr::tr("the Microsoft MXC runtime (wxc-exec) is not installed; "
-                          "download it on the Llama Tools settings page");
+                          "download it on the Llama Sandbox settings page");
         return {};
     }
     if (HostOsInfo::isMacHost()) {

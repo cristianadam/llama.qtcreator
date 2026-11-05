@@ -11,6 +11,7 @@
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
 #include <utils/layoutbuilder.h>
+#include <utils/pathchooser.h>
 
 #include <QComboBox>
 #include <QDir>
@@ -653,8 +654,9 @@ LlamaSettings::LlamaSettings()
         "are not readable by any tool, and sandboxed commands have no "
         "network access (the webfetch and websearch tools are not "
         "affected). On Windows the sandbox uses the pinned wxc-exec.exe "
-        "runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC "
-        "can point to it), and needs Windows 11 24H2 or newer. The "
+        "runtime, downloadable from the Sandbox settings page (a runtime "
+        "of one's own can be pointed to there), and needs Windows 11 24H2 "
+        "or newer. The "
         "additional directories and the network policy are configured on "
         "the Sandbox settings page."));
 
@@ -695,6 +697,13 @@ LlamaSettings::LlamaSettings()
         "network access. The webfetch and websearch tools always run "
         "outside the sandbox and are not affected. Managed on the Sandbox "
         "settings page."));
+
+    mxcPath.setSettingsKey("MxcPath");
+    mxcPath.setLabelText(Tr::tr("MXC runtime:"));
+    mxcPath.setExpectedKind(PathChooserKind::File);
+    mxcPath.setToolTip(Tr::tr(
+        "A wxc-exec.exe launcher to run the Windows sandbox in. If empty, "
+        "the runtime downloaded from this page is used."));
 
     loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
     loadProjectInstructions.setDefaultValue(false);

@@ -2,10 +2,8 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "llamasyntaxhighlighter.h"
-#include "sandboxstatus.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
-#include "tools/mxc.h"
 #include "tools/ripgrep.h"
 #include "tools/tool_utils.h"
 
@@ -15,7 +13,6 @@
 #include <texteditor/fontsettings.h>
 
 #include <utils/fancylineedit.h>
-#include <utils/hostosinfo.h>
 #include <utils/qtcassert.h>
 
 #include <QHash>
@@ -126,45 +123,6 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     ripgrepLayout->addWidget(m_ripgrepButton);
     updateRipgrepStatus();
 
-    // The Windows sandbox runs the command in a Microsoft MXC process
-    // container; the pinned wxc-exec.exe runtime can be downloaded here,
-    // like ripgrep above (the row is shown on Windows hosts only).
-    m_mxcLabel = new QLabel(this);
-    m_mxcButton = new QPushButton(
-        Tr::tr("Download MXC %1").arg(Tools::Mxc::version()), this);
-    m_mxcButton->setVisible(false);
-    const auto mxcDownloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
-    connect(m_mxcButton,
-            &QPushButton::clicked,
-            this,
-            [this, mxcDownloader] {
-                if (mxcDownloader->isRunning())
-                    return;
-                m_mxcButton->setEnabled(false);
-                mxcDownloader->start({Tools::Mxc::downloadRecipe()}, {},
-                                     [this, mxcDownloader](QtTaskTree::DoneWith) {
-                                         m_mxcButton->setEnabled(true);
-                                         updateMxcStatus();
-                                         SandboxStatus::check();
-                                     });
-            });
-    auto *mxcRow = new QWidget(this);
-    auto *mxcLayout = new QHBoxLayout(mxcRow);
-    mxcLayout->setContentsMargins(0, 0, 0, 0);
-    mxcLayout->addWidget(m_mxcLabel);
-    mxcLayout->addStretch();
-    mxcLayout->addWidget(m_mxcButton);
-    updateMxcStatus();
-
-    // The "Sandbox commands" toggle and the sandbox details (extra
-    // directories, network policy) live on the dedicated Sandbox settings
-    // page; a hint keeps them discoverable from here.
-    auto *sandboxHint = new QLabel(Tr::tr(
-        "Sandboxing (commands, directories, network) is configured on the "
-        "Sandbox settings page."),
-        this);
-    sandboxHint->setToolTip(settings().sandboxCommands.toolTip());
-
     // Project instructions (AGENTS.md / CLAUDE.md) appended to the chat
     // system message.
     m_loadInstructionsCheck = new QCheckBox(settings().loadProjectInstructions.displayName(), this);
@@ -222,8 +180,6 @@ ToolsSettingsWidget::ToolsSettingsWidget()
         },
          m_detailEdit,
          ripgrepRow,
-         mxcRow,
-         sandboxHint,
          m_loadInstructionsCheck,
          maxToolTurnsRow,
      }
@@ -380,26 +336,6 @@ void ToolsSettingsWidget::updateRipgrepStatus()
     } else {
         m_ripgrepLabel->setText(Tr::tr("ripgrep: %1").arg(rg.toUserOutput()));
         m_ripgrepButton->setVisible(false);
-    }
-}
-
-void ToolsSettingsWidget::updateMxcStatus()
-{
-    if (!HostOsInfo::isWindowsHost()) {
-        m_mxcLabel->setVisible(false);
-        m_mxcButton->setVisible(false);
-        return;
-    }
-    m_mxcLabel->setVisible(true);
-    const Utils::FilePath mxc = Tools::Mxc::resolvedPath();
-    if (mxc.isEmpty()) {
-        m_mxcLabel->setText(Tr::tr("The sandboxed bash tool on Windows uses the Microsoft "
-                                   "MXC runtime (wxc-exec), which is not installed on this "
-                                   "system."));
-        m_mxcButton->setVisible(Tools::Mxc::isSupportedPlatform());
-    } else {
-        m_mxcLabel->setText(Tr::tr("Windows sandbox runtime: %1").arg(mxc.toUserOutput()));
-        m_mxcButton->setVisible(false);
     }
 }
 

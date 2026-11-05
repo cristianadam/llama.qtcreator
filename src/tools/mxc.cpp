@@ -1,5 +1,6 @@
 #include "mxc.h"
 
+#include "llamasettings.h"
 #include "llamatr.h"
 
 #include <coreplugin/icore.h>
@@ -79,17 +80,20 @@ bool isDownloaded()
     return holdsBinary(downloadDirectory());
 }
 
+FilePath downloadedPath()
+{
+    return downloadDirectory() / binaryName();
+}
+
 FilePath resolvedPath()
 {
-    const QString overridePath = qEnvironmentVariable("LLAMA_WXC_EXEC");
-    if (!overridePath.isEmpty()) {
-        const FilePath fromEnv = FilePath::fromUserInput(overridePath);
-        if (fromEnv.exists())
-            return fromEnv;
-    }
-    const FilePath downloaded = downloadDirectory() / binaryName();
+    // A runtime of one's own, chosen on the Sandbox settings page.
+    const FilePath configured = settings().mxcPath();
+    if (!configured.isEmpty() && configured.exists())
+        return configured;
+
     if (holdsBinary(downloadDirectory()))
-        return downloaded;
+        return downloadDirectory() / binaryName();
     return {};
 }
 
