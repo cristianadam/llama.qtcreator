@@ -9,7 +9,7 @@
 // same way the ripgrep binary is (tools/ripgrep.*).
 namespace LlamaCpp::Tools::Mxc {
 
-// MXC's process container tier exists only on Windows x86-64.
+// MXC's process container tier exists only on Windows x86-64 and arm64.
 bool isSupportedPlatform();
 
 QString version();

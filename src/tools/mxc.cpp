@@ -27,19 +27,41 @@ using namespace Utils;
 namespace LlamaCpp::Tools::Mxc {
 
 // The Microsoft MXC release the Windows sandbox is pinned to (the
-// @microsoft/mxc-sdk npm package; its x64 binaries are byte-identical to
-// the microsoft/mxc v0.8.0 release). A published release never changes, so
-// the checksums belong to this version and no other.
-const char packageVersion[] = "0.8.0";
+// @microsoft/mxc-sdk npm package, the same binaries the microsoft/mxc v1.0.1
+// release publishes). A published release never changes, so the checksums
+// belong to this version and no other.
+const char packageVersion[] = "1.0.1";
 const char packageProject[] = "https://github.com/microsoft/mxc";
 const char packageLicense[] = "https://github.com/microsoft/mxc/blob/main/LICENSE";
-const char packageUrl[] = "https://registry.npmjs.org/@microsoft/mxc-sdk/-/mxc-sdk-0.8.0.tgz";
-const char packageSha256[] = "06bb2399d7e98ab1907acf851e12a4e44748dd467b79d3e53c2f2fbf569da14e";
+const char packageUrl[] = "https://registry.npmjs.org/@microsoft/mxc-sdk/-/mxc-sdk-1.0.1.tgz";
+const char packageSha256[] = "416d9607c9d4652395d95c3d9c5f5605f1f2f845da1a63228bee41b7392cef49";
 
-// The launcher binary the sandbox wraps commands in, inside the package.
-const char binaryMember[] = "package/bin/x64/wxc-exec.exe";
-const quint64 binarySize = 9478968;
-const char binarySha256[] = "6049c64723af1173c3739dc6cd6b2f33f6c021bb2832c4216233cba7f71aee9a";
+// The launcher binary the sandbox wraps commands in, inside the package. The
+// release ships one build per architecture, each pinned to its own size and
+// checksum.
+struct BinarySpec
+{
+    const char *member; // path inside the package
+    quint64 size;
+    const char *sha256;
+};
+
+// The pinned launcher build for the host architecture (x64 for anything that
+// is not arm64, which is safe because isSupportedPlatform() gates the rest).
+static const BinarySpec &binarySpec()
+{
+    static const BinarySpec x64{
+        "package/bin/x64/wxc-exec.exe",
+        12152632,
+        "090f5d1f7bb93104ab08dcd4e8034ef954aeefcdaf6658dde5f7dff4cfc12f3a",
+    };
+    static const BinarySpec arm64{
+        "package/bin/arm64/wxc-exec.exe",
+        5945656,
+        "91aa4171e8809f33f19622c381116188eab7d8c8cffad231230a31b58146ee77",
+    };
+    return QSysInfo::buildCpuArchitecture() == QLatin1String("arm64") ? arm64 : x64;
+}
 
 static QString binaryName()
 {
@@ -50,9 +72,9 @@ bool isSupportedPlatform()
 {
     if (!HostOsInfo::isWindowsHost())
         return false;
-    // MXC v0.8.0 is published for x86-64 only.
+    // MXC 1.0.1 ships a Windows build for x86-64 and arm64 only.
     const QString architecture = QSysInfo::buildCpuArchitecture();
-    return architecture == QLatin1String("x86_64");
+    return architecture == QLatin1String("x86_64") || architecture == QLatin1String("arm64");
 }
 
 QString version()
@@ -146,17 +168,18 @@ static void verifyChecksum(QPromise<void> &promise, const FilePath &package)
 // and checksum) and leaves it where the Windows sandbox looks for it.
 static Result<> install(const FilePath &unpacked)
 {
-    const FilePath binary = unpacked / QLatin1String(binaryMember);
+    const BinarySpec &spec = binarySpec();
+    const FilePath binary = unpacked / QLatin1String(spec.member);
 
     if (!binary.isFile())
         return ResultError(Tr::tr("The package holds no wxc-exec.exe binary."));
 
     const Result<QByteArray> contents = binary.fileContents();
-    if (!contents || qint64(contents->size()) != qint64(binarySize))
+    if (!contents || qint64(contents->size()) != qint64(spec.size))
         return ResultError(Tr::tr("The wxc-exec.exe binary has an unexpected size."));
     QCryptographicHash hash(QCryptographicHash::Sha256);
     hash.addData(*contents);
-    if (hash.result().toHex() != QByteArray(binarySha256))
+    if (hash.result().toHex() != QByteArray(spec.sha256))
         return ResultError(Tr::tr("The wxc-exec.exe binary does not match its expected "
                                   "checksum."));
 
@@ -193,7 +216,7 @@ GroupItem downloadRecipe()
 
     const auto onSetup = [storage] {
         if (!isSupportedPlatform()) {
-            warn(Tr::tr("The Microsoft MXC runtime is available for Windows x86-64 only."));
+            warn(Tr::tr("The Microsoft MXC runtime is available for Windows x86-64 and arm64 only."));
             return SetupResult::StopWithError;
         }
         if (!acceptLicense())

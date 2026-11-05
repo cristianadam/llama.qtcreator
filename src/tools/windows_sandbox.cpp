@@ -222,19 +222,22 @@ QJsonObject buildConfig(const QString &cwd,
         denied << canonicalGrantPath(dir);
 
     // The container starts with no host environment; pass the caller's
-    // environment explicitly. MXC's validator requires LOCALAPPDATA; point
-    // it at the workdir when the caller has none.
+    // environment explicitly. MXC's validator requires LOCALAPPDATA and
+    // SYSTEMROOT to launch a Windows process container; point them at the
+    // workdir when the caller has none (the values are presence-only).
     // Credentials never reach the container (the caller strips them
     // already; this keeps the probe and any other caller honest).
     QProcessEnvironment workloadEnv = withoutSecretVariables(env);
     if (!workloadEnv.contains(QStringLiteral("LOCALAPPDATA")))
         workloadEnv.insert(QStringLiteral("LOCALAPPDATA"), canonicalCwd);
+    if (!workloadEnv.contains(QStringLiteral("SYSTEMROOT")))
+        workloadEnv.insert(QStringLiteral("SYSTEMROOT"), canonicalCwd);
     QStringList envList; // keys() is sorted
     for (const QString &key : workloadEnv.keys())
         envList << key + QLatin1Char('=') + workloadEnv.value(key);
 
     QJsonObject config;
-    config[QStringLiteral("version")] = QStringLiteral("0.8.0-alpha");
+    config[QStringLiteral("version")] = QStringLiteral("0.9.0-alpha");
     const QString containerId =
         QString::fromLatin1("llama-cpp-")
         + QUuid::createUuid().toString(QUuid::WithoutBraces);
@@ -259,17 +262,19 @@ QJsonObject buildConfig(const QString &cwd,
     // is allowed and no network capability is granted. Web access stays
     // available through the webfetch/websearch tools, which run outside the
     // sandbox. The Sandbox settings page can lift the restriction.
+    const bool allowNetwork = sandboxAllowsNetwork();
     QJsonObject network;
-    if (sandboxAllowsNetwork()) {
-        network[QStringLiteral("defaultPolicy")] = QStringLiteral("allow");
-        network[QStringLiteral("allowLocalNetwork")] = true;
-    } else {
-        network[QStringLiteral("defaultPolicy")] = QStringLiteral("deny");
-        network[QStringLiteral("allowLocalNetwork")] = false;
+    QJsonObject egress;
+    egress[QStringLiteral("default")] = allowNetwork ? QStringLiteral("allow")
+                                                     : QStringLiteral("deny");
+    network[QStringLiteral("egress")] = egress;
+    if (allowNetwork) {
+        // Outbound is open; also reach the local network / host loopback.
+        QJsonObject ingress;
+        ingress[QStringLiteral("default")] = QStringLiteral("allow");
+        ingress[QStringLiteral("hostLoopback")] = QStringLiteral("allow");
+        network[QStringLiteral("ingress")] = ingress;
     }
-    network[QStringLiteral("allowedHosts")] = QJsonArray();
-    network[QStringLiteral("blockedHosts")] = QJsonArray();
-    network[QStringLiteral("enforcementMode")] = QStringLiteral("capabilities");
     config[QStringLiteral("network")] = network;
     QJsonObject containerUi;
     containerUi[QStringLiteral("isolation")] = QStringLiteral("container");

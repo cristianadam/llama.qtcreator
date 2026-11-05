@@ -28,7 +28,7 @@ QString unavailableReason()
     if (HostOsInfo::isWindowsHost()) {
         if (!Tools::Mxc::isSupportedPlatform())
             return Tr::tr("the Microsoft MXC runtime (wxc-exec) the Windows sandbox "
-                          "uses is available for Windows x86-64 only");
+                          "uses is available for Windows x86-64 and arm64 only");
         if (Tools::Mxc::resolvedPath().isEmpty())
             return Tr::tr("the Microsoft MXC runtime (wxc-exec) is not installed; "
                           "download it on the Llama Sandbox settings page");

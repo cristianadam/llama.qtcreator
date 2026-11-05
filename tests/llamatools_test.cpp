@@ -3324,7 +3324,7 @@ void LlamaToolsTest::windowsSandboxSpec()
     const QJsonObject config
         = QJsonDocument::fromJson(QByteArray::fromBase64(configFile.readAll())).object();
     QCOMPARE(config.value(QStringLiteral("version")).toString(),
-             QStringLiteral("0.8.0-alpha"));
+             QStringLiteral("0.9.0-alpha"));
     QCOMPARE(config.value(QStringLiteral("containment")).toString(),
              QStringLiteral("processcontainer"));
     const QJsonObject process = config.value(QStringLiteral("process")).toObject();
@@ -3338,6 +3338,7 @@ void LlamaToolsTest::windowsSandboxSpec()
     QVERIFY(envStrings.contains(QStringLiteral("PATH=/usr/bin")));
     QVERIFY(envStrings.contains(QStringLiteral("FOO=bar baz")));
     QVERIFY(envStrings.contains(QStringLiteral("LOCALAPPDATA=") + workdir.path()));
+    QVERIFY(envStrings.contains(QStringLiteral("SYSTEMROOT=") + workdir.path()));
     const QJsonObject filesystem = config.value(QStringLiteral("filesystem")).toObject();
     // Writable: the temporary location; the working directory is inside it,
     // so the nested grant is dropped.
@@ -3355,7 +3356,9 @@ void LlamaToolsTest::windowsSandboxSpec()
     // No network: nothing allowed, no network capability granted.
     QCOMPARE(config.value(QStringLiteral("network"))
                  .toObject()
-                 .value(QStringLiteral("defaultPolicy"))
+                 .value(QStringLiteral("egress"))
+                 .toObject()
+                 .value(QStringLiteral("default"))
                  .toString(),
              QStringLiteral("deny"));
     QCOMPARE(config.value(QStringLiteral("processContainer"))
@@ -3921,7 +3924,9 @@ void LlamaToolsTest::windowsSandboxSpecExtraDirs()
     // Network is allowed (the setting is on).
     QCOMPARE(config.value(QStringLiteral("network"))
                  .toObject()
-                 .value(QStringLiteral("defaultPolicy"))
+                 .value(QStringLiteral("egress"))
+                 .toObject()
+                 .value(QStringLiteral("default"))
                  .toString(),
              QStringLiteral("allow"));
 }
