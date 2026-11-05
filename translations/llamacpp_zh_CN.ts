@@ -98,7 +98,7 @@
         <translation>打开 llama.cpp 设置页面。</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>禁用 llama.cpp。</translation>
     </message>
@@ -155,11 +155,13 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM 补全</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>聊天</translation>
@@ -169,13 +171,13 @@
         <translation type="vanished">[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+67"/>
+        <location filename="../src/llamasettings.cpp" line="-1104"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
@@ -365,7 +367,7 @@
         <translation type="vanished">在结果缓存中保留的最大缓存补全数量。</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>用几个词（包含一个表情符号）概括对话标题。使用对话中使用的语言。使用纯文本，不要使用 Markdown。</translation>
     </message>
@@ -375,12 +377,16 @@
         <translation>在当前对话的上下文中生成最多五个后续问题。问题应来自用户视角。只输出问题，不要解释。使用对话中使用的语言。返回一个 JSON 对象，其中包含单个键 &quot;follow_ups&quot;，其值为一个纯文本问题字符串数组，不要使用 Markdown。</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>上面的对话很长，上下文空间即将用尽。请撰写一份详细的摘要，使对话能够无缝继续。将摘要组织为包含以下章节的 markdown：## 任务（用户的要求和总体目标）、## 关键决策（重要的决策、约束和偏好）、## 已完成的工作（修改的文件、运行的命令、代码更改及其结果）、## 当前状态（已完成的内容、进行中的内容、遇到的错误）和 ## 后续步骤（接下来应完成什么以结束任务）。要精确具体：保留文件路径、函数名和确切值。不要回答用户的最后一条消息；只需总结。</translation>
+        <translation type="vanished">上面的对话很长，上下文空间即将用尽。请撰写一份详细的摘要，使对话能够无缝继续。将摘要组织为包含以下章节的 markdown：## 任务（用户的要求和总体目标）、## 关键决策（重要的决策、约束和偏好）、## 已完成的工作（修改的文件、运行的命令、代码更改及其结果）、## 当前状态（已完成的内容、进行中的内容、遇到的错误）和 ## 后续步骤（接下来应完成什么以结束任务）。要精确具体：保留文件路径、函数名和确切值。不要回答用户的最后一条消息；只需总结。</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+9"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>上面的对话很长，将在一个拥有全新上下文窗口的新对话中继续。请撰写一份交接文档，使新对话在无需查看之前消息的情况下即可无缝继续工作。将文档组织为包含以下章节的 markdown：## 任务（用户的要求和总体目标）、## 关键决策（重要的决策、约束和偏好）、## 已完成的工作（修改的文件、运行的命令、代码更改及其结果）、## 当前状态（已完成的内容、进行中的内容、遇到的错误）和 ## 后续步骤（接下来要做什么以完成该任务）。要精确具体：保留文件路径、函数名和确切值。不要回答用户的最后一条消息；只需撰写交接文档。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -894,6 +900,16 @@
         <translation>支持思考的模型的思考（推理）级别：“default”、“off”、“low”、“medium”、“high” 或 “max”。</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>聊天字体缩放</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>聊天对话字体的大小，以编辑器字体大小的百分比表示。可通过在聊天上按住 Ctrl 并滚动鼠标滚轮，或使用聊天放大/缩小命令进行调整。</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>辅助模型</translation>
@@ -914,27 +930,74 @@
         <translation>用于辅助请求（例如对话标题和后续建议）的模型。使用小模型可以让主聊天模型保持空闲。留空则使用当前激活的聊天模型。</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>当对话使用的模型上下文窗口超过配置的阈值时，其历史会被总结为一条紧凑的标记消息，此后只发送摘要及其后的消息给模型。完整历史仍显示在聊天中。还用于从上下文溢出错误中恢复：历史被压缩，请求会重试一次。</translation>
+        <location line="+19"/>
+        <source>Handoff Prompt</source>
+        <translation>交接提示词</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>发送给模型以撰写交接文档（任务、当前状态、后续步骤）的提示词；当对话在新对话中继续时，该文档将作为新对话的初始内容。</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>自动在新对话中继续</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>当对话使用超过模型上下文窗口的配置阈值时，其历史将被总结为一份交接文档（任务、当前状态、后续步骤），随后将创建并打开一个以该文档为初始内容的新对话，而原对话保持不变。这样可以在上下文窗口较小的模型上让长任务继续推进。</translation>
     </message>
     <message>
         <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>交接阈值</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>交接阈值：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>当对话历史使用超过模型上下文窗口此百分比时，对话将在新对话中继续。</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为 Microsoft MXC 进程容器），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱使用固定版本的 wxc-exec.exe 运行时，可从沙箱设置页面下载（也可以指向自己的运行时），并且需要 Windows 11 24H2 或更高版本。附加目录和网络策略在沙箱设置页面上配置。</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>MXC 运行时：</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>用于运行 Windows 沙箱的 wxc-exec.exe 启动器。如果为空，则使用从本页面下载的运行时。</translation>
+    </message>
+    <message>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">当对话使用的模型上下文窗口超过配置的阈值时，其历史会被总结为一条紧凑的标记消息，此后只发送摘要及其后的消息给模型。完整历史仍显示在聊天中。还用于从上下文溢出错误中恢复：历史被压缩，请求会重试一次。</translation>
+    </message>
+    <message>
         <source>Auto-compact Threshold</source>
-        <translation>自动压缩阈值</translation>
+        <translation type="vanished">自动压缩阈值</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>自动压缩阈值：</translation>
+        <translation type="vanished">自动压缩阈值：</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>当对话历史使用的模型上下文窗口超过此百分比时，对话会被自动压缩。</translation>
+        <translation type="vanished">当对话历史使用的模型上下文窗口超过此百分比时，对话会被自动压缩。</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>本地模型可能无限循环调用工具，因此连续纯工具轮数达到此数量后，这些调用将不再执行 - 模型会收到一个失败结果，提示它改为结束。任务（子代理）对话不受此限制。设置为 0 表示不限制。</translation>
     </message>
@@ -948,7 +1011,7 @@
         <translation type="vanished">用于辅助请求（例如对话标题和后续建议）的模型。使用小模型可以让主聊天模型保持空闲。留空则使用当前激活的聊天模型。</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>对话标题提示词</translation>
     </message>
@@ -968,17 +1031,15 @@
         <translation>发送给模型以在完整回复后生成后续问题的提示词。</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>压缩提示词</translation>
+        <translation type="vanished">压缩提示词</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>发送给模型的提示词，用于在对话历史被压缩以适配上下文窗口时对其进行总结。</translation>
+        <translation type="vanished">发送给模型的提示词，用于在对话历史被压缩以适配上下文窗口时对其进行总结。</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+13"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>后续问题</translation>
@@ -999,17 +1060,15 @@
         <translation>启用后，模型会在助手首次回复后生成简短的对话标题。</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>自动压缩长对话</translation>
+        <translation type="vanished">自动压缩长对话</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">当对话使用约 80% 的模型上下文窗口时，其历史会被总结为一条紧凑的标记消息，此后只发送摘要及其后的消息给模型。完整历史仍显示在聊天中。还用于从上下文溢出错误中恢复：历史被压缩一次，请求会重试一次。</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>定位器提示词</translation>
     </message>
@@ -1031,12 +1090,11 @@
         <translation>在编辑器中文本选区的底部显示一个小按钮。点击它可打开 llama.cpp 定位器，以便使用其中一个提示词将选区发送给 llama.cpp。</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为 Microsoft MXC 进程容器），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱使用固定版本的 wxc-exec.exe 运行时，可从工具设置页面下载（LLAMA_WXC_EXEC 可以指向它），并且需要 Windows 11 24H2 或更高版本。附加目录和网络策略在沙箱设置页面上配置。</translation>
+        <translation type="vanished">如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为 Microsoft MXC 进程容器），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱使用固定版本的 wxc-exec.exe 运行时，可从工具设置页面下载（LLAMA_WXC_EXEC 可以指向它），并且需要 Windows 11 24H2 或更高版本。附加目录和网络策略在沙箱设置页面上配置。</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>沙箱可写目录</translation>
     </message>
@@ -1080,7 +1138,7 @@
         <translation type="vanished">“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-98"/>
         <source>Skill directories</source>
         <translation>技能目录</translation>
     </message>
@@ -1102,8 +1160,23 @@
     </message>
     <message>
         <location line="+4"/>
+        <source>Working directory</source>
+        <translation>工作目录</translation>
+    </message>
+    <message>
         <location line="+1"/>
-        <location line="+393"/>
+        <source>Working directory:</source>
+        <translation>工作目录：</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>聊天工具在其中运行的目录。留空则使用启动项目的目录（未打开任何项目时使用默认项目目录）。也可以点击聊天欢迎屏幕上的工作目录来更改。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱化命令</translation>
@@ -1117,15 +1190,15 @@
         <translation type="vanished">如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为来自 @anthropic-ai/sandbox-runtime 的 srt-win），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱需要一次性安装：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（会弹出一个 UAC 提示）；srt-win 可执行文件必须在 PATH 中（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>加载项目说明</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>如果选中，当前项目的项目说明文件会被追加到聊天系统消息中。该文件为 AGENTS.md，回退到 CLAUDE.md，并在项目目录中查找，然后逐级向上查找直到 git 仓库根目录，因此一个 monorepo 可以为所有项目保留单一说明文件。大于 32 KB 的文件会被截断。</translation>
     </message>
@@ -1293,7 +1366,7 @@
         <translation>Tavily 的 API 密钥，可在 tavily.com 获取（“tavily” 提供方所需）。</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>为该项目覆盖全局“沙箱化命令”设置。有关沙箱限制的内容，请参阅 Llama 工具页面上的全局设置。</translation>
     </message>
@@ -1303,12 +1376,17 @@
         <translation>为该项目覆盖全局“加载项目说明”设置。有关加载的内容，请参阅 Llama 工具页面上的全局设置。</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>网络搜索</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>提示词</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
@@ -1338,13 +1416,11 @@
         <translation>最大</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>工作目录：%1</translation>
+        <translation type="vanished">工作目录：%1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>LLM 模型</translation>
     </message>
@@ -1373,52 +1449,48 @@
         <translation>思考级别</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>聊天中搜索</translation>
+        <translation type="vanished">聊天中搜索</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>下一搜索结果</translation>
+        <translation type="vanished">下一搜索结果</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>上一搜索结果</translation>
+        <translation type="vanished">上一搜索结果</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>发送到 Llama 聊天</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>模型路径：%1</translation>
+        <translation type="vanished">模型路径：%1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>上下文：%1</translation>
+        <translation type="vanished">上下文：%1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>视觉功能：%1</translation>
+        <translation type="vanished">视觉功能：%1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>否</translation>
     </message>
     <message>
-        <location line="+978"/>
+        <location line="+996"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>删除“%1”</translation>
     </message>
@@ -1427,23 +1499,109 @@
         <translation type="vanished">后续问题：</translation>
     </message>
     <message>
-        <location line="-450"/>
+        <location line="-329"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考级别：%1（适用于新消息）</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人工编辑器</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>你已连接到 %1，使用 %2 作为当前目录</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>你好</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>输入消息或上传文件以开始</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>点击模型名称可查看其详细信息，点击目录可更改工具的运行位置。</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>模型详情</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>模型：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>模型路径：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>上下文：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>关闭</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>选择工作目录</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>停止任务</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>任务仍在运行。确定要停止它吗？</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>编辑消息</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>这将删除 %1 条消息，包括：%2 条用户消息和 %3 条助手回复……</translation>
     </message>
@@ -1463,7 +1621,7 @@
         <translation>确定要删除此消息吗？</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>处理中：%1%</translation>
     </message>
@@ -1473,17 +1631,22 @@
         <translation>&lt;b&gt;提示词处理：&lt;/b&gt;&lt;br&gt;总令牌数：%1&lt;br&gt;已处理：%2&lt;br&gt;已缓存：%3&lt;br&gt;时间：%4 毫秒</translation>
     </message>
     <message>
-        <location line="-841"/>
+        <location line="+132"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>正在创建新对话以继续此对话 – 正在总结对话...</translation>
+    </message>
+    <message>
+        <location line="-981"/>
         <source>Follow-up questions:</source>
         <translation>后续问题：</translation>
     </message>
     <message>
-        <location line="-388"/>
+        <location line="-510"/>
         <source>Queued messages - sent after the current step</source>
         <translation>排队消息 - 在当前步骤之后发送</translation>
     </message>
     <message>
-        <location line="+1243"/>
+        <location line="+1373"/>
         <source>Speed: %1 t/s</source>
         <translation>速度：%1 令牌/秒</translation>
     </message>
@@ -1517,7 +1680,11 @@
         <translation>删除排队消息（它不会被发送）</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*正在创建新对话以继续此对话 – 正在总结对话…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>llama.cpp 聊天编辑器</translation>
     </message>
@@ -1680,7 +1847,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">会话 ID</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>创建新的 llama.cpp 会话</translation>
     </message>
@@ -1701,6 +1868,12 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>在新对话中继续</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>删除</translation>
@@ -1728,7 +1901,7 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+95"/>
         <source>Save Conversation as Markdown</source>
         <translation>将会话保存为 Markdown</translation>
     </message>
@@ -1757,7 +1930,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会话</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>为所选内容创建摘要</translation>
     </message>
@@ -1823,7 +1996,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>已复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>切换工具使用的详细信息</translation>
     </message>
@@ -1842,24 +2015,20 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>新建会话</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>搜索</translation>
+        <translation type="vanished">搜索</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>查找...</translation>
+        <translation type="vanished">查找...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>上一结果</translation>
+        <translation type="vanished">上一结果</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>下一结果</translation>
+        <translation type="vanished">下一结果</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2198,7 +2367,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">选择一个工具以查看其 JSON 定义</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>选择一个工具以查看其定义</translation>
     </message>
@@ -2213,22 +2382,20 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>下载 ripgrep %1</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>下载 MXC %1</translation>
+        <translation type="vanished">下载 MXC %1</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>沙箱（命令、目录、网络）在沙箱设置页面上配置。</translation>
+        <translation type="vanished">沙箱（命令、目录、网络）在沙箱设置页面上配置。</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>search 和 find 工具使用 ripgrep，但本系统未安装 ripgrep。</translation>
     </message>
@@ -2238,17 +2405,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>ripgrep：%1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Windows 上的沙箱化 bash 工具使用 Microsoft MXC 运行时（wxc-exec），但本系统未安装它。</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Windows 沙箱运行时：%1</translation>
+        <translation type="vanished">Windows 沙箱运行时：%1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL：%1</translation>
@@ -2271,7 +2437,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+8"/>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
-        <translation>Qt Creator 内置的 MCP 服务器，由 Qt Creator 本身管理（Qt Creator 设置中的 工具 > MCP）。</translation>
+        <translation>Qt Creator 内置的 MCP 服务器，由 Qt Creator 本身管理（Qt Creator 设置中的 工具 &gt; MCP）。</translation>
     </message>
     <message>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools → MCP in the Qt Creator settings).</source>
@@ -2344,7 +2510,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2365,7 +2531,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>名称：%1</translation>
     </message>
@@ -2390,7 +2556,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 个技能</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>无描述</translation>
     </message>
@@ -2432,9 +2598,9 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>添加...</translation>
     </message>
@@ -2462,11 +2628,16 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>定位器菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本，“{file}” 和 “{line}” 会被替换为当前文件和光标所在行，“{diagnostics}” 会被替换为当前文件的错误和警告，“{git_diff}” 会被替换为其 git 仓库的未提交更改。</translation>
     </message>
     <message>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>交接</translation>
+    </message>
+    <message>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">定位器菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本。</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-44"/>
         <source>Prompt</source>
         <translation>提示词</translation>
     </message>
@@ -2476,13 +2647,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>提示词：</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>压缩</translation>
+        <translation type="vanished">压缩</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>标题</translation>
     </message>
@@ -2540,77 +2710,124 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">名称“%1”与 %2 冲突——保留第一个</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>错误：</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>自动压缩已禁用。</translation>
+        <translation type="vanished">自动压缩已禁用。</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>对话正在压缩中。</translation>
+        <translation type="vanished">对话正在压缩中。</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>对话中没有可压缩的消息。</translation>
+        <translation type="vanished">对话中没有可压缩的消息。</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>对话最近已被压缩，无法进一步压缩。</translation>
+        <translation type="vanished">对话最近已被压缩，无法进一步压缩。</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>压缩请求失败：%1</translation>
+        <translation type="vanished">压缩请求失败：%1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>压缩请求返回了格式错误的回复。</translation>
+        <translation type="vanished">压缩请求返回了格式错误的回复。</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>压缩请求没有返回摘要。</translation>
+        <translation type="vanished">压缩请求没有返回摘要。</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>压缩请求返回了空摘要。</translation>
+        <translation type="vanished">压缩请求返回了空摘要。</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>对话已压缩 - 较早的消息已被总结以适配上下文窗口。</translation>
+        <translation type="vanished">对话已压缩 - 较早的消息已被总结以适配上下文窗口。</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">对话已压缩 – 较早的消息已被总结以适配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>对话已超出模型的上下文窗口。</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>自动压缩已禁用；请缩短或压缩对话后重试。</translation>
+        <translation type="vanished">自动压缩已禁用；请缩短或压缩对话后重试。</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">对话正在压缩中；压缩完成后再重新发送该消息。</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>自动交接已禁用。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>正在为此对话创建新对话。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>该对话没有可交接的消息。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>该对话最近刚交接过；请先再发送几条消息。</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>交接请求失败：%1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>交接请求返回了格式错误的回复。</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>对话正在压缩中；压缩完成后再重新发送该消息。</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>交接请求未返回文档。</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>交接请求返回了一个空文档。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>%1 的延续</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>此对话继续上一个对话的工作，该对话的上下文窗口已耗尽。下面的交接文档描述了任务、当前状态和后续步骤。请从后续步骤继续。
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>在新对话中继续以推进工作。</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**注意：** 回复被截断：模型已达到最大输出令牌数。</translation>
     </message>
@@ -2620,14 +2837,22 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>**注意：** 模型未作答便结束了本轮。</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>Windows 沙箱所使用的 Microsoft MXC 运行时（wxc-exec）仅适用于 Windows x86-64</translation>
+        <translation type="vanished">Windows 沙箱所使用的 Microsoft MXC 运行时（wxc-exec）仅适用于 Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">未安装 Microsoft MXC 运行时（wxc-exec）；请在 Llama.cpp 聊天工具设置页面下载</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>Windows 沙箱所使用的 Microsoft MXC 运行时（wxc-exec）仅适用于 Windows x86-64 和 arm64</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>未安装 Microsoft MXC 运行时（wxc-exec）；请在 Llama.cpp 聊天工具设置页面下载</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>未安装 Microsoft MXC 运行时（wxc-exec）；请在 Llama 沙箱设置页面下载</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2660,7 +2885,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>llama.cpp 聊天工具沙箱的问题。</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>可写目录：</translation>
     </message>
@@ -2695,7 +2920,22 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>webfetch 和 websearch 工具始终在沙箱外运行，不受此设置影响。</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>下载...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Windows 上的沙箱化 bash 工具在 Microsoft MXC 进程容器中运行。</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Windows 运行时</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>文件系统</translation>
     </message>
@@ -2705,7 +2945,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>选择目录</translation>
     </message>
@@ -2774,12 +3014,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>成功。已更新以下文件：</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>未找到 sandbox-exec 可执行文件；本系统无法使用沙箱。</translation>
     </message>
@@ -3334,12 +3574,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>下载 Windows 沙箱运行时（MXC）</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>下载 Microsoft MXC 运行时 %1？</translation>
     </message>
@@ -3367,7 +3607,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>下载</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>该包中没有 wxc-exec.exe 二进制文件。</translation>
     </message>
@@ -3383,8 +3623,12 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Microsoft MXC 运行时仅适用于 Windows x86-64 和 arm64。</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Microsoft MXC 运行时仅适用于 Windows x86-64。</translation>
+        <translation type="vanished">Microsoft MXC 运行时仅适用于 Windows x86-64。</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3555,7 +3799,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>任务列表已更新：%2 个中已完成 %1 个。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>不允许访问“%1”：设备路径和管理共享在沙箱内不可访问。</translation>
     </message>
@@ -3617,12 +3861,11 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
+        <translation type="vanished">请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Windows 沙箱后端（wxc-exec）未能及时响应其功能探测。%1</translation>
     </message>
@@ -3632,7 +3875,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows 沙箱无法设置其实时隔离探测（临时目录或主目录金丝雀）。%1</translation>
     </message>
@@ -3667,7 +3910,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>请从 Llama.cpp 聊天沙箱设置页面下载（固定版本、经校验和验证的 Microsoft MXC 发布版本）；也可以在那里指向自己的运行时。或者，在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows 沙箱（Microsoft MXC）正在首次验证其隔离状态；请在几秒后重新运行命令。</translation>
     </message>

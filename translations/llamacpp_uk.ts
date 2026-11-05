@@ -98,7 +98,7 @@
         <translation>Відкрийте сторінку налаштувань llama.cpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>Вимкнути llama.cpp.</translation>
     </message>
@@ -155,23 +155,25 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Чат</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+96"/>
+        <location filename="../src/llamasettings.cpp" line="-1075"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Увімкнути llama.cpp</translation>
@@ -361,7 +363,7 @@
         <translation type="vanished">Максимальна кількість завершень у кеші, які зберігаються в result_cache.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Узагальніть назву розмови кількома словами, включаючи один емодзі. Використовуйте мову, якою ведеться розмова. Використовуйте звичайний текст без Markdown.</translation>
     </message>
@@ -371,12 +373,16 @@
         <translation>Сгенеруйте не більше п&apos;яти запитань для продовження в контексті поточної розмови. Запитання мають бути з погляду користувача. Тільки запитання, без пояснень. Використовуйте мову, якою ведеться розмова. Поверніть об&apos;єкт JSON з одним ключем &quot;follow_ups&quot;, що містить масив рядків із запитаннями у звичайному тексті, без Markdown.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Розмова вище є довгою, і простору контексту майже не лишилося. Напишіть детальний підсумок, що дозволить розмові безшовно продовжитися. Структуруйте підсумок як markdown із такими розділами: ## Task (те, про що просив користувач, і загальна мета), ## Key Decisions (важливі рішення, обмеження та уподобання), ## Work Done (файли, до яких торкнулися, виконані команди, зміни коду та їхні наслідки), ## Current State (що завершено, що в процесі, які помилки виникли) і ## Next Steps (що слід зробити далі, щоб завершити завдання). Будьте точними та конкретними: зберігайте шляхи до файлів, назви функцій і точні значення. Не відповідайте на останнє повідомлення користувача; лише узагальніть.</translation>
+        <translation type="vanished">Розмова вище є довгою, і простору контексту майже не лишилося. Напишіть детальний підсумок, що дозволить розмові безшовно продовжитися. Структуруйте підсумок як markdown із такими розділами: ## Task (те, про що просив користувач, і загальна мета), ## Key Decisions (важливі рішення, обмеження та уподобання), ## Work Done (файли, до яких торкнулися, виконані команди, зміни коду та їхні наслідки), ## Current State (що завершено, що в процесі, які помилки виникли) і ## Next Steps (що слід зробити далі, щоб завершити завдання). Будьте точними та конкретними: зберігайте шляхи до файлів, назви функцій і точні значення. Не відповідайте на останнє повідомлення користувача; лише узагальніть.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+9"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Розмова вище є довгою, і її буде продовжено в новій розмові зі свіжим контекстним вікном. Напишіть документ передання, що дозволить новій розмові безшовно продовжити роботу, не бачачи попередніх повідомлень. Структуруйте його як markdown із такими розділами: ## Task (те, про що просив користувач, і загальна мета), ## Key Decisions (важливі рішення, обмеження та уподобання), ## Work Done (файли, до яких торкнулися, виконані команди, зміни коду та їхні наслідки), ## Current State (що завершено, що в процесі, які помилки виникли) і ## Next Steps (що слід зробити далі, щоб завершити завдання). Будьте точними та конкретними: зберігайте шляхи до файлів, назви функцій і точні значення. Не відповідайте на останнє повідомлення користувача; лише напишіть документ передання.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -890,6 +896,16 @@
         <translation>Рівень мислення (роздумів) для моделей із підтримкою мислення: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; або &quot;max&quot;.</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>Масштаб шрифту чату</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Розмір шрифту розмови чату у відсотках від розміру шрифту редактора. Коригуйте за допомогою Ctrl+коліщатко миші над чатом або команд збільшення/зменшення масштабу чату.</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>Допоміжна модель</translation>
@@ -910,27 +926,74 @@
         <translation>Модель, яку використовується для допоміжних запитів, таких як назви розмов і пропозиції запитань для продовження. Використовуйте невелику модель, щоб не навантажувати основну модель чату. Залиште порожнім, щоб використовувати активну модель чату.</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Коли розмова використовує більше ніж налаштований поріг контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
+        <location line="+19"/>
+        <source>Handoff Prompt</source>
+        <translation>Запит передання</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Запит, який надсилається моделі, щоб написати документ передання (завдання, поточний стан, наступні кроки), з якого починається нова розмова, коли розмову продовжують у новій.</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Автоматично продовжувати в новій розмові</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Коли розмова використовує більше ніж налаштований поріг контекстного вікна моделі, її історію узагальнюють у документ передання (завдання, поточний стан, наступні кроки), створюють і відкривають нову розмову, що починається з цього документа, а початкова розмова лишається незмінною. Це дозволяє довгому завданню тривати на моделі з невеликим контекстним вікном.</translation>
     </message>
     <message>
         <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>Поріг передання</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>Поріг передання:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Розмову продовжують у новій, коли її історія використовує більше цього відсотка контекстного вікна моделі.</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити зі сторінки налаштувань пісочниці (там можна вказати й власне середовище виконання), і потрібна Windows 11 24H2 або новіша. Додаткові каталоги та політику мережі налаштовують на сторінці налаштувань пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>Середовище виконання MXC:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>Запускатор wxc-exec.exe, у якому працює пісочниця Windows. Якщо порожнє, використовується середовище виконання, завантажене з цієї сторінки.</translation>
+    </message>
+    <message>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">Коли розмова використовує більше ніж налаштований поріг контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
+    </message>
+    <message>
         <source>Auto-compact Threshold</source>
-        <translation>Поріг автостиснення</translation>
+        <translation type="vanished">Поріг автостиснення</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Поріг автостиснення:</translation>
+        <translation type="vanished">Поріг автостиснення:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Розмову стискають автоматично, коли її історія використовує більше ніж цей відсоток контекстного вікна моделі.</translation>
+        <translation type="vanished">Розмову стискають автоматично, коли її історія використовує більше ніж цей відсоток контекстного вікна моделі.</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Локальна модель може викликати інструменти в нескінченному циклі, тому після цієї кількості послідовних ходів лише з інструментами виклики не виконуються - модель отримує невдалий результат із наказом завершити замість цього. Розмови завдань (субагентів) не обмежуються. Встановіть 0, щоб не було обмеження.</translation>
     </message>
@@ -944,7 +1007,7 @@
         <translation type="vanished">Модель, яку використовується для допоміжних запитів, таких як назви розмов і пропозиції запитань для продовження. Використовуйте невелику модель, щоб не навантажувати основну модель чату. Залиште порожнім, щоб використовувати активну модель чату.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>Запит для назви розмови</translation>
     </message>
@@ -964,17 +1027,15 @@
         <translation>Запит, який надсилається моделі для генерації запитань продовження після завершення відповіді.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>Запит для стиснення розмови</translation>
+        <translation type="vanished">Запит для стиснення розмови</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Запит, який надсилається моделі для узагальнення історії розмови, коли її стискають, щоб вона вмістилася в контекстне вікно.</translation>
+        <translation type="vanished">Запит, який надсилається моделі для узагальнення історії розмови, коли її стискають, щоб вона вмістилася в контекстне вікно.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+13"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Запитання продовження</translation>
@@ -995,17 +1056,15 @@
         <translation>Якщо увімкнено, модель генерує коротку назву розмови після першої відповіді асистента.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>Автостиснення довгих розмов</translation>
+        <translation type="vanished">Автостиснення довгих розмов</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">Коли розмова використовує приблизно 80 % контекстного вікна моделі, її історію узагальнюють у стисле маркерне повідомлення, і відтоді моделі надсилаються лише підсумок і повідомлення після нього. Повна історія залишається видимою в чаті. Також використовується для відновлення після помилки переповнення контексту: історію стискають, і запит повторюють один раз.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>Запити локалятора</translation>
     </message>
@@ -1027,12 +1086,11 @@
         <translation>Показувати невелику кнопку внизу текстового виділення в редакторі. Натискання на неї відкриває локалятор llama.cpp, щоб виділення можна було надіслати до llama.cpp з одним із запитів.</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити зі сторінки налаштувань інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша. Додаткові каталоги та політику мережі налаштовують на сторінці налаштувань пісочниці.</translation>
+        <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, контейнер процесів Microsoft MXC на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочниця використовує закріплене середовище виконання wxc-exec.exe, яке можна завантажити зі сторінки налаштувань інструментів (LLAMA_WXC_EXEC може вказувати на нього), і потрібна Windows 11 24H2 або новіша. Додаткові каталоги та політику мережі налаштовують на сторінці налаштувань пісочниці.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>Пісочниця: каталоги запису</translation>
     </message>
@@ -1076,7 +1134,7 @@
         <translation type="vanished">Вбудовані запити локалятора &quot;ll&quot;. У меню показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст.</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-98"/>
         <source>Skill directories</source>
         <translation>Каталоги навичок</translation>
     </message>
@@ -1098,8 +1156,23 @@
     </message>
     <message>
         <location line="+4"/>
+        <source>Working directory</source>
+        <translation>Робочий каталог</translation>
+    </message>
+    <message>
         <location line="+1"/>
-        <location line="+393"/>
+        <source>Working directory:</source>
+        <translation>Робочий каталог:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Каталог, у якому працюють інструменти чату. Залиште порожнім, щоб використовувати каталог початкового проєкту (або типовий каталог проєктів, якщо жоден проєкт не відкрито). Його також можна змінити, натиснувши на робочий каталог на екрані привітання чату.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Команди в пісочниці</translation>
@@ -1113,15 +1186,15 @@
         <translation type="vanished">Якщо позначено, інструменти чату працюють в пісочниці: команди bash виконуються в системній пісочниці, яка блокує запис у системні розташування (bubblewrap/bwrap на Linux, sandbox-exec на macOS, srt-win з @anthropic-ai/sandbox-runtime на Windows), а файлові інструменти можуть записувати лише в каталог проєкту та тимчасові розташування. Розташування облікових даних (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) недоступні для читання жодним інструментом, а команди в пісочниці не мають доступу до мережі (інструменти webfetch та websearch не зачіпаються). На Windows пісочницю потрібно встановити один раз: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (один запит UAC); виконуваний файл srt-win має бути в PATH (LLAMA_SRT_WIN може вказувати на нього).</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Завантажити інструкції проєкту</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Якщо позначено, файл інструкцій поточного проєкту додається до системного повідомлення чату. Файл — AGENTS.md, з резервним варіантом CLAUDE.md; його шукають у каталозі проєкту, а потім вгору до кореня репозиторію git, щоб у monorepo можна було тримати один файл інструкцій для всіх проєктів. Файли більші за 32 КБ обрізаються.</translation>
     </message>
@@ -1289,7 +1362,7 @@
         <translation>Ключ API для Tavily, отримати його можна на tavily.com (потрібен для постачальника &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Перевизначає глобальний параметр «Команди в пісочниці» для цього проєкту. Див. глобальний параметр на сторінці інструментів Llama, щоб дізнатися, що обмежує пісочниця.</translation>
     </message>
@@ -1299,12 +1372,17 @@
         <translation>Перевизначає глобальний параметр «Завантажити інструкції проєкту» для цього проєкту. Див. глобальний параметр на сторінці інструментів Llama, щоб дізнатися, що завантажується.</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>Веб-пошук</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>Запити</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>За замовчуванням</translation>
     </message>
@@ -1334,13 +1412,11 @@
         <translation>Максимальний</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>Робочий каталог: %1</translation>
+        <translation type="vanished">Робочий каталог: %1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>Модель LLM</translation>
     </message>
@@ -1369,52 +1445,48 @@
         <translation>Рівень мислення</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>Пошук у чаті</translation>
+        <translation type="vanished">Пошук у чаті</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>Наступний результат пошуку</translation>
+        <translation type="vanished">Наступний результат пошуку</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>Попередній результат пошуку</translation>
+        <translation type="vanished">Попередній результат пошуку</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>Надіслати в Llama Chat</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>Шлях до моделі: %1</translation>
+        <translation type="vanished">Шлях до моделі: %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Контекст: %L1</translation>
+        <translation type="vanished">Контекст: %L1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>Бачення: %1</translation>
+        <translation type="vanished">Бачення: %1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>так</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>ні</translation>
     </message>
     <message>
-        <location line="+978"/>
+        <location line="+996"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Видалити &quot;%1&quot;</translation>
     </message>
@@ -1423,23 +1495,109 @@
         <translation type="vanished">Запитання продовження:</translation>
     </message>
     <message>
-        <location line="-450"/>
+        <location line="-329"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Рівень мислення: %1 (стосується нових повідомлень)</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Людина-редактор</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Ви підключені до %1 з поточним каталогом %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>Привіт</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Введіть повідомлення або завантажте файли, щоб почати</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Натисніть на назву моделі, щоб побачити її деталі, або на каталог, щоб змінити, де працюють інструменти.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>Деталі моделі</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>Модель:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>Шлях до моделі:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>Контекст:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Закрити</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>Виберіть робочий каталог</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>Зупинити завдання</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Завдання все ще виконується. Ви дійсно хочете зупинити його?</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>Редагувати повідомлення</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Буде видалено %1 повідомлень, зокрема: %2 повідомлення користувача та %3 відповіді асистента ...</translation>
     </message>
@@ -1459,7 +1617,7 @@
         <translation>Ви впевнені, що хочете видалити це повідомлення?</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>Обробка: %1%</translation>
     </message>
@@ -1469,17 +1627,22 @@
         <translation>&lt;b&gt;Обробка запиту:&lt;/b&gt;&lt;br&gt;Всього токенів: %1&lt;br&gt;Оброблено: %2&lt;br&gt;З кешу: %3&lt;br&gt;Час: %4 мс</translation>
     </message>
     <message>
-        <location line="-841"/>
+        <location line="+132"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Створення нової розмови, щоб продовжити цю – узагальнення розмови...</translation>
+    </message>
+    <message>
+        <location line="-981"/>
         <source>Follow-up questions:</source>
         <translation>Додаткові запитання:</translation>
     </message>
     <message>
-        <location line="-388"/>
+        <location line="-510"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Повідомлення в черзі - надсилаються після поточного кроку</translation>
     </message>
     <message>
-        <location line="+1243"/>
+        <location line="+1373"/>
         <source>Speed: %1 t/s</source>
         <translation>Швидкість: %1 токенів/секунду</translation>
     </message>
@@ -1513,7 +1676,11 @@
         <translation>Видалити повідомлення з черги (воно не буде надіслано)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Створення нової розмови, щоб продовжити цю – узагальнення розмови…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Редактор чату LlamaCpp</translation>
     </message>
@@ -1676,7 +1843,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Ідентифікатор розмови</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Створює нову розмову з llama.cpp</translation>
     </message>
@@ -1697,6 +1864,12 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>Продовжити в новій розмові</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Видалити</translation>
@@ -1724,7 +1897,7 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+95"/>
         <source>Save Conversation as Markdown</source>
         <translation>Зберегти розмову у форматі Markdown</translation>
     </message>
@@ -1753,7 +1926,7 @@ Do you want to overwrite it?</source>
         <translation>Розмови з llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>Створити підсумок для вибраного {selection}</translation>
     </message>
@@ -1819,7 +1992,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Скопійовано в буфер обміну</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Показати/приховати деталі використання інструментів</translation>
     </message>
@@ -1838,24 +2011,20 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Нова розмова</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>Пошук</translation>
+        <translation type="vanished">Пошук</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>Знайти...</translation>
+        <translation type="vanished">Знайти...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>Попередній результат</translation>
+        <translation type="vanished">Попередній результат</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>Наступний результат</translation>
+        <translation type="vanished">Наступний результат</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2154,7 +2323,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Оберіть інструмент, щоб переглянути його визначення у форматі JSON</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>Оберіть інструмент, щоб переглянути його визначення</translation>
     </message>
@@ -2169,22 +2338,20 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Завантажити ripgrep %1</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>Завантажити MXC %1</translation>
+        <translation type="vanished">Завантажити MXC %1</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Параметри пісочниці (команди, каталоги, мережа) налаштовуються на сторінці налаштувань пісочниці.</translation>
+        <translation type="vanished">Параметри пісочниці (команди, каталоги, мережа) налаштовуються на сторінці налаштувань пісочниці.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>Редагувати</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Інструменти пошуку та знаходження файлів використовують ripgrep, який не встановлено на цій системі.</translation>
     </message>
@@ -2194,17 +2361,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Інструмент bash в пісочниці на Windows використовує середовище виконання Microsoft MXC (wxc-exec), яке не встановлено на цій системі.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Середовище виконання пісочниці Windows: %1</translation>
+        <translation type="vanished">Середовище виконання пісочниці Windows: %1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2300,7 +2466,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>Опис</translation>
     </message>
@@ -2321,7 +2487,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>Назва: %1</translation>
     </message>
@@ -2346,7 +2512,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 навичок</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Без опису</translation>
     </message>
@@ -2388,9 +2554,9 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>Додати...</translation>
     </message>
@@ -2418,11 +2584,16 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>У меню локалятора показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст, &quot;{file}&quot; та &quot;{line}&quot; — на поточний файл і рядок курсора, &quot;{diagnostics}&quot; — на помилки та попередження поточного файлу, а &quot;{git_diff}&quot; — на незакомітовані зміни його репозиторію git.</translation>
     </message>
     <message>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>Передання</translation>
+    </message>
+    <message>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">У меню локалятора показується лише перший рядок запиту; моделі надсилається повний текст. &quot;{selection}&quot; замінюється на виділений текст.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-44"/>
         <source>Prompt</source>
         <translation>Запит</translation>
     </message>
@@ -2432,13 +2603,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Запити:</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>Стиснення</translation>
+        <translation type="vanished">Стиснення</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Назва</translation>
     </message>
@@ -2496,77 +2666,124 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>Помилка:</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Автостиснення вимкнено.</translation>
+        <translation type="vanished">Автостиснення вимкнено.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Розмову вже стискають.</translation>
+        <translation type="vanished">Розмову вже стискають.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>У розмові немає повідомлень для стиснення.</translation>
+        <translation type="vanished">У розмові немає повідомлень для стиснення.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Розмову щойно стиснуто, її не можна стиснути ще.</translation>
+        <translation type="vanished">Розмову щойно стиснуто, її не можна стиснути ще.</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>Запит на стиснення не вдалося виконати: %1</translation>
+        <translation type="vanished">Запит на стиснення не вдалося виконати: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Запит на стиснення повернув некоректну відповідь.</translation>
+        <translation type="vanished">Запит на стиснення повернув некоректну відповідь.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Запит на стиснення не повернув підсумку.</translation>
+        <translation type="vanished">Запит на стиснення не повернув підсумку.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Запит на стиснення повернув порожній підсумок.</translation>
+        <translation type="vanished">Запит на стиснення повернув порожній підсумок.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Розмову стиснено - попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
+        <translation type="vanished">Розмову стиснено - попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Розмова більше не вміщується в контекстне вікно моделі.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Автостиснення вимкнено; скоротіть або стисніть розмову і повторіть спробу.</translation>
+        <translation type="vanished">Автостиснення вимкнено; скоротіть або стисніть розмову і повторіть спробу.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Розмову вже стискають; надішліть повідомлення ще раз, коли стиснення завершиться.</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Автоматичне передання вимкнено.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Для цієї розмови вже створюється нова розмова.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>У розмові немає повідомлень, які можна передати.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Розмову нещодавно передано; спершу надішліть ще кілька повідомлень.</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Запит на передання не вдався: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Запит на передання повернув некоректну відповідь.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Розмову вже стискають; надішліть повідомлення ще раз, коли стиснення завершиться.</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>Запит на передання не повернув жодного документа.</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Запит на передання повернув порожній документ.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>Продовження %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Ця розмова продовжує роботу попередньої розмови, у якої вичерпалося контекстне вікно. Документ передання нижче описує завдання, поточний стан і наступні кроки. Продовжуйте з наступних кроків.
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>Продовжіть у новій розмові, щоб продовжувати роботу.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Примітка:** Відповідь обрізано: модель досягла максимальної кількості токенів виводу.</translation>
     </message>
@@ -2576,14 +2793,22 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>**Примітка:** Модель завершила свій хід без відповіді.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>середовище виконання Microsoft MXC (wxc-exec), яке використовує пісочниця Windows, доступне лише для Windows x86-64</translation>
+        <translation type="vanished">середовище виконання Microsoft MXC (wxc-exec), яке використовує пісочниця Windows, доступне лише для Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">середовище виконання Microsoft MXC (wxc-exec) не встановлено; завантажте його на сторінці налаштувань інструментів Llama</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>середовище виконання Microsoft MXC (wxc-exec), яке використовує пісочниця Windows, доступне лише для Windows x86-64 і arm64</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>середовище виконання Microsoft MXC (wxc-exec) не встановлено; завантажте його на сторінці налаштувань інструментів Llama</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>середовище виконання Microsoft MXC (wxc-exec) не встановлено; завантажте його на сторінці налаштувань пісочниці Llama</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2616,7 +2841,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Проблеми з пісочницею інструментів чату llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>Каталоги запису:</translation>
     </message>
@@ -2651,7 +2876,22 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Інструменти webfetch та websearch завжди працюють поза пісочницею і не зачіпаються цим параметром.</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>Завантажити...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Інструмент bash в пісочниці на Windows працює в контейнері процесів Microsoft MXC.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Середовище виконання Windows</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>Файлова система</translation>
     </message>
@@ -2661,7 +2901,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Мережа</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>Виберіть каталог</translation>
     </message>
@@ -2730,12 +2970,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Успішно. Оновлено такі файли:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Оболонку bash не знайдено. Встановіть Git for Windows (https://git-scm.com/download/win) або додайте bash до PATH.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Виконуваний файл sandbox-exec не знайдено; пісочниця недоступна на цій системі.</translation>
     </message>
@@ -3290,12 +3530,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Інструменти пошуку та знаходження файлів використовують ripgrep для пошуку вмісту файлів і визначення файлів за назвою. Він не встановлено на цій системі, тому його можна завантажити тут. ripgrep оприлюднено під ліцензією MIT або Unlicense.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Завантажити середовище виконання пісочниці Windows (MXC)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Завантажити середовище виконання Microsoft MXC %1?</translation>
     </message>
@@ -3323,7 +3563,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Завантажити</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>У пакеті немає виконуваного файла wxc-exec.exe.</translation>
     </message>
@@ -3339,8 +3579,12 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Середовище виконання Microsoft MXC доступне лише для Windows x86-64 і arm64.</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Середовище виконання Microsoft MXC доступне лише для Windows x86-64.</translation>
+        <translation type="vanished">Середовище виконання Microsoft MXC доступне лише для Windows x86-64.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3511,7 +3755,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Список завдань оновлено: завершено %1 з %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Доступ до &quot;%1&quot; не дозволено: шляхи до пристроїв та адміністративні розподіли недоступні в пісочниці.</translation>
     </message>
@@ -3573,12 +3817,11 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">srt-win (бекенд пісочниці Windows @anthropic-ai/sandbox-runtime) не знайдено в PATH. %1 LLAMA_SRT_WIN може вказувати на виконуваний файл.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Завантажте його зі сторінки налаштувань інструментів Llama.cpp Chat (закріплений випуск Microsoft MXC з перевіреною контрольною сумою); LLAMA_WXC_EXEC може вказувати на wxc-exec.exe. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
+        <translation type="vanished">Завантажте його зі сторінки налаштувань інструментів Llama.cpp Chat (закріплений випуск Microsoft MXC з перевіреною контрольною сумою); LLAMA_WXC_EXEC може вказувати на wxc-exec.exe. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Бекенд пісочниці Windows (wxc-exec) не відповів на запит щодо можливостей вчасно. %1</translation>
     </message>
@@ -3588,7 +3831,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Бекенд пісочниці Windows (wxc-exec) повідомив, що контейнер MXC недоступний (вихід %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Пісочниця Windows не змогла налаштувати пробу ізоляції в реальному часі (тимчасовий каталог або canary-файл у домашньому каталозі). %1</translation>
     </message>
@@ -3623,7 +3866,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Пісочниця Windows (Microsoft MXC) не пройшла перевірку ізоляції: не вдалося перевірити, що команда в пісочниці ізольована. %1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Завантажте його зі сторінки налаштувань пісочниці Llama.cpp Chat (закріплений випуск Microsoft MXC з перевіреною контрольною сумою); там можна вказати й власне середовище виконання. Або зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Пісочниця Windows (Microsoft MXC) вперше перевіряє свою ізоляцію; повторіть команду через кілька секунд.</translation>
     </message>

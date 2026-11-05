@@ -94,7 +94,7 @@
         <translation>Odpre stran nastavitve Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>Onemogoči program llama.cpp.</translation>
     </message>
@@ -151,23 +151,25 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Pogovor</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+67"/>
+        <location filename="../src/llamasettings.cpp" line="-1104"/>
         <source>Tools</source>
         <translation>Orodja</translation>
     </message>
@@ -358,7 +360,7 @@
         <translation type="vanished">Največje število zakasnjenih dokončanj, ki jih shranimo v predpomnilniku rezultatov.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Povzeti naslov pogovora v nekaj besedah, vključno z enim emojijem. Uporabite jezik, ki se uporablja v pogovoru. Uporabite navadno besedilo, brez markdowna.</translation>
     </message>
@@ -368,12 +370,16 @@
         <translation>Generirajte do pet vprašanj za nadaljevanje v kontekstu trenutnega pogovora. Vprašanja so iz zornega kota uporabnika. Samo vprašanja, brez pojasnil. Uporabite jezik, ki se uporablja v pogovoru. Vrnite JSON objekt z enim ključem &quot;follow_ups&quot;, ki vsebuje polje nizov vprašanj v navadnem besedilu, brez markdowna.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Zgornji pogovor je dolg in se razpolaga z vse manj prostora v kontekstu. Napiši podroben povzetek, ki omogoča nemoteno nadaljevanje pogovora. Povzetek strukturiraj kot markdown s temi odseki: ## Naloga (kar je uporabnik zahteval in skupni cilj), ## Ključne odločitve (pomembne odločitve, omejitve in preferenče), ## Izvedeno delo (osnovane datoteke, izvedena povelja, spremembe kode in njihovi rezultati), ## Trenutno stanje (kar je dokončano, kar je v teku, na katere napake je prišlo) in ## Naslednji koraki (kar se mora zgoditi, da se naloga dokonča). Bodite natančni in konkretni: ohranite poti do datotek, imena funkcij in natančne vrednosti. Ne odgovarjajte na zadnje uporabniško sporočilo; samo povzemite.</translation>
+        <translation type="vanished">Zgornji pogovor je dolg in se razpolaga z vse manj prostora v kontekstu. Napiši podroben povzetek, ki omogoča nemoteno nadaljevanje pogovora. Povzetek strukturiraj kot markdown s temi odseki: ## Naloga (kar je uporabnik zahteval in skupni cilj), ## Ključne odločitve (pomembne odločitve, omejitve in preferenče), ## Izvedeno delo (osnovane datoteke, izvedena povelja, spremembe kode in njihovi rezultati), ## Trenutno stanje (kar je dokončano, kar je v teku, na katere napake je prišlo) in ## Naslednji koraki (kar se mora zgoditi, da se naloga dokonča). Bodite natančni in konkretni: ohranite poti do datotek, imena funkcij in natančne vrednosti. Ne odgovarjajte na zadnje uporabniško sporočilo; samo povzemite.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+9"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Zgornji pogovor je dolg in bo nadaljevan v novem pogovoru s svežim oknom konteksta. Napiši podajni dokument, ki omogoča novemu pogovoru nemoteno nadaljevanje dela, ne da bi videl prejšnja sporočila. Dokument strukturiraj kot markdown s temi odseki: ## Naloga (kar je uporabnik zahteval in skupni cilj), ## Ključne odločitve (pomembne odločitve, omejitve in preferenče), ## Izvedeno delo (osnovane datoteke, izvedena povelja, spremembe kode in njihovi rezultati), ## Trenutno stanje (kar je dokončano, kar je v teku, na katere napake je prišlo) in ## Naslednji koraki (kar se mora zgoditi, da se naloga dokonča). Bodite natančni in konkretni: ohranite poti do datotek, imena funkcij in natančne vrednosti. Ne odgovarjajte na zadnje uporabniško sporočilo; samo napišite podajni dokument.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -882,6 +888,16 @@
         <translation>Raven razmišljanja (razlogovanja) za modele, ki podpirajo razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ali &quot;max&quot;.</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>Povečava pisave pogovora</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Velikost pisave pogovora v odstotkih velikosti pisave urejevalnika. Nastavite s Ctrl+kolescem miške nad pogovorom ali z ukazoma za povečavo in pomanjšavo pogovora.</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>Pomožni model</translation>
@@ -902,27 +918,74 @@
         <translation>Model, ki se uporablja za pomožne zahteve, kot so naslovi pogovorov in predlogi vprašanj za nadaljevanje. Za sprostitev glavnega modela za pogovor uporabite majhen model. Pustite prazno, da se uporabi aktiven model za pogovor.</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Ko pogovor uporabi več kot nastavljen prag okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
+        <location line="+19"/>
+        <source>Handoff Prompt</source>
+        <translation>Podajno navodilo</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Navodilo, ki se pošlje modelu za pisanje podajnega dokumenta (naloga, trenutno stanje, naslednji koraki), iz katerega se zaseme novi pogovor, ko se pogovor nadaljuje v novem.</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Samodejno nadaljevanje v novem pogovoru</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Ko pogovor uporabi več kot nastavljen prag okna konteksta modela, se njegova zgodovina povzame v podajni dokument (naloga, trenutno stanje, naslednji koraki), ustvari in odpre se novi pogovor, zasemen s tem dokumentom, prvotni pogovor pa ostane nedotaknjen. Tako lahko dolga naloga teče naprej na modelu z majhnim oknom konteksta.</translation>
     </message>
     <message>
         <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>Prag podaje</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>Prag podaje:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Pogovor se nadaljuje v novem, ko njegova zgodovina uporabi več kot ta odstotek okna konteksta modela.</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Če je zaznamovano, so orodja za pogovor omejena v peskovnik: povelja bash se izvajajo v platformskem peskovniku, ki onemogoča pisanje na sistemske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesni kontejner Microsoft MXC na Windowsu), orodja za datoteke pa lahko pišejo samo znotraj imenika projekta in na začasne lokacije. Lokacije verig (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nobeno orodje ne more prebrati, povelja v peskovniku pa nimajo dostopa do omrežja (orodji webfetch in websearch to ni prizadeto). Na Windowsu peskovnik uporablja pripeto izvedbeno okolje wxc-exec.exe, ki ga je mogoče prenesti s strani nastavitve peskovnika (kazati nanj lahko tudi lastno izvedbeno okolje) in za katerega je potreben Windows 11 24H2 ali novejši. Dodatni imeniki in omrežna politika se nastavita na strani nastavitve peskovnika.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>Izvedbeno okolje MXC:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>Zagonnik wxc-exec.exe, v katerem se izvede peskovnik za Windows. Če je prazno, se uporabi izvedbeno okolje, preneseno s te strani.</translation>
+    </message>
+    <message>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">Ko pogovor uporabi več kot nastavljen prag okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
+    </message>
+    <message>
         <source>Auto-compact Threshold</source>
-        <translation>Prag samodejnega stiskanja</translation>
+        <translation type="vanished">Prag samodejnega stiskanja</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Prag samodejnega stiskanja:</translation>
+        <translation type="vanished">Prag samodejnega stiskanja:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Pogovor se samodejno stisne, ko njegova zgodovina uporabi več kot ta odstotek okna konteksta modela.</translation>
+        <translation type="vanished">Pogovor se samodejno stisne, ko njegova zgodovina uporabi več kot ta odstotek okna konteksta modela.</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokalni model lahko večno zanka klice orodij, zato se po toliko zaporednih potez samo z orodji klici ne izvedejo - model prejme neuspešen rezultat, ki ga usmeri, da namesto tega konča. Pogovori nalog (podagentov) niso omejeni. Za brez omejitve nastavite 0.</translation>
     </message>
@@ -936,7 +999,7 @@
         <translation type="vanished">Model, ki se uporablja za pomožne zahteve, kot so naslovi pogovorov in predlogi vprašanj za nadaljevanje. Za sprostitev glavnega modela za pogovor uporabite majhen model. Pustite prazno, da se uporabi aktiven model za pogovor.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>Navodilo za naslov pogovora</translation>
     </message>
@@ -956,17 +1019,15 @@
         <translation>Navodilo, ki se pošlje modelu za generiranje vprašanj za nadaljevanje po popolnem odgovoru.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>Navodilo za stiskanje</translation>
+        <translation type="vanished">Navodilo za stiskanje</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Navodilo, ki se pošlje modelu za povzemanje zgodovine pogovora, ko se stisne, da se prilega oknu konteksta.</translation>
+        <translation type="vanished">Navodilo, ki se pošlje modelu za povzemanje zgodovine pogovora, ko se stisne, da se prilega oknu konteksta.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+13"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Vprašanja za nadaljevanje</translation>
@@ -987,17 +1048,15 @@
         <translation>Če je omogočeno, model po prvem odgovoru asistenta generira kratek naslov pogovora.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>Samodejno stiskanje dolgih pogovorov</translation>
+        <translation type="vanished">Samodejno stiskanje dolgih pogovorov</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">Ko pogovor uporabi približno 80 % okna konteksta modela, se njegova zgodovina povzame v kompaktno označevalno sporočilo in od takrat naprej se modelu pošlje samo povzetek in sporočila zanj. Celotna zgodovina ostane vidna v pogovoru. Uporablja se tudi za oporavljanje od napake prekoračitve konteksta: zgodovina se stisne in zahteva se ponovi enkrat.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>Navodila lokatorja</translation>
     </message>
@@ -1019,12 +1078,11 @@
         <translation>Prikaže majhen gumb na dnu izbire besedila v uredniku. Klik nanj odpre lokator programa llama.cpp, da se izbrano besedilo pošlje v program llama.cpp z enim od navodil.</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Če je zaznamovano, so orodja za pogovor omejena v peskovnik: povelja bash se izvajajo v platformskem peskovniku, ki onemogoča pisanje na sistemske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesni kontejner Microsoft MXC na Windowsu), orodja za datoteke pa lahko pišejo samo znotraj imenika projekta in na začasne lokacije. Lokacije verig (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nobeno orodje ne more prebrati, povelja v peskovniku pa nimajo dostopa do omrežja (orodji webfetch in websearch to ni prizadeto). Na Windowsu peskovnik uporablja pripeto izvedbeno okolje wxc-exec.exe, ki ga je mogoče prenesti s strani nastavitve orodij (LLAMA_WXC_EXEC lahko kaže nanj) in za katerega je potreben Windows 11 24H2 ali novejši. Dodatni imeniki in omrežna politika se nastavita na strani nastavitve peskovnika.</translation>
+        <translation type="vanished">Če je zaznamovano, so orodja za pogovor omejena v peskovnik: povelja bash se izvajajo v platformskem peskovniku, ki onemogoča pisanje na sistemske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesni kontejner Microsoft MXC na Windowsu), orodja za datoteke pa lahko pišejo samo znotraj imenika projekta in na začasne lokacije. Lokacije verig (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nobeno orodje ne more prebrati, povelja v peskovniku pa nimajo dostopa do omrežja (orodji webfetch in websearch to ni prizadeto). Na Windowsu peskovnik uporablja pripeto izvedbeno okolje wxc-exec.exe, ki ga je mogoče prenesti s strani nastavitve orodij (LLAMA_WXC_EXEC lahko kaže nanj) in za katerega je potreben Windows 11 24H2 ali novejši. Dodatni imeniki in omrežna politika se nastavita na strani nastavitve peskovnika.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>Zapisljivi imeniki peskovnika</translation>
     </message>
@@ -1068,7 +1126,7 @@
         <translation type="vanished">Vgrajena navodila lokatorja &quot;ll&quot;. V meniju se prikaže samo prva vrstica navodila; modelu se pošlje celotno besedilo. &quot;{selection}&quot; se zamenja z izbranim besedilom.</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-98"/>
         <source>Skill directories</source>
         <translation>Imeniki veščin</translation>
     </message>
@@ -1090,8 +1148,23 @@
     </message>
     <message>
         <location line="+4"/>
+        <source>Working directory</source>
+        <translation>Delovni imenik</translation>
+    </message>
+    <message>
         <location line="+1"/>
-        <location line="+393"/>
+        <source>Working directory:</source>
+        <translation>Delovni imenik:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Imenik, v katerem orodja za pogovor delujejo. Pustite prazno, da se uporabi imenik zagonnega projekta (ali privzeti imenik projektov, ko ni odprt noben projekt). Spremenite ga tudi s klikom na delovni imenik na uvodnem zaslonu pogovora.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Povelja v peskovniku</translation>
@@ -1105,15 +1178,15 @@
         <translation type="vanished">Če je zaznamovano, so orodja za pogovor omejena v peskovnik: povelja bash se izvajajo v platformskem peskovniku, ki onemogoča pisanje na sistemske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), orodja za datoteke pa lahko pišejo samo znotraj imenika projekta in na začasne lokacije. Lokacije verig (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nobeno orodje ne more prebrati, povelja v peskovniku pa nimajo dostopa do omrežja (orodji webfetch in websearch to ni prizadeto). Na Windowsu peskovnik zahteva enkratno namestitev: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (en sam UAC poziv); izvedljiva datoteka srt-win mora biti na PATH (LLAMA_SRT_WIN lahko kaže nanjo).</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Naloži navodila projekta</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Če je zaznamovano, se datoteka z navodili projekta trenutnega projekta doda k sistemskemu sporočilu pogovora. Datoteka je AGENTS.md, s povratkom na CLAUDE.md, in se išče v imeniku projekta ter navzgor do korena git skladišča, zato lahko monorepo ohrani samo eno datoteko z navodili za vse svoje projekte. Datoteke, večje od 32 KB, se okrajšajo.</translation>
     </message>
@@ -1281,7 +1354,7 @@
         <translation>API ključ za Tavily, pridobite ga na tavily.com (obvezen za ponudnika &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Prepiše globalno nastavo &apos;Povelja v peskovniku&apos; za ta projekt. Kaj peskovnik omejuje, si oglejte v globalni nastavi na strani Llama Orodja.</translation>
     </message>
@@ -1291,12 +1364,17 @@
         <translation>Prepiše globalno nastavo &apos;Naloži navodila projekta&apos; za ta projekt. Kaj se naloži, si oglejte v globalni nastavi na strani Llama Orodja.</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>Iskanje po spletu</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>Navodila</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>Privzeto</translation>
     </message>
@@ -1326,13 +1404,11 @@
         <translation>Maks</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>Delovni imenik: %1</translation>
+        <translation type="vanished">Delovni imenik: %1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>LLM model</translation>
     </message>
@@ -1361,47 +1437,43 @@
         <translation>Raven razmišljanja</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>Iskanje v pogovoru</translation>
+        <translation type="vanished">Iskanje v pogovoru</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>Naslednji rezultat iskanja</translation>
+        <translation type="vanished">Naslednji rezultat iskanja</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>Prejšnji rezultat iskanja</translation>
+        <translation type="vanished">Prejšnji rezultat iskanja</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>Pošlji v Llama Pogovor</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>Pot do modela: %1</translation>
+        <translation type="vanished">Pot do modela: %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Kontekst: %L1</translation>
+        <translation type="vanished">Kontekst: %L1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>Vid: %1</translation>
+        <translation type="vanished">Vid: %1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>da</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>ne</translation>
     </message>
@@ -1410,33 +1482,119 @@
         <translation type="vanished">Dodatna vprašanja:</translation>
     </message>
     <message>
-        <location line="-346"/>
+        <location line="-458"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Sporočila v čakalni vrsti - poslana po trenutnem koraku</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+510"/>
         <source>Follow-up questions:</source>
         <translation>Dodatna vprašanja:</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <location line="+615"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Raven razmišljanja: %1 (velja za nova sporočila)</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Človeški urejevalnik</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Povezani ste s %1, uporablja se %2 kot trenutni imenik</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>Pozdravljeni</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Vpišite sporočilo ali naložite datoteke, da začnete</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Kliknite ime modela za prikaz njegovih podrobnosti ali imenik za spremembo mesta, kjer orodja delujejo.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>Podrobnosti modela</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>Model:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>Pot do modela:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>Kontekst:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Gradnja:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Zapri</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>Izberite delovni imenik</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>Ustavi nalogo</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Naloga še vedno teče. Ali res želite ustaviti?</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>Uredi sporočilo</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>S tem se izbriše %1 sporočil, in sicer: %2 uporabniških sporočil in %3 odgovorov asistenta ...</translation>
     </message>
@@ -1456,7 +1614,7 @@
         <translation>Ali res želite izbrisati to sporočilo?</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>Obdelava: %1%</translation>
     </message>
@@ -1496,16 +1654,25 @@
         <translation>Odstrani &quot;%1&quot;</translation>
     </message>
     <message>
+        <location line="+37"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Ustvarjanje novega pogovora za nadaljevanje tega – povzemanje pogovora...</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
         <translation type="vanished">Odstrani “%1”</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-35"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Odstrani sporočilo v čakalni vrsti (se ne bo poslano)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Ustvarjanje novega pogovora za nadaljevanje tega – povzemanje pogovora…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Urejevalnik pogovorov programa LlamaCpp</translation>
     </message>
@@ -1667,7 +1834,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Id pogovora</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Ustvari nov pogovor programa llama.cpp</translation>
     </message>
@@ -1688,6 +1855,12 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>Nadaljuj v novem pogovoru</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
@@ -1715,7 +1888,7 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+95"/>
         <source>Save Conversation as Markdown</source>
         <translation>Shrani pogovor kot Markdown</translation>
     </message>
@@ -1744,7 +1917,7 @@ Do you want to overwrite it?</source>
         <translation>Pogovori programa llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>Ustvari povzetek izbora {selection}</translation>
     </message>
@@ -1824,7 +1997,7 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Kopirano v odložišče</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Preklopi prikaz podrobnosti o uporabi orodja</translation>
     </message>
@@ -1843,24 +2016,20 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Novi pogovor</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>Iskanje</translation>
+        <translation type="vanished">Iskanje</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>Iskanje...</translation>
+        <translation type="vanished">Iskanje...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>Prejšnji rezultat</translation>
+        <translation type="vanished">Prejšnji rezultat</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>Naslednji rezultat</translation>
+        <translation type="vanished">Naslednji rezultat</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2199,7 +2368,7 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation type="vanished">Izberite orodje za ogled njegove JSON definicije</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>Izberite orodje, da ogledate njegovo definicijo</translation>
     </message>
@@ -2214,22 +2383,20 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Prenesi ripgrep %1</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>Prenesi MXC %1</translation>
+        <translation type="vanished">Prenesi MXC %1</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Peskovnik (povelja, imeniki, omrežje) se nastavi na strani nastavitve peskovnika.</translation>
+        <translation type="vanished">Peskovnik (povelja, imeniki, omrežje) se nastavi na strani nastavitve peskovnika.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Orodji za iskanje in iščenje datotek uporabljata ripgrep, ki ni nameščen na tem sistemu.</translation>
     </message>
@@ -2239,17 +2406,16 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Orodje bash v peskovniku na Windowsu uporablja izvedbeno okolje Microsoft MXC (wxc-exec), ki ni nameščeno na tem sistemu.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Izvedbeno okolje Windows peskovnika: %1</translation>
+        <translation type="vanished">Izvedbeno okolje Windows peskovnika: %1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2345,7 +2511,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2366,7 +2532,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2391,7 +2557,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 veščin</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Brez opisa</translation>
     </message>
@@ -2411,9 +2577,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>Dodaj...</translation>
     </message>
@@ -2441,11 +2607,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>V meniju lokatorja se prikaže samo prva vrstica navodila; modelu se pošlje celotno besedilo. &quot;{selection}&quot; se zamenja z izbranim besedilom, &quot;{file}&quot; in &quot;{line}&quot; s trenutno datoteko in vrstico kursorja, &quot;{diagnostics}&quot; z napakami in opozorili trenutne datoteke ter &quot;{git_diff}&quot; z nezavozitimi spremmembami git skladišča.</translation>
     </message>
     <message>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>Podaja</translation>
+    </message>
+    <message>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">V meniju lokatorja se prikaže samo prva vrstica navodila; modelu se pošlje celotno besedilo. &quot;{selection}&quot; se zamenja z izbranim besedilom.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-44"/>
         <source>Prompt</source>
         <translation>Navodilo</translation>
     </message>
@@ -2455,13 +2626,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Navodila:</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>Stiskanje</translation>
+        <translation type="vanished">Stiskanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
     </message>
@@ -2519,77 +2689,124 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">ime &quot;%1&quot; je v koliziji z %2 – ohranjen je prvi</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>Napaka:</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Samodejno stiskanje je onemogočeno.</translation>
+        <translation type="vanished">Samodejno stiskanje je onemogočeno.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Pogovor se že stiska.</translation>
+        <translation type="vanished">Pogovor se že stiska.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>Pogovor nima sporočil za stiskanje.</translation>
+        <translation type="vanished">Pogovor nima sporočil za stiskanje.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Pogovor je bil pred kratkim stisnjen in ga ni mogoče stisniti še več.</translation>
+        <translation type="vanished">Pogovor je bil pred kratkim stisnjen in ga ni mogoče stisniti še več.</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>Zahteva za stiskanje ni uspešna: %1</translation>
+        <translation type="vanished">Zahteva za stiskanje ni uspešna: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Zahteva za stiskanje je vrnila neveljaven odgovor.</translation>
+        <translation type="vanished">Zahteva za stiskanje je vrnila neveljaven odgovor.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Zahteva za stiskanje ni vrnila povzetka.</translation>
+        <translation type="vanished">Zahteva za stiskanje ni vrnila povzetka.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Zahteva za stiskanje je vrnila prazen povzetek.</translation>
+        <translation type="vanished">Zahteva za stiskanje je vrnila prazen povzetek.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Pogovor je stisnjen - prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
+        <translation type="vanished">Pogovor je stisnjen - prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">Pogovor je stisnjen – prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Pogovor se ne prilega več oknu konteksta modela.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Samodejno stiskanje je onemogočeno; skrajšajte ali stisnite pogovor in poskusite znova.</translation>
+        <translation type="vanished">Samodejno stiskanje je onemogočeno; skrajšajte ali stisnite pogovor in poskusite znova.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Pogovor se že stiska; sporočilo pošljite znova, ko se stiskanje konča.</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Samodejna podaja je onemogočena.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Nov pogovor za ta se že ustvarja.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>Pogovor nima sporočil za podajo.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Pogovor je bil pred kratkim podan; najprej pošljite še nekaj sporočil.</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Zahteva za podajo ni uspela: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Zahteva za podajo je vrnila nepravilno oblikovan odgovor.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Pogovor se že stiska; sporočilo pošljite znova, ko se stiskanje konča.</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>Zahteva za podajo ni vrnila nobenega dokumenta.</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Zahteva za podajo je vrnila prazen dokument.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>Nadaljevanje %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Ta pogovor nadaljuje delo prejšnjega pogovora, katerega okno konteksta se je izčrpalo. Podajni dokument spodaj opisuje nalogo, trenutno stanje in naslednje korake. Nadaljujte od naslednjih korakov.
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>Nadaljujte v novem pogovoru, da delo poteka naprej.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Opomba:** Odgovor je bil okrajšan: model je dosegel največje število izhodnih žetonov.</translation>
     </message>
@@ -2599,14 +2816,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>**Opomba:** Model je končal svoj hod brez odgovora.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>izvedbeno okolje Microsoft MXC (wxc-exec), ki ga uporablja peskovnik za Windows, je na voljo samo za Windows x86-64</translation>
+        <translation type="vanished">izvedbeno okolje Microsoft MXC (wxc-exec), ki ga uporablja peskovnik za Windows, je na voljo samo za Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">izvedbeno okolje Microsoft MXC (wxc-exec) ni nameščeno; prenesite ga na strani nastavitve Llama Orodja</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>izvedbeno okolje Microsoft MXC (wxc-exec), ki ga uporablja peskovnik za Windows, je na voljo samo za Windows x86-64 in arm64</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>izvedbeno okolje Microsoft MXC (wxc-exec) ni nameščeno; prenesite ga na strani nastavitve Llama Orodja</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>izvedbeno okolje Microsoft MXC (wxc-exec) ni nameščeno; prenesite ga na strani nastavitve Llama Peskovnik</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2639,7 +2864,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Problemi s peskovnikom orodij za pogovor Llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>Zapisljivi imeniki:</translation>
     </message>
@@ -2674,7 +2899,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Orodji webfetch in websearch vedno delujeta zunaj peskovnika in ta nastava ju ne prizadene.</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>Prenesi...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Orodje bash v peskovniku na Windowsu se izvaja v procesnem kontejnerju Microsoft MXC.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Izvedbeno okolje Windows</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>Datotečni sistem</translation>
     </message>
@@ -2684,7 +2924,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Omrežje</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>Izberite imenik</translation>
     </message>
@@ -2753,12 +2993,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uspešno. Posodobljene so bile naslednje datoteke:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Ogrlica bash ni bila najdena. Namestite Git for Windows (https://git-scm.com/download/win) ali dodajte bash na PATH.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedljiva datoteka sandbox-exec ni bila najdena; peskovnik ni na voljo na tem sistemu.</translation>
     </message>
@@ -3313,12 +3553,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Orodji za iskanje in iščenje datotek uporabljata ripgrep za iskanje vsebine datotek in za lociranje datotek po imenu. Ni nameščen na tem sistemu, zato ga lahko namesto tega tukaj prenesete. ripgrep je izdan pod licenco MIT ali Unlicense.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Prenesi izvedbeno okolje Windows peskovnika (MXC)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Prenesem izvedbeno okolje Microsoft MXC %1?</translation>
     </message>
@@ -3346,7 +3586,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Prenesi</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Paketa ne vsebuje binarne datoteke wxc-exec.exe.</translation>
     </message>
@@ -3362,8 +3602,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Izvedbeno okolje Microsoft MXC je na voljo samo za Windows x86-64 in arm64.</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Izvedbeno okolje Microsoft MXC je na voljo samo za Windows x86-64.</translation>
+        <translation type="vanished">Izvedbeno okolje Microsoft MXC je na voljo samo za Windows x86-64.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3534,7 +3778,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam nalog posodobljen: zaključenih %1 od %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Dostop do &quot;%1&quot; ni dovoljen: poti naprav in administrativne mape v peskovniku niso dostopne.</translation>
     </message>
@@ -3596,12 +3840,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (Windows ozadje peskovnika @anthropic-ai/sandbox-runtime) ni bil najden na PATH. %1 LLAMA_SRT_WIN lahko kaže na izvedljivo datoteko.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Prenesite ga s strani nastavitve orodij Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); LLAMA_WXC_EXEC lahko kaže na wxc-exec.exe. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
+        <translation type="vanished">Prenesite ga s strani nastavitve orodij Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); LLAMA_WXC_EXEC lahko kaže na wxc-exec.exe. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Windows ozadja peskovnika (wxc-exec) ni v času odgovorilo na preizkus zmogljivosti. %1</translation>
     </message>
@@ -3611,7 +3854,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows ozadje peskovnika (wxc-exec) je poročalo, da kontejner MXC ni na voljo (končna koda %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows peskovnik ni mogel nastaviti preizkusa ločitve v živo (začasni imenik ali canary datoteka v domačem imeniku). %1</translation>
     </message>
@@ -3646,7 +3889,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows peskovnik (Microsoft MXC) ni prešel preizkusa ločitve v živo: ni bilo mogoče potrditi, da je povelje v peskovniku omejeno. %1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Prenesite ga s strani nastavitve peskovnika Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); kazati nanj lahko tudi lastno izvedbeno okolje. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows peskovnik (Microsoft MXC) prvič preverja svojo ločitev; povelje ponovno izvedite čez nekaj sekund.</translation>
     </message>

@@ -1992,8 +1992,8 @@ void ChatEditor::updateHandoffLabel()
     m_handoffLabel = new MarkdownLabel(widget());
     m_handoffLabel->setMarkdown(
         QStringLiteral("<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/> ")
-        + Tr::tr("*Creating a new conversation to continue this one – summarizing "
-                 "the conversation…"),
+        + Tr::tr("Creating a new conversation to continue this one – summarizing "
+                 "the conversation..."),
         true);
     m_messageLayout->addWidget(m_handoffLabel);
 }

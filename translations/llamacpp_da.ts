@@ -98,7 +98,7 @@
         <translation>Åbn indstillingssiden for llama.cpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>Deaktiver llama.cpp.</translation>
     </message>
@@ -155,23 +155,25 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+96"/>
+        <location filename="../src/llamasettings.cpp" line="-1075"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Aktiver llama.cpp</translation>
@@ -361,7 +363,7 @@
         <translation type="vanished">Det maksimale antal gemte fuldendelser, der skal opbevares i result_cache.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Opsummarér titlen på samtalen på få ord, herunder ét emoji. Brug det sprog, der bruges i samtalen. Brug almindelig tekst, ingen markdown.</translation>
     </message>
@@ -371,12 +373,11 @@
         <translation>Generér op til fem opfølgende spørgsmål i sammenhængen med den aktuelle samtale. Spørgsmålene er fra brugerens synsvinkel. Kun spørgsmål, ingen forklaringer. Brug det sprog, der bruges i samtalen. Returnér et JSON-objekt med en enkelt nøgle &quot;follow_ups&quot;, der indeholder et array af spørgsmål som almindelig tekst, ingen markdown.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Ovennævnte samtale er lang og er ved at løbe tør for konteksrum. Skriv en detaljeret sammenfatning af den, der gør det muligt at fortsætte samtalen uden afbrydelser. Strukturér sammenfatningen som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, kørte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er færdigt, hvad er i gang, opståede fejl) og ## Næste skridt (hvad skal ske for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Besvar ikke brugerens sidste besked; sammenfat kun.</translation>
+        <translation type="vanished">Ovennævnte samtale er lang og er ved at løbe tør for konteksrum. Skriv en detaljeret sammenfatning af den, der gør det muligt at fortsætte samtalen uden afbrydelser. Strukturér sammenfatningen som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, kørte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er færdigt, hvad er i gang, opståede fejl) og ## Næste skridt (hvad skal ske for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Besvar ikke brugerens sidste besked; sammenfat kun.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+26"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -890,6 +891,16 @@
         <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; eller &quot;max&quot;.</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>Zoom på chatskrift</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Størrelsen på skriften i chatsamtalen som procent af editorens skriftstørrelse. Justér med Ctrl+hjul over chatten eller kommandoerne for at zoome ind/ud i chatten.</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>Hjælpemodel</translation>
@@ -905,7 +916,73 @@
         <translation>Standard: chat-model</translation>
     </message>
     <message>
-        <location line="+202"/>
+        <location line="+22"/>
+        <source>Handoff Prompt</source>
+        <translation>Prompt til overlevering</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Prompt, der sendes til modellen for at skrive overleveringsdokumentet (opgave, nuværende tilstand, næste trin), der udgør udgangspunktet for den nye samtale, når en samtale fortsættes i en ny.</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Fortsæt automatisk i en ny samtale</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Når samtalen bruger mere end den konfigurerede tærskel af modellens kontekstvindue, opsummeres dens historik i et overleveringsdokument (opgave, nuværende tilstand, næste trin), der oprettes og åbnes en ny samtale, der er startet med dette dokument, og den oprindelige samtale forbliver urørt. Dette gør det muligt for en lang opgave at fortsætte på en model med et lille kontekstvindue.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>Overleveringstærskel</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>Overleveringstærskel:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Samtalen fortsættes i en ny, når dens historik bruger mere end denne procentdel af modellens kontekstvindue.</translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Working directory</source>
+        <translation>Arbejdsmappe</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Working directory:</source>
+        <translation>Arbejdsmappe:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Mappen, hvor chat-værktøjerne opererer. Lad være tom for at bruge startprojektets mappe (eller standardprojektmappe, når der ikke er et projekt åbent). Den kan også ændres ved at klikke på arbejdsmappen på chatens velkomstskærm.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC procescontainer på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows bruger sandboxen den fastlåste wxc-exec.exe-runtime, der kan downloades fra indstillingssiden for sandboxen (der kan også pege på en egen runtime), og der kræves Windows 11 24H2 eller nyere. De yderligere mapper og netværkspolitikken konfigureres på indstillingssiden for sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>MXC-runtime:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>En wxc-exec.exe-launcher, hvori Windows-sandboxen køres. Hvis feltet er tomt, bruges den runtime, der er downloadet fra denne side.</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke - modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
     </message>
@@ -919,7 +996,7 @@
         <translation type="vanished">Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt til samtaletitel</translation>
     </message>
@@ -939,37 +1016,31 @@
         <translation>Prompt, der sendes til modellen for at generere opfølgende spørgsmål efter et fuldstændigt svar.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>Prompt til kompaktering</translation>
+        <translation type="vanished">Prompt til kompaktering</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Prompt, der sendes til modellen for at sammenfatte samtalehistorikken, når den kompakteres for at passe i kontekstvinduet.</translation>
+        <translation type="vanished">Prompt, der sendes til modellen for at sammenfatte samtalehistorikken, når den kompakteres for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Når samtalen bruger mere end den indstillede tærskel af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
+        <translation type="vanished">Når samtalen bruger mere end den indstillede tærskel af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Auto-compact Threshold</source>
-        <translation>Auto-kompakteringstærskel</translation>
+        <translation type="vanished">Auto-kompakteringstærskel</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Auto-kompakteringstærskel:</translation>
+        <translation type="vanished">Auto-kompakteringstærskel:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Samtalen auto-kompakteres, når historikken bruger mere end denne procentdel af modellens kontekstvindue.</translation>
+        <translation type="vanished">Samtalen auto-kompakteres, når historikken bruger mere end denne procentdel af modellens kontekstvindue.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+54"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
@@ -986,12 +1057,11 @@
         <translation>Vis en lille knap i bunden af den valgte tekst i editoren. Ved et klik åbnes llama.cpp-lokatoren, så markeringen kan sendes til llama.cpp med en af prompts.</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC procescontainer på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows bruger sandboxen den fastlåste wxc-exec.exe-runtime, der kan downloades fra indstillingssiden for Llama-værktøjerne (LLAMA_WXC_EXEC kan pege på den), og der kræves Windows 11 24H2 eller nyere. De yderligere mapper og netværkspolitikken konfigureres på indstillingssiden for sandboxen.</translation>
+        <translation type="vanished">Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, en Microsoft MXC procescontainer på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows bruger sandboxen den fastlåste wxc-exec.exe-runtime, der kan downloades fra indstillingssiden for Llama-værktøjerne (LLAMA_WXC_EXEC kan pege på den), og der kræves Windows 11 24H2 eller nyere. De yderligere mapper og netværkspolitikken konfigureres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>Sandboxens skrivbare mapper</translation>
     </message>
@@ -1031,18 +1101,23 @@
         <translation>Hvis markeret, må de sandboxede bash-kommandoer bruge netværket (f.eks. &apos;curl&apos; eller &apos;npm install&apos;). Slået fra som standard: sandboxen har ingen netværksadgang. Værktøjerne webfetch og websearch køres altid uden for sandboxen og påvirkes ikke. Håndteres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="-147"/>
+        <location line="-160"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="-28"/>
+        <location line="-492"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Samtalen ovenfor er lang og vil blive fortsat i en ny samtale med et frisk kontekstvindue. Skriv et overleveringsdokument, der gør det muligt for den nye samtale at fortsætte arbejdet sømløst uden at se de tidligere beskeder. Strukturer det som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, udførte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er fuldført, hvad er i gang, mødt fejl) og ## Næste trin (hvad der skal gøres for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Svar ikke på brugerens sidste besked; skriv kun overleveringsdokumentet.</translation>
+    </message>
+    <message>
+        <location line="+463"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="+32"/>
+        <location line="+33"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -1057,17 +1132,15 @@
         <translation>Når det er aktiveret, genereres en kort samtaletitel af modellen efter det første svar fra assistenten.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>Auto-kompaktere lange samtaler</translation>
+        <translation type="vanished">Auto-kompaktere lange samtaler</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">Når samtalen bruger ca. 80 % af modellens kontekstvindue, sammenfattes historikken i en kompakt markørbesked, og kun sammenfatningen plus beskederne bagefter sendes til modellen fra da af. Hele historikken forbliver synlig i chatten. Bruges også til at genvinde sig fra en konteksoverløbsfejl: historikken kompakteres, og anmodningen gentages én gang.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>Prompts til lokatoren</translation>
     </message>
@@ -1097,9 +1170,9 @@
         <translation>Hvis markeret, starter chatten med værktøjsknappen aktiveret.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+16"/>
         <location line="+1"/>
-        <location line="+393"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox-kommandoer</translation>
@@ -1113,15 +1186,15 @@
         <translation type="vanished">Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Indlæs projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
     </message>
@@ -1289,7 +1362,7 @@
         <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
     </message>
@@ -1299,12 +1372,17 @@
         <translation>Tilsidesætter den globale indstilling &apos;Indlæs projektinstruktioner&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad der indlæses.</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>Websøgning</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1334,13 +1412,11 @@
         <translation>Maks</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>Arbejdsmappe: %1</translation>
+        <translation type="vanished">Arbejdsmappe: %1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>LLM-model</translation>
     </message>
@@ -1369,52 +1445,48 @@
         <translation>Tænkeniveau</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>Søg i chat</translation>
+        <translation type="vanished">Søg i chat</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>Næste søgeresultat</translation>
+        <translation type="vanished">Næste søgeresultat</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>Forrige søgeresultat</translation>
+        <translation type="vanished">Forrige søgeresultat</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>Send til Llama Chat</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>Modelsti: %1</translation>
+        <translation type="vanished">Modelsti: %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Kontekst: %L1 tokens</translation>
+        <translation type="vanished">Kontekst: %L1 tokens</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>Visions-funktion: %1</translation>
+        <translation type="vanished">Visions-funktion: %1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+978"/>
+        <location line="+996"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Fjern &quot;%1&quot;</translation>
     </message>
@@ -1423,23 +1495,109 @@
         <translation type="vanished">Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-450"/>
+        <location line="-329"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Menneskelig redaktør</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Du er forbundet med %1 og bruger %2 som den aktuelle mappe</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>Hej</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Skriv en besked eller upload filer for at komme i gang</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Klik på modelnavnet for at se dens detaljer, eller på mappen for at ændre, hvor værktøjerne køres.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>Modeldetaljer</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>Model:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>Modelsti:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>Kontekst:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Luk</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>Vælg arbejdsmappe</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>Stop opgave</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Opgaven kører stadig. Vil du virkelig stoppe den?</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>Rediger meddelelse</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Dette vil slette %1 meddelelser, herunder: %2 brugermeddelelser og %3 assistentsvar ...</translation>
     </message>
@@ -1459,7 +1617,7 @@
         <translation>Er du sikker på, at du vil slette denne meddelelse?</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>Behandler: %1%</translation>
     </message>
@@ -1469,17 +1627,22 @@
         <translation>&lt;b&gt;Prompt-behandling:&lt;/b&gt;&lt;br&gt;Samlede tokens: %1&lt;br&gt;Behandlet: %2&lt;br&gt;Cachelagret: %3&lt;br&gt;Tid: %4 ms</translation>
     </message>
     <message>
-        <location line="-841"/>
+        <location line="+132"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Opretter en ny samtale for at fortsætte denne – opsummerer samtalen...</translation>
+    </message>
+    <message>
+        <location line="-981"/>
         <source>Follow-up questions:</source>
         <translation>Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-388"/>
+        <location line="-510"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Beskeder i køen - sendes efter det aktuelle skridt</translation>
     </message>
     <message>
-        <location line="+1243"/>
+        <location line="+1373"/>
         <source>Speed: %1 t/s</source>
         <translation>Hastighed: %1 tokens pr. sekund</translation>
     </message>
@@ -1513,7 +1676,11 @@
         <translation>Fjern beskeden i køen (den sendes ikke)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Opretter en ny samtale for at fortsætte denne – opsummerer samtalen…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>LlamaCpp Chattediter</translation>
     </message>
@@ -1671,7 +1838,7 @@ Vil du overskrive den?</translation>
         <translation type="vanished">Konversations-id</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Opretter en ny samtale med llama.cpp</translation>
     </message>
@@ -1692,6 +1859,12 @@ Vil du overskrive den?</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>Fortsæt i ny samtale</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Slet</translation>
@@ -1719,7 +1892,7 @@ Vil du overskrive den?</translation>
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+95"/>
         <source>Save Conversation as Markdown</source>
         <translation>Gem denne samtale som Markdown</translation>
     </message>
@@ -1748,7 +1921,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -1814,7 +1987,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Kopieret til udklipsholderen</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Vis/fjern detaljer om værktøjsbrug</translation>
     </message>
@@ -1833,24 +2006,20 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Ny samtale</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>Søg</translation>
+        <translation type="vanished">Søg</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>Find...</translation>
+        <translation type="vanished">Find...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>Forrige resultat</translation>
+        <translation type="vanished">Forrige resultat</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>Næste resultat</translation>
+        <translation type="vanished">Næste resultat</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2173,7 +2342,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Vælg et værktøj for at se dets JSON-definition</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>Vælg et værktøj for at se dets definition</translation>
     </message>
@@ -2188,22 +2357,20 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Download ripgrep %1</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>Download MXC %1</translation>
+        <translation type="vanished">Download MXC %1</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Sandboxning (kommandoer, mapper, netværk) konfigureres på indstillingssiden for sandboxen.</translation>
+        <translation type="vanished">Sandboxning (kommandoer, mapper, netværk) konfigureres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Værktøjerne search og find bruger ripgrep, som ikke er installeret på dette system.</translation>
     </message>
@@ -2213,17 +2380,16 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Bash-værktøjet i sandbox på Windows bruger Microsoft MXC-runtime (wxc-exec), som ikke er installeret på dette system.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Windows-sandbox-runtime: %1</translation>
+        <translation type="vanished">Windows-sandbox-runtime: %1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2319,7 +2485,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
@@ -2340,7 +2506,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>Navn: %1</translation>
     </message>
@@ -2365,7 +2531,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 færdigheder</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Ingen beskrivelse</translation>
     </message>
@@ -2407,9 +2573,9 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>Tilføj...</translation>
     </message>
@@ -2446,13 +2612,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Prompts:</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>Kompaktering</translation>
+        <translation type="vanished">Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
@@ -2462,7 +2627,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Kun den første linje i en prompt vises i lokatormenuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>Overlevering</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Locator (&quot;ll&quot;)</source>
         <translation>Lokator (&quot;ll&quot;)</translation>
     </message>
@@ -2515,77 +2685,124 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>Fejl:</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Automatisk kompaktering er deaktiveret.</translation>
+        <translation type="vanished">Automatisk kompaktering er deaktiveret.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Samtalen er allerede ved at blive kompakteret.</translation>
+        <translation type="vanished">Samtalen er allerede ved at blive kompakteret.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>Samtalen har ingen beskeder, der skal kompakteres.</translation>
+        <translation type="vanished">Samtalen har ingen beskeder, der skal kompakteres.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Samtalen blev kompakteret for nylig og kan ikke kompakteres yderligere.</translation>
+        <translation type="vanished">Samtalen blev kompakteret for nylig og kan ikke kompakteres yderligere.</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>Kompakteringsanmodningen fejlede: %1</translation>
+        <translation type="vanished">Kompakteringsanmodningen fejlede: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Kompakteringsanmodningen returnerede et fejlfornemt svar.</translation>
+        <translation type="vanished">Kompakteringsanmodningen returnerede et fejlfornemt svar.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Kompakteringsanmodningen returnerede ingen sammenfatning.</translation>
+        <translation type="vanished">Kompakteringsanmodningen returnerede ingen sammenfatning.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Kompakteringsanmodningen returnerede en tom sammenfatning.</translation>
+        <translation type="vanished">Kompakteringsanmodningen returnerede en tom sammenfatning.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Samtalen kompakteret - tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
+        <translation type="vanished">Samtalen kompakteret - tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Samtalen passer ikke længere i modellens kontekstvindue.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Automatisk kompaktering er deaktiveret; forkort eller kompakter samtalen og prøv igen.</translation>
+        <translation type="vanished">Automatisk kompaktering er deaktiveret; forkort eller kompakter samtalen og prøv igen.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Samtalen er allerede ved at blive kompakteret; send beskeden igen, når kompakteringen er færdig.</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Automatisk overlevering er slået fra.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Der er allerede ved at blive oprettet en ny samtale til denne.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>Samtalen har ingen beskeder at overlevere.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Samtalen blev overleveret for nylig; send et par beskeder til først.</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Overleveringsforespørgslen mislykkedes: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Overleveringsforespørgslen returnerede et svar i ugyldigt format.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Samtalen er allerede ved at blive kompakteret; send beskeden igen, når kompakteringen er færdig.</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>Overleveringsforespørgslen returnerede intet dokument.</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Overleveringsforespørgslen returnerede et tomt dokument.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>Fortsættelse af %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Denne samtale fortsætter arbejdet fra en tidligere samtale, hvis kontekstvindue blev opbrugt. Overleveringsdokumentet nedenfor beskriver opgaven, den nuværende tilstand og de næste trin. Fortsæt fra de næste trin.
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>Fortsæt i en ny samtale for at fortsætte arbejdet.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Bemærk:** Svaret blev beskåret: modellen nåede det maksimale antal output-tokens.</translation>
     </message>
@@ -2595,14 +2812,22 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>**Bemærk:** Modellen afsluttede sin runde uden et svar.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>Microsoft MXC-runtime (wxc-exec), som Windows-sandboxen bruger, er kun tilgængelig til Windows x86-64</translation>
+        <translation type="vanished">Microsoft MXC-runtime (wxc-exec), som Windows-sandboxen bruger, er kun tilgængelig til Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">Microsoft MXC-runtime (wxc-exec) er ikke installeret; download den på indstillingssiden for Llama-værktøjerne</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>Microsoft MXC-runtime (wxc-exec), som Windows-sandboxen bruger, er kun tilgængelig til Windows x86-64 og arm64</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>Microsoft MXC-runtime (wxc-exec) er ikke installeret; download den på indstillingssiden for Llama-værktøjerne</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>Microsoft MXC-runtime (wxc-exec) er ikke installeret; download den på indstillingssiden for Llama-sandboxen</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2635,7 +2860,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Problemer med sandboxen for llama.cpp chat-værktøjerne.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>Skrivbare mapper:</translation>
     </message>
@@ -2670,7 +2895,22 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Værktøjerne webfetch og websearch køres altid uden for sandboxen og påvirkes ikke af denne indstilling.</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>Download...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Det sandboxede bash-værktøj på Windows køres i en Microsoft MXC procescontainer.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Windows-runtime</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>Filsystem</translation>
     </message>
@@ -2680,7 +2920,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Netværk</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>Vælg en mappe</translation>
     </message>
@@ -2749,12 +2989,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
     </message>
@@ -3309,12 +3549,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Download Windows-sandbox-runtime (MXC)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Download Microsoft MXC-runtime %1?</translation>
     </message>
@@ -3342,7 +3582,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Download</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Pakken indeholder ingen wxc-exec.exe-binær.</translation>
     </message>
@@ -3358,8 +3598,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Microsoft MXC-runtime er kun tilgængelig til Windows x86-64 og arm64.</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Microsoft MXC-runtime er kun tilgængelig til Windows x86-64.</translation>
+        <translation type="vanished">Microsoft MXC-runtime er kun tilgængelig til Windows x86-64.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3530,7 +3774,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fælles ressourcer kan ikke adgås i sandboxen.</translation>
     </message>
@@ -3592,12 +3836,11 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">srt-win (@anthropic-ai/sandbox-runtime Windows-sandbox-backend) blev ikke fundet på PATH. %1 LLAMA_SRT_WIN kan pege på eksekverbaren.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+        <translation type="vanished">Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Windows-sandbox-backenden (wxc-exec) besvarede ikke sin evneundersøgelse i tide. %1</translation>
     </message>
@@ -3607,7 +3850,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
     </message>
@@ -3642,7 +3885,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Download den fra indstillingssiden for Llama.cpp Chat-sandboxen (en fastlåst, checksum-verificeret Microsoft MXC-udgave); der kan også pege på en egen runtime. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
     </message>

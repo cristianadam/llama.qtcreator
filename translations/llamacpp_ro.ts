@@ -4,210 +4,299 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="101"/>
+        <location filename="../src/llamachateditor.cpp" line="134"/>
         <source>Default</source>
         <translation>Implicit</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="102"/>
+        <location filename="../src/llamachateditor.cpp" line="135"/>
         <source>Off</source>
         <translation>Oprit</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="103"/>
+        <location filename="../src/llamachateditor.cpp" line="136"/>
         <source>Low</source>
         <translation>Scăzut</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="104"/>
+        <location filename="../src/llamachateditor.cpp" line="137"/>
         <source>Medium</source>
         <translation>Mediu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="105"/>
+        <location filename="../src/llamachateditor.cpp" line="138"/>
         <source>High</source>
         <translation>Ridicat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="106"/>
+        <location filename="../src/llamachateditor.cpp" line="139"/>
         <source>Max</source>
         <translation>Maxim</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="163"/>
-        <location filename="../src/llamachateditor.cpp" line="549"/>
         <source>Working directory: %1</source>
-        <translation>Directorul de lucru: %1</translation>
+        <translation type="vanished">Directorul de lucru: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="178"/>
+        <location filename="../src/llamachateditor.cpp" line="485"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="197"/>
+        <location filename="../src/llamachateditor.cpp" line="504"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Mesaje în coadă - trimise după pasul curent</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="207"/>
+        <location filename="../src/llamachateditor.cpp" line="514"/>
         <source>Follow up</source>
         <translation>Întrebări de urmărire</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="208"/>
+        <location filename="../src/llamachateditor.cpp" line="515"/>
         <source>Generate follow-up questions after each reply</source>
         <translation>Generează întrebări de urmărire după fiecare răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="225"/>
+        <location filename="../src/llamachateditor.cpp" line="532"/>
         <location filename="../src/promptssettingswidget.cpp" line="123"/>
         <source>Title</source>
         <translation>Titlu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="226"/>
+        <location filename="../src/llamachateditor.cpp" line="533"/>
         <source>Generate a conversation title after the first reply</source>
         <translation>Generează un titlu al conversației după primul răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="243"/>
+        <location filename="../src/llamachateditor.cpp" line="550"/>
         <source>Thinking level</source>
         <translation>Nivel de gândire</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="461"/>
         <source>Search in chat</source>
-        <translation>Caută în chat</translation>
+        <translation type="vanished">Caută în chat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="467"/>
         <source>Next search result</source>
-        <translation>Următorul rezultat</translation>
+        <translation type="vanished">Următorul rezultat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="473"/>
         <source>Previous search result</source>
-        <translation>Rezultatul anterior</translation>
+        <translation type="vanished">Rezultatul anterior</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="486"/>
+        <location filename="../src/llamachateditor.cpp" line="788"/>
         <source>Send to Llama Chat</source>
         <translation>Trimite la Llama Chat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="541"/>
         <source>Model Path: %1</source>
-        <translation>Calea modelului: %1</translation>
+        <translation type="vanished">Calea modelului: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="542"/>
         <source>Context: %L1</source>
-        <translation>Context: %L1</translation>
+        <translation type="vanished">Context: %L1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="543"/>
         <source>Vision: %1</source>
-        <translation>Viziune: %1</translation>
+        <translation type="vanished">Viziune: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="543"/>
+        <location filename="../src/llamachateditor.cpp" line="961"/>
+        <location filename="../src/llamachateditor.cpp" line="962"/>
         <source>yes</source>
         <translation>da</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="543"/>
+        <location filename="../src/llamachateditor.cpp" line="961"/>
+        <location filename="../src/llamachateditor.cpp" line="962"/>
         <source>no</source>
         <translation>nu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="585"/>
+        <location filename="../src/llamachateditor.cpp" line="1014"/>
         <source>Follow-up questions:</source>
         <translation>Întrebări de urmărire:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1071"/>
+        <location filename="../src/llamachateditor.cpp" line="1629"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Nivel de gândire: %1 (se aplică mesajelor noi)</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1098"/>
-        <location filename="../src/llamachateditor.cpp" line="1179"/>
+        <location filename="../src/llamachateditor.cpp" line="857"/>
+        <location filename="../src/llamachateditor.cpp" line="1658"/>
+        <location filename="../src/llamachateditor.cpp" line="1739"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1179"/>
+        <location filename="../src/llamachateditor.cpp" line="886"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Sunteți conectat la %1, cu %2 ca director curent</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="893"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="904"/>
+        <source>Hello there</source>
+        <translation>Bună!</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="906"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Scrieți un mesaj sau încărcați fișiere pentru a începe</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="907"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Faceți clic pe numele modelului pentru a vedea detaliile sale sau pe director pentru a modifica unde rulează uneltele.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="944"/>
+        <source>Model Details</source>
+        <translation>Detalii model</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="958"/>
+        <source>Model:</source>
+        <translation>Model:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="959"/>
+        <source>Model path:</source>
+        <translation>Calea modelului:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="960"/>
+        <source>Context:</source>
+        <translation>Context:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="961"/>
+        <source>Vision:</source>
+        <translation>Viziune:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="962"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="964"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="971"/>
+        <source>Close</source>
+        <translation>Închide</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="983"/>
+        <source>Select Working Directory</source>
+        <translation>Selectați directorul de lucru</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="1224"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="1479"/>
+        <source>Stop Task</source>
+        <translation>Oprește sarcina</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="1480"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Sarcina este încă în curs de rulare. Doriți cu adevărat să o opriți?</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="1739"/>
         <source>Edit Message</source>
         <translation>Editare mesaj</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1242"/>
+        <location filename="../src/llamachateditor.cpp" line="1797"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Se vor șterge %1 mesaje, inclusiv: %2 mesaje de utilizator și %3 răspunsuri ale asistentului ...</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1248"/>
+        <location filename="../src/llamachateditor.cpp" line="1803"/>
         <source>Confirm Branch Deletion</source>
         <translation>Confirmare ștergere ramificație</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1254"/>
+        <location filename="../src/llamachateditor.cpp" line="1809"/>
         <source>Delete Message</source>
         <translation>Șterge mesajul</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1255"/>
+        <location filename="../src/llamachateditor.cpp" line="1810"/>
         <source>Are you sure you want to delete this message?</source>
         <translation>Sigur doriți să ștergeți acest mesaj?</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1424"/>
+        <location filename="../src/llamachateditor.cpp" line="1861"/>
         <source>Processing: %1%</source>
         <translation>Se procesează: %1%</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1426"/>
+        <location filename="../src/llamachateditor.cpp" line="1863"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Procesare prompt:&lt;/b&gt;&lt;br&gt;Tokeni totali: %1&lt;br&gt;Procesate: %2&lt;br&gt;În cache: %3&lt;br&gt;Timp: %4 ms</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1440"/>
+        <location filename="../src/llamachateditor.cpp" line="1877"/>
         <source>Speed: %1 t/s</source>
         <translation>Viteză: %1 t/s</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1442"/>
+        <location filename="../src/llamachateditor.cpp" line="1879"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokeni: %1&lt;br&gt;Timp: %2 ms&lt;br&gt;Viteză: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generare:&lt;/b&gt;&lt;br&gt;Tokeni: %4&lt;br&gt;Timp: %5 ms&lt;br&gt;Viteză: %6 t/s</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1491"/>
+        <location filename="../src/llamachateditor.cpp" line="1928"/>
         <source>Context: %1% used</source>
         <translation>Context: %1% utilizat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1493"/>
+        <location filename="../src/llamachateditor.cpp" line="1930"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Context: %1% utilizat.&lt;br&gt;  %2 tokeni din %3.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1507"/>
+        <location filename="../src/llamachateditor.cpp" line="1944"/>
         <source>%1 queued</source>
         <translation>%1 în coadă</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1521"/>
+        <location filename="../src/llamachateditor.cpp" line="1958"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Elimină &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1523"/>
+        <location filename="../src/llamachateditor.cpp" line="1960"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Elimină mesajul din coadă (nu va fi trimis)</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1546"/>
+        <location filename="../src/llamachateditor.cpp" line="1995"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Se creează o conversație nouă pentru a continua aceasta – se rezumă conversația...</translation>
+    </message>
+    <message>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Se creează o conversație nouă pentru a continua aceasta – se rezumă conversația…</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="2017"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Editor de chat LlamaCpp</translation>
     </message>
@@ -280,78 +369,125 @@
         <translation>Doriți să ștergeți toate cele %1 intrări salvate din istoricul de intrare?</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="970"/>
+        <location filename="../src/llamachatmanager.cpp" line="975"/>
         <source>Error:</source>
         <translation>Eroare:</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1321"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Compacția automată este dezactivată.</translation>
+        <translation type="vanished">Compacția automată este dezactivată.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1323"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Conversația este deja în curs de compactare.</translation>
+        <translation type="vanished">Conversația este deja în curs de compactare.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1327"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>Conversația nu are mesaje de compactat.</translation>
+        <translation type="vanished">Conversația nu are mesaje de compactat.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1350"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Conversația a fost compactată recent și nu mai poate fi compactată.</translation>
+        <translation type="vanished">Conversația a fost compactată recent și nu mai poate fi compactată.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1412"/>
         <source>The compaction request failed: %1</source>
-        <translation>Cererea de compactare a eșuat: %1</translation>
+        <translation type="vanished">Cererea de compactare a eșuat: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1417"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Cererea de compactare a returnat un răspuns incorect.</translation>
+        <translation type="vanished">Cererea de compactare a returnat un răspuns incorect.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1420"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Cererea de compactare nu a returnat niciun rezumat.</translation>
+        <translation type="vanished">Cererea de compactare nu a returnat niciun rezumat.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1434"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Cererea de compactare a returnat un rezumat gol.</translation>
+        <translation type="vanished">Cererea de compactare a returnat un rezumat gol.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1460"/>
-        <location filename="../src/llamachatmanager.cpp" line="1491"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Conversația a fost compactată - mesajele anterioare au fost rezumate pentru a se încadra în fereastra de context.</translation>
+        <translation type="vanished">Conversația a fost compactată - mesajele anterioare au fost rezumate pentru a se încadra în fereastra de context.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2286"/>
+        <location filename="../src/llamachatmanager.cpp" line="2296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Conversația nu se mai încadrează în fereastra de context a modelului.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2298"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Compacția automată este dezactivată; scurtați sau compactați conversația și încercați din nou.</translation>
+        <translation type="vanished">Compacția automată este dezactivată; scurtați sau compactați conversația și încercați din nou.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Conversația este deja în curs de compactare; trimiteți din nou mesajul după ce compactarea s-a încheiat.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1372"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Preluarea automată este dezactivată.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1374"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Se creează deja o conversație nouă pentru aceasta.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1378"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>Conversația nu are mesaje de preluat.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1401"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Conversația a fost preluată recent; trimiteți mai întâi câteva mesaje.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1488"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Cererea de preluare a eșuat: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1493"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Cererea de preluare a returnat un răspuns incorect.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1496"/>
+        <source>The handoff request returned no document.</source>
+        <translation>Cererea de preluare nu a returnat niciun document.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1510"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Cererea de preluare a returnat un document gol.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1525"/>
+        <source>Continuation of %1</source>
+        <translation>Continuarea lui %1</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachatmanager.cpp" line="1527"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Această conversație continuă lucrul unei conversații anterioare a cărei fereastră de context s-a epuizat. Documentul de preluare de mai jos descrie sarcina, starea curentă și pașii următori. Continuați de la pașii următori.
+
+</translation>
     </message>
     <message>
         <location filename="../src/llamachatmanager.cpp" line="2301"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Conversația este deja în curs de compactare; trimiteți din nou mesajul după ce compactarea s-a încheiat.</translation>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>Continuați într-o conversație nouă pentru a continua lucrul.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2356"/>
+        <location filename="../src/llamachatmanager.cpp" line="2348"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Notă:** Răspunsul a fost trunchiat: modelul a atins numărul maxim de tokeni de ieșire.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2359"/>
+        <location filename="../src/llamachatmanager.cpp" line="2351"/>
         <source>**Note:** The model ended its turn without an answer.</source>
         <translation>**Notă:** Modelul a terminat rândul fără un răspuns.</translation>
     </message>
@@ -401,79 +537,85 @@
         <translation>Imagine</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Creează o conversație nouă în llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="137"/>
+        <location filename="../src/llamaconversationsview.cpp" line="138"/>
         <source>Refresh</source>
         <translation>Reîmprospătează</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="255"/>
+        <location filename="../src/llamaconversationsview.cpp" line="256"/>
         <source>Rename...</source>
         <translation>Redenumește...</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="256"/>
+        <location filename="../src/llamaconversationsview.cpp" line="257"/>
         <source>Summarize</source>
         <translation>Rezumă</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="257"/>
-        <location filename="../src/llamaconversationsview.cpp" line="325"/>
+        <location filename="../src/llamaconversationsview.cpp" line="258"/>
+        <location filename="../src/llamaconversationsview.cpp" line="393"/>
+        <source>Continue in New Conversation</source>
+        <translation>Continuă într-o conversație nouă</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaconversationsview.cpp" line="261"/>
+        <location filename="../src/llamaconversationsview.cpp" line="329"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="258"/>
+        <location filename="../src/llamaconversationsview.cpp" line="262"/>
         <source>Save as Markdown</source>
         <translation>Salvează ca Markdown</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="261"/>
+        <location filename="../src/llamaconversationsview.cpp" line="265"/>
         <source>Save as HTML</source>
         <translation>Salvează ca HTML</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="318"/>
+        <location filename="../src/llamaconversationsview.cpp" line="322"/>
         <source>Delete Conversation</source>
         <translation>Ștergere conversație</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="319"/>
+        <location filename="../src/llamaconversationsview.cpp" line="323"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Sigur doriți să ștergeți conversația:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="386"/>
+        <location filename="../src/llamaconversationsview.cpp" line="418"/>
         <source>Save Conversation as Markdown</source>
         <translation>Salvare conversație ca Markdown</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="398"/>
-        <location filename="../src/llamaconversationsview.cpp" line="438"/>
+        <location filename="../src/llamaconversationsview.cpp" line="430"/>
+        <location filename="../src/llamaconversationsview.cpp" line="470"/>
         <source>Error</source>
         <translation>Eroare</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="399"/>
-        <location filename="../src/llamaconversationsview.cpp" line="439"/>
+        <location filename="../src/llamaconversationsview.cpp" line="431"/>
+        <location filename="../src/llamaconversationsview.cpp" line="471"/>
         <source>Cannot write file:
 %1</source>
         <translation>Nu se poate scrie fișierul:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="426"/>
+        <location filename="../src/llamaconversationsview.cpp" line="458"/>
         <source>Save Conversation as HTML</source>
         <translation>Salvare conversație ca HTML</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="450"/>
+        <location filename="../src/llamaconversationsview.cpp" line="482"/>
         <source>llama.cpp Conversations</source>
         <translation>Conversații llama.cpp</translation>
     </message>
@@ -492,7 +634,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Se colectează modificările git</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Comută detaliile utilizării uneltelor</translation>
     </message>
@@ -558,91 +700,89 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Deschide pagina de setări llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="244"/>
+        <location filename="../src/llamaplugin.cpp" line="261"/>
         <source>Disable llama.cpp.</source>
         <translation>Dezactivează llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="244"/>
+        <location filename="../src/llamaplugin.cpp" line="261"/>
         <source>Enable llama.cpp.</source>
         <translation>Activează llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="640"/>
+        <location filename="../src/llamaplugin.cpp" line="657"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] S-a produs o eroare la preluarea completării FIM de la %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1316"/>
+        <location filename="../src/llamaplugin.cpp" line="1333"/>
         <source>llama.cpp %1 server (model: %2): invalid endpoint %3</source>
         <translation>serverul llama.cpp %1 (model: %2): punct de intrare nevalid %3</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1318"/>
-        <location filename="../src/llamaplugin.cpp" line="1393"/>
+        <location filename="../src/llamaplugin.cpp" line="1335"/>
+        <location filename="../src/llamaplugin.cpp" line="1410"/>
         <source>default</source>
         <translation>implicit</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1347"/>
+        <location filename="../src/llamaplugin.cpp" line="1364"/>
         <source>not reachable</source>
         <translation>nedisponibil</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1373"/>
+        <location filename="../src/llamaplugin.cpp" line="1390"/>
         <source>no models loaded</source>
         <translation>niciun model încărcat</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1374"/>
+        <location filename="../src/llamaplugin.cpp" line="1391"/>
         <source>multiple models loaded</source>
         <translation>mai multe modele încărcate</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1376"/>
+        <location filename="../src/llamaplugin.cpp" line="1393"/>
         <source>model %1 is not loaded</source>
         <translation>modelul %1 nu este încărcat</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1384"/>
+        <location filename="../src/llamaplugin.cpp" line="1401"/>
         <source>ready</source>
         <translation>gata</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1390"/>
+        <location filename="../src/llamaplugin.cpp" line="1407"/>
         <source>llama.cpp %1 server (%2, model: %3): %4</source>
         <translation>serverul llama.cpp %1 (%2, model: %3): %4</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1401"/>
+        <location filename="../src/llamaplugin.cpp" line="1418"/>
+        <location filename="../src/llamasettings.cpp" line="1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="1405"/>
+        <location filename="../src/llamaplugin.cpp" line="1422"/>
+        <location filename="../src/llamasettings.cpp" line="1173"/>
         <location filename="../src/promptssettingswidget.cpp" line="121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="22"/>
         <source>Search</source>
-        <translation>Caută</translation>
+        <translation type="vanished">Caută</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="29"/>
         <source>Find ...</source>
-        <translation>Căutare...</translation>
+        <translation type="vanished">Căutare...</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="32"/>
         <source>Previous result</source>
-        <translation>Rezultatul anterior</translation>
+        <translation type="vanished">Rezultatul anterior</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="34"/>
         <source>Next result</source>
-        <translation>Rezultatul următor</translation>
+        <translation type="vanished">Rezultatul următor</translation>
     </message>
     <message>
         <location filename="../src/llamaselectionbutton.cpp" line="29"/>
@@ -650,27 +790,31 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Solicită la llama.cpp despre selecție (deschide localizatorul llama.cpp)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="26"/>
+        <location filename="../src/llamasettings.cpp" line="27"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Rezumați titlul conversației în câteva cuvinte, inclusiv un emoji. Folosiți limba folosită în conversație. Folosiți text simplu, fără markdown.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="32"/>
+        <location filename="../src/llamasettings.cpp" line="33"/>
         <source>Generate up to five follow up questions in the context of the current conversation. The questions are from the user point of view. Only questions, no explanations. Use the language used in the conversation. Return a JSON object with a single key &quot;follow_ups&quot; containing an array of plain text question strings, no markdown.</source>
         <translation>Generați până la cinci întrebări de urmărire în contextul conversației curente. Întrebările sunt din punctul de vedere al utilizatorului. Doar întrebări, fără explicații. Folosiți limba folosită în conversație. Returnați un obiect JSON cu o singură cheie &quot;follow_ups&quot; care conține un șir de întrebări în text simplu, fără markdown.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="41"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Conversația de mai sus este lungă și spațiul de context se epuizează. Redactați un rezumat detaliat al acesteia care să permită conversației să continue fără întrerupere. Structurați rezumatul ca markdown cu următoarele secțiuni: ## Task (ce a cerut utilizatorul și obiectivul general), ## Key Decisions (deciziile importante, constrângerile și preferințele), ## Work Done (fișierele modificate, comenzile rulate, modificările de cod și rezultatele acestora), ## Current State (ce este finalizat, ce este în curs, erorile întâlnite) și ## Next Steps (ce ar trebui să se întâmple în continuare pentru a finaliza sarcina). Fii precis și concret: păstrează căile de fișiere, numele funcțiilor și valorile exacte. Nu răspunde la ultima mesajă a utilizatorului; rezumați doar.</translation>
+        <translation type="vanished">Conversația de mai sus este lungă și spațiul de context se epuizează. Redactați un rezumat detaliat al acesteia care să permită conversației să continue fără întrerupere. Structurați rezumatul ca markdown cu următoarele secțiuni: ## Task (ce a cerut utilizatorul și obiectivul general), ## Key Decisions (deciziile importante, constrângerile și preferințele), ## Work Done (fișierele modificate, comenzile rulate, modificările de cod și rezultatele acestora), ## Current State (ce este finalizat, ce este în curs, erorile întâlnite) și ## Next Steps (ce ar trebui să se întâmple în continuare pentru a finaliza sarcina). Fii precis și concret: păstrează căile de fișiere, numele funcțiilor și valorile exacte. Nu răspunde la ultima mesajă a utilizatorului; rezumați doar.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="56"/>
+        <location filename="../src/llamasettings.cpp" line="42"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Conversația de mai sus este lungă și va fi continuată într-o conversație nouă, cu o fereastră de context nouă. Redactați un document de preluare care să permită noii conversații să continue lucrul fără întrerupere, fără a vedea mesajele anterioare. Structurați-l ca markdown cu următoarele secțiuni: ## Task (ce a cerut utilizatorul și obiectivul general), ## Key Decisions (deciziile importante, constrângerile și preferințele), ## Work Done (fișierele modificate, comenzile rulate, modificările de cod și rezultatele acestora), ## Current State (ce este finalizat, ce este în curs, erorile întâlnite) și ## Next Steps (ce trebuie făcut în continuare pentru a finaliza sarcina). Fii precis și concret: păstrează căile de fișiere, numele funcțiilor și valorile exacte. Nu răspunde la ultima mesajă a utilizatorului; scrieți doar documentul de preluare.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="58"/>
         <source>Create a summary of {selection}</source>
         <translation>Creați un rezumat al {selection}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="57"/>
+        <location filename="../src/llamasettings.cpp" line="59"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -679,17 +823,17 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
 {git_diff}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="59"/>
+        <location filename="../src/llamasettings.cpp" line="61"/>
         <source>Explain the code in {selection}</source>
         <translation>Explicați codul din {selection}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="60"/>
+        <location filename="../src/llamasettings.cpp" line="62"/>
         <source>Do spell checking and fix any typos in {selection}</source>
         <translation>Efectuați verificarea ortografică și corectați orice greșeli de tastare din {selection}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="61"/>
+        <location filename="../src/llamasettings.cpp" line="63"/>
         <source>Fix the following errors and warnings in {file}.
 
 {diagnostics}</source>
@@ -698,1066 +842,1138 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
 {diagnostics}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="67"/>
+        <location filename="../src/llamasettings.cpp" line="69"/>
         <source>Tools</source>
         <translation>Instrumente</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="76"/>
+        <location filename="../src/llamasettings.cpp" line="78"/>
         <source>Skills</source>
         <translation>Abilități</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="85"/>
+        <location filename="../src/llamasettings.cpp" line="87"/>
         <source>Sandbox</source>
         <translation>Sandbox</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="96"/>
-        <location filename="../src/llamasettings.cpp" line="97"/>
+        <location filename="../src/llamasettings.cpp" line="98"/>
+        <location filename="../src/llamasettings.cpp" line="99"/>
         <source>Enable llama.cpp</source>
         <translation>Activează llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="98"/>
+        <location filename="../src/llamasettings.cpp" line="100"/>
         <source>Enables the llama.cpp integration.</source>
         <translation>Activează integrarea cu llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="121"/>
+        <location filename="../src/llamasettings.cpp" line="123"/>
         <source>Endpoint</source>
         <translation>Punct de intrare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="124"/>
+        <location filename="../src/llamasettings.cpp" line="126"/>
         <source>Endpoint:</source>
         <translation>Punct de intrare:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="126"/>
+        <location filename="../src/llamasettings.cpp" line="128"/>
         <source>llama.cpp server endpoint</source>
         <translation>punct de intrare al serverului llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="129"/>
+        <location filename="../src/llamasettings.cpp" line="131"/>
         <source>API Key</source>
         <translation>Cheie API</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="132"/>
+        <location filename="../src/llamasettings.cpp" line="134"/>
         <source>API Key:</source>
         <translation>Cheie API:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="134"/>
+        <location filename="../src/llamasettings.cpp" line="136"/>
         <source>llama.cpp server api key (optional)</source>
         <translation>cheia API a serverului llama.cpp (opțional)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="137"/>
+        <location filename="../src/llamasettings.cpp" line="139"/>
         <source>FIM Model</source>
         <translation>Model FIM</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="140"/>
+        <location filename="../src/llamasettings.cpp" line="142"/>
         <source>FIM Model:</source>
         <translation>Model FIM:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="143"/>
+        <location filename="../src/llamasettings.cpp" line="145"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
         <translation>Numele modelului de folosit pentru completarea FIM atunci când pe server sunt încărcate mai multe modele (opțional, recomandat: Qwen3 Coder).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="147"/>
+        <location filename="../src/llamasettings.cpp" line="149"/>
         <source>Prefix Code Lines</source>
         <translation>Linii de cod de prefix</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="149"/>
+        <location filename="../src/llamasettings.cpp" line="151"/>
         <source>Prefix Code Lines:</source>
         <translation>Linii de cod de prefix:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="152"/>
+        <location filename="../src/llamasettings.cpp" line="154"/>
         <source>Number of code lines before the cursor location to include in the local prefix.</source>
         <translation>Numărul de linii de cod dinaintea poziției cursorului care se includ în prefixul local.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="155"/>
+        <location filename="../src/llamasettings.cpp" line="157"/>
         <source>Suffix Code Lines</source>
         <translation>Linii de cod de sufix</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="157"/>
+        <location filename="../src/llamasettings.cpp" line="159"/>
         <source>Suffix Code Lines:</source>
         <translation>Linii de cod de sufix:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="160"/>
+        <location filename="../src/llamasettings.cpp" line="162"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Numărul de linii de cod după poziția cursorului care se includ în sufixul local.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="163"/>
+        <location filename="../src/llamasettings.cpp" line="165"/>
         <source>Max Token Predictions</source>
         <translation>Predicție maximă de tokeni</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="165"/>
+        <location filename="../src/llamasettings.cpp" line="167"/>
         <source>Max Token Predictions:</source>
         <translation>Predicție maximă de tokeni:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="167"/>
+        <location filename="../src/llamasettings.cpp" line="169"/>
         <source>Max number of tokens to predict.</source>
         <translation>Numărul maxim de tokeni de predicție.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="170"/>
+        <location filename="../src/llamasettings.cpp" line="172"/>
         <source>Completions per Position</source>
         <translation>Completați per poziție</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="172"/>
+        <location filename="../src/llamasettings.cpp" line="174"/>
         <source>Completions per Position:</source>
         <translation>Completați per poziție:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="174"/>
+        <location filename="../src/llamasettings.cpp" line="176"/>
         <source>Number of completions to cache per position (ring buffer). Use the Next/Previous Completion shortcuts (Ctrl+G then Down/Up) to cycle through them.</source>
         <translation>Numărul de completări stocate în memoria tampon per poziție (memorie tampon în inel). Folosiți scurtăturile pentru completarea următoare/anterioară (Ctrl+G apoi Săgeată în jos/sus) pentru a naviga între ele.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="179"/>
+        <location filename="../src/llamasettings.cpp" line="181"/>
         <source>Stop Strings</source>
         <translation>Șiruri de oprire</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="182"/>
+        <location filename="../src/llamasettings.cpp" line="184"/>
         <source>Stop Strings:</source>
         <translation>Șiruri de oprire:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="185"/>
+        <location filename="../src/llamasettings.cpp" line="187"/>
         <source>Return the result immediately as soon as any of these strings are encountered in the generated text. Separated by semicolons.</source>
         <translation>Returnează rezultatul imediat de îndată ce oricare dintre aceste șiruri este întâlnit în textul generat. Separate prin punct și virgulă.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="189"/>
+        <location filename="../src/llamasettings.cpp" line="191"/>
         <source>Max Prompt Time (ms)</source>
         <translation>Timp maxim de prompt (ms)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="191"/>
+        <location filename="../src/llamasettings.cpp" line="193"/>
         <source>Max Prompt Time (ms):</source>
         <translation>Timp maxim de prompt (ms):</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="194"/>
+        <location filename="../src/llamasettings.cpp" line="196"/>
         <source>Max alloted time for the prompt processing (TODO: not yet supported).</source>
         <translation>Timpul maxim alocat procesării promptului (TODO: încă nesuportat).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="197"/>
+        <location filename="../src/llamasettings.cpp" line="199"/>
         <source>Max Predict Time (ms)</source>
         <translation>Timp maxim de predicție (ms)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="199"/>
+        <location filename="../src/llamasettings.cpp" line="201"/>
         <source>Max Predict Time (ms):</source>
         <translation>Timp maxim de predicție (ms):</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="201"/>
+        <location filename="../src/llamasettings.cpp" line="203"/>
         <source>Max alloted time for the prediction.</source>
         <translation>Timpul maxim alocat predicției.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="204"/>
+        <location filename="../src/llamasettings.cpp" line="206"/>
         <source>Show Info</source>
         <translation>Afișare informații</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="206"/>
+        <location filename="../src/llamasettings.cpp" line="208"/>
         <source>Show Info:</source>
         <translation>Afișare informații:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="209"/>
+        <location filename="../src/llamasettings.cpp" line="211"/>
         <source>Show extra info about the inference (0 - disabled, 1 - statusline, 2 - inline).</source>
         <translation>Afișează informații suplimentare despre inferență (0 - dezactivat, 1 - linie de stare, 2 - în linie).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="212"/>
         <location filename="../src/llamasettings.cpp" line="214"/>
+        <location filename="../src/llamasettings.cpp" line="216"/>
         <source>Auto FIM</source>
         <translation>FIM automat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="217"/>
+        <location filename="../src/llamasettings.cpp" line="219"/>
         <source>Trigger FIM (Fill-in-the-Middle) completion automatically on cursor movement.</source>
         <translation>Declanșează automat completarea FIM (Fill-in-the-Middle) la mișcarea cursorului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="219"/>
+        <location filename="../src/llamasettings.cpp" line="221"/>
         <source>Max Line Suffix</source>
         <translation>Sufix maxim de linie</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="221"/>
+        <location filename="../src/llamasettings.cpp" line="223"/>
         <source>Max Line Suffix:</source>
         <translation>Sufix maxim de linie:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="223"/>
+        <location filename="../src/llamasettings.cpp" line="225"/>
         <source>Do not auto-trigger FIM completion if there are more than this number of characters to the right of the cursor.</source>
         <translation>Nu declanșa completarea FIM automat dacă există mai mulți caractere decât atât la dreapta cursorului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="227"/>
+        <location filename="../src/llamasettings.cpp" line="229"/>
         <source>Max Cache Keys</source>
         <translation>Număr maxim de chei în memoria tampon</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="229"/>
+        <location filename="../src/llamasettings.cpp" line="231"/>
         <source>Max Cache Keys:</source>
         <translation>Număr maxim de chei în memoria tampon:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="231"/>
+        <location filename="../src/llamasettings.cpp" line="233"/>
         <source>Max number of cached context keys to keep in the result cache. Each key can hold up to &apos;Completions per Position&apos; individual completions.</source>
         <translation>Numărul maxim de chei de context din memoria tampon de păstrat în memoria tampon a rezultatelor. Fiecare cheie poate conține până la „Completați per poziție” completări individuale.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="236"/>
+        <location filename="../src/llamasettings.cpp" line="238"/>
         <source>Ring Chunks</source>
         <translation>Fragmente în inel</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="238"/>
+        <location filename="../src/llamasettings.cpp" line="240"/>
         <source>Ring Chunks:</source>
         <translation>Fragmente în inel:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="241"/>
+        <location filename="../src/llamasettings.cpp" line="243"/>
         <source>Max number of chunks to pass as extra context to the server (0 to disable).</source>
         <translation>Numărul maxim de fragmente transmise ca context suplimentar către server (0 pentru dezactivare).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="244"/>
+        <location filename="../src/llamasettings.cpp" line="246"/>
         <source>Chunk Line Size</source>
         <translation>Dimensiune fragment (în linii)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="246"/>
+        <location filename="../src/llamasettings.cpp" line="248"/>
         <source>Chunk Line Size:</source>
         <translation>Dimensiune fragment (în linii):</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="248"/>
+        <location filename="../src/llamasettings.cpp" line="250"/>
         <source>Max size of the chunks (in number of lines).&lt;br/&gt;&lt;br/&gt;Note: adjust these numbers so that you don&apos;t overrun your context. At ring_n_chunks = 64 and ring_chunk_size = 64 you need ~32k context.</source>
         <translation>Dimensiunea maximă a fragmentelor (în număr de linii).&lt;br/&gt;&lt;br/&gt;Notă: ajustați aceste numere astfel încât să nu depășiți contextul. La ring_n_chunks = 64 și ring_chunk_size = 64 aveți nevoie de ~32k de context.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="254"/>
+        <location filename="../src/llamasettings.cpp" line="256"/>
         <source>Ring Line Scope</source>
         <translation>Amploane linii în inel</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="256"/>
+        <location filename="../src/llamasettings.cpp" line="258"/>
         <source>Ring Line Scope:</source>
         <translation>Amploane linii în inel:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="258"/>
+        <location filename="../src/llamasettings.cpp" line="260"/>
         <source>The range around the cursor position (in number of lines) for gathering chunks after FIM.</source>
         <translation>Intervalul din jurul poziției cursorului (în număr de linii) pentru adunarea fragmentelor după FIM.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="262"/>
+        <location filename="../src/llamasettings.cpp" line="264"/>
         <source>Update Interval (ms)</source>
         <translation>Interval de actualizare (ms)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="264"/>
+        <location filename="../src/llamasettings.cpp" line="266"/>
         <source>Update Interval (ms):</source>
         <translation>Interval de actualizare (ms):</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="266"/>
+        <location filename="../src/llamasettings.cpp" line="268"/>
         <source>How often to process queued chunks in normal mode.</source>
         <translation>Cât de des se procesează fragmentele din coadă în modul normal.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="273"/>
+        <location filename="../src/llamasettings.cpp" line="275"/>
         <source>Chat Endpoint</source>
         <translation>Punct de intrare pentru chat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="275"/>
+        <location filename="../src/llamasettings.cpp" line="277"/>
         <source>Chat Endpoint:</source>
         <translation>Punct de intrare pentru chat:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="278"/>
+        <location filename="../src/llamasettings.cpp" line="280"/>
         <source>llama.cpp server chat endpoint</source>
         <translation>punct de intrare pentru chat al serverului llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="281"/>
+        <location filename="../src/llamasettings.cpp" line="283"/>
         <source>Chat API Key</source>
         <translation>Cheie API pentru chat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="283"/>
+        <location filename="../src/llamasettings.cpp" line="285"/>
         <source>Chat API Key:</source>
         <translation>Cheie API pentru chat:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="287"/>
+        <location filename="../src/llamasettings.cpp" line="289"/>
         <source>Set the API Key if you are using --api-key option for the server.</source>
         <translation>Setați cheia API dacă folosiți opțiunea --api-key pentru server.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="290"/>
+        <location filename="../src/llamasettings.cpp" line="292"/>
         <source>System Message</source>
         <translation>Mesaj de sistem</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="292"/>
+        <location filename="../src/llamasettings.cpp" line="294"/>
         <source>System Message:</source>
         <translation>Mesaj de sistem:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="294"/>
+        <location filename="../src/llamasettings.cpp" line="296"/>
         <source>Default: none</source>
         <translation>Implicit: nimic</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="296"/>
+        <location filename="../src/llamasettings.cpp" line="298"/>
         <source>The starting message that defines how model should behave. Will be disabled if left empty.</source>
         <translation>Mesajul inițial care definește cum ar trebui să se comporte modelul. Va fi dezactivat dacă este lăsat gol.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="300"/>
+        <location filename="../src/llamasettings.cpp" line="302"/>
         <source>Paste Long Text to File Length</source>
         <translation>Lungime text lung convertit în fișier</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="302"/>
+        <location filename="../src/llamasettings.cpp" line="304"/>
         <source>Paste Long Text to File Length:</source>
         <translation>Lungime text lung convertit în fișier:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="305"/>
+        <location filename="../src/llamasettings.cpp" line="307"/>
         <source>On pasting long text, it will be converted to a file. You can control the file length by setting the value of this parameter. Value 0 means disable.</source>
         <translation>La lipirea unui text lung, acesta va fi convertit într-un fișier. Puteți controla lungimea fișierului prin stabilirea valorii acestui parametru. Valoarea 0 înseamnă dezactivare.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="309"/>
+        <location filename="../src/llamasettings.cpp" line="311"/>
         <source>Samplers</source>
         <translation>Eșantionatori</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="311"/>
+        <location filename="../src/llamasettings.cpp" line="313"/>
         <source>Samplers:</source>
         <translation>Eșantionatori:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="314"/>
+        <location filename="../src/llamasettings.cpp" line="316"/>
         <source>The order at which samplers are applied, in simplified way. Default is &quot;edkypmxt&quot;: dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</source>
         <translation>Ordinea în care se aplică eșantionatorii, în formă simplificată. Valoarea implicită este &quot;edkypmxt&quot;: dry-&gt;top_k-&gt;typ_p-&gt;top_p-&gt;min_p-&gt;xtc-&gt;temperature</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="319"/>
+        <location filename="../src/llamasettings.cpp" line="321"/>
         <source>Temperature</source>
         <translation>Temperatură</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="321"/>
+        <location filename="../src/llamasettings.cpp" line="323"/>
         <source>Temperature:</source>
         <translation>Temperatură:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="324"/>
+        <location filename="../src/llamasettings.cpp" line="326"/>
         <source>Controls the randomness of the generated text by affecting the probability distribution of the output tokens. Higher = more random, lower = more focused.</source>
         <translation>Controlează aleatoricitatea textului generat, influențând distribuția de probabilitate a tokenilor de ieșire. Mai mare = mai aleatoriu, mai mic = mai concentrat.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="328"/>
+        <location filename="../src/llamasettings.cpp" line="330"/>
         <source>Dynamic Temperature Range</source>
         <translation>Interval de temperatură dinamică</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="330"/>
+        <location filename="../src/llamasettings.cpp" line="332"/>
         <source>Dynamic Temperature Range:</source>
         <translation>Interval de temperatură dinamică:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="332"/>
+        <location filename="../src/llamasettings.cpp" line="334"/>
         <source>Addon for the temperature sampler. The added value to the range of dynamic temperature, which adjusts probabilities by entropy of tokens.</source>
         <translation>Adăugire pentru eșantionatorul de temperatură. Valoare adăugată la intervalul de temperatură dinamică, care ajustează probabilitățile în funcție de entropia tokenilor.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="337"/>
+        <location filename="../src/llamasettings.cpp" line="339"/>
         <source>Dynamic Temperature Exponent</source>
         <translation>Exponent de temperatură dinamică</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="339"/>
+        <location filename="../src/llamasettings.cpp" line="341"/>
         <source>Dynamic Temperature Exponent:</source>
         <translation>Exponent de temperatură dinamică:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="341"/>
+        <location filename="../src/llamasettings.cpp" line="343"/>
         <source>Addon for the temperature sampler. Smoothes out the probability redistribution based on the most probable token.</source>
         <translation>Adăugire pentru eșantionatorul de temperatură. Împrospătează redistribuirea probabilităților bazată pe tokenul cel mai probabil.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="346"/>
+        <location filename="../src/llamasettings.cpp" line="348"/>
         <source>Top K</source>
         <translation>Top K</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="348"/>
+        <location filename="../src/llamasettings.cpp" line="350"/>
         <source>Top K:</source>
         <translation>Top K:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="350"/>
+        <location filename="../src/llamasettings.cpp" line="352"/>
         <source>Keeps only k top tokens.</source>
         <translation>Păstrează doar k tokeni de top.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="353"/>
+        <location filename="../src/llamasettings.cpp" line="355"/>
         <source>Top P</source>
         <translation>Top P</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="355"/>
+        <location filename="../src/llamasettings.cpp" line="357"/>
         <source>Top P:</source>
         <translation>Top P:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="358"/>
+        <location filename="../src/llamasettings.cpp" line="360"/>
         <source>Limits tokens to those that together have a cumulative probability of at least p</source>
         <translation>Restringe tokenii la cei care împreună au o probabilitate cumulată de cel puțin p</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="361"/>
+        <location filename="../src/llamasettings.cpp" line="363"/>
         <source>Min P</source>
         <translation>Min P</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="363"/>
+        <location filename="../src/llamasettings.cpp" line="365"/>
         <source>Min P:</source>
         <translation>Min P:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="365"/>
+        <location filename="../src/llamasettings.cpp" line="367"/>
         <source>Limits tokens based on the minimum probability for a token to be considered, relative to the probability of the most likely token.</source>
         <translation>Restringe tokenii în funcție de probabilitatea minimă necesară pentru ca un token să fie luat în considerare, față de probabilitatea tokenului cel mai probabil.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="369"/>
+        <location filename="../src/llamasettings.cpp" line="371"/>
         <source>XTC Probability</source>
         <translation>Probabilitate XTC</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="371"/>
+        <location filename="../src/llamasettings.cpp" line="373"/>
         <source>XTC Probability:</source>
         <translation>Probabilitate XTC:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="372"/>
+        <location filename="../src/llamasettings.cpp" line="374"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the chance of cutting tokens at all. 0 disables XTC.</source>
         <translation>Eșantionatorul XTC elimină tokenii de top; acest parametru controlează șansa ca tokenii să fie eliminați deloc. 0 dezactivează XTC.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="377"/>
+        <location filename="../src/llamasettings.cpp" line="379"/>
         <source>XTC Threshold</source>
         <translation>Prag XTC</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="379"/>
+        <location filename="../src/llamasettings.cpp" line="381"/>
         <source>XTC Threshold:</source>
         <translation>Prag XTC:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="380"/>
+        <location filename="../src/llamasettings.cpp" line="382"/>
         <source>XTC sampler cuts out top tokens; this parameter controls the token probability that is required to cut that token.</source>
         <translation>Eșantionatorul XTC elimină tokenii de top; acest parametru controlează probabilitatea tokenului necesară pentru a-l elimina.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="385"/>
+        <location filename="../src/llamasettings.cpp" line="387"/>
         <source>Typical P</source>
         <translation>P tipic</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="387"/>
+        <location filename="../src/llamasettings.cpp" line="389"/>
         <source>Typical P:</source>
         <translation>P tipic:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="389"/>
+        <location filename="../src/llamasettings.cpp" line="391"/>
         <source>Sorts and limits tokens based on the difference between log-probability and entropy.</source>
         <translation>Sortează și restricționează tokenii pe baza diferenței dintre log-probabilitate și entropie.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="393"/>
+        <location filename="../src/llamasettings.cpp" line="395"/>
         <source>Repeat Last N</source>
         <translation>Repetă ultimii N</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="395"/>
+        <location filename="../src/llamasettings.cpp" line="397"/>
         <source>Repeat Last N:</source>
         <translation>Repetă ultimii N:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="397"/>
+        <location filename="../src/llamasettings.cpp" line="399"/>
         <source>Last n tokens to consider for penalizing repetition</source>
         <translation>Ultimii n tokeni luați în considerare pentru penalizarea repetiției</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="400"/>
+        <location filename="../src/llamasettings.cpp" line="402"/>
         <source>Repeat Penalty</source>
         <translation>Penalizare pentru repetare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="402"/>
+        <location filename="../src/llamasettings.cpp" line="404"/>
         <source>Repeat Penalty:</source>
         <translation>Penalizare pentru repetare:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="405"/>
+        <location filename="../src/llamasettings.cpp" line="407"/>
         <source>Controls the repetition of token sequences in the generated text</source>
         <translation>Controlează repetarea secvențelor de tokeni în textul generat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="407"/>
+        <location filename="../src/llamasettings.cpp" line="409"/>
         <source>Presence Penalty</source>
         <translation>Penalizare pentru prezență</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="409"/>
+        <location filename="../src/llamasettings.cpp" line="411"/>
         <source>Presence Penalty:</source>
         <translation>Penalizare pentru prezență:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="412"/>
+        <location filename="../src/llamasettings.cpp" line="414"/>
         <source>Limits tokens based on whether they appear in the output or not.</source>
         <translation>Restringe tokenii în funcție de faptul dacă apar sau nu în ieșire.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="414"/>
+        <location filename="../src/llamasettings.cpp" line="416"/>
         <source>Frequency Penalty</source>
         <translation>Penalizare pentru frecvență</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="416"/>
+        <location filename="../src/llamasettings.cpp" line="418"/>
         <source>Frequency Penalty:</source>
         <translation>Penalizare pentru frecvență:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="419"/>
+        <location filename="../src/llamasettings.cpp" line="421"/>
         <source>Limits tokens based on how often they appear in the output.</source>
         <translation>Restringe tokenii în funcție de cât de des apar în ieșire.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="421"/>
+        <location filename="../src/llamasettings.cpp" line="423"/>
         <source>DRY Multiplier</source>
         <translation>Multiplicator DRY</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="423"/>
+        <location filename="../src/llamasettings.cpp" line="425"/>
         <source>DRY Multiplier:</source>
         <translation>Multiplicator DRY:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="425"/>
+        <location filename="../src/llamasettings.cpp" line="427"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling multiplier.</source>
         <translation>Eșantionarea DRY reduce repetiția în textul generat, chiar și în contexte lungi. Acest parametru stabilește multiplicatorul de eșantionare DRY.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="430"/>
+        <location filename="../src/llamasettings.cpp" line="432"/>
         <source>DRY Base</source>
         <translation>Bază DRY</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="432"/>
+        <location filename="../src/llamasettings.cpp" line="434"/>
         <source>DRY Base:</source>
         <translation>Bază DRY:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="433"/>
+        <location filename="../src/llamasettings.cpp" line="435"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling base value.</source>
         <translation>Eșantionarea DRY reduce repetiția în textul generat, chiar și în contexte lungi. Acest parametru stabilește valoarea de bază a eșantionării DRY.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="438"/>
+        <location filename="../src/llamasettings.cpp" line="440"/>
         <source>DRY Allowed Length</source>
         <translation>Lungime permisă DRY</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="440"/>
+        <location filename="../src/llamasettings.cpp" line="442"/>
         <source>DRY Allowed Length:</source>
         <translation>Lungime permisă DRY:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="442"/>
+        <location filename="../src/llamasettings.cpp" line="444"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the allowed length for DRY sampling.</source>
         <translation>Eșantionarea DRY reduce repetiția în textul generat, chiar și în contexte lungi. Acest parametru stabilește lungimea permisă pentru eșantionarea DRY.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="447"/>
+        <location filename="../src/llamasettings.cpp" line="449"/>
         <source>DRY Penalty Last N</source>
         <translation>Penalizare DRY pentru ultimii N</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="449"/>
+        <location filename="../src/llamasettings.cpp" line="451"/>
         <source>DRY Penalty Last N:</source>
         <translation>Penalizare DRY pentru ultimii N:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="451"/>
+        <location filename="../src/llamasettings.cpp" line="453"/>
         <source>DRY sampling reduces repetition in generated text even across long contexts. This parameter sets DRY penalty for the last n tokens.</source>
         <translation>Eșantionarea DRY reduce repetiția în textul generat, chiar și în contexte lungi. Acest parametru stabilește penalizarea DRY pentru ultimii n tokeni.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="456"/>
+        <location filename="../src/llamasettings.cpp" line="458"/>
         <source>Max Tokens</source>
         <translation>Număr maxim de tokeni</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="458"/>
+        <location filename="../src/llamasettings.cpp" line="460"/>
         <source>Max Tokens:</source>
         <translation>Număr maxim de tokeni:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="460"/>
+        <location filename="../src/llamasettings.cpp" line="462"/>
         <source>The maximum number of token per output. -1 means no limit.</source>
         <translation>Numărul maxim de tokeni per ieșire. -1 înseamnă fără limită.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="463"/>
+        <location filename="../src/llamasettings.cpp" line="465"/>
         <source>Custom JSON config</source>
         <translation>Configurație JSON personalizată</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="465"/>
+        <location filename="../src/llamasettings.cpp" line="467"/>
         <source>Custom JSON config:</source>
         <translation>Configurație JSON personalizată:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="466"/>
+        <location filename="../src/llamasettings.cpp" line="468"/>
         <source>Custom JSON string of extra parameters.</source>
         <translation>Șir JSON personalizat cu parametri suplimentari.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="470"/>
         <location filename="../src/llamasettings.cpp" line="472"/>
+        <location filename="../src/llamasettings.cpp" line="474"/>
         <source>Show Tokens Per Second</source>
         <translation>Afișează tokeni pe secundă</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="474"/>
+        <location filename="../src/llamasettings.cpp" line="476"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>Afișează tokenii pe secundă în interfața chatului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="478"/>
+        <location filename="../src/llamasettings.cpp" line="480"/>
         <source>Thinking Level</source>
         <translation>Nivel de gândire</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="481"/>
+        <location filename="../src/llamasettings.cpp" line="483"/>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
         <translation>Nivel de gândire (raționament) pentru modele capabile de gândire: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; sau &quot;max&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="485"/>
+        <location filename="../src/llamasettings.cpp" line="489"/>
+        <source>Chat Font Zoom</source>
+        <translation>Zoom font chat</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="494"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Mărimea fontului conversației din chat, ca procent din mărimea fontului editorului. Se ajustează cu Ctrl+roata mașinii peste chat sau cu comenzile de zoom in/out ale chatului.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="498"/>
         <source>Utility Model</source>
         <translation>Model auxiliar</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="487"/>
+        <location filename="../src/llamasettings.cpp" line="500"/>
         <source>Utility Model:</source>
         <translation>Model auxiliar:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="489"/>
+        <location filename="../src/llamasettings.cpp" line="502"/>
         <source>Default: chat model</source>
         <translation>Implicit: modelul de chat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="492"/>
+        <location filename="../src/llamasettings.cpp" line="505"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation>Modelul folosit pentru cereri auxiliare, cum ar fi titlurile conversațiilor și sugestiile de întrebări ulterioare. Folosiți un model mic pentru a lăsa modelul principal de chat liber. Lăsați gol pentru a folosi modelul de chat activ.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="497"/>
+        <location filename="../src/llamasettings.cpp" line="510"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt pentru titlul conversației</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="501"/>
+        <location filename="../src/llamasettings.cpp" line="514"/>
         <source>Prompt sent to the model to generate a short conversation title after the first reply.</source>
         <translation>Prompt trimis modelului pentru a genera un titlu scurt al conversației după primul răspuns.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="504"/>
+        <location filename="../src/llamasettings.cpp" line="517"/>
         <source>Follow-Up Questions Prompt</source>
         <translation>Prompt pentru întrebările ulterioare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="508"/>
+        <location filename="../src/llamasettings.cpp" line="521"/>
         <source>Prompt sent to the model to generate follow-up questions after a complete reply.</source>
         <translation>Prompt trimis modelului pentru a genera întrebări ulterioare după un răspuns complet.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="511"/>
+        <location filename="../src/llamasettings.cpp" line="524"/>
+        <source>Handoff Prompt</source>
+        <translation>Prompt de preluare</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="528"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Prompt trimis modelului pentru a redacta documentul de preluare (sarcină, stare curentă, pași următori) care inițializează conversația nouă când o conversație este continuată într-una nouă.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="552"/>
+        <location filename="../src/llamasettings.cpp" line="553"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Continuare automată într-o conversație nouă</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="554"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Când conversația folosește mai mult decât pragul configurat din fereastra de context a modelului, istoricul ei este rezumat într-un document de preluare (sarcină, stare curentă, pași următori), este creată și deschisă o conversație nouă inițializată cu acel document, iar conversația originală rămâne neschimbată. Astfel, o sarcină lungă poate continua pe un model cu o fereastră de context mică.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="565"/>
+        <source>Handoff Threshold</source>
+        <translation>Prag de preluare</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="566"/>
+        <source>Handoff Threshold:</source>
+        <translation>Prag de preluare:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="567"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Conversația este continuată într-una nouă când istoricul ei folosește mai mult decât acest procent din fereastra de context a modelului.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="647"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Dacă este bifat, uneltele de chat sunt limitate la un sandbox: comenzile bash rulează într-un sandbox de platformă care blochează scrierea în locațiile de sistem (bubblewrap/bwrap pe Linux, sandbox-exec pe macOS, un container de proces Microsoft MXC pe Windows), iar uneltele de fișiere pot scrie doar în directorul proiectului și în locațiile temporare. Locațiile de credențiale (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nu pot fi citite de nicio unealtă, iar comenzile din sandbox nu au acces la rețea (uneltele webfetch și websearch nu sunt afectate). Pe Windows, sandbox-ul folosește timpul de execuție wxc-exec.exe cu versiune fixată, descărcabil din pagina de setări Sandbox (poate fi indicat acolo un runtime propriu), și necesită Windows 11 24H2 sau mai nou. Directoarele suplimentare și politica de rețea se configurează în pagina de setări Sandbox.</translation>
+    </message>
+    <message>
         <source>Compaction Prompt</source>
-        <translation>Prompt de compactare</translation>
+        <translation type="vanished">Prompt de compactare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="515"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Prompt trimis modelului pentru a rezuma istoricul conversației când acesta este compactat pentru a se încadra în fereastra de context.</translation>
+        <translation type="vanished">Prompt trimis modelului pentru a rezuma istoricul conversației când acesta este compactat pentru a se încadra în fereastra de context.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="520"/>
+        <location filename="../src/llamasettings.cpp" line="534"/>
         <location filename="../src/promptssettingswidget.cpp" line="124"/>
         <source>Follow-Up Questions</source>
         <translation>Întrebări ulterioare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="524"/>
+        <location filename="../src/llamasettings.cpp" line="538"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Când este activat, sugestiile de întrebări ulterioare sunt generate după fiecare răspuns complet al asistentului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="529"/>
+        <location filename="../src/llamasettings.cpp" line="543"/>
         <source>Auto-generate Conversation Title</source>
         <translation>Generează automat titlul conversației</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="533"/>
+        <location filename="../src/llamasettings.cpp" line="547"/>
         <source>When enabled, a short conversation title is generated by the model after the first assistant reply.</source>
         <translation>Când este activat, modelul generează un titlu scurt al conversației după primul răspuns al asistentului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="538"/>
-        <location filename="../src/llamasettings.cpp" line="539"/>
         <source>Auto-compact long conversations</source>
-        <translation>Compactează automat conversațiile lungi</translation>
+        <translation type="vanished">Compactează automat conversațiile lungi</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="540"/>
         <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Când conversația folosește mai mult decât pragul configurat din fereastra de context a modelului, istoricul ei este rezumat într-un mesaj compact de marcare și de atunci sunt trimise modelului doar rezumatul și mesajele de după el. Întregul istoric rămâne vizibil în chat. Este folosit și pentru a recupera dintr-o eroare de depășire a contextului: istoricul este compactat, iar cererea este reluată o singură dată.</translation>
+        <translation type="vanished">Când conversația folosește mai mult decât pragul configurat din fereastra de context a modelului, istoricul ei este rezumat într-un mesaj compact de marcare și de atunci sunt trimise modelului doar rezumatul și mesajele de după el. Întregul istoric rămâne vizibil în chat. Este folosit și pentru a recupera dintr-o eroare de depășire a contextului: istoricul este compactat, iar cererea este reluată o singură dată.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="551"/>
         <source>Auto-compact Threshold</source>
-        <translation>Prag de compactare automată</translation>
+        <translation type="vanished">Prag de compactare automată</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="552"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Prag de compactare automată:</translation>
+        <translation type="vanished">Prag de compactare automată:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="553"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Conversația este compactată automat când istoricul ei folosește mai mult de acest procent din fereastra de context a modelului.</translation>
+        <translation type="vanished">Conversația este compactată automat când istoricul ei folosește mai mult de acest procent din fereastra de context a modelului.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="557"/>
+        <location filename="../src/llamasettings.cpp" line="571"/>
         <source>Locator Prompts</source>
         <translation>Prompts de localizare</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="561"/>
+        <location filename="../src/llamasettings.cpp" line="575"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Prompts încorporate ale localizatorului &quot;ll&quot;. În meniu este afișată doar prima linie a unui prompt; textul complet este trimis modelului. &quot;{selection}&quot; este înlocuit cu textul selectat, &quot;{file}&quot; și &quot;{line}&quot; cu fișierul curent și linia cursorului, &quot;{diagnostics}&quot; cu erorile și avertizările fișierului curent, iar &quot;{git_diff}&quot; cu modificările necommitate ale repositoriului git.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="568"/>
-        <location filename="../src/llamasettings.cpp" line="569"/>
+        <location filename="../src/llamasettings.cpp" line="582"/>
+        <location filename="../src/llamasettings.cpp" line="583"/>
         <location filename="../src/llamaplugin.h" line="155"/>
         <source>Selection prompt button</source>
         <translation>Buton de prompt pentru selecție</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="573"/>
+        <location filename="../src/llamasettings.cpp" line="587"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>Afișează un buton mic sub o selecție de text din editor. Un clic pe el deschide localizatorul llama.cpp, astfel încât selecția poate fi trimisă către llama.cpp cu unul dintre prompts.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="582"/>
+        <location filename="../src/llamasettings.cpp" line="596"/>
         <source>Skill directories</source>
         <translation>Directoare pentru skilluri</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="583"/>
+        <location filename="../src/llamasettings.cpp" line="597"/>
         <source>Directories scanned recursively for skills. A skill is a directory containing a SKILL.md file (Agent Skills specification) with a name and a description in its YAML frontmatter.</source>
         <translation>Directoare scanate recursiv pentru skilluri. Un skill este un director care conține un fișier SKILL.md (specificația Agent Skills) cu un nume și o descriere în YAML frontmatter.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="612"/>
-        <location filename="../src/llamasettings.cpp" line="613"/>
+        <location filename="../src/llamasettings.cpp" line="626"/>
+        <location filename="../src/llamasettings.cpp" line="627"/>
         <source>Enable Tools in Chat</source>
         <translation>Activează uneltele în chat</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="615"/>
+        <location filename="../src/llamasettings.cpp" line="629"/>
         <source>If checked the chat will start with the Tools button turned on.</source>
         <translation>Dacă este bifat, chatul pornește cu butonul de unelte activat.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="619"/>
-        <location filename="../src/llamasettings.cpp" line="620"/>
-        <location filename="../src/llamasettings.cpp" line="1013"/>
-        <location filename="../src/llamasettings.cpp" line="1014"/>
+        <location filename="../src/llamasettings.cpp" line="633"/>
+        <source>Working directory</source>
+        <translation>Director de lucru</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="634"/>
+        <source>Working directory:</source>
+        <translation>Director de lucru:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="637"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Directorul în care operează uneltele din chat. Lăsați gol pentru a folosi directorul proiectului pornit (sau directorul implicit pentru proiecte când nu este deschis niciun proiect). Poate fi modificat și făcând clic pe directorul de lucru din ecranul de bun venit al chatului.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="645"/>
+        <location filename="../src/llamasettings.cpp" line="646"/>
+        <location filename="../src/llamasettings.cpp" line="937"/>
+        <location filename="../src/llamasettings.cpp" line="938"/>
         <source>Sandbox commands</source>
         <translation>Comenzi în sandbox</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="621"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Dacă este bifat, uneltele de chat sunt limitate la un sandbox: comenzile bash rulează într-un sandbox de platformă care blochează scrierea în locațiile de sistem (bubblewrap/bwrap pe Linux, sandbox-exec pe macOS, un container de proces Microsoft MXC pe Windows), iar uneltele de fișiere pot scrie doar în directorul proiectului și în locațiile temporare. Locațiile de credențiale (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nu pot fi citite de nicio unealtă, iar comenzile din sandbox nu au acces la rețea (uneltele webfetch și websearch nu sunt afectate). Pe Windows, sandbox-ul folosește timpul de execuție wxc-exec.exe cu versiune fixată, descărcabil din pagina de setări pentru unelte (LLAMA_WXC_EXEC poate indica acest fișier), și necesită Windows 11 24H2 sau mai nou. Directoarele suplimentare și politica de rețea se configurează în pagina de setări Sandbox.</translation>
+        <translation type="vanished">Dacă este bifat, uneltele de chat sunt limitate la un sandbox: comenzile bash rulează într-un sandbox de platformă care blochează scrierea în locațiile de sistem (bubblewrap/bwrap pe Linux, sandbox-exec pe macOS, un container de proces Microsoft MXC pe Windows), iar uneltele de fișiere pot scrie doar în directorul proiectului și în locațiile temporare. Locațiile de credențiale (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nu pot fi citite de nicio unealtă, iar comenzile din sandbox nu au acces la rețea (uneltele webfetch și websearch nu sunt afectate). Pe Windows, sandbox-ul folosește timpul de execuție wxc-exec.exe cu versiune fixată, descărcabil din pagina de setări pentru unelte (LLAMA_WXC_EXEC poate indica acest fișier), și necesită Windows 11 24H2 sau mai nou. Directoarele suplimentare și politica de rețea se configurează în pagina de setări Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="641"/>
+        <location filename="../src/llamasettings.cpp" line="668"/>
         <source>Sandbox writable directories</source>
         <translation>Directoare scriabile în sandbox</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="642"/>
+        <location filename="../src/llamasettings.cpp" line="669"/>
         <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations. Managed on the Sandbox settings page.</source>
         <translation>Directoare în care uneltele din sandbox pot scrie, în plus față de directorul proiectului și de locațiile temporare. Gestionate în pagina de setări Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="649"/>
+        <location filename="../src/llamasettings.cpp" line="676"/>
         <source>Sandbox read-only directories</source>
         <translation>Directoare doar citire în sandbox</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="650"/>
+        <location filename="../src/llamasettings.cpp" line="677"/>
         <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows. Managed on the Sandbox settings page.</source>
         <translation>Directoare suplimentare care pot fi citite în sandbox. Doar containerul de proces de pe Windows restricționează citirea (celelalte platforme expun deja sistemul de fișiere doar în citire), așa că această setare are efect pe Windows. Gestionate în pagina de setări Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="658"/>
+        <location filename="../src/llamasettings.cpp" line="685"/>
         <source>Sandbox deny-read directories</source>
         <translation>Directoare cu citire refuzată în sandbox</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="659"/>
+        <location filename="../src/llamasettings.cpp" line="686"/>
         <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected. Managed on the Sandbox settings page.</source>
         <translation>Directoare suplimentare pe care nicio unealtă nu le poate citi (sau scrie), în plus față de locațiile de credențiale încorporate, care sunt mereu protejate. Gestionate în pagina de setări Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="666"/>
+        <location filename="../src/llamasettings.cpp" line="693"/>
         <source>Sandbox: allow network access</source>
         <translation>Sandbox: permite accesul la rețea</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="667"/>
+        <location filename="../src/llamasettings.cpp" line="694"/>
         <source>If checked, sandboxed bash commands may use the network (e.g. &apos;curl&apos; or &apos;npm install&apos;). Off by default: the sandbox has no network access. The webfetch and websearch tools always run outside the sandbox and are not affected. Managed on the Sandbox settings page.</source>
         <translation>Dacă este bifat, comenzile bash din sandbox pot folosi rețeaua (de ex. &apos;curl&apos; sau &apos;npm install&apos;). Dezactivat implicit: sandbox-ul nu are acces la rețea. Uneltele webfetch și websearch rulează mereu în afara sandbox-ului și nu sunt afectate. Gestionate în pagina de setări Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="676"/>
-        <location filename="../src/llamasettings.cpp" line="677"/>
-        <location filename="../src/llamasettings.cpp" line="1027"/>
-        <location filename="../src/llamasettings.cpp" line="1028"/>
+        <location filename="../src/llamasettings.cpp" line="702"/>
+        <source>MXC runtime:</source>
+        <translation>MXC runtime:</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="704"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>Un lansator wxc-exec.exe în care rulează sandbox-ul Windows. Dacă este gol, este folosit runtime-ul descărcat de pe această pagină.</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="710"/>
+        <location filename="../src/llamasettings.cpp" line="711"/>
+        <location filename="../src/llamasettings.cpp" line="951"/>
+        <location filename="../src/llamasettings.cpp" line="952"/>
         <source>Load project instructions</source>
         <translation>Încarcă instrucțiunile proiectului</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="678"/>
+        <location filename="../src/llamasettings.cpp" line="712"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Dacă este bifat, fișierul cu instrucțiunile proiectului curent este adăugat la mesajul de sistem al chatului. Fișierul este AGENTS.md, cu revenire la CLAUDE.md, și este căutat în directorul proiectului, urcând până la rădăcina repositoriului git, astfel încât un monorepo poate păstra un singur fișier de instrucțiuni pentru toate proiectele sale. Fișierele mai mari de 32 KB sunt trunchiate.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="689"/>
+        <location filename="../src/llamasettings.cpp" line="723"/>
         <source>Max consecutive tool turns</source>
         <translation>Număr maxim de ture consecutive de unelte</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="690"/>
+        <location filename="../src/llamasettings.cpp" line="724"/>
         <source>Max consecutive tool turns:</source>
         <translation>Număr maxim de ture consecutive de unelte:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="691"/>
+        <location filename="../src/llamasettings.cpp" line="725"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Un model local poate intra într-o buclă infinită de apeluri de unelte, de aceea, după atât de multe ture consecutive doar cu unelte, apelurile nu mai sunt executate - modelul primește un rezultat eșuat care îi spune să încheie în schimb. Conversațiile de tip task (sub-agent) nu sunt limitate. Setează la 0 pentru a nu exista limită.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="702"/>
+        <location filename="../src/llamasettings.cpp" line="736"/>
         <source>Web Search Provider</source>
         <translation>Furnizor de căutare web</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="705"/>
+        <location filename="../src/llamasettings.cpp" line="739"/>
         <source>Web Search Provider:</source>
         <translation>Furnizor de căutare web:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="707"/>
+        <location filename="../src/llamasettings.cpp" line="741"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
         <translation>Backendul folosit de unelta websearch: &quot;exa&quot; (implicit, nu necesită cheie API), &quot;google&quot; (Custom Search JSON API, necesită o cheie API și un ID de motor de căutare), &quot;brave&quot; (Brave Search API, necesită o cheie API) sau &quot;tavily&quot; (necesită o cheie API).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="714"/>
+        <location filename="../src/llamasettings.cpp" line="748"/>
         <source>Exa Endpoint</source>
         <translation>Endpoint Exa</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="717"/>
+        <location filename="../src/llamasettings.cpp" line="751"/>
         <source>Exa Endpoint:</source>
         <translation>Endpoint Exa:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="719"/>
+        <location filename="../src/llamasettings.cpp" line="753"/>
         <source>URL of the Exa MCP endpoint used by the websearch tool.</source>
         <translation>URL-ul endpointului MCP Exa folosit de unelta websearch.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="722"/>
+        <location filename="../src/llamasettings.cpp" line="756"/>
         <source>Exa API Key</source>
         <translation>Cheie API Exa</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="725"/>
+        <location filename="../src/llamasettings.cpp" line="759"/>
         <source>Exa API Key:</source>
         <translation>Cheie API Exa:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="727"/>
+        <location filename="../src/llamasettings.cpp" line="761"/>
         <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
         <translation>Cheie API Exa opțională. Fără cheie este folosit endpointul partajat (cu limită de rată).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="731"/>
+        <location filename="../src/llamasettings.cpp" line="765"/>
         <source>Google Endpoint</source>
         <translation>Endpoint Google</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="734"/>
+        <location filename="../src/llamasettings.cpp" line="768"/>
         <source>Google Endpoint:</source>
         <translation>Endpoint Google:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="736"/>
+        <location filename="../src/llamasettings.cpp" line="770"/>
         <source>URL of the Google Custom Search (customsearch/v1) endpoint used by the websearch tool.</source>
         <translation>URL-ul endpointului Google Custom Search (customsearch/v1) folosit de unelta websearch.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="740"/>
+        <location filename="../src/llamasettings.cpp" line="774"/>
         <source>Google API Key</source>
         <translation>Cheie API Google</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="743"/>
+        <location filename="../src/llamasettings.cpp" line="777"/>
         <source>Google API Key:</source>
         <translation>Cheie API Google:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="745"/>
+        <location filename="../src/llamasettings.cpp" line="779"/>
         <source>API key for the Google Custom Search JSON API (required for the &quot;google&quot; provider).</source>
-        <translation>Cheie API pentru Google Custom Search JSON API (necesară pentru furnizorul &quot;google").</translation>
+        <translation>Cheie API pentru Google Custom Search JSON API (necesară pentru furnizorul &quot;google&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="749"/>
+        <location filename="../src/llamasettings.cpp" line="783"/>
         <source>Google Search Engine ID (cx)</source>
         <translation>ID motor de căutare Google (cx)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="752"/>
+        <location filename="../src/llamasettings.cpp" line="786"/>
         <source>Google Search Engine ID (cx):</source>
         <translation>ID motor de căutare Google (cx):</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="754"/>
+        <location filename="../src/llamasettings.cpp" line="788"/>
         <source>The cx (search engine ID) of the Google Custom Search engine (required for the &quot;google&quot; provider).</source>
-        <translation>Valoarea cx (ID-ul motorului de căutare) al motorului Google Custom Search (necesară pentru furnizorul &quot;google").</translation>
+        <translation>Valoarea cx (ID-ul motorului de căutare) al motorului Google Custom Search (necesară pentru furnizorul &quot;google&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="759"/>
+        <location filename="../src/llamasettings.cpp" line="793"/>
         <source>Brave Search Endpoint</source>
         <translation>Endpoint Brave Search</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="762"/>
+        <location filename="../src/llamasettings.cpp" line="796"/>
         <source>Brave Search Endpoint:</source>
         <translation>Endpoint Brave Search:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="764"/>
+        <location filename="../src/llamasettings.cpp" line="798"/>
         <source>URL of the Brave Search API endpoint used by the websearch tool (the &quot;brave&quot; provider).</source>
-        <translation>URL-ul endpointului Brave Search API folosit de unelta websearch (furnizorul &quot;brave").</translation>
+        <translation>URL-ul endpointului Brave Search API folosit de unelta websearch (furnizorul &quot;brave&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="769"/>
+        <location filename="../src/llamasettings.cpp" line="803"/>
         <source>Brave Search API Key</source>
         <translation>Cheie API Brave Search</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="772"/>
+        <location filename="../src/llamasettings.cpp" line="806"/>
         <source>Brave Search API Key:</source>
         <translation>Cheie API Brave Search:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="774"/>
+        <location filename="../src/llamasettings.cpp" line="808"/>
         <source>API key for the Brave Search API, get one at brave.com/search/api (required for the &quot;brave&quot; provider).</source>
-        <translation>Cheie API pentru Brave Search API, poți obține una la brave.com/search/api (necesară pentru furnizorul &quot;brave").</translation>
+        <translation>Cheie API pentru Brave Search API, poți obține una la brave.com/search/api (necesară pentru furnizorul &quot;brave&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="779"/>
+        <location filename="../src/llamasettings.cpp" line="813"/>
         <source>Tavily Endpoint</source>
         <translation>Endpoint Tavily</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="782"/>
+        <location filename="../src/llamasettings.cpp" line="816"/>
         <source>Tavily Endpoint:</source>
         <translation>Endpoint Tavily:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="784"/>
+        <location filename="../src/llamasettings.cpp" line="818"/>
         <source>URL of the Tavily search endpoint used by the websearch tool (the &quot;tavily&quot; provider).</source>
-        <translation>URL-ul endpointului de căutare Tavily folosit de unelta websearch (furnizorul &quot;tavily").</translation>
+        <translation>URL-ul endpointului de căutare Tavily folosit de unelta websearch (furnizorul &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="789"/>
+        <location filename="../src/llamasettings.cpp" line="823"/>
         <source>Tavily API Key</source>
         <translation>Cheie API Tavily</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="792"/>
+        <location filename="../src/llamasettings.cpp" line="826"/>
         <source>Tavily API Key:</source>
         <translation>Cheie API Tavily:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="794"/>
+        <location filename="../src/llamasettings.cpp" line="828"/>
         <source>API key for Tavily, get one at tavily.com (required for the &quot;tavily&quot; provider).</source>
-        <translation>Cheie API pentru Tavily, poți obține una la tavily.com (necesară pentru furnizorul &quot;tavily").</translation>
+        <translation>Cheie API pentru Tavily, poți obține una la tavily.com (necesară pentru furnizorul &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="1016"/>
+        <location filename="../src/llamasettings.cpp" line="940"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Suprascrie setarea globală „Sandbox commands” (Comenzi în sandbox) pentru acest proiect. Vezi setarea globală de pe pagina Llama Tools pentru ce restricționează sandbox-ul.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="1030"/>
+        <location filename="../src/llamasettings.cpp" line="954"/>
         <source>Overrides the global &apos;Load project instructions&apos; setting for this project. See the global setting on the Llama Tools page for what is loaded.</source>
         <translation>Suprascrie setarea globală „Load project instructions” (Încarcă instrucțiunile proiectului) pentru acest proiect. Vezi setarea globală de pe pagina Llama Tools pentru ce se încarcă.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="1093"/>
+        <location filename="../src/llamasettings.cpp" line="1188"/>
+        <source>Web Search</source>
+        <translation>Căutare web</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasettings.cpp" line="1203"/>
         <source>Prompts</source>
         <translation>Prompts</translation>
     </message>
@@ -1805,17 +2021,17 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location filename="../src/promptssettingswidget.cpp" line="34"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="192"/>
         <location filename="../src/skillssettingswidget.cpp" line="63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="203"/>
+        <location filename="../src/toolsettingswidget.cpp" line="161"/>
         <source>Add...</source>
         <translation>Adaugă...</translation>
     </message>
     <message>
         <location filename="../src/promptssettingswidget.cpp" line="39"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="141"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="205"/>
         <location filename="../src/skillssettingswidget.cpp" line="80"/>
-        <location filename="../src/toolsettingswidget.cpp" line="205"/>
+        <location filename="../src/toolsettingswidget.cpp" line="163"/>
         <source>Remove</source>
         <translation>Elimină</translation>
     </message>
@@ -1846,8 +2062,12 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location filename="../src/promptssettingswidget.cpp" line="128"/>
+        <source>Handoff</source>
+        <translation>Preluare</translation>
+    </message>
+    <message>
         <source>Compaction</source>
-        <translation>Compactare</translation>
+        <translation type="vanished">Compactare</translation>
     </message>
     <message>
         <location filename="../src/promptssettingswidget.cpp" line="134"/>
@@ -1855,64 +2075,87 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Locator (&quot;ll&quot;)</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="30"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="35"/>
         <source>Writable directories:</source>
         <translation>Directoare scriibile:</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="31"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="36"/>
         <source>Directories the sandboxed tools may write to, in addition to the project directory and the temporary locations.</source>
         <translation>Directoarele în care uneltele din sandbox pot scrie, în plus față de directorul proiectului și locațiile temporare.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="34"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="39"/>
         <source>Read-only directories:</source>
         <translation>Directoare doar pentru citire:</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="35"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="40"/>
         <source>Additional directories readable inside the sandbox. Only the Windows process container restricts reads (the other platforms already expose the file system read-only), so this takes effect on Windows.</source>
         <translation>Directoare suplimentare citibile în interiorul sandbox-ului. Doar containerul de procese Windows restricționează citirile (celelalte platforme expun deja sistemul de fișiere doar pentru citire), de aceea aceasta are efect doar pe Windows.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="40"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="45"/>
         <source>Deny-read directories:</source>
         <translation>Directoare cu citire interzisă:</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="41"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="46"/>
         <source>Additional directories that no tool may read (or write to), on top of the built-in credential locations, which are always protected.</source>
         <translation>Directoare suplimentare care nu pot fi citite (sau scrise) de nicio unelță, în plus față de locațiile de credențiale încorporate, care sunt întotdeauna protejate.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="52"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="57"/>
         <source>The webfetch and websearch tools always run outside the sandbox and are not affected by this setting.</source>
         <translation>Uneltele webfetch și websearch rulează întotdeauna în afara sandbox-ului și nu sunt afectate de această setare.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="83"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="73"/>
+        <source>Download...</source>
+        <translation>Descarcă...</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="84"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Unelta bash izolată pe Windows rulează într-un container de proces Microsoft MXC.</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="110"/>
+        <source>Windows runtime</source>
+        <translation>Runtime Windows</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxsettingswidget.cpp" line="143"/>
         <source>Filesystem</source>
         <translation>Sistem de fișiere</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="91"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="151"/>
         <source>Network</source>
         <translation>Rețea</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="131"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="195"/>
         <source>Choose a Directory</source>
         <translation>Alegere director</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>runtimeul Microsoft MXC (wxc-exec) folosit de sandbox-ul Windows este disponibil doar pentru Windows x86-64</translation>
+        <translation type="vanished">runtimeul Microsoft MXC (wxc-exec) folosit de sandbox-ul Windows este disponibil doar pentru Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">runtimeul Microsoft MXC (wxc-exec) nu este instalat; descărcați-l de pe pagina de setări Llama Tools</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>runtimeul Microsoft MXC (wxc-exec) folosit de sandbox-ul Windows este disponibil doar pentru Windows x86-64 și arm64</translation>
     </message>
     <message>
         <location filename="../src/sandboxstatus.cpp" line="33"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>runtimeul Microsoft MXC (wxc-exec) nu este instalat; descărcați-l de pe pagina de setări Llama Tools</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>runtimeul Microsoft MXC (wxc-exec) nu este instalat; descărcați-l de pe pagina de setări Llama Sandbox</translation>
     </message>
     <message>
         <location filename="../src/sandboxstatus.cpp" line="39"/>
@@ -2001,7 +2244,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location filename="../src/skillssettingswidget.cpp" line="104"/>
-        <location filename="../src/toolsettingswidget.cpp" line="87"/>
+        <location filename="../src/toolsettingswidget.cpp" line="84"/>
         <source>Description</source>
         <translation>Descriere</translation>
     </message>
@@ -2017,7 +2260,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location filename="../src/skillssettingswidget.cpp" line="271"/>
-        <location filename="../src/toolsettingswidget.cpp" line="432"/>
+        <location filename="../src/toolsettingswidget.cpp" line="368"/>
         <source>Name: %1</source>
         <translation>Nume: %1</translation>
     </message>
@@ -2042,143 +2285,140 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>%1 skilluri</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="74"/>
         <source>Select a tool to view its definition</source>
         <translation>Selectați o unelță pentru a-i vizualiza definiția</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="87"/>
+        <location filename="../src/toolsettingswidget.cpp" line="84"/>
         <source>Tool</source>
         <translation>Unelță</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="105"/>
+        <location filename="../src/toolsettingswidget.cpp" line="102"/>
         <source>Download ripgrep %1</source>
         <translation>Descarcă ripgrep %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="134"/>
         <source>Download MXC %1</source>
-        <translation>Descarcă MXC %1</translation>
+        <translation type="vanished">Descarcă MXC %1</translation>
+    </message>
+    <message>
+        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
+        <translation type="vanished">Izolarea (comenzi, directoare, rețea) se configurează pe pagina de setări Sandbox.</translation>
     </message>
     <message>
         <location filename="../src/toolsettingswidget.cpp" line="162"/>
-        <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Izolarea (comenzi, directoare, rețea) se configurează pe pagina de setări Sandbox.</translation>
-    </message>
-    <message>
-        <location filename="../src/toolsettingswidget.cpp" line="204"/>
         <source>Edit</source>
         <translation>Modifică</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="315"/>
+        <location filename="../src/toolsettingswidget.cpp" line="271"/>
         <source>No description</source>
         <translation>Fără descriere</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="332"/>
+        <location filename="../src/toolsettingswidget.cpp" line="288"/>
         <source>Internal</source>
         <translation>Intern</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="377"/>
+        <location filename="../src/toolsettingswidget.cpp" line="333"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Uneltele search și find folosesc ripgrep, care nu este instalat pe acest sistem.</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="381"/>
+        <location filename="../src/toolsettingswidget.cpp" line="337"/>
         <source>ripgrep: %1</source>
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="396"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Unelța bash izolată pe Windows folosește runtimeul Microsoft MXC (wxc-exec), care nu este instalat pe acest sistem.</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="401"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Runtime sandbox Windows: %1</translation>
+        <translation type="vanished">Runtime sandbox Windows: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="444"/>
-        <location filename="../src/toolsettingswidget.cpp" line="455"/>
+        <location filename="../src/toolsettingswidget.cpp" line="380"/>
+        <location filename="../src/toolsettingswidget.cpp" line="391"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="445"/>
+        <location filename="../src/toolsettingswidget.cpp" line="381"/>
         <source>Headers: %1</source>
         <translation>Ante-urme: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="446"/>
+        <location filename="../src/toolsettingswidget.cpp" line="382"/>
         <source>(none)</source>
         <translation>(niciunul)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="449"/>
+        <location filename="../src/toolsettingswidget.cpp" line="385"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>Uneltele servite de acest server sunt listate mai jos; bifați o unelță pentru a o activa în chat.</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="457"/>
+        <location filename="../src/toolsettingswidget.cpp" line="393"/>
         <source>The builtin Qt Creator MCP server, managed by Qt Creator itself (Tools &gt; MCP in the Qt Creator settings).</source>
         <translation>Serverul MCP încorporat în Qt Creator, gestionat de însuși Qt Creator (Tools &gt; MCP în setările Qt Creator).</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="622"/>
-        <location filename="../src/toolsettingswidget.cpp" line="673"/>
-        <location filename="../src/toolsettingswidget.cpp" line="927"/>
+        <location filename="../src/toolsettingswidget.cpp" line="558"/>
+        <location filename="../src/toolsettingswidget.cpp" line="609"/>
+        <location filename="../src/toolsettingswidget.cpp" line="863"/>
         <source>MCP Server</source>
         <translation>Server MCP</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="623"/>
-        <location filename="../src/toolsettingswidget.cpp" line="674"/>
+        <location filename="../src/toolsettingswidget.cpp" line="559"/>
+        <location filename="../src/toolsettingswidget.cpp" line="610"/>
         <source>The name &quot;%1&quot; is reserved for the builtin Qt Creator MCP server.</source>
         <translation>Numele &quot;%1&quot; este rezervat serverului MCP încorporat în Qt Creator.</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="748"/>
+        <location filename="../src/toolsettingswidget.cpp" line="684"/>
         <source>not connected</source>
         <translation>neconectat</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="752"/>
+        <location filename="../src/toolsettingswidget.cpp" line="688"/>
         <source>no tools</source>
         <translation>fără unelte</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="930"/>
+        <location filename="../src/toolsettingswidget.cpp" line="866"/>
         <source>Display name, e.g. My MCP server</source>
         <translation>Nume afișat, de ex. My MCP server</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="933"/>
+        <location filename="../src/toolsettingswidget.cpp" line="869"/>
         <source>https://host:port/mcp</source>
         <translation>https://host:port/mcp</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="937"/>
+        <location filename="../src/toolsettingswidget.cpp" line="873"/>
         <source>One &quot;Name: value&quot; header per line, e.g.
 Authorization: Bearer &lt;token&gt;</source>
         <translation>Un antet „Name: value” pe linie, de ex.
 Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="949"/>
+        <location filename="../src/toolsettingswidget.cpp" line="885"/>
         <source>Name:</source>
         <translation>Nume:</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="950"/>
+        <location filename="../src/toolsettingswidget.cpp" line="886"/>
         <source>URL:</source>
         <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="951"/>
+        <location filename="../src/toolsettingswidget.cpp" line="887"/>
         <source>Headers:</source>
         <translation>Ante-urme:</translation>
     </message>
@@ -2282,84 +2522,84 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Succes. Au fost actualizate următoarele fișiere:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="260"/>
+        <location filename="../src/tools/bash_tool.cpp" line="258"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Executabilul sandbox-exec nu a fost găsit; izolarea nu este disponibilă pe acest sistem.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="269"/>
+        <location filename="../src/tools/bash_tool.cpp" line="267"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) nu a fost găsit. Instalați-l (de ex. &apos;apt install bubblewrap&apos; sau &apos;dnf install bubblewrap&apos;) sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="486"/>
+        <location filename="../src/tools/bash_tool.cpp" line="484"/>
         <source>[Output truncated: %1]</source>
         <translation>[Ieșire trunchiată: %1]</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="488"/>
+        <location filename="../src/tools/bash_tool.cpp" line="486"/>
         <source>showing last %1 of %2 lines</source>
         <translation>se afișează ultimele %1 din %2 linii</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="491"/>
+        <location filename="../src/tools/bash_tool.cpp" line="489"/>
         <source>showing last %1 KB</source>
         <translation>se afișează ultimii %1 KB</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="494"/>
+        <location filename="../src/tools/bash_tool.cpp" line="492"/>
         <source>Full output saved to: %1</source>
         <translation>Ieșirea completă salvată în: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="617"/>
+        <location filename="../src/tools/bash_tool.cpp" line="615"/>
         <source>running %1</source>
         <translation>rulează %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="664"/>
+        <location filename="../src/tools/bash_tool.cpp" line="662"/>
         <source>Error: the command must not be empty.</source>
         <translation>Eroare: comanda nu trebuie să fie goală.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="682"/>
+        <location filename="../src/tools/bash_tool.cpp" line="680"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Eroare: directorul de lucru nu există: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="691"/>
-        <location filename="../src/tools/bash_tool.cpp" line="717"/>
-        <location filename="../src/tools/bash_tool.cpp" line="746"/>
+        <location filename="../src/tools/bash_tool.cpp" line="689"/>
+        <location filename="../src/tools/bash_tool.cpp" line="715"/>
+        <location filename="../src/tools/bash_tool.cpp" line="744"/>
         <source>Error: %1</source>
         <translation>Eroare: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="703"/>
+        <location filename="../src/tools/bash_tool.cpp" line="701"/>
         <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
         <translation>Eroare: sandboxul nu poate face &quot;%1&quot; scribil: este (sau conține) directorul home sau rădăcina unui sistem de fișiere. Deschideți un proiect pentru a rula comenzi în directorul său.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="923"/>
+        <location filename="../src/tools/bash_tool.cpp" line="921"/>
         <source>Command was stopped by the user.</source>
         <translation>Comanda a fost oprită de utilizator.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="926"/>
+        <location filename="../src/tools/bash_tool.cpp" line="924"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
         <translation>Comanda a expirat după %1 ms. Încercați din nou cu un timeout mai mare dacă comanda ar trebui să dureze mai mult.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="931"/>
+        <location filename="../src/tools/bash_tool.cpp" line="929"/>
         <source>Failed to start the command: %1</source>
         <translation>Pornirea comenzii a eșuat: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="933"/>
+        <location filename="../src/tools/bash_tool.cpp" line="931"/>
         <location filename="../src/tools/find_tool.cpp" line="308"/>
         <location filename="../src/tools/find_tool.cpp" line="315"/>
         <location filename="../src/tools/search_tool.cpp" line="382"/>
@@ -2368,17 +2608,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="937"/>
+        <location filename="../src/tools/bash_tool.cpp" line="935"/>
         <source>Command terminated abnormally (crashed).</source>
         <translation>Comanda s-a încheiat anormal (crash).</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="940"/>
+        <location filename="../src/tools/bash_tool.cpp" line="938"/>
         <source>Command exited with code %1.</source>
         <translation>Comanda s-a încheiat cu codul %1.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="991"/>
+        <location filename="../src/tools/bash_tool.cpp" line="989"/>
         <source>Working directory: %1
 
 </source>
@@ -2600,87 +2840,91 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Unelta MCP &quot;%1&quot; a fost oprită de utilizator.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="64"/>
+        <location filename="../src/tools/mxc.cpp" line="87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Descarcă runtimeul sandbox Windows (MXC)</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="109"/>
+        <location filename="../src/tools/mxc.cpp" line="135"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Descărcați runtimeul Microsoft MXC %1?</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="111"/>
+        <location filename="../src/tools/mxc.cpp" line="137"/>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
         <translation>Setarea &apos;Sandbox commands&apos; (Comenzi în sandbox) limitează unelta bash pe Windows la un container de procese Microsoft MXC. Runtimeul wxc-exec.exe fixat la versiune nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. MXC este publicat sub licența MIT.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="115"/>
+        <location filename="../src/tools/mxc.cpp" line="141"/>
         <location filename="../src/tools/ripgrep.cpp" line="152"/>
         <source>Project: %1</source>
         <translation>Proiect: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="116"/>
+        <location filename="../src/tools/mxc.cpp" line="142"/>
         <location filename="../src/tools/ripgrep.cpp" line="153"/>
         <source>License: %1</source>
         <translation>Licență: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="124"/>
+        <location filename="../src/tools/mxc.cpp" line="150"/>
         <location filename="../src/tools/ripgrep.cpp" line="161"/>
         <source>Download</source>
         <translation>Descarcă</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="148"/>
+        <location filename="../src/tools/mxc.cpp" line="175"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Pachetul nu conține binarul wxc-exec.exe.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="152"/>
+        <location filename="../src/tools/mxc.cpp" line="179"/>
         <source>The wxc-exec.exe binary has an unexpected size.</source>
         <translation>Binarul wxc-exec.exe are o dimensiune neașteptată.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="156"/>
+        <location filename="../src/tools/mxc.cpp" line="183"/>
         <source>The wxc-exec.exe binary does not match its expected checksum.</source>
         <translation>Binarul wxc-exec.exe nu corespunde sumei de control așteptate.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="192"/>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64.</translation>
+        <location filename="../src/tools/mxc.cpp" line="219"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64 și arm64.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="202"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation type="vanished">Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="229"/>
         <source>Downloading the MXC runtime...</source>
         <translation>Se descarcă runtimeul MXC...</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="227"/>
+        <location filename="../src/tools/mxc.cpp" line="254"/>
         <source>Downloading the MXC runtime failed: %1</source>
         <translation>Descărcarea runtimeului MXC a eșuat: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="245"/>
+        <location filename="../src/tools/mxc.cpp" line="272"/>
         <location filename="../src/tools/ripgrep.cpp" line="284"/>
         <source>Verifying package integrity...</source>
         <translation>Se verifică integritatea pachetului...</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="250"/>
+        <location filename="../src/tools/mxc.cpp" line="277"/>
         <location filename="../src/tools/ripgrep.cpp" line="289"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Pachetul descărcat nu este cel așteptat.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="254"/>
+        <location filename="../src/tools/mxc.cpp" line="281"/>
         <source>Unpacking the MXC runtime...</source>
         <translation>Se extrage runtimeul MXC...</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="261"/>
+        <location filename="../src/tools/mxc.cpp" line="288"/>
         <source>Unpacking the MXC runtime failed: %1</source>
         <translation>Extragerea runtimeului MXC a eșuat: %1</translation>
     </message>
@@ -2924,7 +3168,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     <message>
         <location filename="../src/tools/todowrite_tool.cpp" line="202"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Eroare de unelță: taskul %1 are starea necunoscută &quot;%2&quot; (așteptat &quot;pending&quot;, &quot;in_progress&quot; sau &quot;completed").</translation>
+        <translation>Eroare de unelță: taskul %1 are starea necunoscută &quot;%2&quot; (așteptat &quot;pending&quot;, &quot;in_progress&quot; sau &quot;completed&quot;).</translation>
     </message>
     <message>
         <location filename="../src/tools/todowrite_tool.cpp" line="214"/>
@@ -2937,32 +3181,32 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Lista de taskuri a fost actualizată: %1 din %2 completate.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Accesarea lui &quot;%1&quot; nu este permisă: căile de dispozitiv și partajările administrative nu sunt accesibile în interiorul sandbox-ului.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="474"/>
+        <location filename="../src/tools/tool_utils.cpp" line="479"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Scrierea în &quot;%1&quot; nu este permisă: niciun proiect nu este deschis, de aceea sandboxul permite scrierea doar în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox. Deschideți un proiect pentru a lucra la fișierele sale.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="481"/>
+        <location filename="../src/tools/tool_utils.cpp" line="486"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
         <translation>Scrierea în &quot;%1&quot; nu este permisă: sandboxul permite scrierea doar în directorul proiectului, în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="492"/>
+        <location filename="../src/tools/tool_utils.cpp" line="497"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
         <translation>Scrierea în &quot;%1&quot; nu este permisă: fișierele .git, .qtcreator și *.user sunt protejate în interiorul sandbox-ului.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="498"/>
+        <location filename="../src/tools/tool_utils.cpp" line="503"/>
         <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
         <translation>Scrierea în &quot;%1&quot; nu este permisă: locațiile de credențiale sunt protejate în interiorul sandbox-ului.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="507"/>
+        <location filename="../src/tools/tool_utils.cpp" line="512"/>
         <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
         <translation>Citirea lui &quot;%1&quot; nu este permisă: locațiile de credențiale nu sunt citibile în interiorul sandbox-ului.</translation>
     </message>
@@ -3070,9 +3314,13 @@ Authorization: Bearer &lt;token&gt;</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Descărcați-l de pe pagina de setări a uneltelor Llama.cpp Chat (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); LLAMA_WXC_EXEC poate arăta către un wxc-exec.exe. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+        <translation type="vanished">Descărcați-l de pe pagina de setări a uneltelor Llama.cpp Chat (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); LLAMA_WXC_EXEC poate arăta către un wxc-exec.exe. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="49"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Descărcați-l de pe pagina de setări Llama.cpp Chat Sandbox (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); acolo poate fi indicat un runtime propriu. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <location filename="../src/tools/windows_sandbox.cpp" line="80"/>
@@ -3085,47 +3333,47 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Backendul sandboxului Windows (wxc-exec) a raportat containerul MXC ca indisponibil (ieșire %1): %2 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="410"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="416"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Sandboxul Windows nu și-a putut configura proba de izolare în timp real (director temporar sau canary în home). %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="427"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="433"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Sandboxul Windows nu a putut crea fișierul canary al probei sale de izolare în timp real la %1. %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="454"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="460"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Configurația sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="480"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="486"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Sandboxul Windows (Microsoft MXC) nu a trecut verificația sa de izolare în timp real: o comandă izolată nu a putut fi verificată ca fiind limitată. %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="517"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="523"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
         <translation>bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație îngustă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH sau debifați &apos;Sandbox commands&apos; în setările Llama.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="610"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="616"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Sandboxul Windows (Microsoft MXC) are nevoie de Windows 11 24H2 (build %1) sau mai nou; acest sistem este build %2. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="621"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="627"/>
         <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
         <translation>wxc-exec.exe (runtimeul sandboxului Microsoft MXC Windows) nu a fost găsit. %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="648"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="654"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Sandboxul Windows (Microsoft MXC) își verifică izolarea pentru prima dată; rulați comanda din nou peste câteva secunde.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="661"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="667"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>

@@ -94,7 +94,7 @@
         <translation>Otevřít stránku nastavení llama.cpp.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>Vypnout llama.cpp.</translation>
     </message>
@@ -151,23 +151,25 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+96"/>
+        <location filename="../src/llamasettings.cpp" line="-1075"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Povolit LlamaCpp</translation>
@@ -362,7 +364,7 @@
         <translation type="vanished">Maximální počet uložených dokončení, které mají zůstat v mezipaměti výsledků.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Shrňte název konverzace v několika slovech včetně jednoho emotikonu. Použijte jazyk, který se v konverzaci používá. Použijte obyčejný text, bez markdownu.</translation>
     </message>
@@ -376,12 +378,16 @@
         <translation type="vanished">Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
+        <translation type="vanished">Vyšší konverzace je dlouhá a dochází jí prostor kontextu. Napište podrobné shrnutí, které umožní konverzaci plynule pokračovat. Strukturujte shrnutí jako markdown se sekcemi: ## Task (co uživatel požadoval a celkový cíl), ## Key Decisions (důležité rozhodnutí, omezení a předvolby), ## Work Done (změněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Current State (co je dokončeno, co je v průběhu, narazené chyby) a ## Next Steps (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: zachovejte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; jen shrňte.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+9"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Konverzace výše je dlouhá a bude pokračovat v nové konverzaci s čerstvým oknem kontextu. Napište dokument předání, díky kterému bude moci nová konverzace plynule pokračovat v práci, aniž by viděla dřívější zprávy. Strukturujte ho jako markdown s těmito sekcemi: ## Úkol (co uživatel požadoval a jaký je celkový cíl), ## Klíčová rozhodnutí (důležitá rozhodnutí, omezení a preference), ## Vykonaná práce (zmeněné soubory, spuštěné příkazy, změny kódu a jejich výsledky), ## Aktuální stav (co je dokončeno, co je v průběhu, narazené chyby) a ## Další kroky (co je potřeba udělat pro dokončení úkolu). Buďte přesní a konkrétní: ponechte cesty k souborům, názvy funkcí a přesné hodnoty. Neodpovídejte na poslední zprávu uživatele; napište pouze dokument předání.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -890,6 +896,16 @@
         <translation>Úroveň přemýšlení (uvážování) pro modely podporující přemýšlení: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; nebo &quot;max&quot;.</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>Zvětšení písma chatu</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Velikost písma konverzace chatu jako procento velikosti písma editoru. Upravte kolečkem myši s podrženým Ctrl nad chatem nebo příkazy pro zvětšení/zmenšení chatu.</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>Výpomocný model</translation>
@@ -910,27 +926,74 @@
         <translation>Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Když konverzace využije více než konfigurovaný prah okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
+        <location line="+19"/>
+        <source>Handoff Prompt</source>
+        <translation>Prompt předání</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Prompt odeslaný modelu pro vygenerování dokumentu předání (úkol, aktuální stav, další kroky), který poslouží jako výchozí obsah nové konverzace, když se konverzace pokračuje v nové.</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Automaticky pokračovat v nové konverzaci</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Pokud konverzace použije více než nastavený práh okna kontextu modelu, její historie se shrne do dokumentu předání (úkol, aktuální stav, další kroky), vytvoří se a otevře nová konverzace s tímto dokumentem jako výchozím obsahem a původní konverzace zůstane nedotčená. Tím může dlouhá úloha pokračovat i na modelu s malým oknem kontextu.</translation>
     </message>
     <message>
         <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>Práh předání</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>Práh předání:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Konverzace se pokračuje v nové, když její historie použije více než toto procento okna kontextu modelu.</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Pokud je zaškrtnuto, nástroje chatu jsou omezeny na pískoviště: příkazy bash se spouštějí v platformním pískovišti, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesní kontejner Microsoft MXC na Windows), a nástroje se soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nejsou čitelná žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá připnutý runtime wxc-exec.exe, ke stažení ze stránky nastavení Pískoviště (tam lze nastavit i vlastní runtime), a vyžaduje Windows 11 24H2 nebo novější. Další adresáře a síťová politika se nastavují na stránce nastavení Pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>Provozní prostředí MXC:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>Spouštěč wxc-exec.exe, ve kterém se spouští pískoviště Windows. Pokud je prázdný, použije se runtime stažený z této stránky.</translation>
+    </message>
+    <message>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">Když konverzace využije více než konfigurovaný prah okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
+    </message>
+    <message>
         <source>Auto-compact Threshold</source>
-        <translation>Prah automatického stlačování</translation>
+        <translation type="vanished">Prah automatického stlačování</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Prah automatického stlačování:</translation>
+        <translation type="vanished">Prah automatického stlačování:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Konverzace se automaticky stlačí, když její historie využije více než tento procentuální podíl okna kontextu modelu.</translation>
+        <translation type="vanished">Konverzace se automaticky stlačí, když její historie využije více než tento procentuální podíl okna kontextu modelu.</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou - model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
     </message>
@@ -944,7 +1007,7 @@
         <translation type="vanished">Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt názvu konverzace</translation>
     </message>
@@ -964,17 +1027,15 @@
         <translation>Prompt odeslaný modelu pro vygenerování doplňujících otázek po kompletní odpovědi.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>Prompt pro stlačení</translation>
+        <translation type="vanished">Prompt pro stlačení</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Prompt odeslaný modelu pro shrnutí historie konverzace, když je stlačována, aby se vešla do okna kontextu.</translation>
+        <translation type="vanished">Prompt odeslaný modelu pro shrnutí historie konverzace, když je stlačována, aby se vešla do okna kontextu.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+13"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Následující otázky</translation>
@@ -995,17 +1056,15 @@
         <translation>Pokud je zapnuto, model po první odpovědi asistenta vygeneruje krátký název konverzace.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>Automaticky stlačovat dlouhé konverzace</translation>
+        <translation type="vanished">Automaticky stlačovat dlouhé konverzace</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">Když konverzace využije přibližně 80 % okna kontextu modelu, její historie se shrne do kompaktní značkové zprávy a od té doby se modelu posílá pouze shrnutí spolu se zprávami po něm. Kompletní historie zůstává v chatu vidět. Používá se také pro obnovu po chybě přetečení kontextu: historie se stlačí a požadavek se opakuje jednou.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>Prohledávací prompty</translation>
     </message>
@@ -1027,12 +1086,11 @@
         <translation>Zobrazit malé tlačítko pod vybraným textem v editoru. Kliknutím na něj se otevře prohledávač llama.cpp, aby se výběr mohl odeslat do llama.cpp s jedním z promptů.</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout ze stránky nastavení nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější. Další adresáře a síťová pravidla se nastavují na stránce nastavení Pískoviště.</translation>
+        <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, procesový kontejner Microsoft MXC na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a příkazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště používá uzpřesněný runtime wxc-exec.exe, který lze stáhnout ze stránky nastavení nástrojů (LLAMA_WXC_EXEC na něj může ukazovat), a vyžaduje Windows 11 24H2 nebo novější. Další adresáře a síťová pravidla se nastavují na stránce nastavení Pískoviště.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>Zapisovatelné adresáře pískoviště</translation>
     </message>
@@ -1076,7 +1134,7 @@
         <translation type="vanished">Vestavěné prompty prohledávače &quot;ll&quot;. V nabídce se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-98"/>
         <source>Skill directories</source>
         <translation>Adresáře dovedností</translation>
     </message>
@@ -1098,8 +1156,23 @@
     </message>
     <message>
         <location line="+4"/>
+        <source>Working directory</source>
+        <translation>Pracovní adresář</translation>
+    </message>
+    <message>
         <location line="+1"/>
-        <location line="+393"/>
+        <source>Working directory:</source>
+        <translation>Pracovní adresář:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Adresář, ve kterém nástroje chatu pracují. Ponechte prázdné, pokud se má použít adresář úvodního projektu (případně výchozí adresář projektů, když není otevřen žádný projekt). Lze ho změnit i kliknutím na pracovní adresář na uvítací obrazovce chatu.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
@@ -1113,15 +1186,15 @@
         <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Načíst instrukce projektu</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Pokud je zaškrtnuto, soubor s instrukcemi projektu aktuálního projektu se připojí ke systémové zprávě chatu. Souborem je AGENTS.md, případně CLAUDE.md, a hledá se v adresáři projektu a směrem nahoru až ke kořeni git repozitáře, takže monorepo může mít jediný soubor s instrukcemi pro všechny své projekty. Soubory větší než 32 KB se oříznou.</translation>
     </message>
@@ -1289,7 +1362,7 @@
         <translation>API klíč pro Tavily, získáte ho na tavily.com (vyžadován u poskytovatele &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Přepisuje globální nastavení &apos;Přikazy v pískovišti&apos; pro tento projekt. O tom, co pískoviště omezuje, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
@@ -1299,12 +1372,17 @@
         <translation>Přepisuje globální nastavení &apos;Načíst instrukce projektu&apos; pro tento projekt. O tom, co se načte, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>Webové vyhledávání</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>Prompty</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
@@ -1334,13 +1412,11 @@
         <translation>Maximální</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>Pracovní adresář: %1</translation>
+        <translation type="vanished">Pracovní adresář: %1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1369,47 +1445,43 @@
         <translation>Úroveň přemýšlení</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>Hledat v chatu</translation>
+        <translation type="vanished">Hledat v chatu</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>Další výsledek vyhledávání</translation>
+        <translation type="vanished">Další výsledek vyhledávání</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>Předchozí výsledek vyhledávání</translation>
+        <translation type="vanished">Předchozí výsledek vyhledávání</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>Odeslat do chatu Llama</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>Cesta k modelu: %1</translation>
+        <translation type="vanished">Cesta k modelu: %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Kontext: %L1</translation>
+        <translation type="vanished">Kontext: %L1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>Vize: %1</translation>
+        <translation type="vanished">Vize: %1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>ano</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>ne</translation>
     </message>
@@ -1418,33 +1490,119 @@
         <translation type="vanished">Následující otázky:</translation>
     </message>
     <message>
-        <location line="-346"/>
+        <location line="-458"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Zprávy ve frontě - odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+510"/>
         <source>Follow-up questions:</source>
         <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <location line="+615"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Úroveň přemýšlení: %1 (platí pro nové zprávy)</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Lidský editor</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Jste připojeni k %1, aktuální adresář je %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>Dobrý den</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Napište zprávu nebo nahrajte soubory, abyste začali</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Klikněte na název modelu, abyste viděli jeho podrobnosti, nebo na adresář, abyste změnili místo, kde se nástroje spouštějí.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>Podrobnosti o modelu</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>Model:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>Cesta k modelu:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>Kontext:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Zavřít</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>Vybrat pracovní adresář</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>Zastavit úlohu</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Úloha stále běží. Opravdu ji chcete zastavit?</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>Upravit zprávu</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Tím se smaže %1 zpráv, včetně: %2 uživatelských zpráv a %3 odpovědí asistenta ...</translation>
     </message>
@@ -1464,7 +1622,7 @@
         <translation>Opravdu chcete tuto zprávu smazat?</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>Zpracování: %1%</translation>
     </message>
@@ -1504,16 +1662,25 @@
         <translation>Odebrat &quot;%1&quot;</translation>
     </message>
     <message>
+        <location line="+37"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Vytváření nové konverzace pro pokračování v této – shrnování konverzace...</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
         <translation type="vanished">Odebrat “%1”</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-35"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Odebrat zprávu ve frontě (neodešle se)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Vytváření nové konverzace pro pokračování v této – shrnování konverzace…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Editor chatu LlamaCpp</translation>
     </message>
@@ -1668,7 +1835,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">ID konverzace</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Vytvoří novou konverzaci s LlamaCpp</translation>
     </message>
@@ -1689,6 +1856,12 @@ Chcete ho přepsat?</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>Pokračovat v nové konverzaci</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Smazat</translation>
@@ -1715,7 +1888,7 @@ Chcete ho přepsat?</translation>
         <translation>Jste si jistí, že chcete smazat konverzaci: %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+95"/>
         <source>Save Conversation as Markdown</source>
         <translation>Uložit konverzaci jako Markdown</translation>
     </message>
@@ -1743,7 +1916,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -1823,7 +1996,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Zkopírováno do schránky</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Zapnout/vypnout podrobnosti použití nástrojů</translation>
     </message>
@@ -1842,24 +2015,20 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Nová konverzace</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>Hledat</translation>
+        <translation type="vanished">Hledat</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>Najít...</translation>
+        <translation type="vanished">Najít...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>Předchozí výsledek</translation>
+        <translation type="vanished">Předchozí výsledek</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>Další výsledek</translation>
+        <translation type="vanished">Další výsledek</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2198,7 +2367,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Vyberte nástroj pro zobrazení jeho JSON definice</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>Vyberte nástroj pro zobrazení jeho definice</translation>
     </message>
@@ -2213,22 +2382,20 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Stáhnout ripgrep %1</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>Stáhnout MXC %1</translation>
+        <translation type="vanished">Stáhnout MXC %1</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Pískoviště (příkazy, adresáře, síť) se nastavuje na stránce nastavení Pískoviště.</translation>
+        <translation type="vanished">Pískoviště (příkazy, adresáře, síť) se nastavuje na stránce nastavení Pískoviště.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Nástroje search a find používají ripgrep, který není na tomto systému nainstalován.</translation>
     </message>
@@ -2238,17 +2405,16 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Nástroj bash v pískovišti na Windows používá runtime Microsoft MXC (wxc-exec), který není na tomto systému nainstalován.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Runtime pískoviště Windows: %1</translation>
+        <translation type="vanished">Runtime pískoviště Windows: %1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2344,7 +2510,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2365,7 +2531,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2390,7 +2556,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 dovedností</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Žádný popis</translation>
     </message>
@@ -2410,9 +2576,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>Přidat...</translation>
     </message>
@@ -2440,11 +2606,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem, &quot;{file}&quot; a &quot;{line}&quot; aktuálním souborem a řádkem kurzoru, &quot;{diagnostics}&quot; chybami a varováními aktuálního souboru a &quot;{git_diff}&quot; necommitnutými změnami jeho git repozitáře.</translation>
     </message>
     <message>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>Předání</translation>
+    </message>
+    <message>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">V nabídce prohledávače se zobrazuje pouze první řádek promptu; modelu se odesílá celý text. &quot;{selection}&quot; se nahradí vybraným textem.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-44"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2454,13 +2625,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Prompty:</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>Stlačení</translation>
+        <translation type="vanished">Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Název</translation>
     </message>
@@ -2518,77 +2688,124 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>Chyba:</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Automatické stlačení je vypnuto.</translation>
+        <translation type="vanished">Automatické stlačení je vypnuto.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Konverzace se právě stlačuje.</translation>
+        <translation type="vanished">Konverzace se právě stlačuje.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>Konverzace nemá žádné zprávy ke stlačení.</translation>
+        <translation type="vanished">Konverzace nemá žádné zprávy ke stlačení.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Konverzace byla nedávno stlačena a nelze ji dále stlačovat.</translation>
+        <translation type="vanished">Konverzace byla nedávno stlačena a nelze ji dále stlačovat.</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>Požadavek na stlačení selhal: %1</translation>
+        <translation type="vanished">Požadavek na stlačení selhal: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Požadavek na stlačení vrátil nesprávně formátovanou odpověď.</translation>
+        <translation type="vanished">Požadavek na stlačení vrátil nesprávně formátovanou odpověď.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Požadavek na stlačení nevrátil žádné shrnutí.</translation>
+        <translation type="vanished">Požadavek na stlačení nevrátil žádné shrnutí.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Požadavek na stlačení vrátil prázdné shrnutí.</translation>
+        <translation type="vanished">Požadavek na stlačení vrátil prázdné shrnutí.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Konverzace stlačena - dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
+        <translation type="vanished">Konverzace stlačena - dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konverzace se již nevešla do okna kontextu modelu.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Automatické stlačení je vypnuto; zkrátte nebo stlačte konverzaci a zkuste to znovu.</translation>
+        <translation type="vanished">Automatické stlačení je vypnuto; zkrátte nebo stlačte konverzaci a zkuste to znovu.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Konverzace se právě stlačuje; pošlete zprávu znovu, až se stlačení dokončí.</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Automatické předání je vypnuto.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Nová konverzace pro tuto už se vytváří.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>Konverzace nemá žádné zprávy, které by se daly předat.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Konverzace byla nedávno předána; nejdřív odešlete ještě několik zpráv.</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Požadavek na předání selhal: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Požadavek na předání vrátil neplatnou odpověď.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Konverzace se právě stlačuje; pošlete zprávu znovu, až se stlačení dokončí.</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>Požadavek na předání nevrátil žádný dokument.</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Požadavek na předání vrátil prázdný dokument.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>Pokračování %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Tato konverzace pokračuje v práci předchozí konverzace, jejíž okno kontextu se vyčerpalo. Dokument předání níže popisuje úkol, aktuální stav a další kroky. Pokračujte od dalších kroků.
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>Pokračujte v nové konverzaci, abyste mohli dál pracovat.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Poznámka:** Odpověď byla oříznuta: model dosáhl maximálního počtu výstupních tokenů.</translation>
     </message>
@@ -2598,14 +2815,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>**Poznámka:** Model ukončil své kolo bez odpovědi.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>runtime Microsoft MXC (wxc-exec), který používá pískoviště Windows, je k dispozici pouze pro Windows x86-64</translation>
+        <translation type="vanished">runtime Microsoft MXC (wxc-exec), který používá pískoviště Windows, je k dispozici pouze pro Windows x86-64</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">runtime Microsoft MXC (wxc-exec) není nainstalován; stáhněte ho na stránce nastavení nástrojů Llama</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>runtime Microsoft MXC (wxc-exec), který používá pískoviště Windows, je k dispozici pouze pro Windows x86-64 a arm64</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>runtime Microsoft MXC (wxc-exec) není nainstalován; stáhněte ho na stránce nastavení nástrojů Llama</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>runtime Microsoft MXC (wxc-exec) není nainstalován; stáhněte ho na stránce nastavení Pískoviště Llama</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2638,7 +2863,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Problémy s pískovištěm nástrojů Llama.cpp Chat.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>Zapisovatelné adresáře:</translation>
     </message>
@@ -2673,7 +2898,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nástroje webfetch a websearch se vždy spouštějí mimo pískoviště a tímto nastavením nejsou ovlivněny.</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>Stáhnout...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Nástroj bash v pískovišti na Windows se spouští v procesním kontejneru Microsoft MXC.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Provozní prostředí Windows</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>Souborový systém</translation>
     </message>
@@ -2683,7 +2923,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Síť</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>Vyberte adresář</translation>
     </message>
@@ -2752,12 +2992,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
@@ -3312,12 +3552,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nástroje search a find používají ripgrep k vyhledávání obsahu souborů a k lokalizaci souborů podle názvu. Na tomto systému není nainstalován, můžete ho ale stáhnout zde. ripgrep je publikován pod licencí MIT nebo Unlicense.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Stáhnout runtime pískoviště Windows (MXC)</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Stáhnout runtime Microsoft MXC %1?</translation>
     </message>
@@ -3345,7 +3585,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stáhnout</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Balíček neobsahuje binární soubor wxc-exec.exe.</translation>
     </message>
@@ -3361,8 +3601,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Runtime Microsoft MXC je k dispozici pouze pro Windows x86-64 a arm64.</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Runtime Microsoft MXC je k dispozici pouze pro Windows x86-64.</translation>
+        <translation type="vanished">Runtime Microsoft MXC je k dispozici pouze pro Windows x86-64.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3533,7 +3777,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Přístup k &quot;%1&quot; není povolen: cesty k zařízením a administrativní sdílené složky nejsou uvnitř pískoviště dostupné.</translation>
     </message>
@@ -3595,12 +3839,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (backend pískoviště Windows @anthropic-ai/sandbox-runtime) nebyl nalezen v PATH. %1 LLAMA_SRT_WIN může ukazovat na spustitelný soubor.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+        <translation type="vanished">Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Backend pískoviště Windows (wxc-exec) včas neodpověděl na dotaz na své schopnosti. %1</translation>
     </message>
@@ -3610,7 +3853,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Pískoviště Windows nepodařilo nastavit sondu izolace za běhu (dočasný adresář nebo canary soubor v domovském adresáři). %1</translation>
     </message>
@@ -3645,7 +3888,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Pískoviště Windows (Microsoft MXC) nezvládlo kontrolu izolace za běhu: nepodařilo se ověřit, že je příkaz v pískovišti omezen. %1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Stáhněte ho ze stránky nastavení Pískoviště Llama.cpp Chat (připnuté, kontrolním součtem ověřené vydání Microsoft MXC); tam lze také nastavit vlastní runtime. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Pískoviště Windows (Microsoft MXC) poprvé ověřuje svou izolaci; příkaz spusťte znovu za pár sekund.</translation>
     </message>

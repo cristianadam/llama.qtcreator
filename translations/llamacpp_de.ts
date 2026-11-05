@@ -94,7 +94,7 @@
         <translation>Öffnet die llama.cpp-Einstellungsseite.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+35"/>
         <source>Disable llama.cpp.</source>
         <translation>llama.cpp deaktivieren.</translation>
     </message>
@@ -151,23 +151,25 @@
     </message>
     <message>
         <location line="+11"/>
+        <location filename="../src/llamasettings.cpp" line="+1158"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1274"/>
+        <location line="-1291"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+67"/>
+        <location filename="../src/llamasettings.cpp" line="-1104"/>
         <source>Tools</source>
         <translation>Werkzeuge</translation>
     </message>
@@ -358,7 +360,7 @@
         <translation type="vanished">Maximale Anzahl der zwischengespeicherten Vervollständigungen, die im Ergebnis-Cache behalten werden sollen.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-204"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Fassen Sie den Titel der Konversation in wenigen Worten zusammen, einschließlich eines Emojis. Verwenden Sie die in der Konversation verwendete Sprache. Verwenden Sie reinen Text, kein Markdown.</translation>
     </message>
@@ -368,12 +370,16 @@
         <translation>Generieren Sie bis zu fünf Anschlussfragen im Kontext der aktuellen Konversation. Die Fragen sind aus der Perspektive des Nutzers. Nur Fragen, keine Erklärungen. Verwenden Sie die in der Konversation verwendete Sprache. Geben Sie ein JSON-Objekt mit einem einzigen Schlüssel &quot;follow_ups&quot; zurück, das ein Array mit Frage-Strings in reinem Text enthält, kein Markdown.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>The conversation above is long and is running out of context space. Write a detailed summary of it that allows the conversation to continue seamlessly. Structure the summary as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what should happen next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only summarize.</source>
-        <translation>Die obige Konversation ist lang und der verfügbare Kontextplatz neigt sich dem Ende zu. Schreiben Sie eine detaillierte Zusammenfassung, mit der die Konversation nahtlos fortgesetzt werden kann. Strukturieren Sie die Zusammenfassung als Markdown mit diesen Abschnitten: ## Aufgabe (was der Benutzer verlangt hat und das Gesamtziel), ## Wichtige Entscheidungen (wichtige Entscheidungen, Einschränkungen und Präferenzen), ## Erledigte Arbeit (berührte Dateien, ausgeführte Befehle, Codeänderungen und deren Ergebnisse), ## Aktueller Stand (was abgeschlossen ist, was in Arbeit ist, aufgetretene Fehler) und ## Nächste Schritte (was als Nächstes zu tun ist, um die Aufgabe abzuschließen). Seien Sie präzise und konkret: behalten Sie Pfade, Funktionsnamen und exakte Werte bei. Beantworten Sie die letzte Nachricht des Benutzers nicht; fassen Sie nur zusammen.</translation>
+        <translation type="vanished">Die obige Konversation ist lang und der verfügbare Kontextplatz neigt sich dem Ende zu. Schreiben Sie eine detaillierte Zusammenfassung, mit der die Konversation nahtlos fortgesetzt werden kann. Strukturieren Sie die Zusammenfassung als Markdown mit diesen Abschnitten: ## Aufgabe (was der Benutzer verlangt hat und das Gesamtziel), ## Wichtige Entscheidungen (wichtige Entscheidungen, Einschränkungen und Präferenzen), ## Erledigte Arbeit (berührte Dateien, ausgeführte Befehle, Codeänderungen und deren Ergebnisse), ## Aktueller Stand (was abgeschlossen ist, was in Arbeit ist, aufgetretene Fehler) und ## Nächste Schritte (was als Nächstes zu tun ist, um die Aufgabe abzuschließen). Seien Sie präzise und konkret: behalten Sie Pfade, Funktionsnamen und exakte Werte bei. Beantworten Sie die letzte Nachricht des Benutzers nicht; fassen Sie nur zusammen.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+9"/>
+        <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
+        <translation>Die obige Konversation ist lang und wird in einer neuen Konversation mit einem frischen Kontextfenster fortgesetzt. Schreiben Sie ein Übergabedokument, mit dem die neue Konversation die Arbeit nahtlos fortsetzen kann, ohne die früheren Nachrichten zu sehen. Strukturieren Sie es als Markdown mit diesen Abschnitten: ## Aufgabe (was der Benutzer verlangt hat und das Gesamtziel), ## Wichtige Entscheidungen (wichtige Entscheidungen, Einschränkungen und Präferenzen), ## Erledigte Arbeit (berührte Dateien, ausgeführte Befehle, Codeänderungen und deren Ergebnisse), ## Aktueller Stand (was abgeschlossen ist, was in Arbeit ist, aufgetretene Fehler) und ## Nächste Schritte (was als Nächstes zu tun ist, um die Aufgabe abzuschließen). Seien Sie präzise und konkret: behalten Sie Pfade, Funktionsnamen und exakte Werte bei. Beantworten Sie die letzte Nachricht des Benutzers nicht; schreiben Sie nur das Übergabedokument.</translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Create a commit message for the uncommitted changes.
 
 {git_diff}</source>
@@ -882,6 +888,16 @@
         <translation>Denk- (Schlussfolgerungs-)stufe für Modelle mit Denkfähigkeit: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; oder &quot;max&quot;.</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <source>Chat Font Zoom</source>
+        <translation>Chat-Textvergrößerung</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Size of the chat conversation font, as a percentage of the editor font size. Adjust with Ctrl+mouse-wheel over the chat or the chat zoom in/out commands.</source>
+        <translation>Größe der Chat-Konversationsschrift als Prozentsatz der Editor-Schriftgröße. Mit Strg+Mausrad über dem Chat oder den Chat-Vergrößerungs- und -Reduzierungsbefehlen anpassen.</translation>
+    </message>
+    <message>
         <location line="+4"/>
         <source>Utility Model</source>
         <translation>Hilfsmodell</translation>
@@ -902,27 +918,74 @@
         <translation>Modell, das für Hilfsanfragen wie Konversationstitel und Anschlussvorschläge verwendet wird. Verwenden Sie ein kleines Modell, um das Haupt-Chat-Modell frei zu halten. Leer lassen, um das aktive Chat-Modell zu verwenden.</translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
-        <translation>Wenn die Konversation mehr als den konfigurierten Schwellenwert des Kontextfensters des Modells belegt, wird ihr Verlauf in eine kompakte Marker-Nachricht zusammengefasst und von da an werden nur die Zusammenfassung und die Nachrichten danach an das Modell gesendet. Der vollständige Verlauf bleibt im Chat sichtbar. Wird auch zur Wiederherstellung nach einem Kontextüberlauf-Fehler verwendet: Der Verlauf wird kompaktiert und die Anfrage ein weiteres Mal gesendet.</translation>
+        <location line="+19"/>
+        <source>Handoff Prompt</source>
+        <translation>Übergabe-Prompt</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Prompt sent to the model to write the handoff document (task, current state, next steps) that seeds the new conversation when a conversation is continued in a new one.</source>
+        <translation>Dem Modell gesendeter Prompt zum Erstellen des Übergabedokuments (Aufgabe, aktueller Stand, nächste Schritte), mit dem die neue Konversation initialisiert wird, wenn eine Konversation in einer neuen fortgesetzt wird.</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <location line="+1"/>
+        <source>Automatically continue in a new conversation</source>
+        <translation>Automatisch in einer neuen Konversation fortsetzen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a handoff document (task, current state, next steps), a new conversation seeded with that document is created and opened, and the original conversation stays untouched. This lets a long task keep going on a model with a small context window.</source>
+        <translation>Wenn die Konversation mehr als den konfigurierten Schwellenwert des Kontextfensters des Modells belegt, wird ihr Verlauf in ein Übergabedokument (Aufgabe, aktueller Stand, nächste Schritte) zusammengefasst, eine mit diesem Dokument initialisierte neue Konversation wird erstellt und geöffnet, und die ursprüngliche Konversation bleibt unberührt. So kann eine lange Aufgabe auch auf einem Modell mit kleinem Kontextfenster weiterlaufen.</translation>
     </message>
     <message>
         <location line="+11"/>
+        <source>Handoff Threshold</source>
+        <translation>Übergabe-Schwellenwert</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Handoff Threshold:</source>
+        <translation>Übergabe-Schwellenwert:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The conversation is continued in a new one when its history uses more than this percentage of the model&apos;s context window.</source>
+        <translation>Die Konversation wird in einer neuen fortgesetzt, wenn ihr Verlauf mehr als diesen Prozentsatz des Kontextfensters des Modells belegt.</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
+        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle laufen in einer Plattformsandbox, die Schreibzugriffe auf Systemorte blockiert (bubblewrap/bwrap unter Linux, sandbox-exec unter macOS, ein Microsoft-MXC-Prozesscontainer unter Windows), und die Dateitools können nur innerhalb des Projektverzeichnisses und temporärer Orte schreiben. Anmeldeinformationsorte (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und in der Sandbox ausgeführte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Unter Windows verwendet die Sandbox die gepinnte wxc-exec.exe-Laufzeitumgebung, die von der Sandbox-Einstellungsseite heruntergeladen werden kann (dort kann auch eine eigene Laufzeitumgebung angegeben werden), und benötigt Windows 11 24H2 oder neuer. Die zusätzlichen Verzeichnisse und die Netzwerkrichtlinie werden auf der Sandbox-Einstellungsseite konfiguriert.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>MXC runtime:</source>
+        <translation>MXC-Laufzeitumgebung:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A wxc-exec.exe launcher to run the Windows sandbox in. If empty, the runtime downloaded from this page is used.</source>
+        <translation>Ein wxc-exec.exe-Startprogramm, in dem die Windows-Sandbox ausgeführt wird. Wenn leer, wird die von dieser Seite heruntergeladene Laufzeitumgebung verwendet.</translation>
+    </message>
+    <message>
+        <source>When the conversation uses more than the configured threshold of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
+        <translation type="vanished">Wenn die Konversation mehr als den konfigurierten Schwellenwert des Kontextfensters des Modells belegt, wird ihr Verlauf in eine kompakte Marker-Nachricht zusammengefasst und von da an werden nur die Zusammenfassung und die Nachrichten danach an das Modell gesendet. Der vollständige Verlauf bleibt im Chat sichtbar. Wird auch zur Wiederherstellung nach einem Kontextüberlauf-Fehler verwendet: Der Verlauf wird kompaktiert und die Anfrage ein weiteres Mal gesendet.</translation>
+    </message>
+    <message>
         <source>Auto-compact Threshold</source>
-        <translation>Auto-Kompaktierungsschwelle</translation>
+        <translation type="vanished">Auto-Kompaktierungsschwelle</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Auto-compact Threshold:</source>
-        <translation>Auto-Kompaktierungsschwelle:</translation>
+        <translation type="vanished">Auto-Kompaktierungsschwelle:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>The conversation is auto-compacted when its history uses more than this percentage of the model&apos;s context window.</source>
-        <translation>Die Konversation wird automatisch kompaktiert, wenn ihr Verlauf mehr als diesen Prozentsatz des Kontextfensters des Modells belegt.</translation>
+        <translation type="vanished">Die Konversation wird automatisch kompaktiert, wenn ihr Verlauf mehr als diesen Prozentsatz des Kontextfensters des Modells belegt.</translation>
     </message>
     <message>
-        <location line="+138"/>
+        <location line="+21"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Ein lokales Modell kann Werkzeugaufrufe in einer Endlosschleife ausführen, daher werden nach dieser Anzahl aufeinanderfolgender Runden mit nur Werkzeugaufrufen die Aufrufe nicht ausgeführt - das Modell erhält ein fehlgeschlagenes Ergebnis, das es anweist, stattdessen abzuschließen. Aufgaben- (Unteragenten-)Konversationen sind nicht begrenzt. Auf 0 setzen für keine Grenze.</translation>
     </message>
@@ -936,7 +999,7 @@
         <translation type="vanished">Modell, das für Hilfsanfragen wie Konversationstitel und Anschlussvorschläge verwendet wird. Verwenden Sie ein kleines Modell, um das Haupt-Chat-Modell frei zu halten. Leer lassen, um das aktive Chat-Modell zu verwenden.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-251"/>
         <source>Conversation Title Prompt</source>
         <translation>Konversationstitel-Prompt</translation>
     </message>
@@ -956,17 +1019,15 @@
         <translation>Dem Modell gesendeter Prompt zur Generierung von Anschlussfragen nach einer vollständigen Antwort.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Compaction Prompt</source>
-        <translation>Kompaktierungsprompt</translation>
+        <translation type="vanished">Kompaktierungsprompt</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Prompt sent to the model to summarize the conversation history when it is compacted to fit the context window.</source>
-        <translation>Dem Modell gesendeter Prompt zur Zusammenfassung des Konversationsverlaufs, wenn dieser kompaktiert wird, um in das Kontextfenster zu passen.</translation>
+        <translation type="vanished">Dem Modell gesendeter Prompt zur Zusammenfassung des Konversationsverlaufs, wenn dieser kompaktiert wird, um in das Kontextfenster zu passen.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+13"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Anschlussfragen</translation>
@@ -987,17 +1048,15 @@
         <translation>Wenn aktiviert, generiert das Modell nach der ersten Assistenten-Antwort einen kurzen Konversationstitel.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
         <source>Auto-compact long conversations</source>
-        <translation>Lange Konversationen automatisch kompaktieren</translation>
+        <translation type="vanished">Lange Konversationen automatisch kompaktieren</translation>
     </message>
     <message>
         <source>When the conversation uses about 80% of the model&apos;s context window, its history is summarized into a compact marker message and only the summary plus the messages after it are sent to the model from then on. The full history stays visible in the chat. Also used to recover from a context-overflow error: the history is compacted and the request is retried once.</source>
         <translation type="vanished">Wenn die Konversation etwa 80 % des Kontextfensters des Modells belegt, wird ihr Verlauf in eine kompakte Marker-Nachricht zusammengefasst und von da an werden nur die Zusammenfassung und die Nachrichten danach an das Modell gesendet. Der vollständige Verlauf bleibt im Chat sichtbar. Wird auch zur Wiederherstellung nach einem Kontextüberlauf-Fehler verwendet: Der Verlauf wird kompaktiert und die Anfrage ein weiteres Mal gesendet.</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+24"/>
         <source>Locator Prompts</source>
         <translation>Locator-Prompts</translation>
     </message>
@@ -1019,12 +1078,11 @@
         <translation>Zeigt einen kleinen Button am unteren Rand einer Textauswahl im Editor an. Ein Klick öffnet den llama.cpp-Locator, sodass die Auswahl mit einem der Prompts an llama.cpp gesendet werden kann.</translation>
     </message>
     <message>
-        <location line="+48"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the tools settings page (LLAMA_WXC_EXEC can point to it), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
-        <translation>Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Orten schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von der Llama.cpp-Chat-Tools-Einstellungsseite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer. Die zusätzlichen Verzeichnisse und die Netzwerkrichtlinie werden auf der Sandbox-Einstellungsseite konfiguriert.</translation>
+        <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, ein Microsoft-MXC-Prozesscontainer auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Orten schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows verwendet die Sandbox die festgelegte wxc-exec.exe-Laufzeitumgebung, die von der Llama.cpp-Chat-Tools-Einstellungsseite heruntergeladen werden kann (LLAMA_WXC_EXEC kann auf sie verweisen), und benötigt Windows 11 24H2 oder neuer. Die zusätzlichen Verzeichnisse und die Netzwerkrichtlinie werden auf der Sandbox-Einstellungsseite konfiguriert.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+81"/>
         <source>Sandbox writable directories</source>
         <translation>Schreibbare Sandbox-Verzeichnisse</translation>
     </message>
@@ -1068,7 +1126,7 @@
         <translation type="vanished">Eingebaute Prompts des &quot;ll&quot;-Locators. Im Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt.</translation>
     </message>
     <message>
-        <location line="-85"/>
+        <location line="-98"/>
         <source>Skill directories</source>
         <translation>Skill-Verzeichnisse</translation>
     </message>
@@ -1090,8 +1148,23 @@
     </message>
     <message>
         <location line="+4"/>
+        <source>Working directory</source>
+        <translation>Arbeitsverzeichnis</translation>
+    </message>
+    <message>
         <location line="+1"/>
-        <location line="+393"/>
+        <source>Working directory:</source>
+        <translation>Arbeitsverzeichnis:</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Directory the chat tools operate in. Leave empty to use the startup project&apos;s directory (or the default projects directory when no project is open). It can also be changed by clicking the working directory in the chat welcome screen.</source>
+        <translation>Verzeichnis, in dem die Chat-Tools arbeiten. Leer lassen, um das Verzeichnis des Startprojekts (oder das Standardprojektverzeichnis, wenn kein Projekt geöffnet ist) zu verwenden. Es kann auch geändert werden, indem man das Arbeitsverzeichnis im Chat-Begrüßungsbildschirm anklickt.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+1"/>
+        <location line="+291"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Befehle in Sandbox ausführen</translation>
@@ -1105,15 +1178,15 @@
         <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
     </message>
     <message>
-        <location line="-338"/>
+        <location line="-228"/>
         <location line="+1"/>
-        <location line="+350"/>
+        <location line="+240"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Projektanweisungen laden</translation>
     </message>
     <message>
-        <location line="-350"/>
+        <location line="-240"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Wenn aktiviert, wird die Projektanweisungsdatei des aktuellen Projekts an die Chat-Systemnachricht angehängt. Die Datei ist AGENTS.md, mit CLAUDE.md als Fallback, und wird im Projektverzeichnis gesucht und bis zur Wurzel des Git-Repositories hochsuchend verfolgt, sodass ein Monorepo eine einzige Anweisungsdatei für alle seine Projekte verwenden kann. Dateien größer als 32 KB werden abgeschnitten.</translation>
     </message>
@@ -1281,7 +1354,7 @@
         <translation>API-Schlüssel für Tavily, erhältlich unter tavily.com (erforderlich für den &quot;tavily&quot;-Anbieter).</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+112"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Überschreibt die globale Einstellung &apos;Befehle in Sandbox ausführen&apos; für dieses Projekt. Was die Sandbox beschränkt, zeigt die globale Einstellung auf der Llama-Tools-Seite.</translation>
     </message>
@@ -1291,12 +1364,17 @@
         <translation>Überschreibt die globale Einstellung &apos;Projektanweisungen laden&apos; für dieses Projekt. Was geladen wird, zeigt die globale Einstellung auf der Llama-Tools-Seite.</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+234"/>
+        <source>Web Search</source>
+        <translation>Websuche</translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Prompts</source>
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+101"/>
+        <location filename="../src/llamachateditor.cpp" line="+134"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1326,13 +1404,11 @@
         <translation>Max</translation>
     </message>
     <message>
-        <location line="+57"/>
-        <location line="+386"/>
         <source>Working directory: %1</source>
-        <translation>Arbeitsverzeichnis: %1</translation>
+        <translation type="vanished">Arbeitsverzeichnis: %1</translation>
     </message>
     <message>
-        <location line="-371"/>
+        <location line="+346"/>
         <source>LLM model</source>
         <translation>LLM-Modell</translation>
     </message>
@@ -1361,47 +1437,43 @@
         <translation>Denkstufe</translation>
     </message>
     <message>
-        <location line="+218"/>
         <source>Search in chat</source>
-        <translation>Im Chat suchen</translation>
+        <translation type="vanished">Im Chat suchen</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Next search result</source>
-        <translation>Nächstes Suchergebnis</translation>
+        <translation type="vanished">Nächstes Suchergebnis</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Previous search result</source>
-        <translation>Vorheriges Suchergebnis</translation>
+        <translation type="vanished">Vorheriges Suchergebnis</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+238"/>
         <source>Send to Llama Chat</source>
         <translation>An Llama-Chat senden</translation>
     </message>
     <message>
-        <location line="+55"/>
         <source>Model Path: %1</source>
-        <translation>Modellpfad: %1</translation>
+        <translation type="vanished">Modellpfad: %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Context: %L1</source>
-        <translation>Kontext (Tokens): %L1</translation>
+        <translation type="vanished">Kontext (Tokens): %L1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Vision: %1</source>
-        <translation>Visionsunterstützung: %1</translation>
+        <translation type="vanished">Visionsunterstützung: %1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="+173"/>
+        <location line="+1"/>
         <source>yes</source>
         <translation>ja</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-1"/>
+        <location line="+1"/>
         <source>no</source>
         <translation>nein</translation>
     </message>
@@ -1410,33 +1482,119 @@
         <translation type="vanished">Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="-346"/>
+        <location line="-458"/>
         <source>Queued messages - sent after the current step</source>
         <translation>In der Warteschlange stehende Nachrichten - gesendet nach dem aktuellen Schritt</translation>
     </message>
     <message>
-        <location line="+388"/>
+        <location line="+510"/>
         <source>Follow-up questions:</source>
         <translation>Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="+486"/>
+        <location line="+615"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Denkstufe: %1 (gilt für neue Nachrichten)</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="-772"/>
+        <location line="+801"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location line="-853"/>
+        <source>You are connected to %1 using %2 as current directory</source>
+        <translation>Verbunden mit %1, aktuelles Verzeichnis: %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Hello there</source>
+        <translation>Hallo</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type a message or upload files to get started</source>
+        <translation>Geben Sie eine Nachricht ein oder laden Sie Dateien hoch, um zu beginnen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run.</source>
+        <translation>Klicken Sie auf den Modellnamen, um dessen Details zu sehen, oder auf das Verzeichnis, um zu ändern, wo die Tools ausgeführt werden.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Model Details</source>
+        <translation>Modell-Details</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Model:</source>
+        <translation>Modell:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Model path:</source>
+        <translation>Modellpfad:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Context:</source>
+        <translation>Kontext:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Vision:</source>
+        <translation>Vision:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Audio:</source>
+        <translation>Audio:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Build:</source>
+        <translation>Build:</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Close</source>
+        <translation>Schließen</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Select Working Directory</source>
+        <translation>Arbeitsverzeichnis auswählen</translation>
+    </message>
+    <message>
+        <location line="+241"/>
+        <source>Zoom: %1%</source>
+        <translation>Zoom: %1%</translation>
+    </message>
+    <message>
+        <location line="+255"/>
+        <source>Stop Task</source>
+        <translation>Aufgabe stoppen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The task is still running. Do you really want to stop it?</source>
+        <translation>Die Aufgabe läuft noch. Möchten Sie sie wirklich stoppen?</translation>
+    </message>
+    <message>
+        <location line="+259"/>
         <source>Edit Message</source>
         <translation>Nachricht bearbeiten</translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Dadurch werden %1 Nachrichten gelöscht, einschließlich: %2 Nutznachrichten und %3 Assistentenantworten ...</translation>
     </message>
@@ -1456,7 +1614,7 @@
         <translation>Möchten Sie diese Nachricht wirklich löschen?</translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+51"/>
         <source>Processing: %1%</source>
         <translation>Verarbeitung: %1%</translation>
     </message>
@@ -1496,16 +1654,25 @@
         <translation>&quot;%1&quot; entfernen</translation>
     </message>
     <message>
+        <location line="+37"/>
+        <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
+        <translation>Erstelle eine neue Konversation, um diese fortzusetzen – Konversation wird zusammengefasst...</translation>
+    </message>
+    <message>
         <source>Remove “%1”</source>
         <translation type="vanished">„%1“ entfernen</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-35"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Die in der Warteschlange stehende Nachricht entfernen (sie wird nicht gesendet)</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <source>*Creating a new conversation to continue this one – summarizing the conversation…</source>
+        <translation type="vanished">*Erstelle eine neue Konversation, um diese fortzusetzen – Konversation wird zusammengefasst…</translation>
+    </message>
+    <message>
+        <location line="+57"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>llama.cpp Chat-Editor</translation>
     </message>
@@ -1666,7 +1833,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation type="vanished">Konversations-ID</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Erstellt eine neue Konversation mit llama.cpp</translation>
     </message>
@@ -1687,6 +1854,12 @@ Möchten Sie sie überschreiben?</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+135"/>
+        <source>Continue in New Conversation</source>
+        <translation>In neuer Konversation fortsetzen</translation>
+    </message>
+    <message>
+        <location line="-132"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Löschen</translation>
@@ -1714,7 +1887,7 @@ Möchten Sie sie überschreiben?</translation>
 %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+108"/>
         <location line="+40"/>
         <source>Cannot write file:
 %1</source>
@@ -1751,7 +1924,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>llama.cpp-Konversationen</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1037"/>
+        <location filename="../src/llamasettings.cpp" line="-1145"/>
         <source>Create a summary of {selection}</source>
         <translation>Zusammenfassung von **„{selection}“** erstellen</translation>
     </message>
@@ -1831,7 +2004,7 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>In die Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+116"/>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
         <translation>Details der Werkzeugverwendung an- bzw. ausblenden</translation>
     </message>
@@ -1850,24 +2023,20 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>Neue Konversation</translation>
     </message>
     <message>
-        <location filename="../src/llamasearchtoolbar.cpp" line="+22"/>
         <source>Search</source>
-        <translation>Suche</translation>
+        <translation type="vanished">Suche</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Find ...</source>
-        <translation>Suchen...</translation>
+        <translation type="vanished">Suchen...</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Previous result</source>
-        <translation>Vorheriges Ergebnis</translation>
+        <translation type="vanished">Vorheriges Ergebnis</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Next result</source>
-        <translation>Nächstes Ergebnis</translation>
+        <translation type="vanished">Nächstes Ergebnis</translation>
     </message>
     <message>
         <source>ask user</source>
@@ -2198,7 +2367,7 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation type="vanished">Wählen Sie ein Werkzeug aus, um dessen JSON-Definition anzuzeigen</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+77"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
         <source>Select a tool to view its definition</source>
         <translation>Wählen Sie ein Tool aus, um seine Definition anzuzeigen</translation>
     </message>
@@ -2213,22 +2382,20 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>ripgrep %1 herunterladen</translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Download MXC %1</source>
-        <translation>MXC %1 herunterladen</translation>
+        <translation type="vanished">MXC %1 herunterladen</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Sandboxing (commands, directories, network) is configured on the Sandbox settings page.</source>
-        <translation>Sandboxing (Befehle, Verzeichnisse, Netzwerk) wird auf der Sandbox-Einstellungsseite konfiguriert.</translation>
+        <translation type="vanished">Sandboxing (Befehle, Verzeichnisse, Netzwerk) wird auf der Sandbox-Einstellungsseite konfiguriert.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+60"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+171"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Die search- und find-Tools verwenden ripgrep, das auf diesem System nicht installiert ist.</translation>
     </message>
@@ -2238,17 +2405,16 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>ripgrep: %1</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Das gesandboxte bash-Tool auf Windows verwendet die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die auf diesem System nicht installiert ist.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Windows sandbox runtime: %1</source>
-        <translation>Windows-Sandbox-Laufzeitumgebung: %1</translation>
+        <translation type="vanished">Windows-Sandbox-Laufzeitumgebung: %1</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2344,7 +2510,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-864"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2365,7 +2531,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+345"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
         <source>Name: %1</source>
         <translation>Name: %1</translation>
     </message>
@@ -2390,7 +2556,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 Skills</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-117"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
         <source>No description</source>
         <translation>Keine Beschreibung verfügbar</translation>
     </message>
@@ -2410,9 +2576,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+128"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
         <source>Add...</source>
         <translation>Hinzufügen...</translation>
     </message>
@@ -2440,11 +2606,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Im Locator-Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt, &quot;{file}&quot; und &quot;{line}&quot; durch die aktuelle Datei und die Cursorzeile, &quot;{diagnostics}&quot; durch die Fehler und Warnungen der aktuellen Datei und &quot;{git_diff}&quot; durch die nicht committeten Änderungen des zugehörigen Git-Repositories.</translation>
     </message>
     <message>
+        <location line="+56"/>
+        <source>Handoff</source>
+        <translation>Übergabe</translation>
+    </message>
+    <message>
         <source>Only the first line of a prompt is shown in the locator menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text.</source>
         <translation type="vanished">Im Locator-Menü wird nur die erste Zeile eines Prompts angezeigt; der vollständige Text wird an das Modell gesendet. &quot;{selection}&quot; wird durch den markierten Text ersetzt.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="-44"/>
         <source>Prompt</source>
         <translation>Prompt</translation>
     </message>
@@ -2454,13 +2625,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Prompts:</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Compaction</source>
-        <translation>Kompaktierung</translation>
+        <translation type="vanished">Kompaktierung</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1321"/>
-        <location filename="../src/promptssettingswidget.cpp" line="-5"/>
+        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
@@ -2518,77 +2688,124 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Name &quot;%1&quot; kollidiert mit %2 – der erste bleibt erhalten</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+970"/>
+        <location filename="../src/llamachatmanager.cpp" line="+975"/>
         <source>Error:</source>
         <translation>Fehler:</translation>
     </message>
     <message>
-        <location line="+351"/>
         <source>Automatic compaction is disabled.</source>
-        <translation>Automatische Kompaktierung ist deaktiviert.</translation>
+        <translation type="vanished">Automatische Kompaktierung ist deaktiviert.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The conversation is already being compacted.</source>
-        <translation>Die Konversation wird bereits kompaktiert.</translation>
+        <translation type="vanished">Die Konversation wird bereits kompaktiert.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to compact.</source>
-        <translation>Die Konversation hat keine Nachrichten, die kompaktiert werden könnten.</translation>
+        <translation type="vanished">Die Konversation hat keine Nachrichten, die kompaktiert werden könnten.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was compacted recently and cannot be compacted further.</source>
-        <translation>Die Konversation wurde kürzlich kompaktiert und kann nicht weiter kompaktiert werden.</translation>
+        <translation type="vanished">Die Konversation wurde kürzlich kompaktiert und kann nicht weiter kompaktiert werden.</translation>
     </message>
     <message>
-        <location line="+62"/>
         <source>The compaction request failed: %1</source>
-        <translation>Die Kompaktierungsanfrage ist fehlgeschlagen: %1</translation>
+        <translation type="vanished">Die Kompaktierungsanfrage ist fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The compaction request returned a malformed reply.</source>
-        <translation>Die Kompaktierungsanfrage hat eine fehlerhafte Antwort zurückgegeben.</translation>
+        <translation type="vanished">Die Kompaktierungsanfrage hat eine fehlerhafte Antwort zurückgegeben.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The compaction request returned no summary.</source>
-        <translation>Die Kompaktierungsanfrage hat keine Zusammenfassung zurückgegeben.</translation>
+        <translation type="vanished">Die Kompaktierungsanfrage hat keine Zusammenfassung zurückgegeben.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The compaction request returned an empty summary.</source>
-        <translation>Die Kompaktierungsanfrage hat eine leere Zusammenfassung zurückgegeben.</translation>
+        <translation type="vanished">Die Kompaktierungsanfrage hat eine leere Zusammenfassung zurückgegeben.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <location line="+31"/>
         <source>Conversation compacted - earlier messages were summarized to fit the context window.</source>
-        <translation>Konversation kompaktiert - frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
+        <translation type="vanished">Konversation kompaktiert - frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
     </message>
     <message>
         <source>Conversation compacted – earlier messages were summarized to fit the context window.</source>
         <translation type="vanished">Konversation kompaktiert – frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
     </message>
     <message>
-        <location line="+795"/>
+        <location line="+1321"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Die Konversation passt nicht mehr in das Kontextfenster des Modells.</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Automatic compaction is disabled; shorten or compact the conversation and try again.</source>
-        <translation>Automatische Kompaktierung ist deaktiviert; kürzen oder kompaktieren Sie die Konversation und versuchen Sie es erneut.</translation>
+        <translation type="vanished">Automatische Kompaktierung ist deaktiviert; kürzen oder kompaktieren Sie die Konversation und versuchen Sie es erneut.</translation>
+    </message>
+    <message>
+        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
+        <translation type="vanished">Die Konversation wird bereits kompaktiert; senden Sie die Nachricht erneut, sobald die Kompaktierung abgeschlossen ist.</translation>
+    </message>
+    <message>
+        <location line="-924"/>
+        <source>Automatic handoff is disabled.</source>
+        <translation>Die automatische Übergabe ist deaktiviert.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A new conversation is already being created for this one.</source>
+        <translation>Für diese Konversation wird bereits eine neue erstellt.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The conversation has no messages to hand off.</source>
+        <translation>Die Konversation hat keine Nachrichten, die übergeben werden könnten.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The conversation was handed off recently; send a few more messages first.</source>
+        <translation>Die Konversation wurde kürzlich übergeben; senden Sie zunächst noch einige Nachrichten.</translation>
+    </message>
+    <message>
+        <location line="+87"/>
+        <source>The handoff request failed: %1</source>
+        <translation>Die Übergabe-Anfrage ist fehlgeschlagen: %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The handoff request returned a malformed reply.</source>
+        <translation>Die Übergabe-Anfrage hat eine fehlerhafte Antwort zurückgegeben.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The conversation is already being compacted; send the message again once the compaction has finished.</source>
-        <translation>Die Konversation wird bereits kompaktiert; senden Sie die Nachricht erneut, sobald die Kompaktierung abgeschlossen ist.</translation>
+        <source>The handoff request returned no document.</source>
+        <translation>Die Übergabe-Anfrage hat kein Dokument zurückgegeben.</translation>
     </message>
     <message>
-        <location line="+55"/>
+        <location line="+14"/>
+        <source>The handoff request returned an empty document.</source>
+        <translation>Die Übergabe-Anfrage hat ein leeres Dokument zurückgegeben.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Continuation of %1</source>
+        <translation>Fortsetzung von %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
+
+</source>
+        <translation>Diese Konversation setzt die Arbeit einer vorherigen Konversation fort, deren Kontextfenster erschöpft war. Das folgende Übergabedokument beschreibt die Aufgabe, den aktuellen Stand und die nächsten Schritte. Fahren Sie bei den nächsten Schritten fort.
+
+</translation>
+    </message>
+    <message>
+        <location line="+774"/>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation>In einer neuen Konversation fortsetzen, um weiterzuarbeiten.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Hinweis:** Die Antwort wurde gekürzt: Das Modell hat die maximale Anzahl an Ausgabetokens erreicht.</translation>
     </message>
@@ -2598,14 +2815,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>**Hinweis:** Das Modell hat seinen Zug ohne Antwort beendet.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 only</source>
-        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die die Windows-Sandbox verwendet, ist nur für Windows x86-64 verfügbar</translation>
+        <translation type="vanished">die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die die Windows-Sandbox verwendet, ist nur für Windows x86-64 verfügbar</translation>
+    </message>
+    <message>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
+        <translation type="vanished">die Microsoft-MXC-Laufzeitumgebung (wxc-exec) ist nicht installiert; laden Sie sie auf der Llama-Tools-Einstellungsseite herunter</translation>
+    </message>
+    <message>
+        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
+        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die die Windows-Sandbox verwendet, ist nur für Windows x86-64 und arm64 verfügbar</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Tools settings page</source>
-        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec) ist nicht installiert; laden Sie sie auf der Llama-Tools-Einstellungsseite herunter</translation>
+        <source>the Microsoft MXC runtime (wxc-exec) is not installed; download it on the Llama Sandbox settings page</source>
+        <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec) ist nicht installiert; laden Sie sie auf der Llama-Sandbox-Einstellungsseite herunter</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -2638,7 +2863,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Probleme mit der Sandbox der llama.cpp-Chat-Tools.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
         <source>Writable directories:</source>
         <translation>Schreibbare Verzeichnisse:</translation>
     </message>
@@ -2673,7 +2898,22 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Die webfetch- und websearch-Tools werden immer außerhalb der Sandbox ausgeführt und sind von dieser Einstellung nicht betroffen.</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+16"/>
+        <source>Download...</source>
+        <translation>Herunterladen...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The sandboxed bash tool on Windows runs in a Microsoft MXC process container.</source>
+        <translation>Das in der Sandbox ausgeführte bash-Tool unter Windows läuft in einem Microsoft-MXC-Prozesscontainer.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Windows runtime</source>
+        <translation>Windows-Laufzeitumgebung</translation>
+    </message>
+    <message>
+        <location line="+33"/>
         <source>Filesystem</source>
         <translation>Dateisystem</translation>
     </message>
@@ -2683,7 +2923,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+44"/>
         <source>Choose a Directory</source>
         <translation>Verzeichnis auswählen</translation>
     </message>
@@ -2752,12 +2992,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Erfolg. Die folgenden Dateien wurden aktualisiert:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+114"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+145"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Die sandbox-exec-Executabler wurde nicht gefunden; Sandboxing ist auf diesem System nicht verfügbar.</translation>
     </message>
@@ -3312,12 +3552,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Die search- und find-Tools verwenden ripgrep, um Dateiinhalte zu durchsuchen und Dateien nach Name zu lokalisieren. Es ist auf diesem System nicht installiert, kann daher hier stattdessen heruntergeladen werden. ripgrep wird unter der MIT- oder der Unlicense-Lizenz veröffentlicht.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+64"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Windows-Sandbox-Laufzeitumgebung (MXC) herunterladen</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Microsoft-MXC-Laufzeitumgebung %1 herunterladen?</translation>
     </message>
@@ -3345,7 +3585,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>Das Paket enthält keine wxc-exec.exe-Binärdatei.</translation>
     </message>
@@ -3361,8 +3601,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Die Microsoft-MXC-Laufzeitumgebung ist nur für Windows x86-64 und arm64 verfügbar.</translation>
+    </message>
+    <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation>Die Microsoft-MXC-Laufzeitumgebung ist nur für Windows x86-64 verfügbar.</translation>
+        <translation type="vanished">Die Microsoft-MXC-Laufzeitumgebung ist nur für Windows x86-64 verfügbar.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3533,7 +3777,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Aufgabenliste aktualisiert: %1 von %2 abgeschlossen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+454"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Zugriff auf &quot;%1&quot; ist nicht erlaubt: Gerätepfade und administrative Freigaben sind innerhalb der Sandbox nicht zugänglich.</translation>
     </message>
@@ -3595,12 +3839,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">srt-win (das @anthropic-ai/sandbox-runtime Windows-Sandbox-Backend) wurde im PATH nicht gefunden. %1 LLAMA_SRT_WIN kann auf die Executabler verweisen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+50"/>
         <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Laden Sie es von der Llama.cpp-Chat-Tools-Einstellungsseite herunter (eine festgelegte, prüfsummenverifizierte Microsoft-MXC-Veröffentlichung); LLAMA_WXC_EXEC kann auf eine wxc-exec.exe verweisen. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+        <translation type="vanished">Laden Sie es von der Llama.cpp-Chat-Tools-Einstellungsseite herunter (eine festgelegte, prüfsummenverifizierte Microsoft-MXC-Veröffentlichung); LLAMA_WXC_EXEC kann auf eine wxc-exec.exe verweisen. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Das Windows-Sandbox-Backend (wxc-exec) hat auf seine Funktionsfähigkeitsabfrage nicht rechtzeitig geantwortet. %1</translation>
     </message>
@@ -3610,7 +3853,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Das Windows-Sandbox-Backend (wxc-exec) hat den MXC-Container als nicht verfügbar gemeldet (Exit %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+330"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Die Windows-Sandbox konnte ihren Live-Isolationstest nicht einrichten (temporäres Verzeichnis oder Home-Canary). %1</translation>
     </message>
@@ -3645,7 +3888,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Die Windows-Sandbox (Microsoft MXC) hat ihren Live-Isolationstest nicht bestanden: Es konnte nicht verifiziert werden, dass ein gesandboxter Befehl isoliert ist. %1</translation>
     </message>
     <message>
-        <location line="+168"/>
+        <location line="-437"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Laden Sie sie von der Llama.cpp-Chat-Sandbox-Einstellungsseite herunter (ein gepinntes, prüfsummenverifiziertes Microsoft-MXC-Release); dort kann auch eine eigene Laufzeitumgebung angegeben werden. Alternativ können Sie in den Llama-Einstellungen &apos;Befehle in Sandbox ausführen&apos; deaktivieren, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+605"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Die Windows-Sandbox (Microsoft MXC) verifiziert ihre Isolation zum ersten Mal; führen Sie den Befehl in wenigen Sekunden erneut aus.</translation>
     </message>
