@@ -21,7 +21,9 @@ namespace LlamaCpp::Constants {
     const char LLAMACPP_MENU_ID[] = "LlamaCpp.Menu";
     const char LLAMACPP_NEW_CONVERSATION[] = "LlamaCpp.NewConversation";
 
-    const char LLAMACPP_GENERAL_OPTIONS_ID[] = "LlamaCpp.General";
+    const char LLAMACPP_FIM_OPTIONS_ID[] = "LlamaCpp.Fim";
+    const char LLAMACPP_CHAT_OPTIONS_ID[] = "LlamaCpp.Chat";
+    const char LLAMACPP_WEBSEARCH_OPTIONS_ID[] = "LlamaCpp.WebSearch";
     const char LLAMACPP_PROMPTS_OPTIONS_ID[] = "LlamaCpp.Prompts";
     const char LLAMACPP_TOOLS_OPTIONS_ID[] = "LlamaCpp.Tools";
     const char LLAMACPP_SKILLS_OPTIONS_ID[] = "LlamaCpp.Skills";

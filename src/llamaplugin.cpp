@@ -225,7 +225,7 @@ void LlamaPlugin::initialize()
         = ActionManager::registerAction(&m_preferencesAction, Constants::LLAMACPP_SHOW_PREFERENCES);
     m_preferencesAction.setToolTip(Tr::tr("Open the llama.cpp settings page."));
     connect(&m_preferencesAction, &QAction::triggered, this, [] {
-        ICore::showSettings(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
+        ICore::showSettings(Constants::LLAMACPP_CHAT_OPTIONS_ID);
     });
 
     auto menuContainer = ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID);

@@ -938,117 +938,6 @@ LlamaSettings::LlamaSettings()
     handoffThreshold.setEnabler(&autoHandoffEnabled);
     locatorPrompts.setEnabler(&enableLlamaCpp);
     selectionPromptButton.setEnabler(&enableLlamaCpp);
-
-    setLayouter([this] {
-        using namespace Layouting;
-
-        // clang-format off
-        Group fim {
-            Column {
-                endpoint, br,
-                Row {apiKey}, br,
-                Row {modelFim}, br,
-                Row {nPrefix}, br,
-                Row {nSuffix}, br,
-                Row {nPredict}, br,
-                Row {nCmpl}, br,
-                Row {stopStrings}, br,
-                Row {tMaxPromptMs}, br,
-                Row {tMaxPredictMs}, br,
-                Row {showInfo}, br,
-                Row {autoFim}, br,
-                Row {maxLineSuffix}, br,
-                Row {maxCacheKeys}, br,
-                hr, br,
-                Row {ringNChunks}, br,
-                Row {ringChunkSize}, br,
-                Row {ringScope}, br,
-                Row {ringUpdateMs}, br,
-            },
-        };
-
-        Group chat {
-            Column {
-                chatEndpoint, br,
-                Row {chatApiKey}, br,
-                systemMessage, br,
-                Row {utilityModel}, br,
-                Row {temperature}, br,
-                Row {top_k}, br,
-                Row {top_p}, br,
-                Row {min_p}, br,
-                Row {max_tokens}, br,
-                Row {pasteLongTextToFileLen}, br,
-                hr, br,
-                Row {samplers}, br,
-                Row {dynatemp_range}, br,
-                Row {dynatemp_exponent}, br,
-                Row {typical_p}, br,
-                Row {xtc_probability}, br,
-                Row {xtc_threshold}, br,
-                hr, br,
-                Row {repeat_last_n}, br,
-                Row {repeat_penalty}, br,
-                Row {presence_penalty}, br,
-                Row {frequency_penalty}, br,
-                Row {dry_multiplier}, br,
-                Row {dry_base}, br,
-                Row {dry_allowed_length}, br,
-                Row {dry_penalty_last_n}, br,
-                hr, br,
-                showTokensPerSecond, br,
-                toolsEnabled, br,
-                selectionPromptButton, br,
-                Row {autoHandoff}, br,
-                Row {handoffThreshold}, br,
-                customJson, br,
-            },
-        };
-
-        auto *providerCombo = new QComboBox();
-        providerCombo->addItems({QStringLiteral("exa"),
-                                 QStringLiteral("google"),
-                                 QStringLiteral("brave"),
-                                 QStringLiteral("tavily")});
-        providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(webSearchProvider())));
-        connect(providerCombo,
-                &QComboBox::currentTextChanged,
-                this,
-                [this](const QString &text) { webSearchProvider.setValue(text); });
-        webSearchProvider.addOnChanged(providerCombo, [this, providerCombo]() {
-            providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(webSearchProvider())));
-        });
-
-        Group webSearch {
-            Column {
-                Row {new QLabel(webSearchProvider.labelText()), providerCombo, st}, br,
-                hr, br,
-                Row {webSearchExaUrl}, br,
-                Row {webSearchExaApiKey}, br,
-                hr, br,
-                Row {webSearchGoogleUrl}, br,
-                Row {webSearchGoogleApiKey}, br,
-                Row {webSearchGoogleCx}, br,
-                hr, br,
-                Row {webSearchBraveUrl}, br,
-                Row {webSearchBraveApiKey}, br,
-                hr, br,
-                Row {webSearchTavilyUrl}, br,
-                Row {webSearchTavilyApiKey}, br,
-            },
-        };
-
-        return Column {
-            enableLlamaCpp, br,
-            Row {
-                Column { fim, st },
-                Column { chat, st },
-                Column { webSearch, st }
-            },
-            st
-        };
-        // clang-format on
-    });
 }
 
 LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
@@ -1056,7 +945,7 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
     setAutoApply(true);
 
     useGlobalSettings.setSettingsKey(Constants::LLAMACPP_USE_GLOBAL_SETTINGS);
-    useGlobalSettings.setSettingsPageId(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
+    useGlobalSettings.setSettingsPageId(Constants::LLAMACPP_FIM_OPTIONS_ID);
 
     initEnableAspect(enableLlamaCpp);
 
@@ -1122,19 +1011,205 @@ void LlamaProjectSettings::save(ProjectExplorer::Project *project)
     settings().apply();
 }
 
-class LlamaCppSettingsPage : public Core::IOptionsPage
+// The three settings pages that replace the former single "llama.cpp" page
+// (its three columns): FIM, Chat and Web Search. Each page embeds its
+// aspects in a plain IOptionsPageWidget; a settings-provider page would
+// render the container's single layouter on every page, so a widget creator
+// is needed for per-page layouts. The shared "Enable llama.cpp" master
+// toggle is shown only on the FIM page (it still enables/disables all the
+// aspects of the other pages via their enabler).
+// Applying or cancelling a page acts on the whole shared settings
+// container, which is what the old single page did.
+namespace {
+
+void setupLlamaSettingsPage(Core::IOptionsPageWidget *widget)
+{
+    widget->setOnApply([] {
+        settings().apply();
+        settings().writeSettings();
+    });
+    widget->setOnCancel([] { settings().cancel(); });
+    widget->setDirtyChecker([] { return settings().isDirty(); });
+}
+
+Core::IOptionsPageWidget *createFimSettingsWidget()
+{
+    using namespace Layouting;
+    auto &s = settings();
+
+    auto *widget = new Core::IOptionsPageWidget;
+    // clang-format off
+    Column {
+        s.enableLlamaCpp, br,
+        Row {s.endpoint}, br,
+        Row {s.apiKey}, br,
+        Row {s.modelFim, st}, br,
+        Row {s.nPrefix, st}, br,
+        Row {s.nSuffix, st}, br,
+        Row {s.nPredict, st}, br,
+        Row {s.nCmpl, st}, br,
+        Row {s.stopStrings}, br,
+        Row {s.tMaxPromptMs, st}, br,
+        Row {s.tMaxPredictMs, st}, br,
+        Row {s.showInfo, st}, br,
+        Row {s.autoFim}, br,
+        Row {s.maxLineSuffix, st}, br,
+        Row {s.maxCacheKeys, st}, br,
+        hr, br,
+        Row {s.ringNChunks, st}, br,
+        Row {s.ringChunkSize, st}, br,
+        Row {s.ringScope, st}, br,
+        Row {s.ringUpdateMs, st}, br,
+        st
+    }.attachTo(widget);
+    // clang-format on
+
+    setupLlamaSettingsPage(widget);
+    return widget;
+}
+
+Core::IOptionsPageWidget *createChatSettingsWidget()
+{
+    using namespace Layouting;
+    auto &s = settings();
+
+    auto *widget = new Core::IOptionsPageWidget;
+    // clang-format off
+    Column {
+        Row {s.chatEndpoint}, br,
+        Row {s.chatApiKey}, br,
+        s.systemMessage, br,
+        Row {s.utilityModel, st}, br,
+        Row {s.temperature, st}, br,
+        Row {s.top_k, st}, br,
+        Row {s.top_p, st}, br,
+        Row {s.min_p, st}, br,
+        Row {s.max_tokens, st}, br,
+        Row {s.pasteLongTextToFileLen, st}, br,
+        hr, br,
+        Row {s.samplers}, br,
+        Row {s.dynatemp_range, st}, br,
+        Row {s.dynatemp_exponent, st}, br,
+        Row {s.typical_p, st}, br,
+        Row {s.xtc_probability, st}, br,
+        Row {s.xtc_threshold, st}, br,
+        hr, br,
+        Row {s.repeat_last_n, st}, br,
+        Row {s.repeat_penalty, st}, br,
+        Row {s.presence_penalty, st}, br,
+        Row {s.frequency_penalty, st}, br,
+        Row {s.dry_multiplier, st}, br,
+        Row {s.dry_base, st}, br,
+        Row {s.dry_allowed_length, st}, br,
+        Row {s.dry_penalty_last_n, st}, br,
+        hr, br,
+        s.showTokensPerSecond, br,
+        s.toolsEnabled, br,
+        s.selectionPromptButton, br,
+        Row {s.autoHandoff}, br,
+        Row {s.handoffThreshold, st}, br,
+        s.customJson, br,
+        st
+    }.attachTo(widget);
+    // clang-format on
+
+    setupLlamaSettingsPage(widget);
+    return widget;
+}
+
+Core::IOptionsPageWidget *createWebSearchSettingsWidget()
+{
+    using namespace Layouting;
+    auto &s = settings();
+
+    auto *widget = new Core::IOptionsPageWidget;
+
+    auto *providerCombo = new QComboBox(widget);
+    providerCombo->addItems({QStringLiteral("exa"),
+                             QStringLiteral("google"),
+                             QStringLiteral("brave"),
+                             QStringLiteral("tavily")});
+    providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(s.webSearchProvider())));
+    QObject::connect(providerCombo,
+                     &QComboBox::currentTextChanged,
+                     widget,
+                     [combo = providerCombo](const QString &text) {
+                         settings().webSearchProvider.setValue(text);
+                     });
+    s.webSearchProvider.addOnChanged(providerCombo, [combo = providerCombo]() {
+        combo->setCurrentIndex(qMax(0, combo->findText(settings().webSearchProvider())));
+    });
+
+    // clang-format off
+    Column {
+        Row {new QLabel(s.webSearchProvider.labelText(), widget), providerCombo, st}, br,
+        hr, br,
+        Row {s.webSearchExaUrl}, br,
+        Row {s.webSearchExaApiKey}, br,
+        hr, br,
+        Row {s.webSearchGoogleUrl}, br,
+        Row {s.webSearchGoogleApiKey}, br,
+        Row {s.webSearchGoogleCx}, br,
+        hr, br,
+        Row {s.webSearchBraveUrl}, br,
+        Row {s.webSearchBraveApiKey}, br,
+        hr, br,
+        Row {s.webSearchTavilyUrl}, br,
+        Row {s.webSearchTavilyApiKey}, br,
+        st
+    }.attachTo(widget);
+    // clang-format on
+
+    setupLlamaSettingsPage(widget);
+    return widget;
+}
+
+} // namespace
+
+class LlamaFimSettingsPage : public Core::IOptionsPage
 {
 public:
-    LlamaCppSettingsPage()
+    LlamaFimSettingsPage()
     {
-        setId(Constants::LLAMACPP_GENERAL_OPTIONS_ID);
-        setDisplayName("llama.cpp");
+        setId(Constants::LLAMACPP_FIM_OPTIONS_ID); // unique identifier
+        setDisplayName(Tr::tr("FIM"));             // title shown in the Settings dialog
         setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-        setSettingsProvider([] { return &settings(); });
+        setSettingsProvider([] { return &LlamaCpp::settings(); });
+        setWidgetCreator(createFimSettingsWidget);
     }
 };
 
-const LlamaCppSettingsPage settingsPage;
+const LlamaFimSettingsPage fimSettingsPage;
+
+class LlamaChatSettingsPage : public Core::IOptionsPage
+{
+public:
+    LlamaChatSettingsPage()
+    {
+        setId(Constants::LLAMACPP_CHAT_OPTIONS_ID); // unique identifier
+        setDisplayName(Tr::tr("Chat"));             // title shown in the Settings dialog
+        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+        setSettingsProvider([] { return &LlamaCpp::settings(); });
+        setWidgetCreator(createChatSettingsWidget);
+    }
+};
+
+const LlamaChatSettingsPage chatSettingsPage;
+
+class LlamaWebSearchSettingsPage : public Core::IOptionsPage
+{
+public:
+    LlamaWebSearchSettingsPage()
+    {
+        setId(Constants::LLAMACPP_WEBSEARCH_OPTIONS_ID); // unique identifier
+        setDisplayName(Tr::tr("Web Search"));            // title shown in the Settings dialog
+        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+        setSettingsProvider([] { return &LlamaCpp::settings(); });
+        setWidgetCreator(createWebSearchSettingsWidget);
+    }
+};
+
+const LlamaWebSearchSettingsPage webSearchSettingsPage;
 
 class LlamaPromptsPage : public Core::IOptionsPage
 {
