@@ -124,7 +124,8 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
 // - thinking disabled when the chat template supports it (see the
 //   title generation in llama.cpp's tools/ui, which sends
 //   chat_template_kwargs: {enable_thinking: false})
-void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens) const
+void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens,
+                                            bool useChatModel) const
 {
     payload["max_tokens"] = maxTokens;
     payload["temperature"] = 0.2;
@@ -143,8 +144,10 @@ void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens)
 
     // An optional dedicated (typically smaller) model for these tasks, cf.
     // the "task model" in Open WebUI. Empty falls back to the chat model.
-    const QString model =
-        settings().utilityModel.value().isEmpty() ? m_selectedModel : settings().utilityModel.value();
+    const QString model = useChatModel
+            ? m_selectedModel
+            : (settings().utilityModel.value().isEmpty() ? m_selectedModel
+                                                         : settings().utilityModel.value());
     if (!model.isEmpty())
         payload["model"] = model;
 }
@@ -522,11 +525,6 @@ void ChatManager::updateModelPolling()
 bool ChatManager::isGenerating(const QString &convId) const
 {
     return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
-}
-
-bool ChatManager::isHandingOff(const QString &convId) const
-{
-    return m_handingOff.contains(convId);
 }
 
 ViewingChat ChatManager::getViewingChat(const QString &convId) const
@@ -1030,6 +1028,12 @@ void ChatManager::generateMessage(const QString &convId,
         convId,
         [leafMsgs, convId, this](QJsonObject &payload) {
             payload["messages"] = normalizeMsgsForAPI(leafMsgs);
+            // Tools stay advertised on the handoff turn as well: dropping
+            // them would change the rendered system prompt and invalidate
+            // the warm prompt cache the handoff turn relies on.  The
+            // handoff prompt asks for a plain document; if the model calls
+            // a tool anyway, the m_handoffTurns flag is kept across the
+            // tool‑call turns until the document is written.
             if (settings().toolsEnabled()) {
                 const auto it = m_taskConfigs.constFind(convId);
                 if (it != m_taskConfigs.constEnd()) {
@@ -1311,235 +1315,129 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     });
 }
 
-// Rough token estimate of a normalized message array (the same array that
-// goes into the request's "messages" field, system message included):
-// visible text is counted at ~3 chars/token – a deliberately
-// over‑estimating rate, so the fit check errs on the side of trimming –
-// while base64 image/audio payloads get a flat per‑item cost, since their
-// byte size says nothing about their token cost.
-static void estimateTokensOf(const QJsonValue &value,
-                             const QString &key,
-                             int &chars,
-                             int &mediaItems)
-{
-    switch (value.type()) {
-    case QJsonValue::String: {
-        const QString s = value.toString();
-        // Base64 payloads ("image_url.url", "input_audio.data")
-        if ((key == QLatin1String("url") || key == QLatin1String("data"))
-                && s.size() > 1024)
-            ++mediaItems;
-        else
-            chars += s.size();
-        break;
-    }
-    case QJsonValue::Array:
-        for (const QJsonValue &e : value.toArray())
-            estimateTokensOf(e, key, chars, mediaItems);
-        break;
-    case QJsonValue::Object: {
-        const QJsonObject obj = value.toObject();
-        for (auto it = obj.constBegin(); it != obj.constEnd(); ++it)
-            estimateTokensOf(it.value(), it.key(), chars, mediaItems);
-        break;
-    }
-    default:
-        break;
-    }
-}
+// The handoff document's token budget: long enough for the sections, short
+// enough to leave room in the context window that triggered the handoff.
+static constexpr int kHandoffMaxTokens = 1500;
 
-static int estimatePromptTokens(const QJsonArray &msgs)
+void ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
 {
-    int chars = 0;
-    int mediaItems = 0;
-    for (const QJsonValue &m : msgs)
-        estimateTokensOf(m, QString(), chars, mediaItems);
-    return chars / 3 + mediaItems * 1500;
-}
-
-void ChatManager::handoffConversation(const QString &convId,
-                                      qint64 leafNodeId,
-                                      bool force,
-                                      std::function<void(const QString &)> onDone,
-                                      std::function<void(const QString &)> onFailed)
-{
-    const auto fail = [onFailed](const QString &reason) {
-        if (onFailed)
-            onFailed(reason);
-    };
-
-    if (!force && !settings().autoHandoff.value())
-        return fail(Tr::tr("Automatic handoff is disabled."));
-    if (m_handingOff.contains(convId))
-        return fail(Tr::tr("A new conversation is already being created for this one."));
+    if (!settings().autoHandoff.value())
+        return;
+    // A reply (or the handoff document) is already in flight: the next
+    // quiet point triggers the handoff again.
+    if (isGenerating(convId))
+        return;
+    // "Human Editor" mode: the reply would be written by a human in a
+    // split editor, and the finished handler that creates the continuation
+    // never runs – the m_handoffTurns flag would leak into the next real
+    // turn.
+    if (isHumanEditor())
+        return;
 
     auto msgs = m_storage->getMessages(convId);
     if (msgs.isEmpty())
-        return fail(Tr::tr("The conversation has no messages to hand off."));
+        return;
     auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
-    // The original conversation is left untouched, so it stays above the
-    // threshold after a handoff: without this guard every later reply in it
-    // would spawn yet another continuation.  Only hand off again once the
-    // branch has grown since the last handoff (a handoff from a different
-    // branch is always allowed, the old leaf is not on the current path).
-    if (!force) {
-        const auto it = m_lastHandoffLeaf.constFind(convId);
-        if (it != m_lastHandoffLeaf.constEnd()) {
-            int handoffIndex = -1;
-            for (int i = 0; i < leafMsgs.size(); ++i) {
-                if (leafMsgs.at(i).id == it.value()) {
-                    handoffIndex = i;
-                    break;
-                }
+    // The original conversation stays above the threshold after a handoff:
+    // without this guard every later reply in it would spawn yet another
+    // continuation.  Only hand off again once the branch has grown since
+    // the last handoff (a handoff from a different branch is always
+    // allowed, the old leaf is not on the current path).
+    const auto it = m_lastHandoffLeaf.constFind(convId);
+    if (it != m_lastHandoffLeaf.constEnd()) {
+        int handoffIndex = -1;
+        for (int i = 0; i < leafMsgs.size(); ++i) {
+            if (leafMsgs.at(i).id == it.value()) {
+                handoffIndex = i;
+                break;
             }
-            if (handoffIndex >= 0 && leafMsgs.size() - handoffIndex < 6) {
-                qCInfo(llamaChatNetwork)
-                    << "Skipping handoff of" << convId << ": only"
-                    << leafMsgs.size() - handoffIndex
-                    << "messages since the last handoff";
-                return fail(Tr::tr("The conversation was handed off recently; "
-                                   "send a few more messages first."));
-            }
+        }
+        if (handoffIndex >= 0 && leafMsgs.size() - handoffIndex < 6) {
+            qCInfo(llamaChatNetwork)
+                << "Skipping handoff of" << convId << ": only"
+                << leafMsgs.size() - handoffIndex
+                << "messages since the last handoff";
+            return;
         }
     }
 
-    m_handingOff.insert(convId);
-    emit handoffProgress(convId, true);
-
-    // The summary request sees the full history plus the handoff prompt; a
-    // capped token budget and thinking off keep the housekeeping call
-    // short, like the title and follow-up requests.
-    QJsonArray parts;
-    QJsonObject txt;
-    txt["type"] = "text";
+    // The handoff prompt is appended as a regular user message: the reply
+    // (the handoff document) is streamed in this conversation, reusing the
+    // warm prompt cache of the previous turn instead of a fresh
+    // full‑history request, and the user sees the whole exchange.  The
+    // document is then copied as the seed message of a new conversation
+    // (createHandoffContinuation() in the finished handler).
     // User-editable prompt ("Prompts" settings page); fall back to the
     // built-in default if it was cleared.
     const QString prompt = settings().handoffPrompt.value().trimmed();
-    txt["text"] = prompt.isEmpty() ? defaultHandoffPrompt() : prompt;
-    parts.append(txt);
-    QJsonObject promptMsg;
-    promptMsg["role"] = "user";
-    promptMsg["content"] = parts;
+    Message promptMsg;
+    promptMsg.convId = convId;
+    promptMsg.type = "text";
+    promptMsg.timestamp = QDateTime::currentMSecsSinceEpoch();
+    promptMsg.role = "user";
+    promptMsg.content = Tr::tr("Creating a new conversation to continue this one...")
+            + QLatin1String("\n\n")
+            + (prompt.isEmpty() ? defaultHandoffPrompt() : prompt);
 
-    // The request must fit the context window even when the history
-    // already does not: the overflow error now points here, and the model
-    // may have been switched to a smaller context mid‑conversation.  Drop
-    // the oldest messages until the payload fits – the document then
-    // covers only the recent part of the conversation, which is what the
-    // next steps mostly depend on.  Trimming stops at a user message, so a
-    // tool call/result pair is never split.
-    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
-    msgArray.append(promptMsg);
-    const int maxCtx = serverProps().n_ctx;
-    // Reserve for the 1500‑token document and a margin.
-    const int budget = maxCtx - 2000;
-    const int totalMessages = leafMsgs.size();
-    while (maxCtx > 0 && budget > 0 && estimatePromptTokens(msgArray) > budget
-            && leafMsgs.size() > 1) {
-        int drop = 1;
-        while (drop < leafMsgs.size() && leafMsgs.at(drop).role != "user")
-            ++drop;
-        if (drop >= leafMsgs.size())
-            break; // no user message left to trim to
-        leafMsgs = leafMsgs.mid(drop);
-        msgArray = normalizeMsgsForAPI(leafMsgs);
-        msgArray.append(promptMsg);
+    // A user message breaks any tool-call streak (runaway guard), and the
+    // queued steering messages were sent before this one.
+    m_consecutiveToolTurns.remove(convId);
+    promptMsg.parent = flushSteeringQueue(convId, leafNodeId);
+    m_storage->appendMsg(promptMsg, promptMsg.parent);
+
+    m_handoffTurns.insert(convId, HandoffTurn{promptMsg.id, promptMsg.parent});
+    generateMessage(convId, promptMsg.id, [](qint64) {});
+}
+
+void ChatManager::createHandoffContinuation(const QString &convId,
+                                            qint64 handoffLeaf,
+                                            const QString &document)
+{
+    // Small models sometimes wrap the document in a markdown code fence.
+    QString handoff = document.trimmed();
+    if (handoff.startsWith(QLatin1String("```"))) {
+        const int nl = handoff.indexOf(QLatin1Char('\n'));
+        if (nl > 0)
+            handoff = handoff.mid(nl + 1);
+        if (handoff.endsWith(QLatin1String("```")))
+            handoff.chop(3);
+        handoff = handoff.trimmed();
     }
-    if (leafMsgs.size() < totalMessages)
+    if (handoff.isEmpty()) {
         qCWarning(llamaChatNetwork)
-            << "Handoff of" << convId << ": the full history does not fit the "
-            << "context window, summarizing only the most recent"
-            << leafMsgs.size() << "of" << totalMessages << "messages";
+            << "Handoff of" << convId << "discarded: the document is empty.";
+        return;
+    }
 
-    QJsonObject payload;
-    payload["messages"] = msgArray;
-    payload["stream"] = false;
-    payload["cache_prompt"] = true;
-    payload["reasoning_format"] = "deepseek";
-    payload["reasoning_in_content"] = "false";
-    addAuxiliaryPayloadParams(payload, /*maxTokens=*/1500);
+    // The original conversation keeps the prompt and the document; if it
+    // was deleted meanwhile there is nothing to continue.
+    const Conversation original = m_storage->getOneConversation(convId);
+    if (original.currNode < 0) {
+        qCWarning(llamaChatNetwork)
+            << "Handoff of" << convId << "discarded: the conversation was deleted";
+        return;
+    }
 
-    QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
-    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    if (!settings().chatApiKey.value().isEmpty())
-        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+    // The handoff document becomes the first user message of the
+    // continuation: sendMessage() generates the reply right away, so the
+    // new conversation picks up the work at the next steps.
+    QString newName = sanitizeConversationName(
+        Tr::tr("Continuation of %1").arg(original.name));
+    Conversation fresh = createConversation(newName);
+    const QString seed = Tr::tr(
+        "This conversation continues the work of a previous conversation "
+        "whose context window ran out. The handoff document below "
+        "describes the task, the current state and the next steps. "
+        "Continue from the next steps.\n\n") + handoff;
+    sendMessage(fresh.id, fresh.currNode, seed, {}, [](qint64) {});
 
-    QNetworkReply *reply = m_network.post(req, QJsonDocument(payload).toJson());
-    m_handoffReplies.insert(convId, reply);
+    m_lastHandoffLeaf.insert(convId, handoffLeaf);
 
-    QObject::connect(reply, &QNetworkReply::finished, [reply, this, convId, leafNodeId, onDone, fail]() {
-        m_handingOff.remove(convId);
-        m_handoffReplies.remove(convId);
-        reply->deleteLater();
-        emit handoffProgress(convId, false);
-
-        // Canceled: the conversation is being deleted, nobody waits for it.
-        if (reply->error() == QNetworkReply::OperationCanceledError)
-            return;
-
-        if (reply->error() != QNetworkReply::NoError) {
-            qCWarning(llamaChatNetwork) << "Handoff request failed:" << reply->errorString();
-            QJsonObject errObj;
-            QString reason = parseJsonObject(reply->readAll(), &errObj)
-                    ? errorMessageFromJson(errObj) : QString();
-            if (reason.isEmpty())
-                reason = reply->errorString();
-            return fail(Tr::tr("The handoff request failed: %1").arg(reason));
-        }
-
-        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-        if (!doc.isObject())
-            return fail(Tr::tr("The handoff request returned a malformed reply."));
-        const QJsonArray choices = doc.object().value("choices").toArray();
-        if (choices.isEmpty())
-            return fail(Tr::tr("The handoff request returned no document."));
-
-        QString handoff = choices.first().toObject().value("message").toObject()
-                              .value("content").toString().trimmed();
-        // Small models sometimes wrap the document in a markdown code fence.
-        if (handoff.startsWith(QLatin1String("```"))) {
-            const int nl = handoff.indexOf(QLatin1Char('\n'));
-            if (nl > 0)
-                handoff = handoff.mid(nl + 1);
-            if (handoff.endsWith(QLatin1String("```")))
-                handoff.chop(3);
-            handoff = handoff.trimmed();
-        }
-        if (handoff.isEmpty())
-            return fail(Tr::tr("The handoff request returned an empty document."));
-
-        // The original conversation stays untouched; if it was deleted
-        // meanwhile there is nothing to continue.
-        const Conversation original = m_storage->getOneConversation(convId);
-        if (original.currNode < 0) {
-            qCWarning(llamaChatNetwork)
-                << "Handoff of" << convId << "discarded: the conversation was deleted";
-            return;
-        }
-
-        // The handoff document becomes the first user message of the
-        // continuation: sendMessage() generates the reply right away, so
-        // the new conversation picks up the work at the next steps.
-        QString newName = sanitizeConversationName(
-            Tr::tr("Continuation of %1").arg(original.name));
-        Conversation fresh = createConversation(newName);
-        const QString seed = Tr::tr(
-            "This conversation continues the work of a previous conversation "
-            "whose context window ran out. The handoff document below "
-            "describes the task, the current state and the next steps. "
-            "Continue from the next steps.\n\n") + handoff;
-        sendMessage(fresh.id, fresh.currNode, seed, {}, [](qint64) {});
-
-        m_lastHandoffLeaf.insert(convId, leafNodeId);
-
-        Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
-                                                    &newName,
-                                                    fresh.id.toUtf8(),
-                                                    fresh.id);
-        if (onDone)
-            onDone(fresh.id);
-    });
+    Core::EditorManager::openEditorWithContents(Constants::LLAMACPP_VIEWER_ID,
+                                                &newName,
+                                                fresh.id.toUtf8(),
+                                                fresh.id);
 }
 
 void ChatManager::failTurn(Message pm, const QString &error)
@@ -2096,7 +1994,17 @@ void ChatManager::sendChatRequest(const QString &convId,
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
     payload["reasoning_in_content"] = "false";
-    addCommonPayloadParams(payload, m_selectedModel);
+    if (m_handoffTurns.contains(convId)) {
+        // Handoff turn: housekeeping parameters (capped budget, thinking
+        // off) on the chat model, so the warm prompt cache of the previous
+        // turn is reused.
+        addAuxiliaryPayloadParams(payload, kHandoffMaxTokens, /*useChatModel=*/true);
+        // The context-usage label in the status bar.
+        payload["timings_per_token"] = true;
+        payload["return_progress"] = true;
+    } else {
+        addCommonPayloadParams(payload, m_selectedModel);
+    }
 
     QNetworkRequest req(QUrl(settings().chatEndpoint.value() + "/v1/chat/completions"));
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -2262,6 +2170,12 @@ void ChatManager::sendChatRequest(const QString &convId,
         const bool stopped = status.stopped
                 || reply->error() == QNetworkReply::OperationCanceledError;
 
+        // The in‑flight turn was a handoff document (see
+        // handoffConversation()).  The flag is kept for tool‑call turns so
+        // the continuation is created from the document message, not from
+        // an intermediate tool turn.
+        const bool isHandoffTurn = m_handoffTurns.contains(convId);
+
         // HTTP / transport error.  The JSON error body of a non-streamed
         // 4xx/5xx reply is normally handed over by readSSEStream() as an
         // error chunk already; whatever is left is parsed here.
@@ -2280,12 +2194,37 @@ void ChatManager::sendChatRequest(const QString &convId,
         }
 
         // Context overflow: the server refused the request because the
-        // history no longer fits.  Drop the assistant message (including
+        // prompt no longer fits.  Drop the assistant message (including
         // any partial content streamed before the error) and end the turn
-        // with a visible error pointing at the handoff: the conversation
-        // can be continued in a new one (auto-handoff fires at the
-        // threshold, or via the "Continue in New Conversation" action).
+        // with a visible error.
         if (pm.overflowError && !stopped) {
+            QString overflowText;
+            QString advice;
+            if (isHandoffTurn) {
+                // The handoff turn itself overflowed: the history plus the
+                // prompt and the capped document no longer fit, so the
+                // conversation can no longer be handed off at all.  Drop
+                // the handoff exchange and state, or the next turn would
+                // be treated as a handoff (capped budget) and spawn a
+                // continuation from a regular message.
+                const HandoffTurn handoff = m_handoffTurns.take(convId);
+                if (m_storage->deleteMessageBranch(handoff.promptId))
+                    m_storage->setCurrentNode(convId, handoff.leafId);
+                    emit messageDeleted(convId);
+                pm.parent = handoff.leafId;
+                overflowText = Tr::tr(
+                    "The conversation is too long to hand off: the history plus the "
+                    "handoff document no longer fit the model's context window.");
+                advice = Tr::tr("Switch to a model with a larger context or start a new conversation.");
+            } else {
+                // A conversation this long is continued by the handoff:
+                // it fires at the threshold, before the overflow.
+                overflowText = Tr::tr(
+                    "The conversation no longer fits the model's context window.");
+                advice = Tr::tr("Enable \"Automatically continue in a new conversation\" in the "
+                                 "Llama settings to hand the work over to a new conversation "
+                                 "before the context window fills up.");
+            }
             if (!pm.content.trimmed().isEmpty())
                 qCWarning(llamaChatNetwork)
                     << "Context overflow in" << convId << "– dropping the partial "
@@ -2293,12 +2232,9 @@ void ChatManager::sendChatRequest(const QString &convId,
             pm.content.clear();
             pm.haveContent = false;
 
-            QString overflowText = Tr::tr(
-                "The conversation no longer fits the model's context window.");
             if (!status.error.isEmpty())
                 overflowText += QStringLiteral(" (%1)").arg(status.error);
-            overflowText += QLatin1Char(' ')
-                    + Tr::tr("Continue in a new conversation to keep working.");
+            overflowText += QLatin1Char(' ') + advice;
             failTurn(pm, overflowText);
             return;
         }
@@ -2456,7 +2392,44 @@ void ChatManager::sendChatRequest(const QString &convId,
                 const bool complete = !stopped && !failed
                         && reply->error() == QNetworkReply::NoError
                         && !answer.trimmed().isEmpty();
-                if (continueLoop)
+                if (isHandoffTurn) {
+                    const HandoffTurn handoff = m_handoffTurns.take(convId);
+                    // A document cut off at the capped budget lost its
+                    // tail (the "next steps" section): not usable as the
+                    // seed of the continuation.
+                    const bool truncated =
+                        status.finishReason == QLatin1String("length");
+                    if (complete && !truncated) {
+                        // The handoff document is committed: hand the
+                        // conversation over to a new one (the prompt and
+                        // the document stay in this one).
+                        createHandoffContinuation(convId, pm.id, answer);
+                    } else {
+                        // Stopped, failed, empty or truncated: drop the
+                        // whole handoff exchange (prompt + partial
+                        // document), or the orphan prompt would be re‑sent
+                        // with every later request.  The threshold trigger
+                        // fires again at the next quiet point.
+                        if (m_storage->deleteMessageBranch(handoff.promptId))
+                            m_storage->setCurrentNode(convId, handoff.leafId);
+                            emit messageDeleted(convId);
+                        if (failed) {
+                            // The error note was attached to the document
+                            // message that was just deleted: re‑anchor it
+                            // at the pre‑handoff leaf so the failure stays
+                            // visible.
+                            pm.parent = handoff.leafId;
+                            m_storage->appendMsg(pm, pm.parent);
+                        }
+                    }
+                    if (continueLoop)
+                        generateMessage(convId,
+                                        flushSteeringQueue(
+                                            convId,
+                                            (complete && !truncated) ? pm.id
+                                                                     : handoff.leafId),
+                                        onChunk);
+                } else if (continueLoop)
                     generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
                 else if (isTaskConversation) {
                     // The sub‑agent reached its final answer (or the stream
@@ -2481,7 +2454,8 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // is checked the same way once it ends.  Sub‑agents are
                 // skipped: a visible continuation conversation would not
                 // make sense for a background task.
-                if (!continueLoop && !isTaskConversation && settings().autoHandoff.value()) {
+                if (!isHandoffTurn && !continueLoop && !isTaskConversation
+                        && settings().autoHandoff.value()) {
                     const auto &t = pm.timings;
                     int usedTokens = int(t.cache_n + t.prompt_n + t.predicted_n);
                     if (usedTokens <= 0)
@@ -2489,7 +2463,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     const int maxCtx = serverProps().n_ctx;
                     const int threshold = settings().handoffThreshold();
                     if (maxCtx > 0 && qint64(usedTokens) * 100 > qint64(maxCtx) * threshold)
-                        handoffConversation(convId, pm.id, /*force=*/false);
+                        handoffConversation(convId, pm.id);
                 }
             }
         }
@@ -2729,13 +2703,8 @@ void ChatManager::deleteConversation(const QString &convId)
     if (m_runningTools.value(convId) == 0)
         m_stopRequested.remove(convId);
     m_steeringQueue.remove(convId);
-    m_handingOff.remove(convId);
+    m_handoffTurns.remove(convId);
     m_lastHandoffLeaf.remove(convId);
-    if (auto it = m_handoffReplies.find(convId); it != m_handoffReplies.end()) {
-        it.value()->abort();
-        it.value()->deleteLater();
-        m_handoffReplies.erase(it);
-    }
 
     m_storage->deleteConversation(convId);
 }

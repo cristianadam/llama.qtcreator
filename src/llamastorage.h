@@ -31,6 +31,10 @@ public:
     bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
     bool updateMessageContent(const Message &msg);
     bool deleteMessageBranch(qint64 msgId);
+    //! Points the conversation's currNode at \a nodeId (deleteMessageBranch
+    //! does not touch it, so a deleted current branch would otherwise leave
+    //! a ghost node behind).
+    void setCurrentNode(const QString &convId, qint64 nodeId);
 
     // Chat input history, most recent first (for the input's Up/Down
     // navigation). Stored here rather than in QtCreator.ini: entries can be

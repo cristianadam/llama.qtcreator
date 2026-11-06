@@ -56,9 +56,6 @@ public:
     void refreshServerProps();
 
     bool isGenerating(const QString &convId) const;
-    //! True while a handoff summary request is in flight for \a convId
-    //! (see handoffConversation()).
-    bool isHandingOff(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
     //! Renders a single message as Markdown for the conversation export
     //! ("Save as Markdown" in the conversations view and the editor's save
@@ -229,25 +226,21 @@ public:
                            qint64 leafNodeId,
                            std::function<void(const QStringList &)> onSuccess);
 
-    //! Continues the conversation in a new one: summarizes the history with
-    //! the handoff prompt (task, key decisions, work done, current state,
-    //! next steps), creates a new conversation whose first message is the
-    //! handoff document and opens it in an editor.  The original
-    //! conversation stays untouched.  When the history does not fit the
-    //! context window (overflow recovery, or the model was switched to a
-    //! smaller context), only the most recent messages that fit are
-    //! summarized.  \a force bypasses the "recently handed off" guard
-    //! (manual "Continue in New Conversation" action).  \a onDone
-    //! is called with the new conversation's id when the handoff succeeded;
-    //! \a onFailed is called with the reason on every path that does not
-    //! create a conversation (skipped, disabled, already running, request
-    //! failed, empty summary).  Neither is called when the request was
-    //! canceled (the conversation was deleted).
-    void handoffConversation(const QString &convId,
-                             qint64 leafNodeId,
-                             bool force,
-                             std::function<void(const QString &)> onDone = {},
-                             std::function<void(const QString &)> onFailed = {});
+    //! Continues the conversation in a new one: the handoff prompt (task,
+    //! key decisions, work done, current state, next steps) is appended as
+    //! a regular user message, the streamed reply (the handoff document)
+    //! stays in this conversation, and a new conversation whose first
+    //! message is that document is created and opened in an editor once the
+    //! reply completes (createHandoffContinuation()).  When the reply does
+    //! not produce a usable document (stopped, failed, empty or truncated),
+    //! the handoff exchange (prompt + partial document) is dropped again,
+    //! so the conversation is back where it was and the threshold trigger
+    //! fires again at the next quiet point.  Running the document as a
+    //! normal turn reuses the warm prompt cache of the previous turn
+    //! instead of a fresh full‑history request.  Called from the
+    //! auto‑handoff threshold trigger; the "recently handed off" guard
+    //! skips conversations handed off less than six messages ago.
+    void handoffConversation(const QString &convId, qint64 leafNodeId);
 
     void cancelTitleSummary(const QString &convId);
     void cancelFollowUp(const QString &convId);
@@ -263,13 +256,6 @@ signals:
 
     //! The number of queued (steering) user messages of \a convId changed.
     void steeringQueueChanged(const QString &convId, int count);
-
-    //! A handoff summary request for \a convId started (\a active is true)
-    //! or finished (\a active is false): the chat UI shows a transient note
-    //! in the (untouched) original conversation while its history is being
-    //! summarized into the seed message of the new one – the summarization
-    //! of a long conversation can take a while.
-    void handoffProgress(const QString &convId, bool active);
 
     //! The "Human Editor" endpoint is ready for a reply: a pending
     //! assistant message exists for \a convId and the UI should open the
@@ -318,16 +304,29 @@ private:
     //! the waiting "task" tool when \a pm belongs to a task conversation.
     void failTurn(Message pm, const QString &error);
 
+    //! Creates the continuation of a handed‑off conversation: a new
+    //! conversation ("Continuation of <name>") whose first message is the
+    //! handoff document (code fences stripped), seeded with an immediate
+    //! reply and opened in an editor.  \a handoffLeaf is the id of the
+    //! document message in \a convId (the "recently handed off" guard).
+    void createHandoffContinuation(const QString &convId,
+                                   qint64 handoffLeaf,
+                                   const QString &document);
+
     void sendChatRequest(const QString &convId,
                          const std::function<void(QJsonObject &payload)> &payloadBuilder,
                          std::function<void(qint64)> onChunk);
 
     // Fills the payload for auxiliary requests (conversation title, follow‑up
-    // suggestions). Unlike addCommonPayloadParams() it does NOT apply the
-    // user's sampling settings and max_tokens: the token budget is capped at
-    // @p maxTokens and thinking is turned off, so these housekeeping calls
-    // stay short and do not starve real chat generations on the server.
-    void addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens) const;
+    // suggestions, the handoff document). Unlike addCommonPayloadParams() it
+    // does NOT apply the user's sampling settings and max_tokens: the token
+    // budget is capped at @p maxTokens and thinking is turned off, so these
+    // housekeeping calls stay short and do not starve real chat generations
+    // on the server.  @p useChatModel forces the chat model (instead of the
+    // optional utility model): the handoff turn needs the conversation's
+    // warm prompt cache.
+    void addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens,
+                                   bool useChatModel = false) const;
 
     // internal state
     Storage *m_storage;
@@ -392,17 +391,27 @@ private:
     };
     QHash<QString, QList<SteeringMessage>> m_steeringQueue;
 
-    //! Conversations whose history is currently being summarized into a
-    //! handoff document ("continue in a new conversation"), and the
-    //! in‑flight summary requests.
-    QSet<QString> m_handingOff;
-    QHash<QString, QNetworkReply *> m_handoffReplies;
+    //! Conversations whose handoff document is currently being generated
+    //! (the handoff prompt message was appended, the reply is streaming).
+    //! The auxiliary payload parameters apply (capped budget, thinking
+    //! off, chat model for the warm prompt cache), and the finished
+    //! handler hands the reply over to a new conversation – or drops the
+    //! handoff exchange again when no usable document was written.
+    struct HandoffTurn {
+        //! The handoff prompt message appended to the conversation (the
+        //! root of the branch that is dropped when the handoff fails).
+        qint64 promptId{-1};
+        //! The leaf the prompt was appended to (where the error note of a
+        //! failed handoff is re‑anchored).
+        qint64 leafId{-1};
+    };
+    QHash<QString, HandoffTurn> m_handoffTurns;
 
-    //! The leaf node at the time of the last handoff per conversation.  The
-    //! original conversation stays above the threshold after a handoff (it
-    //! is deliberately left untouched), so without this a later reply in it
-    //! would spawn yet another continuation: the threshold trigger only
-    //! hands off again once the branch has grown since the last handoff.
+    //! The id of the last handoff document message per conversation.  The
+    //! original conversation stays above the threshold after a handoff, so
+    //! without this a later reply in it would spawn yet another
+    //! continuation: the threshold trigger only hands off again once the
+    //! branch has grown since the last handoff.
     QHash<QString, qint64> m_lastHandoffLeaf;
 
     // Task‑conversation (sub‑agent) state

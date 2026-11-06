@@ -616,6 +616,17 @@ bool Storage::deleteMessageBranch(qint64 msgId)
     return true;
 }
 
+void Storage::setCurrentNode(const QString &convId, qint64 nodeId)
+{
+    QSqlQuery q(db);
+    q.prepare("UPDATE conversations SET currNode = :node WHERE id = :conv");
+    q.bindValue(":node", nodeId);
+    q.bindValue(":conv", convId);
+    if (!q.exec())
+        qCWarning(llamaStorage) << "setCurrentNode: Failed to update currNode:"
+                                << db.lastError().text();
+}
+
 QStringList Storage::inputHistory()
 {
     QStringList res;

@@ -92,18 +92,10 @@ public slots:
     void onHumanEditorReplyReady(const QString &convId);
     void onHumanEditorAborted(const QString &convId);
     void onMessageContentUpdated(const LlamaCpp::Message &msg);
-    //! Shows/hides the transient "creating a continuation" note in the
-    //! conversation being viewed (see ChatManager::handoffProgress()).
-    void onHandoffProgress(const QString &convId, bool active);
 
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
-    //! (Re)adds the transient "creating a continuation" note at the end of
-    //! the message list while a handoff summary runs for the conversation
-    //! being viewed; the note is re-inserted on every view refresh, since
-    //! the message widgets are rebuilt after it.
-    void updateHandoffLabel();
     //! Shows/hides the "queued messages" popup button (mid‑run steering)
     //! and rebuilds its menu (one removable entry per queued message).
     void updateSteeringButton();
@@ -161,7 +153,6 @@ private:
     QWidget *m_propsWidget{nullptr};
     QLabel *m_connectionLabel{nullptr}; // "You are connected to …" line in m_propsWidget
     QWidget *m_followUpWidget{nullptr};
-    QPointer<MarkdownLabel> m_handoffLabel; // transient "creating continuation" note
     QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor
     QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
