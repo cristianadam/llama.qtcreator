@@ -1,5 +1,6 @@
 #include "ripgrep.h"
 
+#include "llamasettings.h"
 #include "llamatr.h"
 
 #include <coreplugin/icore.h>
@@ -119,14 +120,24 @@ bool isDownloaded()
     return holdsBinary(downloadDirectory());
 }
 
+FilePath downloadedPath()
+{
+    return downloadDirectory() / binaryName();
+}
+
 FilePath resolvedPath()
 {
+    // A ripgrep of one's own, chosen on the Tools settings page.
+    const FilePath configured = settings().ripgrepPath();
+    if (!configured.isEmpty() && configured.exists())
+        return configured;
+
     const FilePath onPath = FilePath::fromUserInput(QStandardPaths::findExecutable("rg"));
     if (onPath.exists())
         return onPath;
-    const FilePath downloaded = downloadDirectory() / binaryName();
+
     if (holdsBinary(downloadDirectory()))
-        return downloaded;
+        return downloadDirectory() / binaryName();
     return {};
 }
 

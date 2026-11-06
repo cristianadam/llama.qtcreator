@@ -705,6 +705,14 @@ LlamaSettings::LlamaSettings()
         "A wxc-exec.exe launcher to run the Windows sandbox in. If empty, "
         "the runtime downloaded from this page is used."));
 
+    ripgrepPath.setSettingsKey("RipgrepPath");
+    ripgrepPath.setLabelText(Tr::tr("ripgrep:"));
+    ripgrepPath.setExpectedKind(PathChooserKind::File);
+    ripgrepPath.setToolTip(Tr::tr(
+        "A ripgrep (rg) executable to run the search and find tools with. "
+        "If empty, the one on the PATH is used, then the one downloaded "
+        "from this page."));
+
     loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
     loadProjectInstructions.setDefaultValue(false);
     loadProjectInstructions.setDisplayName(Tr::tr("Load project instructions"));

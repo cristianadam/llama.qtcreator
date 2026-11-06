@@ -94,34 +94,57 @@ ToolsSettingsWidget::ToolsSettingsWidget()
 
     fillModel();
 
-    // The search and find tools run ripgrep, which is not always installed.
-    // Offer to download a pinned release, the way the terminal plugin does for
-    // its console host.
-    m_ripgrepLabel = new QLabel(this);
-    m_ripgrepButton = new QPushButton(
-        Tr::tr("Download ripgrep %1").arg(Tools::Ripgrep::version()), this);
-    m_ripgrepButton->setVisible(false);
-    const auto downloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
-    connect(m_ripgrepButton,
+    // The search and find tools run ripgrep, which is not always installed;
+    // like the Windows sandbox runtime on the Sandbox page, a pinned release
+    // can be downloaded here, or an rg of one's own can be pointed to. The
+    // group leads the page, as it is what makes the tools usable in the
+    // first place.
+    using namespace Layouting;
+    m_ripgrepStatus = new QLabel(this);
+    m_ripgrepStatus->setWordWrap(true);
+    m_ripgrepDownloadButton = new QPushButton(Tr::tr("Download..."), this);
+
+    // The path chooser is for an rg of one's own; when it is empty the one
+    // on the PATH (or the downloaded one) is taken, and showing that as the
+    // placeholder is what tells where it came from.
+    const auto showRipgrep = [this] {
+        const Utils::FilePath inUse = Tools::Ripgrep::resolvedPath();
+        m_ripgrepStatus->setText(inUse.isEmpty()
+            ? Tr::tr("The search and find tools use ripgrep, which is not "
+                     "installed on this system.")
+            : Tr::tr("The search and find tools use ripgrep."));
+        settings().ripgrepPath.setPlaceHolderText(inUse.toUserOutput());
+    };
+    showRipgrep();
+    connect(&settings().ripgrepPath, &Utils::BaseAspect::changed, this, showRipgrep);
+
+    const auto ripgrepDownloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
+    connect(m_ripgrepDownloadButton,
             &QPushButton::clicked,
-            this,
-            [this, downloader] {
-                if (downloader->isRunning())
+            m_ripgrepDownloadButton,
+            [this, showRipgrep, ripgrepDownloader] {
+                if (ripgrepDownloader->isRunning())
                     return;
-                m_ripgrepButton->setEnabled(false);
-                downloader->start({Tools::Ripgrep::downloadRecipe()}, {},
-                                  [this, downloader](QtTaskTree::DoneWith) {
-                                      m_ripgrepButton->setEnabled(true);
-                                      updateRipgrepStatus();
-                                  });
+                m_ripgrepDownloadButton->setEnabled(false);
+                ripgrepDownloader->start({Tools::Ripgrep::downloadRecipe()}, {},
+                                         [this, showRipgrep, ripgrepDownloader](
+                                             QtTaskTree::DoneWith result) {
+                                             m_ripgrepDownloadButton->setEnabled(true);
+                                             if (result == QtTaskTree::DoneWith::Success)
+                                                 settings().ripgrepPath.setValue(
+                                                     Tools::Ripgrep::downloadedPath());
+                                             showRipgrep();
+                                         });
             });
-    auto *ripgrepRow = new QWidget(this);
-    auto *ripgrepLayout = new QHBoxLayout(ripgrepRow);
-    ripgrepLayout->setContentsMargins(0, 0, 0, 0);
-    ripgrepLayout->addWidget(m_ripgrepLabel);
-    ripgrepLayout->addStretch();
-    ripgrepLayout->addWidget(m_ripgrepButton);
-    updateRipgrepStatus();
+
+    auto *ripgrepGroup = Group{
+        title(Tr::tr("ripgrep")),
+        Column{
+            m_ripgrepStatus,
+            settings().ripgrepPath,
+            Row{m_ripgrepDownloadButton, st},
+        },
+    }.emerge();
 
     // Project instructions (AGENTS.md / CLAUDE.md) appended to the chat
     // system message.
@@ -172,17 +195,16 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             &ToolsSettingsWidget::removeServer);
 
     // layout
-    using namespace Layouting;
     Column{
+        ripgrepGroup,
         Row{
             Column{filterLineEdit, m_view},
             Column{m_addServerButton, m_editServerButton, m_removeServerButton, st},
         },
          m_detailEdit,
-         ripgrepRow,
          m_loadInstructionsCheck,
          maxToolTurnsRow,
-     }
+    }
         .attachTo(this);
 
     connect(filterLineEdit,
@@ -324,19 +346,6 @@ void ToolsSettingsWidget::fillModel()
     // Initialise the check-states from the stored settings
     updateModelFromEnabledTools();
     m_view->expandAll();
-}
-
-void ToolsSettingsWidget::updateRipgrepStatus()
-{
-    const Utils::FilePath rg = Tools::Ripgrep::resolvedPath();
-    if (rg.isEmpty()) {
-        m_ripgrepLabel->setText(Tr::tr("The search and find tools use ripgrep, which is not "
-                                       "installed on this system."));
-        m_ripgrepButton->setVisible(true);
-    } else {
-        m_ripgrepLabel->setText(Tr::tr("ripgrep: %1").arg(rg.toUserOutput()));
-        m_ripgrepButton->setVisible(false);
-    }
 }
 
 void ToolsSettingsWidget::showToolDefinition(const QModelIndex &current,

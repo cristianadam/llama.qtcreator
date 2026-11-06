@@ -14,7 +14,11 @@ QString version();
 Utils::FilePath downloadDirectory();
 bool isDownloaded();
 
-// A usable ripgrep: the one on PATH, then the downloaded one, then empty.
+// The rg of the downloaded release (empty while it is not installed).
+Utils::FilePath downloadedPath();
+
+// A usable ripgrep: the one chosen on the Tools settings page, then the
+// one on PATH, then the downloaded one, then empty.
 Utils::FilePath resolvedPath();
 
 // Fetches and unpacks the release for this platform, after asking for the

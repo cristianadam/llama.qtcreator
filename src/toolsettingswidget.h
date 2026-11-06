@@ -79,7 +79,6 @@ private:
     void updateModelFromEnabledTools();
     void showToolDefinition(const QModelIndex &current, const QModelIndex & /*previous*/);
     void syncGroupStates();
-    void updateRipgrepStatus();
 
     // MCP server management: every group row of the tools tree except
     // "Internal" is an MCP server; Add / Edit / Remove (like the skill
@@ -113,8 +112,11 @@ private:
     ToolsFilterModel *m_filterModel = nullptr;
     QTextEdit *m_detailEdit = nullptr;
     ToolsJsonHighlighter *m_jsonHighlighter = nullptr;
-    QLabel *m_ripgrepLabel = nullptr;
-    QPushButton *m_ripgrepButton = nullptr;
+    // ripgrep group (leads the page, like the Windows runtime group on the
+    // Sandbox page): the status line and the download button (the path
+    // chooser is the ripgrepPath aspect of the settings).
+    QLabel *m_ripgrepStatus = nullptr;
+    QPushButton *m_ripgrepDownloadButton = nullptr;
     QCheckBox *m_loadInstructionsCheck = nullptr;
     // Runaway tool-loop guard: the maximum number of consecutive tool-only
     // turns before the calls are no longer executed (0 = no limit).

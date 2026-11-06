@@ -123,6 +123,10 @@ public:
     // empty, the runtime downloaded from the Sandbox settings page is
     // used.
     Utils::FilePathAspect mxcPath{this};
+    // ripgrep: an rg executable of one's own, for the search and find
+    // tools. When empty, the one on the PATH is used, then the one
+    // downloaded from the Tools settings page.
+    Utils::FilePathAspect ripgrepPath{this};
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
     Utils::BoolAspect loadProjectInstructions{this};
