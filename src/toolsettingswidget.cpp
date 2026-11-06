@@ -197,13 +197,13 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // layout
     Column{
         ripgrepGroup,
+        m_loadInstructionsCheck,
+        maxToolTurnsRow,
         Row{
             Column{filterLineEdit, m_view},
             Column{m_addServerButton, m_editServerButton, m_removeServerButton, st},
         },
          m_detailEdit,
-         m_loadInstructionsCheck,
-         maxToolTurnsRow,
     }
         .attachTo(this);
 
