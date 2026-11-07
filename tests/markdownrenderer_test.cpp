@@ -102,6 +102,7 @@ private slots:
     void thinkingSection();
     void detailsSummaryMarkdown();
     void detailsSummaryInlineHtml();
+    void inlineCodeInHeadingKeepsHeadingFont();
     void toolCallCollapsedByDataToolAttribute();
     void toolCallSummaryWithOutputPreview();
     void collapsedSectionStaysCollapsed();
@@ -426,6 +427,47 @@ void MarkdownRendererTest::detailsSummaryInlineHtml()
             textInIconFont = true;
     }
     QVERIFY2(!textInIconFont, "summary text must not inherit the icon font");
+}
+
+// An inline code span inside a heading must keep the heading's scaled, bold
+// font (only the mono family/pitch changes).  setFont(monoFont,
+// FontPropertiesSpecifiedOnly) copies the mono font's own point size and
+// weight, which used to shrink the code to the editor's code size and drop
+// the heading's boldness.
+void MarkdownRendererTest::inlineCodeInHeadingKeepsHeadingFont()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    // Mimic the chat's mono font: the editor's code font, which carries its
+    // own (smaller) point size and a normal weight.
+    QFont mono(QStringLiteral("Test Mono"));
+    mono.setPointSize(10);
+    mono.setWeight(QFont::Normal);
+    renderer.setMonoFont(mono);
+
+    // A level-2 heading with an inline code span.  The default base font is
+    // 14pt, so a level-2 heading renders at 14 * 1.5 = 21pt, bold.
+    const QString text = QStringLiteral("## Fix (`src/file.cpp`)\n");
+    renderer.feed(text.toUtf8());
+    renderer.finish();
+
+    QTextBlock blk = renderer.document()->firstBlock();
+    bool found = false;
+    for (auto it = blk.begin(); it != blk.end(); ++it) {
+        const QTextFragment frag = it.fragment();
+        if (frag.text() == QLatin1String("src/file.cpp")) {
+            found = true;
+            const QTextCharFormat cf = frag.charFormat();
+            QCOMPARE(cf.fontFamilies().toStringList().first(), QStringLiteral("Test Mono"));
+            // Scaled with the heading and still bold, not the mono font's
+            // own 10pt normal weight.
+            QCOMPARE(cf.fontPointSize(), 21.0);
+            QCOMPARE(cf.fontWeight(), int(QFont::Bold));
+            // No inline-code background inside a heading.
+            QVERIFY(!cf.hasProperty(QTextFormat::BackgroundBrush));
+        }
+    }
+    QVERIFY2(found, "code span fragment not found in heading");
 }
 
 void MarkdownRendererTest::toolCallCollapsedByDataToolAttribute()

@@ -1546,11 +1546,22 @@ void MarkdownRenderer::handleInlineCode()
 {
     QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
                                                           : m_textCharFormatStack.top();
+    // setFont() below copies the mono font's own point size and weight (it is
+    // the editor's code font – smaller and normal weight).  Inside a heading
+    // the code span must instead keep the heading's scaled, bold font, so
+    // remember what the current format has before it is overwritten.
+    const bool inHeading = m_headingLevel > 0;
+    const double headingPointSize = fmt.fontPointSize();
+    const int headingWeight = fmt.fontWeight();
+
     fmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
     fmt.setFontFixedPitch(true);
-    // Inside a heading, keep the heading's font size and skip the inline-code
-    // background so the code stays bold and scales with the heading.
-    if (m_headingLevel == 0) {
+    if (inHeading) {
+        // Only the mono family/pitch is wanted here; restore the heading's
+        // size and boldness so the code scales with the heading.
+        fmt.setFontPointSize(headingPointSize);
+        fmt.setFontWeight(headingWeight);
+    } else {
         fmt.setBackground(color(InlineCodeBackground));
         fmt.setFontPointSize(m_baseFontSize * 0.90);
     }
