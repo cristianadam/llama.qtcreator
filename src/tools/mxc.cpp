@@ -109,6 +109,16 @@ FilePath downloadedPath()
 
 FilePath resolvedPath()
 {
+    // LLAMA_WXC_EXEC overrides everything: the tests point it at a fake
+    // (or the real) wxc-exec, and a developer can point it at a runtime of
+    // one's own without touching the settings.
+    const QString overridePath = qEnvironmentVariable("LLAMA_WXC_EXEC");
+    if (!overridePath.isEmpty()) {
+        const FilePath fromEnv = FilePath::fromUserInput(overridePath);
+        if (fromEnv.exists())
+            return fromEnv;
+    }
+
     // A runtime of one's own, chosen on the Sandbox settings page.
     const FilePath configured = settings().mxcPath();
     if (!configured.isEmpty() && configured.exists())

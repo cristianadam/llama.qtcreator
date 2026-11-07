@@ -12,16 +12,23 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QLoggingCategory>
 #include <QOperatingSystemVersion>
 #include <QProcess>
 #include <QTemporaryDir>
+#include <QTimer>
 #include <QUuid>
+
+#include <utils/filepath.h>
 
 #if defined(Q_OS_WIN)
 #include <windows.h>
 #endif
 
 namespace LlamaCpp::Tools {
+
+Q_LOGGING_CATEGORY(windowsSandboxLog, "llama.cpp.chat.sandbox", QtWarningMsg)
+
 namespace {
 
 constexpr int kProbeTimeoutMs = 15'000;
@@ -36,12 +43,21 @@ constexpr quint32 kMinWindowsBuild = 26100;
 // The canary content the live isolation probe hides in the home directory.
 constexpr const char *kCanaryContent = "llama-mxc-canary";
 
-/*! Locates the wxc-exec executable: the runtime chosen on the Sandbox
-    settings page (if any), or the pinned release downloaded from there. */
-QString findWxcExec()
+/*! Locates the wxc-exec executable: the LLAMA_WXC_EXEC override (the tests
+    point it at a fake wxc-exec, a developer at a runtime of one's own),
+    then the runtime chosen on the Sandbox settings page (if any), then the
+    pinned release downloaded from there. Empty when there is none. */
+Utils::FilePath findWxcExec()
 {
     const Utils::FilePath resolved = Mxc::resolvedPath();
-    return resolved.exists() ? resolved.toUserOutput() : QString();
+    if (resolved.exists()) {
+        qCDebug(windowsSandboxLog) << "using wxc-exec" << resolved.toUserOutput();
+        return resolved;
+    }
+    qCWarning(windowsSandboxLog)
+        << "wxc-exec not found (neither the LLAMA_WXC_EXEC override, the runtime "
+           "chosen on the Sandbox settings page, nor a downloaded release)";
+    return {};
 }
 
 QString installHint()
@@ -65,31 +81,40 @@ struct WxcStatus
     Sandbox settings page may point elsewhere); a failure re-probes on
     every call, so a runtime installed while the editor is running takes
     effect on the next command. */
-WxcStatus probeWxc(const QString &exe)
+WxcStatus probeWxc(const Utils::FilePath &exe)
 {
-    static QHash<QString, bool> s_probed;
+    static QHash<Utils::FilePath, bool> s_probed;
     if (s_probed.value(exe))
         return { true, {} };
 
     QProcess process;
-    process.start(exe, { QStringLiteral("--probe") });
+    process.start(exe.toFSPathString(), { QStringLiteral("--probe") });
     if (!process.waitForFinished(kProbeTimeoutMs)) {
         process.kill();
         process.waitForFinished(5000);
+        qCWarning(windowsSandboxLog)
+            << "wxc-exec capability probe timed out after" << kProbeTimeoutMs << "ms for"
+            << exe.toUserOutput();
         return { false,
                  Tr::tr("The Windows sandbox backend (wxc-exec) did not answer its "
                         "capability probe in time. %1")
                          .arg(installHint()) };
     }
     if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        const QString stderrText
+            = QString::fromLocal8Bit(process.readAllStandardError()).trimmed();
+        qCWarning(windowsSandboxLog)
+            << "wxc-exec capability probe failed for" << exe.toUserOutput() << "(exit"
+            << process.exitCode() << "):" << stderrText;
         return { false,
                  Tr::tr("The Windows sandbox backend (wxc-exec) reported the MXC "
                         "container as unavailable (exit %1): %2 %3")
                          .arg(process.exitCode())
-                         .arg(QString::fromLocal8Bit(process.readAllStandardError()).trimmed())
+                         .arg(stderrText)
                          .arg(installHint()) };
     }
     s_probed.insert(exe, true);
+    qCDebug(windowsSandboxLog) << "wxc-exec capability probe passed for" << exe.toUserOutput();
     return { true, {} };
 }
 
@@ -309,7 +334,8 @@ QString encodedConfig(const QJsonObject &config)
 
 enum class LiveProbeState
 {
-    Running, // the probe command is running (a fresh entry starts here)
+    NotRun, // a fresh entry: the probe has not been started yet
+    Running, // the probe command is running
     Ok,
     Failed,
 };
@@ -317,15 +343,15 @@ enum class LiveProbeState
 struct LiveProbe
 {
     QProcess *process = nullptr;
-    LiveProbeState state = LiveProbeState::Running;
+    LiveProbeState state = LiveProbeState::NotRun;
     QString failure; // a complete, actionable message when the state is Failed
 };
 
 // Keyed by the executable, as the Sandbox settings page may point
 // elsewhere.
-QHash<QString, LiveProbe> &liveProbes()
+QHash<Utils::FilePath, LiveProbe> &liveProbes()
 {
-    static QHash<QString, LiveProbe> probes;
+    static QHash<Utils::FilePath, LiveProbe> probes;
     return probes;
 }
 
@@ -367,12 +393,28 @@ bool liveProbePassed(QProcess &process,
     QFile leakFile(workdir + QStringLiteral("/canary-leak"));
     const bool leaked
         = leakFile.open(QIODevice::ReadOnly) && leakFile.readAll().contains(kCanaryContent);
-    return process.exitStatus() == QProcess::NormalExit
-        && process.exitCode() == 0
-        && output.contains(QStringLiteral("LLAMA_MXC_LIVE_PROBE_OK"))
-        && QFileInfo::exists(workdir + QStringLiteral("/canary-ok"))
-        && !leaked
-        && !QFileInfo::exists(outsideWrite);
+    const bool exitedCleanly
+        = process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0;
+    const bool markerPresent
+        = output.contains(QStringLiteral("LLAMA_MXC_LIVE_PROBE_OK"));
+    const bool workdirWriteOk
+        = QFileInfo::exists(workdir + QStringLiteral("/canary-ok"));
+    const bool outsideWriteBlocked = !QFileInfo::exists(outsideWrite);
+    const bool ok
+        = exitedCleanly && markerPresent && workdirWriteOk && !leaked && outsideWriteBlocked;
+    if (!ok) {
+        // The individual controls say which guarantee broke: a canary leak or
+        // an outside write is an actual escape, the rest is a probe that
+        // could not verify the container.
+        qCWarning(windowsSandboxLog)
+            << "live isolation probe failed its controls: exited cleanly"
+            << exitedCleanly << "marker present" << markerPresent << "workdir write ok"
+            << workdirWriteOk << "canary leaked" << leaked << "outside write blocked"
+            << outsideWriteBlocked;
+        if (!output.trimmed().isEmpty())
+            qCWarning(windowsSandboxLog).noquote() << "probe output:\n" << output.trimmed();
+    }
+    return ok;
 }
 
 /*! Checks that the container really isolates, with one real sandboxed
@@ -386,16 +428,25 @@ bool liveProbePassed(QProcess &process,
     session (keyed by the executable); a failure re-probes on the next
     call, like probeWxc(). The probe uses the same environment the command
     gets, so an oversized environment fails it with the same "too long"
-    reason the command would get. */
-LiveProbeState liveProbeState(const QString &exe,
+    reason the command would get. A host-side timer kills a probe that
+    outlives the container's own timeout plus a margin: kLiveProbeTimeoutMs
+    is only enforced by wxc-exec once the container is up, so a runtime that
+    hangs before that (first container start, the container infrastructure
+    still initializing) would otherwise keep the state Running and defer
+    every command forever. */
+LiveProbeState liveProbeState(const Utils::FilePath &exe,
                               const QProcessEnvironment &env,
                               const QString &shellPath,
                               const QString &shellRoot)
 {
     LiveProbe &probe = liveProbes()[exe];
-    if (probe.state != LiveProbeState::Failed)
+    // A cached success costs nothing; a probe that is up right now only has
+    // to be waited for. NotRun (a fresh entry) and Failed both fall through
+    // and (re)start the probe below.
+    if (probe.state == LiveProbeState::Ok || probe.state == LiveProbeState::Running)
         return probe.state;
-    probe = LiveProbe{}; // a failed probe is retried on the next call
+    probe = LiveProbe{}; // a fresh (NotRun) or failed probe (re)starts here
+    qCDebug(windowsSandboxLog) << "starting live isolation probe for" << exe.toUserOutput();
 
     QTemporaryDir *workdir = new QTemporaryDir;
     QDir homeProbe(QDir::homePath() + QStringLiteral("/.llama-mxc-probe-")
@@ -413,6 +464,10 @@ LiveProbeState liveProbeState(const QString &exe,
 
     if (!workdir->isValid() || shellPath.isEmpty()
         || !homeProbe.mkpath(QStringLiteral("outside"))) {
+        qCWarning(windowsSandboxLog)
+            << "live isolation probe could not be set up: workdir"
+            << (workdir->isValid() ? workdir->path() : QStringLiteral("<none>"))
+            << "shell" << shellPath << "canary directory" << homeProbe.path();
         cleanupAndFail(Tr::tr("The Windows sandbox could not set up its live isolation "
                               "probe (temporary directory or home canary). %1")
                           .arg(installHint()));
@@ -430,6 +485,9 @@ LiveProbeState liveProbeState(const QString &exe,
         // the probe would pass without verifying anything.
         if (!file.open(QIODevice::WriteOnly)
             || file.write(kCanaryContent) < 0) {
+            qCWarning(windowsSandboxLog)
+                << "could not create the live probe canary file" << canary
+                << file.errorString();
             cleanupAndFail(Tr::tr("The Windows sandbox could not create the canary file "
                                   "of its live isolation probe at %1. %2")
                               .arg(canary)
@@ -457,6 +515,9 @@ LiveProbeState liveProbeState(const QString &exe,
                                     shellRoot,
                                     probeDenied));
     if (encoded.size() > kMaxConfigBase64Chars) {
+        qCWarning(windowsSandboxLog)
+            << "live probe configuration too long:" << encoded.size() << "of"
+            << kMaxConfigBase64Chars << "base64 characters";
         cleanupAndFail(Tr::tr("The Windows sandbox configuration is too long (%1 of %2 "
                               "characters); the process environment is probably oversized. "
                               "Uncheck 'Sandbox commands' in the Llama settings to run "
@@ -470,6 +531,19 @@ LiveProbeState liveProbeState(const QString &exe,
     const QString homeProbePath = homeProbe.path();
     QProcess *process = new QProcess;
     probe.process = process;
+    probe.state = LiveProbeState::Running;
+    // Host-side backstop (see above): kill the probe once it outlives the
+    // container's timeout plus a margin; the finished it triggers then
+    // fails the probe and the next command retries it. Contexted on the
+    // process, so it is dropped with it when the probe finishes in time.
+    QTimer::singleShot(kLiveProbeTimeoutMs + 10'000, process, [process] {
+        if (process->state() != QProcess::NotRunning) {
+            qCWarning(windowsSandboxLog)
+                << "live isolation probe still running after the backstop; "
+                   "killing it";
+            process->kill();
+        }
+    });
     const auto onFinished = [exe, process, workdir, workdirPath, homeProbePath,
                              outsideWrite] {
         const bool ok = liveProbePassed(*process, workdirPath, outsideWrite);
@@ -481,16 +555,21 @@ LiveProbeState liveProbeState(const QString &exe,
         if (ok) {
             probe.state = LiveProbeState::Ok;
             probe.failure.clear();
+            qCDebug(windowsSandboxLog)
+                << "live isolation probe passed for" << exe.toUserOutput();
         } else {
             probe.state = LiveProbeState::Failed;
             probe.failure = Tr::tr("The Windows sandbox (Microsoft MXC) failed its live "
                                    "isolation check: a sandboxed command could not be "
                                    "verified to be confined. %1")
                               .arg(installHint());
+            qCWarning(windowsSandboxLog)
+                << "live isolation probe failed for" << exe.toUserOutput();
         }
     };
-    QObject::connect(process, &QProcess::finished, nullptr, onFinished);
-    process->start(exe, { QStringLiteral("--config-base64"), encoded });
+    // No context object: the connection dies with the process.
+    QObject::connect(process, &QProcess::finished, onFinished);
+    process->start(exe.toFSPathString(), { QStringLiteral("--config-base64"), encoded });
     return probe.state;
 }
 #else
@@ -504,7 +583,7 @@ quint32 windowsBuildNumber()
 {
     return 0;
 }
-LiveProbeState liveProbeState(const QString &,
+LiveProbeState liveProbeState(const Utils::FilePath &,
                               const QProcessEnvironment &,
                               const QString &,
                               const QString &)
@@ -520,19 +599,27 @@ ShellInstallRoot windowsShellInstallRoot(const QString &shellPath)
     QString shell = shellPath;
     shell.replace(QLatin1Char('/'), QLatin1Char('\\'));
     const QString unrecognized
-        = Tr::tr("The bash at \"%1\" is not part of a recognized Git for Windows or "
-                 "MSYS2 installation, so the Windows sandbox cannot grant it a narrow "
-                 "read-only location. Install Git for Windows "
+        = Tr::tr("The bash at \"%1\" is not part of a recognized niubash, Git for "
+                 "Windows or MSYS2 installation, so the Windows sandbox cannot grant "
+                 "it a narrow read-only location. Install Git for Windows "
                  "(https://git-scm.com/download/win) and put its bash first on PATH, "
+                 "or download niubash from the Llama.cpp Chat tools settings page, "
                  "or uncheck 'Sandbox commands' in the Llama settings.")
               .arg(shellPath);
 
-    // <root>\usr\bin\bash.exe (MSYS2 and Git for Windows) or
-    // <root>\bin\bash.exe (the Git for Windows launcher).
+    // <root>\usr\bin\bash.exe (MSYS2 and Git for Windows),
+    // <root>\bin\bash.exe (the Git for Windows launcher), or the niubash
+    // launchers <root>\winuxcmd\bin\bash.exe / <root>\winuxcmd\usr\bin\bash.exe
+    // (the winuxcmd cases are checked first: they also end in /bin and
+    // /usr/bin, but their root is two / three levels up).
     const QString bashDir = windowsDirectoryOf(shell);
     const QString foldedDir = normalizedPath(bashDir);
     QString root;
-    if (foldedDir.endsWith(QLatin1String("/usr/bin")))
+    if (foldedDir.endsWith(QLatin1String("/winuxcmd/usr/bin")))
+        root = windowsDirectoryOf(windowsDirectoryOf(windowsDirectoryOf(bashDir)));
+    else if (foldedDir.endsWith(QLatin1String("/winuxcmd/bin")))
+        root = windowsDirectoryOf(windowsDirectoryOf(bashDir));
+    else if (foldedDir.endsWith(QLatin1String("/usr/bin")))
         root = windowsDirectoryOf(windowsDirectoryOf(bashDir));
     else if (foldedDir.endsWith(QLatin1String("/bin")))
         root = windowsDirectoryOf(bashDir);
@@ -553,13 +640,20 @@ ShellInstallRoot windowsShellInstallRoot(const QString &shellPath)
         return { {}, unrecognized };
     }
     const QDir rootDir(root);
+    // Git for Windows / MSYS2: usr\bin\bash.exe plus a git or msys2 marker.
     const bool hasUsrBash = QFileInfo(rootDir.filePath(QStringLiteral("usr/bin/bash.exe"))).isFile();
-    const bool hasMarker
+    const bool hasGitOrMsys2Marker
         = QFileInfo::exists(rootDir.filePath(QStringLiteral("git-cmd.exe")))
           || QFileInfo::exists(rootDir.filePath(QStringLiteral("cmd/git.exe")))
           || QFileInfo::exists(rootDir.filePath(QStringLiteral("msys2.exe")))
           || QFileInfo::exists(rootDir.filePath(QStringLiteral("msys2_shell.cmd")));
-    if (!hasUsrBash || !hasMarker)
+    // niubash: a native (MSYS2/Cygwin-free) Bash that, unlike Git Bash, can
+    // initialize in the container; the root holds niu.exe (which the bash
+    // launcher execs) and the winuxcmd\bin\bash.exe launcher.
+    const bool hasNiubash
+        = QFileInfo(rootDir.filePath(QStringLiteral("niu.exe"))).isFile()
+          && QFileInfo(rootDir.filePath(QStringLiteral("winuxcmd/bin/bash.exe"))).isFile();
+    if (!hasNiubash && !(hasUsrBash && hasGitOrMsys2Marker))
         return { {}, unrecognized };
 #endif
     return { root, {} };
@@ -613,6 +707,9 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
     WindowsSandboxSpec spec;
 
     if (!windowsBuildOk()) {
+        qCWarning(windowsSandboxLog)
+            << "Windows build" << windowsBuildNumber() << "is below the" << kMinWindowsBuild
+            << "build needed for the MXC process container tier";
         spec.error = Tr::tr("The Windows sandbox (Microsoft MXC) needs Windows 11 "
                             "24H2 (build %1) or newer; this system is build %2. Uncheck "
                             "'Sandbox commands' in the Llama settings to run commands "
@@ -622,7 +719,7 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
         return spec;
     }
 
-    const QString exe = findWxcExec();
+    const Utils::FilePath exe = findWxcExec();
     if (exe.isEmpty()) {
         spec.error = Tr::tr("wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was "
                             "not found. %1")
@@ -643,6 +740,9 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
     if (!shellPath.isEmpty()) {
         const ShellInstallRoot root = windowsShellInstallRoot(shellPath);
         if (!root.error.isEmpty()) {
+            qCWarning(windowsSandboxLog)
+                << "no recognized shell installation for" << shellPath
+                << "; refusing to grant a read-only location";
             spec.error = root.error;
             return spec;
         }
@@ -651,6 +751,8 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
 
     const LiveProbeState liveState = liveProbeState(exe, env, shellPath, shellRoot);
     if (liveState == LiveProbeState::Running) {
+        qCDebug(windowsSandboxLog)
+            << "live isolation probe still running; deferring the command";
         spec.error = Tr::tr("The Windows sandbox (Microsoft MXC) is verifying its "
                             "isolation for the first time; run the command again in a "
                             "few seconds.");
@@ -664,6 +766,9 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
     const QString encoded = encodedConfig(
         buildConfig(cwd, env, commandLine, timeoutMs, shellRoot));
     if (encoded.size() > kMaxConfigBase64Chars) {
+        qCWarning(windowsSandboxLog)
+            << "sandbox configuration too long:" << encoded.size() << "of"
+            << kMaxConfigBase64Chars << "base64 characters";
         spec.error = Tr::tr("The Windows sandbox command line is too long (%1 of %2 "
                             "characters); the process environment is probably oversized. "
                             "Uncheck 'Sandbox commands' in the Llama settings to run "
@@ -673,8 +778,10 @@ WindowsSandboxSpec windowsSandboxSpec(const QString &cwd,
         return spec;
     }
 
-    spec.program = exe;
+    spec.program = exe.toFSPathString();
     spec.arguments = { QStringLiteral("--config-base64"), encoded };
+    qCDebug(windowsSandboxLog) << "sandboxing a command in" << cwd
+                               << "(configuration" << encoded.size() << "base64 characters)";
     return spec;
 }
 

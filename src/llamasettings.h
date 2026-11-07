@@ -127,6 +127,11 @@ public:
     // tools. When empty, the one on the PATH is used, then the one
     // downloaded from the Tools settings page.
     Utils::FilePathAspect ripgrepPath{this};
+    // niubash: a niubash bash launcher (winuxcmd\bin\bash.exe) of one's own,
+    // for the bash tool on Windows. niubash is a native, MSYS2-free Bash that
+    // can run in the Windows sandbox, where Git Bash cannot. When empty, the
+    // one downloaded from the Tools settings page is used, then Git Bash.
+    Utils::FilePathAspect niubashPath{this};
     // Load the project's instructions file (AGENTS.md, falling back to
     // CLAUDE.md) and append it to the chat system message.
     Utils::BoolAspect loadProjectInstructions{this};

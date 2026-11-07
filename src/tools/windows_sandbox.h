@@ -28,13 +28,16 @@ struct ShellInstallRoot
     QString error; // actionable, non-empty when the shell is not recognized
 };
 
-/// The installation root of a Git for Windows or MSYS2 bash (\a shellPath
-/// is <root>\usr\bin\bash.exe or <root>\bin\bash.exe). On Windows the root
-/// must also look like such an installation (usr\bin\bash.exe plus
-/// git-cmd.exe, cmd\git.exe, msys2.exe or msys2_shell.cmd) and must not be
-/// a drive root, the Windows directory or cover the user profile; anything
-/// else fails closed. Elsewhere only the path layout is checked (so the
-/// wrapper construction stays testable).
+/// The installation root of a niubash, Git for Windows or MSYS2 bash (\a
+/// shellPath is <root>\winuxcmd\bin\bash.exe or
+/// <root>\winuxcmd\usr\bin\bash.exe for niubash, <root>\usr\bin\bash.exe or
+/// <root>\bin\bash.exe for the others). On Windows the root must also look
+/// like such an installation (niu.exe plus winuxcmd\bin\bash.exe for
+/// niubash; otherwise usr\bin\bash.exe plus git-cmd.exe, cmd\git.exe,
+/// msys2.exe or msys2_shell.cmd) and must not be a drive root, the Windows
+/// directory or cover the user profile; anything else fails closed.
+/// Elsewhere only the path layout is checked (so the wrapper construction
+/// stays testable).
 ShellInstallRoot windowsShellInstallRoot(const QString &shellPath);
 
 /// Quotes a single argument for a Windows command line (the MSVCRT

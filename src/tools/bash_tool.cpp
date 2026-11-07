@@ -2,6 +2,7 @@
 #include "factory.h"
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "niubash.h"
 #include "tool_utils.h"
 #include "windows_sandbox.h"
 
@@ -93,14 +94,24 @@ QString findGitBash()
 #endif
 
 /*! Resolves a bash executable on all platforms so that commands behave
-    identically for the model: /bin/bash on Unix, Git Bash on Windows.
-    Never uses $SHELL or cmd.exe. On Windows a bash on PATH that is not
-    part of a recognized Git for Windows / MSYS2 installation (e.g. WSL's
-    System32\bash.exe, which mishandles Windows paths) is always skipped
-    in favor of Git for Windows' own bash. */
+    identically for the model: /bin/bash on Unix, and on Windows niubash when
+    it is set up, else Git Bash. Never uses $SHELL or cmd.exe. On Windows a
+    native, MSYS2-free bash (niubash) is preferred, as it - unlike Git Bash,
+    whose MSYS2 runtime aborts in the AppContainer (microsoft/mxc#1061) - can
+    initialize inside the Windows sandbox: the one chosen on the Tools
+    settings page, then the one downloaded there. Next a bash on PATH that is
+    part of a recognized Git for Windows / MSYS2 installation (one that is
+    not, e.g. WSL's System32\bash.exe, which mishandles Windows paths, is
+    skipped), then Git for Windows' own bash. */
 BashSpec bashSpec()
 {
 #if defined(Q_OS_WIN)
+    // niubash, when set up (configured or downloaded), takes priority: it is
+    // the only bash that runs in the Windows sandbox.
+    const FilePath niubash = Niubash::resolvedPath();
+    if (!niubash.isEmpty() && niubash.exists())
+        return { niubash.toUserOutput(), QStringLiteral("-c"), {} };
+
     const FilePath onPath =
         FilePath::fromUserInput(QStandardPaths::findExecutable("bash.exe"));
     if (onPath.exists()
@@ -111,7 +122,9 @@ BashSpec bashSpec()
         return { gitBash, QStringLiteral("-c"), {} };
     return { {}, {},
              Tr::tr("No bash shell found. Install Git for Windows "
-                    "(https://git-scm.com/download/win) or add a bash to PATH.") };
+                    "(https://git-scm.com/download/win) or add a bash to PATH, "
+                    "or download niubash from the Llama.cpp Chat tools "
+                    "settings page.") };
 #else
     const FilePath binBash = FilePath::fromString(QStringLiteral("/bin/bash"));
     if (binBash.exists())
@@ -543,7 +556,8 @@ QString BashTool::toolDefinition() const
     QString description = QStringLiteral(
         "Executes a command in a bash shell and returns its combined output "
         "(stdout and stderr). Commands use bash/POSIX syntax on all platforms "
-        "(Windows uses Git Bash). Use this for terminal operations like git, "
+        "(Windows uses a native bash: niubash when available, otherwise Git "
+        "Bash). Use this for terminal operations like git, "
         "npm, docker, running builds or tests; do not use it for reading, "
         "writing, editing or searching files - use the dedicated tools for "
         "that. The output may contain ANSI escape sequences for terminal "

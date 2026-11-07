@@ -4,6 +4,7 @@
 #include "llamasyntaxhighlighter.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
+#include "tools/niubash.h"
 #include "tools/ripgrep.h"
 #include "tools/tool_utils.h"
 
@@ -13,6 +14,7 @@
 #include <texteditor/fontsettings.h>
 
 #include <utils/fancylineedit.h>
+#include <utils/hostosinfo.h>
 #include <utils/qtcassert.h>
 
 #include <QHash>
@@ -146,6 +148,68 @@ ToolsSettingsWidget::ToolsSettingsWidget()
         },
     }.emerge();
 
+    // The bash tool on Windows runs a bash shell. Git Bash (the default) cannot
+    // initialize inside the Windows sandbox - its MSYS2 runtime aborts in the
+    // AppContainer (microsoft/mxc#1061) - so a native, MSYS2-free bash
+    // (niubash) can be downloaded here or pointed to, like the ripgrep and MXC
+    // runtimes. Windows-only: the other platforms use /bin/bash. The path
+    // chooser is for a niubash of one's own; when it is empty the downloaded
+    // one is taken, and showing that as the placeholder is what tells where it
+    // came from.
+    m_niubashStatus = new QLabel(this);
+    m_niubashStatus->setWordWrap(true);
+    m_niubashDownloadButton = new QPushButton(Tr::tr("Download..."), this);
+
+    const auto showNiubash = [this] {
+        const Utils::FilePath inUse = Tools::Niubash::resolvedPath();
+        m_niubashStatus->setText(inUse.isEmpty()
+            ? Tr::tr("The bash tool on Windows runs Git Bash, which cannot "
+                     "initialize inside the Windows sandbox (microsoft/mxc#1061). "
+                     "niubash, a native MSYS2-free Bash that can, is not "
+                     "installed on this system.")
+            : Tr::tr("The bash tool on Windows runs niubash, which can "
+                     "initialize inside the Windows sandbox."));
+        settings().niubashPath.setPlaceHolderText(inUse.toUserOutput());
+    };
+    showNiubash();
+    connect(&settings().niubashPath, &Utils::BaseAspect::changed, this, showNiubash);
+
+    const auto niubashDownloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
+    connect(m_niubashDownloadButton,
+            &QPushButton::clicked,
+            m_niubashDownloadButton,
+            [this, showNiubash, niubashDownloader] {
+                if (niubashDownloader->isRunning())
+                    return;
+                m_niubashDownloadButton->setEnabled(false);
+                niubashDownloader->start({Tools::Niubash::downloadRecipe()}, {},
+                                         [this, showNiubash, niubashDownloader](
+                                             QtTaskTree::DoneWith result) {
+                                             m_niubashDownloadButton->setEnabled(true);
+                                             // A fresh download is what the
+                                             // user just asked for, so pin it
+                                             // in the chooser (a niubash of
+                                             // one's own is left untouched):
+                                             // the resolved path is only the
+                                             // placeholder while the field is
+                                             // empty, which reads as a blank.
+                                             if (result == QtTaskTree::DoneWith::Success
+                                                 && settings().niubashPath().isEmpty())
+                                                 settings().niubashPath.setValue(
+                                                     Tools::Niubash::downloadedPath());
+                                             showNiubash();
+                                         });
+            });
+
+    auto *niubashGroup = Group{
+        title(Tr::tr("niubash (Windows sandbox bash)")),
+        Column{
+            m_niubashStatus,
+            settings().niubashPath,
+            Row{m_niubashDownloadButton, st},
+        },
+    }.emerge();
+
     // Project instructions (AGENTS.md / CLAUDE.md) appended to the chat
     // system message.
     m_loadInstructionsCheck = new QCheckBox(settings().loadProjectInstructions.displayName(), this);
@@ -197,6 +261,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // layout
     Column{
         ripgrepGroup,
+        If(HostOsInfo::isWindowsHost()) >> Then{niubashGroup},
         m_loadInstructionsCheck,
         maxToolTurnsRow,
         Row{

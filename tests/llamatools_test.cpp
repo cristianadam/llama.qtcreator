@@ -41,6 +41,7 @@
 #include <tools/ls_tool.h>
 #include <tools/ripgrep.h>
 #include <tools/mxc.h>
+#include <tools/niubash.h>
 #include <tools/tool.h>
 #include <tools/search_tool.h>
 #include <tools/task_tool.h>
@@ -3213,16 +3214,35 @@ static QString writeFakeWxcExec(const QString &dir)
     return path;
 }
 
+// The real wxc-exec.exe the Windows tests run against (LLAMA_WXC_EXEC, then
+// the configured runtime, then the downloaded one); empty while none is
+// available. The fake cannot run on Windows (it is a shell script), so
+// these tests exercise the real container when one is installed.
+#if defined(Q_OS_WIN)
+static QString realWxcExec()
+{
+    const Utils::FilePath resolved = LlamaCpp::Tools::Mxc::resolvedPath();
+    return resolved.exists() ? resolved.toUserOutput() : QString();
+}
+
+// A bash that can initialize inside the container: niubash (configured or
+// downloaded). The MSYS2/Cygwin-based shells, like Git Bash, abort in the
+// AppContainer (microsoft/mxc#1061), so they cannot be used.
+static QString containerBash()
+{
+    const Utils::FilePath niubash = LlamaCpp::Tools::Niubash::resolvedPath();
+    return niubash.exists() ? niubash.toUserOutput() : QString();
+}
+#endif
+
 // The successful capability probe is cached per wxc-exec executable for
 // the session; this test uses its own fake (a fresh QTemporaryDir path),
 // so the probe-failure path is reachable regardless of test order.
 void LlamaToolsTest::windowsSandboxSpecProbeFailed()
 {
-#if defined(Q_OS_WIN)
-    // The fake wxc-exec is a shell script; QProcess cannot start it on
-    // Windows.
-    QSKIP("the fake wxc-exec shell script cannot run on Windows");
-#endif
+    // The capability probe must fail: off Windows the fake exits nonzero
+    // (WXC_FAKE_PROBE_FAIL); on Windows the fake is a shell script that
+    // QProcess cannot start, which fails it the same way.
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
     const QString fake = writeFakeWxcExec(dir.path());
@@ -3264,9 +3284,136 @@ void LlamaToolsTest::windowsSandboxSpecUnavailable()
 void LlamaToolsTest::windowsSandboxSpec()
 {
 #if defined(Q_OS_WIN)
-    // The fake wxc-exec is a shell script; QProcess cannot start it on
-    // Windows.
-    QSKIP("the fake wxc-exec shell script cannot run on Windows");
+    // The real wxc-exec (LLAMA_WXC_EXEC, then the configured or downloaded
+    // runtime) and a container-capable bash (niubash). The configuration is
+    // not capturable like with the fake, so the command verifies the grants
+    // from inside the container.
+    {
+        const QString exe = realWxcExec();
+        if (exe.isEmpty())
+            QSKIP("no wxc-exec.exe: set LLAMA_WXC_EXEC or download the runtime "
+                  "from the Sandbox settings page");
+        const QString shellPath = containerBash();
+        if (shellPath.isEmpty())
+            QSKIP("no niubash: download it from the tools settings page");
+        const QString shellRoot = LlamaCpp::Tools::windowsShellInstallRoot(shellPath).root;
+        QVERIFY2(!shellRoot.isEmpty(), qPrintable(shellPath));
+        qputenv("LLAMA_WXC_EXEC", exe.toUtf8());
+        struct ExeGuard
+        {
+            ~ExeGuard()
+            {
+                qunsetenv("LLAMA_WXC_EXEC");
+            }
+        } exeGuard;
+
+        QTemporaryDir workdir;
+        QVERIFY(workdir.isValid());
+
+        // A canary outside every grant (the home directory is not granted):
+        // a read of it from the container must fail.
+        const QString canaryDir = QDir::homePath() + QStringLiteral("/.llama-mxc-spec-")
+                                  + QString::number(QCoreApplication::applicationPid());
+        struct CanaryGuard
+        {
+            QString dir;
+            ~CanaryGuard()
+            {
+                QDir(dir).removeRecursively();
+            }
+        } canaryGuard{ canaryDir };
+        QVERIFY(QDir().mkpath(canaryDir));
+        const QString canaryFile = canaryDir + QStringLiteral("/secret.txt");
+        QVERIFY(writeTextFile(canaryFile, QStringLiteral("llama-spec-canary")));
+
+        QProcessEnvironment env;
+        env.insert("PATH", "/usr/bin");
+        env.insert("FOO", "bar baz");
+
+        // The command verifies the configuration from inside the container:
+        // the environment is passed in full (LOCALAPPDATA and SYSTEMROOT are
+        // filled in with the working directory when missing), the working
+        // directory is writable, the shell's tree is read-only, and nothing
+        // outside the grants (the canary read, the outside write) is
+        // reachable. Builtins only: the container sees no other tools.
+        const QString outsideWrite = QDir::homePath()
+                                     + QStringLiteral("/llama-mxc-spec-outside.txt");
+        const QString script = QStringLiteral("printf 'FOO=%s\\n' \"$FOO\"; "
+                                              "printf 'LOCALAPPDATA=%s\\n' \"$LOCALAPPDATA\"; "
+                                              "printf 'SYSTEMROOT=%s\\n' \"$SYSTEMROOT\"; "
+                                              ": > inside.txt; "
+                                              "printf '%s' \"$(<'")
+                               + canaryFile
+                               + QStringLiteral("')\" > canary-leak 2>/dev/null; "
+                                              "echo bad > '")
+                               + outsideWrite
+                               + QStringLiteral("' 2>/dev/null; "
+                                              ": > '")
+                               + shellRoot
+                               + QStringLiteral("/llama-mxc-spec-ro.txt' 2>/dev/null; "
+                                              "echo LLAMA_SPEC_OK");
+        const QString commandLine = LlamaCpp::Tools::quoteWindowsArgument(shellPath)
+                                    + QStringLiteral(" -c ")
+                                    + LlamaCpp::Tools::quoteWindowsArgument(script);
+
+        // The live isolation probe runs asynchronously on the container
+        // host: the first call starts it and asks for a retry, the next
+        // call picks up the result.
+        LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+            workdir.path(), env, commandLine, 1234, shellPath);
+        for (int i = 0; i < 120 && spec.error.contains("verifying"); ++i)
+            QTest::qWait(250);
+        spec = LlamaCpp::Tools::windowsSandboxSpec(
+            workdir.path(), env, commandLine, 1234, shellPath);
+
+        // An oversized environment exceeds the wxc-exec command line bound
+        // and is refused with an actionable error.
+        QProcessEnvironment bigEnv = env;
+        bigEnv.insert("BIG", QString(40000, QLatin1Char('x')));
+        const LlamaCpp::Tools::WindowsSandboxSpec bigSpec = LlamaCpp::Tools::windowsSandboxSpec(
+            workdir.path(), bigEnv, commandLine, 1234, shellPath);
+
+        // Run the wrapper for real: wxc-exec starts the container with the
+        // configuration and the command above.
+        QProcess start;
+        start.start(spec.program, spec.arguments);
+        QVERIFY2(start.waitForFinished(30000), qPrintable(exe));
+        const QString output = QString::fromLocal8Bit(start.readAllStandardOutput())
+                               + QString::fromLocal8Bit(start.readAllStandardError());
+
+        QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
+        QCOMPARE(spec.program, exe);
+        // The complete wrapper: the configuration (with the command line
+        // embedded) is the single argument, nothing follows it.
+        QCOMPARE(spec.arguments.size(), 2);
+        QCOMPARE(spec.arguments.at(0), QStringLiteral("--config-base64"));
+        QVERIFY2(start.exitStatus() == QProcess::NormalExit
+                   && start.exitCode() == 0,
+                 qPrintable(output));
+        // The command ran in the container: the caller's environment is
+        // passed in full (the container starts with no host environment),
+        // and LOCALAPPDATA / SYSTEMROOT are filled in with the working
+        // directory when missing.
+        QVERIFY(output.contains(QStringLiteral("FOO=bar baz")));
+        const QString canonicalWorkdir = QFileInfo(workdir.path()).canonicalFilePath();
+        QVERIFY(output.contains(QStringLiteral("LOCALAPPDATA=") + canonicalWorkdir));
+        QVERIFY(output.contains(QStringLiteral("SYSTEMROOT=") + canonicalWorkdir));
+        // The working directory is writable (and the process cwd: the file
+        // lands in the workdir, not just somewhere writable).
+        QVERIFY(QFileInfo::exists(workdir.path() + QStringLiteral("/inside.txt")));
+        // The canary outside the grants did not leak (the redirect creates
+        // the file even when the read fails, so only content is a leak).
+        QVERIFY(!readTextFile(workdir.path() + QStringLiteral("/canary-leak"))
+                    .contains(QStringLiteral("llama-spec-canary")));
+        // The write outside the granted paths failed, and the shell's tree
+        // is read-only.
+        QVERIFY(!QFileInfo::exists(outsideWrite));
+        QVERIFY(!QFileInfo::exists(shellRoot + QStringLiteral("/llama-mxc-spec-ro.txt")));
+
+        QVERIFY(!bigSpec.error.isEmpty());
+        QVERIFY(bigSpec.error.contains("too long"));
+        return;
+    }
 #endif
     QTemporaryDir workdir;
     QVERIFY(workdir.isValid());
@@ -3837,15 +3984,126 @@ void LlamaToolsTest::sandboxWritableDirFileTools()
 
 // The Windows container grants the extra directories from the Sandbox
 // settings page (read-write, read-only and denied) and lifts the network
-// restriction when the setting is on. Exercised cross-platform with the fake
-// wxc-exec, like windowsSandboxSpec(); the extra paths are host-absolute so
-// the cleaning keeps them.
+// restriction when the setting is on. Off Windows this is exercised with
+// the fake wxc-exec (the extra paths are host-absolute so the cleaning
+// keeps them); on Windows the real container is used, like
+// windowsSandboxSpec().
 void LlamaToolsTest::windowsSandboxSpecExtraDirs()
 {
 #if defined(Q_OS_WIN)
-    // The fake wxc-exec is a shell script; QProcess cannot start it on
-    // Windows.
-    QSKIP("the fake wxc-exec shell script cannot run on Windows");
+    // The real wxc-exec (like windowsSandboxSpec above): the extra grants
+    // are verified from inside the container. The network grant is verified
+    // by the fake, which can inspect the configuration.
+    {
+        const QString exe = realWxcExec();
+        if (exe.isEmpty())
+            QSKIP("no wxc-exec.exe: set LLAMA_WXC_EXEC or download the runtime "
+                  "from the Sandbox settings page");
+        const QString shellPath = containerBash();
+        if (shellPath.isEmpty())
+            QSKIP("no niubash: download it from the tools settings page");
+        qputenv("LLAMA_WXC_EXEC", exe.toUtf8());
+        struct ExeGuard
+        {
+            ~ExeGuard()
+            {
+                qunsetenv("LLAMA_WXC_EXEC");
+            }
+        } exeGuard;
+
+        const QStringList oldWritable = settings().sandboxWritableDirs();
+        const QStringList oldReadOnly = settings().sandboxReadOnlyDirs();
+        const QStringList oldDenyRead = settings().sandboxDenyReadDirs();
+        const bool oldNetwork = settings().sandboxAllowNetwork();
+        struct Guard
+        {
+            QStringList w, ro, dr;
+            bool net;
+            ~Guard()
+            {
+                settings().sandboxWritableDirs.setValue(w);
+                settings().sandboxReadOnlyDirs.setValue(ro);
+                settings().sandboxDenyReadDirs.setValue(dr);
+                settings().sandboxAllowNetwork.setValue(net);
+            }
+        } guard{ oldWritable, oldReadOnly, oldDenyRead, oldNetwork };
+
+        // The extra directories live in the home directory: outside every
+        // default grant (so the extra grants are what makes them visible)
+        // and creatable without elevation (unlike the drive root).
+        const QString base = QDir::homePath() + QStringLiteral("/.llama-mxc-extra-")
+                             + QString::number(QCoreApplication::applicationPid());
+        struct BaseGuard
+        {
+            QString dir;
+            ~BaseGuard()
+            {
+                QDir(dir).removeRecursively();
+            }
+        } baseGuard{ base };
+        const QString writableDir = base + QStringLiteral("/writable");
+        const QString readOnlyDir = base + QStringLiteral("/readonly");
+        const QString denyReadDir = base + QStringLiteral("/denied");
+        QVERIFY(QDir().mkpath(writableDir));
+        QVERIFY(QDir().mkpath(readOnlyDir));
+        QVERIFY(QDir().mkpath(denyReadDir));
+        QVERIFY(writeTextFile(readOnlyDir + QStringLiteral("/marker.txt"),
+                              QStringLiteral("llama-extra-readonly")));
+        settings().sandboxWritableDirs.setValue({ writableDir });
+        settings().sandboxReadOnlyDirs.setValue({ readOnlyDir });
+        settings().sandboxDenyReadDirs.setValue({ denyReadDir });
+        settings().sandboxAllowNetwork.setValue(true);
+
+        QTemporaryDir workdir;
+        QVERIFY(workdir.isValid());
+        QProcessEnvironment env;
+        env.insert("PATH", "/usr/bin");
+
+        // The command verifies the extra grants from inside the container:
+        // the writable directory is writable, the read-only one readable,
+        // the deny-read one unreachable. Builtins only: the container sees
+        // no other tools.
+        const QString script = QStringLiteral("echo w > '")
+                               + writableDir
+                               + QStringLiteral("/f.txt'; "
+                                              "printf '%s' \"$(<'")
+                               + readOnlyDir
+                               + QStringLiteral("/marker.txt')\" > ro-read.txt; "
+                                              "echo d > '")
+                               + denyReadDir
+                               + QStringLiteral("/f.txt' 2>/dev/null; "
+                                              "echo LLAMA_EXTRA_OK");
+        const QString commandLine = LlamaCpp::Tools::quoteWindowsArgument(shellPath)
+                                    + QStringLiteral(" -c ")
+                                    + LlamaCpp::Tools::quoteWindowsArgument(script);
+
+        LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
+            workdir.path(), env, commandLine, 1234, shellPath);
+        for (int i = 0; i < 120 && spec.error.contains("verifying"); ++i)
+            QTest::qWait(250);
+        spec = LlamaCpp::Tools::windowsSandboxSpec(
+            workdir.path(), env, commandLine, 1234, shellPath);
+        QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
+
+        QProcess start;
+        start.start(spec.program, spec.arguments);
+        QVERIFY2(start.waitForFinished(30000), qPrintable(exe));
+        const QString output = QString::fromLocal8Bit(start.readAllStandardOutput())
+                               + QString::fromLocal8Bit(start.readAllStandardError());
+        QVERIFY2(start.exitStatus() == QProcess::NormalExit
+                   && start.exitCode() == 0,
+                 qPrintable(output));
+        QVERIFY(output.contains(QStringLiteral("LLAMA_EXTRA_OK")));
+        // The extra writable directory is granted read-write...
+        QVERIFY(readTextFile(writableDir + QStringLiteral("/f.txt"))
+                    .contains(QStringLiteral("w")));
+        // ...the read-only one is readable...
+        QVERIFY(readTextFile(workdir.path() + QStringLiteral("/ro-read.txt"))
+                    .contains(QStringLiteral("llama-extra-readonly")));
+        // ...and the deny-read one is not writable.
+        QVERIFY(!QFileInfo::exists(denyReadDir + QStringLiteral("/f.txt")));
+        return;
+    }
 #endif
     const QStringList oldWritable = settings().sandboxWritableDirs();
     const QStringList oldReadOnly = settings().sandboxReadOnlyDirs();
@@ -3936,18 +4194,48 @@ void LlamaToolsTest::windowsShellInstallRootLayout()
     using LlamaCpp::Tools::windowsShellInstallRoot;
     // WSL's launcher and shells outside a bin directory are not recognized.
     QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\Windows\\System32\\bash.exe"))
-                 .error.isEmpty());
+                  .error.isEmpty());
     QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\bash.exe")).error.isEmpty());
     QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\tools\\bash.exe")).error.isEmpty());
 #if defined(Q_OS_WIN)
     // A drive root is never granted, whatever its layout.
     QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\bin\\bash.exe")).error.isEmpty());
+    QVERIFY(!windowsShellInstallRoot(QStringLiteral("C:\\winuxcmd\\bin\\bash.exe")).error.isEmpty());
+
+    // A niubash tree (niu.exe plus winuxcmd\bin\bash.exe) is recognized, and
+    // its root (not the winuxcmd subdirectory) is what gets granted.
+    QTemporaryDir niubashDir;
+    QVERIFY(niubashDir.isValid());
+    const QString root = niubashDir.path();
+    QVERIFY(QDir().mkpath(root + QStringLiteral("/winuxcmd/bin")));
+    QVERIFY(writeTextFile(root + QStringLiteral("/niu.exe"), QStringLiteral("x")));
+    QVERIFY(writeTextFile(root + QStringLiteral("/winuxcmd/bin/bash.exe"),
+                          QStringLiteral("x")));
+    QCOMPARE(windowsShellInstallRoot(root + QStringLiteral("/winuxcmd/bin/bash.exe")).root,
+             root);
+    QCOMPARE(windowsShellInstallRoot(root + QStringLiteral("/winuxcmd/usr/bin/bash.exe")).root,
+             root);
+
+    // A winuxcmd tree without niu.exe is not a niubash installation.
+    QTemporaryDir bareDir;
+    QVERIFY(bareDir.isValid());
+    const QString bareRoot = bareDir.path();
+    QVERIFY(QDir().mkpath(bareRoot + QStringLiteral("/winuxcmd/bin")));
+    QVERIFY(writeTextFile(bareRoot + QStringLiteral("/winuxcmd/bin/bash.exe"),
+                          QStringLiteral("x")));
+    QVERIFY(!windowsShellInstallRoot(bareRoot + QStringLiteral("/winuxcmd/bin/bash.exe"))
+                  .error.isEmpty());
 #else
     // Off Windows only the layout is checked (no installation to inspect).
     QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\git\\bin\\bash.exe")).root,
              QStringLiteral("C:\\git"));
     QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\msys64\\usr\\bin\\bash.exe")).root,
              QStringLiteral("C:\\msys64"));
+    QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\niubash\\winuxcmd\\bin\\bash.exe")).root,
+             QStringLiteral("C:\\niubash"));
+    QCOMPARE(windowsShellInstallRoot(QStringLiteral("C:\\niubash\\winuxcmd\\usr\\bin\\bash.exe"))
+                 .root,
+             QStringLiteral("C:\\niubash"));
 #endif
 }
 

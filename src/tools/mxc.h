@@ -20,8 +20,8 @@ bool isDownloaded();
 // installed).
 Utils::FilePath downloadedPath();
 
-// A usable wxc-exec.exe: the one chosen on the Sandbox settings page, then
-// the downloaded one, then empty.
+// A usable wxc-exec.exe: the one LLAMA_WXC_EXEC points to, then the one
+// chosen on the Sandbox settings page, then the downloaded one, then empty.
 Utils::FilePath resolvedPath();
 
 // Fetches and unpacks the pinned release, after asking for the license.
