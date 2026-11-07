@@ -8,6 +8,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QUrl>
 
@@ -347,6 +348,31 @@ void httpPost(const QString &url,
                  maxResponseBytes,
                  std::move(done),
                  replyOut);
+}
+
+QString decodeHtmlEntities(const QString &s)
+{
+    QString t = s;
+    t.replace(QStringLiteral("&amp;"), QLatin1String("&"))
+        .replace(QStringLiteral("&lt;"), QLatin1String("<"))
+        .replace(QStringLiteral("&gt;"), QLatin1String(">"))
+        .replace(QStringLiteral("&quot;"), QLatin1String("\""))
+        .replace(QStringLiteral("&#x27;"), QLatin1String("'"))
+        .replace(QStringLiteral("&#39;"), QLatin1String("'"))
+        .replace(QStringLiteral("&apos;"), QLatin1String("'"))
+        .replace(QStringLiteral("&nbsp;"), QLatin1String(" "));
+    return t;
+}
+
+QString stripHtmlTags(const QString &s)
+{
+    QString t = s;
+    t.remove(QRegularExpression(QStringLiteral("<[^>]*>"),
+                                QRegularExpression::CaseInsensitiveOption));
+    t = decodeHtmlEntities(t);
+    t.replace(QRegularExpression(QStringLiteral("\\s+"), QRegularExpression::NoPatternOption),
+              QLatin1String(" "));
+    return t.trimmed();
 }
 
 } // namespace LlamaCpp::Tools

@@ -68,4 +68,12 @@ void httpPost(const QString &url,
               HttpResponseCallback done,
               QNetworkReply **replyOut = nullptr);
 
+//! Decodes the HTML entities that occur in text content (&amp;, &lt;, &gt;,
+//! &quot;, &#x27;/&#39;/&apos;, &nbsp;).
+QString decodeHtmlEntities(const QString &s);
+
+//! Removes all HTML tags from \a s, decodes the entities and collapses
+//! whitespace runs to single spaces (the result is trimmed).
+QString stripHtmlTags(const QString &s);
+
 } // namespace LlamaCpp::Tools

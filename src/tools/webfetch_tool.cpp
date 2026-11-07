@@ -19,19 +19,6 @@ constexpr int kMaxOutputChars = 50000;
 const QRegularExpression::PatternOptions kReCiDot
     = QRegularExpression::CaseInsensitiveOption | QRegularExpression::DotMatchesEverythingOption;
 
-QString decodeEntities(QString s)
-{
-    s.replace(QStringLiteral("&amp;"), QLatin1String("&"))
-        .replace(QStringLiteral("&lt;"), QLatin1String("<"))
-        .replace(QStringLiteral("&gt;"), QLatin1String(">"))
-        .replace(QStringLiteral("&quot;"), QLatin1String("\""))
-        .replace(QStringLiteral("&#x27;"), QLatin1String("'"))
-        .replace(QStringLiteral("&#39;"), QLatin1String("'"))
-        .replace(QStringLiteral("&apos;"), QLatin1String("'"))
-        .replace(QStringLiteral("&nbsp;"), QLatin1String(" "));
-    return s;
-}
-
 QRegularExpression makeRe(const QString &pattern, QRegularExpression::PatternOptions options = kReCiDot)
 {
     return QRegularExpression(pattern, options);
@@ -70,22 +57,12 @@ QString removeBoilerplate(const QString &html)
     return s;
 }
 
-QString stripInner(const QString &s)
-{
-    QString t = s;
-    t.remove(makeRe(QStringLiteral("<[^>]*>"), QRegularExpression::CaseInsensitiveOption));
-    t = decodeEntities(t);
-    t.replace(makeRe(QStringLiteral("\\s+"), QRegularExpression::NoPatternOption),
-              QLatin1String(" "));
-    return t.trimmed();
-}
-
-/*! Like stripInner but keeps the line structure (for <pre> blocks). */
+/*! Like stripHtmlTags but keeps the line structure (for <pre> blocks). */
 QString verbatimCode(const QString &s)
 {
     QString t = s;
     t.remove(makeRe(QStringLiteral("<[^>]*>"), QRegularExpression::CaseInsensitiveOption));
-    t = decodeEntities(t);
+    t = decodeHtmlEntities(t);
 
     QStringList lines;
     for (const QString &raw : t.split(QLatin1Char('\n'))) {
@@ -234,7 +211,7 @@ QString htmlToMarkdown(const QString &html)
         makeRe(QStringLiteral("<a\\s[^>]*href\\s*=\\s*([\"'])([^\"']*)\\1[^>]*>(.*?)</a>")),
         [](const QRegularExpressionMatch &m) {
             const QString url = m.captured(2);
-            const QString text = stripInner(m.captured(3));
+             const QString text = stripHtmlTags(m.captured(3));
             if (text.isEmpty())
                 return url;
             return QStringLiteral("[%1](%2)").arg(text, url);
@@ -246,7 +223,7 @@ QString htmlToMarkdown(const QString &html)
             = QStringLiteral("<h%1[^>]*>(.*?)</h%1>").arg(level);
         s = replaceMatches(s, makeRe(rxPattern), [level](const QRegularExpressionMatch &m) {
             return QString(level, QLatin1Char('#')) + QLatin1Char(' ')
-                 + stripInner(m.captured(1)) + QLatin1Char('\n');
+                  + stripHtmlTags(m.captured(1)) + QLatin1Char('\n');
         });
     }
 
@@ -264,7 +241,7 @@ QString htmlToMarkdown(const QString &html)
 
     // Drop whatever markup is left
     s.remove(makeRe(QStringLiteral("<[^>]*>")));
-    s = decodeEntities(s);
+    s = decodeHtmlEntities(s);
     s = cleanLines(s);
 
     // Restore code blocks
@@ -285,7 +262,7 @@ QString htmlToText(const QString &html)
                         "</(?:p|div|tr|table|ul|ol|li|section|article|header|footer|main|nav|blockquote|h[1-6])\\s*>")),
               QLatin1String("\n"));
     s.remove(makeRe(QStringLiteral("<[^>]*>")));
-    s = decodeEntities(s);
+    s = decodeHtmlEntities(s);
     return cleanLines(s);
 }
 

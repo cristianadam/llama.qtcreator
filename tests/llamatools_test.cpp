@@ -449,6 +449,8 @@ private slots:
     void websearch_parseMcpResponse();
     void websearch_parseMcpResponseSse();
     void websearch_parseGoogleResults();
+    void websearch_parseDuckDuckGoResults();
+    void websearch_duckDuckGoResultUrl();
     void websearch_formatResults();
 
     // BashTool
@@ -2307,8 +2309,13 @@ void LlamaToolsTest::websearch_isConfigured()
 {
     using Config = Tools::WebSearchConfig;
 
-    // Exa: hosted endpoint needs a key.
+    // DuckDuckGo: keyless, always configured.
     Config c;
+    c.provider = QStringLiteral("duckduckgo");
+    QVERIFY(c.isConfigured());
+
+    // Exa: hosted endpoint needs a key.
+    c = Config{};
     c.provider = QStringLiteral("exa");
     QVERIFY(!c.isConfigured());
     c.exaApiKey = QStringLiteral("secret");
@@ -2457,6 +2464,81 @@ void LlamaToolsTest::websearch_parseGoogleResults()
     QVERIFY(results[1].snippet.isEmpty());
 
     QVERIFY(Tools::parseGoogleResults(QJsonObject()).isEmpty());
+}
+
+void LlamaToolsTest::websearch_parseDuckDuckGoResults()
+{
+    // Fixture mirroring the real html.duckduckgo.com result structure:
+    // title anchor (class="result__a") with a redirector href, an extras
+    // block, then the snippet anchor (class="result__snippet").
+    const QString html = QStringLiteral(
+        "<div class=\"result results_links results_links_deep web-result \">"
+        "<div class=\"links_main links_deep result__body\">"
+        "<h2 class=\"result__title\">"
+        "<a rel=\"nofollow\" class=\"result__a\" "
+        "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fgithub.com%2Fggml%2Dorg%2F"
+        "llama.cpp%2Fblob%2Fmaster%2Ftools%2Fserver%2FREADME.md&amp;rut=7bdf138a90\">"
+        "llama.cpp/tools/server/README.md at master - GitHub</a>"
+        "</h2>"
+        "<div class=\"result__extras\"><div class=\"result__extras__url\">"
+        "<a class=\"result__url\" href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2F"
+        "github.com%2Fggml%2Dorg%2Fllama.cpp&amp;rut=7bdf138a90\">"
+        "github.com/ggml-org/llama.cpp</a>"
+        "</div></div>"
+        "<a class=\"result__snippet\" href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2F"
+        "github.com%2Fggml%2Dorg%2Fllama.cpp&amp;rut=7bdf138a90\">"
+        "Fast, lightweight, pure C/C++ <b>server</b> based on httplib</a>"
+        "</div></div>"
+        "<div class=\"result results_links results_links_deep web-result \">"
+        "<div class=\"links_main links_deep result__body\">"
+        "<h2 class=\"result__title\">"
+        "<a rel=\"nofollow\" class=\"result__a\" "
+        "href=\"//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Fdocs&amp;rut=abc123\">"
+        "Second &amp; more - Example</a>"
+        "</h2>"
+        "</div></div>");
+
+    const auto results = Tools::parseDuckDuckGoResults(html);
+    QCOMPARE(results.size(), 2);
+
+    // The redirector href is unwrapped to the percent‑decoded target.
+    QCOMPARE(results[0].title, QString("llama.cpp/tools/server/README.md at master - GitHub"));
+    QCOMPARE(results[0].url,
+             QString("https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md"));
+    // The <b> markup of the snippet is stripped.
+    QCOMPARE(results[0].snippet, QString("Fast, lightweight, pure C/C++ server based on httplib"));
+
+    // A result without a snippet gets an empty one; the title entity is
+    // decoded.
+    QCOMPARE(results[1].title, QString("Second & more - Example"));
+    QCOMPARE(results[1].url, QString("https://example.org/docs"));
+    QVERIFY(results[1].snippet.isEmpty());
+
+    QVERIFY(Tools::parseDuckDuckGoResults(QString()).isEmpty());
+    // A page without result blocks (e.g. DDG's rate‑limit page) yields
+    // nothing rather than garbage.
+    QVERIFY(Tools::parseDuckDuckGoResults(QStringLiteral("<html><body>no results</body></html>"))
+        .isEmpty());
+}
+
+void LlamaToolsTest::websearch_duckDuckGoResultUrl()
+{
+    // Redirector link: the percent‑encoded "uddg" target is unwrapped (the
+    // "&amp;" entity of the href is handled too).
+    QCOMPARE(
+        Tools::duckDuckGoResultUrl(QStringLiteral(
+            "//duckduckgo.com/l/?uddg=https%3A%2F%2Fexample.org%2Fa%2Fb%3Fq%3D1%26x%3D2"
+            "&amp;rut=deadbeef")),
+        QString("https://example.org/a/b?q=1&x=2"));
+
+    // A protocol‑relative link without a "uddg" item is resolved to an
+    // absolute URL.
+    QCOMPARE(Tools::duckDuckGoResultUrl(QStringLiteral("//example.org/x")),
+             QString("https://example.org/x"));
+
+    // An absolute non‑redirector link is returned as‑is.
+    QCOMPARE(Tools::duckDuckGoResultUrl(QStringLiteral("https://example.org/y")),
+             QString("https://example.org/y"));
 }
 
 void LlamaToolsTest::websearch_formatResults()

@@ -754,12 +754,12 @@ LlamaSettings::LlamaSettings()
     webSearchProvider.setDisplayStyle(StringAspect::LineEditDisplay);
     webSearchProvider.setSettingsKey("WebSearchProvider");
     webSearchProvider.setLabelText(Tr::tr("Web Search Provider:"));
-    webSearchProvider.setDefaultValue("exa");
+    webSearchProvider.setDefaultValue("duckduckgo");
     webSearchProvider.setToolTip(Tr::tr(
-        "Backend used by the websearch tool: \"exa\" (default, no API key required), "
-        "\"google\" (Custom Search JSON API, requires an API key and a search engine ID), "
-        "\"brave\" (Brave Search API, requires an API key) or \"tavily\" "
-        "(requires an API key)."));
+        "Backend used by the websearch tool: \"duckduckgo\" (default, no API key "
+        "required), \"exa\" (Exa search API), \"google\" (Custom Search JSON API, "
+        "requires an API key and a search engine ID), \"brave\" (Brave Search API, "
+        "requires an API key) or \"tavily\" (requires an API key)."));
     webSearchProvider.setHistoryCompleter("LlamaCpp.WebSearchProvider.History");
 
     webSearchExaUrl.setDisplayName(Tr::tr("Exa Endpoint"));
@@ -1125,7 +1125,8 @@ Core::IOptionsPageWidget *createWebSearchSettingsWidget()
     auto *widget = new Core::IOptionsPageWidget;
 
     auto *providerCombo = new QComboBox(widget);
-    providerCombo->addItems({QStringLiteral("exa"),
+    providerCombo->addItems({QStringLiteral("duckduckgo"),
+                             QStringLiteral("exa"),
                              QStringLiteral("google"),
                              QStringLiteral("brave"),
                              QStringLiteral("tavily")});
@@ -1142,7 +1143,10 @@ Core::IOptionsPageWidget *createWebSearchSettingsWidget()
 
     // clang-format off
     Column {
-        Row {new QLabel(s.webSearchProvider.labelText(), widget), providerCombo, st}, br,
+        Row {new QLabel(s.webSearchProvider.labelText(), widget),
+             providerCombo,
+             new QLabel(Tr::tr("\"duckduckgo\" needs no API key"), widget),
+             st}, br,
         hr, br,
         Row {s.webSearchExaUrl}, br,
         Row {s.webSearchExaApiKey}, br,

@@ -35,7 +35,8 @@ struct SearchResult
 //! Backend selection for the websearch tool.
 struct WebSearchConfig
 {
-    //! One of "exa" (default), "google", "brave" or "tavily".
+    //! One of "duckduckgo" (default, no API key), "exa", "google", "brave"
+    //! or "tavily".
     QString provider;
     QString exaUrl;
     QString exaApiKey;
@@ -68,6 +69,14 @@ QVector<SearchResult> parseBraveResults(const QJsonObject &response);
 
 //! Parses the JSON of a Tavily (search) response.
 QVector<SearchResult> parseTavilyResults(const QJsonObject &response);
+
+//! Parses the HTML of a DuckDuckGo (html.duckduckgo.com) results page.
+QVector<SearchResult> parseDuckDuckGoResults(const QString &html);
+
+//! Unwraps a DuckDuckGo redirector link ("//duckduckgo.com/l/?uddg=…") to
+//! the target URL; a link without a "uddg" item is returned as-is
+//! (resolved to an absolute URL when protocol-relative).
+QString duckDuckGoResultUrl(const QString &href);
 
 //! Appends the (optional) API key query parameter to an Exa MCP endpoint.
 QString exaEndpointUrl(const QString &baseUrl, const QString &apiKey);
