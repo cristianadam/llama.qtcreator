@@ -506,12 +506,9 @@ void MarkdownLabel::updateColorPalette()
     newPalette[MarkdownRenderer::InlineCodeBackground] = creatorColor(
         Theme::Token_Background_Muted);
 
+    // setColorPalette() also applies TextForeground to the document's default
+    // text and the widget palette, so the plain text follows the theme.
     setColorPalette(newPalette);
-
-    // Also update the standard Qt Palette for the Text color
-    QPalette p = palette();
-    p.setColor(QPalette::Text, newPalette[MarkdownRenderer::TextForeground]);
-    setPalette(p);
 }
 
 void MarkdownLabel::setHeightAdjustment(int newHeightAdjustment)

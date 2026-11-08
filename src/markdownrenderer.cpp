@@ -104,15 +104,12 @@ MarkdownRenderer::MarkdownRenderer(QWidget *parent)
     setFont(m_baseFont);
     m_monoFont = QFont("SF Mono");
 
-    QPalette p = palette();
-    p.setColor(QPalette::Text, color(TextForeground));
-    setPalette(p);
-
     m_doc = new QTextDocument(this);
     m_doc->setIndentWidth(30);
     setDocument(m_doc);
     setupDocumentSettings();
     m_cursor = QTextCursor(m_doc);
+    applyDocumentTextColor();
 
     // Markus streaming parser setup (GitHub-flavored Markdown)
     m_options.enable_tables = true;
@@ -472,9 +469,7 @@ void MarkdownRenderer::pruneStaleCodeBlocks()
 
 void MarkdownRenderer::beginBlock()
 {
-    QTextCharFormat charFmt;
-    if (!m_textCharFormatStack.isEmpty())
-        charFmt = m_textCharFormatStack.top();
+    QTextCharFormat charFmt = baseCharFormat();
     QTextBlockFormat blkFmt;
     if (!m_listStack.isEmpty())
         blkFmt.setIndent(m_listStack.size());
@@ -536,7 +531,7 @@ void MarkdownRenderer::leaveHeading()
     if (!m_textCharFormatStack.isEmpty())
         m_cursor.setCharFormat(m_textCharFormatStack.top());
     else
-        m_cursor.setCharFormat(QTextCharFormat());
+        m_cursor.setCharFormat(baseCharFormat());
     m_headingLevel = 0;
 }
 
@@ -557,8 +552,7 @@ void MarkdownRenderer::handleParagraph()
 void MarkdownRenderer::handleBlockQuote()
 {
     ++m_blockQuoteDepth;
-    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                          : m_textCharFormatStack.top();
+    QTextCharFormat fmt = baseCharFormat();
     fmt.setForeground(color(BlockquoteText));
     m_textCharFormatStack.push(fmt);
     m_cursor.setCharFormat(fmt);
@@ -578,7 +572,7 @@ void MarkdownRenderer::leaveBlockQuote()
     if (!m_textCharFormatStack.isEmpty())
         m_cursor.setCharFormat(m_textCharFormatStack.top());
     else
-        m_cursor.setCharFormat(QTextCharFormat());
+        m_cursor.setCharFormat(baseCharFormat());
 }
 
 void MarkdownRenderer::handleCodeBlock(const markus::CodeBlock &code)
@@ -796,8 +790,7 @@ bool MarkdownRenderer::renderDiagramAsDetails(const markus::CodeBlock &code,
     m_cursor.setBlockFormat(labelBlockFmt);
     // insertImage() may leave the cursor's char format set to the image
     // format; the label text must not inherit it.
-    m_cursor.setCharFormat(m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                           : m_textCharFormatStack.top());
+    m_cursor.setCharFormat(baseCharFormat());
     m_cursor.insertText(summaryText);
     // The direction icon goes last, like in regular details headers; restore
     // the char format afterwards (insertHtml leaves it set to the icon font).
@@ -1515,10 +1508,20 @@ void MarkdownRenderer::renderMath(const markus::Math &math)
 // Inline handlers
 // ---------------------------------------------------------------------------
 
-void MarkdownRenderer::handleEmph()
+QTextCharFormat MarkdownRenderer::baseCharFormat() const
 {
     QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
                                                           : m_textCharFormatStack.top();
+    // Guarantee the theme's text colour on the running text. A format that
+    // already carries a foreground (block quote, link, …) keeps it.
+    if (fmt.foreground().style() == Qt::NoBrush)
+        fmt.setForeground(color(TextForeground));
+    return fmt;
+}
+
+void MarkdownRenderer::handleEmph()
+{
+    QTextCharFormat fmt = baseCharFormat();
     fmt.setFontItalic(true);
     m_textCharFormatStack.push(fmt);
     m_cursor.setCharFormat(fmt);
@@ -1526,8 +1529,7 @@ void MarkdownRenderer::handleEmph()
 
 void MarkdownRenderer::handleStrong()
 {
-    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                          : m_textCharFormatStack.top();
+    QTextCharFormat fmt = baseCharFormat();
     fmt.setFontWeight(QFont::Bold);
     m_textCharFormatStack.push(fmt);
     m_cursor.setCharFormat(fmt);
@@ -1535,8 +1537,7 @@ void MarkdownRenderer::handleStrong()
 
 void MarkdownRenderer::handleStrikethrough()
 {
-    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                          : m_textCharFormatStack.top();
+    QTextCharFormat fmt = baseCharFormat();
     fmt.setFontStrikeOut(true);
     m_textCharFormatStack.push(fmt);
     m_cursor.setCharFormat(fmt);
@@ -1544,8 +1545,7 @@ void MarkdownRenderer::handleStrikethrough()
 
 void MarkdownRenderer::handleInlineCode()
 {
-    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                          : m_textCharFormatStack.top();
+    QTextCharFormat fmt = baseCharFormat();
     // setFont() below copies the mono font's own point size and weight (it is
     // the editor's code font – smaller and normal weight).  Inside a heading
     // the code span must instead keep the heading's scaled, bold font, so
@@ -1571,8 +1571,7 @@ void MarkdownRenderer::handleInlineCode()
 
 void MarkdownRenderer::handleLink(const markus::Link &link)
 {
-    QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
-                                                          : m_textCharFormatStack.top();
+    QTextCharFormat fmt = baseCharFormat();
     fmt.setAnchor(true);
     fmt.setAnchorHref(fromStdString(link.destination));
     fmt.setForeground(color(Link));
@@ -1591,7 +1590,11 @@ void MarkdownRenderer::popCharFormat()
     if (!m_textCharFormatStack.isEmpty())
         m_cursor.setCharFormat(m_textCharFormatStack.top());
     else
-        m_cursor.setCharFormat(QTextCharFormat());
+        // Restore the running text to the theme's default colour, not a bare
+        // (colourless) format: the plain text that follows an inline span
+        // would otherwise fall back to the widget palette, which the host can
+        // reset to the wrong colour (dark-on-dark in the dark theme).
+        m_cursor.setCharFormat(baseCharFormat());
 }
 
 QString MarkdownRenderer::languageFromInfoString(const markus::CodeBlock &code)
@@ -2163,6 +2166,8 @@ void MarkdownRenderer::setCollapseToolCallsByDefault(bool newCollapseToolCallsBy
 void MarkdownRenderer::setColor(ColorRole role, const QColor &color)
 {
     m_colorMap[role] = color;
+    if (role == TextForeground)
+        applyDocumentTextColor();
 }
 QColor MarkdownRenderer::color(ColorRole role) const
 {
@@ -2171,6 +2176,22 @@ QColor MarkdownRenderer::color(ColorRole role) const
 void MarkdownRenderer::setColorPalette(const QHash<ColorRole, QColor> &p)
 {
     m_colorMap = p;
+    applyDocumentTextColor();
+}
+// Keeps the widget palette's Text role in step with TextForeground so the
+// document's default (unformatted) text – paragraphs, the <details> summary
+// line, tool output – renders in the theme's text colour. The document
+// layout colours fragments without an explicit foreground from the widget
+// palette, so this is what makes plain text follow the active theme instead
+// of staying at the constructor's light-theme default (dark-on-dark in the
+// dark theme). Links, block quotes and syntax highlighting set their own
+// foreground and are unaffected.
+void MarkdownRenderer::applyDocumentTextColor()
+{
+    const QColor fg = color(TextForeground);
+    QPalette p = palette();
+    p.setColor(QPalette::Text, fg);
+    setPalette(p);
 }
 void MarkdownRenderer::setBaseFont(const QFont &f)
 {

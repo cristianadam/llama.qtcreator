@@ -255,11 +255,22 @@ private:
     void handleInlineCode();
     void handleLink(const markus::Link &link);
     void popCharFormat();
+    // The character format the running text is inserted with: the top of the
+    // inline-format stack (or a fresh format), always carrying the theme's
+    // text colour unless a more specific one is already set. Centralising it
+    // here is what keeps plain text between inline spans (code, links, …)
+    // the same colour as the surrounding text, and makes the colour come from
+    // the palette rather than the widget palette (which the host can reset).
+    QTextCharFormat baseCharFormat() const;
 
     void createOverlayForCodeBlock(int blockId);
     void updateAllOverlaysGeometry();
     void toggleSection(int secId);
     void setupDocumentSettings();
+    // Colours the document's default (unformatted) text with TextForeground
+    // and keeps the widget palette's Text role in step. Called whenever the
+    // colour palette changes.
+    void applyDocumentTextColor();
 
     static QString languageFromInfoString(const markus::CodeBlock &code);
     static int getBlockQuoteMargin(int depth, int paragraphMargin);

@@ -426,11 +426,26 @@ ChatEditor::ChatEditor()
     m_scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_messageContainer = new QWidget(m_scrollArea);
+    m_messageContainer->setObjectName("LlamaConversationContainer");
     m_messageLayout = new QVBoxLayout(m_messageContainer);
     m_messageLayout->setContentsMargins(0, 0, 0, 0);
     m_messageLayout->setSpacing(0);           // no gap between message rows
     m_messageLayout->setAlignment(Qt::AlignTop);
     m_scrollArea->setWidget(m_messageContainer);
+    // The conversation's own background is the theme's default background
+    // (Token_Background_Default): the message bubbles paint their own (muted)
+    // background on top, and the viewport fills the empty space around and
+    // below the messages. Styled on the scroll area (which cascades to the
+    // viewport and the container) so it holds up under the host style the
+    // same way the bubble backgrounds do.
+    m_scrollArea->setObjectName("LlamaConversationArea");
+    m_scrollArea->setStyleSheet(replaceThemeColorNamesWithRGBNames(R"(
+        QScrollArea#LlamaConversationArea,
+        QScrollArea#LlamaConversationArea > QWidget#qt_scrollarea_viewport,
+        QWidget#LlamaConversationContainer {
+            background: Token_Background_Default;
+        }
+    )"));
     // Accept file drops anywhere in the conversation, not just on the
     // input: the container covers the message area, the viewport the empty
     // space around/under the messages.  Without this the drop would bubble
