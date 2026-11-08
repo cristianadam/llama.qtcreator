@@ -38,6 +38,7 @@
 #include <QActionGroup>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QContextMenuEvent>
 #include <QLabel>
 #include <QLineEdit>
 #include <QLocale>
@@ -837,6 +838,19 @@ QWidget *ChatEditor::displayServerProps()
     m_connectionLabel->setTextFormat(Qt::RichText);
     m_connectionLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_connectionLabel->setOpenExternalLinks(false);
+    // The event filter (on ChatEditor) right-clicks the working directory
+    // link and offers the reset shortcuts (a regular click opens the folder
+    // picker).  QLabel has no hit‑test API for its links, so the link under
+    // the cursor is tracked from linkHovered() (emitted by Qt's own hit test
+    // with the link name, or an empty string when leaving it).  The filter
+    // is removed with the label when the welcome screen goes away.
+    m_connectionLabel->installEventFilter(this);
+    connect(m_connectionLabel,
+            &QLabel::linkHovered,
+            this,
+            [this](const QString &link) {
+                m_workdirLinkHovered = (link == QLatin1String("dir"));
+            });
     connect(m_connectionLabel,
             &QLabel::linkActivated,
             this,
@@ -920,6 +934,7 @@ void ChatEditor::removePropsWidget()
         // reference now so a (deferred) deleteLater() cannot leave it
         // dangling while a project/model change tries to refresh it.
         m_connectionLabel = nullptr;
+        m_workdirLinkHovered = false;
         // The welcome screen centred the message area; messages are top
         // aligned, so restore the layout's default alignment.
         m_messageLayout->setAlignment(Qt::AlignTop);
@@ -990,6 +1005,38 @@ void ChatEditor::changeWorkingDirectory()
         return;
 
     settings().workingDirectory.setValue(dir);
+    settings().writeSettings();
+    updateConnectionLabel();
+}
+
+void ChatEditor::showWorkingDirectoryResetMenu(const QPoint &globalPos)
+{
+    QMenu menu(m_connectionLabel);
+    // "Reset to Project Directory" clears the override: an empty value means
+    // the (startup) project's directory, which also keeps tracking the
+    // project when it changes.  "Reset to Default Projects Directory" pins
+    // the directory the new projects are created in.
+    auto *resetToProject = new QAction(Tr::tr("Reset to Project Directory"), &menu);
+    resetToProject->setToolTip(Tr::tr(
+        "Clear the working directory override: the tools run in the startup "
+        "project's directory (or the default projects directory when no "
+        "project is open)."));
+    // Without a project there is nothing to reset to: the override would
+    // fall back to the default projects directory (the other entry).
+    resetToProject->setEnabled(ProjectExplorer::ProjectManager::startupProject() != nullptr);
+    auto *resetToDefault = new QAction(Tr::tr("Reset to Default Projects Directory"), &menu);
+    resetToDefault->setToolTip(Tr::tr(
+        "Use the default projects directory, the setting the new projects "
+        "are created in."));
+    menu.addActions({resetToProject, resetToDefault});
+    const QAction *chosen = menu.exec(globalPos);
+    if (chosen == resetToProject)
+        settings().workingDirectory.setValue(QString());
+    else if (chosen == resetToDefault)
+        settings().workingDirectory.setValue(
+            Core::DocumentManager::projectsDirectory().toUserOutput());
+    else
+        return;
     settings().writeSettings();
     updateConnectionLabel();
 }
@@ -1499,6 +1546,16 @@ void ChatEditor::onStopRequested(bool fromKey)
 
 bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
 {
+    // Right-click on the working directory link in the welcome screen: the
+    // reset shortcuts (a left click opens the folder picker).  The link under
+    // the cursor is tracked from linkHovered() (see displayServerProps()).
+    if (obj == m_connectionLabel
+        && event->type() == QEvent::ContextMenu && m_workdirLinkHovered) {
+        auto *ce = static_cast<QContextMenuEvent *>(event);
+        showWorkingDirectoryResetMenu(ce->globalPos());
+        return true;
+    }
+
     // Esc stops an in‑progress generation (LLM streaming or a running
     // tool) no matter which widget in the chat editor has focus.  The
     // ChatInput consumes the event first when one of its children is

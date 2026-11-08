@@ -1,4 +1,5 @@
 #pragma once
+#include <QPoint>
 #include <QPointer>
 #include <QSet>
 #include <QVector>
@@ -133,6 +134,11 @@ private:
     void showModelDetails();
     // Opens a folder picker to change the working directory the tools run in.
     void changeWorkingDirectory();
+    // The context menu of the working directory link in the welcome screen
+    // (a regular click opens the folder picker): reset the directory to the
+    // (startup) project's, or to the default projects directory (the setting
+    // new projects are created in).
+    void showWorkingDirectoryResetMenu(const QPoint &globalPos);
     // Toggles the in‑place edit button on all assistant message widgets
     // after the "Human Editor" endpoint was (de)selected.
     void applyHumanEditorMode();
@@ -152,6 +158,7 @@ private:
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
     QLabel *m_connectionLabel{nullptr}; // "You are connected to …" line in m_propsWidget
+    bool m_workdirLinkHovered{false}; // the welcome screen's dir link is under the cursor
     QWidget *m_followUpWidget{nullptr};
     QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor
     QLabel *m_contextLabel{nullptr};
