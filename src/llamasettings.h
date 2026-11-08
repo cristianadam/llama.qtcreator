@@ -97,8 +97,8 @@ public:
     Utils::BoolAspect toolsEnabled{this};
     // Override for the directory the chat tools operate in. Empty means: the
     // startup project's directory (or the default projects directory when no
-    // project is open). It can be changed by clicking the working directory
-    // in the chat welcome screen.
+    // project is open). It can be changed on the "Tools" settings page or by
+    // clicking the working directory in the chat welcome screen.
     Utils::StringAspect workingDirectory{this};
     // Run the chat tools in a sandbox: bash commands in a platform sandbox
     // (bubblewrap on Linux, sandbox-exec on macOS, a Microsoft MXC process

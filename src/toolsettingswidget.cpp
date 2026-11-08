@@ -17,6 +17,7 @@
 #include <utils/hostosinfo.h>
 #include <utils/qtcassert.h>
 
+#include <QFileDialog>
 #include <QHash>
 #include <QHBoxLayout>
 #include <QHeaderView>
@@ -99,12 +100,39 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // The search and find tools run ripgrep, which is not always installed;
     // like the Windows sandbox runtime on the Sandbox page, a pinned release
     // can be downloaded here, or an rg of one's own can be pointed to. The
-    // group leads the page, as it is what makes the tools usable in the
-    // first place.
+    // group follows the working directory row, as it is what makes the tools
+    // usable in the first place.
     using namespace Layouting;
     m_ripgrepStatus = new QLabel(this);
     m_ripgrepStatus->setWordWrap(true);
     m_ripgrepDownloadButton = new QPushButton(Tr::tr("Download..."), this);
+
+    // Working directory: the directory the chat tools operate in (the chat
+    // welcome screen offers a picker for it too). When the field is empty
+    // the startup project's directory (or the default projects directory)
+    // is used – shown as the placeholder, like the resolved ripgrep path in
+    // its chooser.
+    auto *workdirBrowseButton = new QPushButton(Tr::tr("Browse..."), this);
+    connect(workdirBrowseButton,
+            &QPushButton::clicked,
+            this,
+            [this] {
+                const QString dir = QFileDialog::getExistingDirectory(
+                        this,
+                        Tr::tr("Select Working Directory"),
+                        settings().workingDirectory.value());
+                if (!dir.isEmpty())
+                    settings().workingDirectory.setValue(dir);
+            });
+    const auto showWorkdir = [this] {
+        settings().workingDirectory.setPlaceHolderText(
+                toolsWorkingDirectory().toUserOutput());
+    };
+    showWorkdir();
+    connect(&settings().workingDirectory,
+            &Utils::BaseAspect::changed,
+            this,
+            showWorkdir);
 
     // The path chooser is for an rg of one's own; when it is empty the one
     // on the PATH (or the downloaded one) is taken, and showing that as the
@@ -260,6 +288,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
 
     // layout
     Column{
+        Row{settings().workingDirectory, workdirBrowseButton},
         ripgrepGroup,
         If(HostOsInfo::isWindowsHost()) >> Then{niubashGroup},
         m_loadInstructionsCheck,
