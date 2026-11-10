@@ -14,6 +14,7 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QProcessEnvironment>
+#include <QRegularExpression>
 #include <QtTest/QtTest>
 
 #include <coreplugin/documentmanager.h>
@@ -5716,8 +5717,13 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
              qPrintable(html));
     QVERIFY2(html.contains(QStringLiteral("data:image/svg+xml;base64,") + b64),
              qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("A[Start]")), qPrintable(html));
-    QVERIFY2(html.contains(QStringLiteral("--&gt; B[End]")), qPrintable(html));
+    // The source below the image: syntax highlighting may split it across
+    // <span> runs (a Mermaid definition installed in the KDE data dir does),
+    // so check the tag‑stripped text.
+    QString sourceText = html;
+    sourceText.remove(QRegularExpression(QStringLiteral("<[^>]*>")));
+    QVERIFY2(sourceText.contains(QStringLiteral("A[Start]")), qPrintable(html));
+    QVERIFY2(sourceText.contains(QStringLiteral("--&gt; B[End]")), qPrintable(html));
     // ...and the cached math span an inline image, aligned like the chat
     // view (re-boxed SVGs pin to the line bottom, display math is centred).
     QVERIFY2(html.contains(QStringLiteral("<img class=\"math\" src=\"data:image/svg+xml;base64,")),
