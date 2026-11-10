@@ -20,6 +20,7 @@
 #include <utils/utilsicons.h>
 #include <utils/widgets.h>
 
+#include <texteditor/fontsettings.h>
 #include <texteditor/textdocument.h>
 #include <texteditor/texteditor.h>
 
@@ -48,12 +49,14 @@
 #include <QMessageBox>
 #include <QPoint>
 #include <QPointer>
+#include <QPlainTextEdit>
 #include <QRect>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QSignalBlocker>
+#include <QSyntaxHighlighter>
 #include <QTextCharFormat>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -72,6 +75,7 @@
 #include "llamaconstants.h"
 #include "llamaicons.h"
 #include "llamasettings.h"
+#include "llamasyntaxhighlighter.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -125,6 +129,49 @@ QString escapeHtml(const QString &text)
     result.replace(QLatin1String(">"), QLatin1String("&gt;"));
     result.replace(QLatin1Char('"'), QLatin1String("&quot;"));
     return result;
+}
+
+//! Highlights the chat templates shown in the model details dialog, using
+//! the editor's "Jinja" syntax definition and the global editor color
+//! scheme (the same engine the rendered chat Markdown uses for its code
+//! blocks, and the Tools settings page for its JSON view).
+class JinjaHighlighter : public QSyntaxHighlighter
+{
+    Q_OBJECT
+public:
+    explicit JinjaHighlighter(QTextDocument *document);
+
+protected:
+    void highlightBlock(const QString &text) override;
+
+private:
+    SyntaxHighlighter m_engine;
+    QTextCharFormat m_defaultFormat;
+};
+
+JinjaHighlighter::JinjaHighlighter(QTextDocument *document)
+    : QSyntaxHighlighter(document)
+{
+    m_engine.setDefinition(syntaxDefinitionForName(QStringLiteral("Jinja")));
+    m_defaultFormat =
+            TextEditor::globalFontSettings().data().toTextCharFormat(TextEditor::C_TEXT);
+}
+
+void JinjaHighlighter::highlightBlock(const QString &text)
+{
+    // The engine carries inter-line state (e.g. an unterminated string).
+    // Reset it at the start of the document so re-highlighting fresh
+    // content does not continue a state from the previous content.
+    if (currentBlock().blockNumber() == 0)
+        m_engine.resetState();
+
+    QVector<HighlightFragment> fragments;
+    m_engine.highlight(text, m_defaultFormat, fragments);
+    int position = 0;
+    for (const HighlightFragment &fragment : fragments) {
+        setFormat(position, fragment.text.length(), fragment.format);
+        position += fragment.text.length();
+    }
 }
 
 // The thinking levels and their display names, shared by the status bar
@@ -974,7 +1021,7 @@ void ChatEditor::showModelDetails()
 
     QDialog dialog(widget());
     dialog.setWindowTitle(Tr::tr("Model Details"));
-    dialog.setMinimumWidth(420);
+    dialog.resize(800, 600);
 
     auto *layout = new QVBoxLayout(&dialog);
     auto *form = new QFormLayout;
@@ -989,14 +1036,45 @@ void ChatEditor::showModelDetails()
 
     addRow(Tr::tr("Model:"), selectedModelDisplayName());
     addRow(Tr::tr("Model path:"), FilePath::fromUserInput(sp.model_path).toUserOutput());
-    addRow(Tr::tr("Context:"), sp.n_ctx > 0 ? QString(" %L1").arg(sp.n_ctx) : QString());
+    if (!sp.model_ftype.isEmpty())
+        addRow(Tr::tr("Type:"), sp.model_ftype);
+    if (sp.total_slots > 0)
+        addRow(Tr::tr("Parallel slots:"), QString::number(sp.total_slots));
+    addRow(Tr::tr("Context:"), sp.n_ctx > 0 ? QString("%L1").arg(sp.n_ctx) : QString());
     addRow(Tr::tr("Vision:"), sp.modalities.vision ? Tr::tr("yes") : Tr::tr("no"));
     addRow(Tr::tr("Audio:"), sp.modalities.audio ? Tr::tr("yes") : Tr::tr("no"));
+    if (!sp.bos_token.isEmpty())
+        addRow(Tr::tr("BOS token:"), sp.bos_token);
+    if (!sp.eos_token.isEmpty())
+        addRow(Tr::tr("EOS token:"), sp.eos_token);
+    if (!sp.reasoningEffortLevels.isEmpty())
+        addRow(Tr::tr("Reasoning effort:"), sp.reasoningEffortLevels.join(QStringLiteral(", ")));
     if (!sp.build_info.isEmpty())
         addRow(Tr::tr("Build:"), sp.build_info);
 
+    // The chat template (and, with --jinja, the tool-use template) is the
+    // server's Jinja source: a read-only view with syntax highlighting (the
+    // "Jinja" definition, the same engine the chat Markdown uses for its
+    // code blocks).  The highlighter is parented to the document, so it
+    // lives as long as the dialog.
+    auto addTemplate = [&](const QString &label, const QString &templateText) {
+        if (templateText.isEmpty())
+            return;
+        auto *view = new QPlainTextEdit(&dialog);
+        view->setReadOnly(true);
+        view->setLineWrapMode(QPlainTextEdit::NoWrap);
+        view->setPlainText(templateText);
+        view->setFont(TextEditor::globalFontSettings().data().font());
+        new JinjaHighlighter(view->document());
+        form->addRow(label, view);
+    };
+    if (sp.chat_template.isEmpty() && sp.chat_template_tool_use.isEmpty())
+        addRow(Tr::tr("Chat template:"),
+               Tr::tr("Not reported by the server (the model is not loaded?)."));
+    addTemplate(Tr::tr("Chat template:"), sp.chat_template);
+    addTemplate(Tr::tr("Tool-use template:"), sp.chat_template_tool_use);
+
     layout->addLayout(form);
-    layout->addStretch();
 
     auto *buttons = new QHBoxLayout;
     buttons->addStretch();
@@ -2068,3 +2146,5 @@ void setupChatEditor()
 }
 
 } // namespace LlamaCpp
+
+#include "llamachateditor.moc"

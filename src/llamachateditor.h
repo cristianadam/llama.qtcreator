@@ -130,7 +130,8 @@ private:
     // file name in single-model mode, or "Human Editor").
     QString selectedModelDisplayName() const;
     // Shows the model details dialog (the llama.cpp web‑UI model info: path,
-    // context, modalities, build).
+    // type, context, modalities, tokens, build, and the Jinja chat template
+    // with syntax highlighting).
     void showModelDetails();
     // Opens a folder picker to change the working directory the tools run in.
     void changeWorkingDirectory();

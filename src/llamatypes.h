@@ -139,8 +139,14 @@ struct LlamaCppServerProps
     QString role; // "router" in multi-model mode, "model" in single-model mode
     QString build_info;
     QString model_path;
+    QString model_ftype; // e.g. "Q8_0"
+    int total_slots = 0;
     int n_ctx = 0;
     QString chat_template;
+    QString chat_template_tool_use; // only present with --jinja
+    QStringList reasoningEffortLevels; // chat_template_caps.reasoning_effort_levels
+    QString bos_token;
+    QString eos_token;
 
     struct Modalities
     {

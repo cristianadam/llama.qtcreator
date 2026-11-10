@@ -386,12 +386,22 @@ void ChatManager::initServerProps()
         QJsonObject obj = doc.object();
         m_serverProps.build_info = obj.value("build_info").toString();
         m_serverProps.model_path = obj.value("model_path").toString();
+        m_serverProps.model_ftype = obj.value("model_ftype").toString();
+        m_serverProps.total_slots = obj.value("total_slots").toInt();
         QJsonObject genSettings = obj.value("default_generation_settings").toObject();
         m_serverProps.n_ctx = genSettings.value("n_ctx").toInt();
         QJsonObject mod = obj.value("modalities").toObject();
         m_serverProps.modalities.vision = mod.value("vision").toBool();
         m_serverProps.modalities.audio = mod.value("audio").toBool();
         m_serverProps.chat_template = obj.value("chat_template").toString();
+        m_serverProps.chat_template_tool_use = obj.value("chat_template_tool_use").toString();
+        const QJsonObject caps = obj.value("chat_template_caps").toObject();
+        m_serverProps.reasoningEffortLevels.clear();
+        const QJsonArray effortLevels = caps.value("reasoning_effort_levels").toArray();
+        for (const QJsonValue &value : effortLevels)
+            m_serverProps.reasoningEffortLevels << value.toString();
+        m_serverProps.bos_token = obj.value("bos_token").toString();
+        m_serverProps.eos_token = obj.value("eos_token").toString();
         m_serverProps.role = obj.value("role").toString();
         reply->deleteLater();
 
