@@ -1319,24 +1319,24 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
 // enough to leave room in the context window that triggered the handoff.
 static constexpr int kHandoffMaxTokens = 1500;
 
-void ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
+bool ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
 {
     if (!settings().autoHandoff.value())
-        return;
+        return false;
     // A reply (or the handoff document) is already in flight: the next
     // quiet point triggers the handoff again.
     if (isGenerating(convId))
-        return;
+        return false;
     // "Human Editor" mode: the reply would be written by a human in a
     // split editor, and the finished handler that creates the continuation
     // never runs – the m_handoffTurns flag would leak into the next real
     // turn.
     if (isHumanEditor())
-        return;
+        return false;
 
     auto msgs = m_storage->getMessages(convId);
     if (msgs.isEmpty())
-        return;
+        return false;
     auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
     // The original conversation stays above the threshold after a handoff:
@@ -1358,7 +1358,7 @@ void ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
                 << "Skipping handoff of" << convId << ": only"
                 << leafMsgs.size() - handoffIndex
                 << "messages since the last handoff";
-            return;
+            return false;
         }
     }
 
@@ -1388,6 +1388,7 @@ void ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
 
     m_handoffTurns.insert(convId, HandoffTurn{promptMsg.id, promptMsg.parent});
     generateMessage(convId, promptMsg.id, [](qint64) {});
+    return true;
 }
 
 void ChatManager::createHandoffContinuation(const QString &convId,
@@ -2295,6 +2296,7 @@ void ChatManager::sendChatRequest(const QString &convId,
             auto msgs = m_storage->getMessages(convId);
             const bool doSummarization = msgs.size() == 3 && !isTaskConversation;
             bool haveToolExecution = false;
+            bool toolsWereRun = false;
 
             // Collect the tool calls committed during the stream (each is a
             // single-entry "tool_calls" extra, in call order).
@@ -2367,6 +2369,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     for (const ToolCall &tool : tools) {
                         executeToolAndSendResult(convId, pm, tool, [](qint64) {}, batchRemaining);
                     }
+                    toolsWereRun = true;
                 }
                 haveToolExecution = true;
             }
@@ -2381,6 +2384,25 @@ void ChatManager::sendChatRequest(const QString &convId,
                 });
             }
 
+            // The context threshold of the auto‑handoff.  Checked for every
+            // assistant turn, not only the tool‑free ones: a tool loop can
+            // run on for many turns, so the handoff must be able to fire in
+            // the middle of a sequence of operations.  A handoff turn never
+            // triggers another handoff, and sub‑agents are skipped (a visible
+            // continuation would not make sense for a background task).
+            bool handoffThresholdExceeded = false;
+            if (!isHandoffTurn && !isTaskConversation
+                    && settings().autoHandoff.value()) {
+                const auto &t = pm.timings;
+                int usedTokens = int(t.cache_n + t.prompt_n + t.predicted_n);
+                if (usedTokens <= 0)
+                    usedTokens = pm.promptProgress.total;
+                const int maxCtx = serverProps().n_ctx;
+                const int threshold = settings().handoffThreshold();
+                handoffThresholdExceeded = maxCtx > 0
+                        && qint64(usedTokens) * 100 > qint64(maxCtx) * threshold;
+            }
+
             if (!haveToolExecution) {
                 // Mid‑run steering: messages queued while this reply was
                 // generated keep the loop alive (pi's follow‑up messages /
@@ -2393,42 +2415,18 @@ void ChatManager::sendChatRequest(const QString &convId,
                         && reply->error() == QNetworkReply::NoError
                         && !answer.trimmed().isEmpty();
                 if (isHandoffTurn) {
-                    const HandoffTurn handoff = m_handoffTurns.take(convId);
-                    // A document cut off at the capped budget lost its
-                    // tail (the "next steps" section): not usable as the
-                    // seed of the continuation.
-                    const bool truncated =
-                        status.finishReason == QLatin1String("length");
-                    if (complete && !truncated) {
-                        // The handoff document is committed: hand the
-                        // conversation over to a new one (the prompt and
-                        // the document stay in this one).
+                    m_handoffTurns.remove(convId);
+                    // The handoff exchange (prompt + document) stays in this
+                    // conversation in every case.  A document cut off at the
+                    // capped budget is still usable as the seed of the
+                    // continuation; only a turn that was stopped, failed or
+                    // produced nothing has no usable document – no
+                    // continuation is created then, and the threshold trigger
+                    // fires again at the next quiet point.
+                    if (complete)
                         createHandoffContinuation(convId, pm.id, answer);
-                    } else {
-                        // Stopped, failed, empty or truncated: drop the
-                        // whole handoff exchange (prompt + partial
-                        // document), or the orphan prompt would be re‑sent
-                        // with every later request.  The threshold trigger
-                        // fires again at the next quiet point.
-                        if (m_storage->deleteMessageBranch(handoff.promptId))
-                            m_storage->setCurrentNode(convId, handoff.leafId);
-                            emit messageDeleted(convId);
-                        if (failed) {
-                            // The error note was attached to the document
-                            // message that was just deleted: re‑anchor it
-                            // at the pre‑handoff leaf so the failure stays
-                            // visible.
-                            pm.parent = handoff.leafId;
-                            m_storage->appendMsg(pm, pm.parent);
-                        }
-                    }
                     if (continueLoop)
-                        generateMessage(convId,
-                                        flushSteeringQueue(
-                                            convId,
-                                            (complete && !truncated) ? pm.id
-                                                                     : handoff.leafId),
-                                        onChunk);
+                        generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
                 } else if (continueLoop)
                     generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
                 else if (isTaskConversation) {
@@ -2451,20 +2449,14 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // the reply would end): hand the conversation over to a new
                 // one before it fills the model's context window.  Skipped
                 // when the loop continues – the next turn's (larger) prompt
-                // is checked the same way once it ends.  Sub‑agents are
-                // skipped: a visible continuation conversation would not
-                // make sense for a background task.
-                if (!isHandoffTurn && !continueLoop && !isTaskConversation
-                        && settings().autoHandoff.value()) {
-                    const auto &t = pm.timings;
-                    int usedTokens = int(t.cache_n + t.prompt_n + t.predicted_n);
-                    if (usedTokens <= 0)
-                        usedTokens = pm.promptProgress.total;
-                    const int maxCtx = serverProps().n_ctx;
-                    const int threshold = settings().handoffThreshold();
-                    if (maxCtx > 0 && qint64(usedTokens) * 100 > qint64(maxCtx) * threshold)
-                        handoffConversation(convId, pm.id);
-                }
+                // is checked the same way once it ends.
+                if (handoffThresholdExceeded && !continueLoop)
+                    handoffConversation(convId, pm.id);
+            } else if (toolsWereRun && handoffThresholdExceeded) {
+                // Tool‑call turn: the handoff is deferred to the end of the
+                // current tool batch (executeToolAndSendResult()), instead
+                // of the model getting another turn.
+                m_handoffPending.insert(convId);
             }
         }
     });
@@ -2495,6 +2487,13 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         onChunk(toolMsg.id);
         if (batchRemaining && --*batchRemaining > 0)
             return; // sibling tool calls of the same message are still running
+        // The context threshold was exceeded on this turn: hand the
+        // conversation over instead of the model getting another turn
+        // (fall back to the regular next turn when the handoff did not
+        // start, e.g. the setting was switched off in the meantime).
+        if (m_handoffPending.remove(convId) > 0
+                && handoffConversation(convId, toolMsg.id))
+            return;
         generateMessage(convId, toolMsg.id, onChunk);
     };
 
@@ -2641,6 +2640,10 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         // steering messages stay in the queue for the next user action.)
         if (m_stopRequested.contains(convId)) {
             m_stopRequested.remove(convId);
+            // The handoff was deferred to the end of this batch, but the
+            // conversation is stopped: drop the flag, or it would leak into
+            // the next turn.
+            m_handoffPending.remove(convId);
             // A stopped task conversation must still report back to the
             // "task" tool waiting in its parent conversation (as
             // deleteConversation does), or the parent would stay busy
@@ -2650,6 +2653,13 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                 emit taskConversationFinished(convId, {}, false);
             return;
         }
+        // The context threshold was exceeded on this turn: hand the
+        // conversation over instead of the model getting another turn
+        // (fall back to the regular next turn when the handoff did not
+        // start, e.g. it was skipped by the "recently handed off" guard).
+        if (m_handoffPending.remove(convId) > 0
+                && handoffConversation(convId, toolMsg.id))
+            return;
         // Mid‑run steering: user messages queued while the tools ran join
         // the next request.
         generateMessage(toolMsg.convId, flushSteeringQueue(toolMsg.convId, toolMsg.id), onChunk);
@@ -2704,6 +2714,7 @@ void ChatManager::deleteConversation(const QString &convId)
         m_stopRequested.remove(convId);
     m_steeringQueue.remove(convId);
     m_handoffTurns.remove(convId);
+    m_handoffPending.remove(convId);
     m_lastHandoffLeaf.remove(convId);
 
     m_storage->deleteConversation(convId);

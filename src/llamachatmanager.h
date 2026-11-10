@@ -231,16 +231,21 @@ public:
     //! a regular user message, the streamed reply (the handoff document)
     //! stays in this conversation, and a new conversation whose first
     //! message is that document is created and opened in an editor once the
-    //! reply completes (createHandoffContinuation()).  When the reply does
-    //! not produce a usable document (stopped, failed, empty or truncated),
-    //! the handoff exchange (prompt + partial document) is dropped again,
-    //! so the conversation is back where it was and the threshold trigger
-    //! fires again at the next quiet point.  Running the document as a
-    //! normal turn reuses the warm prompt cache of the previous turn
-    //! instead of a fresh full‑history request.  Called from the
-    //! auto‑handoff threshold trigger; the "recently handed off" guard
-    //! skips conversations handed off less than six messages ago.
-    void handoffConversation(const QString &convId, qint64 leafNodeId);
+    //! reply completes (createHandoffContinuation()).  The exchange is kept
+    //! in the original conversation in every case; when the reply does not
+    //! produce a usable document (stopped, failed or empty) no continuation
+    //! is created and the threshold trigger fires again at the next quiet
+    //! point.  Running the document as a normal turn reuses the warm prompt
+    //! cache of the previous turn instead of a fresh full-history request.
+    //! Called from the auto‑handoff threshold trigger, which is checked for
+    //! every assistant turn – a tool loop is handed off once the current
+    //! tool batch has reported back (m_handoffPending); the "recently
+    //! handed off" guard skips conversations handed off less than six
+    //! messages ago.
+    //! Returns true when the handoff prompt was appended and the document
+    //! generation started; the caller of a deferred (tool‑batch) handoff
+    //! falls back to the regular next turn when it is false.
+    bool handoffConversation(const QString &convId, qint64 leafNodeId);
 
     void cancelTitleSummary(const QString &convId);
     void cancelFollowUp(const QString &convId);
@@ -413,6 +418,13 @@ private:
     //! continuation: the threshold trigger only hands off again once the
     //! branch has grown since the last handoff.
     QHash<QString, qint64> m_lastHandoffLeaf;
+
+    //! Conversations whose current tool batch must trigger the auto‑handoff
+    //! once every tool has reported back, instead of the model getting
+    //! another turn: the context threshold is exceeded and the in‑flight
+    //! turn carried tool calls, so the handoff is deferred to the end of
+    //! the batch (executeToolAndSendResult()).
+    QSet<QString> m_handoffPending;
 
     // Task‑conversation (sub‑agent) state
     struct TaskConversationConfig
