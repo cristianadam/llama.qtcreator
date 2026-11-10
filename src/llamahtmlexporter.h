@@ -22,6 +22,12 @@ public:
     // messages that render through their tool bubble instead (mirroring
     // ChatManager::messageToMarkdown()).
     static QString messageToHtml(const Message &msg);
+
+    // A complete HTML document for a single message: the conversation
+    // export's document frame and styling, but only the bubble of \a msg
+    // (no title heading).  Returns an empty string when \a msg has no
+    // bubble markup of its own (see messageToHtml()).
+    static QString messageHtml(const Message &msg);
 };
 
 } // namespace LlamaCpp

@@ -55,6 +55,7 @@ signals:
 
 private slots:
     void onCopyClicked();
+    void onCopyAsHtmlClicked();
     void onEditClicked();
     void onRegenerateClicked();
     void onPrevSiblingClicked();

@@ -562,6 +562,7 @@ private slots:
 
     // HtmlExporter
     void htmlExport_conversationDocument();
+    void htmlExport_messageDocument();
     void htmlExport_userAssistant();
     void htmlExport_codeBlockHighlighted();
     void htmlExport_toolCall();
@@ -5584,6 +5585,43 @@ void LlamaToolsTest::htmlExport_conversationDocument()
     QVERIFY(html.contains(QStringLiteral("<p>Hi!</p>")));
     // Tables get the chat renderer's alternating row shading.
     QVERIFY(html.contains(QStringLiteral("tbody tr:nth-child(odd)")));
+}
+
+void LlamaToolsTest::htmlExport_messageDocument()
+{
+    Message assistant;
+    assistant.role = "assistant";
+    assistant.content = QStringLiteral("**bold** and `inline code`");
+
+    const QString html = HtmlExporter::messageHtml(assistant);
+    // A complete, self-contained document (same frame and styling as the
+    // conversation export, but no title heading)...
+    QVERIFY2(html.startsWith("<!DOCTYPE html>"), qPrintable(html.left(100)));
+    QVERIFY(html.contains(QStringLiteral("<style>")));
+    QVERIFY(!html.contains(QStringLiteral("<h1>")));
+    QVERIFY(!html.contains(QStringLiteral("Token_")));
+    // ...holding only the one message's bubble.
+    QVERIFY2(html.contains(QStringLiteral("<div class=\"msg assistant\">")),
+             qPrintable(html));
+    QVERIFY(html.contains(QStringLiteral("<strong>bold</strong>")));
+    QVERIFY(html.contains(QStringLiteral("<code>inline code</code>")));
+    QVERIFY(!html.contains(QStringLiteral("class=\"msg user\"")));
+
+    // Messages without a bubble of their own (tool‑call‑only assistant)
+    // export as nothing.
+    Message toolOnly;
+    toolOnly.role = "assistant";
+    QJsonObject fn;
+    fn[QStringLiteral("name")] = QStringLiteral("bash");
+    fn[QStringLiteral("arguments")] = QStringLiteral("{\"command\":\"ls\"}");
+    QJsonObject call;
+    call[QStringLiteral("function")] = fn;
+    QJsonArray calls;
+    calls.append(call);
+    QVariantMap extra;
+    extra[QStringLiteral("tool_calls")] = calls;
+    toolOnly.extra.append(extra);
+    QVERIFY(HtmlExporter::messageHtml(toolOnly).isEmpty());
 }
 
 void LlamaToolsTest::htmlExport_userAssistant()

@@ -1,4 +1,5 @@
 #include <QAbstractTextDocumentLayout>
+#include <QAction>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopServices>
@@ -31,6 +32,7 @@
 
 #include "llamachatmessage.h"
 #include "llamamarkdownwidget.h"
+#include "llamahtmlexporter.h"
 #include "llamatheme.h"
 #include "llamathinkingsectionparser.h"
 #include "llamatr.h"
@@ -254,7 +256,13 @@ void ChatMessage::buildUI()
     m_copyButton->setText("E");
     m_copyButton->setToolTip(Tr::tr("Copy the message to clipboard"));
     m_copyButton->setVisible(!m_haveToolCalls);
-    connect(m_copyButton, &QToolButton::clicked, this, &ChatMessage::onCopyClicked);
+    QMenu *copyMenu = new QMenu(m_copyButton);
+    connect(copyMenu->addAction(Tr::tr("Copy verbatim")),
+            &QAction::triggered, this, &ChatMessage::onCopyClicked);
+    connect(copyMenu->addAction(Tr::tr("Copy HTML")),
+            &QAction::triggered, this, &ChatMessage::onCopyAsHtmlClicked);
+    m_copyButton->setMenu(copyMenu);
+    m_copyButton->setPopupMode(QToolButton::InstantPopup);
     m_actionLayout->addWidget(m_copyButton);
 
     m_deleteButton = new QToolButton(this);
@@ -587,6 +595,19 @@ void ChatMessage::setSiblingLeafIds(const QVector<qint64> &newSiblingLeafIds)
 void ChatMessage::onCopyClicked()
 {
     QGuiApplication::clipboard()->setText(m_msg.content);
+}
+
+void ChatMessage::onCopyAsHtmlClicked()
+{
+    const QString html = HtmlExporter::messageHtml(m_msg);
+    if (html.isEmpty())
+        return;
+    // Rich targets (browsers, editors, …) get the styled document; plain‑text
+    // targets fall back to the Markdown source.
+    QMimeData *md = new QMimeData;
+    md->setHtml(html);
+    md->setText(m_msg.content);
+    QGuiApplication::clipboard()->setMimeData(md);
 }
 
 void ChatMessage::onEditClicked()

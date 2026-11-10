@@ -216,6 +216,84 @@ static QString cleanUpSummaries(const QString &html)
     return result.replace(re, QStringLiteral("<summary>\\1</summary>"));
 }
 
+// The <style> block of the exported documents.  Colours follow the current
+// Qt Creator theme, like the chat view.
+static QString conversationStyleSheet()
+{
+    return themeStyleSheet(R"(
+        body {
+            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            background: Token_Background_Default;
+            color: Token_Text_Default;
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+        h1 { font-size: 20px; }
+        .chat { display: flex; flex-direction: column; gap: 12px; }
+        .msg {
+            border-radius: 8px;
+            padding: 8px 12px;
+            overflow-wrap: break-word;
+        }
+        .msg.user { background: Token_Background_Muted; }
+        .msg.assistant {
+            background: Token_Background_Default;
+            border: 1px solid Token_Stroke_Muted;
+        }
+        .msg.tool {
+            background: Token_Background_Default;
+            border: 1px solid Token_Stroke_Subtle;
+        }
+        .msg p { margin: 8px 0; }
+        .msg > :first-child { margin-top: 0; }
+        .msg > :last-child { margin-bottom: 0; }
+        pre {
+            background: Token_Background_Muted;
+            border: 1px solid Token_Stroke_Subtle;
+            border-radius: 8px;
+            padding: 8px 10px;
+            overflow-x: auto;
+            font-family: "SF Mono", Menlo, Consolas, monospace;
+            font-size: 13px;
+        }
+        code { font-family: "SF Mono", Menlo, Consolas, monospace; }
+        p code, li code, td code {
+            background: Token_Background_Muted;
+            border-radius: 4px;
+            padding: 1px 4px;
+            font-size: 90%;
+        }
+        pre code { background: none; padding: 0; }
+        a { color: Token_Accent_Default; }
+        blockquote {
+            border-left: 3px solid Token_Stroke_Muted;
+            margin: 8px 0;
+            padding: 2px 12px;
+            color: Token_Text_Muted;
+        }
+        hr { border: none; border-top: 1px solid Token_Stroke_Muted; margin: 12px 0; }
+        table { border-collapse: collapse; margin: 8px 0; }
+        th, td { border: 1px solid Token_Stroke_Muted; padding: 4px 8px; }
+        /* Like the chat renderer: the header is plain (bold) and only the
+           1st, 3rd, … body row gets the muted shading. */
+        tbody tr:nth-child(odd) { background: Token_Background_Muted; }
+        details { margin: 8px 0; }
+        summary { cursor: pointer; color: Token_Text_Accent; }
+        img { max-width: 100%; }
+        span.math { color: Token_Text_Default; }
+        /* The persisted math SVGs are re-boxed so their bottom edge sits one
+           font descent below the math baseline (the chat view pins them to
+           the line bottom); match that, or the formula floats a descent
+           above the text (the img default is baseline alignment). */
+        img.math { vertical-align: bottom; }
+        /* Display math reads as its own centred line, like the chat view. */
+        img.math.display { display: block; margin: 8px auto; }
+    )");
+}
+
 // ---------------------------------------------------------------------------
 // Markdown -> HTML
 // ---------------------------------------------------------------------------
@@ -342,86 +420,18 @@ QString HtmlExporter::messageToHtml(const Message &msg)
            + markdownToHtml(processedContent, diagrams) + QStringLiteral("\n</div>\n");
 }
 
-QString HtmlExporter::conversationHtml(const QString &title, const QVector<Message> &messages)
+// ---------------------------------------------------------------------------
+// Shared document frame
+// ---------------------------------------------------------------------------
+
+// The complete HTML document: doctype, head with the resolved style sheet,
+// and the message bubbles.  \a titleHeading adds the <h1> the conversation
+// export has (the single-message document has no title of its own).
+static QString htmlDocument(const QString &title,
+                            const QString &css,
+                            const QString &body,
+                            bool titleHeading)
 {
-    QString body;
-    for (const Message &msg : std::as_const(messages))
-        body += messageToHtml(msg);
-
-    // Colours follow the current Qt Creator theme, like the chat view.
-    const QString css = themeStyleSheet(R"(
-        body {
-            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.5;
-            background: Token_Background_Default;
-            color: Token_Text_Default;
-            max-width: 860px;
-            margin: 0 auto;
-            padding: 24px 16px;
-        }
-        h1 { font-size: 20px; }
-        .chat { display: flex; flex-direction: column; gap: 12px; }
-        .msg {
-            border-radius: 8px;
-            padding: 8px 12px;
-            overflow-wrap: break-word;
-        }
-        .msg.user { background: Token_Background_Muted; }
-        .msg.assistant {
-            background: Token_Background_Default;
-            border: 1px solid Token_Stroke_Muted;
-        }
-        .msg.tool {
-            background: Token_Background_Default;
-            border: 1px solid Token_Stroke_Subtle;
-        }
-        .msg p { margin: 8px 0; }
-        .msg > :first-child { margin-top: 0; }
-        .msg > :last-child { margin-bottom: 0; }
-        pre {
-            background: Token_Background_Muted;
-            border: 1px solid Token_Stroke_Subtle;
-            border-radius: 8px;
-            padding: 8px 10px;
-            overflow-x: auto;
-            font-family: "SF Mono", Menlo, Consolas, monospace;
-            font-size: 13px;
-        }
-        code { font-family: "SF Mono", Menlo, Consolas, monospace; }
-        p code, li code, td code {
-            background: Token_Background_Muted;
-            border-radius: 4px;
-            padding: 1px 4px;
-            font-size: 90%;
-        }
-        pre code { background: none; padding: 0; }
-        a { color: Token_Accent_Default; }
-        blockquote {
-            border-left: 3px solid Token_Stroke_Muted;
-            margin: 8px 0;
-            padding: 2px 12px;
-            color: Token_Text_Muted;
-        }
-        hr { border: none; border-top: 1px solid Token_Stroke_Muted; margin: 12px 0; }
-        table { border-collapse: collapse; margin: 8px 0; }
-        th, td { border: 1px solid Token_Stroke_Muted; padding: 4px 8px; }
-        /* Like the chat renderer: the header is plain (bold) and only the
-           1st, 3rd, … body row gets the muted shading. */
-        tbody tr:nth-child(odd) { background: Token_Background_Muted; }
-        details { margin: 8px 0; }
-        summary { cursor: pointer; color: Token_Text_Accent; }
-        img { max-width: 100%; }
-        span.math { color: Token_Text_Default; }
-        /* The persisted math SVGs are re-boxed so their bottom edge sits one
-           font descent below the math baseline (the chat view pins them to
-           the line bottom); match that, or the formula floats a descent
-           above the text (the img default is baseline alignment). */
-        img.math { vertical-align: bottom; }
-        /* Display math reads as its own centred line, like the chat view. */
-        img.math.display { display: block; margin: 8px auto; }
-    )");
-
     return QStringLiteral(
                    "<!DOCTYPE html>\n"
                    "<html>\n"
@@ -432,11 +442,30 @@ QString HtmlExporter::conversationHtml(const QString &title, const QVector<Messa
                    "<style>\n%2</style>\n"
                    "</head>\n"
                    "<body>\n"
-                   "<h1>%1</h1>\n"
-                   "<div class=\"chat\">\n%3\n</div>\n"
+                   "%3"
+                   "<div class=\"chat\">\n%4\n</div>\n"
                    "</body>\n"
                    "</html>\n")
-        .arg(escapeHtml(title), css, body);
+        .arg(title, css, titleHeading ? QStringLiteral("<h1>%1</h1>\n").arg(title) : QString(),
+             body);
+}
+
+QString HtmlExporter::conversationHtml(const QString &title, const QVector<Message> &messages)
+{
+    QString body;
+    for (const Message &msg : std::as_const(messages))
+        body += messageToHtml(msg);
+
+    return htmlDocument(escapeHtml(title), conversationStyleSheet(), body, true);
+}
+
+QString HtmlExporter::messageHtml(const Message &msg)
+{
+    const QString body = messageToHtml(msg);
+    if (body.isEmpty())
+        return {};
+
+    return htmlDocument(escapeHtml(msg.role), conversationStyleSheet(), body, false);
 }
 
 } // namespace LlamaCpp
