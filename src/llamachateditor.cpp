@@ -174,27 +174,32 @@ void JinjaHighlighter::highlightBlock(const QString &text)
     }
 }
 
-// The thinking levels and their display names, shared by the status bar
-// dropdown menu and the button label.
-const QList<QPair<QString, QString>> &thinkingLevels()
+// The display name of a thinking/reasoning level.  The concrete levels are
+// reported by the server (chat_template_caps.reasoning_effort_levels) and are
+// not a fixed set, so the known ones get a friendly name and anything else is
+// shown as‑is (capitalised).  "default" means "no override" and "off"/"none"
+// both mean "thinking disabled".
+QString thinkingLevelDisplay(const QString &level)
 {
-    static const QList<QPair<QString, QString>> levels{
+    static const QHash<QString, QString> names{
         {QStringLiteral("default"), Tr::tr("Default")},
         {QStringLiteral("off"), Tr::tr("Off")},
+        {QStringLiteral("none"), Tr::tr("Off")},
+        {QStringLiteral("minimal"), Tr::tr("Minimal")},
         {QStringLiteral("low"), Tr::tr("Low")},
         {QStringLiteral("medium"), Tr::tr("Medium")},
         {QStringLiteral("high"), Tr::tr("High")},
+        {QStringLiteral("xhigh"), Tr::tr("Extra High")},
         {QStringLiteral("max"), Tr::tr("Max")},
     };
-    return levels;
-}
-
-QString thinkingLevelDisplay(const QString &level)
-{
-    for (const auto &entry : thinkingLevels())
-        if (entry.first == level)
-            return entry.second;
-    return thinkingLevels().front().second;
+    const auto it = names.constFind(level);
+    if (it != names.constEnd())
+        return it.value();
+    if (level.isEmpty())
+        return Tr::tr("Default");
+    QString display = level;
+    display[0] = display[0].toUpper();
+    return display;
 }
 
 } // namespace
@@ -607,31 +612,19 @@ ChatEditor::ChatEditor()
     statusLayout->addWidget(m_titleButton);
 
     // Thinking-level dropdown (only shown when the model's chat template
-    // supports thinking/reasoning control, see onServerPropsUpdated()).
+    // supports thinking/reasoning control, see onServerPropsUpdated()).  The
+    // level entries come from the server's reported
+    // chat_template_caps.reasoning_effort_levels (see updateThinkingMenu());
+    // the button is disabled when the server reports none.
     m_thinkingButton = new QToolButton(m_statusBar);
     m_thinkingButton->setPopupMode(QToolButton::InstantPopup);
     m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
     m_thinkingButton->setVisible(false);
-    auto *menu = new QMenu(m_thinkingButton);
-    m_thinkingMenu = menu;
-    auto *actionGroup = new QActionGroup(m_thinkingButton);
-    actionGroup->setExclusive(true);
-    for (const auto &[key, display] : thinkingLevels()) {
-        auto *action = menu->addAction(display);
-        action->setCheckable(true);
-        action->setData(key);
-        action->setChecked(settings().thinkingLevel.value() == key);
-        actionGroup->addAction(action);
-        connect(action,
-                &QAction::triggered,
-                this,
-                [this, level = key]() {
-                    settings().thinkingLevel.setValue(level);
-                    settings().writeSettings();
-                });
-    }
-    m_thinkingButton->setMenu(menu);
-    syncThinkingLevel();
+    m_thinkingMenu = new QMenu(m_thinkingButton);
+    m_thinkingActions = new QActionGroup(m_thinkingButton);
+    m_thinkingActions->setExclusive(true);
+    m_thinkingButton->setMenu(m_thinkingMenu);
+    updateThinkingMenu();
     // Keep the menu check and the button label in sync when the level
     // changes elsewhere (another chat editor, the settings, …).
     settings().thinkingLevel.addOnChanged(this, [this] { syncThinkingLevel(); });
@@ -1766,6 +1759,46 @@ void ChatEditor::onSiblingChanged(qint64 siblingId)
     refreshMessages(chat.messages, siblingId);
 }
 
+void ChatEditor::updateThinkingMenu()
+{
+    // The concrete levels are the ones the server reports for the active
+    // model's chat template (chat_template_caps.reasoning_effort_levels);
+    // "Default" (send nothing, the model's default) and "Off" (send "none")
+    // are always offered.  When the server reports no level the template
+    // honours, the button is disabled.
+    const QStringList serverLevels =
+        ChatManager::instance().serverProps().reasoningEffortLevels;
+
+    QList<QPair<QString, QString>> entries;
+    entries.append({QStringLiteral("default"), thinkingLevelDisplay(QStringLiteral("default"))});
+    entries.append({QStringLiteral("off"), thinkingLevelDisplay(QStringLiteral("off"))});
+    for (const QString &level : serverLevels)
+        entries.append({level, thinkingLevelDisplay(level)});
+
+    // Replace the previous actions (they are the menu's children and leave
+    // the exclusive action group when destroyed).
+    const QList<QAction *> oldActions = m_thinkingMenu->actions();
+    for (QAction *action : oldActions) {
+        m_thinkingMenu->removeAction(action);
+        action->deleteLater();
+    }
+    for (const auto &entry : entries) {
+        auto *action = m_thinkingMenu->addAction(entry.second);
+        action->setCheckable(true);
+        action->setData(entry.first);
+        m_thinkingActions->addAction(action);
+        connect(action,
+                &QAction::triggered,
+                this,
+                [this, level = entry.first]() {
+                    settings().thinkingLevel.setValue(level);
+                    settings().writeSettings();
+                });
+    }
+    m_thinkingButton->setEnabled(!serverLevels.isEmpty());
+    syncThinkingLevel();
+}
+
 void ChatEditor::syncThinkingLevel()
 {
     const QString level = settings().thinkingLevel.value();
@@ -1921,8 +1954,10 @@ void ChatEditor::onMessageContentUpdated(const Message &msg)
 void ChatEditor::onServerPropsUpdated()
 {
     // Show the thinking-level dropdown only for models whose chat template
-    // supports thinking/reasoning control.
+    // supports thinking/reasoning control, and rebuild its entries from the
+    // levels the server reports (disabling the button when there are none).
     m_thinkingButton->setVisible(ChatManager::instance().serverSupportsThinking());
+    updateThinkingMenu();
 
     removePropsWidget();
 

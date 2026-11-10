@@ -95,18 +95,18 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
     payload["return_progress"] = true;
     // Thinking level for reasoning models, sent as the OAI "reasoning_effort"
     // field (the llama.cpp server maps it onto the chat template kwargs).
-    // "off" maps to "none"; "default" (or empty) omits the field entirely so
-    // the server/model default applies. Unknown values are ignored and the
-    // field is not sent for templates without thinking support.
+    // "default" (or empty) omits the field entirely so the server/model
+    // default applies; "off" maps to "none".  A concrete level is only sent
+    // when the server reports that the active template honours it
+    // (chat_template_caps.reasoning_effort_levels).
     const QString thinkingLevel = settings().thinkingLevel.value();
-    static const QStringList knownLevels{QLatin1String("off"),
-                                         QLatin1String("low"),
-                                         QLatin1String("medium"),
-                                         QLatin1String("high"),
-                                         QLatin1String("max")};
-    if (knownLevels.contains(thinkingLevel) && ChatManager::instance().serverSupportsThinking()) {
-        payload["reasoning_effort"] =
-            thinkingLevel == QLatin1String("off") ? QStringLiteral("none") : thinkingLevel;
+    if (!thinkingLevel.isEmpty() && thinkingLevel != QLatin1String("default")) {
+        if (thinkingLevel == QLatin1String("off")) {
+            if (ChatManager::instance().serverSupportsThinking())
+                payload["reasoning_effort"] = QStringLiteral("none");
+        } else if (ChatManager::instance().serverProps().reasoningEffortLevels.contains(thinkingLevel)) {
+            payload["reasoning_effort"] = thinkingLevel;
+        }
     }
     // Select the active model; required by router-mode servers, ignored by
     // single-model ones.

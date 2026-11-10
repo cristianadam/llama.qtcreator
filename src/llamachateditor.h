@@ -13,6 +13,7 @@
 class QComboBox;
 class QLabel;
 class QLineEdit;
+class QActionGroup;
 class QMenu;
 class QPushButton;
 class QTimer;
@@ -112,6 +113,12 @@ private:
     // markdown browser do.
     static void showZoomIndicator(QWidget *widget, int zoom);
     void syncThinkingLevel();
+    // Rebuilds the thinking-level menu from the levels the server reports for
+    // the active model's chat template (chat_template_caps.
+    // reasoning_effort_levels) and enables the button only when the server
+    // reports at least one.  Called from onServerPropsUpdated() and once
+    // from the constructor.
+    void updateThinkingMenu();
     void updateModelCombo();
     // Rebuilds the "You are connected to <model> in the <directory>" line of
     // the welcome screen (the model name and the directory are links; see
@@ -166,6 +173,7 @@ private:
     QLabel *m_speedLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
     QMenu *m_thinkingMenu{nullptr};
+    QActionGroup *m_thinkingActions{nullptr};
     QToolButton *m_steeringButton{nullptr};
     QMenu *m_steeringMenu{nullptr};
     QToolButton *m_followUpButton{nullptr};
