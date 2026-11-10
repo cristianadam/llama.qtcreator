@@ -28,6 +28,7 @@
 #include <QJsonParseError>
 #include <QMessageBox>
 #include <QMouseEvent>
+#include <QPoint>
 #include <QRegularExpression>
 
 using namespace Utils;
@@ -111,7 +112,9 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // welcome screen offers a picker for it too). When the field is empty
     // the startup project's directory (or the default projects directory)
     // is used – shown as the placeholder, like the resolved ripgrep path in
-    // its chooser.
+    // its chooser. Choosing a directory the tools already default to clears
+    // the override (so the directory keeps tracking the project); the
+    // Reset… button offers the welcome screen's resets.
     auto *workdirBrowseButton = new QPushButton(Tr::tr("Browse..."), this);
     connect(workdirBrowseButton,
             &QPushButton::clicked,
@@ -120,9 +123,9 @@ ToolsSettingsWidget::ToolsSettingsWidget()
                 const QString dir = QFileDialog::getExistingDirectory(
                         this,
                         Tr::tr("Select Working Directory"),
-                        settings().workingDirectory.value());
+                        toolsWorkingDirectory().toUserOutput());
                 if (!dir.isEmpty())
-                    settings().workingDirectory.setValue(dir);
+                    setToolsWorkingDirectory(dir);
             });
     const auto showWorkdir = [this] {
         settings().workingDirectory.setPlaceHolderText(
@@ -133,6 +136,20 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             &Utils::BaseAspect::changed,
             this,
             showWorkdir);
+    auto *workdirResetButton = new QPushButton(Tr::tr("Reset..."), this);
+    workdirResetButton->setToolTip(Tr::tr(
+        "Reset the working directory to the startup project's directory "
+        "(clears the override) or to the default projects directory."));
+    connect(workdirResetButton,
+            &QPushButton::clicked,
+            this,
+            [this, workdirResetButton, showWorkdir] {
+                if (execWorkingDirectoryResetMenu(
+                        this,
+                        workdirResetButton->mapToGlobal(
+                                QPoint(0, workdirResetButton->height()))))
+                    showWorkdir();
+            });
 
     // The path chooser is for an rg of one's own; when it is empty the one
     // on the PATH (or the downloaded one) is taken, and showing that as the
@@ -288,7 +305,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
 
     // layout
     Column{
-        Row{settings().workingDirectory, workdirBrowseButton},
+        Row{settings().workingDirectory, workdirBrowseButton, workdirResetButton},
         ripgrepGroup,
         If(HostOsInfo::isWindowsHost()) >> Then{niubashGroup},
         m_loadInstructionsCheck,

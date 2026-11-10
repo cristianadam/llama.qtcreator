@@ -1021,7 +1021,8 @@ void ChatEditor::updateConnectionLabel()
                  tableTag)));
     m_connectionLabel->setToolTip(Tr::tr(
         "Click the model name to see its details, or the directory to change "
-        "where the tools run."));
+        "where the tools run (right-click it to reset the directory to the "
+        "project)."));
 }
 
 void ChatEditor::removePropsWidget()
@@ -1134,41 +1135,14 @@ void ChatEditor::changeWorkingDirectory()
     if (dir.isEmpty())
         return;
 
-    settings().workingDirectory.setValue(dir);
-    settings().writeSettings();
+    setToolsWorkingDirectory(dir);
     updateConnectionLabel();
 }
 
 void ChatEditor::showWorkingDirectoryResetMenu(const QPoint &globalPos)
 {
-    QMenu menu(m_connectionLabel);
-    // "Reset to Project Directory" clears the override: an empty value means
-    // the (startup) project's directory, which also keeps tracking the
-    // project when it changes.  "Reset to Default Projects Directory" pins
-    // the directory the new projects are created in.
-    auto *resetToProject = new QAction(Tr::tr("Reset to Project Directory"), &menu);
-    resetToProject->setToolTip(Tr::tr(
-        "Clear the working directory override: the tools run in the startup "
-        "project's directory (or the default projects directory when no "
-        "project is open)."));
-    // Without a project there is nothing to reset to: the override would
-    // fall back to the default projects directory (the other entry).
-    resetToProject->setEnabled(ProjectExplorer::ProjectManager::startupProject() != nullptr);
-    auto *resetToDefault = new QAction(Tr::tr("Reset to Default Projects Directory"), &menu);
-    resetToDefault->setToolTip(Tr::tr(
-        "Use the default projects directory, the setting the new projects "
-        "are created in."));
-    menu.addActions({resetToProject, resetToDefault});
-    const QAction *chosen = menu.exec(globalPos);
-    if (chosen == resetToProject)
-        settings().workingDirectory.setValue(QString());
-    else if (chosen == resetToDefault)
-        settings().workingDirectory.setValue(
-            Core::DocumentManager::projectsDirectory().toUserOutput());
-    else
-        return;
-    settings().writeSettings();
-    updateConnectionLabel();
+    if (execWorkingDirectoryResetMenu(m_connectionLabel, globalPos))
+        updateConnectionLabel();
 }
 
 void ChatEditor::createFollowUpWidget(const QString &convId,

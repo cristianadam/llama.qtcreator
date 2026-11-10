@@ -1,9 +1,12 @@
 #pragma once
 
+#include <QPoint>
 #include <QList>
 #include <QProcessEnvironment>
 #include <QString>
 #include <QStringList>
+
+class QWidget;
 
 namespace Utils {
 class FilePath;
@@ -110,6 +113,25 @@ QProcessEnvironment withoutSecretVariables(const QProcessEnvironment &env);
 //! The directory the tools operate in: the startup project directory when a
 //! project is open, otherwise the default projects directory.
 Utils::FilePath toolsWorkingDirectory();
+
+//! The directory the tools would operate in without an explicit override:
+//! the startup project's directory when a project is open, otherwise the
+//! default projects directory.
+Utils::FilePath defaultToolsWorkingDirectory();
+
+//! Stores \a dir as the tools' working-directory override – or clears the
+//! override when \a dir is the directory the tools already default to:
+//! pinning a copy of the startup project's directory would keep pointing at
+//! the old project once a different one is opened.
+void setToolsWorkingDirectory(const QString &dir);
+
+//! The working-directory reset menu shown by the chat welcome screen and
+//! the tools settings page: "Reset to Project Directory" clears the
+//! override (the tools then track the startup project), "Reset to Default
+//! Projects Directory" pins the directory new projects are created in.
+//! Returns true when an entry was chosen and applied (the caller refreshes
+//! its display of the effective directory).
+bool execWorkingDirectoryResetMenu(QWidget *parent, const QPoint &pos);
 
 //! Model-facing error when the (enabled) sandbox forbids \a isWrite access
 //! to \a path; an empty string when the access is allowed or the sandbox is

@@ -12,9 +12,13 @@
 
 #include <QDir>
 #include <QFileInfo>
+#include <QAction>
+#include <QMenu>
+#include <QPoint>
 #include <QProcessEnvironment>
 #include <QSet>
 #include <QStandardPaths>
+#include <QWidget>
 
 using namespace LlamaCpp;
 using namespace ProjectExplorer;
@@ -434,10 +438,60 @@ FilePath toolsWorkingDirectory()
     const QString override = settings().workingDirectory.value();
     if (!override.isEmpty())
         return FilePath::fromUserInput(override);
+    return defaultToolsWorkingDirectory();
+}
+
+FilePath defaultToolsWorkingDirectory()
+{
     FilePath cwd = Core::DocumentManager::projectsDirectory();
     if (const Project *project = ProjectManager::startupProject())
         cwd = project->projectDirectory();
     return cwd;
+}
+
+void setToolsWorkingDirectory(const QString &dir)
+{
+    // Choosing the directory the tools already default to (the startup
+    // project's, or the default projects') clears the override instead of
+    // pinning a copy of it: a pinned copy of the current project's directory
+    // would keep pointing at the old project once a different one is opened.
+    if (cleanedPath(dir) == cleanedPath(defaultToolsWorkingDirectory().toFSPathString()))
+        settings().workingDirectory.setValue(QString());
+    else
+        settings().workingDirectory.setValue(dir);
+    settings().writeSettings();
+}
+
+bool execWorkingDirectoryResetMenu(QWidget *parent, const QPoint &pos)
+{
+    QMenu menu(parent);
+    // "Reset to Project Directory" clears the override: an empty value means
+    // the (startup) project's directory, which also keeps tracking the
+    // project when it changes.  "Reset to Default Projects Directory" pins
+    // the directory new projects are created in.
+    auto *resetToProject = new QAction(Tr::tr("Reset to Project Directory"), &menu);
+    resetToProject->setToolTip(Tr::tr(
+        "Clear the working directory override: the tools run in the startup "
+        "project's directory (or the default projects directory when no "
+        "project is open)."));
+    // Without a project there is nothing to reset to: the override would
+    // fall back to the default projects directory (the other entry).
+    resetToProject->setEnabled(ProjectManager::startupProject() != nullptr);
+    auto *resetToDefault = new QAction(Tr::tr("Reset to Default Projects Directory"), &menu);
+    resetToDefault->setToolTip(Tr::tr(
+        "Use the default projects directory, the setting the new projects "
+        "are created in."));
+    menu.addActions({resetToProject, resetToDefault});
+    const QAction *chosen = menu.exec(pos);
+    if (!chosen)
+        return false;
+    if (chosen == resetToProject)
+        settings().workingDirectory.setValue(QString());
+    else
+        settings().workingDirectory.setValue(
+            Core::DocumentManager::projectsDirectory().toUserOutput());
+    settings().writeSettings();
+    return true;
 }
 
 QString sandboxAccessError(const FilePath &path, bool isWrite)
