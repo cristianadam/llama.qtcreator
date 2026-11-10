@@ -893,6 +893,7 @@ QWidget *ChatEditor::displayServerProps()
     m_connectionLabel->setTextFormat(Qt::RichText);
     m_connectionLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
     m_connectionLabel->setOpenExternalLinks(false);
+    m_connectionLabel->setWordWrap(true);
     // The event filter (on ChatEditor) right-clicks the working directory
     // link and offers the reset shortcuts (a regular click opens the folder
     // picker).  QLabel has no hit‑test API for its links, so the link under
@@ -990,12 +991,22 @@ void ChatEditor::updateConnectionLabel()
     // separator and a left‑aligned list.  Each piece of visible text is its
     // own translatable string (no markup in them); the theme tokens in the
     // structural HTML are resolved afterwards.
+    // The list's table gets an explicit width of ~85% of the message area:
+    // Qt's rich‑text engine honours the HTML width attribute (not a CSS
+    // width style) and wraps the cell content at it, so the rows wrap when
+    // the screen is not wide enough.  Rebuilt on viewport resizes (see
+    // eventFilter()); the attribute is omitted until the viewport has a
+    // size.
+    const int tableWidth = int(m_scrollArea->viewport()->width() * 0.85);
+    const QString tableTag = tableWidth > 0
+        ? QStringLiteral("<table width=\"%1\">").arg(tableWidth)
+        : QStringLiteral("<table>");
     m_connectionLabel->setText(replaceThemeColorNamesWithRGBNames(
         Tr::tr("<html><body style=\"color:Token_Text_Muted; font-size:14px\">"
                "<div align='center'>"
                "<div style=\"font-size:20px; font-weight:bold; "
                "color:Token_Text_Default\">%1</div>"
-               "<table><tr><td>"
+               "%5<tr><td>"
                "<hr/>"
                "<div style=\"margin-top: 5px\">%2</div>"
                "<div style=\"margin-top: 5px\">%3</div>"
@@ -1006,7 +1017,8 @@ void ChatEditor::updateConnectionLabel()
             .arg(Tr::tr("Hello there"),
                  connectionLine,
                  Tr::tr("Type a message or upload files to get started"),
-                 warningFragment)));
+                 warningFragment,
+                 tableTag)));
     m_connectionLabel->setToolTip(Tr::tr(
         "Click the model name to see its details, or the directory to change "
         "where the tools run."));
@@ -1664,6 +1676,13 @@ void ChatEditor::onStopRequested(bool fromKey)
 
 bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
 {
+    // The welcome screen's table width (see updateConnectionLabel())
+    // follows the message area's width.
+    if (obj == m_scrollArea->viewport() && event->type() == QEvent::Resize
+            && m_connectionLabel) {
+        updateConnectionLabel();
+    }
+
     // Right-click on the working directory link in the welcome screen: the
     // reset shortcuts (a left click opens the folder picker).  The link under
     // the cursor is tracked from linkHovered() (see displayServerProps()).

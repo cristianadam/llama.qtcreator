@@ -122,8 +122,10 @@ private:
     void updateModelCombo();
     // Rebuilds the "You are connected to <model> in the <directory>" line of
     // the welcome screen (the model name and the directory are links; see
-    // displayServerProps()).  Called from displayServerProps() and whenever
-    // the startup project or the working-directory override changes.
+    // displayServerProps()).  The list's table width follows the message
+    // area's width, so this is also called on viewport resizes (see
+    // eventFilter()) and whenever the startup project or the
+    // working-directory override changes.
     void updateConnectionLabel();
     // Removes the welcome screen (m_propsWidget) if it is showing and clears
     // the member references (the label is a child of the widget, and
