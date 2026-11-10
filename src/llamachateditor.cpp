@@ -2187,9 +2187,15 @@ void ChatEditor::updateSteeringButton()
     for (int i = 0; i < queued.size(); ++i) {
         const QString text = queued.at(i);
         const QString firstLine = text.section(QLatin1Char('\n'), 0, 0).trimmed();
-        const QString label = firstLine.length() > 60
-                ? firstLine.left(60) + QLatin1String("…")
-                : firstLine;
+        QString label = firstLine;
+        if (label.size() > 60) {
+            int cut = 60;
+            // Don't split a surrogate pair (e.g. an emoji) in half – the
+            // orphaned high surrogate would render as a broken glyph.
+            if (label.at(cut - 1).isHighSurrogate() && label.at(cut).isLowSurrogate())
+                --cut;
+            label = label.left(cut) + QStringLiteral("...");
+        }
         auto *action = m_steeringMenu->addAction(
             Utils::Icon::fromTheme(QLatin1String("SP.TrashIcon")),
             Tr::tr("Remove \"%1\"").arg(label));
