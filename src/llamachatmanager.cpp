@@ -231,6 +231,28 @@ ChatManager::ChatManager(QObject *parent)
     initServerProps();
     refreshModels();
 
+    // Reconnect the model status feed 1 s after it breaks (the web UI's
+    // SSE_RECONNECT_MS); the reconnect itself re-reads the configured
+    // endpoint, so an endpoint change while the server is down is picked up.
+    m_modelSseReconnectTimer.setSingleShot(true);
+    connect(&m_modelSseReconnectTimer, &QTimer::timeout, this, [this]() {
+        if (m_modelSseWanted && !m_modelSseReply)
+            openModelSseFeed();
+    });
+
+    // Servers without the /models/sse feed give no signal that they
+    // (re)started with a different model; probe their identity periodically
+    // (see checkServerIdentity()).
+    m_serverCheckTimer.setInterval(10000);
+    connect(&m_serverCheckTimer, &QTimer::timeout, this, [this]() {
+        if (m_modelSseWanted && m_modelSseReply)
+            return; // the live feed already keeps the state current
+        if (m_identityCheckReply)
+            return; // a probe is still in flight (e.g. a slow timeout)
+        checkServerIdentity();
+    });
+    m_serverCheckTimer.start();
+
     connect(m_storage, &Storage::messageAppended, this, &ChatManager::messageAppended);
     connect(m_storage, &Storage::conversationCreated, [this](const QString &convId) {
         if (!m_taskConvCreationPending && !m_taskConversations.contains(convId))
@@ -312,6 +334,42 @@ void ChatManager::refreshServerProps()
     initServerProps();
 }
 
+void ChatManager::checkServerIdentity()
+{
+    QNetworkReply *reply = getServerProps(&m_network,
+                                          settings().chatEndpoint.value(),
+                                          settings().chatApiKey.value());
+    m_identityCheckReply = reply;
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
+        m_identityCheckReply = nullptr;
+        if (reply->error() != QNetworkReply::NoError) {
+            // The server is down (restarting?): the next successful probe
+            // picks up the new state.
+            reply->deleteLater();
+            return;
+        }
+        const QJsonObject obj = QJsonDocument::fromJson(reply->readAll()).object();
+        reply->deleteLater();
+
+        const QString role = obj.value("role").toString();
+        const QString modelPath = obj.value("model_path").toString();
+        const QString buildInfo = obj.value("build_info").toString();
+        const int nCtx = obj.value("default_generation_settings")
+                             .toObject()
+                             .value("n_ctx")
+                             .toInt();
+        if (role == m_serverProps.role && modelPath == m_serverProps.model_path
+            && buildInfo == m_serverProps.build_info && nCtx == m_serverProps.n_ctx)
+            return; // unchanged
+
+        // The server (re)started with a different model or configuration:
+        // refresh the props and the model list (the latter re‑selects a
+        // valid model and updates the combo and the welcome screen).
+        initServerProps();
+        refreshModels();
+    });
+}
+
 void ChatManager::initServerProps()
 {
     QNetworkReply *reply = getServerProps(&m_network,
@@ -334,7 +392,20 @@ void ChatManager::initServerProps()
         m_serverProps.modalities.vision = mod.value("vision").toBool();
         m_serverProps.modalities.audio = mod.value("audio").toBool();
         m_serverProps.chat_template = obj.value("chat_template").toString();
+        m_serverProps.role = obj.value("role").toString();
         reply->deleteLater();
+
+        // The /models/sse feed only exists in router mode; keep it in sync
+        // with the server's role and the (possibly changed) endpoint.
+        const QString endpoint = settings().chatEndpoint.value();
+        if (m_serverProps.role == QLatin1String("router")) {
+            if (!m_modelSseWanted || m_modelSseEndpoint != endpoint) {
+                closeModelSseFeed();
+                openModelSseFeed();
+            }
+        } else {
+            closeModelSseFeed();
+        }
 
         emit serverPropsUpdated();
     });
@@ -519,6 +590,147 @@ void ChatManager::updateModelPolling()
             m_modelPollTimer->start();
         else if (!anyLoading && m_modelPollTimer->isActive())
             m_modelPollTimer->stop();
+    }
+}
+
+void ChatManager::openModelSseFeed()
+{
+    if (m_modelSseReply)
+        return; // already connected or connecting
+
+    m_modelSseWanted = true;
+    m_modelSseEndpoint = settings().chatEndpoint.value();
+    m_modelSseBuffer.clear();
+
+    QUrl url(m_modelSseEndpoint + "/models/sse");
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+
+    QNetworkReply *reply = m_network.get(req);
+    m_modelSseReply = reply;
+    m_modelSseConnected = false;
+
+    // The server sends no keep-alive on the stream, so the response headers
+    // are the only reliable "a server is answering" signal: when a broken
+    // feed reconnects, the server (re)started and the cached model list and
+    // props are stale (the new server's startup models_reload broadcast went
+    // out before we were back).
+    QObject::connect(reply, &QNetworkReply::metaDataChanged, this, [this, reply]() {
+        if (m_modelSseReply != reply)
+            return; // superseded by a feed for a new endpoint
+        if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() != 200)
+            return;
+        m_modelSseConnected = true;
+        if (m_modelSseRefreshOnReconnect) {
+            m_modelSseRefreshOnReconnect = false;
+            refreshModels();
+            initServerProps();
+        }
+    });
+    QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {
+        if (m_modelSseReply != reply)
+            return;
+        handleModelSseData(reply->readAll());
+    });
+    QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (m_modelSseReply != reply)
+            return; // closeModelSseFeed() already took over
+        m_modelSseReply = nullptr;
+        const bool wasConnected = m_modelSseConnected;
+        m_modelSseConnected = false;
+        m_modelSseBuffer.clear();
+        reply->deleteLater();
+        if (!m_modelSseWanted)
+            return;
+        const int httpStatus =
+            reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (httpStatus >= 400 && httpStatus < 500) {
+            // The server refuses the stream (an older llama-server without
+            // /models/sse, a bad API key): retrying will not help.
+            m_modelSseWanted = false;
+            m_modelSseEndpoint.clear();
+            return;
+        }
+        // The stream broke: the server stopped (restart, crash) or the
+        // connection dropped.  Reconnect after a short delay; the model list
+        // and props are refreshed once the new connection is up.
+        if (wasConnected)
+            m_modelSseRefreshOnReconnect = true;
+        m_modelSseReconnectTimer.start(1000);
+    });
+}
+
+void ChatManager::closeModelSseFeed()
+{
+    m_modelSseWanted = false;
+    m_modelSseEndpoint.clear();
+    m_modelSseRefreshOnReconnect = false;
+    m_modelSseReconnectTimer.stop();
+    if (QNetworkReply *reply = m_modelSseReply) {
+        // Clear the pointer first so the finished handler the abort triggers
+        // cannot schedule a reconnect.
+        m_modelSseReply = nullptr;
+        reply->abort();
+        reply->deleteLater();
+    }
+}
+
+void ChatManager::handleModelSseData(const QByteArray &chunk)
+{
+    m_modelSseBuffer += chunk;
+    int sep;
+    while ((sep = m_modelSseBuffer.indexOf("\n\n")) >= 0) {
+        // Decode the record whole (not the chunks) so a multi-byte UTF‑8
+        // character split across two reads cannot corrupt the JSON.
+        const QString record = QString::fromUtf8(m_modelSseBuffer.left(sep));
+        m_modelSseBuffer.remove(0, sep + 2);
+        // One record is "data: <json>" (the server sends a single data line
+        // per event); ignore comments and the other SSE fields.
+        QString payload;
+        for (const QString &line : record.split(QLatin1Char('\n'))) {
+            if (!line.startsWith(QLatin1String("data:")))
+                continue;
+            if (!payload.isEmpty())
+                payload += QLatin1Char('\n');
+            payload += line.mid(5).trimmed();
+        }
+        if (payload.isEmpty())
+            continue;
+        const QJsonObject envelope = QJsonDocument::fromJson(payload.toUtf8()).object();
+        if (envelope.contains("event"))
+            applyModelSseEvent(envelope);
+    }
+}
+
+void ChatManager::applyModelSseEvent(const QJsonObject &envelope)
+{
+    const QString event = envelope.value("event").toString();
+    if (event == QLatin1String("models_reload") || event == QLatin1String("model_remove")
+        || event == QLatin1String("download_finished") || event == QLatin1String("download_failed")) {
+        // The router's model table changed (a reload, a removed model, a
+        // finished download): the cached list is stale, refetch it.
+        refreshModels();
+        return;
+    }
+    if (event == QLatin1String("status_change") || event == QLatin1String("model_status")
+        || event == QLatin1String("status_update")) {
+        // The web UI's live status update: apply it to the matching model
+        // instead of waiting for the next /models poll.
+        const QString model = envelope.value("model").toString();
+        const QString status = envelope.value("data").toObject().value("status").toString();
+        bool changed = false;
+        for (ModelEntry &m : m_models) {
+            if (m.id == model && m.status != status) {
+                m.status = status;
+                changed = true;
+            }
+        }
+        if (changed) {
+            updateModelPolling();
+            emit modelsUpdated();
+        }
     }
 }
 

@@ -136,6 +136,7 @@ struct ViewingChat
 
 struct LlamaCppServerProps
 {
+    QString role; // "router" in multi-model mode, "model" in single-model mode
     QString build_info;
     QString model_path;
     int n_ctx = 0;

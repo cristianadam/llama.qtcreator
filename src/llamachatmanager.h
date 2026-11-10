@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QJsonArray>
+#include <QJsonObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QObject>
@@ -297,6 +299,25 @@ private:
     void initServerProps();
     void updateModelPolling();
 
+    //! The router-mode server's model status feed (GET /models/sse, the same
+    //! feed the llama.cpp web UI reads): its events keep m_models live, and a
+    //! broken stream that reconnects is how a server (re)start is detected
+    //! (the model list and props are re-fetched once the new connection is
+    //! up, since the server sends no keep-alive and its startup
+    //! models_reload broadcast is sent before we are back).
+    void openModelSseFeed();
+    void closeModelSseFeed();
+    void handleModelSseData(const QByteArray &chunk);
+    void applyModelSseEvent(const QJsonObject &envelope);
+
+    //! Lightweight identity probe (role, model, build, context) for servers
+    //! without the /models/sse feed (single‑model mode, older versions):
+    //! they give no signal that they (re)started with a different model, so
+    //! the probe runs periodically and refreshes the props and model list
+    //! when its answer changed (the web UI needs no such probe: a browser
+    //! page reloads).
+    void checkServerIdentity();
+
     QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
 
     //! Persists the user messages queued for \a convId (mid‑run steering) as
@@ -343,6 +364,17 @@ private:
     QList<ModelEntry> m_models;
     QString m_selectedModel;
     QTimer *m_modelPollTimer{nullptr}; // polls /models while a model is loading
+    //! The router's /models/sse feed (see openModelSseFeed()); null when the
+    //! server is not in router mode or the feed is between connects.
+    QPointer<QNetworkReply> m_modelSseReply;
+    QByteArray m_modelSseBuffer; // partial SSE record waiting for its blank line
+    QString m_modelSseEndpoint; // endpoint the feed is (or was) connected to
+    bool m_modelSseWanted{false}; // the server is in router mode
+    bool m_modelSseConnected{false}; // the current feed delivered its HTTP 200
+    bool m_modelSseRefreshOnReconnect{false}; // the feed broke: refresh when it is back
+    QTimer m_modelSseReconnectTimer; // single-shot, 1 s (the web UI's reconnect delay)
+    QTimer m_serverCheckTimer; // periodic identity probe (no-feed modes)
+    QPointer<QNetworkReply> m_identityCheckReply; // a probe still in flight
     QString m_activeConvId;
 
     QHash<QString, Message> m_pendingMessages;
