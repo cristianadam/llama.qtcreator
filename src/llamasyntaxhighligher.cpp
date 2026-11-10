@@ -3,9 +3,11 @@
 #include <abstracthighlighter_p.h>
 #include <definition.h>
 #include <definition_p.h>
+#include <definitiondownloader.h>
 #include <format.h>
 
 #include <coreplugin/icore.h>
+#include <coreplugin/messagemanager.h>
 #include <repository.h>
 #include <state.h>
 #include <theme.h>
@@ -13,6 +15,8 @@
 #include <texteditor/fontsettings.h>
 #include <utils/filepath.h>
 #include <utils/theme/theme.h>
+
+#include "llamatr.h"
 
 namespace LlamaCpp {
 
@@ -110,6 +114,63 @@ static KSyntaxHighlighting::Repository *highlightRepository()
 KSyntaxHighlighting::Definition syntaxDefinitionForName(const QString &name)
 {
     return highlightRepository()->definitionForName(name);
+}
+
+namespace {
+
+// A few syntax definitions that are part of the full KSyntaxHighlighting set
+// but not of the small set Qt Creator ships (it only bundles a license‑clear
+// subset).  If these are missing, the full set has not been downloaded yet.
+// The first two are named in the welcome‑screen warning.
+struct CommonSyntaxDefinition
+{
+    const char *name;        // KSyntaxHighlighting name (case‑insensitive)
+    const char *displayName; // human‑readable name for the warning
+};
+
+constexpr CommonSyntaxDefinition kCommonSyntaxDefinitions[] = {
+    {"cpp", "C++"},
+    {"python", "Python"},
+    {"javascript", "JavaScript"},
+    {"c", "C"},
+};
+
+} // namespace
+
+QStringList missingCommonSyntaxDefinitions()
+{
+    const auto &repository = *highlightRepository();
+    QStringList missing;
+    for (const auto &definition : kCommonSyntaxDefinitions) {
+        if (!repository.definitionForName(QLatin1String(definition.name)).isValid())
+            missing.append(QLatin1String(definition.displayName));
+    }
+    return missing;
+}
+
+void downloadSyntaxDefinitions(std::function<void(const QString &)> onFinished)
+{
+    using namespace KSyntaxHighlighting;
+
+    // Parented to the (long‑lived) repository so it survives until done();
+    // deleteLater() on done() keeps it from leaking if the user never sees
+    // the completion.
+    auto *downloader = new DefinitionDownloader(highlightRepository());
+    QObject::connect(downloader,
+                     &DefinitionDownloader::informationMessage,
+                     [](const QString &message) {
+                         MessageManager::writeSilently(
+                             Tr::tr("Syntax definitions: %1").arg(message));
+                     });
+    QObject::connect(downloader, &DefinitionDownloader::done, [downloader, onFinished]() {
+        const QString message = Tr::tr("Syntax definitions: done");
+        MessageManager::writeFlashing(message);
+        if (onFinished)
+            onFinished(message);
+        downloader->deleteLater();
+    });
+    MessageManager::writeDisrupting(Tr::tr("Syntax definitions: starting download"));
+    downloader->start();
 }
 
 SyntaxHighlighter::SyntaxHighlighter()

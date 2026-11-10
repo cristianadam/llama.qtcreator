@@ -1,6 +1,9 @@
 #pragma once
 
+#include <functional>
+
 #include <QString>
+#include <QStringList>
 #include <QTextCharFormat>
 #include <QVector>
 #include <abstracthighlighter.h>
@@ -19,6 +22,20 @@ struct HighlightFragment
 
 // Look up a syntax definition by its Qt Creator name (e.g. "cpp", "python").
 KSyntaxHighlighting::Definition syntaxDefinitionForName(const QString &name);
+
+// The display names of a small set of commonly used syntax definitions that
+// are missing from the repository.  Qt Creator only ships a small,
+// license‑clear subset of the KSyntaxHighlighting definitions; the rest
+// (C++, Python, JavaScript, …) are downloaded on demand (the "Download
+// Definitions" button on the Text Editor settings page).  An empty list means
+// all the representative definitions are present.
+QStringList missingCommonSyntaxDefinitions();
+
+// Downloads the full KSyntaxHighlighting definition set – the same action as
+// the "Download Definitions" button on the Text Editor settings page.  The
+// repository is reloaded when the download finishes.  \a onFinished (optional)
+// is invoked on the main thread once, with a short status message.
+void downloadSyntaxDefinitions(std::function<void(const QString &)> onFinished = {});
 
 class SyntaxHighlighter : public KSyntaxHighlighting::AbstractHighlighter
 {

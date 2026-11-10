@@ -914,6 +914,15 @@ QWidget *ChatEditor::displayServerProps()
                     showModelDetails();
                 else if (link == QLatin1String("dir"))
                     changeWorkingDirectory();
+                else if (link == QLatin1String("download")) {
+                    // Refresh the welcome screen once the download finishes so
+                    // the warning disappears when the definitions are in.
+                    QPointer<ChatEditor> guard = this;
+                    downloadSyntaxDefinitions([guard](const QString &) {
+                        if (guard)
+                            guard->updateConnectionLabel();
+                    });
+                }
             });
 
     updateConnectionLabel();
@@ -955,6 +964,27 @@ void ChatEditor::updateConnectionLabel()
             .arg(escapeHtml(dir));
     const QString connectionLine =
         Tr::tr("You are connected to %1 using %2 as current directory").arg(modelLink, dirLink);
+    // Warning line, shown only when the full KSyntaxHighlighting definition
+    // set has not been downloaded yet (Qt Creator ships a small subset): it
+    // names a couple of the missing definitions and offers to download them.
+    // The link markup is not translatable (built here, substituted through
+    // placeholders); the values are escaped so a name with HTML
+    // metacharacters is not interpreted.
+    QString warningFragment;
+    const QStringList missing = missingCommonSyntaxDefinitions();
+    if (missing.size() >= 2) {
+        const QString downloadLink =
+            QStringLiteral("<a href=\"download\" style=\"color:Token_Accent_Default\">%1</a>")
+                .arg(escapeHtml(Tr::tr("Download definitions")));
+        const QString problem =
+            Tr::tr("%1 and %2 (and other syntax definitions) are missing, so "
+                   "matching code snippets will not be highlighted. %3")
+                .arg(escapeHtml(missing.first()), escapeHtml(missing.at(1)), downloadLink);
+        warningFragment =
+            QStringLiteral("<div style=\"margin-top:5px; "
+                           "color:Token_Notification_Alert_Default\">")
+            + problem + QStringLiteral("</div>");
+    }
     // Laid out like Qt Creator's "Open a document" placeholder (see
     // Locator::updateEditorManagerPlaceholderText()): a centred heading, a
     // separator and a left‑aligned list.  Each piece of visible text is its
@@ -969,12 +999,14 @@ void ChatEditor::updateConnectionLabel()
                "<hr/>"
                "<div style=\"margin-top: 5px\">%2</div>"
                "<div style=\"margin-top: 5px\">%3</div>"
+               "%4"
                "</td></tr></table>"
                "</div>"
                "</body></html>")
             .arg(Tr::tr("Hello there"),
                  connectionLine,
-                 Tr::tr("Type a message or upload files to get started"))));
+                 Tr::tr("Type a message or upload files to get started"),
+                 warningFragment)));
     m_connectionLabel->setToolTip(Tr::tr(
         "Click the model name to see its details, or the directory to change "
         "where the tools run."));
