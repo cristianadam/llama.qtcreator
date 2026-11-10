@@ -401,7 +401,7 @@ void ChatMessage::applyStyleSheet()
 
         QToolButton {
             border: 1px solid Token_Foreground_Muted;
-            font-family: heroicons_outline;
+            font-family: lucideicons_outline;
             font-size: 14px;
             border-radius: 6px;
             padding: 4px -2px;
@@ -517,11 +517,11 @@ QString ChatMessage::getToolUsageAndResult() const
         statusIconHtml = "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/>";
     } else if (toolStatus == "success") {
         statusIconHtml = replaceThemeColorNamesWithRGBNames(
-            "<span style=\"font-family: heroicons_outline; color: "
+            "<span style=\"font-family: lucideicons_outline; color: "
             "Token_Notification_Success_Default\">R</span>");
     } else {
         statusIconHtml = replaceThemeColorNamesWithRGBNames(
-            "<span style=\"font-family: heroicons_outline; color: "
+            "<span style=\"font-family: lucideicons_outline; color: "
             "Token_Notification_Danger_Default\">J</span>");
     }
 

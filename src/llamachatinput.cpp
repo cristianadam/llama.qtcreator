@@ -200,7 +200,7 @@ void ChatInput::applyStyleSheet()
 
         QToolButton {
             border: 1px solid Token_Foreground_Muted;
-            font-family: heroicons_outline;
+            font-family: lucideicons_outline;
             font-size: 18px;
             border-radius: 6px;
             padding: 6px -2px;

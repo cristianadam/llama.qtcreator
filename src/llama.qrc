@@ -4,7 +4,7 @@
         <file>../images/settingscategory_llama@2x.png</file>
         <file>../images/llama.png</file>
         <file>../images/llama@2x.png</file>
-        <file>../images/heroicons_outline.ttf</file>
+        <file>../images/lucideicons_outline.ttf</file>
         <file alias="mermaid/mermaid.min.js">../3rdparty/mermaid/mermaid.min.js</file>
         <file alias="mermaid/domshim.js">../3rdparty/mermaid/domshim.js</file>
         <file alias="katex/katex.min.js">../3rdparty/katex/katex.min.js</file>

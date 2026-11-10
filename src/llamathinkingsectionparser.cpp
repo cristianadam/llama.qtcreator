@@ -48,7 +48,7 @@ QString ThinkingSectionParser::formatThinkingHtml(const QString &content, bool i
     QString label;
 
     if (isFinished) {
-        statusIcon = "<span style=\"font-family: heroicons_outline;\">Q</span>";
+        statusIcon = "<span style=\"font-family: lucideicons_outline;\">Q</span>";
         label = Tr::tr("Thought Process");
     } else {
         statusIcon = "<img src=\"spinner://tool\" style=\"vertical-align: middle;\"/>";

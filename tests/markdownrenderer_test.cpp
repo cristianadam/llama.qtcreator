@@ -401,13 +401,13 @@ void MarkdownRendererTest::detailsSummaryInlineHtml()
     // Tool-result style header: a status icon (an inline-HTML span whose tag
     // markus splits across nodes) followed by a markdown one-liner.
     const QString text
-        = "<details>\n<summary><span style=\"font-family: heroicons_outline;\">R</span>&nbsp;running python</summary>\n\nexit 0\n</details>\n";
+        = "<details>\n<summary><span style=\"font-family: lucideicons_outline;\">R</span>&nbsp;running python</summary>\n\nexit 0\n</details>\n";
     renderer.feed(text.toUtf8());
     renderer.finish();
 
     // The icon span must survive as HTML: Qt drops a tag that is not closed
     // within a single insertHtml() call, so a split <span>R</span> would be lost.
-    QVERIFY2(renderer.toHtml().contains(QLatin1String("heroicons_outline")),
+    QVERIFY2(renderer.toHtml().contains(QLatin1String("lucideicons_outline")),
              qPrintable(renderer.toHtml()));
     QVERIFY2(renderer.toPlainText().contains(QStringLiteral("running python")),
              qPrintable(renderer.toPlainText()));
@@ -423,7 +423,7 @@ void MarkdownRendererTest::detailsSummaryInlineHtml()
         const QTextFragment frag = it.fragment();
         if (frag.text().contains(QStringLiteral("running"))
             && frag.charFormat().fontFamilies().toStringList()
-                   .contains(QLatin1String("heroicons_outline")))
+                   .contains(QLatin1String("lucideicons_outline")))
             textInIconFont = true;
     }
     QVERIFY2(!textInIconFont, "summary text must not inherit the icon font");

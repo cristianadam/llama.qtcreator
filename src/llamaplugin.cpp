@@ -86,7 +86,7 @@ LlamaPlugin::LlamaPlugin()
             this,
             &LlamaPlugin::handleCursorPositionChangedDelayed);
 
-    QFontDatabase::addApplicationFont(":/images/heroicons_outline.ttf");
+    QFontDatabase::addApplicationFont(":/images/lucideicons_outline.ttf");
 }
 
 LlamaPlugin::~LlamaPlugin()

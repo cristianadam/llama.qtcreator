@@ -1641,7 +1641,7 @@ static bool setSectionIconGlyph(QTextBlock &blk, bool visible)
         if (!frag.isValid()
             || !fmt.anchorHref().startsWith(QLatin1String("details-toggle:")))
             continue;
-        if (!fmt.fontFamilies().toStringList().contains(QLatin1String("heroicons_outline")))
+        if (!fmt.fontFamilies().toStringList().contains(QLatin1String("lucideicons_outline")))
             continue;
         QTextCursor cursor(blk);
         cursor.setPosition(frag.position());
@@ -1688,7 +1688,7 @@ QString MarkdownRenderer::sectionIconHtml(int secId, bool isVisible) const
     QString icon = isVisible ? "M" : "N";
     return QString(
                    "&nbsp;<a href=\"details-toggle:%1\" style=\"text-decoration:none; color: %2\">"
-                   "<span style=\"font-family: heroicons_outline\">%3</span></a>")
+                   "<span style=\"font-family: lucideicons_outline\">%3</span></a>")
                    .arg(secId)
                    .arg(colorToRgba(color(TextForeground)))
                    .arg(icon);
@@ -1820,7 +1820,7 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
                                     "  background: none; "
                                     "  border: none; "
                                     "  padding: 2px;"
-                                    "  font-family: heroicons_outline; "
+                                    "  font-family: lucideicons_outline; "
                                     "  font-size: 15px; "
                                     "  color: %1; "
                                     "} "
@@ -1834,7 +1834,7 @@ void MarkdownRenderer::createOverlayForCodeBlock(int blockId)
     hl->setSpacing(10);
 
     QToolButton *copyBtn = new QToolButton(overlay);
-    copyBtn->setText("E"); // Heroicon character for copy
+    copyBtn->setText("E"); // Lucide icon character for copy
     copyBtn->setToolTip(Tr::tr("Copy the code below to Clipboard"));
     hl->addWidget(copyBtn);
 
