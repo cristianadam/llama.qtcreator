@@ -35,6 +35,9 @@
 #include <QFile>
 #include <QFormLayout>
 #include <QFrame>
+#include <QFont>
+#include <QFontDatabase>
+#include <QFontMetrics>
 #include <QHash>
 #include <QActionGroup>
 #include <QHBoxLayout>
@@ -47,10 +50,13 @@
 #include <QKeySequence>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QPainter>
 #include <QPoint>
 #include <QPointer>
+#include <QPixmap>
 #include <QPlainTextEdit>
 #include <QRect>
+#include <QScreen>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
@@ -65,6 +71,7 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWheelEvent>
+#include <QWindow>
 
 #include "llamachateditor.h"
 #include "llamachatinput.h"
@@ -200,6 +207,58 @@ QString thinkingLevelDisplay(const QString &level)
     QString display = level;
     display[0] = display[0].toUpper();
     return display;
+}
+
+// Renders a glyph of the bundled lucide icon font (see the
+// "lucideicons_outline" spans elsewhere) as a pixmap: the status‑bar buttons
+// are styled by the host theme, and a styled QToolButton draws its text as
+// plain text, so an icon‑font glyph in the label's rich text would show up
+// verbatim.  The glyph is rendered at an explicit pixel size matching the
+// button's text line height (icon‑font glyphs are designed to fill the em
+// square, so they land cleanly in a square box of that size), and coloured
+// with the button's palette so it follows the theme (the caller re‑renders
+// it on palette changes).
+QIcon lucideGlyphIcon(QLatin1Char glyph, QWidget *button)
+{
+    // The button may not have a window (yet); fall back to the primary
+    // screen's ratio rather than 1 so the glyph is not blurry on HiDPI.
+    const qreal dpr = button->windowHandle()
+                          ? button->windowHandle()->devicePixelRatio()
+                          : (qApp->primaryScreen()
+                                 ? qApp->primaryScreen()->devicePixelRatio()
+                                 : 1.0);
+
+    // Match the icon to the button's text line height.
+    const int logicalSize = qMax(1, QFontMetrics(button->font()).height()) * dpr;
+    const int physicalSize = logicalSize * dpr;
+    QFont font = button->font();
+    font.setFamily(QStringLiteral("lucideicons_outline"));
+    font.setPixelSize(logicalSize);
+    QPixmap pixmap(physicalSize, physicalSize);
+    pixmap.setDevicePixelRatio(dpr);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+    painter.setFont(font);
+    painter.setPen(button->palette().color(QPalette::WindowText));
+    painter.drawText(QRectF(0, 0, logicalSize, logicalSize), Qt::AlignCenter, QString(glyph));
+    return QIcon(pixmap);
+}
+
+// Builds the "glyph + text" rich text for a status‑bar label (context /
+// speed).  The lucide glyph is drawn at the label's line height so it matches
+// the thinking button's icon (see lucideGlyphIcon).  As rich text it inherits
+// the label's font and colour automatically, so it follows the theme and font
+// zoom with no re‑rendering.  \a text is the plain text shown after the glyph.
+QString lucideGlyphLabelText(const QWidget *label, QLatin1Char glyph, const QString &text)
+{
+    const int px = qMax(1, QFontMetrics(label->font()).height());
+    return QStringLiteral(
+                 "<span style=\"font-family: lucideicons_outline; font-size:%1px\">%2</span> %3")
+        .arg(px)
+        .arg(QString(glyph))
+        .arg(text);
 }
 
 } // namespace
@@ -556,12 +615,16 @@ ChatEditor::ChatEditor()
 
     m_speedLabel = new QLabel(m_statusBar);
     m_speedLabel->setVisible(false);
-    m_speedLabel->setTextFormat(Qt::PlainText);
+    // Rich text: the speed state embeds a lucide glyph (see
+    // lucideGlyphLabelText); the plain "Processing:" state renders
+    // unchanged under this format.
+    m_speedLabel->setTextFormat(Qt::RichText);
     statusLayout->addWidget(m_speedLabel);
 
     m_contextLabel = new QLabel(m_statusBar);
     m_contextLabel->setVisible(false);
-    m_contextLabel->setTextFormat(Qt::PlainText);
+    // Rich text: embeds a lucide glyph (see lucideGlyphLabelText).
+    m_contextLabel->setTextFormat(Qt::RichText);
     statusLayout->addWidget(m_contextLabel);
 
     // Mid‑run steering: user messages sent while a reply is being
@@ -618,12 +681,17 @@ ChatEditor::ChatEditor()
     // the button is disabled when the server reports none.
     m_thinkingButton = new QToolButton(m_statusBar);
     m_thinkingButton->setPopupMode(QToolButton::InstantPopup);
+    // A styled QToolButton defaults to icon‑only; force the label next to
+    // the light‑bulb icon (see lucideGlyphIcon).
+    m_thinkingButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
     m_thinkingButton->setVisible(false);
     m_thinkingMenu = new QMenu(m_thinkingButton);
     m_thinkingActions = new QActionGroup(m_thinkingButton);
     m_thinkingActions->setExclusive(true);
     m_thinkingButton->setMenu(m_thinkingMenu);
+    // The button's palette (theme) changes re‑tint the light‑bulb icon.
+    m_thinkingButton->installEventFilter(this);
     updateThinkingMenu();
     // Keep the menu check and the button label in sync when the level
     // changes elsewhere (another chat editor, the settings, …).
@@ -1650,6 +1718,14 @@ void ChatEditor::onStopRequested(bool fromKey)
 
 bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
 {
+    // The thinking button's light‑bulb icon is a rendered icon‑font glyph,
+    // so re‑render it when the button's palette (theme) or font changes.
+    if (obj == m_thinkingButton
+            && (event->type() == QEvent::PaletteChange
+                || event->type() == QEvent::FontChange)) {
+        m_thinkingButton->setIcon(lucideGlyphIcon(QLatin1Char('L'), m_thinkingButton));
+    }
+
     // The welcome screen's table width (see updateConnectionLabel())
     // follows the message area's width.
     if (obj == m_scrollArea->viewport() && event->type() == QEvent::Resize
@@ -1833,7 +1909,10 @@ void ChatEditor::syncThinkingLevel()
         for (QAction *a : std::as_const(actions))
             a->setChecked(a->data().toString() == level);
     }
-    m_thinkingButton->setText(QStringLiteral("T: ") + label);
+    // The "L" glyph of the lucide icon font is the light‑bulb (rendered as a
+    // button icon: a styled QToolButton does not evaluate rich text).
+    m_thinkingButton->setIcon(lucideGlyphIcon(QLatin1Char('L'), m_thinkingButton));
+    m_thinkingButton->setText(label);
     m_thinkingButton->setToolTip(
         Tr::tr("Thinking level: %1 (applies to new messages)").arg(label));
 }
@@ -2069,7 +2148,10 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
 
             percent = qBound(0.0, percent, 100.0);
 
-            text = Tr::tr("Processing: %1%").arg(percent, 0, 'f', 0);
+            // "X" is the lucide glyph for prompt processing (replaces the
+            // plain "Processing:" prefix; see lucideGlyphLabelText).
+            text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('X'),
+                                        QString::number(percent, 'f', 0) + QLatin1String("%"));
 
             tooltip = Tr::tr("<b>Prompt Processing:</b><br>"
                              "Total Tokens: %1<br>"
@@ -2085,7 +2167,10 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
             const auto &t = msg.timings;
             if (t.predicted_n >= kMinTokensForSpeed && t.predicted_ms > 0 && t.prompt_ms > 0) {
                 const qreal genTokensPerSec = t.predicted_n * 1000.0 / t.predicted_ms;
-                text = Tr::tr("Speed: %1 t/s").arg(genTokensPerSec, 0, 'f', 1);
+                // "T" is the lucide glyph for generation speed.
+                text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('T'),
+                                            QString::number(genTokensPerSec, 'f', 1)
+                                            + QLatin1String(" t/s"));
 
                 tooltip = Tr::tr(
                     "<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
@@ -2136,7 +2221,10 @@ void ChatEditor::updateContextLabel(const Message &msg)
     const QString percentStr = QString::number(percent, 'f', 0);
 
     m_contextLabel->setVisible(true);
-    m_contextLabel->setText(Tr::tr("Context: %1% used").arg(percentStr));
+    // "Q" is the lucide glyph for context usage (replaces "Context:",
+    // "used" dropped); see lucideGlyphLabelText.
+    m_contextLabel->setText(lucideGlyphLabelText(m_contextLabel, QLatin1Char('Q'),
+                                                 percentStr + QLatin1String("%")));
     m_contextLabel->setToolTip(
         Tr::tr("Context: %1% used.<br>  %2 tokens from %3.")
             .arg(percentStr)
