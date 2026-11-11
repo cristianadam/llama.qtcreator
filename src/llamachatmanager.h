@@ -354,6 +354,11 @@ private:
     void addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens,
                                    bool useChatModel = false) const;
 
+    //! Token budget of the handoff document: the part of the context window
+    //! the handoff threshold leaves free (e.g. 20% at the default 80%), or a
+    //! fixed fallback when the server's context size is unknown.
+    int handoffMaxTokens() const;
+
     // internal state
     Storage *m_storage;
     bool m_showSettings{false};

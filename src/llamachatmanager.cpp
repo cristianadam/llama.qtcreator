@@ -1537,9 +1537,23 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     });
 }
 
-// The handoff document's token budget: long enough for the sections, short
-// enough to leave room in the context window that triggered the handoff.
-static constexpr int kHandoffMaxTokens = 1500;
+// Fallback token budget for the handoff document, used only when the
+// server's context size is unknown (the real budget is the context
+// remaining beyond the handoff threshold, see handoffMaxTokens()).
+static constexpr int kHandoffFallbackMaxTokens = 1500;
+
+// Token budget for the handoff document: the part of the context window
+// the handoff threshold leaves free (e.g. 20% at the default 80%): the
+// prompt of the turn is right at the threshold, so the document has to
+// fit in the rest of the window, not a fixed slice of it.
+int ChatManager::handoffMaxTokens() const
+{
+    const int maxCtx = serverProps().n_ctx;
+    const int threshold = settings().handoffThreshold();
+    if (maxCtx > 0 && threshold < 100)
+        return (100 - threshold) * maxCtx / 100;
+    return kHandoffFallbackMaxTokens;
+}
 
 bool ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
 {
@@ -2221,7 +2235,7 @@ void ChatManager::sendChatRequest(const QString &convId,
         // Handoff turn: housekeeping parameters (capped budget, thinking
         // off) on the chat model, so the warm prompt cache of the previous
         // turn is reused.
-        addAuxiliaryPayloadParams(payload, kHandoffMaxTokens, /*useChatModel=*/true);
+        addAuxiliaryPayloadParams(payload, handoffMaxTokens(), /*useChatModel=*/true);
         // The context-usage label in the status bar.
         payload["timings_per_token"] = true;
         payload["return_progress"] = true;
