@@ -1,5 +1,6 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
+#include <QDir>
 #include <QElapsedTimer>
 #include <QPainter>
 #include <QEventLoop>
@@ -73,8 +74,20 @@ static bool waitForPendingMermaid(MarkdownRenderer &renderer, int timeoutMs = 60
 // one and override the terminal ANSI tokens the tests assert on.
 static void setTerminalAnsiColor(int index, const QColor &color)
 {
-    static Utils::Theme *theme = nullptr;
     static QTemporaryDir dir;
+    // Write the INI file directly: QSettings in IniFormat wraps top-level
+    // keys in a [Default] group, which readSettings() would not match.
+    const QString path = dir.path() + QStringLiteral("/theme.ini");
+    {
+        QFile f(path);
+        QVERIFY2(f.open(QIODevice::WriteOnly | QIODevice::Truncate), qPrintable(path));
+        f.write(QStringLiteral("[Colors]\nTerminalAnsi%1=%2\n")
+                    .arg(index)
+                    .arg(color.name().mid(1)) // no leading "#": Theme::readSettings prepends it
+                    .toUtf8());
+    }
+
+    static Utils::Theme *theme = nullptr;
     if (!theme) {
         struct TestTheme : Utils::Theme
         {
@@ -83,9 +96,7 @@ static void setTerminalAnsiColor(int index, const QColor &color)
         theme = new TestTheme;
         Utils::setCreatorTheme(theme);
     }
-    QSettings settings(dir.path() + QStringLiteral("/theme.ini"), QSettings::IniFormat);
-    settings.setValue(QStringLiteral("Colors/TerminalAnsi%1").arg(index), color.name().mid(1)); // no leading "#": Theme::readSettings prepends it
-    settings.sync();
+    QSettings settings(QDir::toNativeSeparators(path), QSettings::IniFormat);
     theme->readSettings(settings);
 }
 
@@ -1147,11 +1158,6 @@ void MarkdownRendererTest::mathServedFromPersistedCache()
     QCOMPARE(cachedEmissions, 0);
 }
 
-int main(int argc, char **argv)
-{
-    QApplication app(argc, argv);
-    MarkdownRendererTest tc;
-    return QTest::qExec(&tc);
-}
+QTEST_MAIN(MarkdownRendererTest)
 
 #include "markdownrenderer_test.moc"

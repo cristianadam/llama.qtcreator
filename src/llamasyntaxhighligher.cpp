@@ -12,6 +12,8 @@
 #include <state.h>
 #include <theme.h>
 
+#include <QGuiApplication>
+
 #include <texteditor/fontsettings.h>
 #include <utils/filepath.h>
 #include <utils/theme/theme.h>
@@ -175,13 +177,26 @@ void downloadSyntaxDefinitions(std::function<void(const QString &)> onFinished)
 
 SyntaxHighlighter::SyntaxHighlighter()
 {
-    m_colorScheme = globalFontSettings().data().colorScheme();
+    // The color scheme is fetched lazily in setDefinition(): constructing
+    // the FontSettings singleton builds Utils aspects that need a
+    // QGuiApplication (a QPixmap), and the unit tests run without one, in
+    // which case the uncolored default format is fine.
 }
 
 void SyntaxHighlighter::setDefinition(const KSyntaxHighlighting::Definition &def)
 {
     AbstractHighlighter::setDefinition(def);
     m_definition = def;
+    // Highlighting is about to start: fetch the theme's color scheme now,
+    // once, instead of on every applyFormat() call. Only when running inside
+    // Qt Creator (ICore is initialized): constructing the FontSettings
+    // singleton builds Utils aspects that require a fully-initialized
+    // QGuiApplication (a QPixmap), which the unit tests don't provide, in
+    // which case the uncolored default format is fine.
+    if (def.isValid() && m_colorScheme.isEmpty()
+        && QCoreApplication::instance()
+        && ICore::instance())
+        m_colorScheme = globalFontSettings().data().colorScheme();
 }
 
 void SyntaxHighlighter::applyFormat(int offset,

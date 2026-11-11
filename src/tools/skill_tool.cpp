@@ -31,16 +31,21 @@ void collectSkillFiles(const QDir &dir, const QString &prefix, QStringList &out)
 {
     if (out.size() >= kMaxListedFiles)
         return;
+    // NoDotAndDotDot skips only "." and ".."; dot directories like .git are
+    // not "hidden" on Windows (the hidden attribute is separate), so they
+    // must be filtered out explicitly.
     const QFileInfoList entries = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot,
                                                     QDir::Name);
     for (const QFileInfo &entry : std::as_const(entries)) {
-        const QString rel = prefix.isEmpty() ? entry.fileName()
-                                             : prefix + QLatin1Char('/') + entry.fileName();
+        const QString name = entry.fileName();
+        if (name.startsWith(QLatin1Char('.')))
+            continue;
+        const QString rel = prefix.isEmpty() ? name : prefix + QLatin1Char('/') + name;
         if (entry.isDir()) {
-            if (entry.fileName() == QLatin1String("node_modules"))
+            if (name == QLatin1String("node_modules"))
                 continue;
             collectSkillFiles(QDir(entry.absoluteFilePath()), rel, out);
-        } else if (entry.fileName() != QLatin1String("SKILL.md")) {
+        } else if (name != QLatin1String("SKILL.md")) {
             out << rel;
             if (out.size() >= kMaxListedFiles)
                 return;
