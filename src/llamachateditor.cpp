@@ -686,6 +686,11 @@ ChatEditor::ChatEditor()
     m_thinkingButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
     m_thinkingButton->setVisible(false);
+    // The "L" glyph of the lucide icon font is the light‑bulb (rendered as a
+    // button icon: a styled QToolButton does not evaluate rich text).  It is
+    // independent of the thinking level, so it is set once here and only
+    // re‑rendered when the button's palette or font changes (eventFilter()).
+    m_thinkingButton->setIcon(lucideGlyphIcon(QLatin1Char('L'), m_thinkingButton));
     m_thinkingMenu = new QMenu(m_thinkingButton);
     m_thinkingActions = new QActionGroup(m_thinkingButton);
     m_thinkingActions->setExclusive(true);
@@ -1915,9 +1920,9 @@ void ChatEditor::syncThinkingLevel()
         for (QAction *a : std::as_const(actions))
             a->setChecked(a->data().toString() == level);
     }
-    // The "L" glyph of the lucide icon font is the light‑bulb (rendered as a
-    // button icon: a styled QToolButton does not evaluate rich text).
-    m_thinkingButton->setIcon(lucideGlyphIcon(QLatin1Char('L'), m_thinkingButton));
+    // The light‑bulb icon does not depend on the level: it is set once when
+    // the button is created and re‑rendered only on palette/font changes
+    // (see eventFilter()).
     m_thinkingButton->setText(label);
     m_thinkingButton->setToolTip(
         Tr::tr("Thinking level: %1 (applies to new messages)").arg(label));

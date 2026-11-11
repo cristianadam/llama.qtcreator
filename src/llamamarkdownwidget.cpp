@@ -1,6 +1,5 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
-#include <QBuffer>
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QFileInfo>
@@ -28,6 +27,7 @@
 
 #include "llamamarkdownwidget.h"
 #include "llamasettings.h"
+#include "llamaspinner.h"
 #include "llamatheme.h"
 #include "llamatr.h"
 
@@ -135,11 +135,10 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
     HoverFilter *hoverFilter = new HoverFilter(this);
     viewport()->installEventFilter(hoverFilter);
 
-    QBuffer *buffer = new QBuffer(this);
-    QMovie *spinnerMovie = new QMovie(buffer, "spinner", this);
-    spinnerMovie->setScaledSize(QSize(14, 14));
-
-    setMovie(spinnerMovie);
+    // All labels share the single spinner movie (created once, on first
+    // use – see sharedSpinnerMovie()): a per‑label movie would render the
+    // frames once per label per tick.
+    setMovie(sharedSpinnerMovie());
 
     connect(hoverFilter, &HoverFilter::linkHovered, this, [](const QString &link) {
         const int idx = link.indexOf(':');
@@ -455,6 +454,12 @@ void MarkdownLabel::refreshSvgResources()
 
 void MarkdownLabel::onSpinnerFrameChanged(int)
 {
+    // The movie is shared by every label and ticks even when this document
+    // shows no spinner: skip the (queued) frame update in that case instead
+    // of repainting the whole message every 33 ms for nothing.
+    if (m_spinnerUrls.isEmpty())
+        return;
+
     const QImage frame = m_spinner->currentImage();
     for (const QUrl &url : m_spinnerUrls)
         document()->addResource(QTextDocument::ImageResource, url, frame);

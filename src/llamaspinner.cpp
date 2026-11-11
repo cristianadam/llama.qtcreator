@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QBuffer>
 #include <QPainter>
 #include <QScreen>
 
@@ -189,6 +190,17 @@ void SpinnerHandler::setOption(ImageOption option, const QVariant &value)
     default:
         break;
     }
+}
+
+QMovie *sharedSpinnerMovie()
+{
+    static QMovie *movie = [] {
+        auto *buffer = new QBuffer(); // never deleted, like the movie itself
+        auto *m = new QMovie(buffer, "spinner");
+        m->setScaledSize(QSize(14, 14));
+        return m;
+    }();
+    return movie;
 }
 
 } // namespace LlamaCpp

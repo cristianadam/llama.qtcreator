@@ -2,6 +2,7 @@
 
 #include <QImageIOHandler>
 #include <QImageIOPlugin>
+#include <QMovie>
 #include <QVector>
 
 namespace LlamaCpp {
@@ -45,5 +46,12 @@ private:
     QImage::Format m_imageFormat{QImage::Format_ARGB32};
     int delay{33};
 };
+
+// The single spinner movie shared by every MarkdownLabel: created lazily on
+// first use and reused from then on.  A QMovie is safe to use in many
+// widgets (repeated start() calls only bump an internal reference count), so
+// the frames are rendered once per tick instead of once per chat message.
+// Never deleted – the plugin runs for the whole app lifetime.
+QMovie *sharedSpinnerMovie();
 
 } // namespace LlamaCpp
