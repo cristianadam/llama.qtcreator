@@ -2713,8 +2713,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         // conversation over instead of the model getting another turn
         // (fall back to the regular next turn when the handoff did not
         // start, e.g. the setting was switched off in the meantime).
-        if (m_handoffPending.remove(convId) > 0
-                && handoffConversation(convId, toolMsg.id))
+        if (m_handoffPending.remove(convId) && handoffConversation(convId, toolMsg.id))
             return;
         generateMessage(convId, toolMsg.id, onChunk);
     };
@@ -2879,8 +2878,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         // conversation over instead of the model getting another turn
         // (fall back to the regular next turn when the handoff did not
         // start, e.g. it was skipped by the "recently handed off" guard).
-        if (m_handoffPending.remove(convId) > 0
-                && handoffConversation(convId, toolMsg.id))
+        if (m_handoffPending.remove(convId) && handoffConversation(convId, toolMsg.id))
             return;
         // Mid‑run steering: user messages queued while the tools ran join
         // the next request.
