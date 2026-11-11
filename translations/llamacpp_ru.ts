@@ -155,7 +155,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1158"/>
+        <location filename="../src/llamasettings.cpp" line="+1180"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -177,7 +177,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1104"/>
+        <location filename="../src/llamasettings.cpp" line="-1126"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
@@ -896,11 +896,35 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation>Уровень мышления (рассуждения) для моделей, поддерживающих мышление: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; или &quot;max&quot;.</translation>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
+        <translation>Уровень мышления (рассуждения) для моделей, поддерживающих мышление. &quot;default&quot; использует значение по умолчанию модели, &quot;off&quot; отключает мышление, а конкретные уровни — это те, которые сервер сообщает для шаблона чата модели.</translation>
+    </message>
+    <message>
+        <location line="+227"/>
+        <source>ripgrep:</source>
+        <translation>ripgrep:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A ripgrep (rg) executable to run the search and find tools with. If empty, the one on the PATH is used, then the one downloaded from this page.</source>
+        <translation>Исполняемый файл ripgrep (rg) для работы инструментов search и find. Если поле пустое, используется тот, что в PATH, затем тот, что скачан с этой страницы.</translation>
     </message>
     <message>
         <location line="+6"/>
+        <source>niubash:</source>
+        <translation>niubash:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
+        <translation>Запускающая программа niubash bash (winuxcmd\bin\bash.exe) для работы инструмента bash на Windows. niubash — нативный Bash без MSYS2, поэтому - в отличие от Git Bash - он может работать в песочнице Windows. Если поле пустое, используется niubash, скачанный с этой страницы, затем Git Bash.</translation>
+    </message>
+    <message>
+        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
+        <translation type="vanished">Уровень мышления (рассуждения) для моделей, поддерживающих мышление: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; или &quot;max&quot;.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Chat Font Zoom</source>
         <translation>Масштаб шрифта чата</translation>
     </message>
@@ -997,12 +1021,17 @@
         <translation type="vanished">Разговор автоматически свёртывается, когда его история занимает больше указанного процента окна контекста модели.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+38"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Локальная модель может зациклить вызовы инструментов, поэтому после такого количества последовательных ходов только с инструментами вызовы не выполняются - модель получает результат с ошибкой, указывающий ей вместо этого завершить работу. Разговоры задач (субагентов) не ограничены. Значение 0 отключает ограничение.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+16"/>
+        <source>Backend used by the websearch tool: &quot;duckduckgo&quot; (default, no API key required), &quot;exa&quot; (Exa search API), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
+        <translation>Бэкенд, используемый инструментом websearch: &quot;duckduckgo&quot; (по умолчанию, не требует ключа API), &quot;exa&quot; (API поиска Exa), &quot;google&quot; (Custom Search JSON API, требуется ключ API и идентификатор поисковой системы), &quot;brave&quot; (Brave Search API, требуется ключ API) или &quot;tavily&quot; (требуется ключ API).</translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
         <translation>Необязательный ключ API Exa. Без ключа используется общая конечная точка (с ограничением частоты запросов).</translation>
     </message>
@@ -1011,7 +1040,7 @@
         <translation type="vanished">Модель, используемая для вспомогательных запросов, таких как заголовки разговоров и дополнительные предложения. Используйте небольшую модель, чтобы основная чат-модель оставалась свободной. Оставьте пустым, чтобы использовать активную чат-модель.</translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-268"/>
         <source>Conversation Title Prompt</source>
         <translation>Запрос для заголовка разговора</translation>
     </message>
@@ -1176,7 +1205,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+291"/>
+        <location line="+308"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Песочница для команд</translation>
@@ -1227,12 +1256,11 @@
         <translation>Поставщик веб-поиска:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation>Бэкенд, используемый инструментом websearch: &quot;exa&quot; (по умолчанию, ключ API не требуется), &quot;google&quot; (Custom Search JSON API, требуется ключ API и идентификатор поисковой системы), &quot;brave&quot; (Brave Search API, требуется ключ API) или &quot;tavily&quot; (требуется ключ API).</translation>
+        <translation type="vanished">Бэкенд, используемый инструментом websearch: &quot;exa&quot; (по умолчанию, ключ API не требуется), &quot;google&quot; (Custom Search JSON API, требуется ключ API и идентификатор поисковой системы), &quot;brave&quot; (Brave Search API, требуется ключ API) или &quot;tavily&quot; (требуется ключ API).</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
         <source>Exa Endpoint</source>
         <translation>Конечная точка Exa</translation>
     </message>
@@ -1376,7 +1404,12 @@
         <translation>Переопределяет глобальную настройку &apos;Загружать инструкции проекта&apos; для этого проекта. О том, что загружается, см. глобальную настройку на странице инструментов Llama.</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+177"/>
+        <source>&quot;duckduckgo&quot; needs no API key</source>
+        <translation>Для &quot;duckduckgo&quot; не требуется ключ API</translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <source>Web Search</source>
         <translation>Веб-поиск</translation>
     </message>
@@ -1386,14 +1419,21 @@
         <translation>Запросы</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+134"/>
+        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location line="+14"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
+        <location line="-13"/>
         <location line="+1"/>
         <source>Off</source>
         <translation>Выкл.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minimal</source>
+        <translation>Минимальный</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1412,6 +1452,11 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>Extra High</source>
+        <translation>Очень высокий</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Max</source>
         <translation>Максимум</translation>
     </message>
@@ -1420,7 +1465,7 @@
         <translation type="vanished">Рабочий каталог: %1</translation>
     </message>
     <message>
-        <location line="+346"/>
+        <location line="+412"/>
         <source>LLM model</source>
         <translation>LLM-модель</translation>
     </message>
@@ -1429,7 +1474,7 @@
         <translation type="vanished">Сообщения в очереди – отправляются после текущего шага</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Follow up</source>
         <translation>Доп. вопросы</translation>
     </message>
@@ -1444,7 +1489,7 @@
         <translation>Генерировать заголовок разговора после первого ответа</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+23"/>
         <source>Thinking level</source>
         <translation>Уровень мышления</translation>
     </message>
@@ -1461,7 +1506,7 @@
         <translation type="vanished">Предыдущий результат поиска</translation>
     </message>
     <message>
-        <location line="+238"/>
+        <location line="+217"/>
         <source>Send to Llama Chat</source>
         <translation>Отправить в Llama Chat</translation>
     </message>
@@ -1478,7 +1523,7 @@
         <translation type="vanished">Видение: %1</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+252"/>
         <location line="+1"/>
         <source>yes</source>
         <translation>да</translation>
@@ -1490,7 +1535,7 @@
         <translation>нет</translation>
     </message>
     <message>
-        <location line="+996"/>
+        <location line="+1112"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Удалить «%1»</translation>
     </message>
@@ -1499,29 +1544,28 @@
         <translation type="vanished">Дополнительные вопросы:</translation>
     </message>
     <message>
-        <location line="-329"/>
+        <location line="-346"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Уровень мышления: %1 (применяется к новым сообщениям)</translation>
     </message>
     <message>
-        <location line="-772"/>
-        <location line="+801"/>
+        <location line="-911"/>
+        <location line="+940"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Человек-редактор</translation>
     </message>
     <message>
-        <location line="-853"/>
+        <location line="-992"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Вы подключены к %1; текущий каталог: %2</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+50"/>
         <source>Hello there</source>
         <translation>Здравствуйте!</translation>
     </message>
@@ -1531,12 +1575,31 @@
         <translation>Введите сообщение или загрузите файлы, чтобы начать</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Click the model name to see its details, or the directory to change where the tools run.</source>
-        <translation>Кликните по имени модели, чтобы просмотреть её сведения, или по каталогу, чтобы изменить каталог выполнения инструментов.</translation>
+        <translation type="vanished">Кликните по имени модели, чтобы просмотреть её сведения, или по каталогу, чтобы изменить каталог выполнения инструментов.</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="-40"/>
+        <source>Download definitions</source>
+        <translation>Скачать определения синтаксиса</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
+        <translation>Отсутствуют %1 и %2 (а также другие определения синтаксиса), поэтому соответствующие фрагменты кода не будут подсвечиваться. %3</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
+        <translation>Кликните по имени модели, чтобы просмотреть её сведения, или по каталогу, чтобы изменить каталог выполнения инструментов (правый клик сбросит каталог на каталог проекта).</translation>
+    </message>
+    <message>
+        <location line="+39"/>
         <source>Model Details</source>
         <translation>Сведения о модели</translation>
     </message>
@@ -1549,6 +1612,16 @@
         <location line="+1"/>
         <source>Model path:</source>
         <translation>Путь к модели:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type:</source>
+        <translation>Тип:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Parallel slots:</source>
+        <translation>Параллельные слоты:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1567,21 +1640,53 @@
     </message>
     <message>
         <location line="+2"/>
+        <source>BOS token:</source>
+        <translation>Токен BOS:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>EOS token:</source>
+        <translation>Токен EOS:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reasoning effort:</source>
+        <translation>Уровень рассуждений:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Build:</source>
         <translation>Build:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+19"/>
+        <location line="+2"/>
+        <source>Chat template:</source>
+        <translation>Шаблон чата:</translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Not reported by the server (the model is not loaded?).</source>
+        <translation>Не сообщено сервером (модель не загружена?).</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool-use template:</source>
+        <translation>Шаблон использования инструментов:</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
         <source>Select Working Directory</source>
         <translation>Выберите рабочий каталог</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1596,12 +1701,12 @@
         <translation>Задача всё ещё выполняется. Вы действительно хотите её остановить?</translation>
     </message>
     <message>
-        <location line="+259"/>
+        <location line="+327"/>
         <source>Edit Message</source>
         <translation>Редактировать сообщение</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Будет удалено %1 сообщений, в том числе: %2 пользовательских сообщения и %3 ответа ассистента ...</translation>
     </message>
@@ -1621,47 +1726,43 @@
         <translation>Вы уверены, что хотите удалить это сообщение?</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>Processing: %1%</source>
-        <translation>Обработка: %1%</translation>
+        <translation type="vanished">Обработка: %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+56"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Обработка запроса:&lt;/b&gt;&lt;br&gt;Всего токенов: %1&lt;br&gt;Обработано: %2&lt;br&gt;В кэше: %3&lt;br&gt;Время: %4 мс</translation>
     </message>
     <message>
-        <location line="+132"/>
         <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
-        <translation>Создание нового разговора, чтобы продолжить этот – суммирование разговора...</translation>
+        <translation type="vanished">Создание нового разговора, чтобы продолжить этот – суммирование разговора...</translation>
     </message>
     <message>
-        <location line="-981"/>
+        <location line="-921"/>
         <source>Follow-up questions:</source>
         <translation>Продолжение разговора:</translation>
     </message>
     <message>
-        <location line="-510"/>
+        <location line="-606"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Сообщения в очереди - отправляются после текущего шага</translation>
     </message>
     <message>
-        <location line="+1373"/>
         <source>Speed: %1 t/s</source>
-        <translation>Скорость генерации: %1 токенов/с</translation>
+        <translation type="vanished">Скорость генерации: %1 токенов/с</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1546"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Запрос:&lt;/b&gt;&lt;br&gt;Токенов: %1&lt;br&gt;Время: %2 мс&lt;br&gt;Скорость: %3 токенов/с&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерация:&lt;/b&gt;&lt;br&gt;Токенов: %4&lt;br&gt;Время: %5 мс&lt;br&gt;Скорость: %6 токенов/с</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation>Контекст: использовано %1%</translation>
+        <translation type="vanished">Контекст: использовано %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+54"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Контекст: использовано %1%.&lt;br&gt;  %2 токенов из %3.</translation>
     </message>
@@ -1675,7 +1776,7 @@
         <translation type="vanished">Удалить «%1»</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Удалить сообщение из очереди (оно не будет отправлено)</translation>
     </message>
@@ -1684,7 +1785,7 @@
         <translation type="vanished">*Создание нового разговора, чтобы продолжить этот – суммирование разговора…</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Редактор чата llama.cpp</translation>
     </message>
@@ -1762,7 +1863,7 @@
         <translation>Мышление</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+142"/>
         <source>Attached files</source>
         <translation>Прикрепленные файлы</translation>
     </message>
@@ -1797,7 +1898,17 @@
         <translation>Скопировать сообщение в буфер обмена</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
+        <source>Copy verbatim</source>
+        <translation>Скопировать дословно</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Copy HTML</source>
+        <translation>Скопировать HTML</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Delete this message</source>
         <translation>Удалить это сообщение</translation>
     </message>
@@ -1838,7 +1949,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Идентификатор разговора</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Создает новый разговор с llama.cpp</translation>
     </message>
@@ -1858,13 +1969,11 @@ Do you want to overwrite it?</source>
         <translation>Создать сводку</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+135"/>
         <source>Continue in New Conversation</source>
-        <translation>Продолжить в новом разговоре</translation>
+        <translation type="vanished">Продолжить в новом разговоре</translation>
     </message>
     <message>
-        <location line="-132"/>
+        <location line="+1"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Удалить</translation>
@@ -1892,7 +2001,7 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
         <translation>Сохранить разговор как Markdown</translation>
     </message>
@@ -1921,7 +2030,7 @@ Do you want to overwrite it?</source>
         <translation>Разговоры llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1145"/>
+        <location filename="../src/llamasettings.cpp" line="-1167"/>
         <source>Create a summary of {selection}</source>
         <translation>Создать сводку для выделенного</translation>
     </message>
@@ -1956,7 +2065,7 @@ You can type any other prompt – they are remembered for next time.</source>
 Вы можете ввести любой другой запрос – они будут сохранены для следующего использования.</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+686"/>
         <source>SVG image</source>
         <translation>SVG-изображение</translation>
     </message>
@@ -1967,13 +2076,13 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Диаграмма Mermaid</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+477"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Детали</translation>
     </message>
     <message>
-        <location line="+581"/>
+        <location line="+602"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Скопировать код ниже в буфер обмена</translation>
     </message>
@@ -2358,7 +2467,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Выберите инструмент, чтобы просмотреть его JSON-определение</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-47"/>
         <source>Select a tool to view its definition</source>
         <translation>Выберите инструмент, чтобы просмотреть его определение</translation>
     </message>
@@ -2368,9 +2477,8 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Инструмент</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Download ripgrep %1</source>
-        <translation>Скачать ripgrep %1</translation>
+        <translation type="vanished">Скачать ripgrep %1</translation>
     </message>
     <message>
         <source>Download MXC %1</source>
@@ -2381,19 +2489,18 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Песочница (команды, каталоги, сеть) настраивается на странице настроек песочницы.</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+206"/>
         <source>Edit</source>
         <translation>Править</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="-134"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Инструменты search и find используют ripgrep, который не установлен на этой системе.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>ripgrep: %1</source>
-        <translation>ripgrep: %1</translation>
+        <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
         <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
@@ -2405,7 +2512,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Рантайм песочницы Windows: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2435,7 +2542,47 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">Встроенный MCP-сервер Qt Creator, управляемый самим Qt Creator (Инструменты → MCP в настройках Qt Creator).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="-395"/>
+        <source>Browse...</source>
+        <translation>Обзор...</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Reset...</source>
+        <translation>Сброс...</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
+        <translation>Сбросить рабочий каталог на каталог проекта запуска (снимает переопределение) или на каталог по умолчанию для проектов.</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>The search and find tools use ripgrep.</source>
+        <translation>Инструменты search и find используют ripgrep.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>ripgrep</source>
+        <translation>ripgrep</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
+        <translation>Инструмент bash на Windows использует Git Bash, который не может инициализироваться внутри песочницы Windows (microsoft/mxc#1061). niubash — нативный Bash без MSYS2, способный это сделать, — не установлен на этой системе.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
+        <translation>Инструмент bash на Windows использует niubash, который может инициализироваться внутри песочницы Windows.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>niubash (Windows sandbox bash)</source>
+        <translation>niubash (bash песочницы Windows)</translation>
+    </message>
+    <message>
+        <location line="+428"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2501,7 +2648,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
         <source>Description</source>
         <translation>Описание</translation>
     </message>
@@ -2522,7 +2669,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
         <source>Name: %1</source>
         <translation>Имя: %1</translation>
     </message>
@@ -2547,7 +2694,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 навыков</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-84"/>
         <source>No description</source>
         <translation>Описание отсутствует</translation>
     </message>
@@ -2591,7 +2738,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
@@ -2642,7 +2789,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Свёртка</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/llamachateditor.cpp" line="-1631"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Заголовок</translation>
@@ -2701,7 +2848,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">имя &quot;%1&quot; конфликтует с %2 – сохраняется первое</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+975"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
         <source>Error:</source>
         <translation>Ошибка:</translation>
     </message>
@@ -2746,7 +2893,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Разговор свёрнут – предыдущие сообщения были суммированы для размещения в окне контекста.</translation>
     </message>
     <message>
-        <location line="+1321"/>
+        <location line="+1250"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Разговор больше не помещается в окно контекста модели.</translation>
     </message>
@@ -2759,47 +2906,44 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Разговор уже свёртывается; отправьте сообщение повторно, когда свёртка завершится.</translation>
     </message>
     <message>
-        <location line="-924"/>
         <source>Automatic handoff is disabled.</source>
-        <translation>Автоматическая передача отключена.</translation>
+        <translation type="vanished">Автоматическая передача отключена.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A new conversation is already being created for this one.</source>
-        <translation>Новый разговор для этого уже создаётся.</translation>
+        <translation type="vanished">Новый разговор для этого уже создаётся.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to hand off.</source>
-        <translation>В разговоре нет сообщений для передачи.</translation>
+        <translation type="vanished">В разговоре нет сообщений для передачи.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was handed off recently; send a few more messages first.</source>
-        <translation>Разговор недавно был передан; сначала отправьте ещё несколько сообщений.</translation>
+        <translation type="vanished">Разговор недавно был передан; сначала отправьте ещё несколько сообщений.</translation>
     </message>
     <message>
-        <location line="+87"/>
         <source>The handoff request failed: %1</source>
-        <translation>Запрос передачи не удался: %1</translation>
+        <translation type="vanished">Запрос передачи не удался: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The handoff request returned a malformed reply.</source>
-        <translation>Запрос передачи вернул некорректный ответ.</translation>
+        <translation type="vanished">Запрос передачи вернул некорректный ответ.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The handoff request returned no document.</source>
-        <translation>Запрос передачи не вернул документ.</translation>
+        <translation type="vanished">Запрос передачи не вернул документ.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The handoff request returned an empty document.</source>
-        <translation>Запрос передачи вернул пустой документ.</translation>
+        <translation type="vanished">Запрос передачи вернул пустой документ.</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-844"/>
+        <source>Creating a new conversation to continue this one...</source>
+        <translation>Создаётся новый разговор для продолжения этого...</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>Continuation of %1</source>
         <translation>Продолжение %1</translation>
     </message>
@@ -2813,12 +2957,26 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+774"/>
-        <source>Continue in a new conversation to keep working.</source>
-        <translation>Продолжите в новом разговоре, чтобы работать дальше.</translation>
+        <location line="+787"/>
+        <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
+        <translation>Разговор слишком длинный для передачи: история плюс документ передачи больше не помещаются в окно контекста модели.</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+3"/>
+        <source>Switch to a model with a larger context or start a new conversation.</source>
+        <translation>Переключитесь на модель с более большим контекстом или начните новый разговор.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Enable &quot;Automatically continue in a new conversation&quot; in the Llama settings to hand the work over to a new conversation before the context window fills up.</source>
+        <translation>Включите &quot;Автоматически продолжать в новом разговоре&quot; в настройках Llama, чтобы передать работу новому разговору до заполнения окна контекста.</translation>
+    </message>
+    <message>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation type="vanished">Продолжите в новом разговоре, чтобы работать дальше.</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Примечание:** Ответ был обрезан: модель достигла максимального количества выходных токенов.</translation>
     </message>
@@ -2912,6 +3070,8 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
+        <location line="+97"/>
         <source>Download...</source>
         <translation>Скачать...</translation>
     </message>
@@ -2944,6 +3104,21 @@ You can type any other prompt - they are remembered for next time.</source>
         <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
         <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
         <translation>Запросить у llama.cpp информацию о выделении (открывает локатор llama.cpp)</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <source>Syntax definitions: %1</source>
+        <translation>Определения синтаксиса: %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Syntax definitions: done</source>
+        <translation>Определения синтаксиса: завершено</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Syntax definitions: starting download</source>
+        <translation>Определения синтаксиса: начало загрузки</translation>
     </message>
 </context>
 <context>
@@ -3005,12 +3180,16 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Успешно. Обновлены следующие файлы:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation>Оболочка bash не найдена. Установите Git for Windows (https://git-scm.com/download/win) или добавьте bash в PATH.</translation>
+        <translation type="vanished">Оболочка bash не найдена. Установите Git for Windows (https://git-scm.com/download/win) или добавьте bash в PATH.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>Оболочка bash не найдена. Установите Git for Windows (https://git-scm.com/download/win) или добавьте bash в PATH, или скачайте niubash на странице настроек инструментов Llama.cpp Chat.</translation>
+    </message>
+    <message>
+        <location line="+147"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Исполняемый файл sandbox-exec не найден; песочница недоступна на этой системе.</translation>
     </message>
@@ -3040,7 +3219,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Полный вывод сохранён в: %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+124"/>
         <source>running %1</source>
         <translation>выполняется %1</translation>
     </message>
@@ -3331,7 +3510,7 @@ You can type any other prompt - they are remembered for next time.</source>
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>получить %1</translation>
@@ -3361,13 +3540,13 @@ You can type any other prompt - they are remembered for next time.</source>
 [... содержимое усечено на %1 символах ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>поиск %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
         <translation>Результаты поиска по запросу &quot;%1&quot;:</translation>
     </message>
@@ -3381,12 +3560,13 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Ошибка инструмента: &quot;query&quot; должна быть непустой строкой.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+52"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Поиск не выполнен: бэкенд Google не настроен. Задайте ключ API и идентификатор поисковой системы (cx) в настройках Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="-23"/>
+        <location line="+44"/>
         <location line="+13"/>
         <location line="+41"/>
         <location line="+45"/>
@@ -3395,7 +3575,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Поиск не выполнен: %1</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation>Поиск не выполнен: DuckDuckGo сейчас ограничивает частоту запросов; подождите минуту и повторите попытку.</translation>
+    </message>
+    <message>
+        <location line="+43"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3412,7 +3597,8 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Поиск не выполнен: бэкенд Brave не настроен. Задайте ключ API в настройках Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="-59"/>
+        <location line="+95"/>
         <location line="+44"/>
         <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
@@ -3550,12 +3736,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>MCP-инструмент &quot;%1&quot; недоступен (ни один подключённый MCP-сервер его не предоставляет).</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
         <translation>Скачать ripgrep</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
         <translation>Скачать ripgrep %1 с GitHub?</translation>
     </message>
@@ -3570,7 +3756,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Скачать рантайм песочницы Windows (MXC)</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Скачать рантайм Microsoft MXC %1?</translation>
     </message>
@@ -3581,18 +3767,21 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+152"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Проект: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
         <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Лицензия: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
         <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Скачать</translation>
@@ -3663,12 +3852,14 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
         <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Проверка целостности пакета...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
         <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Скачанный пакет не совпадает с ожидаемым.</translation>
@@ -3790,7 +3981,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Список задач обновлён: выполнено %1 из %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Доступ к &quot;%1&quot; не разрешён: пути к устройствам и административные шары недоступны в песочнице.</translation>
     </message>
@@ -3803,7 +3994,27 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Запись в &quot;%1&quot; не разрешена: песочница позволяет записывать только в каталог проекта и временные расположения.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="-41"/>
+        <source>Reset to Project Directory</source>
+        <translation>Сбросить на каталог проекта</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>Снять переопределение рабочего каталога: инструменты будут выполняться в каталоге проекта запуска (или в каталоге по умолчанию для проектов, если проект не открыт).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>Сбросить на каталог по умолчанию для проектов</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>Использовать каталог по умолчанию для проектов, в котором создаются новые проекты.</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Запись в &quot;%1&quot; не разрешена: проект не открыт, поэтому песочница позволяет записывать только во временные расположения и дополнительные каталоги с доступом на запись из настроек песочницы. Откройте проект, чтобы работать с его файлами.</translation>
     </message>
@@ -3856,37 +4067,36 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Скачайте его со страницы настроек инструментов чата Llama.cpp (закреплённый релиз Microsoft MXC с проверенной контрольной суммой); переменная LLAMA_WXC_EXEC может указывать на wxc-exec.exe. В качестве альтернативы снимите отметку «Песочница для команд» в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Бэкенд песочницы Windows (wxc-exec) не ответил на запрос проверки возможностей вовремя. %1</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
         <translation>Бэкенд песочницы Windows (wxc-exec) сообщил, что контейнер MXC недоступен (код выхода %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+330"/>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Песочница Windows не смогла настроить пробу изоляции в реальном времени (временный каталог или canary-файл в домашнем каталоге). %1</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Песочница Windows не смогла создать canary-файл пробы изоляции в реальном времени в %1. %2</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Конфигурация песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
     <message>
-        <location line="+63"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>bash по пути &quot;%1&quot; не входит в распознанную установку Git for Windows или MSYS2, поэтому песочница Windows не может предоставить ему узкое расположение с доступом только на чтение. Установите Git for Windows (https://git-scm.com/download/win) и поместите его bash в начале PATH, либо снимите отметку &apos;Песочница для команд&apos; в настройках Llama.</translation>
+        <translation type="vanished">bash по пути &quot;%1&quot; не входит в распознанную установку Git for Windows или MSYS2, поэтому песочница Windows не может предоставить ему узкое расположение с доступом только на чтение. Установите Git for Windows (https://git-scm.com/download/win) и поместите его bash в начале PATH, либо снимите отметку &apos;Песочница для команд&apos; в настройках Llama.</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Для песочницы Windows (Microsoft MXC) требуется Windows 11 24H2 (сборка %1) или новее; сборка этой системы — %2. Снимите отметку «Песочница для команд» в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
@@ -3896,22 +4106,27 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>wxc-exec.exe (рантайм песочницы Windows Microsoft MXC) не найден. %1</translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Песочница Windows (Microsoft MXC) не прошла проверку изоляции: не удалось проверить, что команда в песочнице ограничена. %1</translation>
     </message>
     <message>
-        <location line="-437"/>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Скачайте его со страницы настроек песочницы Llama.cpp Chat (закреплённый выпуск Microsoft MXC с проверенной контрольной суммой); там можно указать свой рантайм. В качестве альтернативы снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
     <message>
-        <location line="+605"/>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash по адресу &quot;%1&quot; не входит в распознаваемую установку niubash, Git for Windows или MSYS2, поэтому песочница Windows не может выдать ему узкое расположение только для чтения. Установите Git for Windows (https://git-scm.com/download/win) и поставьте его bash первым в PATH, или скачайте niubash на странице настроек инструментов Llama.cpp Chat, или снимите отметку &apos;Песочница для команд&apos; в настройках Llama.</translation>
+    </message>
+    <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Песочница Windows (Microsoft MXC) впервые проверяет свою изоляцию; повторите команду через несколько секунд.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Командная строка песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
@@ -3955,6 +4170,51 @@ You can type any other prompt - they are remembered for next time.</source>
         <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
         <translation>MCP-инструмент &quot;%1&quot; был остановлен пользователем.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <source>Download niubash</source>
+        <translation>Скачать niubash</translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation>Скачать niubash %1 с GitHub?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation>Инструмент bash на Windows обычно использует Git Bash, но его рантайм MSYS2 не может инициализироваться внутри песочницы Windows (microsoft/mxc#1061). niubash — нативный Bash без MSYS2, который может, поэтому его можно скачать здесь, чтобы выполнять инструмент bash в песочнице. niubash распространяется под лицензией MIT.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>The package holds no niubash shell.</source>
+        <translation>В пакете нет оболочки niubash.</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>There is no niubash for this platform.</source>
+        <translation>Для этой платформы niubash не существует.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading niubash...</source>
+        <translation>Загрузка niubash...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading niubash failed: %1</source>
+        <translation>Не удалось загрузить niubash: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking niubash...</source>
+        <translation>Распаковка niubash...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking niubash failed: %1</source>
+        <translation>Не удалось распаковать niubash: %1</translation>
     </message>
 </context>
 </TS>

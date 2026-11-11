@@ -151,7 +151,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1158"/>
+        <location filename="../src/llamasettings.cpp" line="+1180"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -169,7 +169,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1104"/>
+        <location filename="../src/llamasettings.cpp" line="-1126"/>
         <source>Tools</source>
         <translation>Orodja</translation>
     </message>
@@ -884,11 +884,35 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation>Raven razmišljanja (razlogovanja) za modele, ki podpirajo razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ali &quot;max&quot;.</translation>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
+        <translation>Raven razmišljanja (razlogovanja) za modele, ki podpirajo razmišljanje. &quot;default&quot; uporablja privzeto vrednost modela, &quot;off&quot; razmišljanje onemogoči, konkretne ravni pa so tiste, ki jih strežnik poroča za pogovorno predlogo modela.</translation>
+    </message>
+    <message>
+        <location line="+227"/>
+        <source>ripgrep:</source>
+        <translation>ripgrep:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A ripgrep (rg) executable to run the search and find tools with. If empty, the one on the PATH is used, then the one downloaded from this page.</source>
+        <translation>Izvedljiva datoteka ripgrep (rg) za izvajanje orodij za iskanje in iščenje datotek. Če je prazno, se uporabi tista na PATH, nato pa tista, prenesena s te strani.</translation>
     </message>
     <message>
         <location line="+6"/>
+        <source>niubash:</source>
+        <translation>niubash:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
+        <translation>Zagonnik niubash (winuxcmd\bin\bash.exe) za izvajanje orodja bash na Windowsu. niubash je izvorni Bash brez MSYS2, zato - za razliko od Git Bash - lahko deluje v peskovniku za Windows. Če je prazno, se uporabi tisti, prenesen s te strani, nato pa Git Bash.</translation>
+    </message>
+    <message>
+        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
+        <translation type="vanished">Raven razmišljanja (razlogovanja) za modele, ki podpirajo razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ali &quot;max&quot;.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Chat Font Zoom</source>
         <translation>Povečava pisave pogovora</translation>
     </message>
@@ -985,12 +1009,17 @@
         <translation type="vanished">Pogovor se samodejno stisne, ko njegova zgodovina uporabi več kot ta odstotek okna konteksta modela.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+38"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokalni model lahko večno zanka klice orodij, zato se po toliko zaporednih potez samo z orodji klici ne izvedejo - model prejme neuspešen rezultat, ki ga usmeri, da namesto tega konča. Pogovori nalog (podagentov) niso omejeni. Za brez omejitve nastavite 0.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+16"/>
+        <source>Backend used by the websearch tool: &quot;duckduckgo&quot; (default, no API key required), &quot;exa&quot; (Exa search API), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
+        <translation>Ozadje, ki ga uporablja orodje websearch: &quot;duckduckgo&quot; (privzeto, ne zahteva API ključa), &quot;exa&quot; (Exa search API), &quot;google&quot; (Custom Search JSON API, zahteva API ključ in ID iskalnega dvigala), &quot;brave&quot; (Brave Search API, zahteva API ključ) ali &quot;tavily&quot; (zahteva API ključ).</translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
         <translation>Neobvezen API ključ Exa. Brez ključa se uporabi skupna (omejena po hitrosti) konecna točka.</translation>
     </message>
@@ -999,7 +1028,7 @@
         <translation type="vanished">Model, ki se uporablja za pomožne zahteve, kot so naslovi pogovorov in predlogi vprašanj za nadaljevanje. Za sprostitev glavnega modela za pogovor uporabite majhen model. Pustite prazno, da se uporabi aktiven model za pogovor.</translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-268"/>
         <source>Conversation Title Prompt</source>
         <translation>Navodilo za naslov pogovora</translation>
     </message>
@@ -1164,7 +1193,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+291"/>
+        <location line="+308"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Povelja v peskovniku</translation>
@@ -1215,12 +1244,11 @@
         <translation>Ponudnik iskanja po spletu:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation>Ozadje, ki ga uporablja orodje websearch: &quot;exa&quot; (privzeto, ne zahteva API ključa), &quot;google&quot; (Custom Search JSON API, zahteva API ključ in ID iskalnega dvigala), &quot;brave&quot; (Brave Search API, zahteva API ključ) ali &quot;tavily&quot; (zahteva API ključ).</translation>
+        <translation type="vanished">Ozadje, ki ga uporablja orodje websearch: &quot;exa&quot; (privzeto, ne zahteva API ključa), &quot;google&quot; (Custom Search JSON API, zahteva API ključ in ID iskalnega dvigala), &quot;brave&quot; (Brave Search API, zahteva API ključ) ali &quot;tavily&quot; (zahteva API ključ).</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
         <source>Exa Endpoint</source>
         <translation>Konecna točka Exa</translation>
     </message>
@@ -1364,7 +1392,12 @@
         <translation>Prepiše globalno nastavo &apos;Naloži navodila projekta&apos; za ta projekt. Kaj se naloži, si oglejte v globalni nastavi na strani Llama Orodja.</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+177"/>
+        <source>&quot;duckduckgo&quot; needs no API key</source>
+        <translation>&quot;duckduckgo&quot; ne zahteva API ključa</translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <source>Web Search</source>
         <translation>Iskanje po spletu</translation>
     </message>
@@ -1374,14 +1407,21 @@
         <translation>Navodila</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+134"/>
+        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location line="+14"/>
         <source>Default</source>
         <translation>Privzeto</translation>
     </message>
     <message>
+        <location line="-13"/>
         <location line="+1"/>
         <source>Off</source>
         <translation>Izklap</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minimal</source>
+        <translation>Minimalna</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1400,6 +1440,11 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>Extra High</source>
+        <translation>Zelo visoka</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Max</source>
         <translation>Maks</translation>
     </message>
@@ -1408,7 +1453,7 @@
         <translation type="vanished">Delovni imenik: %1</translation>
     </message>
     <message>
-        <location line="+346"/>
+        <location line="+412"/>
         <source>LLM model</source>
         <translation>LLM model</translation>
     </message>
@@ -1417,7 +1462,7 @@
         <translation type="vanished">Sporočila v čakalni vrsti – poslana po trenutnem koraku</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Follow up</source>
         <translation>Nadaljuj</translation>
     </message>
@@ -1432,7 +1477,7 @@
         <translation>Generiraj naslov pogovora po prvem odgovoru</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+23"/>
         <source>Thinking level</source>
         <translation>Raven razmišljanja</translation>
     </message>
@@ -1449,7 +1494,7 @@
         <translation type="vanished">Prejšnji rezultat iskanja</translation>
     </message>
     <message>
-        <location line="+238"/>
+        <location line="+217"/>
         <source>Send to Llama Chat</source>
         <translation>Pošlji v Llama Pogovor</translation>
     </message>
@@ -1466,7 +1511,7 @@
         <translation type="vanished">Vid: %1</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+252"/>
         <location line="+1"/>
         <source>yes</source>
         <translation>da</translation>
@@ -1482,39 +1527,58 @@
         <translation type="vanished">Dodatna vprašanja:</translation>
     </message>
     <message>
-        <location line="-458"/>
+        <location line="-522"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Sporočila v čakalni vrsti - poslana po trenutnem koraku</translation>
     </message>
     <message>
-        <location line="+510"/>
+        <location line="+418"/>
+        <source>Download definitions</source>
+        <translation>Prenesi definicije</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
+        <translation>%1 in %2 (in druge definicije sintakse) manjkata, zato kodni odrezki, ki ustrezejo, ne bodo poudarjeni. %3</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
+        <translation>Kliknite ime modela za prikaz njegovih podrobnosti ali imenik za spremembo mesta, kjer orodja delujejo (desni klik nanj ponastavi imenik na projekt).</translation>
+    </message>
+    <message>
+        <location line="+145"/>
         <source>Follow-up questions:</source>
         <translation>Dodatna vprašanja:</translation>
     </message>
     <message>
-        <location line="+615"/>
+        <location line="+682"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Raven razmišljanja: %1 (velja za nova sporočila)</translation>
     </message>
     <message>
-        <location line="-772"/>
-        <location line="+801"/>
+        <location line="-911"/>
+        <location line="+940"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Človeški urejevalnik</translation>
     </message>
     <message>
-        <location line="-853"/>
+        <location line="-992"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Povezani ste s %1, uporablja se %2 kot trenutni imenik</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+50"/>
         <source>Hello there</source>
         <translation>Pozdravljeni</translation>
     </message>
@@ -1524,12 +1588,11 @@
         <translation>Vpišite sporočilo ali naložite datoteke, da začnete</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Click the model name to see its details, or the directory to change where the tools run.</source>
-        <translation>Kliknite ime modela za prikaz njegovih podrobnosti ali imenik za spremembo mesta, kjer orodja delujejo.</translation>
+        <translation type="vanished">Kliknite ime modela za prikaz njegovih podrobnosti ali imenik za spremembo mesta, kjer orodja delujejo.</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+42"/>
         <source>Model Details</source>
         <translation>Podrobnosti modela</translation>
     </message>
@@ -1542,6 +1605,16 @@
         <location line="+1"/>
         <source>Model path:</source>
         <translation>Pot do modela:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type:</source>
+        <translation>Vrsta:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Parallel slots:</source>
+        <translation>Paralelni razdelki:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1560,21 +1633,53 @@
     </message>
     <message>
         <location line="+2"/>
+        <source>BOS token:</source>
+        <translation>BOS žeton:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>EOS token:</source>
+        <translation>EOS žeton:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reasoning effort:</source>
+        <translation>Napor razlogovanja:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Build:</source>
         <translation>Gradnja:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+19"/>
+        <location line="+2"/>
+        <source>Chat template:</source>
+        <translation>Pogovorna predloga:</translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Not reported by the server (the model is not loaded?).</source>
+        <translation>Strežnik ne poroča (model ni naložen?).</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool-use template:</source>
+        <translation>Predloga za uporabo orodij:</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Close</source>
         <translation>Zapri</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
         <source>Select Working Directory</source>
         <translation>Izberite delovni imenik</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1589,12 +1694,12 @@
         <translation>Naloga še vedno teče. Ali res želite ustaviti?</translation>
     </message>
     <message>
-        <location line="+259"/>
+        <location line="+327"/>
         <source>Edit Message</source>
         <translation>Uredi sporočilo</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>S tem se izbriše %1 sporočil, in sicer: %2 uporabniških sporočil in %3 odgovorov asistenta ...</translation>
     </message>
@@ -1614,32 +1719,29 @@
         <translation>Ali res želite izbrisati to sporočilo?</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>Processing: %1%</source>
-        <translation>Obdelava: %1%</translation>
+        <translation type="vanished">Obdelava: %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+56"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Obdelava navodila:&lt;/b&gt;&lt;br&gt;Skupaj žetonov: %1&lt;br&gt;Obdelano: %2&lt;br&gt;Predpomnjeno: %3&lt;br&gt;Čas: %4 ms</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Speed: %1 t/s</source>
-        <translation>Hitrost: %1 ž/s</translation>
+        <translation type="vanished">Hitrost: %1 ž/s</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+19"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Povabilo:&lt;/b&gt;&lt;br&gt;Žetoni: %1&lt;br&gt;Čas: %2 ms&lt;br&gt;Hitrost: %3 ž/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generacija:&lt;/b&gt;&lt;br&gt;Žetoni: %4&lt;br&gt;Čas: %5 ms&lt;br&gt;Hitrost: %6 ž/s</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation>Kontekst: uporabljeno %1%</translation>
+        <translation type="vanished">Kontekst: uporabljeno %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+54"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontekst: uporabljeno %1%.&lt;br&gt;  %2 žetonov iz %3.</translation>
     </message>
@@ -1649,21 +1751,20 @@
         <translation>%1 v čakalni vrsti</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+20"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Odstrani &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
-        <translation>Ustvarjanje novega pogovora za nadaljevanje tega – povzemanje pogovora...</translation>
+        <translation type="vanished">Ustvarjanje novega pogovora za nadaljevanje tega – povzemanje pogovora...</translation>
     </message>
     <message>
         <source>Remove “%1”</source>
         <translation type="vanished">Odstrani “%1”</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="+2"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Odstrani sporočilo v čakalni vrsti (se ne bo poslano)</translation>
     </message>
@@ -1672,7 +1773,7 @@
         <translation type="vanished">*Ustvarjanje novega pogovora za nadaljevanje tega – povzemanje pogovora…</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Urejevalnik pogovorov programa LlamaCpp</translation>
     </message>
@@ -1754,7 +1855,7 @@
         <translation type="vanished">Kliknite za razširitev ali skritje procesa razmišljanja</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+142"/>
         <source>Attached files</source>
         <translation>Pripete datoteke</translation>
     </message>
@@ -1789,7 +1890,17 @@
         <translation>Kopiraj sporočilo v odložišče</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
+        <source>Copy verbatim</source>
+        <translation>Kopiraj doslovno</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Copy HTML</source>
+        <translation>Kopiraj HTML</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Delete this message</source>
         <translation>Izbriši to sporočilo</translation>
     </message>
@@ -1834,7 +1945,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">Id pogovora</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Ustvari nov pogovor programa llama.cpp</translation>
     </message>
@@ -1854,13 +1965,11 @@ Do you want to overwrite it?</source>
         <translation>Povzemi</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+135"/>
         <source>Continue in New Conversation</source>
-        <translation>Nadaljuj v novem pogovoru</translation>
+        <translation type="vanished">Nadaljuj v novem pogovoru</translation>
     </message>
     <message>
-        <location line="-132"/>
+        <location line="+1"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
@@ -1888,7 +1997,7 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
         <translation>Shrani pogovor kot Markdown</translation>
     </message>
@@ -1917,7 +2026,7 @@ Do you want to overwrite it?</source>
         <translation>Pogovori programa llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1145"/>
+        <location filename="../src/llamasettings.cpp" line="-1167"/>
         <source>Create a summary of {selection}</source>
         <translation>Ustvari povzetek izbora {selection}</translation>
     </message>
@@ -1966,7 +2075,7 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Zbiranje git sprememb</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+686"/>
         <source>SVG image</source>
         <translation>Slika SVG</translation>
     </message>
@@ -1977,13 +2086,13 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Mermaid diagram</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+477"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Podrobnosti</translation>
     </message>
     <message>
-        <location line="+581"/>
+        <location line="+602"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Kopiraj kodo spodaj v odložišče</translation>
     </message>
@@ -2368,7 +2477,7 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation type="vanished">Izberite orodje za ogled njegove JSON definicije</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-47"/>
         <source>Select a tool to view its definition</source>
         <translation>Izberite orodje, da ogledate njegovo definicijo</translation>
     </message>
@@ -2378,9 +2487,8 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation>Orodje</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Download ripgrep %1</source>
-        <translation>Prenesi ripgrep %1</translation>
+        <translation type="vanished">Prenesi ripgrep %1</translation>
     </message>
     <message>
         <source>Download MXC %1</source>
@@ -2391,19 +2499,18 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation type="vanished">Peskovnik (povelja, imeniki, omrežje) se nastavi na strani nastavitve peskovnika.</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+206"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="-134"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Orodji za iskanje in iščenje datotek uporabljata ripgrep, ki ni nameščen na tem sistemu.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>ripgrep: %1</source>
-        <translation>ripgrep: %1</translation>
+        <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
         <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
@@ -2415,7 +2522,7 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation type="vanished">Izvedbeno okolje Windows peskovnika: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2445,7 +2552,47 @@ Lahko vpišete katerikoli drugo povabilo - bodo zapomnjena za naslednjič.</tran
         <translation type="vanished">Vgrajeni MCP strežnik programa Qt Creator, ki ga upravlja sam Qt Creator (Orodja → MCP v nastavitvah Qt Creator).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="-395"/>
+        <source>Browse...</source>
+        <translation>Preglej...</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Reset...</source>
+        <translation>Ponastavi...</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
+        <translation>Ponastavi delovni imenik na imenik zagonnega projekta (počisti prepis) ali na privzeti imenik projektov.</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>The search and find tools use ripgrep.</source>
+        <translation>Orodji za iskanje in iščenje datotek uporabljata ripgrep.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>ripgrep</source>
+        <translation>ripgrep</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
+        <translation>Orodje bash na Windowsu izvaja Git Bash, ki se ne more inicializirati znotraj peskovnika za Windows (microsoft/mxc#1061). niubash, izvorni Bash brez MSYS2, ki se v peskovniku lahko inicializira, ni nameščen na tem sistemu.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
+        <translation>Orodje bash na Windowsu izvaja niubash, ki se lahko inicializira znotraj peskovnika za Windows.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>niubash (Windows sandbox bash)</source>
+        <translation>niubash (bash peskovnika za Windows)</translation>
+    </message>
+    <message>
+        <location line="+428"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2511,7 +2658,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2532,7 +2679,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2557,7 +2704,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 veščin</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-84"/>
         <source>No description</source>
         <translation>Brez opisa</translation>
     </message>
@@ -2579,7 +2726,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Add...</source>
         <translation>Dodaj...</translation>
     </message>
@@ -2630,7 +2777,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Stiskanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/llamachateditor.cpp" line="-1631"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -2689,7 +2836,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">ime &quot;%1&quot; je v koliziji z %2 – ohranjen je prvi</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+975"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
         <source>Error:</source>
         <translation>Napaka:</translation>
     </message>
@@ -2734,7 +2881,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Pogovor je stisnjen – prejšnja sporočila so bila povzeta, da se prilegajo oknu konteksta.</translation>
     </message>
     <message>
-        <location line="+1321"/>
+        <location line="+1250"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Pogovor se ne prilega več oknu konteksta modela.</translation>
     </message>
@@ -2747,47 +2894,44 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Pogovor se že stiska; sporočilo pošljite znova, ko se stiskanje konča.</translation>
     </message>
     <message>
-        <location line="-924"/>
         <source>Automatic handoff is disabled.</source>
-        <translation>Samodejna podaja je onemogočena.</translation>
+        <translation type="vanished">Samodejna podaja je onemogočena.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A new conversation is already being created for this one.</source>
-        <translation>Nov pogovor za ta se že ustvarja.</translation>
+        <translation type="vanished">Nov pogovor za ta se že ustvarja.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to hand off.</source>
-        <translation>Pogovor nima sporočil za podajo.</translation>
+        <translation type="vanished">Pogovor nima sporočil za podajo.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was handed off recently; send a few more messages first.</source>
-        <translation>Pogovor je bil pred kratkim podan; najprej pošljite še nekaj sporočil.</translation>
+        <translation type="vanished">Pogovor je bil pred kratkim podan; najprej pošljite še nekaj sporočil.</translation>
     </message>
     <message>
-        <location line="+87"/>
         <source>The handoff request failed: %1</source>
-        <translation>Zahteva za podajo ni uspela: %1</translation>
+        <translation type="vanished">Zahteva za podajo ni uspela: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The handoff request returned a malformed reply.</source>
-        <translation>Zahteva za podajo je vrnila nepravilno oblikovan odgovor.</translation>
+        <translation type="vanished">Zahteva za podajo je vrnila nepravilno oblikovan odgovor.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The handoff request returned no document.</source>
-        <translation>Zahteva za podajo ni vrnila nobenega dokumenta.</translation>
+        <translation type="vanished">Zahteva za podajo ni vrnila nobenega dokumenta.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The handoff request returned an empty document.</source>
-        <translation>Zahteva za podajo je vrnila prazen dokument.</translation>
+        <translation type="vanished">Zahteva za podajo je vrnila prazen dokument.</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-844"/>
+        <source>Creating a new conversation to continue this one...</source>
+        <translation>Ustvarjanje novega pogovora za nadaljevanje tega...</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>Continuation of %1</source>
         <translation>Nadaljevanje %1</translation>
     </message>
@@ -2801,12 +2945,26 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+774"/>
-        <source>Continue in a new conversation to keep working.</source>
-        <translation>Nadaljujte v novem pogovoru, da delo poteka naprej.</translation>
+        <location line="+787"/>
+        <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
+        <translation>Pogovor je predolg za podajo: zgodovina skupaj s podajnim dokumentom se ne prilega več v okno konteksta modela.</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+3"/>
+        <source>Switch to a model with a larger context or start a new conversation.</source>
+        <translation>Preklopite na model z večjim kontekstom ali začnite nov pogovor.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Enable &quot;Automatically continue in a new conversation&quot; in the Llama settings to hand the work over to a new conversation before the context window fills up.</source>
+        <translation>V nastavitvah Llama omogočite &quot;Samodejno nadaljevanje v novem pogovoru&quot;, da se delo podaja v nov pogovor, preden se okno konteksta izpolni.</translation>
+    </message>
+    <message>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation type="vanished">Nadaljujte v novem pogovoru, da delo poteka naprej.</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Opomba:** Odgovor je bil okrajšan: model je dosegel največje število izhodnih žetonov.</translation>
     </message>
@@ -2900,6 +3058,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
+        <location line="+97"/>
         <source>Download...</source>
         <translation>Prenesi...</translation>
     </message>
@@ -2932,6 +3092,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
         <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
         <translation>Vprašaj program llama.cpp o izbranem besedilu (odpre lokator programa llama.cpp)</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <source>Syntax definitions: %1</source>
+        <translation>Definicije sintakse: %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Syntax definitions: done</source>
+        <translation>Definicije sintakse: končano</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Syntax definitions: starting download</source>
+        <translation>Definicije sintakse: začetek prenosa</translation>
     </message>
 </context>
 <context>
@@ -2993,12 +3168,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Uspešno. Posodobljene so bile naslednje datoteke:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation>Ogrlica bash ni bila najdena. Namestite Git for Windows (https://git-scm.com/download/win) ali dodajte bash na PATH.</translation>
+        <translation type="vanished">Ogrlica bash ni bila najdena. Namestite Git for Windows (https://git-scm.com/download/win) ali dodajte bash na PATH.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>Lupina bash ni bila najdena. Namestite Git for Windows (https://git-scm.com/download/win) ali dodajte bash na PATH, ali prenesite niubash s strani nastavitve orodij Llama.cpp Pogovor.</translation>
+    </message>
+    <message>
+        <location line="+147"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedljiva datoteka sandbox-exec ni bila najdena; peskovnik ni na voljo na tem sistemu.</translation>
     </message>
@@ -3028,7 +3207,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Celoten izhod shranjen v: %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+124"/>
         <source>running %1</source>
         <translation>se izvaja %1</translation>
     </message>
@@ -3319,7 +3498,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>pridobi %1</translation>
@@ -3349,13 +3528,13 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... vsebina okrajšana na %1 znakov ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>išči %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
         <translation>Rezultati iskanja za &quot;%1&quot;:</translation>
     </message>
@@ -3369,12 +3548,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Napaka orodja: &quot;query&quot; mora biti neprazen niz.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+52"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Iskanje ni uspešno: Google ozadje ni nastavljeno. V nastavitvah Llama.cpp nastavite API ključ in ID iskalnega dvigala (cx).</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="-23"/>
+        <location line="+44"/>
         <location line="+13"/>
         <location line="+41"/>
         <location line="+45"/>
@@ -3383,7 +3563,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Iskanje ni uspešno: %1</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation>Iskanje ni uspešno: DuckDuckGo trenutno omejuje hitrost zahtev; počakajte minuto in poskusite znova.</translation>
+    </message>
+    <message>
+        <location line="+43"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3400,7 +3585,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Iskanje ni uspešno: Brave ozadje ni nastavljeno. V nastavitvah Llama.cpp nastavite API ključ.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="-59"/>
+        <location line="+95"/>
         <location line="+44"/>
         <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
@@ -3538,12 +3724,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP orodje &quot;%1&quot; ni na voljo (ga ne ponuja noben povezan MCP strežnik).</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
         <translation>Prenesi ripgrep</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
         <translation>Prenesem ripgrep %1 z GitHuba?</translation>
     </message>
@@ -3558,7 +3744,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Prenesi izvedbeno okolje Windows peskovnika (MXC)</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Prenesem izvedbeno okolje Microsoft MXC %1?</translation>
     </message>
@@ -3569,18 +3755,21 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+152"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
         <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licenca: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
         <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Prenesi</translation>
@@ -3651,12 +3840,14 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
         <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Preverjanje celovitosti paketa ...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
         <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Preneseni paket ni tisti, ki je bil pričakovan.</translation>
@@ -3778,7 +3969,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam nalog posodobljen: zaključenih %1 od %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Dostop do &quot;%1&quot; ni dovoljen: poti naprav in administrativne mape v peskovniku niso dostopne.</translation>
     </message>
@@ -3791,7 +3982,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Pisanje v &quot;%1&quot; ni dovoljeno: peskovnik dovoljuje pisanje samo znotraj imenika projekta in na začasne lokacije.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="-41"/>
+        <source>Reset to Project Directory</source>
+        <translation>Ponastavi na imenik projekta</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>Počisti prepis delovnega imenika: orodja se izvajajo v imeniku zagonnega projekta (ali v privzetem imeniku projektov, če ni odprt noben projekt).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>Ponastavi na privzeti imenik projektov</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>Uporabi privzeti imenik projektov, nastavo, v kateri se ustvarjajo novi projekti.</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Pisanje v &quot;%1&quot; ni dovoljeno: ni odprt noben projekt, zato peskovnik dovoljuje pisanje samo na začasne lokacije in v dodatne zapisljive imenike iz nastavitev peskovnika. Odprite projekt, da delate z njegovimi datotekami.</translation>
     </message>
@@ -3844,37 +4055,36 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Prenesite ga s strani nastavitve orodij Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); LLAMA_WXC_EXEC lahko kaže na wxc-exec.exe. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Windows ozadja peskovnika (wxc-exec) ni v času odgovorilo na preizkus zmogljivosti. %1</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
         <translation>Windows ozadje peskovnika (wxc-exec) je poročalo, da kontejner MXC ni na voljo (končna koda %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+330"/>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows peskovnik ni mogel nastaviti preizkusa ločitve v živo (začasni imenik ali canary datoteka v domačem imeniku). %1</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows peskovnik ni mogel ustvariti canary datoteke svojega preizkusa ločitve v živo na %1. %2</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Nastavitev Windows peskovnika je predolga (%1 od %2 znakov); okolje procesa je verjetno preveliko. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
     <message>
-        <location line="+63"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>Bash na &quot;%1&quot; ni del prepoznanega namestitvenega paketa Git for Windows ali MSYS2, zato peskovnik za Windows ne more dodeliti ozke samo za branje lokacije. Namestite Git for Windows (https://git-scm.com/download/win) in postavite njegov bash na PATH na prvo mesto, ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama.</translation>
+        <translation type="vanished">Bash na &quot;%1&quot; ni del prepoznanega namestitvenega paketa Git for Windows ali MSYS2, zato peskovnik za Windows ne more dodeliti ozke samo za branje lokacije. Namestite Git for Windows (https://git-scm.com/download/win) in postavite njegov bash na PATH na prvo mesto, ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama.</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows peskovnik (Microsoft MXC) potrebuje Windows 11 24H2 (zgradba %1) ali novejšega; ta sistem je zgradbe %2. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
@@ -3884,22 +4094,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (izvedbeno okolje Windows peskovnika Microsoft MXC) ni bilo najdeno. %1</translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows peskovnik (Microsoft MXC) ni prešel preizkusa ločitve v živo: ni bilo mogoče potrditi, da je povelje v peskovniku omejeno. %1</translation>
     </message>
     <message>
-        <location line="-437"/>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Prenesite ga s strani nastavitve peskovnika Llama.cpp Pogovor (pripeta, s kontrolnim seštevkom preverjena izdaja Microsoft MXC); kazati nanj lahko tudi lastno izvedbeno okolje. Ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
     <message>
-        <location line="+605"/>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash na &quot;%1&quot; ni del prepoznanega namestitvenega paketa niubash, Git for Windows ali MSYS2, zato peskovnik za Windows ne more dodeliti ozke samo za branje lokacije. Namestite Git for Windows (https://git-scm.com/download/win) in postavite njegov bash na PATH na prvo mesto, ali prenesite niubash s strani nastavitve orodij Llama.cpp Pogovor, ali pa odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama.</translation>
+    </message>
+    <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows peskovnik (Microsoft MXC) prvič preverja svojo ločitev; povelje ponovno izvedite čez nekaj sekund.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows ukazna vrstica peskovnika je predolga (%1 od %2 znakov); okolje procesa je verjetno preveliko. Odznačite &apos;Povelja v peskovniku&apos; v nastavitvah Llama, da se povelja izvajajo brez peskovnika.</translation>
     </message>
@@ -3943,6 +4158,51 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
         <translation>MCP orodje &quot;%1&quot; je bilo ustavljeno s strani uporabnika.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <source>Download niubash</source>
+        <translation>Prenesi niubash</translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation>Prenesem niubash %1 z GitHuba?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation>Orodje bash na Windowsu običajno izvaja Git Bash, vendar se njegovo izvedbeno okolje MSYS2 ne more inicializirati znotraj peskovnika za Windows (microsoft/mxc#1061). niubash je izvorni Bash brez MSYS2, ki to zmore, zato ga lahko prenesete tukaj, da orodje bash deluje v peskovniku. niubash je izdan pod licenco MIT.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>The package holds no niubash shell.</source>
+        <translation>Paketa ne vsebuje lupine niubash.</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>There is no niubash for this platform.</source>
+        <translation>Za to platformo niubash ni na voljo.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading niubash...</source>
+        <translation>Prenos niubash ...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading niubash failed: %1</source>
+        <translation>Prenos niubash ni uspešen: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking niubash...</source>
+        <translation>Razpakiranje niubash ...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking niubash failed: %1</source>
+        <translation>Razpakiranje niubash ni uspešno: %1</translation>
     </message>
 </context>
 </TS>

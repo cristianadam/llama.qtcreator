@@ -151,7 +151,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1158"/>
+        <location filename="../src/llamasettings.cpp" line="+1180"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -169,7 +169,7 @@
         <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1075"/>
+        <location filename="../src/llamasettings.cpp" line="-1097"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>Povolit LlamaCpp</translation>
@@ -892,11 +892,35 @@
     </message>
     <message>
         <location line="+3"/>
-        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation>Úroveň přemýšlení (uvážování) pro modely podporující přemýšlení: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; nebo &quot;max&quot;.</translation>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
+        <translation>Úroveň přemýšlení (uvážování) pro modely podporující přemýšlení. &quot;default&quot; používá výchozí hodnotu modelu, &quot;off&quot; přemýšlení vypne a konkrétní úrovně jsou ty, které server nahlásí pro šablonu chatu modelu.</translation>
+    </message>
+    <message>
+        <location line="+227"/>
+        <source>ripgrep:</source>
+        <translation>ripgrep:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A ripgrep (rg) executable to run the search and find tools with. If empty, the one on the PATH is used, then the one downloaded from this page.</source>
+        <translation>Spustitelný soubor ripgrep (rg), se kterým se spouštějí nástroje search a find. Pokud je prázdné, použije se ten z PATH, pak ten stažený z této stránky.</translation>
     </message>
     <message>
         <location line="+6"/>
+        <source>niubash:</source>
+        <translation>niubash:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
+        <translation>Spouštěč bash niubash (winuxcmd\bin\bash.exe), se kterým se na Windows spouští nástroj bash. niubash je nativní Bash bez MSYS2, takže - na rozdíl od Git Bash - se může spouštět v pískovišti Windows. Pokud je prázdné, použije se ten stažený z této stránky, pak Git Bash.</translation>
+    </message>
+    <message>
+        <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
+        <translation type="vanished">Úroveň přemýšlení (uvážování) pro modely podporující přemýšlení: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; nebo &quot;max&quot;.</translation>
+    </message>
+    <message>
+        <location line="-230"/>
         <source>Chat Font Zoom</source>
         <translation>Zvětšení písma chatu</translation>
     </message>
@@ -993,12 +1017,17 @@
         <translation type="vanished">Konverzace se automaticky stlačí, když její historie využije více než tento procentuální podíl okna kontextu modelu.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+38"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou - model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+16"/>
+        <source>Backend used by the websearch tool: &quot;duckduckgo&quot; (default, no API key required), &quot;exa&quot; (Exa search API), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
+        <translation>Backend používaný nástrojem websearch: &quot;duckduckgo&quot; (výchozí, nevyžaduje API klíč), &quot;exa&quot; (vyhledávací API Exa), &quot;google&quot; (Custom Search JSON API, vyžaduje API klíč a ID vyhledávače), &quot;brave&quot; (Brave Search API, vyžaduje API klíč) nebo &quot;tavily&quot; (vyžaduje API klíč).</translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
         <translation>Volitelný API klíč Exa. Bez klíče se používá sdílený (s omezenou frekvencí) konečný bod.</translation>
     </message>
@@ -1007,7 +1036,7 @@
         <translation type="vanished">Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
     </message>
     <message>
-        <location line="-251"/>
+        <location line="-268"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt názvu konverzace</translation>
     </message>
@@ -1172,7 +1201,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+291"/>
+        <location line="+308"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
@@ -1223,12 +1252,11 @@
         <translation>Poskytovatel webového vyhledávání:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation>Zadní konec používaný nástrojem websearch: &quot;exa&quot; (výchozí, nepotřebuje API klíč), &quot;google&quot; (Custom Search JSON API, vyžaduje API klíč a ID vyhledávače), &quot;brave&quot; (Brave Search API, vyžaduje API klíč) nebo &quot;tavily&quot; (vyžaduje API klíč).</translation>
+        <translation type="vanished">Zadní konec používaný nástrojem websearch: &quot;exa&quot; (výchozí, nepotřebuje API klíč), &quot;google&quot; (Custom Search JSON API, vyžaduje API klíč a ID vyhledávače), &quot;brave&quot; (Brave Search API, vyžaduje API klíč) nebo &quot;tavily&quot; (vyžaduje API klíč).</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
         <source>Exa Endpoint</source>
         <translation>Konečný bod Exa</translation>
     </message>
@@ -1372,7 +1400,12 @@
         <translation>Přepisuje globální nastavení &apos;Načíst instrukce projektu&apos; pro tento projekt. O tom, co se načte, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+177"/>
+        <source>&quot;duckduckgo&quot; needs no API key</source>
+        <translation>&quot;duckduckgo&quot; nevyžaduje API klíč</translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <source>Web Search</source>
         <translation>Webové vyhledávání</translation>
     </message>
@@ -1382,14 +1415,21 @@
         <translation>Prompty</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+134"/>
+        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location line="+14"/>
         <source>Default</source>
         <translation>Výchozí</translation>
     </message>
     <message>
+        <location line="-13"/>
         <location line="+1"/>
         <source>Off</source>
         <translation>Vypnuto</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minimal</source>
+        <translation>Minimální</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1408,6 +1448,11 @@
     </message>
     <message>
         <location line="+1"/>
+        <source>Extra High</source>
+        <translation>Extra vysoká</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Max</source>
         <translation>Maximální</translation>
     </message>
@@ -1416,7 +1461,7 @@
         <translation type="vanished">Pracovní adresář: %1</translation>
     </message>
     <message>
-        <location line="+346"/>
+        <location line="+412"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1425,7 +1470,7 @@
         <translation type="vanished">Zprávy ve frontě – odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Follow up</source>
         <translation>Následující otázky</translation>
     </message>
@@ -1440,7 +1485,7 @@
         <translation>Generovat název konverzace po první odpovědi</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+23"/>
         <source>Thinking level</source>
         <translation>Úroveň přemýšlení</translation>
     </message>
@@ -1457,7 +1502,7 @@
         <translation type="vanished">Předchozí výsledek vyhledávání</translation>
     </message>
     <message>
-        <location line="+238"/>
+        <location line="+217"/>
         <source>Send to Llama Chat</source>
         <translation>Odeslat do chatu Llama</translation>
     </message>
@@ -1474,7 +1519,7 @@
         <translation type="vanished">Vize: %1</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+252"/>
         <location line="+1"/>
         <source>yes</source>
         <translation>ano</translation>
@@ -1490,39 +1535,58 @@
         <translation type="vanished">Následující otázky:</translation>
     </message>
     <message>
-        <location line="-458"/>
+        <location line="-522"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Zprávy ve frontě - odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+510"/>
+        <location line="+418"/>
+        <source>Download definitions</source>
+        <translation>Stáhnout definice</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
+        <translation>Chybí %1 a %2 (a další definice syntaxe), takže odpovídající úryvky kódu nebudou zvýrazněny. %3</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
+        <translation>Klikněte na název modelu, abyste viděli jeho podrobnosti, nebo na adresář, abyste změnili místo, kde se nástroje spouštějí (pravým kliknutím na něj vrátíte adresář na projekt).</translation>
+    </message>
+    <message>
+        <location line="+145"/>
         <source>Follow-up questions:</source>
         <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+615"/>
+        <location line="+682"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Úroveň přemýšlení: %1 (platí pro nové zprávy)</translation>
     </message>
     <message>
-        <location line="-772"/>
-        <location line="+801"/>
+        <location line="-911"/>
+        <location line="+940"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Lidský editor</translation>
     </message>
     <message>
-        <location line="-853"/>
+        <location line="-992"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Jste připojeni k %1, aktuální adresář je %2</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+50"/>
         <source>Hello there</source>
         <translation>Dobrý den</translation>
     </message>
@@ -1532,12 +1596,11 @@
         <translation>Napište zprávu nebo nahrajte soubory, abyste začali</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Click the model name to see its details, or the directory to change where the tools run.</source>
-        <translation>Klikněte na název modelu, abyste viděli jeho podrobnosti, nebo na adresář, abyste změnili místo, kde se nástroje spouštějí.</translation>
+        <translation type="vanished">Klikněte na název modelu, abyste viděli jeho podrobnosti, nebo na adresář, abyste změnili místo, kde se nástroje spouštějí.</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+42"/>
         <source>Model Details</source>
         <translation>Podrobnosti o modelu</translation>
     </message>
@@ -1550,6 +1613,16 @@
         <location line="+1"/>
         <source>Model path:</source>
         <translation>Cesta k modelu:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type:</source>
+        <translation>Typ:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Parallel slots:</source>
+        <translation>Paralelní sloty:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1568,21 +1641,53 @@
     </message>
     <message>
         <location line="+2"/>
+        <source>BOS token:</source>
+        <translation>Token BOS:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>EOS token:</source>
+        <translation>Token EOS:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reasoning effort:</source>
+        <translation>Úsilí uvažování:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Build:</source>
         <translation>Build:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+19"/>
+        <location line="+2"/>
+        <source>Chat template:</source>
+        <translation>Šablona chatu:</translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Not reported by the server (the model is not loaded?).</source>
+        <translation>Server to nenahlásil (model není načten?).</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool-use template:</source>
+        <translation>Šablona pro použití nástrojů:</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Close</source>
         <translation>Zavřít</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
         <source>Select Working Directory</source>
         <translation>Vybrat pracovní adresář</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1597,12 +1702,12 @@
         <translation>Úloha stále běží. Opravdu ji chcete zastavit?</translation>
     </message>
     <message>
-        <location line="+259"/>
+        <location line="+327"/>
         <source>Edit Message</source>
         <translation>Upravit zprávu</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Tím se smaže %1 zpráv, včetně: %2 uživatelských zpráv a %3 odpovědí asistenta ...</translation>
     </message>
@@ -1622,32 +1727,29 @@
         <translation>Opravdu chcete tuto zprávu smazat?</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>Processing: %1%</source>
-        <translation>Zpracování: %1%</translation>
+        <translation type="vanished">Zpracování: %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+56"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Zpracování promptu:&lt;/b&gt;&lt;br&gt;Celkem tokánů: %1&lt;br&gt;Zpracováno: %2&lt;br&gt;V mezipaměti: %3&lt;br&gt;Čas: %4 ms</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Speed: %1 t/s</source>
-        <translation>Rychlost: %1 tokenů za sekundu</translation>
+        <translation type="vanished">Rychlost: %1 tokenů za sekundu</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+19"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokany: %1&lt;br&gt;Čas: %2 ms&lt;br&gt;Rychlost: %3 tokenů za sekundu&lt;br&gt;&lt;br&gt;&lt;b&gt;Generování:&lt;/b&gt;&lt;br&gt;Tokany: %4&lt;br&gt;Čas: %5 ms&lt;br&gt;Rychlost: %6 tokenů za sekundu</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation>Kontext: použito %1%</translation>
+        <translation type="vanished">Kontext: použito %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+54"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontext: použito %1%.&lt;br&gt;  %2 tokány z %3.</translation>
     </message>
@@ -1657,21 +1759,20 @@
         <translation>%1 ve frontě</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+20"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Odebrat &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
-        <translation>Vytváření nové konverzace pro pokračování v této – shrnování konverzace...</translation>
+        <translation type="vanished">Vytváření nové konverzace pro pokračování v této – shrnování konverzace...</translation>
     </message>
     <message>
         <source>Remove “%1”</source>
         <translation type="vanished">Odebrat “%1”</translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="+2"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Odebrat zprávu ve frontě (neodešle se)</translation>
     </message>
@@ -1680,7 +1781,7 @@
         <translation type="vanished">*Vytváření nové konverzace pro pokračování v této – shrnování konverzace…</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Editor chatu LlamaCpp</translation>
     </message>
@@ -1778,7 +1879,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+232"/>
+        <location filename="../src/llamachatmessage.cpp" line="+234"/>
         <source>Edit the message</source>
         <translation>Upravit zprávu</translation>
     </message>
@@ -1813,7 +1914,17 @@ Chcete ho přepsat?</translation>
         <translation>Zkopírovat zprávu do schránky</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
+        <source>Copy verbatim</source>
+        <translation>Zkopírovat doslova</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Copy HTML</source>
+        <translation>Zkopírovat HTML</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Delete this message</source>
         <translation>Smažit tuto zprávu</translation>
     </message>
@@ -1835,7 +1946,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">ID konverzace</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Vytvoří novou konverzaci s LlamaCpp</translation>
     </message>
@@ -1855,13 +1966,11 @@ Chcete ho přepsat?</translation>
         <translation>Shrnout</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+135"/>
         <source>Continue in New Conversation</source>
-        <translation>Pokračovat v nové konverzaci</translation>
+        <translation type="vanished">Pokračovat v nové konverzaci</translation>
     </message>
     <message>
-        <location line="-132"/>
+        <location line="+1"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>Smazat</translation>
@@ -1888,7 +1997,7 @@ Chcete ho přepsat?</translation>
         <translation>Jste si jistí, že chcete smazat konverzaci: %1</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
         <translation>Uložit konverzaci jako Markdown</translation>
     </message>
@@ -1916,7 +2025,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1145"/>
+        <location filename="../src/llamasettings.cpp" line="-1167"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -1965,7 +2074,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Sběr git změn</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+686"/>
         <source>SVG image</source>
         <translation>Obrázek SVG</translation>
     </message>
@@ -1976,13 +2085,13 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Diagram Mermaid</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+477"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>Podrobnosti</translation>
     </message>
     <message>
-        <location line="+581"/>
+        <location line="+602"/>
         <source>Copy the code below to Clipboard</source>
         <translation>Zkopírovat kód níže do schránky</translation>
     </message>
@@ -2367,7 +2476,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Vyberte nástroj pro zobrazení jeho JSON definice</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+74"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-47"/>
         <source>Select a tool to view its definition</source>
         <translation>Vyberte nástroj pro zobrazení jeho definice</translation>
     </message>
@@ -2377,9 +2486,8 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Nástroj</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Download ripgrep %1</source>
-        <translation>Stáhnout ripgrep %1</translation>
+        <translation type="vanished">Stáhnout ripgrep %1</translation>
     </message>
     <message>
         <source>Download MXC %1</source>
@@ -2390,19 +2498,18 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Pískoviště (příkazy, adresáře, síť) se nastavuje na stránce nastavení Pískoviště.</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+206"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="-134"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Nástroje search a find používají ripgrep, který není na tomto systému nainstalován.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>ripgrep: %1</source>
-        <translation>ripgrep: %1</translation>
+        <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
         <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
@@ -2414,7 +2521,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Runtime pískoviště Windows: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2444,7 +2551,47 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje → MCP v nastavení Qt Creator).</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="-395"/>
+        <source>Browse...</source>
+        <translation>Procházet...</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Reset...</source>
+        <translation>Resetovat...</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
+        <translation>Vrátí pracovní adresář na adresář úvodního projektu (zruší přepsání) nebo na výchozí adresář projektů.</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>The search and find tools use ripgrep.</source>
+        <translation>Nástroje search a find používají ripgrep.</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>ripgrep</source>
+        <translation>ripgrep</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
+        <translation>Nástroj bash na Windows spouští Git Bash, který se nedá inicializovat uvnitř pískoviště Windows (microsoft/mxc#1061). niubash, nativní Bash bez MSYS2, který to zvládne, není na tomto systému nainstalován.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
+        <translation>Nástroj bash na Windows spouští niubash, který se dá inicializovat uvnitř pískoviště Windows.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>niubash (Windows sandbox bash)</source>
+        <translation>niubash (bash pískoviště Windows)</translation>
+    </message>
+    <message>
+        <location line="+428"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2510,7 +2657,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2531,7 +2678,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2556,7 +2703,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 dovedností</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-84"/>
         <source>No description</source>
         <translation>Žádný popis</translation>
     </message>
@@ -2578,7 +2725,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-127"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
         <source>Add...</source>
         <translation>Přidat...</translation>
     </message>
@@ -2629,7 +2776,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/llamachateditor.cpp" line="-1631"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Název</translation>
@@ -2688,7 +2835,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+975"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
         <source>Error:</source>
         <translation>Chyba:</translation>
     </message>
@@ -2733,7 +2880,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
-        <location line="+1321"/>
+        <location line="+1250"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konverzace se již nevešla do okna kontextu modelu.</translation>
     </message>
@@ -2746,47 +2893,44 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konverzace se právě stlačuje; pošlete zprávu znovu, až se stlačení dokončí.</translation>
     </message>
     <message>
-        <location line="-924"/>
         <source>Automatic handoff is disabled.</source>
-        <translation>Automatické předání je vypnuto.</translation>
+        <translation type="vanished">Automatické předání je vypnuto.</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A new conversation is already being created for this one.</source>
-        <translation>Nová konverzace pro tuto už se vytváří.</translation>
+        <translation type="vanished">Nová konverzace pro tuto už se vytváří.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to hand off.</source>
-        <translation>Konverzace nemá žádné zprávy, které by se daly předat.</translation>
+        <translation type="vanished">Konverzace nemá žádné zprávy, které by se daly předat.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was handed off recently; send a few more messages first.</source>
-        <translation>Konverzace byla nedávno předána; nejdřív odešlete ještě několik zpráv.</translation>
+        <translation type="vanished">Konverzace byla nedávno předána; nejdřív odešlete ještě několik zpráv.</translation>
     </message>
     <message>
-        <location line="+87"/>
         <source>The handoff request failed: %1</source>
-        <translation>Požadavek na předání selhal: %1</translation>
+        <translation type="vanished">Požadavek na předání selhal: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The handoff request returned a malformed reply.</source>
-        <translation>Požadavek na předání vrátil neplatnou odpověď.</translation>
+        <translation type="vanished">Požadavek na předání vrátil neplatnou odpověď.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The handoff request returned no document.</source>
-        <translation>Požadavek na předání nevrátil žádný dokument.</translation>
+        <translation type="vanished">Požadavek na předání nevrátil žádný dokument.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The handoff request returned an empty document.</source>
-        <translation>Požadavek na předání vrátil prázdný dokument.</translation>
+        <translation type="vanished">Požadavek na předání vrátil prázdný dokument.</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-844"/>
+        <source>Creating a new conversation to continue this one...</source>
+        <translation>Vytváření nové konverzace pro pokračování této...</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>Continuation of %1</source>
         <translation>Pokračování %1</translation>
     </message>
@@ -2800,12 +2944,26 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+774"/>
-        <source>Continue in a new conversation to keep working.</source>
-        <translation>Pokračujte v nové konverzaci, abyste mohli dál pracovat.</translation>
+        <location line="+787"/>
+        <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
+        <translation>Konverzace je příliš dlouhá na předání: historie a dokument předání už nevměstnají do okna kontextu modelu.</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+3"/>
+        <source>Switch to a model with a larger context or start a new conversation.</source>
+        <translation>Přepněte na model s větším kontextem nebo začněte novou konverzaci.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Enable &quot;Automatically continue in a new conversation&quot; in the Llama settings to hand the work over to a new conversation before the context window fills up.</source>
+        <translation>V nastavení Llama zapněte &quot;Automaticky pokračovat v nové konverzaci&quot;, aby se práce předala nové konverzaci, než se okno kontextu zaplní.</translation>
+    </message>
+    <message>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation type="vanished">Pokračujte v nové konverzaci, abyste mohli dál pracovat.</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Poznámka:** Odpověď byla oříznuta: model dosáhl maximálního počtu výstupních tokenů.</translation>
     </message>
@@ -2899,6 +3057,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
+        <location line="+97"/>
         <source>Download...</source>
         <translation>Stáhnout...</translation>
     </message>
@@ -2931,6 +3091,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
         <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
         <translation>Vyslat prompt do llama.cpp o výběr (otevře prohledávač llama.cpp)</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <source>Syntax definitions: %1</source>
+        <translation>Definice syntaxe: %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Syntax definitions: done</source>
+        <translation>Definice syntaxe: hotovo</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Syntax definitions: starting download</source>
+        <translation>Definice syntaxe: stahování se spouští</translation>
     </message>
 </context>
 <context>
@@ -2992,12 +3167,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation>Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
+        <translation type="vanished">Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>Nenalezen žádný bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH, nebo stáhněte niubash ze stránky nastavení nástrojů Llama.cpp Chat.</translation>
+    </message>
+    <message>
+        <location line="+147"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
@@ -3027,7 +3206,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úplný výstup uložen do: %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+124"/>
         <source>running %1</source>
         <translation>spouštění %1</translation>
     </message>
@@ -3318,7 +3497,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>načíst %1</translation>
@@ -3348,13 +3527,13 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... obsah oříznut na %1 znaků ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>vyhledat %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
         <translation>Výsledky vyhledávání pro &quot;%1&quot;:</translation>
     </message>
@@ -3368,12 +3547,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Chyba nástroje: &quot;query&quot; musí být neprázdný řetězec.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+52"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Vyhledávání selhalo: backend Google není nakonfigurován. Nastavte API klíč a ID vyhledávače (cx) v nastavení Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="-23"/>
+        <location line="+44"/>
         <location line="+13"/>
         <location line="+41"/>
         <location line="+45"/>
@@ -3382,7 +3562,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vyhledávání selhalo: %1</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation>Vyhledávání selhalo: DuckDuckGo právě omezuje frekvenci požadavků; počkejte minutu a zkuste to znovu.</translation>
+    </message>
+    <message>
+        <location line="+43"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3399,7 +3584,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vyhledávání selhalo: backend Brave není nakonfigurován. Nastavte API klíč v nastavení Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="-59"/>
+        <location line="+95"/>
         <location line="+44"/>
         <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
@@ -3537,12 +3723,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP nástroj &quot;%1&quot; není k dispozici (neposkytuje ho žádný připojený MCP server).</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
         <translation>Stáhnout ripgrep</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
         <translation>Stáhnout ripgrep %1 z GitHubu?</translation>
     </message>
@@ -3557,7 +3743,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Stáhnout runtime pískoviště Windows (MXC)</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Stáhnout runtime Microsoft MXC %1?</translation>
     </message>
@@ -3568,18 +3754,21 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+152"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
         <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
         <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>Stáhnout</translation>
@@ -3650,12 +3839,14 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
         <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>Ověřování integrity balíčku...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
         <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>Stažený balíček není ten očekávaný.</translation>
@@ -3777,7 +3968,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Přístup k &quot;%1&quot; není povolen: cesty k zařízením a administrativní sdílené složky nejsou uvnitř pískoviště dostupné.</translation>
     </message>
@@ -3790,7 +3981,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="-41"/>
+        <source>Reset to Project Directory</source>
+        <translation>Resetovat na adresář projektu</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>Zruší přepsání pracovního adresáře: nástroje se spouštějí v adresáři úvodního projektu (nebo ve výchozím adresáři projektů, pokud není otevřen žádný projekt).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>Resetovat na výchozí adresář projektů</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>Použije výchozí adresář projektů, nastavení, do kterého se vytvářejí nové projekty.</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění a do dalších zapisovatelných adresářů ze nastavení Pískoviště. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
     </message>
@@ -3843,37 +4054,36 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Stáhněte ho ze stránky nastavení nástrojů chatu Llama.cpp (uzpřesněné vydání Microsoft MXC s ověřeným kontrolním součtem); LLAMA_WXC_EXEC může ukazovat na wxc-exec.exe. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Backend pískoviště Windows (wxc-exec) včas neodpověděl na dotaz na své schopnosti. %1</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
         <translation>Backend pískoviště Windows (wxc-exec) ohlásil kontejner MXC jako nedostupný (ukončení %1): %2 %3</translation>
     </message>
     <message>
-        <location line="+330"/>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Pískoviště Windows nepodařilo nastavit sondu izolace za běhu (dočasný adresář nebo canary soubor v domovském adresáři). %1</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Pískoviště Windows nepodařilo vytvořit canary soubor své sondy izolace za běhu na %1. %2</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Konfigurace pískoviště Windows je příliš dlouhá (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+63"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>Bash na &quot;%1&quot; není součástí rozpoznané instalace Git for Windows nebo MSYS2, takže pískoviště Windows mu nemůže udělit úzké umístění pouze pro čtení. Nainstalujte Git for Windows (https://git-scm.com/download/win) a umístěte jeho bash jako první v PATH, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;.</translation>
+        <translation type="vanished">Bash na &quot;%1&quot; není součástí rozpoznané instalace Git for Windows nebo MSYS2, takže pískoviště Windows mu nemůže udělit úzké umístění pouze pro čtení. Nainstalujte Git for Windows (https://git-scm.com/download/win) a umístěte jeho bash jako první v PATH, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;.</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Pískoviště Windows (Microsoft MXC) vyžaduje Windows 11 24H2 (verze %1) nebo novější; tento systém je verze %2. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3883,22 +4093,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe (runtime pískoviště Windows Microsoft MXC) nebyl nalezen. %1</translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Pískoviště Windows (Microsoft MXC) nezvládlo kontrolu izolace za běhu: nepodařilo se ověřit, že je příkaz v pískovišti omezen. %1</translation>
     </message>
     <message>
-        <location line="-437"/>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Stáhněte ho ze stránky nastavení Pískoviště Llama.cpp Chat (připnuté, kontrolním součtem ověřené vydání Microsoft MXC); tam lze také nastavit vlastní runtime. Případně v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+605"/>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash na &quot;%1&quot; není součástí rozpoznané instalace niubash, Git for Windows nebo MSYS2, takže pískoviště Windows mu nemůže udělit úzce omezené umístění pouze pro čtení. Nainstalujte Git for Windows (https://git-scm.com/download/win) a v PATH ho umístěte na první místo, nebo stáhněte niubash ze stránky nastavení nástrojů Llama.cpp Chat, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;.</translation>
+    </message>
+    <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Pískoviště Windows (Microsoft MXC) poprvé ověřuje svou izolaci; příkaz spusťte znovu za pár sekund.</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Příkazový řádek pískoviště Windows je příliš dlouhý (%1 z %2 znaků); prostředí procesu je pravděpodobně příliš velké. V nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
@@ -3942,6 +4157,51 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
         <translation>MCP nástroj &quot;%1&quot; byl zastaven uživatelem.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <source>Download niubash</source>
+        <translation>Stáhnout niubash</translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation>Stáhnout niubash %1 z GitHubu?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation>Nástroj bash na Windows se obvykle spouští s Git Bash, ale jeho runtime MSYS2 se nedá inicializovat uvnitř pískoviště Windows (microsoft/mxc#1061). niubash je nativní Bash bez MSYS2, který to zvládne, takže ho lze stáhnout zde a spouštět nástroj bash v pískovišti. niubash je vydáván pod licencí MIT.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>The package holds no niubash shell.</source>
+        <translation>Balíček neobsahuje shell niubash.</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>There is no niubash for this platform.</source>
+        <translation>Pro tuto platformu neexistuje niubash.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading niubash...</source>
+        <translation>Stahování niubash...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading niubash failed: %1</source>
+        <translation>Stahování niubash selhalo: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking niubash...</source>
+        <translation>Rozbalování niubash...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking niubash failed: %1</source>
+        <translation>Rozbalování niubash selhalo: %1</translation>
     </message>
 </context>
 </TS>

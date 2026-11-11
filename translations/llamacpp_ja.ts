@@ -161,7 +161,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1158"/>
+        <location filename="../src/llamasettings.cpp" line="+1180"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -177,7 +177,7 @@
         <translation type="vanished">[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1075"/>
+        <location filename="../src/llamasettings.cpp" line="-1097"/>
         <location line="+1"/>
         <source>Enable llama.cpp</source>
         <translation>llama.cpp を有効にする</translation>
@@ -521,12 +521,11 @@
         <translation>思考レベル</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
-        <translation>推論対応モデルの思考（reasoning）レベル: &quot;default&quot;、&quot;off&quot;、&quot;low&quot;、&quot;medium&quot;、&quot;high&quot; または &quot;max&quot;。</translation>
+        <translation type="vanished">推論対応モデルの思考（reasoning）レベル: &quot;default&quot;、&quot;off&quot;、&quot;low&quot;、&quot;medium&quot;、&quot;high&quot; または &quot;max&quot;。</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Utility Model</source>
         <translation>ユーティリティモデル</translation>
     </message>
@@ -595,7 +594,7 @@
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-309"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
@@ -968,7 +967,12 @@
         <translation>秒あたりのトークン数を表示</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
+        <translation>推論対応モデルの思考（reasoning）レベル。&quot;default&quot; はモデルのデフォルトを使用し、&quot;off&quot; は思考を無効にします。具体的なレベルは、サーバーがモデルのチャットテンプレートについて報告するものです。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Chat Font Zoom</source>
         <translation>チャットフォントのズーム</translation>
     </message>
@@ -998,6 +1002,26 @@
         <translation>Windows サンドボックスを実行するための wxc-exec.exe ランチャー。空欄の場合は、このページからダウンロードした実行ファイルが使用されます。</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <source>ripgrep:</source>
+        <translation>ripgrep:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A ripgrep (rg) executable to run the search and find tools with. If empty, the one on the PATH is used, then the one downloaded from this page.</source>
+        <translation>search ツールと find ツールを実行するための ripgrep（rg）実行ファイル。空欄の場合は、まず PATH 上のものが、次にこのページからダウンロードしたものが使用されます。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>niubash:</source>
+        <translation>niubash:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
+        <translation>Windows で bash ツールを実行するための niubash bash ランチャー（winuxcmd\bin\bash.exe）。niubash はネイティブで MSYS2 に依存しない Bash なので、Git Bash とは異なり Windows サンドボックス内で実行できます。空欄の場合は、まずこのページからダウンロードしたものが、次に Git Bash が使用されます。</translation>
+    </message>
+    <message>
         <source>Compaction Prompt</source>
         <translation type="vanished">圧縮プロンプト</translation>
     </message>
@@ -1006,7 +1030,7 @@
         <translation type="vanished">会話履歴がコンテキストウィンドウに収まるように圧縮される際に、その履歴を要約するためにモデルに送信されるプロンプト。</translation>
     </message>
     <message>
-        <location line="-170"/>
+        <location line="-185"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>フォローアップ質問</translation>
@@ -1031,12 +1055,17 @@
         <translation type="vanished">長い会話を自動圧縮する</translation>
     </message>
     <message>
-        <location line="+178"/>
+        <location line="+195"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>ローカルモデルはツール呼び出しを永遠にループさせる可能性があるため、ツール呼び出しのみの連続ターンがこの回数に達すると、呼び出しは実行されません - モデルには代わりに終了するよう指示する失敗結果が返されます。タスク（サブエージェント）の会話は制限されません。0 を設定すると無制限です。</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+16"/>
+        <source>Backend used by the websearch tool: &quot;duckduckgo&quot; (default, no API key required), &quot;exa&quot; (Exa search API), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
+        <translation>websearch ツールが使用するバックエンド: &quot;duckduckgo&quot;（デフォルト、API キー不要）、&quot;exa&quot;（Exa 検索 API）、&quot;google&quot;（Custom Search JSON API、API キーと検索エンジン ID が必要）、&quot;brave&quot;（Brave 検索 API、API キーが必要）、または &quot;tavily&quot;（API キーが必要）。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>Optional Exa API key. Without a key the shared (rate-limited) endpoint is used.</source>
         <translation>任意の Exa API キー。キーがない場合は、共有（レート制限付き）のエンドポイントが使用されます。</translation>
     </message>
@@ -1045,7 +1074,7 @@
         <translation type="vanished">会話がモデルのコンテキストウィンドウの約 80% を使用すると、その履歴はコンパクトなマーカーメッセージとして要約され、以降は要約とその後のメッセージのみがモデルに送信されます。完全な履歴はチャットに表示され続けます。また、コンテキストオーバーフローエラーからの回復にも使用されます: 履歴が圧縮され、リクエストが1回だけ再試行されます。</translation>
     </message>
     <message>
-        <location line="-186"/>
+        <location line="-203"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>&quot;ll&quot; ロケーター組み込みプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
     </message>
@@ -1089,7 +1118,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+291"/>
+        <location line="+308"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>コマンドをサンドボックス化する</translation>
@@ -1099,7 +1128,7 @@
         <translation type="vanished">チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。ツール設定ページからダウンロードでき（LLAMA_WXC_EXEC でその場所を指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
     </message>
     <message>
-        <location line="-270"/>
+        <location line="-287"/>
         <source>Sandbox writable directories</source>
         <translation>サンドボックス書き込み可能ディレクトリ</translation>
     </message>
@@ -1147,7 +1176,7 @@
         <translation type="vanished">チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では @anthropic-ai/sandbox-runtime の srt-win）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows ではサンドボックスの初回インストールが必要です: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（UAC プロンプト1回）。srt-win 実行可能ファイルは PATH に含まれている必要があります（LLAMA_SRT_WIN でその場所を指定できます）。</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+33"/>
         <location line="+1"/>
         <location line="+240"/>
         <location line="+1"/>
@@ -1184,12 +1213,11 @@
         <translation>Web 検索プロバイダー:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Backend used by the websearch tool: &quot;exa&quot; (default, no API key required), &quot;google&quot; (Custom Search JSON API, requires an API key and a search engine ID), &quot;brave&quot; (Brave Search API, requires an API key) or &quot;tavily&quot; (requires an API key).</source>
-        <translation>websearch ツールで使用するバックエンド: &quot;exa&quot;（デフォルト、API キー不要）、&quot;google&quot;（Custom Search JSON API、API キーと検索エンジン ID が必要）、&quot;brave&quot;（Brave Search API、API キーが必要）、または &quot;tavily&quot;（API キーが必要）。</translation>
+        <translation type="vanished">websearch ツールで使用するバックエンド: &quot;exa&quot;（デフォルト、API キー不要）、&quot;google&quot;（Custom Search JSON API、API キーと検索エンジン ID が必要）、&quot;brave&quot;（Brave Search API、API キーが必要）、または &quot;tavily&quot;（API キーが必要）。</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
         <source>Exa Endpoint</source>
         <translation>Exa エンドポイント</translation>
     </message>
@@ -1333,7 +1361,12 @@
         <translation>このプロジェクトに対して、グローバルの &apos;プロジェクト指示を読み込む&apos; 設定を上書きします。何が読み込まれるのかは、Llama Tools ページのグローバル設定を参照してください。</translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+177"/>
+        <source>&quot;duckduckgo&quot; needs no API key</source>
+        <translation>&quot;duckduckgo&quot; は API キーを必要としません</translation>
+    </message>
+    <message>
+        <location line="+61"/>
         <source>Web Search</source>
         <translation>Web 検索</translation>
     </message>
@@ -1347,12 +1380,12 @@
         <translation type="vanished">秒あたりのトークン数を表示:</translation>
     </message>
     <message>
-        <location line="-727"/>
+        <location line="-749"/>
         <source>Show tokens per second in the chat UI.</source>
         <translation>チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+49"/>
         <source>Handoff Prompt</source>
         <translation>引き継ぎプロンプト</translation>
     </message>
@@ -1475,7 +1508,7 @@
         <translation type="vanished">考え中 %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+140"/>
+        <location filename="../src/llamachatmessage.cpp" line="+142"/>
         <source>Attached files</source>
         <translation>添付ファイル</translation>
     </message>
@@ -1510,7 +1543,17 @@
         <translation>メッセージをクリップボードにコピー</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+3"/>
+        <source>Copy verbatim</source>
+        <translation>原文をそのままコピー</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Copy HTML</source>
+        <translation>HTML をコピー</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Delete this message</source>
         <translation>このメッセージを削除</translation>
     </message>
@@ -1552,7 +1595,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">会話 ID</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+134"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>新しい llama.cpp 会話を作成します</translation>
     </message>
@@ -1572,13 +1615,11 @@ Do you want to overwrite it?</source>
         <translation>要約する</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+135"/>
         <source>Continue in New Conversation</source>
-        <translation>新しい会話で継続</translation>
+        <translation type="vanished">新しい会話で継続</translation>
     </message>
     <message>
-        <location line="-132"/>
+        <location line="+1"/>
         <location line="+68"/>
         <source>Delete</source>
         <translation>削除</translation>
@@ -1605,7 +1646,7 @@ Do you want to overwrite it?</source>
         <translation>会話 %1 を削除してよろしいですか?</translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+67"/>
         <source>Save Conversation as Markdown</source>
         <translation>会話を Markdown として保存</translation>
     </message>
@@ -1634,7 +1675,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-569"/>
+        <location filename="../src/llamasettings.cpp" line="-570"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -1669,7 +1710,7 @@ You can type any other prompt – they are remembered for next time.</source>
 その他のプロンプトも入力できます。入力したプロンプトは次回以降に記憶されます。</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+692"/>
+        <location filename="../src/markdownrenderer.cpp" line="+686"/>
         <source>SVG image</source>
         <translation>SVG イメージ</translation>
     </message>
@@ -1680,13 +1721,13 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Mermaid 図</translation>
     </message>
     <message>
-        <location line="+478"/>
+        <location line="+477"/>
         <location line="+34"/>
         <source>Details</source>
         <translation>詳細</translation>
     </message>
     <message>
-        <location line="+581"/>
+        <location line="+602"/>
         <source>Copy the code below to Clipboard</source>
         <translation>以下のコードをクリップボードにコピー</translation>
     </message>
@@ -1735,14 +1776,21 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">次の結果</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+134"/>
+        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location line="+14"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
     <message>
+        <location line="-13"/>
         <location line="+1"/>
         <source>Off</source>
         <translation>オフ</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minimal</source>
+        <translation>最小</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1761,6 +1809,11 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Extra High</source>
+        <translation>超高</translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Max</source>
         <translation>最大</translation>
     </message>
@@ -1769,7 +1822,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">作業ディレクトリ: %1</translation>
     </message>
     <message>
-        <location line="+346"/>
+        <location line="+412"/>
         <source>LLM model</source>
         <translation>LLM モデル</translation>
     </message>
@@ -1778,7 +1831,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">キューに入ったメッセージ – 現在のステップの後に送信されます</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Follow up</source>
         <translation>フォローアップ</translation>
     </message>
@@ -1793,7 +1846,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>最初の返信後に会話タイトルを生成</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+23"/>
         <source>Thinking level</source>
         <translation>思考レベル</translation>
     </message>
@@ -1810,7 +1863,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">前の検索結果</translation>
     </message>
     <message>
-        <location line="+238"/>
+        <location line="+217"/>
         <source>Send to Llama Chat</source>
         <translation>Llama チャットに送信</translation>
     </message>
@@ -1827,7 +1880,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">ビジョン: %1</translation>
     </message>
     <message>
-        <location line="+173"/>
+        <location line="+252"/>
         <location line="+1"/>
         <source>yes</source>
         <translation>あり</translation>
@@ -1839,7 +1892,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="+996"/>
+        <location line="+1112"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>「%1」を削除</translation>
     </message>
@@ -1848,29 +1901,28 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">フォローアップ質問:</translation>
     </message>
     <message>
-        <location line="-329"/>
+        <location line="-346"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
     <message>
-        <location line="-772"/>
-        <location line="+801"/>
+        <location line="-911"/>
+        <location line="+940"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人間エディター</translation>
     </message>
     <message>
-        <location line="-853"/>
+        <location line="-992"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>%1 に接続しています。現在のディレクトリは %2 です。</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+50"/>
         <source>Hello there</source>
         <translation>こんにちは</translation>
     </message>
@@ -1880,12 +1932,31 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>メッセージを入力するか、ファイルをアップロードして開始してください</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Click the model name to see its details, or the directory to change where the tools run.</source>
-        <translation>モデル名をクリックするとその詳細を表示でき、ディレクトリをクリックするとツールを実行する場所を変更できます。</translation>
+        <translation type="vanished">モデル名をクリックするとその詳細を表示でき、ディレクトリをクリックするとツールを実行する場所を変更できます。</translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="-40"/>
+        <source>Download definitions</source>
+        <translation>シンタックス定義をダウンロード</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
+        <translation>%1 と %2（およびその他のシンタックス定義）が欠けているため、該当するコードスニペットはシンタックスハイライトされません。%3</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
+        <translation>モデル名をクリックするとその詳細を表示でき、ディレクトリをクリックするとツールを実行する場所を変更できます（右クリックするとディレクトリをプロジェクトにリセットします）。</translation>
+    </message>
+    <message>
+        <location line="+39"/>
         <source>Model Details</source>
         <translation>モデル詳細</translation>
     </message>
@@ -1898,6 +1969,16 @@ You can type any other prompt – they are remembered for next time.</source>
         <location line="+1"/>
         <source>Model path:</source>
         <translation>モデルパス:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type:</source>
+        <translation>タイプ:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Parallel slots:</source>
+        <translation>並列スロット:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1916,21 +1997,53 @@ You can type any other prompt – they are remembered for next time.</source>
     </message>
     <message>
         <location line="+2"/>
+        <source>BOS token:</source>
+        <translation>BOS トークン:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>EOS token:</source>
+        <translation>EOS トークン:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Reasoning effort:</source>
+        <translation>推論レベル:</translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Build:</source>
         <translation>Build:</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+19"/>
+        <location line="+2"/>
+        <source>Chat template:</source>
+        <translation>チャットテンプレート:</translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Not reported by the server (the model is not loaded?).</source>
+        <translation>サーバーから報告されていません（モデルが読み込まれていない可能性があります）。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Tool-use template:</source>
+        <translation>ツール使用テンプレート:</translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
         <location line="+12"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
         <source>Select Working Directory</source>
         <translation>作業ディレクトリを選択</translation>
     </message>
     <message>
-        <location line="+241"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1945,12 +2058,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>タスクはまだ実行中です。本当に停止しますか？</translation>
     </message>
     <message>
-        <location line="+259"/>
+        <location line="+327"/>
         <source>Edit Message</source>
         <translation>メッセージを編集</translation>
     </message>
     <message>
-        <location line="+58"/>
+        <location line="+60"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>%1 個のメッセージが削除されます。内訳: ユーザーメッセージ %2 件、アシスタントの応答 %3 件 ...</translation>
     </message>
@@ -1970,47 +2083,43 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>このメッセージを削除してよろしいですか?</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>Processing: %1%</source>
-        <translation>処理中: %1%</translation>
+        <translation type="vanished">処理中: %1%</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+56"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;プロンプト処理:&lt;/b&gt;&lt;br&gt;総トークン数: %1&lt;br&gt;処理済み: %2&lt;br&gt;キャッシュ: %3&lt;br&gt;時間: %4 ミリ秒</translation>
     </message>
     <message>
-        <location line="+132"/>
         <source>Creating a new conversation to continue this one – summarizing the conversation...</source>
-        <translation>この会話を継続するために新しい会話を作成しています – 会話を要約しています...</translation>
+        <translation type="vanished">この会話を継続するために新しい会話を作成しています – 会話を要約しています...</translation>
     </message>
     <message>
-        <location line="-981"/>
+        <location line="-921"/>
         <source>Follow-up questions:</source>
         <translation>続きの質問:</translation>
     </message>
     <message>
-        <location line="-510"/>
+        <location line="-606"/>
         <source>Queued messages - sent after the current step</source>
         <translation>キューに入ったメッセージ - 現在のステップの後に送信されます</translation>
     </message>
     <message>
-        <location line="+1373"/>
         <source>Speed: %1 t/s</source>
-        <translation>速度: %1 トークン/秒</translation>
+        <translation type="vanished">速度: %1 トークン/秒</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1546"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;プロンプト:&lt;/b&gt;&lt;br&gt;トークン数: %1&lt;br&gt;処理時間: %2 ミリ秒&lt;br&gt;速度: %3 トークン/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成:&lt;/b&gt;&lt;br&gt;トークン数: %4&lt;br&gt;処理時間: %5 ミリ秒&lt;br&gt;速度: %6 トークン/秒</translation>
     </message>
     <message>
-        <location line="+49"/>
         <source>Context: %1% used</source>
-        <translation>コンテキスト: %1% 使用</translation>
+        <translation type="vanished">コンテキスト: %1% 使用</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+54"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>コンテキスト: %1% 使用。&lt;br&gt;  %2 トークンが %3 から。</translation>
     </message>
@@ -2024,7 +2133,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">“%1” を削除</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+22"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>キューに入ったメッセージを削除します（送信されません）</translation>
     </message>
@@ -2033,7 +2142,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">*この会話を継続するために新しい会話を作成しています – 会話を要約しています…</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+23"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>LlamaCpp チャットエディター</translation>
     </message>
@@ -2072,7 +2181,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <location line="+13"/>
         <location filename="../src/sandboxsettingswidget.cpp" line="+192"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+161"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+168"/>
         <source>Add...</source>
         <translation>追加...</translation>
     </message>
@@ -2123,7 +2232,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1485"/>
+        <location filename="../src/llamachateditor.cpp" line="-1631"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -2134,7 +2243,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>ロケーター（&quot;ll&quot;）</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-89"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-217"/>
         <source>Select a tool to view its definition</source>
         <translation>定義を表示するツールを選択してください</translation>
     </message>
@@ -2144,9 +2253,8 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Download ripgrep %1</source>
-        <translation>ripgrep %1 をダウンロード</translation>
+        <translation type="vanished">ripgrep %1 をダウンロード</translation>
     </message>
     <message>
         <source>Download MXC %1</source>
@@ -2157,19 +2265,18 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">サンドボックス化（コマンド、ディレクトリ、ネットワーク）は、サンドボックス設定ページで設定します。</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+206"/>
         <source>Edit</source>
         <translation>編集</translation>
     </message>
     <message>
-        <location line="+171"/>
+        <location line="-134"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>search ツールと find ツールは ripgrep を使用しますが、このシステムにインストールされていません。</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>ripgrep: %1</source>
-        <translation>ripgrep: %1</translation>
+        <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
         <location filename="../src/sandboxsettingswidget.cpp" line="-124"/>
@@ -2181,7 +2288,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Windows サンドボックス実行ファイル: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+43"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2211,7 +2318,47 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Qt Creator 本体が管理する組み込みの Qt Creator MCP サーバー（Qt Creator 設定の Tools → MCP）。</translation>
     </message>
     <message>
-        <location line="+165"/>
+        <location line="-395"/>
+        <source>Browse...</source>
+        <translation>参照...</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Reset...</source>
+        <translation>リセット...</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
+        <translation>作業ディレクトリを起動プロジェクトのディレクトリ（上書きをクリア）またはデフォルトのプロジェクトディレクトリにリセットします。</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>The search and find tools use ripgrep.</source>
+        <translation>search ツールと find ツールは ripgrep を使用します。</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>ripgrep</source>
+        <translation>ripgrep</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
+        <translation>Windows の bash ツールは Git Bash を実行しますが、これは Windows サンドボックス内で初期化できません（microsoft/mxc#1061）。初期化できるネイティブで MSYS2 に依存しない Bash、niubash は、このシステムにはインストールされていません。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
+        <translation>Windows の bash ツールは niubash を実行しています。niubash は Windows サンドボックス内で初期化できます。</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>niubash (Windows sandbox bash)</source>
+        <translation>niubash（Windows サンドボックス用 bash）</translation>
+    </message>
+    <message>
+        <location line="+428"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2277,7 +2424,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-803"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
@@ -2298,7 +2445,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+284"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
         <source>Name: %1</source>
         <translation>名前: %1</translation>
     </message>
@@ -2323,7 +2470,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>スキル %1 個</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-84"/>
         <source>No description</source>
         <translation>説明がありません</translation>
     </message>
@@ -2381,7 +2528,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+975"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
         <source>Error:</source>
         <translation>エラー:</translation>
     </message>
@@ -2426,7 +2573,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
     </message>
     <message>
-        <location line="+1321"/>
+        <location line="+1250"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>会話はもはやモデルのコンテキストウィンドウに収まりません。</translation>
     </message>
@@ -2439,47 +2586,44 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">会話はすでに圧縮されています。圧縮が完了したら、メッセージを再送信してください。</translation>
     </message>
     <message>
-        <location line="-924"/>
         <source>Automatic handoff is disabled.</source>
-        <translation>自動引き継ぎは無効になっています。</translation>
+        <translation type="vanished">自動引き継ぎは無効になっています。</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A new conversation is already being created for this one.</source>
-        <translation>この会話用に新しい会話がすでに作成されています。</translation>
+        <translation type="vanished">この会話用に新しい会話がすでに作成されています。</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The conversation has no messages to hand off.</source>
-        <translation>会話は引き継げるメッセージがありません。</translation>
+        <translation type="vanished">会話は引き継げるメッセージがありません。</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The conversation was handed off recently; send a few more messages first.</source>
-        <translation>会話は最近引き継がれたばかりです。先に数件のメッセージを送信してください。</translation>
+        <translation type="vanished">会話は最近引き継がれたばかりです。先に数件のメッセージを送信してください。</translation>
     </message>
     <message>
-        <location line="+87"/>
         <source>The handoff request failed: %1</source>
-        <translation>引き継ぎリクエストが失敗しました: %1</translation>
+        <translation type="vanished">引き継ぎリクエストが失敗しました: %1</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>The handoff request returned a malformed reply.</source>
-        <translation>引き継ぎリクエストが不正な形式の返信を返しました。</translation>
+        <translation type="vanished">引き継ぎリクエストが不正な形式の返信を返しました。</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>The handoff request returned no document.</source>
-        <translation>引き継ぎリクエストはドキュメントを返していません。</translation>
+        <translation type="vanished">引き継ぎリクエストはドキュメントを返していません。</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>The handoff request returned an empty document.</source>
-        <translation>引き継ぎリクエストは空のドキュメントを返しました。</translation>
+        <translation type="vanished">引き継ぎリクエストは空のドキュメントを返しました。</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="-844"/>
+        <source>Creating a new conversation to continue this one...</source>
+        <translation>この会話を継続するために新しい会話を作成しています...</translation>
+    </message>
+    <message>
+        <location line="+48"/>
         <source>Continuation of %1</source>
         <translation>%1 の続き</translation>
     </message>
@@ -2493,12 +2637,26 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+774"/>
-        <source>Continue in a new conversation to keep working.</source>
-        <translation>作業を続けるために、新しい会話で継続してください。</translation>
+        <location line="+787"/>
+        <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
+        <translation>会話が引き継ぎに長すぎます: 履歴と引き継ぎドキュメントでモデルのコンテキストウィンドウに収まらなくなりました。</translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+3"/>
+        <source>Switch to a model with a larger context or start a new conversation.</source>
+        <translation>より大きなコンテキストを持つモデルに切り替えるか、新しい会話を開始してください。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Enable &quot;Automatically continue in a new conversation&quot; in the Llama settings to hand the work over to a new conversation before the context window fills up.</source>
+        <translation>コンテキストウィンドウがいっぱいになる前に作業を新しい会話に引き継ぐには、Llama 設定で &quot;自動的に新しい会話で継続する&quot; を有効にしてください。</translation>
+    </message>
+    <message>
+        <source>Continue in a new conversation to keep working.</source>
+        <translation type="vanished">作業を続けるために、新しい会話で継続してください。</translation>
+    </message>
+    <message>
+        <location line="+60"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**注意:** 返信は切り詰められました: モデルが出力トークンの最大数に達しました。</translation>
     </message>
@@ -2592,6 +2750,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-312"/>
+        <location line="+97"/>
         <source>Download...</source>
         <translation>ダウンロード...</translation>
     </message>
@@ -2624,6 +2784,21 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/llamaselectionbutton.cpp" line="+29"/>
         <source>Prompt llama.cpp about the selection (opens the llama.cpp locator)</source>
         <translation>選択中のテキストをプロンプト付きで llama.cpp に送信します（llama.cpp ロケーターを開きます）</translation>
+    </message>
+    <message>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <source>Syntax definitions: %1</source>
+        <translation>シンタックス定義: %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Syntax definitions: done</source>
+        <translation>シンタックス定義: 完了</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Syntax definitions: starting download</source>
+        <translation>シンタックス定義: ダウンロードを開始</translation>
     </message>
 </context>
 <context>
@@ -2685,12 +2860,16 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>成功しました。以下のファイルを更新しました:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+113"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
+        <translation type="vanished">bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加するか、Llama.cpp チャットツール設定ページから niubash をダウンロードしてください。</translation>
+    </message>
+    <message>
+        <location line="+147"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
     </message>
@@ -2720,7 +2899,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完全な出力を以下に保存しました: %1</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+124"/>
         <source>running %1</source>
         <translation>%1 を実行中</translation>
     </message>
@@ -3011,7 +3190,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+159"/>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
         <location line="+27"/>
         <source>fetch %1</source>
         <translation>%1 をフェッチ</translation>
@@ -3041,13 +3220,13 @@ Authorization: Bearer &lt;token&gt;</translation>
 [... 内容は %1 文字で切り詰められました ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+88"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>%1 を検索</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
         <translation>&quot;%1&quot; の検索結果:</translation>
     </message>
@@ -3061,12 +3240,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+52"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="-23"/>
+        <location line="+44"/>
         <location line="+13"/>
         <location line="+41"/>
         <location line="+45"/>
@@ -3075,7 +3255,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>検索に失敗しました: %1</translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation>検索に失敗しました: DuckDuckGo によるレート制限が現在適用されています。1 分待ってから再試行してください。</translation>
+    </message>
+    <message>
+        <location line="+43"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3092,7 +3277,8 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>検索に失敗しました: Brave バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="-59"/>
+        <location line="+95"/>
         <location line="+44"/>
         <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
@@ -3230,12 +3416,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+89"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
         <translation>ripgrep をダウンロード</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
         <translation>GitHub から ripgrep %1 をダウンロードしますか?</translation>
     </message>
@@ -3250,7 +3436,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows サンドボックス実行ファイル（MXC）をダウンロード</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
         <translation>Microsoft MXC 実行ファイル %1 をダウンロードしますか?</translation>
     </message>
@@ -3261,18 +3447,21 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+152"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>プロジェクト: %1</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
         <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>ライセンス: %1</translation>
     </message>
     <message>
         <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
         <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
         <translation>ダウンロード</translation>
@@ -3343,12 +3532,14 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
         <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
         <translation>パッケージの完全性を検証中...</translation>
     </message>
     <message>
         <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
         <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
         <translation>ダウンロードされたパッケージは期待されるものではありません。</translation>
@@ -3470,7 +3661,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+459"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
     </message>
@@ -3483,7 +3674,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="-41"/>
+        <source>Reset to Project Directory</source>
+        <translation>プロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>作業ディレクトリの上書きをクリアします: ツールは起動プロジェクトのディレクトリ（プロジェクトが開かれていない場合はデフォルトのプロジェクトディレクトリ）で実行されます。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>デフォルトのプロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>新しいプロジェクトが作成される場所である、デフォルトのプロジェクトディレクトリを使用します。</translation>
+    </message>
+    <message>
+        <location line="+52"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
     </message>
@@ -3536,37 +3747,36 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+80"/>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
         <translation>Windows サンドバックエンド（wxc-exec）が機能プローブに対して時間内に応答しませんでした。%1</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
         <translation>Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
     </message>
     <message>
-        <location line="+330"/>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
         <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
         <translation>Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+63"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>&quot;%1&quot; の bash は認識された Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはそれに狭い読み取り専用領域を与えることができません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に追加するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+        <translation type="vanished">&quot;%1&quot; の bash は認識された Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはそれに狭い読み取り専用領域を与えることができません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に追加するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -3576,22 +3786,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
         <translation>Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
     </message>
     <message>
-        <location line="-437"/>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Llama.cpp チャットサンドボックス設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。そちらで自分の実行ファイルを指定することもできます。また、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを解除すると、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location line="+605"/>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>&quot;%1&quot; の bash は、認識された niubash、Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはこの bash に限定された読み取り専用場所を許可できません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に置くか、Llama.cpp チャットツール設定ページから niubash をダウンロードするか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+    </message>
+    <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
         <translation>Windows サンドボックス（Microsoft MXC）がはじめて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
@@ -3635,6 +3850,51 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
         <translation>MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <source>Download niubash</source>
+        <translation>niubash をダウンロード</translation>
+    </message>
+    <message>
+        <location line="+66"/>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation>GitHub から niubash %1 をダウンロードしますか?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation>Windows の bash ツールは通常 Git Bash を実行しますが、その MSYS2 ランタイムは Windows サンドボックス内で初期化できません（microsoft/mxc#1061）。niubash はこれができるネイティブで MSYS2 に依存しない Bash なので、ここでダウンロードして bash ツールをサンドボックス内で実行できます。niubash は MIT ライセンスで公開されています。</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>The package holds no niubash shell.</source>
+        <translation>このパッケージには niubash シェルが含まれていません。</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>There is no niubash for this platform.</source>
+        <translation>このプラットフォーム用の niubash はありません。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading niubash...</source>
+        <translation>niubash をダウンロード中...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading niubash failed: %1</source>
+        <translation>niubash のダウンロードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking niubash...</source>
+        <translation>niubash を展開中...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking niubash failed: %1</source>
+        <translation>niubash の展開に失敗しました: %1</translation>
     </message>
 </context>
 <context>
