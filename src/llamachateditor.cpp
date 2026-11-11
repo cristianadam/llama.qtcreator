@@ -914,16 +914,22 @@ ChatEditor::ChatEditor()
 ChatEditor::~ChatEditor()
 {
     s_instances.remove(this);
-    // Uninstall the event filters before tearing the widget tree down:
+    // Uninstall the event filters before tearing the widget trees down:
     // ~QWidget deletes all children first and only then sends the widget a
-    // final QEvent::Destroy, so the filter installed on the top widget
-    // would still run with m_scrollArea already destroyed – and
-    // eventFilter() dereferences it for every event.
+    // final QEvent::Destroy, so a filter still registered on a dying widget
+    // would run with m_scrollArea already destroyed – and eventFilter()
+    // dereferences it for every event.  The status bar (and with it the
+    // thinking button) is deleted below, after the main widget, and neither
+    // tree is covered by the widget() check – remove their filters
+    // unconditionally.
     if (QWidget *w = widget()) {
         w->removeEventFilter(this);
         m_scrollArea->viewport()->removeEventFilter(this);
         m_messageContainer->removeEventFilter(this);
+        if (m_connectionLabel)
+            m_connectionLabel->removeEventFilter(this);
     }
+    m_thinkingButton->removeEventFilter(this);
     delete widget();
     // The editor tool bar only detaches the status bar (setParent(nullptr))
     // when the editor is removed from a view, it never deletes it. The guard
