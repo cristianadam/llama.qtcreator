@@ -500,7 +500,14 @@ void MarkdownRenderer::beginBlock()
         m_cursor.setBlockFormat(blkFmt);
         m_cursor.setCharFormat(charFmt);
     } else {
+        // insertBlock() applies charFmt to the new block but leaves the
+        // cursor's *pending* char format untouched (Qt keeps the format that
+        // was in force before the block), so set it explicitly: code blocks
+        // read m_cursor.charFormat() afterwards, and a stale, colourless
+        // pending format makes their text fall back to the widget palette,
+        // which the host can override (dark-on-dark in the dark theme).
         m_cursor.insertBlock(blkFmt, charFmt);
+        m_cursor.setCharFormat(charFmt);
     }
 }
 
@@ -615,7 +622,11 @@ void MarkdownRenderer::renderCodeBlockText(const markus::CodeBlock &code)
     }
     m_cursor.setBlockFormat(fmt);
 
-    QTextCharFormat baseCharFmt = m_cursor.charFormat();
+    // baseCharFormat() (not m_cursor.charFormat()): the cursor's pending
+    // format may be a stale, colourless one left over from the previous
+    // block; baking in the theme's text colour keeps plain code and the
+    // unhighlighted runs theme-aware.
+    QTextCharFormat baseCharFmt = baseCharFormat();
     baseCharFmt.setFont(m_monoFont, QTextCharFormat::FontPropertiesSpecifiedOnly);
     baseCharFmt.setFontFixedPitch(true);
     baseCharFmt.setFontPointSize(m_baseFontSize * 0.90);

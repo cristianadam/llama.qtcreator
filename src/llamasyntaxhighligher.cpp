@@ -203,6 +203,18 @@ void SyntaxHighlighter::applyFormat(int offset,
                                     int length,
                                     const KSyntaxHighlighting::Format &format)
 {
+    // Without a valid definition highlightLine() still reports a Normal
+    // format for every line; passing it through the colour scheme would tint
+    // the whole block with the editor scheme's text colour (olive on the
+    // "Dark (2024)" scheme, black-on-dark in the chat view on a scheme whose
+    // text colour is dark). Use the caller's (theme-aware) default format
+    // instead, and keep emitting the runs: the HTML exporter relies on the
+    // highlighter to produce the text.
+    if (!m_definition.isValid()) {
+        m_recordedFormats.append({offset, length, m_defaultFmt});
+        return;
+    }
+
     TextStyle ts = categoryForTextStyle(format.textStyle(), m_definition);
     TextEditor::Format fm = m_colorScheme.formatFor(ts);
 

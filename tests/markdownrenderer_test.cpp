@@ -108,6 +108,7 @@ private slots:
     void multiParagraph();
     void codeBlock();
     void terminalBlockDecodesAnsiColors();
+    void toolCallCodeBlockCarriesThemeForeground();
     void ansiDecodeAndStrip();
     void list();
     void thinkingSection();
@@ -298,6 +299,38 @@ void MarkdownRendererTest::terminalBlockDecodesAnsiColors()
                 found = true;
         }
     }
+    QVERIFY2(found, qPrintable(out));
+}
+
+void MarkdownRendererTest::toolCallCodeBlockCarriesThemeForeground()
+{
+    MarkdownRenderer renderer;
+    renderer.document()->setTextWidth(500);
+    const QColor fg(0x33, 0x66, 0x99);
+    renderer.setColor(MarkdownRenderer::TextForeground, fg);
+
+    // Tool call bubble: the <details> header is inserted with insertHtml(),
+    // which leaves a stale, colourless pending char format on the cursor. The
+    // plain code in the body must carry the theme's text colour explicitly
+    // instead of falling back to the widget palette (dark-on-dark in the dark
+    // theme when the host overrides it).
+    const QString text
+        = "<details data-tool=\"true\"><summary>bash echo hello world</summary>\n\n"
+          "```terminal\n$ echo hello world\nhello world\n```\n</details>\n";
+    renderer.feed(text.toUtf8());
+    renderer.finish();
+
+    bool found = false;
+    for (QTextBlock blk = renderer.document()->firstBlock(); blk.isValid() && !found;
+         blk = blk.next()) {
+        for (QTextBlock::Iterator it = blk.begin(); it != blk.end(); ++it) {
+            const QTextFragment &frag = it.fragment();
+            if (frag.text() == QLatin1String("hello world")
+                && frag.charFormat().foreground().color() == fg)
+                found = true;
+        }
+    }
+    const QString out = renderer.toPlainText();
     QVERIFY2(found, qPrintable(out));
 }
 
