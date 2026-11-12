@@ -14,6 +14,8 @@
 #include <QListWidget>
 #include <QPushButton>
 
+#include <utils/infolabel.h>
+
 using namespace Layouting;
 
 namespace LlamaCpp {
@@ -30,6 +32,15 @@ SandboxSettingsWidget::SandboxSettingsWidget()
         settings().sandboxCommands.setValue(checked);
         applyMasterState();
     });
+
+    // Shown while the sandbox backend of this host (bubblewrap on Linux,
+    // sandbox-exec on macOS, the Microsoft MXC runtime on Windows) is
+    // missing, the way the code style selector of the C++ page warns
+    // about a read-only configuration: the master toggle and the details
+    // are disabled then, as the sandbox could not be used in the first
+    // place.
+    m_backendWarning = new Utils::InfoLabel(QString(), Utils::InfoLabelType::Warning, this);
+    m_backendWarning->setVisible(false);
 
     m_writable = makeDirList(
         Tr::tr("Writable directories:"),
@@ -84,6 +95,7 @@ SandboxSettingsWidget::SandboxSettingsWidget()
                 : Tr::tr("The sandboxed bash tool on Windows runs in a Microsoft "
                          "MXC process container."));
             settings().mxcPath.setPlaceHolderText(inUse.toUserOutput());
+            updateBackendWarning();
         };
         showMxc();
         connect(&settings().mxcPath, &Utils::BaseAspect::changed, this, showMxc);
@@ -160,15 +172,18 @@ SandboxSettingsWidget::SandboxSettingsWidget()
         netGroup,
     }.attachTo(m_detailsContainer);
 
-    // Layout: the master toggle, then the (gated) details.
+    // Layout: the master toggle (and the warning shown while its backend
+    // is missing), then the (gated) details.
     Column{
         m_masterCheck,
+        m_backendWarning,
         m_detailsContainer,
         st,
     }.attachTo(this);
 
     loadFromSettings();
     applyMasterState();
+    updateBackendWarning();
 }
 
 SandboxSettingsWidget::DirList SandboxSettingsWidget::makeDirList(const QString &caption,
@@ -250,8 +265,24 @@ void SandboxSettingsWidget::loadFromSettings()
 
 void SandboxSettingsWidget::applyMasterState()
 {
-    const bool enabled = m_masterCheck->isChecked();
+    // The details apply only while the master toggle is on and usable;
+    // the toggle is disabled (and the warning shown) while the sandbox
+    // backend of this host is missing.
+    const bool enabled = m_masterCheck->isEnabled() && m_masterCheck->isChecked();
     m_detailsContainer->setEnabled(enabled);
+}
+
+void SandboxSettingsWidget::updateBackendWarning()
+{
+    // The reason is empty when the sandbox backend of this host is
+    // usable, otherwise it says why not (bubblewrap or sandbox-exec not
+    // installed, the MXC runtime not downloaded on Windows).
+    const QString reason = SandboxStatus::unavailableReason();
+    m_backendWarning->setVisible(!reason.isEmpty());
+    if (!reason.isEmpty())
+        m_backendWarning->setText(reason);
+    m_masterCheck->setEnabled(reason.isEmpty());
+    applyMasterState();
 }
 
 void SandboxSettingsWidget::apply()

@@ -10,6 +10,10 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 
+namespace Utils {
+class InfoLabel;
+}
+
 namespace LlamaCpp {
 
 //! The "Sandbox" settings page: the master "Sandbox commands" toggle plus
@@ -61,9 +65,15 @@ private:
     void loadFromSettings();
     // Enable / disable the detail controls from the master toggle state.
     void applyMasterState();
+    // Show the warning and disable the master toggle (and, with it, the
+    // detail controls) while the sandbox backend of this host (bwrap,
+    // sandbox-exec, the MXC runtime) is missing; hide it again once the
+    // backend is available.
+    void updateBackendWarning();
 
     // UI
     QCheckBox *m_masterCheck = nullptr;
+    Utils::InfoLabel *m_backendWarning = nullptr;
     QCheckBox *m_networkCheck = nullptr;
     DirList m_writable;
     DirList m_readOnly;
