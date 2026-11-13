@@ -2835,10 +2835,11 @@ void LlamaToolsTest::bash_sandboxDenyRead()
 
     // On Windows the MXC container gets no host environment, so a fake
     // $HOME would not exist inside it and the "cat" would fail without
-    // verifying the isolation: use the real user profile instead (the test
-    // never touches any pre-existing .ssh). On Unix, point HOME at a
-    // temporary directory with a fake credential file so the test never
-    // touches the real user's ~/.ssh & co.
+    // verifying the isolation: use the real user profile instead. The test
+    // writes only its own credential file and removes exactly that file
+    // again - the .ssh directory may hold the user's keys and must never be
+    // deleted. On Unix, point HOME at a temporary directory with a fake
+    // credential file so the test never touches the real user's ~/.ssh & co.
 #if !defined(Q_OS_WIN)
     QTemporaryDir fakeHome;
     QVERIFY(fakeHome.isValid());
@@ -2855,19 +2856,22 @@ void LlamaToolsTest::bash_sandboxDenyRead()
 #if defined(Q_OS_WIN)
     const QString homePath = QDir::homePath();
     const QString sshDir = homePath + QStringLiteral("/.ssh");
-    struct SshCleanup
+    struct SshFileCleanup
     {
-        explicit SshCleanup(const QString &dir)
-            : m_dir(dir)
+        explicit SshFileCleanup(const QString &file)
+            : m_file(file)
         {
         }
-        ~SshCleanup()
+        ~SshFileCleanup()
         {
-            QDir(m_dir).removeRecursively();
+            QFile::remove(m_file);
         }
-        QString m_dir;
-    } sshCleanup{ sshDir };
+        QString m_file;
+    } sshFileCleanup{ sshDir + QStringLiteral("/id_test") };
     QVERIFY(QDir(homePath).mkpath(sshDir));
+    { QFile keyFile(sshDir + QStringLiteral("/id_test"));
+      QVERIFY(keyFile.open(QIODevice::WriteOnly));
+      keyFile.write("llama-secret-key"); }
 #else
     qputenv("HOME", fakeHome.path().toUtf8());
 #endif
@@ -3197,24 +3201,25 @@ void LlamaToolsTest::sandboxFileTools()
     // The credential locations are resolved from QDir::homePath() when the
     // deny-read set is built. On Unix that follows $HOME, but on Windows it
     // follows $USERPROFILE and cannot be redirected from a test, so the
-    // credential directory is created in the real user profile and removed
-    // again on exit (the test never touches any pre-existing one).
+    // credential file is created in the real user profile and removed again
+    // on exit (only the test's own file is removed: the .ssh directory may
+    // hold the user's keys and must never be deleted by a test).
     const QString realHome = QDir::homePath();
 #if defined(Q_OS_WIN)
     const QString homePath = realHome;
     const QString sshDir = homePath + QStringLiteral("/.ssh");
-    struct SshCleanup
+    struct SshFileCleanup
     {
-        explicit SshCleanup(const QString &dir)
-            : m_dir(dir)
+        explicit SshFileCleanup(const QString &file)
+            : m_file(file)
         {
         }
-        ~SshCleanup()
+        ~SshFileCleanup()
         {
-            QDir(m_dir).removeRecursively();
+            QFile::remove(m_file);
         }
-        QString m_dir;
-    } sshCleanup{ sshDir };
+        QString m_file;
+    } sshFileCleanup{ sshDir + QStringLiteral("/id_test") };
 #else
     QTemporaryDir fakeHome;
     QVERIFY(fakeHome.isValid());
@@ -3606,7 +3611,14 @@ void LlamaToolsTest::linuxSandboxSpecProbeOk()
     qunsetenv("LLAMA_BWRAP");
 
     QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
-    QCOMPARE(spec.program, fake);
+    // The program may come back with the platform's separators
+    // (FilePath::toUserOutput keeps them on Windows); the test writes the
+    // fake with forward slashes, so compare in the normalized spelling.
+    QString program = spec.program;
+    program.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    QString fakeNormalized = fake;
+    fakeNormalized.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    QCOMPARE(program, fakeNormalized);
     const QStringList args = spec.arguments;
     QVERIFY(args.contains(QStringLiteral("--ro-bind")));
     QVERIFY(args.contains(QStringLiteral("/")));
