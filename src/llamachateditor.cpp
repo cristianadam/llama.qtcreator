@@ -1347,8 +1347,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
     if (m_messageWidgets.size() > 0 && !m_messageWidgets.last()->isUser()
         && !m_messageWidgets.last()->isTool()) {
         const Message &lastMsg = m_messageWidgets.last()->message();
-        if (settings().showTokensPerSecond.value())
-            updateSpeedLabel(lastMsg);
+        updateSpeedLabel(lastMsg);
         updateContextLabel(lastMsg);
     }
     updateSteeringButton();
@@ -2141,65 +2140,61 @@ void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantM
 void ChatEditor::updateSpeedLabel(const Message &msg)
 {
     // Update the speed label (in the editor status bar) using the latest timings
-    const bool enabled = settings().showTokensPerSecond.value();
-
     QString text;
     QString tooltip;
     bool hasData = false;
 
-    if (enabled) {
-        if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
-            // The server reports processed tokens *including* the cached
-            // prefix (processed >= cache), so the cached part must be
-            // excluded on both sides – like the llama.cpp web UI – or a
-            // mostly-cached prompt (every turn after the first) shows ~100%
-            // from the very first event and stays there while only the small
-            // uncached delta is being processed.
-            const int actualTotal = msg.promptProgress.total - msg.promptProgress.cache;
-            const int actualDone = msg.promptProgress.processed - msg.promptProgress.cache;
-            double percent = actualTotal > 0 ? (actualDone * 100.0) / actualTotal : 100.0;
+    if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
+        // The server reports processed tokens *including* the cached
+        // prefix (processed >= cache), so the cached part must be
+        // excluded on both sides – like the llama.cpp web UI – or a
+        // mostly-cached prompt (every turn after the first) shows ~100%
+        // from the very first event and stays there while only the small
+        // uncached delta is being processed.
+        const int actualTotal = msg.promptProgress.total - msg.promptProgress.cache;
+        const int actualDone = msg.promptProgress.processed - msg.promptProgress.cache;
+        double percent = actualTotal > 0 ? (actualDone * 100.0) / actualTotal : 100.0;
 
-            percent = qBound(0.0, percent, 100.0);
+        percent = qBound(0.0, percent, 100.0);
 
-            // "X" is the lucide glyph for prompt processing (replaces the
-            // plain "Processing:" prefix; see lucideGlyphLabelText).
-            text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('X'),
-                                        QString::number(percent, 'f', 0) + QLatin1String("%"));
+        // "X" is the lucide glyph for prompt processing (replaces the
+        // plain "Processing:" prefix; see lucideGlyphLabelText).
+        text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('X'),
+                                    QString::number(percent, 'f', 0) + QLatin1String("%"));
 
-            tooltip = Tr::tr("<b>Prompt Processing:</b><br>"
-                             "Total Tokens: %1<br>"
-                             "Processed: %2<br>"
-                             "Cached: %3<br>"
-                             "Time: %4 ms")
-                          .arg(msg.promptProgress.total)
-                          .arg(msg.promptProgress.processed)
-                          .arg(msg.promptProgress.cache)
-                          .arg(msg.promptProgress.time_ms);
+        tooltip = Tr::tr("<b>Prompt Processing:</b><br>"
+                         "Total Tokens: %1<br>"
+                         "Processed: %2<br>"
+                         "Cached: %3<br>"
+                         "Time: %4 ms")
+                      .arg(msg.promptProgress.total)
+                      .arg(msg.promptProgress.processed)
+                      .arg(msg.promptProgress.cache)
+                      .arg(msg.promptProgress.time_ms);
+        hasData = true;
+    } else if (!msg.content.isEmpty()) {
+        const auto &t = msg.timings;
+        if (t.predicted_n >= kMinTokensForSpeed && t.predicted_ms > 0 && t.prompt_ms > 0) {
+            const qreal genTokensPerSec = t.predicted_n * 1000.0 / t.predicted_ms;
+            // "T" is the lucide glyph for generation speed.
+            text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('T'),
+                                        QString::number(genTokensPerSec, 'f', 1)
+                                        + QLatin1String(" t/s"));
+
+            tooltip = Tr::tr(
+                "<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
+                "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
+                          .arg(t.prompt_n)
+                          .arg(t.prompt_ms)
+                          .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
+                          .arg(t.predicted_n)
+                          .arg(t.predicted_ms)
+                          .arg(genTokensPerSec, 0, 'f', 1);
             hasData = true;
-        } else if (!msg.content.isEmpty()) {
-            const auto &t = msg.timings;
-            if (t.predicted_n >= kMinTokensForSpeed && t.predicted_ms > 0 && t.prompt_ms > 0) {
-                const qreal genTokensPerSec = t.predicted_n * 1000.0 / t.predicted_ms;
-                // "T" is the lucide glyph for generation speed.
-                text = lucideGlyphLabelText(m_speedLabel, QLatin1Char('T'),
-                                            QString::number(genTokensPerSec, 'f', 1)
-                                            + QLatin1String(" t/s"));
-
-                tooltip = Tr::tr(
-                    "<b>Prompt:</b><br>Tokens: %1<br>Time: %2 ms<br>Speed: %3 t/s<br><br>"
-                    "<b>Generation:</b><br>Tokens: %4<br>Time: %5 ms<br>Speed: %6 t/s")
-                              .arg(t.prompt_n)
-                              .arg(t.prompt_ms)
-                              .arg(t.prompt_n * 1000.0 / t.prompt_ms, 0, 'f', 1)
-                              .arg(t.predicted_n)
-                              .arg(t.predicted_ms)
-                              .arg(genTokensPerSec, 0, 'f', 1);
-                hasData = true;
-            }
         }
     }
 
-    m_speedLabel->setVisible(enabled && hasData);
+    m_speedLabel->setVisible(hasData);
     if (hasData) {
         m_speedLabel->setText(text);
         m_speedLabel->setToolTip(tooltip);

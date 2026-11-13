@@ -88,9 +88,8 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
     if (settings().dry_penalty_last_n.value() >= 0)
         payload["dry_penalty_last_n"] = settings().dry_penalty_last_n.value();
     payload["max_tokens"] = settings().max_tokens.value();
-    // Progress and timings are always requested so the context-usage label in
-    // the status bar can be populated, even when "Show tokens per second" is
-    // disabled. The speed label itself is only shown when that setting is on.
+    // Progress and timings are always requested so the context-usage and
+    // speed labels in the status bar can be populated.
     payload["timings_per_token"] = true;
     payload["return_progress"] = true;
     // Thinking level for reasoning models, sent as the OAI "reasoning_effort"

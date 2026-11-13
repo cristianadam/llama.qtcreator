@@ -65,7 +65,6 @@ public:
     Utils::IntegerAspect dry_penalty_last_n{this};
     Utils::IntegerAspect max_tokens{this};
     Utils::StringAspect customJson{this};
-    Utils::BoolAspect showTokensPerSecond{this};
     // Optional (typically smaller) model used for auxiliary requests –
     // conversation titles and follow‑up suggestions. Empty means: use the
     // active chat model.

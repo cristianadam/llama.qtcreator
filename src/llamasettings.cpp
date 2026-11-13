@@ -472,12 +472,6 @@ LlamaSettings::LlamaSettings()
     customJson.setHistoryCompleter("LlamaCpp.Custom.History");
     customJson.setDisplayStyle(StringAspect::TextEditDisplay);
 
-    showTokensPerSecond.setDisplayName(Tr::tr("Show Tokens Per Second"));
-    showTokensPerSecond.setSettingsKey("ShowTokensPerSecond");
-    showTokensPerSecond.setLabelText(Tr::tr("Show Tokens Per Second"));
-    showTokensPerSecond.setDefaultValue(false);
-    showTokensPerSecond.setToolTip(Tr::tr("Show tokens per second in the chat UI."));
-
     // Only exposed through the thinking-level dropdown in the chat status
     // bar, so no options-page entry is needed.
     thinkingLevel.setDisplayName(Tr::tr("Thinking Level"));
@@ -1054,7 +1048,6 @@ Core::IOptionsPageWidget *createChatSettingsWidget()
             st
         },
         Column {
-            s.showTokensPerSecond, br,
             s.toolsEnabled, br,
             s.selectionPromptButton, br,
             Row {s.autoHandoff}, br,
