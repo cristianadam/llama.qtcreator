@@ -23,8 +23,8 @@ bool isDownloaded();
 // while it is not installed).
 Utils::FilePath downloadedPath();
 
-// A usable niubash bash: the one chosen on the Tools settings page, then the
-// downloaded one, then empty.
+// A usable niubash bash: the "bash" setting when it points at a niubash, then
+// the downloaded one, then empty.
 Utils::FilePath resolvedPath();
 
 // Fetches and unpacks the release for this platform, after asking for the

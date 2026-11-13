@@ -117,10 +117,10 @@ private:
     // chooser is the ripgrepPath aspect of the settings).
     QLabel *m_ripgrepStatus = nullptr;
     QPushButton *m_ripgrepDownloadButton = nullptr;
-    // niubash group (Windows only, below the ripgrep group): the same shape
-    // (status line, path chooser, download button) for the native bash the
-    // bash tool runs in the Windows sandbox; the path chooser is the
-    // niubashPath aspect of the settings.
+    // bash group (Windows only, below the ripgrep group): the same shape
+    // (status line, path chooser, download and reset buttons) for the bash
+    // the bash tool runs; the path chooser is the bashPath aspect of the
+    // settings.
     QLabel *m_niubashStatus = nullptr;
     QPushButton *m_niubashDownloadButton = nullptr;
     QCheckBox *m_loadInstructionsCheck = nullptr;

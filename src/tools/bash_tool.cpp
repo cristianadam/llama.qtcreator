@@ -3,7 +3,6 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "linux_sandbox.h"
-#include "niubash.h"
 #include "tool_utils.h"
 #include "windows_sandbox.h"
 
@@ -43,12 +42,12 @@ namespace LlamaCpp::Tools {
 
 Q_LOGGING_CATEGORY(bashToolLog, "llama.cpp.chat.bash", QtWarningMsg)
 
-namespace {
-
 constexpr int kDefaultTimeoutMs = 120 * 1000;
 constexpr int kMaxTimeoutMs = 10 * 60 * 1000;
 constexpr int kMaxOutputLines = 2000;
 constexpr int kMaxOutputBytes = 50 * 1024; // 50 KB
+
+namespace {
 
 struct BashSpec
 {
@@ -66,18 +65,19 @@ struct SandboxSpec
     // (the MXC config embeds the command line) - nothing is appended
 };
 
-#if defined(Q_OS_WIN)
+} // namespace
 
 /*! Locates the bash shipped with Git for Windows, mirroring how the
     terminal plugin finds it: next to the git executable, then in the
     default Program Files installation directories. */
-QString findGitBash()
+Utils::FilePath findGitBash()
 {
+#if defined(Q_OS_WIN)
     const FilePath git = FilePath::fromUserInput(QStandardPaths::findExecutable("git.exe"));
     if (git.exists()) {
         const FilePath gitBash = git.parentDir().parentDir().pathAppended(QStringLiteral("bin/bash.exe"));
         if (gitBash.exists())
-            return gitBash.toUserOutput();
+            return gitBash;
     }
     const QStringList programFiles = {qEnvironmentVariable("ProgramFiles"),
                                       qEnvironmentVariable("ProgramFiles(x86)")};
@@ -87,55 +87,73 @@ QString findGitBash()
         const FilePath gitBash =
             FilePath::fromString(dir + QStringLiteral("/Git/bin/bash.exe"));
         if (gitBash.exists())
-            return gitBash.toUserOutput();
+            return gitBash;
     }
+#endif
     return {};
 }
 
-#endif
-
-/*! Resolves a bash executable on all platforms so that commands behave
-    identically for the model: /bin/bash on Unix, and on Windows niubash when
-    it is set up, else Git Bash. Never uses $SHELL or cmd.exe. On Windows a
-    native, MSYS2-free bash (niubash) is preferred, as it - unlike Git Bash,
-    whose MSYS2 runtime aborts in the AppContainer (microsoft/mxc#1061) - can
-    initialize inside the Windows sandbox: the one chosen on the Tools
-    settings page, then the one downloaded there. Next a bash on PATH that is
-    part of a recognized Git for Windows / MSYS2 installation (one that is
-    not, e.g. WSL's System32\bash.exe, which mishandles Windows paths, is
-    skipped), then Git for Windows' own bash. */
-BashSpec bashSpec()
+Utils::FilePath defaultGitBash()
 {
 #if defined(Q_OS_WIN)
-    // niubash, when set up (configured or downloaded), takes priority: it is
-    // the only bash that runs in the Windows sandbox.
-    const FilePath niubash = Niubash::resolvedPath();
-    if (!niubash.isEmpty() && niubash.exists())
-        return { niubash.toUserOutput(), QStringLiteral("-c"), {} };
-
     const FilePath onPath =
         FilePath::fromUserInput(QStandardPaths::findExecutable("bash.exe"));
     if (onPath.exists()
         && windowsShellInstallRoot(onPath.toUserOutput()).error.isEmpty())
-        return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
-    const QString gitBash = findGitBash();
-    if (!gitBash.isEmpty())
-        return { gitBash, QStringLiteral("-c"), {} };
+        return onPath;
+    return findGitBash();
+#else
+    const FilePath binBash = FilePath::fromString(QStringLiteral("/bin/bash"));
+    if (binBash.exists())
+        return binBash;
+    const FilePath onPath =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("bash"));
+    if (onPath.exists())
+        return onPath;
+    return FilePath::fromString(QStringLiteral("/bin/sh"));
+#endif
+}
+
+namespace {
+
+// The bash the tool uses when the "bash" setting is empty: the default bash
+// for the platform (resolved here rather than in the settings, so the
+// settings widget only knows that an empty field means "the default bash").
+FilePath defaultBashPath()
+{
+#if defined(Q_OS_WIN)
+    return defaultGitBash();
+#else
+    const FilePath binBash = FilePath::fromString(QStringLiteral("/bin/bash"));
+    if (binBash.exists())
+        return binBash;
+    const FilePath onPath =
+        FilePath::fromUserInput(QStandardPaths::findExecutable("bash"));
+    if (onPath.exists())
+        return onPath;
+    return FilePath::fromString(QStringLiteral("/bin/sh"));
+#endif
+}
+
+// The bash the tool uses: the one chosen on the Tools settings page
+// ("bash:" field), then the default bash for the platform. Never uses
+// $SHELL or cmd.exe. On Windows the default is a bash on the PATH that is
+// part of a recognized Git for Windows / MSYS2 installation (one that is
+// not, e.g. WSL's System32\bash.exe, which mishandles Windows paths, is
+// skipped), then Git for Windows' own bash.
+BashSpec bashSpec()
+{
+    const FilePath configured = settings().bashPath();
+    if (!configured.isEmpty() && configured.exists())
+        return { configured.toUserOutput(), QStringLiteral("-c"), {} };
+    const FilePath fallback = defaultBashPath();
+    if (!fallback.isEmpty())
+        return { fallback.toUserOutput(), QStringLiteral("-c"), {} };
     return { {}, {},
              Tr::tr("No bash shell found. Install Git for Windows "
                     "(https://git-scm.com/download/win) or add a bash to PATH, "
                     "or download niubash from the Llama.cpp Chat tools "
                     "settings page.") };
-#else
-    const FilePath binBash = FilePath::fromString(QStringLiteral("/bin/bash"));
-    if (binBash.exists())
-        return { binBash.toUserOutput(), QStringLiteral("-c"), {} };
-    const FilePath onPath =
-        FilePath::fromUserInput(QStandardPaths::findExecutable("bash"));
-    if (onPath.exists())
-        return { onPath.toUserOutput(), QStringLiteral("-c"), {} };
-    return { QStringLiteral("/bin/sh"), QStringLiteral("-c"), {} };
-#endif
 }
 
 // Escapes a path for use inside a double-quoted sandbox-exec profile string.

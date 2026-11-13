@@ -133,6 +133,15 @@ void setToolsWorkingDirectory(const QString &dir);
 //! its display of the effective directory).
 bool execWorkingDirectoryResetMenu(QWidget *parent, const QPoint &pos);
 
+//! The bash reset menu shown by the tools settings page (Windows only):
+//! "Reset to Git Bash" clears the "bash" setting (the tools then use the
+//! default bash, Git Bash) and "Reset to niubash" points it at the
+//! downloaded niubash (the only bash that runs in the Windows sandbox).
+//! "Reset to niubash" is disabled while the release is not installed.
+//! Returns true when an entry was chosen and applied (the caller refreshes
+//! its display of the effective bash).
+bool execBashResetMenu(QWidget *parent, const QPoint &pos);
+
 //! Model-facing error when the (enabled) sandbox forbids \a isWrite access
 //! to \a path; an empty string when the access is allowed or the sandbox is
 //! disabled. Mirrors the bash sandbox: writes are restricted to the project

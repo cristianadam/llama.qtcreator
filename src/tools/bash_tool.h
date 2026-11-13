@@ -1,7 +1,19 @@
 #pragma once
 #include "tool.h"
 
+#include <utils/filepath.h>
+
 namespace LlamaCpp::Tools {
+
+// The Git for Windows bash the bash tool defaults to on Windows: next to the
+// git executable on the PATH, then in the default Program Files installation
+// directories. Empty when Git for Windows is not installed.
+Utils::FilePath findGitBash();
+
+// The bash the bash tool uses when the "bash" setting (Tools settings
+// page) is empty: Git Bash (a recognized bash on the PATH, then the one
+// shipped with Git for Windows) on Windows, /bin/bash on Unix.
+Utils::FilePath defaultGitBash();
 
 class BashState;
 

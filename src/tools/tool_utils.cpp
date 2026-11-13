@@ -4,6 +4,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "mcpbridge.h"
+#include "niubash.h"
 
 #include <coreplugin/documentmanager.h>
 #include <projectexplorer/project.h>
@@ -490,6 +491,36 @@ bool execWorkingDirectoryResetMenu(QWidget *parent, const QPoint &pos)
     else
         settings().workingDirectory.setValue(
             Core::DocumentManager::projectsDirectory().toUserOutput());
+    settings().writeSettings();
+    return true;
+}
+
+bool execBashResetMenu(QWidget *parent, const QPoint &pos)
+{
+    QMenu menu(parent);
+    // "Reset to Git Bash" clears the setting: an empty value means the
+    // default bash (a recognized bash on the PATH, then the one shipped
+    // with Git for Windows).  "Reset to niubash" points the setting at the
+    // downloaded niubash, the only bash that runs in the Windows sandbox.
+    auto *resetToGitBash = new QAction(Tr::tr("Reset to Git Bash"), &menu);
+    resetToGitBash->setToolTip(Tr::tr(
+        "Clear the bash override: the bash tool uses the default bash, "
+        "Git Bash (a recognized bash on the PATH, then the one shipped "
+        "with Git for Windows)."));
+    auto *resetToNiubash = new QAction(Tr::tr("Reset to niubash"), &menu);
+    resetToNiubash->setToolTip(Tr::tr(
+        "Use the downloaded niubash, a native MSYS2-free Bash that - unlike "
+        "Git Bash - can run in the Windows sandbox."));
+    // Nothing to reset to while the release is not installed.
+    resetToNiubash->setEnabled(Tools::Niubash::isDownloaded());
+    menu.addActions({resetToGitBash, resetToNiubash});
+    const QAction *chosen = menu.exec(pos);
+    if (!chosen)
+        return false;
+    if (chosen == resetToGitBash)
+        settings().bashPath.setValue(QString());
+    else
+        settings().bashPath.setValue(Tools::Niubash::downloadedPath().toUserOutput());
     settings().writeSettings();
     return true;
 }

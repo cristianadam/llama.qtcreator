@@ -2,6 +2,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "llamasyntaxhighlighter.h"
+#include "tools/bash_tool.h"
 #include "tools/factory.h"
 #include "tools/mcpbridge.h"
 #include "tools/niubash.h"
@@ -193,65 +194,95 @@ ToolsSettingsWidget::ToolsSettingsWidget()
         },
     }.emerge();
 
-    // The bash tool on Windows runs a bash shell. Git Bash (the default) cannot
+    // The bash tool on Windows runs the bash the "bash:" field points at: Git
+    // Bash when the field is empty, niubash when it is not. Git Bash cannot
     // initialize inside the Windows sandbox - its MSYS2 runtime aborts in the
     // AppContainer (microsoft/mxc#1061) - so a native, MSYS2-free bash
-    // (niubash) can be downloaded here or pointed to, like the ripgrep and MXC
-    // runtimes. Windows-only: the other platforms use /bin/bash. The path
-    // chooser is for a niubash of one's own; when it is empty the downloaded
-    // one is taken, and showing that as the placeholder is what tells where it
-    // came from.
+    // (niubash) can be downloaded here, like the ripgrep and MXC runtimes.
+    // Windows-only: the other platforms use /bin/bash. The path chooser is
+    // for a bash of one's own; when it is empty the default bash (Git Bash)
+    // is taken, and showing that as the placeholder is what tells which bash
+    // is being used. The Reset... button switches between the two without
+    // having to type or browse a path.
     m_niubashStatus = new QLabel(this);
     m_niubashStatus->setWordWrap(true);
     m_niubashDownloadButton = new QPushButton(Tr::tr("Download..."), this);
+    auto *bashResetButton = new QPushButton(Tr::tr("Reset..."), this);
+    bashResetButton->setToolTip(Tr::tr(
+        "Switch the bash tool between Git Bash (the default, cleared from "
+        "the field) and the downloaded niubash (the only bash that runs in "
+        "the Windows sandbox)."));
 
-    const auto showNiubash = [this] {
-        const Utils::FilePath inUse = Tools::Niubash::resolvedPath();
-        m_niubashStatus->setText(inUse.isEmpty()
-            ? Tr::tr("The bash tool on Windows runs Git Bash, which cannot "
-                     "initialize inside the Windows sandbox (microsoft/mxc#1061). "
-                     "niubash, a native MSYS2-free Bash that can, is not "
-                     "installed on this system.")
-            : Tr::tr("The bash tool on Windows runs niubash, which can "
-                     "initialize inside the Windows sandbox."));
-        settings().niubashPath.setPlaceHolderText(inUse.toUserOutput());
+    const auto showBash = [this] {
+        const Utils::FilePath inUse = settings().bashPath().isEmpty()
+            ? Tools::defaultGitBash()
+            : settings().bashPath();
+        // The field (value or placeholder) already shows which bash is in
+        // use; the status line carries only what the field cannot: the
+        // missing-bash error, and the sandbox caveat - Git Bash cannot
+        // initialize inside the Windows sandbox, niubash can.
+        if (inUse.isEmpty()) {
+            m_niubashStatus->setText(Tr::tr("No bash shell found. Install Git "
+                                            "for Windows (https://git-scm.com/download/win) "
+                                            "or add a bash to PATH, or download "
+                                            "niubash below."));
+        } else if (inUse == Tools::defaultGitBash()) {
+            m_niubashStatus->setText(Tr::tr(
+                "The default bash (Git Bash) cannot initialize inside the "
+                "Windows sandbox (microsoft/mxc#1061). Download niubash to "
+                "run the bash tool in the sandbox."));
+        } else {
+            m_niubashStatus->setText(Tr::tr(
+                "This bash can initialize inside the Windows sandbox."));
+        }
+        settings().bashPath.setPlaceHolderText(Tools::defaultGitBash().toUserOutput());
     };
-    showNiubash();
-    connect(&settings().niubashPath, &Utils::BaseAspect::changed, this, showNiubash);
+    showBash();
+    connect(&settings().bashPath, &Utils::BaseAspect::changed, this, showBash);
+
+    connect(bashResetButton,
+            &QPushButton::clicked,
+            this,
+            [this, bashResetButton, showBash] {
+                if (execBashResetMenu(
+                        this,
+                        bashResetButton->mapToGlobal(
+                                QPoint(0, bashResetButton->height()))))
+                    showBash();
+            });
 
     const auto niubashDownloader = std::make_shared<QtTaskTree::QSingleTaskTreeRunner>();
     connect(m_niubashDownloadButton,
             &QPushButton::clicked,
             m_niubashDownloadButton,
-            [this, showNiubash, niubashDownloader] {
+            [this, showBash, niubashDownloader] {
                 if (niubashDownloader->isRunning())
                     return;
                 m_niubashDownloadButton->setEnabled(false);
                 niubashDownloader->start({Tools::Niubash::downloadRecipe()}, {},
-                                         [this, showNiubash, niubashDownloader](
+                                         [this, showBash, niubashDownloader](
                                              QtTaskTree::DoneWith result) {
                                              m_niubashDownloadButton->setEnabled(true);
                                              // A fresh download is what the
                                              // user just asked for, so pin it
-                                             // in the chooser (a niubash of
+                                             // in the chooser (a bash of
                                              // one's own is left untouched):
                                              // the resolved path is only the
                                              // placeholder while the field is
                                              // empty, which reads as a blank.
                                              if (result == QtTaskTree::DoneWith::Success
-                                                 && settings().niubashPath().isEmpty())
-                                                 settings().niubashPath.setValue(
+                                                 && settings().bashPath().isEmpty())
+                                                 settings().bashPath.setValue(
                                                      Tools::Niubash::downloadedPath());
-                                             showNiubash();
+                                             showBash();
                                          });
             });
 
     auto *niubashGroup = Group{
-        title(Tr::tr("niubash (Windows sandbox bash)")),
+        title(Tr::tr("bash (Windows)")),
         Column{
             m_niubashStatus,
-            settings().niubashPath,
-            Row{m_niubashDownloadButton, st},
+            Row{settings().bashPath, m_niubashDownloadButton, bashResetButton},
         },
     }.emerge();
 

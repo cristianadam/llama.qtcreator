@@ -711,14 +711,15 @@ LlamaSettings::LlamaSettings()
         "If empty, the one on the PATH is used, then the one downloaded "
         "from this page."));
 
-    niubashPath.setSettingsKey("NiubashPath");
-    niubashPath.setLabelText(Tr::tr("niubash:"));
-    niubashPath.setExpectedKind(PathChooserKind::File);
-    niubashPath.setToolTip(Tr::tr(
-        "A niubash bash launcher (winuxcmd\\bin\\bash.exe) to run the bash "
-        "tool with on Windows. niubash is a native, MSYS2-free Bash, so - "
-        "unlike Git Bash - it can run in the Windows sandbox. If empty, the "
-        "one downloaded from this page is used, then Git Bash."));
+    bashPath.setSettingsKey("BashPath");
+    bashPath.setLabelText(Tr::tr("bash:"));
+    bashPath.setExpectedKind(PathChooserKind::File);
+    bashPath.setToolTip(Tr::tr(
+        "The bash executable to run the bash tool with. If empty, the "
+        "default bash is used (Git Bash). niubash - a native, MSYS2-free "
+        "Bash - can additionally run in the Windows sandbox, where Git "
+        "Bash cannot; use the Download... button to install it and Reset... "
+        "to switch between the two."));
 
     loadProjectInstructions.setSettingsKey("LoadProjectInstructions");
     loadProjectInstructions.setDefaultValue(false);

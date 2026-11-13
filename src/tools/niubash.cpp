@@ -121,8 +121,10 @@ FilePath downloadedPath()
 
 FilePath resolvedPath()
 {
-    // A niubash of one's own, chosen on the Tools settings page.
-    const FilePath configured = settings().niubashPath();
+    // The "bash" setting (Tools settings page) when it points at a niubash:
+    // the downloaded release is pinned there by the Download... button and
+    // by "Reset to niubash".
+    const FilePath configured = settings().bashPath();
     if (!configured.isEmpty() && configured.exists())
         return configured;
 
