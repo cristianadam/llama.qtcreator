@@ -63,7 +63,7 @@ add_qtc_test(llamatools_test
     ../src/tools/windows_sandbox.cpp
 )
 
-# The AUTOMOC scanner (dep‑file mode) chokes on llamatools_test.cpp in this
+# The AUTOMOC scanner (dep-file mode) chokes on llamatools_test.cpp in this
 # environment, so skip AUTOMOC for it and run moc on it explicitly instead
 # (qt_wrap_cpp generates llamatools_test.moc and puts it on the include path,
 # picked up by the #include at the end of the source).

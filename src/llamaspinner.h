@@ -51,7 +51,7 @@ private:
 // first use and reused from then on.  A QMovie is safe to use in many
 // widgets (repeated start() calls only bump an internal reference count), so
 // the frames are rendered once per tick instead of once per chat message.
-// Never deleted – the plugin runs for the whole app lifetime.
+// Never deleted - the plugin runs for the whole app lifetime.
 QMovie *sharedSpinnerMovie();
 
 } // namespace LlamaCpp

@@ -15,7 +15,7 @@ namespace {
 const char kSubagentExplore[] = "explore";
 const char kSubagentGeneral[] = "general";
 
-// Tools the "explore" subagent may use (read‑only, non‑interactive).
+// Tools the "explore" subagent may use (read-only, non-interactive).
 // "search_directory" is provided by the Qt Creator MCP server; it is only
 // picked up when the server is actually connected.
 const QStringList kExploreTools = {
@@ -37,7 +37,7 @@ QString taskSystemPromptFor(const QString &type)
     if (type == QLatin1String(kSubagentExplore))
         return Tr::tr("You are the \"explore\" subagent, running in a separate conversation "
                       "that is isolated from the main one. Explore the codebase and answer "
-                      "the task with the read‑only tools available to you: use \"find\" to "
+                      "the task with the read-only tools available to you: use \"find\" to "
                       "locate files by name, \"search\" to search file contents, and "
                       "\"read_file\" to read the relevant sections. Do not modify any file "
                       "and do not run commands that change anything. Work autonomously; you "
@@ -64,7 +64,7 @@ QStringList taskToolsFor(const QString &type, const QStringList &availableTools)
     }
 
     // "general": every tool that exists, except the ones that must never run
-    // inside a sub‑conversation (no task recursion, no user dialog).
+    // inside a sub-conversation (no task recursion, no user dialog).
     QStringList res;
     for (const QString &tool : availableTools)
         if (tool != QLatin1String("task") && tool != QLatin1String("ask_user"))
@@ -187,7 +187,7 @@ void TaskTool::run(const QJsonObject &args,
                                    taskSystemPromptFor(type),
                                    taskToolsFor(type, availableTools));
 
-    // The tool finishes when the sub‑conversation reaches its final answer
+    // The tool finishes when the sub-conversation reaches its final answer
     // (or is stopped / deleted, which also emits the signal with ok=false).
     auto connection = std::make_shared<QMetaObject::Connection>();
     *connection = QObject::connect(&chat,
@@ -220,7 +220,7 @@ void TaskTool::run(const QJsonObject &args,
 
 void TaskTool::abort()
 {
-    // Stopping the sub‑conversation aborts its stream (or its running
+    // Stopping the sub-conversation aborts its stream (or its running
     // tools, recursively) and emits taskConversationFinished with
     // ok=false, which reports the failure back through the done callback.
     if (!m_convId.isEmpty()) {

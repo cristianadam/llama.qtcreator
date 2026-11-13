@@ -155,7 +155,7 @@ public:
 private:
     void acceptPrompt(const QString &prompt);
 
-    // Built‑in prompts, user‑editable through the "Prompts" settings page.
+    // Built-in prompts, user-editable through the "Prompts" settings page.
     // Read from the settings on every call so that changes made on that page
     // take effect without a restart.
     QStringList predefinedPrompts() const;
@@ -175,7 +175,7 @@ QStringList LocatorFilter::predefinedPrompts() const
 LocatorFilter::LocatorFilter()
 {
     setId(Constants::LLAMACPP_LOCATOR_ID);
-    setDisplayName("llama.cpp – Prompt ...");
+    setDisplayName("llama.cpp - Prompt ...");
     setDescription(Tr::tr("Send the current selection to llama.cpp with a prompt.\n"
                           "Built-in prompts: %1\n"
                           "You can type any other prompt - they are remembered for next time.")
@@ -192,7 +192,7 @@ LocatorFilter::LocatorFilter()
 LocatorMatcherTasks LocatorFilter::matchers()
 {
     const auto onSetup = [this]() {
-        // Build a list of entries for the built‑in prompts + history
+        // Build a list of entries for the built-in prompts + history
         const LocatorStorage &storage = *LocatorStorage::storage();
         const QString input = storage.input();
 
@@ -263,7 +263,7 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
         const QTextDocument *doc = editor->document();
         const QTextCursor cursor = editor->textCursor();
         if (!text.isEmpty()) {
-            // blockNumber() is 0‑based; +1 for the 1‑based line the model sees.
+            // blockNumber() is 0-based; +1 for the 1-based line the model sees.
             startLine = doc->findBlock(cursor.selectionStart()).blockNumber() + 1;
             endLine = doc->findBlock(cursor.selectionEnd() - 1).blockNumber() + 1;
         }
@@ -288,7 +288,7 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
 
     // Without a text editor (or a file path) the {file}/{diagnostics}
     // placeholders would become an empty string and the prompt would read
-    // "Fix the errors in ." – give the model an explicit hint instead (like
+    // "Fix the errors in ." - give the model an explicit hint instead (like
     // {git_diff} does).
     if (values.file.isEmpty() && prompt.contains(QLatin1String("{file}")))
         values.file = QStringLiteral("(no file is open)");
@@ -296,8 +296,8 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
         values.diagnostics = QStringLiteral(
             "(no file is open, so there are no errors or warnings)");
 
-    // The conversation is named after the (single‑line) prompt as displayed
-    // in the locator menu, not after the full multi‑line prompt text.
+    // The conversation is named after the (single-line) prompt as displayed
+    // in the locator menu, not after the full multi-line prompt text.
     const QString name = prompt.section(QLatin1Char('\n'), 0, 0).trimmed().left(250);
 
     if (!prompt.contains(QLatin1String("{git_diff}"))) {
@@ -314,8 +314,8 @@ void LocatorFilter::acceptPrompt(const QString &prompt)
         // the diff is collected in the background with a status bar progress
         // bar (the same ProgressManager::addTask pattern as the CMake presets
         // kit creation). The conversation is created up front so that clicking
-        // the progress bar can already open it; the message is sent – and the
-        // editor opened – once the diff is in, which is where the flow ends
+        // the progress bar can already open it; the message is sent - and the
+        // editor opened - once the diff is in, which is where the flow ends
         // when the user does not click.
         Conversation c = ChatManager::instance().createConversation(name);
         const QFuture<QString> future =

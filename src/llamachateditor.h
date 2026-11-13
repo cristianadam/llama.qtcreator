@@ -70,7 +70,7 @@ public:
                               const QStringList &questions);
 
     // Accessors used by ChatEditorFindSupport (the Core::IFindSupport that
-    // backs the in‑chat "Find" bar, see llamachateditor.cpp).
+    // backs the in-chat "Find" bar, see llamachateditor.cpp).
     const QVector<ChatMessage *> &messageWidgets() const { return m_messageWidgets; }
     AutoScrollArea *scrollArea() const { return m_scrollArea; }
 
@@ -79,7 +79,7 @@ public slots:
     void onPendingMessageChanged(const LlamaCpp::Message &pm);
     void onSendRequested(const QString &text, const QList<QVariantMap> &extra);
     // \a fromKey is true when the stop was triggered by the Escape key
-    // rather than the stop button; stopping a running task (sub‑agent)
+    // rather than the stop button; stopping a running task (sub-agent)
     // conversation then asks for confirmation first.
     void onStopRequested(bool fromKey);
     void onEditRequested(const LlamaCpp::Message &msg);
@@ -98,10 +98,10 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
-    //! Shows/hides the "queued messages" popup button (mid‑run steering)
+    //! Shows/hides the "queued messages" popup button (mid-run steering)
     //! and rebuilds its menu (one removable entry per queued message).
     void updateSteeringButton();
-    // Pre‑wrap a freshly created message's document at its final label width
+    // Pre-wrap a freshly created message's document at its final label width
     // so its first size hint is already correct (call before adding the
     // widget to m_messageWidgets / the layout).
     void preWrapDocument(ChatMessage *w);
@@ -138,7 +138,7 @@ private:
     // The display name of the active model (router id, the loaded model's
     // file name in single-model mode, or "Human Editor").
     QString selectedModelDisplayName() const;
-    // Shows the model details dialog (the llama.cpp web‑UI model info: path,
+    // Shows the model details dialog (the llama.cpp web-UI model info: path,
     // type, context, modalities, tokens, build, and the Jinja chat template
     // with syntax highlighting).
     void showModelDetails();
@@ -149,11 +149,11 @@ private:
     // (startup) project's, or to the default projects directory (the setting
     // new projects are created in).
     void showWorkingDirectoryResetMenu(const QPoint &globalPos);
-    // Toggles the in‑place edit button on all assistant message widgets
+    // Toggles the in-place edit button on all assistant message widgets
     // after the "Human Editor" endpoint was (de)selected.
     void applyHumanEditorMode();
     // Opens a "Human Editor" document as a regular text editor in a new
-    // split next to the chat.  \a msgId > 0: in‑place edit of that stored
+    // split next to the chat.  \a msgId > 0: in-place edit of that stored
     // message; otherwise a new pending reply for \a convId.
     void openHumanEditorDocument(const QString &convId, qint64 msgId, const QString &text);
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -167,7 +167,7 @@ private:
     QVector<ChatMessage *> m_messageWidgets; // keep for cleanup
     std::optional<Message> m_editedMessage;
     QWidget *m_propsWidget{nullptr};
-    QLabel *m_connectionLabel{nullptr}; // "You are connected to …" line in m_propsWidget
+    QLabel *m_connectionLabel{nullptr}; // "You are connected to ..." line in m_propsWidget
     bool m_workdirLinkHovered{false}; // the welcome screen's dir link is under the cursor
     QWidget *m_followUpWidget{nullptr};
     QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor
@@ -182,7 +182,7 @@ private:
     QToolButton *m_titleButton{nullptr};
     QComboBox *m_modelCombo{nullptr};
 
-    // Core::IFindSupport backing the standard in‑chat "Find" bar.  It is
+    // Core::IFindSupport backing the standard in-chat "Find" bar.  It is
     // aggregated with the editor widget so the FindToolBar of the current
     // document can locate it (and the FindToolBarPlaceHolder it docks into).
     ChatEditorFindSupport *m_findSupport{nullptr};

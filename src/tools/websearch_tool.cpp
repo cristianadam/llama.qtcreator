@@ -28,8 +28,8 @@ const char kTavilyDefaultUrl[] = "https://api.tavily.com/search";
 const char kDuckDuckGoDefaultUrl[] = "https://html.duckduckgo.com/html/";
 const char kExaToolName[] = "web_search_exa";
 
-//! A current desktop Firefox user agent for the host platform – the
-//! DuckDuckGo HTML endpoint serves results to browser‑like clients only.
+//! A current desktop Firefox user agent for the host platform - the
+//! DuckDuckGo HTML endpoint serves results to browser-like clients only.
 QString duckDuckGoUserAgent()
 {
 #if defined(Q_OS_MACOS)
@@ -172,7 +172,7 @@ QString parseMcpSearchResponse(const QString &body)
         if (const QString text = mcpTextFromJson(trimmed.toUtf8()); !text.isEmpty())
             return text;
     }
-    // Server‑sent events: pick the first "data:" line that carries text content.
+    // Server-sent events: pick the first "data:" line that carries text content.
     for (const QString &line : body.split(QLatin1Char('\n'))) {
         if (!line.startsWith(QLatin1String("data:")))
             continue;
@@ -202,7 +202,7 @@ QVector<SearchResult> parseGoogleResults(const QJsonObject &response)
 QVector<SearchResult> parseBraveResults(const QJsonObject &response)
 {
     // Brave web/search response: { "web": { "results": [ { "title",
-    // "url", "description", … }, … ] } }
+    // "url", "description", ... }, ... ] } }
     QVector<SearchResult> results;
     const QJsonObject web = response.value(QStringLiteral("web")).toObject();
     for (const QJsonValue &value : web.value(QStringLiteral("results")).toArray()) {
@@ -222,7 +222,7 @@ QVector<SearchResult> parseBraveResults(const QJsonObject &response)
 QVector<SearchResult> parseTavilyResults(const QJsonObject &response)
 {
     // Tavily /search response: { "results": [ { "title", "url", "content",
-    // … }, … ] }
+    // ... }, ... ] }
     QVector<SearchResult> results;
     for (const QJsonValue &value : response.value(QStringLiteral("results")).toArray()) {
         const QJsonObject item = value.toObject();
@@ -241,9 +241,9 @@ QVector<SearchResult> parseTavilyResults(const QJsonObject &response)
 QString duckDuckGoResultUrl(const QString &href)
 {
     // Result links go through the DDG redirector
-    // ("//duckduckgo.com/l/?uddg=<percent‑encoded target>&rut=…"); unwrap
-    // the percent‑encoded target, fall back to the raw (resolved) link.
-    // The value is extracted manually – QUrlQuery's "Prettified" parsing
+    // ("//duckduckgo.com/l/?uddg=<percent-encoded target>&rut=..."); unwrap
+    // the percent-encoded target, fall back to the raw (resolved) link.
+    // The value is extracted manually - QUrlQuery's "Prettified" parsing
     // decodes the %26/%3D escapes of the *outer* query and would split the
     // encoded target at its (decoded) inner "&".
     QString h = href;
@@ -370,10 +370,10 @@ void WebSearchTool::run(const QJsonObject &args,
                            if (!error.isEmpty())
                                return done(Tr::tr("Search failed: %1").arg(error), false);
                            const QString html = QString::fromUtf8(body);
-                           // DDG's rate‑limit ("anomaly detection") page
+                           // DDG's rate-limit ("anomaly detection") page
                            // instead of a results page.
                            if (html.contains(QLatin1String("anomaly"), Qt::CaseInsensitive))
-                               return done(Tr::tr("Search failed: DuckDuckGo is rate‑limiting "
+                               return done(Tr::tr("Search failed: DuckDuckGo is rate-limiting "
                                                   "requests right now; wait a minute and try "
                                                   "again."),
                                            false);
@@ -526,7 +526,7 @@ void WebSearchTool::run(const QJsonObject &args,
                       &m_reply);
     }
 
-    // Default: Exa via its hosted MCP endpoint (JSON‑RPC tools/call).
+    // Default: Exa via its hosted MCP endpoint (JSON-RPC tools/call).
     const QString base = config.exaUrl.isEmpty() ? kExaDefaultUrl : config.exaUrl;
     const QString endpoint = exaEndpointUrl(base, config.exaApiKey);
     if (endpoint.isEmpty())

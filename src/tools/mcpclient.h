@@ -50,7 +50,7 @@ public:
 
     /*! Connects to the given MCP server endpoint. \a httpHeaders are
         request headers to send with every request, as "Name: value" strings
-        (e.g. the "Authorization: Bearer …" header of a token-protected
+        (e.g. the "Authorization: Bearer ..." header of a token-protected
         server). */
     void connectTo(const QUrl &url, const QStringList &httpHeaders = {});
     void disconnectFromServer();

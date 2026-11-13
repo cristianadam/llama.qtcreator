@@ -127,7 +127,7 @@ std::pair<QString, bool> runTool(const QJsonObject &args)
     return {output, ok};
 }
 
-// Runs an asynchronous (process‑backed) tool such as bash / search / find
+// Runs an asynchronous (process-backed) tool such as bash / search / find
 // and spins the event loop until its callback fires or waitMs is exceeded.
 template <typename ToolT>
 std::pair<QString, bool> runAsyncTool(ToolT &tool, const QJsonObject &args, int waitMs = 30000)
@@ -161,14 +161,14 @@ std::pair<QString, bool> runBashTool(const QJsonObject &args, int waitMs = 30000
     return runAsyncTool(tool, args, waitMs);
 }
 
-// The search / find tools spawn ripgrep; the process‑based test cases only
+// The search / find tools spawn ripgrep; the process-based test cases only
 // make sense when a ripgrep (system or downloaded) is available.
 bool ripgrepAvailable()
 {
     return !Tools::Ripgrep::resolvedPath().isEmpty();
 }
 
-// A stand‑in for a tool served by the Qt Creator MCP server.
+// A stand-in for a tool served by the Qt Creator MCP server.
 class FakeRemoteTool : public Tool
 {
 public:
@@ -205,7 +205,7 @@ public:
     }
 };
 
-// A minimal HTTP/1.1 server for the web_utils round‑trip tests. It answers
+// A minimal HTTP/1.1 server for the web_utils round-trip tests. It answers
 // any request with \a body, except POST requests, where it echoes the
 // request body back (so the tests can verify that posted data arrived).
 class MiniHttpServer : public QTcpServer
@@ -439,7 +439,7 @@ private slots:
     void webfetch_toolDefinition();
     void webfetch_summaries();
 
-    // WebUtils (task‑tree based HTTP)
+    // WebUtils (task-tree based HTTP)
     void webutils_httpGet();
     void webutils_httpPost();
     void webutils_httpGetTooLarge();
@@ -615,7 +615,7 @@ private slots:
     void editfile_legacyTopLevel();
     void editfile_resultContainsDiff();
 
-    // repairJson (string‑literal repair for small‑model tool arguments)
+    // repairJson (string-literal repair for small-model tool arguments)
     void repairJson_controlChars();
     void repairJson_invalidEscapes();
     void repairJson_validUnchanged();
@@ -929,7 +929,7 @@ void LlamaToolsTest::match_contextNotFound()
 
 void LlamaToolsTest::match_closestMatchHint()
 {
-    // The chunk almost matches (typo in the middle line) – the error should
+    // The chunk almost matches (typo in the middle line) - the error should
     // point at the closest match and the first differing line.
     const QString result = applyChunks(QStringLiteral("alpha\nbeta\ngamma\ndelta\n"),
                                        {makeChunk({"alpha", "bett", "gamma"}, {"A"})});
@@ -943,7 +943,7 @@ void LlamaToolsTest::match_closestMatchHint()
 
 void LlamaToolsTest::match_outOfOrderHint()
 {
-    // The second chunk matches, but before the first one – the error should
+    // The second chunk matches, but before the first one - the error should
     // say the hunks are out of file order instead of a bare "not found".
     const QString result = applyChunks(QStringLiteral("first\nA\nmiddle\nB\nlast\n"),
                                        {makeChunk({"B"}, {"2"}), makeChunk({"A"}, {"1"})});
@@ -986,7 +986,7 @@ void LlamaToolsTest::absoluteProjectPath_generalDirFallback()
     // With a startup project open, a relative path that exists in the
     // project directory wins, and a path that exists only in the general
     // projects directory (gTempDir, set in initTestCase) still resolves
-    // there – the fallback must not collapse into the project directory.
+    // there - the fallback must not collapse into the project directory.
     const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("fallbackproj"));
     QVERIFY(projectDir.ensureWritableDir());
     ProjectExplorer::ProjectManager::setStartupProject(projectDir.toFSPathString());
@@ -1192,7 +1192,7 @@ void LlamaToolsTest::tool_toolDefinition()
     QCOMPARE(err.error, QJsonParseError::NoError);
     QVERIFY(doc.isObject());
 
-    // The definition must be human‑readable, i.e. formatted over multiple lines
+    // The definition must be human-readable, i.e. formatted over multiple lines
     QVERIFY2(def.count(QLatin1Char('\n')) > 10, qPrintable(def));
 }
 
@@ -1336,7 +1336,7 @@ void LlamaToolsTest::tool_detailsMarkdown()
 {
     ApplyPatchTool tool;
 
-    // Created file: full content in a language‑tagged code block, no diff
+    // Created file: full content in a language-tagged code block, no diff
     QJsonObject addArgs;
     addArgs["patchText"] = QStringLiteral(
         "*** Begin Patch\n"
@@ -1384,7 +1384,7 @@ void LlamaToolsTest::tool_detailsMarkdown()
     QVERIFY(multiDetails.contains(QStringLiteral("**created** `a.txt`")));
     QVERIFY(multiDetails.contains(QStringLiteral("**deleted** `b.txt`")));
 
-    // Failed patch: the error text is shown as-is (no error header; the ✗
+    // Failed patch: the error text is shown as-is (no error header; the X
     // icon in the summary marks the failure).
     QCOMPARE(tool.detailsMarkdown(addArgs, QStringLiteral("apply_patch verification failed: boom"), false),
              QStringLiteral("apply_patch verification failed: boom"));
@@ -1471,7 +1471,7 @@ void LlamaToolsTest::editfile_overlap()
 
 void LlamaToolsTest::editfile_fuzzyUnicode()
 {
-    // The file uses a smart quote the model did not reproduce – the exact
+    // The file uses a smart quote the model did not reproduce - the exact
     // match fails, the line-based fuzzy match succeeds, and the rest of the
     // file keeps its original bytes.
     const QString file = QStringLiteral("line1\nsay \u201Chello\u201D\nline3\n");
@@ -1482,7 +1482,7 @@ void LlamaToolsTest::editfile_fuzzyUnicode()
 void LlamaToolsTest::editfile_fuzzyTrailingWhitespace()
 {
     // The model's oldText has a trailing space, the file a trailing tab:
-    // the exact match fails, the fuzzy (trailing‑whitespace‑insensitive)
+    // the exact match fails, the fuzzy (trailing-whitespace-insensitive)
     // line match succeeds and the whole line is replaced.
     const QString file = QStringLiteral("int a = 1;   \nint b = 2;\t\n");
     QCOMPARE(applyEdits(file, {{QStringLiteral("int b = 2; "), QStringLiteral("int b = 3;")}}),
@@ -1573,7 +1573,7 @@ void LlamaToolsTest::editfile_summaries()
     edit2[QStringLiteral("oldText")] = QStringLiteral("c");
     edit2[QStringLiteral("newText")] = QStringLiteral("d");
     edits.append(edit2);
-    args[QStringLiteral("edits")] = edits; // QJsonObject copies – refresh
+    args[QStringLiteral("edits")] = edits; // QJsonObject copies - refresh
     const QString md2 = tool.detailsMarkdown(args, QStringLiteral("Successfully replaced 2 block(s) in f.txt."), true);
     QCOMPARE(md2.count(QStringLiteral("```diff")), 1);
     QVERIFY(md2.contains(QStringLiteral("-c")));
@@ -1710,7 +1710,7 @@ void LlamaToolsTest::write_summaries()
     QVERIFY(md.contains("int main() {}"));
     QVERIFY(!md.startsWith(QStringLiteral("**Error**")));
 
-    // A failed run shows the error as-is (no error header; the ✗ icon in
+    // A failed run shows the error as-is (no error header; the X icon in
     // the summary marks the failure).
     QVERIFY(tool.detailsMarkdown(args, QStringLiteral("Cannot write \"src/main.cpp\": boom"), false)
                 .startsWith(QStringLiteral("Cannot write")));
@@ -1875,21 +1875,21 @@ void LlamaToolsTest::preview_bashTail()
 
     // Long output: the *tail* is shown, prefixed with an ellipsis line. The
     // line count comes from the "Tool preview lines" setting (8 by default);
-    // the … marker line is on top of the content lines.
+    // the ... marker line is on top of the content lines.
     QString output;
     for (int i = 1; i <= 10; ++i)
         output += QStringLiteral("l%1\n").arg(i);
     output.chop(1);
     const QString preview = tool.summaryPreview(QJsonObject(), output, true);
     QCOMPARE(preview,
-             QString("```terminal\n…\nl3\nl4\nl5\nl6\nl7\nl8\nl9\nl10\n```"));
+             QString("```terminal\n...\nl3\nl4\nl5\nl6\nl7\nl8\nl9\nl10\n```"));
     QVERIFY(!preview.contains("l1\n"));
 
     // The setting is honoured: with 3 lines the compact tail is shown.
     const int oldLines = settings().toolPreviewLines();
     settings().toolPreviewLines.setValue(3);
     const QString compact = tool.summaryPreview(QJsonObject(), output, true);
-    QCOMPARE(compact, QString("```terminal\n…\nl8\nl9\nl10\n```"));
+    QCOMPARE(compact, QString("```terminal\n...\nl8\nl9\nl10\n```"));
     settings().toolPreviewLines.setValue(oldLines);
 
     // Short output passes through, still fenced.
@@ -1902,7 +1902,7 @@ void LlamaToolsTest::preview_bashTail()
 
 void LlamaToolsTest::preview_bashShort()
 {
-    // A single long line is character‑capped (120 characters per line).
+    // A single long line is character-capped (120 characters per line).
     Tools::BashTool tool;
     const QString preview = tool.summaryPreview(QJsonObject(), QString(2000, QLatin1Char('y')), true);
     QVERIFY(preview.size() <= previewCharLimit(8) + 16); // cap + fence overhead
@@ -1937,7 +1937,7 @@ void LlamaToolsTest::preview_todoBase()
     // toolPreviewLineCount() around the in_progress task.
     Tools::TodoWriteTool tool;
 
-    // The fixtures below are sized for a 3‑item window.
+    // The fixtures below are sized for a 3-item window.
     const int oldLines = settings().toolPreviewLines();
     settings().toolPreviewLines.setValue(3);
 
@@ -1997,7 +1997,7 @@ void LlamaToolsTest::todowrite_slidingWindow()
 {
     Tools::TodoWriteTool todo;
 
-    // The fixtures below are sized for a 3‑item window.
+    // The fixtures below are sized for a 3-item window.
     const int oldLines = settings().toolPreviewLines();
     settings().toolPreviewLines.setValue(3);
 
@@ -2435,7 +2435,7 @@ void LlamaToolsTest::websearch_summaries()
 
 void LlamaToolsTest::websearch_exaEndpointUrl()
 {
-    // Without a key the endpoint is used as‑is
+    // Without a key the endpoint is used as-is
     QCOMPARE(Tools::exaEndpointUrl(QStringLiteral("https://mcp.exa.ai/mcp"), QString()),
               QString("https://mcp.exa.ai/mcp"));
 
@@ -2444,7 +2444,7 @@ void LlamaToolsTest::websearch_exaEndpointUrl()
                                    QStringLiteral("secret-key")),
               QString("https://mcp.exa.ai/mcp?exaApiKey=secret-key"));
 
-    // Pre‑existing query parameters are preserved
+    // Pre-existing query parameters are preserved
     QCOMPARE(Tools::exaEndpointUrl(QStringLiteral("https://mcp.exa.ai/mcp?x=1"),
                                    QStringLiteral("k2")),
               QString("https://mcp.exa.ai/mcp?x=1&exaApiKey=k2"));
@@ -2461,7 +2461,7 @@ void LlamaToolsTest::websearch_parseMcpResponse()
     QCOMPARE(Tools::parseMcpSearchResponse(json),
               QString("Title: A\nURL: https://a.example"));
 
-    // A non‑text content item is skipped
+    // A non-text content item is skipped
     const QString mixed = QStringLiteral(
         "{\"result\":{\"content\":[{\"type\":\"image\"},{\"type\":\"text\",\"text\":\"hello\"}]}}");
     QCOMPARE(Tools::parseMcpSearchResponse(mixed), QString("hello"));
@@ -2474,7 +2474,7 @@ void LlamaToolsTest::websearch_parseMcpResponse()
 
 void LlamaToolsTest::websearch_parseMcpResponseSse()
 {
-    // Server‑sent‑events body, as returned by mcp.exa.ai
+    // Server-sent-events body, as returned by mcp.exa.ai
     const QString sse = QStringLiteral(
         "event: message\n"
         "data: {\"result\":{\"content\":["
@@ -2483,7 +2483,7 @@ void LlamaToolsTest::websearch_parseMcpResponseSse()
     QCOMPARE(Tools::parseMcpSearchResponse(sse),
               QString("Title: B\nURL: https://b.example"));
 
-    // A leading non‑JSON data line is skipped
+    // A leading non-JSON data line is skipped
     const QString sseSkipped = QStringLiteral(
         "data: [NOTICE] synthetic\n"
         "data: {\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"ok\"}]}}\n");
@@ -2554,7 +2554,7 @@ void LlamaToolsTest::websearch_parseDuckDuckGoResults()
     const auto results = Tools::parseDuckDuckGoResults(html);
     QCOMPARE(results.size(), 2);
 
-    // The redirector href is unwrapped to the percent‑decoded target.
+    // The redirector href is unwrapped to the percent-decoded target.
     QCOMPARE(results[0].title, QString("llama.cpp/tools/server/README.md at master - GitHub"));
     QCOMPARE(results[0].url,
              QString("https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md"));
@@ -2568,7 +2568,7 @@ void LlamaToolsTest::websearch_parseDuckDuckGoResults()
     QVERIFY(results[1].snippet.isEmpty());
 
     QVERIFY(Tools::parseDuckDuckGoResults(QString()).isEmpty());
-    // A page without result blocks (e.g. DDG's rate‑limit page) yields
+    // A page without result blocks (e.g. DDG's rate-limit page) yields
     // nothing rather than garbage.
     QVERIFY(Tools::parseDuckDuckGoResults(QStringLiteral("<html><body>no results</body></html>"))
         .isEmpty());
@@ -2576,7 +2576,7 @@ void LlamaToolsTest::websearch_parseDuckDuckGoResults()
 
 void LlamaToolsTest::websearch_duckDuckGoResultUrl()
 {
-    // Redirector link: the percent‑encoded "uddg" target is unwrapped (the
+    // Redirector link: the percent-encoded "uddg" target is unwrapped (the
     // "&amp;" entity of the href is handled too).
     QCOMPARE(
         Tools::duckDuckGoResultUrl(QStringLiteral(
@@ -2584,12 +2584,12 @@ void LlamaToolsTest::websearch_duckDuckGoResultUrl()
             "&amp;rut=deadbeef")),
         QString("https://example.org/a/b?q=1&x=2"));
 
-    // A protocol‑relative link without a "uddg" item is resolved to an
+    // A protocol-relative link without a "uddg" item is resolved to an
     // absolute URL.
     QCOMPARE(Tools::duckDuckGoResultUrl(QStringLiteral("//example.org/x")),
              QString("https://example.org/x"));
 
-    // An absolute non‑redirector link is returned as‑is.
+    // An absolute non-redirector link is returned as-is.
     QCOMPARE(Tools::duckDuckGoResultUrl(QStringLiteral("https://example.org/y")),
              QString("https://example.org/y"));
 }
@@ -2934,7 +2934,7 @@ void LlamaToolsTest::bash_sandboxNetwork()
 }
 
 // Streaming aggregation of (parallel) tool calls, as implemented in
-// ChatManager::mergeToolCallDeltas()/finalizeToolCallBatch() – the same
+// ChatManager::mergeToolCallDeltas()/finalizeToolCallBatch() - the same
 // scheme as the llama.cpp web UI's mergeToolCallDeltas.
 void LlamaToolsTest::streamingToolCallAggregation()
 {
@@ -3039,7 +3039,7 @@ void LlamaToolsTest::streamingToolCallAggregation()
     }
 
     // Two batches back-to-back with NO text chunk in between: the second
-    // batch's index 0 must not merge into the first (committed) slot – it
+    // batch's index 0 must not merge into the first (committed) slot - it
     // carries a different id, so the batch is re-based implicitly.
     {
         LlamaCpp::StreamingToolCalls state;
@@ -3098,7 +3098,7 @@ void LlamaToolsTest::toolResultOrdering()
     const Message b = toolMsg(11, 1, "call_b");
     const Message c = toolMsg(12, 1, "call_c");
 
-    // Call order a, b, c; storage order b, a, c → emitted a, b, c.
+    // Call order a, b, c; storage order b, a, c -> emitted a, b, c.
     {
         QHash<QString, const Message *> results;
         results.insert("call_b", &b);
@@ -3125,7 +3125,7 @@ void LlamaToolsTest::toolResultOrdering()
         QCOMPARE(ordered.at(1), &c);
     }
 
-    // No call order known → the results' iteration order.
+    // No call order known -> the results' iteration order.
     {
         QHash<QString, const Message *> results;
         results.insert("call_a", &a);
@@ -3137,8 +3137,8 @@ void LlamaToolsTest::toolResultOrdering()
 }
 
 // The live-output handler is a local that is destroyed while the command is
-// still running – the tool must keep its own copy (regression test for a
-// use‑after‑free of the caller's handler on the first readyRead).
+// still running - the tool must keep its own copy (regression test for a
+// use-after-free of the caller's handler on the first readyRead).
 void LlamaToolsTest::bashLiveOutputHandlerLifetime()
 {
     Tools::BashTool tool;
@@ -4648,11 +4648,11 @@ void LlamaToolsTest::bash_summaries()
     args["command"] = QStringLiteral("git status");
     QCOMPARE(tool.oneLineSummary(args), QString("running `git status`"));
 
-    // Multi‑line commands (heredocs etc.) are shortened to the first line.
+    // Multi-line commands (heredocs etc.) are shortened to the first line.
     args["command"] = QStringLiteral("cat <<'EOF'\nhello\nEOF");
-    QCOMPARE(tool.oneLineSummary(args), QString("running `cat <<'EOF' …`"));
+    QCOMPARE(tool.oneLineSummary(args), QString("running `cat <<'EOF' ...`"));
 
-    // Backticks in the command need a double‑backtick code span.
+    // Backticks in the command need a double-backtick code span.
     args["command"] = QStringLiteral("echo \"`date`\"");
     QCOMPARE(tool.oneLineSummary(args), QString("running `` echo \"`date`\" ``"));
 
@@ -4668,7 +4668,7 @@ void LlamaToolsTest::bash_detailsMarkdown()
     args["command"] = QStringLiteral("git status");
     args["workdir"] = QStringLiteral("/some/dir");
     const QString md = tool.detailsMarkdown(args, QStringLiteral("On branch main"), true);
-    // The command and its output appear in a single terminal‑style block:
+    // The command and its output appear in a single terminal-style block:
     // the command with a "$ " prompt, the output directly below it.
     QVERIFY(md.contains("```terminal\n$ git status\nOn branch main\n```"));
     QVERIFY(md.contains("/some/dir"));
@@ -4679,7 +4679,7 @@ void LlamaToolsTest::bash_detailsMarkdown()
                  .contains("Working directory"));
 
     // A failed run has no error header: the output carries the error and
-    // the ✗ icon in the summary marks the failure.
+    // the X icon in the summary marks the failure.
     QVERIFY(!tool.detailsMarkdown(args, QStringLiteral("Command exited with code 1."), false)
                  .contains(QStringLiteral("**Error**")));
 }
@@ -4722,7 +4722,7 @@ void LlamaToolsTest::task_summaries()
 
     // The whole call must stay on a single line: when this QCOMPARE spans
     // multiple lines the clang 21 preprocessor in this environment fails
-    // with "unterminated function‑like macro invocation".
+    // with "unterminated function-like macro invocation".
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"description\": \"Explore build")),
              QString("task: Explore build"));
     QCOMPARE(tool.streamingSummary(QStringLiteral("{\"description\": \"")), QString());
@@ -4743,7 +4743,7 @@ void LlamaToolsTest::task_toolsFor()
                              QStringLiteral("bash"),
                              QStringLiteral("edit_file")};
 
-    // explore: only the read‑only subset
+    // explore: only the read-only subset
     QCOMPARE(Tools::taskToolsFor(QStringLiteral("explore"), all),
              (QStringList{QStringLiteral("read_file")}));
 
@@ -4970,7 +4970,7 @@ void LlamaToolsTest::search_summaries()
     args["pattern"] = QStringLiteral("foo bar");
     QCOMPARE(tool.oneLineSummary(args), QString("search for `foo bar`"));
 
-    // Backticks in the pattern need a double‑backtick code span.
+    // Backticks in the pattern need a double-backtick code span.
     args["pattern"] = QStringLiteral("a`b");
     QCOMPARE(tool.oneLineSummary(args), QString("search for `` a`b ``"));
 
@@ -5002,7 +5002,7 @@ void LlamaToolsTest::search_summaries()
     QVERIFY(!preview.contains("Pattern:"));
 
     // A long result is cut to the "Tool preview lines" count (8 by default);
-    // the fence stays well‑formed.
+    // the fence stays well-formed.
     QString longResult;
     for (int i = 1; i <= 12; ++i)
         longResult += QStringLiteral("l%1\n").arg(i);
@@ -5011,11 +5011,11 @@ void LlamaToolsTest::search_summaries()
     QCOMPARE(longPreview,
              QStringLiteral("```\nl1\nl2\nl3\nl4\nl5\nl6\nl7\nl8\n```"));
 
-    // On failure no preview: the ✗ icon marks the call, the error text is
+    // On failure no preview: the X icon marks the call, the error text is
     // only shown in the expanded details.
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
     QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
-    // A whitespace‑only result would render as an empty code block.
+    // A whitespace-only result would render as an empty code block.
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
@@ -5192,7 +5192,7 @@ void LlamaToolsTest::find_summaries()
 
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
     QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
-    // A whitespace‑only result would render as an empty code block.
+    // A whitespace-only result would render as an empty code block.
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
@@ -5317,7 +5317,7 @@ void LlamaToolsTest::ls_summaries()
 
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());
     QCOMPARE(tool.summaryPreview(mdArgs, QString(), true), QString());
-    // A whitespace‑only result would render as an empty code block.
+    // A whitespace-only result would render as an empty code block.
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("\n  \n"), true), QString());
 }
 
@@ -5331,7 +5331,7 @@ void LlamaToolsTest::ripgrep_metadata()
     QCOMPARE(Tools::Ripgrep::dialogTitle(), QString("Download ripgrep"));
     // This build targets a supported desktop platform.
     QVERIFY(Tools::Ripgrep::isSupportedPlatform());
-    // The downloaded copy lives under a per‑version user resource directory.
+    // The downloaded copy lives under a per-version user resource directory.
     const Utils::FilePath dir = Tools::Ripgrep::downloadDirectory();
     const QString dirString = dir.toUserOutput();
     QVERIFY2(dirString.endsWith(Tools::Ripgrep::version()), qPrintable(dirString));
@@ -5343,7 +5343,7 @@ void LlamaToolsTest::ripgrep_resolvedPath()
     if (resolved.isEmpty()) {
         // Neither a system nor a downloaded copy exists.
         QVERIFY(!Tools::Ripgrep::isDownloaded());
-        // The search tool then points at the settings‑page download.
+        // The search tool then points at the settings-page download.
         Tools::SearchTool tool;
         QJsonObject args;
         args["pattern"] = QStringLiteral("x");
@@ -5474,10 +5474,10 @@ void LlamaToolsTest::mcptool_oneLineSummary()
     args["project_path"] = "CMakeLists.txt";
     QCOMPARE(tool.oneLineSummary(args), QString("build_project CMakeLists.txt"));
 
-    // No arguments – just the tool name
+    // No arguments - just the tool name
     QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("build_project"));
 
-    // Non‑string arguments are stringified compactly
+    // Non-string arguments are stringified compactly
     QJsonObject num;
     num["timeout"] = 30;
     QCOMPARE(Tools::McpTool(QStringLiteral("x")).oneLineSummary(num), QString("x {\"timeout\":30}"));
@@ -5548,7 +5548,7 @@ void LlamaToolsTest::factory_remoteProvider()
     QVERIFY(!factory.creatorsList().contains("remote_tool_a"));
 }
 
-// WebUtils (task‑tree based HTTP)
+// WebUtils (task-tree based HTTP)
 
 void LlamaToolsTest::webutils_httpGet()
 {
@@ -5687,7 +5687,7 @@ void LlamaToolsTest::messageToMarkdown_toolCall()
 void LlamaToolsTest::messageToMarkdown_toolOnlyAssistant()
 {
     // An assistant message that only carries the tool call has no content of
-    // its own – it renders through the tool bubble and exports as nothing.
+    // its own - it renders through the tool bubble and exports as nothing.
     Message assistant;
     assistant.role = "assistant";
     assistant.content = QString();
@@ -5706,7 +5706,7 @@ void LlamaToolsTest::messageToMarkdown_toolOnlyAssistant()
 
     QVERIFY(ChatManager::messageToMarkdown(assistant).isEmpty());
 
-    // …while an empty assistant message without tool calls keeps its header
+    // ...while an empty assistant message without tool calls keeps its header
     // (previous export behaviour).
     Message emptyAssistant;
     emptyAssistant.role = "assistant";
@@ -5823,14 +5823,14 @@ void LlamaToolsTest::sanitizeConversationName_lengthCap()
     // Long names are cut at a word boundary and get an ellipsis.
     const QString longName = QStringLiteral("word ").repeated(30).trimmed();
     const QString truncated = sanitizeConversationName(longName);
-    QVERIFY(truncated.endsWith(QChar(0x2026)));
-    QVERIFY(truncated.size() <= 81);
-    QVERIFY(!truncated.contains(QStringLiteral(" \u2026")));
+    QVERIFY(truncated.endsWith(QLatin1String("...")));
+    QVERIFY(truncated.size() <= 83);
+    QVERIFY(!truncated.contains(QStringLiteral(" ...")));
     // A single long word (no space near the cut point) is cut hard.
     const QString oneWord = QStringLiteral("a").repeated(100);
     const QString hardCut = sanitizeConversationName(oneWord);
-    QVERIFY(hardCut.endsWith(QChar(0x2026)));
-    QCOMPARE(hardCut.size(), 81);
+    QVERIFY(hardCut.endsWith(QLatin1String("...")));
+    QCOMPARE(hardCut.size(), 83);
 }
 
 void LlamaToolsTest::htmlExport_conversationDocument()
@@ -5878,7 +5878,7 @@ void LlamaToolsTest::htmlExport_messageDocument()
     QVERIFY(html.contains(QStringLiteral("<code>inline code</code>")));
     QVERIFY(!html.contains(QStringLiteral("class=\"msg user\"")));
 
-    // Messages without a bubble of their own (tool‑call‑only assistant)
+    // Messages without a bubble of their own (tool-call-only assistant)
     // export as nothing.
     Message toolOnly;
     toolOnly.role = "assistant";
@@ -5981,7 +5981,7 @@ void LlamaToolsTest::htmlExport_toolCall()
     QVERIFY(html.contains(QStringLiteral("total 0")));
     QVERIFY(html.contains(QStringLiteral("</details>")));
 
-    // A tool message without a call exports as nothing, and a tool‑call‑only
+    // A tool message without a call exports as nothing, and a tool-call-only
     // assistant message renders through the tool bubble.
     Message emptyTool;
     emptyTool.role = "tool";
@@ -6028,7 +6028,7 @@ void LlamaToolsTest::htmlExport_embedsCachedDiagrams()
              qPrintable(html));
     // The source below the image: syntax highlighting may split it across
     // <span> runs (a Mermaid definition installed in the KDE data dir does),
-    // so check the tag‑stripped text.
+    // so check the tag-stripped text.
     QString sourceText = html;
     sourceText.remove(QRegularExpression(QStringLiteral("<[^>]*>")));
     QVERIFY2(sourceText.contains(QStringLiteral("A[Start]")), qPrintable(html));
@@ -6177,20 +6177,20 @@ void LlamaToolsTest::projectInstructions_truncation()
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
     const Utils::FilePath root = Utils::FilePath::fromString(dir.path());
-    // Multi‑byte content: the 32 KB cut must land on a character boundary.
+    // Multi-byte content: the 32 KB cut must land on a character boundary.
     const QString content = QStringLiteral("é").repeated(20000); // 40 KB
     writeTextFile(root.pathAppended("AGENTS.md").path(), content);
 
     const QString text = loadProjectInstructions(root);
     QVERIFY2(text.contains(QStringLiteral("[... truncated ...]")), qPrintable(text));
-    // The truncated body (after the header line) is valid UTF‑8 (fromUtf8
+    // The truncated body (after the header line) is valid UTF-8 (fromUtf8
     // would insert U+FFFD for a split sequence).
     QVERIFY(!text.contains(QChar(0xFFFD)));
     QByteArray body = text.mid(text.indexOf(QLatin1Char('\n')) + 1).toUtf8();
     const QByteArray marker = QStringLiteral("\n\n[... truncated ...]").toUtf8();
     QVERIFY(body.endsWith(marker));
     body.chop(marker.size());
-    // The cut lands exactly on a character boundary (32768 bytes = 16384 ×
+    // The cut lands exactly on a character boundary (32768 bytes = 16384 x
     // é): nothing beyond the cap is dropped, nothing of it kept.
     QCOMPARE(body.size(), 32 * 1024);
     const QByteArray expected = QByteArray::fromHex(QByteArray("c3a9")).repeated(16384);
@@ -6231,7 +6231,7 @@ private:
 };
 
 // (no assertions in here: QtTest macros expand to a bare return, which is
-// not allowed in a non‑void function)
+// not allowed in a non-void function)
 QString makeSkillFile(const QString &dir, const QString &relPath, const QString &content)
 {
     const QString path = dir + QLatin1Char('/') + relPath;
@@ -6250,7 +6250,7 @@ void LlamaToolsTest::skills_scanBasic()
                                  "---\n\n# PDF tools\n\nBody text."));
 
     const SkillScanResult result = Skills::scan({dir.path()});
-    // (first() on an empty list would crash – guard the message)
+    // (first() on an empty list would crash - guard the message)
     QVERIFY2(result.diagnostics.isEmpty(),
              result.diagnostics.isEmpty() ? "" : qPrintable(result.diagnostics.first().message));
     QCOMPARE(result.skills.size(), 1);
@@ -6271,12 +6271,12 @@ void LlamaToolsTest::skills_scanNestedAndRootFiles()
     makeSkillFile(dir.path(),
                   QStringLiteral("a/deep/SKILL.md"),
                   QStringLiteral("---\nname: deep\ndescription: Nested skill.\n---\nBody"));
-    // Bare root‑level Markdown with a description is a skill, the name
+    // Bare root-level Markdown with a description is a skill, the name
     // falling back to the file name.
     makeSkillFile(dir.path(),
                   QStringLiteral("root-skill.md"),
                   QStringLiteral("---\ndescription: A root level skill.\n---\nBody"));
-    // No frontmatter description – not a skill, skipped silently.
+    // No frontmatter description - not a skill, skipped silently.
     makeSkillFile(dir.path(), QStringLiteral("plain.md"), QStringLiteral("Just notes."));
 
     const SkillScanResult result = Skills::scan({dir.path()});
@@ -6297,7 +6297,7 @@ void LlamaToolsTest::skills_scanSkillRootStopsRecursion()
     makeSkillFile(dir.path(),
                   QStringLiteral("outer/SKILL.md"),
                   QStringLiteral("---\nname: outer\ndescription: Outer skill.\n---\nBody"));
-    // Inside a skill root – must not be picked up.
+    // Inside a skill root - must not be picked up.
     makeSkillFile(dir.path(),
                   QStringLiteral("outer/inner/SKILL.md"),
                   QStringLiteral("---\nname: inner\ndescription: Inner skill.\n---\nBody"));
@@ -6313,22 +6313,22 @@ void LlamaToolsTest::skills_scanValidationAndCollisions()
     QTemporaryDir dir1;
     QTemporaryDir dir2;
     QVERIFY(dir1.isValid() && dir2.isValid());
-    // Invalid name (uppercase + underscore) – skipped with a diagnostic.
+    // Invalid name (uppercase + underscore) - skipped with a diagnostic.
     makeSkillFile(dir1.path(),
                   QStringLiteral("bad-name/SKILL.md"),
                   QStringLiteral("---\nname: Bad_Name\ndescription: Bad name.\n---\nBody"));
-    // Declared skill without a description – skipped with a diagnostic.
+    // Declared skill without a description - skipped with a diagnostic.
     makeSkillFile(dir2.path(),
                   QStringLiteral("no-desc/SKILL.md"),
                   QStringLiteral("---\nname: no-desc\n---\nBody"));
-    // Name collision – the first discovered skill wins.
+    // Name collision - the first discovered skill wins.
     makeSkillFile(dir1.path(),
                   QStringLiteral("dup/SKILL.md"),
                   QStringLiteral("---\nname: dup\ndescription: First.\n---\nBody"));
     makeSkillFile(dir2.path(),
                   QStringLiteral("dup/SKILL.md"),
                   QStringLiteral("---\nname: dup\ndescription: Second.\n---\nBody"));
-    // Name does not match its directory – kept, but flagged (like pi).
+    // Name does not match its directory - kept, but flagged (like pi).
     makeSkillFile(dir2.path(),
                   QStringLiteral("mismatch/SKILL.md"),
                   QStringLiteral("---\nname: other\ndescription: Mismatch.\n---\nBody"));
@@ -6382,7 +6382,7 @@ void LlamaToolsTest::skills_formatForPrompt()
     QVERIFY(prompt.contains(QStringLiteral("<available_skills>")));
     QVERIFY(prompt.contains(QStringLiteral("</available_skills>")));
     QVERIFY(prompt.contains(QStringLiteral("<name>demo</name>")));
-    // XML‑escaped description.
+    // XML-escaped description.
     QVERIFY(prompt.contains(QStringLiteral("&lt;files&gt; &amp; &quot;stuff&quot;")));
     QVERIFY(!prompt.contains(QStringLiteral("<files>")));
     // The skill tool (not read_file) loads the skill, so the list carries
@@ -6412,7 +6412,7 @@ void LlamaToolsTest::skills_enabledSkillsFiltering()
     QCOMPARE(enabled.size(), 1);
     QCOMPARE(enabled.first().name, QStringLiteral("one"));
 
-    // The disabled list is re‑read on every call (only the scan is cached).
+    // The disabled list is re-read on every call (only the scan is cached).
     settings().disabledSkillsList.setValue(QStringList());
     QCOMPARE(Skills::enabledSkills().size(), 2);
 }
@@ -6617,7 +6617,7 @@ void LlamaToolsTest::readfile_byteCap()
 
 void LlamaToolsTest::readfile_emptyFile()
 {
-    // A 0‑byte file is a legitimate empty result, not a byte‑cap error.
+    // A 0-byte file is a legitimate empty result, not a byte-cap error.
     writeTextFile(gTempDir->path() + "/empty.txt", {});
 
     QJsonObject args;
@@ -6629,7 +6629,7 @@ void LlamaToolsTest::readfile_emptyFile()
     QVERIFY(ok);
     QCOMPARE(output, QString());
 
-    // … and so is a slice covering only empty lines (with the usual
+    // ... and so is a slice covering only empty lines (with the usual
     // continuation hint, since more lines follow).
     writeTextFile(gTempDir->path() + "/blanklines.txt", QStringLiteral("\n\n"));
     args[QStringLiteral("file_path")] = QStringLiteral("blanklines.txt");
@@ -6795,20 +6795,20 @@ void LlamaToolsTest::editfile_resultContainsDiff()
     args[QStringLiteral("edits")] = QJsonArray{edit};
     auto [output, ok] = runTool<Tools::EditFileTool>(args);
     QVERIFY2(ok, qPrintable(output));
-    // The model sees the change without re‑reading the file.
+    // The model sees the change without re-reading the file.
     QVERIFY(output.contains(QStringLiteral("```diff")));
     QVERIFY(output.contains(QStringLiteral("-alpha")));
     QVERIFY(output.contains(QStringLiteral("+beta")));
 }
 
 // ============================================================================
-// repairJson (string‑literal repair for small‑model tool arguments)
+// repairJson (string-literal repair for small-model tool arguments)
 // ============================================================================
 
 void LlamaToolsTest::repairJson_controlChars()
 {
-    // A real newline and tab inside a JSON string (the #1 small‑model
-    // malformations, e.g. multi‑line bash commands).  Qt's parser already
+    // A real newline and tab inside a JSON string (the #1 small-model
+    // malformations, e.g. multi-line bash commands).  Qt's parser already
     // tolerates these; the repair must keep the value intact.
     const QString broken = QStringLiteral("{\"command\": \"echo hi\n\tworld\"}");
     const QString repaired = repairJson(broken);
@@ -6822,7 +6822,7 @@ void LlamaToolsTest::repairJson_controlChars()
 
 void LlamaToolsTest::repairJson_invalidEscapes()
 {
-    // A backslash before an invalid escape character (a Windows‑ish path).
+    // A backslash before an invalid escape character (a Windows-ish path).
     // Qt's parser accepts this but silently *drops* the backslash
     // ("C:.projects"); the repair doubles it, so the tool receives the
     // intended literal.

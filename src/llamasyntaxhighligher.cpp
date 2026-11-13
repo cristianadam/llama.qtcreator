@@ -121,13 +121,13 @@ KSyntaxHighlighting::Definition syntaxDefinitionForName(const QString &name)
 namespace {
 
 // A few syntax definitions that are part of the full KSyntaxHighlighting set
-// but not of the small set Qt Creator ships (it only bundles a license‑clear
+// but not of the small set Qt Creator ships (it only bundles a license-clear
 // subset).  If these are missing, the full set has not been downloaded yet.
-// The first two are named in the welcome‑screen warning.
+// The first two are named in the welcome-screen warning.
 struct CommonSyntaxDefinition
 {
-    const char *name;        // KSyntaxHighlighting name (case‑insensitive)
-    const char *displayName; // human‑readable name for the warning
+    const char *name;        // KSyntaxHighlighting name (case-insensitive)
+    const char *displayName; // human-readable name for the warning
 };
 
 constexpr CommonSyntaxDefinition kCommonSyntaxDefinitions[] = {
@@ -154,7 +154,7 @@ void downloadSyntaxDefinitions(std::function<void(const QString &)> onFinished)
 {
     using namespace KSyntaxHighlighting;
 
-    // Parented to the (long‑lived) repository so it survives until done();
+    // Parented to the (long-lived) repository so it survives until done();
     // deleteLater() on done() keeps it from leaking if the user never sees
     // the completion.
     auto *downloader = new DefinitionDownloader(highlightRepository());

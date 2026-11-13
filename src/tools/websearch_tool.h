@@ -20,7 +20,7 @@ public:
     void abort() override;
 
 private:
-    //! The in‑flight reply (nullptr when idle), so abort() can cancel the
+    //! The in-flight reply (nullptr when idle), so abort() can cancel the
     //! request.  Deleted by web_utils before the done callback runs.
     mutable QNetworkReply *m_reply = nullptr;
 };
@@ -55,8 +55,8 @@ struct WebSearchConfig
     bool isConfigured() const;
 };
 
-//! Extracts the LLM‑friendly text from an MCP (JSON‑RPC) tools/call
-//! response.  Handles both plain JSON and server‑sent‑events bodies
+//! Extracts the LLM-friendly text from an MCP (JSON-RPC) tools/call
+//! response.  Handles both plain JSON and server-sent-events bodies
 //! (the first "data: " line carrying a "text" content item).
 //! Returns an empty string when no text content could be extracted.
 QString parseMcpSearchResponse(const QString &body);
@@ -73,7 +73,7 @@ QVector<SearchResult> parseTavilyResults(const QJsonObject &response);
 //! Parses the HTML of a DuckDuckGo (html.duckduckgo.com) results page.
 QVector<SearchResult> parseDuckDuckGoResults(const QString &html);
 
-//! Unwraps a DuckDuckGo redirector link ("//duckduckgo.com/l/?uddg=…") to
+//! Unwraps a DuckDuckGo redirector link ("//duckduckgo.com/l/?uddg=...") to
 //! the target URL; a link without a "uddg" item is returned as-is
 //! (resolved to an absolute URL when protocol-relative).
 QString duckDuckGoResultUrl(const QString &href);

@@ -25,7 +25,7 @@ QRegularExpression makeRe(const QString &pattern, QRegularExpression::PatternOpt
 }
 
 /*! Runs \a fn on every match of \a rx in \a in and splices the results
-    back into the string (a capture‑aware replace). */
+    back into the string (a capture-aware replace). */
 QString replaceMatches(const QString &in,
                        const QRegularExpression &rx,
                        const std::function<QString(const QRegularExpressionMatch &)> &fn)
@@ -42,7 +42,7 @@ QString replaceMatches(const QString &in,
     return out;
 }
 
-/*! Removes non‑content sections (comments, scripts, styles, head, …). */
+/*! Removes non-content sections (comments, scripts, styles, head, ...). */
 QString removeBoilerplate(const QString &html)
 {
     QString s = html;
@@ -143,11 +143,11 @@ QString WebFetchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "webfetch",
-            "description": "Fetches a URL and returns its content as compact, LLM‑friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as‑is. The returned content is truncated at 50000 characters. Local and private network addresses (localhost, 10.x, 192.168.x, link-local, ...) cannot be fetched.",
+            "description": "Fetches a URL and returns its content as compact, LLM-friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as-is. The returned content is truncated at 50000 characters. Local and private network addresses (localhost, 10.x, 192.168.x, link-local, ...) cannot be fetched.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "url": { "type": "string", "description": "The fully‑formed URL to fetch (http:// or https://)." },
+                    "url": { "type": "string", "description": "The fully-formed URL to fetch (http:// or https://)." },
                     "format": { "type": "string", "enum": ["markdown", "text", "html"], "description": "Output format. \"markdown\" (default): HTML stripped to light markdown. \"text\": visible plain text. \"html\": raw page source." },
                     "timeout": { "type": "integer", "description": "Timeout in seconds. Defaults to 30, maximum 120." }
                 },
@@ -234,7 +234,7 @@ QString htmlToMarkdown(const QString &html)
     s.replace(makeRe(QStringLiteral("<(/?code\\b[^>]*)>")), QLatin1String("`"));
     s.replace(makeRe(QStringLiteral("<br\\s*/?>")), QLatin1String("\n"));
 
-    // Block‑level closing tags become line breaks
+    // Block-level closing tags become line breaks
     s.replace(makeRe(QStringLiteral(
                         "</(?:p|div|tr|table|ul|ol|li|section|article|header|footer|main|nav|blockquote|h[1-6])\\s*>")),
               QLatin1String("\n"));

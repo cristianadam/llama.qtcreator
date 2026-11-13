@@ -55,7 +55,7 @@ QString elideForList(const QString &text, int maxLength = 100)
         cut = result.lastIndexOf(QLatin1Char(' '), maxLength);
     if (cut < 20)
         cut = maxLength;
-    return result.left(cut).trimmed() + QStringLiteral("…");
+    return result.left(cut).trimmed() + QStringLiteral("...");
 }
 
 } // namespace
@@ -111,10 +111,10 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     // Working directory: the directory the chat tools operate in (the chat
     // welcome screen offers a picker for it too). When the field is empty
     // the startup project's directory (or the default projects directory)
-    // is used – shown as the placeholder, like the resolved ripgrep path in
+    // is used - shown as the placeholder, like the resolved ripgrep path in
     // its chooser. Choosing a directory the tools already default to clears
     // the override (so the directory keeps tracking the project); the
-    // Reset… button offers the welcome screen's resets.
+    // Reset... button offers the welcome screen's resets.
     auto *workdirBrowseButton = new QPushButton(Tr::tr("Browse..."), this);
     connect(workdirBrowseButton,
             &QPushButton::clicked,
@@ -343,7 +343,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             m_filterModel,
             &ToolsFilterModel::setFilterWildcard);
 
-    // Filtering resets the expanded state of the group rows – re-expand them so
+    // Filtering resets the expanded state of the group rows - re-expand them so
     // the matching tools are directly visible.
     connect(filterLineEdit, &FancyLineEdit::textChanged, this, [this] { m_view->expandAll(); });
 
@@ -371,7 +371,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     });
 
     // The tools served by the MCP servers change at runtime (a server
-    // connects / disconnects) – refresh the tree on that.
+    // connects / disconnects) - refresh the tree on that.
     connect(&McpBridge::instance(),
             &McpBridge::toolsChanged,
             this,
@@ -381,7 +381,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
             });
 
     // The connection state of the servers changes at runtime (a server
-    // starts or stops) – refresh the tree's status on that.
+    // starts or stops) - refresh the tree's status on that.
     connect(&McpBridge::instance(), &McpBridge::connectionChanged, this, &ToolsSettingsWidget::fillModel);
 
     connect(m_view->selectionModel(),
@@ -436,7 +436,7 @@ void ToolsSettingsWidget::fillModel()
             mcpToolsByServer[server] << toolName;
     }
 
-    // "Internal" – the tools implemented by this plugin
+    // "Internal" - the tools implemented by this plugin
     if (!internalTools.isEmpty()) {
         auto *internalGroup = new GroupItem(Tr::tr("Internal"));
         m_model->rootItem()->appendChild(internalGroup);
@@ -496,7 +496,7 @@ void ToolsSettingsWidget::showToolDefinition(const QModelIndex &current,
     if (!current.parent().isValid()) {
         const QString serverName = current.data(GroupItem::ServerNameRole).toString();
         if (serverName.isEmpty()) {
-            m_detailEdit->clear(); // "Internal" – nothing to show
+            m_detailEdit->clear(); // "Internal" - nothing to show
             return;
         }
 
@@ -596,7 +596,7 @@ void ToolsSettingsWidget::updateEnabledToolsFromModel()
                     = static_cast<Qt::CheckState>(idx.data(Qt::CheckStateRole).toInt()) == Qt::Checked;
 
             if (McpBridge::instance().isMcpTool(name)) {
-                // MCP tools are disabled by default – only the checked ones are
+                // MCP tools are disabled by default - only the checked ones are
                 // stored (in the enabled list).
                 if (checked)
                     enabledMcp << name;
@@ -664,7 +664,7 @@ bool ToolsSettingsWidget::eventFilter(QObject *watched, QEvent *event)
 
 void ToolsSettingsWidget::cancel()
 {
-    // Re‑load the stored value – this discards any UI changes.
+    // Re-load the stored value - this discards any UI changes.
     settings().readSettings(); // reload from .ini
     m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
     m_maxToolTurnsSpin->setValue(settings().maxToolTurns());
@@ -754,7 +754,7 @@ void ToolsSettingsWidget::editServer()
         return;
     }
 
-    // Replaced by the (old) row name – editing may also rename the server.
+    // Replaced by the (old) row name - editing may also rename the server.
     QVector<Tools::McpServerConfig> updated =
             Tools::McpServerConfig::fromJson(settings().mcpServersJson());
     for (int i = 0; i < updated.size(); ++i)
@@ -847,7 +847,7 @@ Qt::ItemFlags ToolsSettingsWidget::GroupItem::flags(int column) const
 }
 
 /* The actual propagation to the children is done by the widget's
- * dataChanged handler – here we only track the requested state. */
+ * dataChanged handler - here we only track the requested state. */
 bool ToolsSettingsWidget::GroupItem::setData(int column, const QVariant &value, int role)
 {
     if (column == 0 && role == Qt::CheckStateRole) {
@@ -915,13 +915,13 @@ ToolsSettingsWidget::ToolItem::ToolItem(const QString &toolName,
     , m_description(description)
     , m_json(json)
 {
-    // default to unchecked – the UI will later set the correct state
+    // default to unchecked - the UI will later set the correct state
     m_checkState = Qt::Unchecked;
 }
 
 QVariant ToolsSettingsWidget::ToolItem::data(int column, int role) const
 {
-    // Column 0 – name + check‑box
+    // Column 0 - name + check-box
     if (column == 0) {
         if (role == Qt::DisplayRole)
             return m_name;
@@ -932,7 +932,7 @@ QVariant ToolsSettingsWidget::ToolItem::data(int column, int role) const
         return QVariant();
     }
 
-    // Column 1 – description (elided, the full text is in the detail pane)
+    // Column 1 - description (elided, the full text is in the detail pane)
     if (column == 1 && role == Qt::DisplayRole)
         return elideForList(m_description);
 
@@ -946,7 +946,7 @@ QVariant ToolsSettingsWidget::ToolItem::data(int column, int role) const
     return QVariant();
 }
 
-/* flags() – only column 0 is user‑checkable */
+/* flags() - only column 0 is user-checkable */
 Qt::ItemFlags ToolsSettingsWidget::ToolItem::flags(int column) const
 {
     if (column == 0)
@@ -954,7 +954,7 @@ Qt::ItemFlags ToolsSettingsWidget::ToolItem::flags(int column) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-/* setData() – handle changes of the check‑state */
+/* setData() - handle changes of the check-state */
 bool ToolsSettingsWidget::ToolItem::setData(int column, const QVariant &value, int role)
 {
     Q_UNUSED(column);

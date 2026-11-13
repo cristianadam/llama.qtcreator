@@ -300,7 +300,7 @@ void PromptsSettingsWidget::apply()
 
 void PromptsSettingsWidget::cancel()
 {
-    // Re‑load the stored values – this discards any UI changes.
+    // Re-load the stored values - this discards any UI changes.
     settings().readSettings();
     rebuild();
 }

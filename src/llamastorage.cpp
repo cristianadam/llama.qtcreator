@@ -98,7 +98,7 @@ Storage::Storage()
                 "parent TEXT)"))
         qCCritical(llamaStorage) << "Failed to create table \"conversations\"" << q.lastError();
 
-    // Migrate older databases that predate the parent column (task / sub‑agent
+    // Migrate older databases that predate the parent column (task / sub-agent
     // conversations are nested under the conversation that spawned them).
     // Inspect the schema with PRAGMA table_info so the check is based on the
     // table definition itself, not on its contents.
@@ -251,12 +251,12 @@ void Storage::deleteConversation(const QString &convId)
 {
     QSqlQuery q(db);
 
-    // Re‑parent any task conversations nested under this one so they surface
+    // Re-parent any task conversations nested under this one so they surface
     // at the top level instead of being left orphaned.
     q.prepare("UPDATE conversations SET parent = '' WHERE parent = (:id)");
     q.bindValue(":id", convId);
     if (!q.exec())
-        qCWarning(llamaStorage) << "Re‑parenting children of conversation" << convId << q.lastError();
+        qCWarning(llamaStorage) << "Re-parenting children of conversation" << convId << q.lastError();
 
     q.prepare("DELETE FROM conversations WHERE id = (:id)");
     q.bindValue(":id", convId);
@@ -401,7 +401,7 @@ QVector<Message> Storage::filterByLeafNodeId(const QVector<Message> &msgs,
     QVector<Message> res;
     Message *curr = map.contains(leafNodeId) ? &map[leafNodeId] : nullptr;
     if (!curr) {
-        // no exact match – pick the latest by timestamp
+        // no exact match - pick the latest by timestamp
         qint64 latest = -1;
         for (auto it = map.constBegin(); it != map.constEnd(); ++it)
             if (it.value().timestamp > latest) {
@@ -426,7 +426,7 @@ bool Storage::updateMessageExtra(const Message &msg, const QList<QVariantMap> &e
     const QString json = serialize(extra);
 
     QSqlQuery q(db);
-    // We use an explicit transaction – if anything fails we roll back.
+    // We use an explicit transaction - if anything fails we roll back.
     if (!db.transaction()) {
         qCWarning(llamaStorage) << "updateMessageExtra: cannot start transaction" << db.lastError();
         return false;
@@ -445,7 +445,7 @@ bool Storage::updateMessageExtra(const Message &msg, const QList<QVariantMap> &e
         return false;
     }
 
-    // Commit the transaction – this will also release any locks.
+    // Commit the transaction - this will also release any locks.
     if (!db.commit()) {
         qCWarning(llamaStorage) << "updateMessageExtra: commit failed" << db.lastError();
         db.rollback();
@@ -459,7 +459,7 @@ bool Storage::updateMessageExtra(const Message &msg, const QList<QVariantMap> &e
 
 bool Storage::updateMessageContent(const Message &msg)
 {
-    // Serialize the timings – content is a plain string.
+    // Serialize the timings - content is a plain string.
     const QString timingsJson = serialize(msg.timings);
 
     QSqlQuery q(db);

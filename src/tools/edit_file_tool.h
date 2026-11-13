@@ -38,7 +38,7 @@ public:
 //!
 //! On success the new content is written to \a newContentOut, the number of
 //! replacements to \a replacementsOut (when non-null), and an empty string
-//! is returned.  On failure a human‑readable error message is returned.
+//! is returned.  On failure a human-readable error message is returned.
 QString applyTextEdits(const QString &content,
                        const QVector<QPair<QString, QString>> &edits,
                        bool replaceAll,

@@ -29,7 +29,7 @@ struct LocatorDiagnostic
 QString applyLocatorPlaceholders(const QString &prompt, const LocatorPlaceholders &values);
 
 //! Assembles the {diagnostics} placeholder value from the diagnostic marks of
-//! a document, sorted by line and capped (with a "… and N more" note).
+//! a document, sorted by line and capped (with a "... and N more" note).
 //! Returns a "(no errors or warnings reported for this file)" hint when
 //! \a diagnostics is empty.
 QString formatDiagnostics(const QList<LocatorDiagnostic> &diagnostics);
@@ -38,7 +38,7 @@ QString formatDiagnostics(const QList<LocatorDiagnostic> &diagnostics);
 //! `git status --porcelain` (\a status) and `git diff` (\a diff). Returns a
 //! "(no uncommitted changes)" hint for a clean repository, an error hint when
 //! \a gitFailed is true, and appends the list of untracked files (which a
-//! `git diff` does not show), capped with a "… and N more" note. Oversized
+//! `git diff` does not show), capped with a "... and N more" note. Oversized
 //! diffs are truncated at a line boundary with a note.
 QString formatGitDiff(const QString &status, const QString &diff, bool gitFailed);
 

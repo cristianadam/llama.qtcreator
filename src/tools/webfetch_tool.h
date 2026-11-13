@@ -17,7 +17,7 @@ public:
     void abort() override;
 
 private:
-    //! The in‑flight reply (nullptr when idle), so abort() can cancel the
+    //! The in-flight reply (nullptr when idle), so abort() can cancel the
     //! request.  Deleted by web_utils before the done callback runs.
     mutable QNetworkReply *m_reply = nullptr;
 };
@@ -26,9 +26,9 @@ private:
     URL, or an empty string when it is not a fetchable URL. */
 QString normalizeFetchUrl(const QString &url);
 
-/*! Converts an HTML document to lightweight, LLM‑friendly markdown:
+/*! Converts an HTML document to lightweight, LLM-friendly markdown:
     headings, lists, links, code and bold/italic are kept, everything
-    else (scripts, styles, navigation markup, …) is reduced to plain text. */
+    else (scripts, styles, navigation markup, ...) is reduced to plain text. */
 QString htmlToMarkdown(const QString &html);
 
 /*! Extracts the visible plain text of an HTML document. */

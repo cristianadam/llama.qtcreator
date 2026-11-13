@@ -414,7 +414,7 @@ bool ConversationsView::saveConversationAsHtml()
     const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
     ViewingChat chat = ChatManager::instance().getViewingChat(convId);
 
-    // Self‑contained HTML document (styles in a <style> block), matching
+    // Self-contained HTML document (styles in a <style> block), matching
     // the chat view's look.
     const QString title = selected.data().toString();
     const QByteArray content = HtmlExporter::conversationHtml(title, chat.messages).toUtf8();

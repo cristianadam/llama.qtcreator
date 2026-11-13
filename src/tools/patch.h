@@ -48,23 +48,23 @@ struct Hunk
  *   *** Delete File: <path>
  *   *** End Patch
  *
- * Lines that do not fit the format (a non‑'+' line inside an Add File
+ * Lines that do not fit the format (a non-'+' line inside an Add File
  * section, a malformed change line inside a chunk) are rejected with an
  * error instead of being silently dropped, so a malformed patch can never
  * "succeed" with missing content.  Empty lines are tolerated in both places
  * (they represent an empty file line / an empty context line).
  *
- * Returns an empty string on success, otherwise a human‑readable error
+ * Returns an empty string on success, otherwise a human-readable error
  * message. On success the parsed hunks are written to \a hunksOut.
  */
 QString parse(const QString &patchText, QVector<Hunk> &hunksOut);
 
 /**
- * Fuzzy‑locates \a pattern inside \a lines, searching forward from
- * \a startIndex. Tries four passes in order: exact, trailing‑whitespace,
- * whitespace and unicode‑punctuation insensitive.
+ * Fuzzy-locates \a pattern inside \a lines, searching forward from
+ * \a startIndex. Tries four passes in order: exact, trailing-whitespace,
+ * whitespace and unicode-punctuation insensitive.
  *
- * Returns the 0‑based index of the match, or -1 if not found.
+ * Returns the 0-based index of the match, or -1 if not found.
  */
 int locateLines(const QStringList &lines,
                 const QStringList &pattern,
@@ -75,8 +75,8 @@ int locateLines(const QStringList &lines,
  * Applies the update chunks to \a oldContents and writes the new content to
  * \a newContentsOut.
  *
- * Each chunk's old lines are located in the file by a four‑pass fuzzy match
- * (exact, trailing‑whitespace‑insensitive, whitespace‑insensitive, unicode
+ * Each chunk's old lines are located in the file by a four-pass fuzzy match
+ * (exact, trailing-whitespace-insensitive, whitespace-insensitive, unicode
  * punctuation normalized). Chunks must appear in file order; a chunk's
  * search starts right after the previous chunk's match.
  *
@@ -86,7 +86,7 @@ int locateLines(const QStringList &lines,
  * otherwise the closest partial match (line number, how many lines matched,
  * and the first expected/actual line pair) is reported.
  *
- * Returns an empty string on success, otherwise a human‑readable error
+ * Returns an empty string on success, otherwise a human-readable error
  * message.
  */
 QString applyUpdateChunks(const QString &oldContents,

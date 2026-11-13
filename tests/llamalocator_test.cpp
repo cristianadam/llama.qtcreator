@@ -108,7 +108,7 @@ void LlamaLocatorPromptsTest::diagnostics_capped()
     for (int line = 1; line <= 30; ++line)
         diagnostics.append({line, QStringLiteral("error %1").arg(line)});
     const QStringList lines = formatDiagnostics(diagnostics).split('\n');
-    QCOMPARE(lines.size(), 26); // 25 entries + the "… and 5 more" note
+    QCOMPARE(lines.size(), 26); // 25 entries + the "... and 5 more" note
     QCOMPARE(lines.first(), QStringLiteral("line 1: error 1"));
     QCOMPARE(lines.at(24), QStringLiteral("line 25: error 25"));
     QCOMPARE(lines.last(), QStringLiteral("... and 5 more"));

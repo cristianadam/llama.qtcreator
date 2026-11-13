@@ -203,7 +203,7 @@ QString ApplyPatchTool::oneLineSummary(const QJsonObject &args) const
 
 QString ApplyPatchTool::streamingSummary(const QString &partialArgs) const
 {
-    // Extracts the first file section from the raw (JSON‑escaped) argument
+    // Extracts the first file section from the raw (JSON-escaped) argument
     // text as it is being streamed, so the UI can show "Add src/main.cpp"
     // long before the patch is complete.
     auto findSection = [&partialArgs](const QString &marker) -> QPair<int, QString> {
@@ -292,7 +292,7 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
             break;
         }
         case Patch::HunkType::Delete:
-            // A deletion has no content to show – the line is the only
+            // A deletion has no content to show - the line is the only
             // trace of it, so it always carries the file name.
             md += QString("**%1** `%2`\n\n").arg(Tr::tr("deleted"), hunk.path);
             break;
@@ -304,7 +304,7 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
 
 QString ApplyPatchTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
-    // The per‑file diff is the interesting part.  On failure the ✗ icon
+    // The per-file diff is the interesting part.  On failure the X icon
     // suffices in the collapsed view; the error text is only shown in the
     // expanded details.  +1 for the opening fence line: the setting counts
     // content lines, not fences.
@@ -447,7 +447,7 @@ void ApplyPatchTool::run(const QJsonObject &args,
     }
 
     // Write phase.  The contents are fully verified, but the writes are not
-    // atomic across files – if one fails, report what was already applied.
+    // atomic across files - if one fails, report what was already applied.
     QStringList applied;
     auto fail = [&applied, done](const QString &message) {
         const QString prefix = applied.isEmpty()

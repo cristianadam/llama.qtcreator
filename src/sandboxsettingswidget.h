@@ -19,14 +19,14 @@ namespace LlamaCpp {
 //! The "Sandbox" settings page: the master "Sandbox commands" toggle plus
 //! the details of the sandbox that the chat tools run in.
 //!
-//! Windows runtime – the Microsoft MXC runtime (wxc-exec) the Windows
+//! Windows runtime - the Microsoft MXC runtime (wxc-exec) the Windows
 //! sandbox runs commands in, laid out like the terminal plugin's console
 //! host: a status line, a path chooser for a runtime of one's own, and an
 //! offer to download the pinned release (the group is shown on supported
 //! platforms only). It leads the details, as it is what makes the Windows
 //! sandbox usable in the first place.
 //!
-//! Filesystem – directories the sandbox grants on top of the project
+//! Filesystem - directories the sandbox grants on top of the project
 //! directory and the temporary locations:
 //!   - writable: the tools may write there (all platforms);
 //!   - read-only: readable inside the sandbox (only the Windows process
@@ -34,7 +34,7 @@ namespace LlamaCpp {
 //!   - deny-read: no tool may read (or write to) there, on top of the
 //!     built-in credential locations, which are always protected.
 //!
-//! Network – whether sandboxed bash commands may use the network (off by
+//! Network - whether sandboxed bash commands may use the network (off by
 //! default). The webfetch and websearch tools always run outside the
 //! sandbox and are not affected.
 //!

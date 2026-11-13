@@ -36,7 +36,7 @@ static QString escapeHtml(QString text)
     return text;
 }
 
-// The inverse of the escaping markus applies to code‑block content
+// The inverse of the escaping markus applies to code-block content
 // (entities first, &amp; last).
 static QString unescapeHtmlCode(QString text)
 {
@@ -65,11 +65,11 @@ static QString replaceMatches(const QString &text,
 }
 
 // ---------------------------------------------------------------------------
-// Syntax‑highlighted code
+// Syntax-highlighted code
 // ---------------------------------------------------------------------------
 
 // Runs \a content through the shared KSyntaxHighlighting highlighter and
-// returns it as escaped text with per‑run <span> styling (the same colour
+// returns it as escaped text with per-run <span> styling (the same colour
 // scheme the chat view uses).
 static QString highlightCode(const QString &language, QString content)
 {
@@ -89,7 +89,7 @@ static QString highlightCode(const QString &language, QString content)
     QString out;
     for (const HighlightFragment &f : std::as_const(fragments)) {
         const QString text = escapeHtml(f.text);
-        // name() (not isValid()): the colour scheme may hand out CMYK‑space
+        // name() (not isValid()): the colour scheme may hand out CMYK-space
         // colours, which report isValid() == false but convert to a hex name.
         const QString fg = f.format.foreground().color().name(QColor::HexRgb);
         QString style;
@@ -109,7 +109,7 @@ static QString highlightCode(const QString &language, QString content)
 }
 
 // Replaces every <pre><code ...>escaped</code></pre> emitted by markus with
-// the syntax‑highlighted equivalent.
+// the syntax-highlighted equivalent.
 static QString highlightCodeBlocks(const QString &html)
 {
     const QRegularExpression re(QStringLiteral(
@@ -132,7 +132,7 @@ static QString svgDataUrl(const DiagramSvg &svg)
 }
 
 // Same substitutions as MarkdownRenderer::embedDiagramSvgs(), but the
-// rendered pictures become self‑contained <img> tags (base64 data URLs)
+// rendered pictures become self-contained <img> tags (base64 data URLs)
 // instead of raw SVG text.  Diagrams without a cached SVG are left untouched.
 static QString embedDiagramSvgsHtml(QString content, const QMap<QString, DiagramSvg> &diagrams)
 {
@@ -173,7 +173,7 @@ static QString embedDiagramSvgsHtml(QString content, const QMap<QString, Diagram
                    : m.captured(0);
     });
     // The content must not start or end with whitespace, and the delimiters
-    // must not be escaped or part of a $$ pair (plain‑dollar prices like
+    // must not be escaped or part of a $$ pair (plain-dollar prices like
     // "$5 and $10" must stay text).
     const QRegularExpression inlineRe(QStringLiteral(
         "(?<!\\\\)\\$([^\\s$](?:[^$\\n]*[^\\s$])?)\\$(?<!\\\\)(?!\\$)"));
@@ -278,7 +278,7 @@ static QString conversationStyleSheet()
         table { border-collapse: collapse; margin: 8px 0; }
         th, td { border: 1px solid Token_Stroke_Muted; padding: 4px 8px; }
         /* Like the chat renderer: the header is plain (bold) and only the
-           1st, 3rd, … body row gets the muted shading. */
+           1st, 3rd, ... body row gets the muted shading. */
         tbody tr:nth-child(odd) { background: Token_Background_Muted; }
         details { margin: 8px 0; }
         summary { cursor: pointer; color: Token_Text_Accent; }
@@ -303,7 +303,7 @@ static QString markdownToHtml(const QString &content, const QMap<QString, Diagra
     const QString prepared = embedDiagramSvgsHtml(content, diagrams);
 
     markus::Options options;
-    // Mirror the chat renderer (GitHub‑flavoured Markdown).
+    // Mirror the chat renderer (GitHub-flavoured Markdown).
     options.enable_tables = true;
     options.enable_autolink = true;
     options.enable_strikethrough = true;
@@ -353,7 +353,7 @@ static QString toolCallToHtml(const Message &msg)
     if (argDoc.isObject())
         formattedArgs = QString::fromUtf8(QJsonDocument(argDoc.object()).toJson(QJsonDocument::Indented));
 
-    // Reuse the tool's one‑line summary so the export matches what the UI
+    // Reuse the tool's one-line summary so the export matches what the UI
     // shows in the collapsed tool bubble.
     QString summary = QStringLiteral("Tool: %1").arg(functionName);
     if (const std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName))
@@ -407,7 +407,7 @@ QString HtmlExporter::messageToHtml(const Message &msg)
     processedContent.replace(ThinkingSectionParser::endToken(),
                              "\n</details>\n\n");
 
-    // A tool‑call‑only assistant message renders through its tool bubble,
+    // A tool-call-only assistant message renders through its tool bubble,
     // whose call + result are exported with the tool message instead.
     if (processedContent.trimmed().isEmpty()) {
         for (const QVariantMap &e : msg.extra) {

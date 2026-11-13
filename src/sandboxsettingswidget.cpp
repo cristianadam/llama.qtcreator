@@ -293,7 +293,7 @@ void SandboxSettingsWidget::apply()
 
 void SandboxSettingsWidget::cancel()
 {
-    // Re-load the stored values – this discards any unapplied UI changes.
+    // Re-load the stored values - this discards any unapplied UI changes.
     settings().readSettings();
     m_masterCheck->setChecked(settings().sandboxCommands());
     loadFromSettings();

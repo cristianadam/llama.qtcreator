@@ -75,7 +75,7 @@ ChatMessage::ChatMessage(const Message &msg,
         // Still streaming: render without finish()ing the label's streaming
         // parser. A finish() (Flush) here would finalize this first chunk as
         // a stable block; every later chunk then lands in the pending tail
-        // and is rendered as a new paragraph after it — a visible line
+        // and is rendered as a new paragraph after it - a visible line
         // break after the first streamed token (or a split code block when
         // the first chunk already carries fence lines).
         renderMarkdown(m_msg.content, false);
@@ -83,7 +83,7 @@ ChatMessage::ChatMessage(const Message &msg,
     // When the document size changes (details toggle, streaming), update our
     // fixed height so the layout picks up the new size. Use a queued connection
     // so the slot runs AFTER the document layout has finished recalculating
-    // sizes — otherwise doc->size() returns stale data and we set the wrong
+    // sizes - otherwise doc->size() returns stale data and we set the wrong
     // fixed height (causing jumps / white space on toggle).
     connect(m_markdownLabel->document()->documentLayout(),
             &QAbstractTextDocumentLayout::documentSizeChanged,
@@ -101,7 +101,7 @@ void ChatMessage::buildUI()
     // buttons.
     m_mainLayout->setSpacing(8);
 
-    // Parent the label directly to ChatMessage — no intermediate bubble
+    // Parent the label directly to ChatMessage - no intermediate bubble
     // widget.  This eliminates nested-layout height-for-width caching
     // issues that were causing messages to be clamped at wrong heights.
     m_markdownLabel = new MarkdownLabel(this);
@@ -236,7 +236,7 @@ void ChatMessage::buildUI()
         m_actionLayout->addWidget(m_editButton);
     } else {
         // "Human Editor" mode: assistant messages are edited in place in
-        // the split text editor (the whole message, not a re‑send).
+        // the split text editor (the whole message, not a re-send).
         m_editButton = new QToolButton(this);
         m_editButton->setText("H");
         m_editButton->setToolTip(Tr::tr("Edit the message in the Markdown editor"));
@@ -272,7 +272,7 @@ void ChatMessage::buildUI()
     connect(m_deleteButton, &QToolButton::clicked, this, &ChatMessage::onDeleteClicked);
     m_actionLayout->addWidget(m_deleteButton);
 
-    // Add label and action row directly — no intermediate bubble widget.
+    // Add label and action row directly - no intermediate bubble widget.
     m_mainLayout->addWidget(m_markdownLabel, 0, labelAlign);
     m_mainLayout->addLayout(m_actionLayout);
 
@@ -329,7 +329,7 @@ void ChatMessage::messageCompleted(bool completed)
     }
 
     if (!m_isUser && !m_isTool) {
-        // Normal assistant – show buttons only when the answer is finished.
+        // Normal assistant - show buttons only when the answer is finished.
         m_completed = completed;
         m_regenButton->setVisible(completed && !haveToolCalls());
         m_copyButton->setVisible(completed && !haveToolCalls());
@@ -357,13 +357,13 @@ bool ChatMessage::shouldCollapse() const
         }
     }
 
-    // A tool‑call‑only assistant message carries no text of its own – the
+    // A tool-call-only assistant message carries no text of its own - the
     // tool bubble below renders the call.  Hide the empty bubble so that
     // when the streamed "Preparing ..." line is replaced by the tool
-    // bubble, the line appears in exactly the same spot (a plain in‑place
-    // replacement) instead of an erase‑then‑insert transition.
+    // bubble, the line appears in exactly the same spot (a plain in-place
+    // replacement) instead of an erase-then-insert transition.
     // Note: while the message is still pending, the preparing suffix is part
-    // of m_msg.content, so it never collapses mid‑stream.
+    // of m_msg.content, so it never collapses mid-stream.
     return hasToolCalls && m_msg.content.trimmed().isEmpty();
 }
 
@@ -504,7 +504,7 @@ QString ChatMessage::getToolUsageAndResult() const
 
     std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName);
     if (!tool) {
-        // Fallback – unknown tool, keep the old behaviour
+        // Fallback - unknown tool, keep the old behaviour
         const QString fallbackSummary = QStringLiteral("%1").arg(functionName);
         const QString fallbackDetails = QStringLiteral("**Result:**\n```\n%1\n```")
                                             .arg(functionResult);
@@ -527,9 +527,9 @@ QString ChatMessage::getToolUsageAndResult() const
 
     QString summaryText;
     if (toolStatus.isEmpty()) {
-        // Still running – show the same text the streaming "Preparing ..."
+        // Still running - show the same text the streaming "Preparing ..."
         // line used, so the tool bubble reads as the same line continuing
-        // in place rather than a brand‑new block appearing.
+        // in place rather than a brand-new block appearing.
         summaryText = tool->streamingSummary(argumentsJson);
         if (summaryText.isEmpty())
             summaryText = tool->oneLineSummary(args);
@@ -544,7 +544,7 @@ QString ChatMessage::getToolUsageAndResult() const
                     : liveOutput;
             const int maxChars = previewCharLimit(maxLines);
             if (tail.size() > maxChars)
-                tail = tail.left(maxChars - 3) + QStringLiteral("…");
+                tail = tail.left(maxChars - 3) + QStringLiteral("...");
             summaryText += QStringLiteral("\n\n") + codeFence(tail, QStringLiteral("terminal"));
         }
     } else {
@@ -604,7 +604,7 @@ void ChatMessage::onCopyAsHtmlClicked()
     const QString html = HtmlExporter::messageHtml(m_msg);
     if (html.isEmpty())
         return;
-    // Rich targets (browsers, editors, …) get the styled document; plain‑text
+    // Rich targets (browsers, editors, ...) get the styled document; plain-text
     // targets fall back to the Markdown source.
     QMimeData *md = new QMimeData;
     md->setHtml(html);
@@ -687,7 +687,7 @@ void ChatMessage::onDiagramRendered(const QString &key, const MarkdownRenderer::
 
     // Queued: the signal fires mid document-edit (inside the renderer's
     // feed()), and persisting can re-enter the render through
-    // messageExtraUpdated — that must not happen inside the edit block.
+    // messageExtraUpdated - that must not happen inside the edit block.
     QMetaObject::invokeMethod(this,
                               [this, entry] {
                                   ChatManager::instance().saveDiagramSvg(m_msg, entry);
@@ -705,7 +705,7 @@ void ChatMessage::recomputeFixedHeight()
         return;
 
     // Do not bake in a height derived from a document that has not yet been
-    // laid out at a real width — at width 0 the wrapping (and hence the
+    // laid out at a real width - at width 0 the wrapping (and hence the
     // height) is degenerate.
     if (doc->textWidth() <= 0)
         return;
@@ -713,7 +713,7 @@ void ChatMessage::recomputeFixedHeight()
     const int docH = qRound(doc->size().height());
     // Contents margins (10px top+bottom for user bubbles, 0 for others)
     // plus the stylesheet padding of the bubble (4px top+bottom for
-    // user/assistant bubbles — see applyStyleSheet(); the document size
+    // user/assistant bubbles - see applyStyleSheet(); the document size
     // does not include it) plus the layout spacing between label and
     // action row, plus the action row height.  Forgetting any of these
     // clipped the bubble.

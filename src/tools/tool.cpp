@@ -27,8 +27,8 @@ QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &resul
 {
     Q_UNUSED(arguments);
     Q_UNUSED(ok);
-    // Generic fallback – just show the raw result.  Failures need no error
-    // header: the ✗ icon in the summary already marks the call as failed.
+    // Generic fallback - just show the raw result.  Failures need no error
+    // header: the X icon in the summary already marks the call as failed.
     if (result.isEmpty())
         return {};
     return codeFence(result);
@@ -36,7 +36,7 @@ QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &resul
 
 QString Tool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
 {
-    // On failure the ✗ icon plus the one‑line summary are enough in the
+    // On failure the X icon plus the one-line summary are enough in the
     // collapsed view; the error text is only shown in the expanded details.
     if (!ok)
         return {};
@@ -95,7 +95,7 @@ QString truncatedPreview(const QString &text, int maxLines)
     }
 
     // Close a code fence left open by the cut so the markdown stays
-    // well‑formed.  No trailing ellipsis: the details header already gets
+    // well-formed.  No trailing ellipsis: the details header already gets
     // the expand (down) icon appended, which signals more content.
     int fences = 0;
     int fenceLength = 3;
@@ -116,13 +116,13 @@ QString truncatedPreview(const QString &text, int maxLines)
 
 QString listPreview(const QString &result, bool ok)
 {
-    // On failure the ✗ icon suffices in the collapsed view; the error text
+    // On failure the X icon suffices in the collapsed view; the error text
     // is only shown in the expanded details.  trimmed() also rejects a
-    // newline‑only result, which codeFence() would render as an empty block.
+    // newline-only result, which codeFence() would render as an empty block.
     if (!ok || result.trimmed().isEmpty())
         return {};
     // +1 for the opening fence line; truncatedPreview() closes the fence
-    // left open by the cut so the markdown stays well‑formed.
+    // left open by the cut so the markdown stays well-formed.
     return truncatedPreview(codeFence(result), toolPreviewLineCount() + 1);
 }
 

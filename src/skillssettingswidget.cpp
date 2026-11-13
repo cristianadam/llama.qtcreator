@@ -22,7 +22,7 @@ namespace LlamaCpp {
 namespace {
 
 //! Canonical form of a configured directory: skills are stored with their
-//! canonical file paths, so directory matching must canonicalize as well –
+//! canonical file paths, so directory matching must canonicalize as well -
 //! otherwise a stored path that only textually differs (trailing slash,
 //! symlink, case) would group no skills under it.
 QString canonicalDir(const QString &path)
@@ -50,7 +50,7 @@ QString elideForList(const QString &text, int maxLength = 100)
         cut = result.lastIndexOf(QLatin1Char(' '), maxLength);
     if (cut < 20)
         cut = maxLength;
-    return result.left(cut).trimmed() + QStringLiteral("…");
+    return result.left(cut).trimmed() + QStringLiteral("...");
 }
 
 } // namespace
@@ -135,7 +135,7 @@ SkillsSettingsWidget::SkillsSettingsWidget()
             m_filterModel,
             &SkillsFilterModel::setFilterWildcard);
 
-    // Filtering resets the expanded state of the group rows – re-expand them
+    // Filtering resets the expanded state of the group rows - re-expand them
     // so the matching skills are directly visible.
     connect(filterLineEdit, &FancyLineEdit::textChanged, this, [this] { m_view->expandAll(); });
 
@@ -181,7 +181,7 @@ void SkillsSettingsWidget::removeCurrentDirectory()
     const QModelIndex current = m_view->currentIndex();
     if (!isDirectoryRow(current))
         return;
-    // The row holds the canonical path, the setting may not – compare
+    // The row holds the canonical path, the setting may not - compare
     // canonical forms when removing.
     const QString rowPath = canonicalDir(current.data(GroupItem::PathRole).toString());
     QStringList dirs = settings().skillsDirectories();
@@ -215,7 +215,7 @@ void SkillsSettingsWidget::rescan()
             grouped.insert(skill.filePath);
             groupSkills.append(skill);
         }
-        // Every configured directory gets a row – also when it holds no
+        // Every configured directory gets a row - also when it holds no
         // skills, so it can be selected and removed from the tree.
         auto *group = new GroupItem(canonical);
         m_model->rootItem()->appendChild(group);
@@ -256,7 +256,7 @@ void SkillsSettingsWidget::showSkillDetails(const QModelIndex &current,
 
     // Only skill rows have details; a directory row (or no selection) just
     // clears the pane. (Test the row kind, not a role value: group items
-    // carry a PathRole too – their own directory path.)
+    // carry a PathRole too - their own directory path.)
     if (!current.isValid() || isDirectoryRow(current)) {
         m_detailEdit->clear();
         return;
@@ -357,7 +357,7 @@ void SkillsSettingsWidget::apply()
 
 void SkillsSettingsWidget::cancel()
 {
-    // Re‑load the stored values – this discards any UI changes.
+    // Re-load the stored values - this discards any UI changes.
     settings().readSettings();
     Skills::clearCache();
     rescan();
@@ -427,7 +427,7 @@ Qt::ItemFlags SkillsSettingsWidget::GroupItem::flags(int column) const
 }
 
 /* The actual propagation to the children is done by the widget's
- * dataChanged handler – here we only track the requested state. */
+ * dataChanged handler - here we only track the requested state. */
 bool SkillsSettingsWidget::GroupItem::setData(int column, const QVariant &value, int role)
 {
     if (column == 0 && role == Qt::CheckStateRole) {
@@ -497,13 +497,13 @@ SkillsSettingsWidget::SkillItem::SkillItem(const QString &name,
     , m_path(path)
     , m_content(content)
 {
-    // default to unchecked – the UI will later set the correct state
+    // default to unchecked - the UI will later set the correct state
     m_checkState = Qt::Unchecked;
 }
 
 QVariant SkillsSettingsWidget::SkillItem::data(int column, int role) const
 {
-    // Column 0 – name + check‑box
+    // Column 0 - name + check-box
     if (column == 0) {
         if (role == Qt::DisplayRole)
             return m_name;
@@ -514,7 +514,7 @@ QVariant SkillsSettingsWidget::SkillItem::data(int column, int role) const
         return QVariant();
     }
 
-    // Column 1 – description (elided, the full text is in the detail pane)
+    // Column 1 - description (elided, the full text is in the detail pane)
     if (column == 1 && role == Qt::DisplayRole)
         return elideForList(m_description);
 
@@ -530,7 +530,7 @@ QVariant SkillsSettingsWidget::SkillItem::data(int column, int role) const
     return QVariant();
 }
 
-/* flags() – only column 0 is user‑checkable */
+/* flags() - only column 0 is user-checkable */
 Qt::ItemFlags SkillsSettingsWidget::SkillItem::flags(int column) const
 {
     if (column == 0)
@@ -538,7 +538,7 @@ Qt::ItemFlags SkillsSettingsWidget::SkillItem::flags(int column) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-/* setData() – handle changes of the check‑state */
+/* setData() - handle changes of the check-state */
 bool SkillsSettingsWidget::SkillItem::setData(int column, const QVariant &value, int role)
 {
     Q_UNUSED(column);

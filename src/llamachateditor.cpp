@@ -103,9 +103,9 @@ namespace {
 // before displaying it.
 constexpr int kMinTokensForSpeed = 10;
 
-// "Human Editor" documents are backed by a throw‑away file in the temp dir
+// "Human Editor" documents are backed by a throw-away file in the temp dir
 // so the regular text editor treats them as ordinary, saveable files (no
-// "Save As" dialog, which a file‑less document would trigger).  The file is
+// "Save As" dialog, which a file-less document would trigger).  The file is
 // removed when the editor closes; the real content lives in the chat
 // (committed on save, see ChatManager).
 QString humanEditorFilePath(const QString &uniqueId)
@@ -117,8 +117,8 @@ QString humanEditorFilePath(const QString &uniqueId)
     }
     const QString path = dirPath + QStringLiteral("/") + uniqueId + QStringLiteral(".md");
     // Create the (empty) file so the document sees a writable path; a
-    // non‑existent file is treated as read‑only.  The real content is set via
-    // setContents(); this file is only a throw‑away backing store.
+    // non-existent file is treated as read-only.  The real content is set via
+    // setContents(); this file is only a throw-away backing store.
     QFile file(path);
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         file.close();
@@ -127,7 +127,7 @@ QString humanEditorFilePath(const QString &uniqueId)
 
 // Escapes the HTML metacharacters so a value (a model id or a directory that
 // may contain '&', '<' or '>') can be embedded in the welcome screen's
-// rich‑text label without being interpreted as markup.
+// rich-text label without being interpreted as markup.
 QString escapeHtml(const QString &text)
 {
     QString result = text;
@@ -184,7 +184,7 @@ void JinjaHighlighter::highlightBlock(const QString &text)
 // The display name of a thinking/reasoning level.  The concrete levels are
 // reported by the server (chat_template_caps.reasoning_effort_levels) and are
 // not a fixed set, so the known ones get a friendly name and anything else is
-// shown as‑is (capitalised).  "default" means "no override" and "off"/"none"
+// shown as-is (capitalised).  "default" means "no override" and "off"/"none"
 // both mean "thinking disabled".
 QString thinkingLevelDisplay(const QString &level)
 {
@@ -210,13 +210,13 @@ QString thinkingLevelDisplay(const QString &level)
 }
 
 // Renders a glyph of the bundled lucide icon font (see the
-// "lucideicons_outline" spans elsewhere) as a pixmap: the status‑bar buttons
+// "lucideicons_outline" spans elsewhere) as a pixmap: the status-bar buttons
 // are styled by the host theme, and a styled QToolButton draws its text as
-// plain text, so an icon‑font glyph in the label's rich text would show up
+// plain text, so an icon-font glyph in the label's rich text would show up
 // verbatim.  The glyph is rendered at an explicit pixel size matching the
-// button's text line height (icon‑font glyphs are designed to fill the em
+// button's text line height (icon-font glyphs are designed to fill the em
 // square, so they land cleanly in a square box of that size), and coloured
-// with the button's palette so it follows the theme (the caller re‑renders
+// with the button's palette so it follows the theme (the caller re-renders
 // it on palette changes).
 QIcon lucideGlyphIcon(QLatin1Char glyph, QWidget *button)
 {
@@ -246,11 +246,11 @@ QIcon lucideGlyphIcon(QLatin1Char glyph, QWidget *button)
     return QIcon(pixmap);
 }
 
-// Builds the "glyph + text" rich text for a status‑bar label (context /
+// Builds the "glyph + text" rich text for a status-bar label (context /
 // speed).  The lucide glyph is drawn at the label's line height so it matches
 // the thinking button's icon (see lucideGlyphIcon).  As rich text it inherits
 // the label's font and colour automatically, so it follows the theme and font
-// zoom with no re‑rendering.  \a text is the plain text shown after the glyph.
+// zoom with no re-rendering.  \a text is the plain text shown after the glyph.
 QString lucideGlyphLabelText(const QWidget *label, QLatin1Char glyph, const QString &text)
 {
     const int px = qMax(1, QFontMetrics(label->font()).height());
@@ -266,7 +266,7 @@ QString lucideGlyphLabelText(const QWidget *label, QLatin1Char glyph, const QStr
 // ---------------------------------------------------------------------------
 // ChatEditorFindSupport
 //
-// The Core::IFindSupport that backs the standard in‑chat "Find" bar.  It
+// The Core::IFindSupport that backs the standard in-chat "Find" bar.  It
 // searches across every ChatMessage's markdown label (a QTextBrowser), the
 // same way ACP's MessageViewFindSupport searches across its MarkdownBrowser
 // widgets.  It is aggregated with the editor widget (see the ChatEditor
@@ -315,7 +315,7 @@ public:
                 selections.append({found, format});
                 int pos = found.selectionEnd();
                 if (found.position() == found.anchor())
-                    ++pos; // avoid an infinite loop on a zero‑length match
+                    ++pos; // avoid an infinite loop on a zero-length match
                 found = findInLabel(label, txt, pos, findFlags, docFlags);
             }
             label->setExtraSelections(selections);
@@ -368,8 +368,8 @@ public:
         return findText(txt, findFlags, false);
     }
 
-    //! Re‑applies the current highlights.  The message widgets are rebuilt on
-    //! every refresh (new message, font zoom, …), which drops the extra
+    //! Re-applies the current highlights.  The message widgets are rebuilt on
+    //! every refresh (new message, font zoom, ...), which drops the extra
     //! selections; call this after a rebuild to bring them back while a find
     //! is active.
     void reapplyHighlights()
@@ -582,16 +582,16 @@ ChatEditor::ChatEditor()
     // QScrollArea installs its own viewport event filter (for scrolling) at
     // construction, which runs before any filter we add later and would
     // consume a Ctrl+wheel on a scrollable view.  So we also filter the
-    // message container: the message labels are read‑only text with no
+    // message container: the message labels are read-only text with no
     // internal scroll, so a plain wheel event propagates up to the container
     // (and is seen there) before it ever reaches the viewport.  The viewport
-    // filter covers the non‑scrollable case, where the scroll filter does not
+    // filter covers the non-scrollable case, where the scroll filter does not
     // consume the event.  A Ctrl+wheel is consumed here so the view does not
     // scroll instead.
     m_scrollArea->viewport()->installEventFilter(this);
     m_messageContainer->installEventFilter(this);
 
-    // The "You are connected to ..." line in the empty‑conversation welcome
+    // The "You are connected to ..." line in the empty-conversation welcome
     // screen is created once, so keep it in sync when the startup project
     // changes (the welcome widget itself is created once and not rebuilt).
     connect(ProjectExplorer::ProjectManager::instance(),
@@ -627,7 +627,7 @@ ChatEditor::ChatEditor()
     m_contextLabel->setTextFormat(Qt::RichText);
     statusLayout->addWidget(m_contextLabel);
 
-    // Mid‑run steering: user messages sent while a reply is being
+    // Mid-run steering: user messages sent while a reply is being
     // generated are queued; the popup lists them and each entry can be
     // removed before it is handed to the model.
     m_steeringButton = new QToolButton(m_statusBar);
@@ -681,36 +681,36 @@ ChatEditor::ChatEditor()
     // the button is disabled when the server reports none.
     m_thinkingButton = new QToolButton(m_statusBar);
     m_thinkingButton->setPopupMode(QToolButton::InstantPopup);
-    // A styled QToolButton defaults to icon‑only; force the label next to
-    // the light‑bulb icon (see lucideGlyphIcon).
+    // A styled QToolButton defaults to icon-only; force the label next to
+    // the light-bulb icon (see lucideGlyphIcon).
     m_thinkingButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_thinkingButton->setToolTip(Tr::tr("Thinking level"));
     m_thinkingButton->setVisible(false);
-    // The "L" glyph of the lucide icon font is the light‑bulb (rendered as a
+    // The "L" glyph of the lucide icon font is the light-bulb (rendered as a
     // button icon: a styled QToolButton does not evaluate rich text).  It is
     // independent of the thinking level, so it is set once here and only
-    // re‑rendered when the button's palette or font changes (eventFilter()).
+    // re-rendered when the button's palette or font changes (eventFilter()).
     m_thinkingButton->setIcon(lucideGlyphIcon(QLatin1Char('L'), m_thinkingButton));
     m_thinkingMenu = new QMenu(m_thinkingButton);
     m_thinkingActions = new QActionGroup(m_thinkingButton);
     m_thinkingActions->setExclusive(true);
     m_thinkingButton->setMenu(m_thinkingMenu);
-    // The button's palette (theme) changes re‑tint the light‑bulb icon.
+    // The button's palette (theme) changes re-tint the light-bulb icon.
     m_thinkingButton->installEventFilter(this);
     updateThinkingMenu();
     // Keep the menu check and the button label in sync when the level
-    // changes elsewhere (another chat editor, the settings, …).
+    // changes elsewhere (another chat editor, the settings, ...).
     settings().thinkingLevel.addOnChanged(this, [this] { syncThinkingLevel(); });
     statusLayout->addWidget(m_thinkingButton);
 
     updateModelCombo();
 
-    // In‑chat search uses the standard Qt Creator "Find" bar instead of a
+    // In-chat search uses the standard Qt Creator "Find" bar instead of a
     // floating tool window.  The FindToolBar of the Find plugin locates the
     // editor through the focused widget: it walks up the parent chain looking
     // for a Core::IFindSupport (found by aggregating it with the editor
     // widget) and for a FindToolBarPlaceHolder owned by an ancestor, which it
-    // then docks into.  The owner is the top‑level editor widget so the bar
+    // then docks into.  The owner is the top-level editor widget so the bar
     // works no matter whether focus is in the conversation or in the input.
     m_findSupport = new ChatEditorFindSupport(this);
     Utils::Aggregation::aggregate({widget, m_findSupport});
@@ -853,12 +853,12 @@ ChatEditor::ChatEditor()
                 if (editor != this)
                     return;
 
-                // A task (sub‑agent) conversation that is still working keeps
+                // A task (sub-agent) conversation that is still working keeps
                 // running in the background when its editor is closed: the
-                // sub‑agent finishes on its own and reports back to the parent
+                // sub-agent finishes on its own and reports back to the parent
                 // conversation.  The stop button and Escape still stop it, as
                 // does deleting the conversation.  Task conversations never
-                // have a title summary, follow‑ups or a "Human Editor"
+                // have a title summary, follow-ups or a "Human Editor"
                 // session, so skipping the cancels below is safe.
                 if (ChatManager::instance().isTaskConversationRunning(m_viewingConvId))
                     return;
@@ -891,15 +891,15 @@ ChatEditor::ChatEditor()
                 }
             });
 
-    // In‑chat search is provided by the standard Find/Replace bar of the Find
+    // In-chat search is provided by the standard Find/Replace bar of the Find
     // plugin (Ctrl+F, F3, Shift+F3).  The editor registers a
     // Core::IFindSupport and a FindToolBarPlaceHolder (see the constructor),
-    // so no chat‑specific find actions are needed here – the global actions
+    // so no chat-specific find actions are needed here - the global actions
     // pick the chat up through the focused widget automatically.
 
     // Global "Send to Llama Chat" action: commits the current "Human
     // Editor" document (the split text editor) as a chat message, the same
-    // as saving it (Ctrl+S).  Registered once, against the long‑lived
+    // as saving it (Ctrl+S).  Registered once, against the long-lived
     // ChatManager as context: an action registered against this editor
     // would be deregistered when the editor is destroyed.
     static bool sendActionRegistered = false;
@@ -922,10 +922,10 @@ ChatEditor::~ChatEditor()
     // Uninstall the event filters before tearing the widget trees down:
     // ~QWidget deletes all children first and only then sends the widget a
     // final QEvent::Destroy, so a filter still registered on a dying widget
-    // would run with m_scrollArea already destroyed – and eventFilter()
+    // would run with m_scrollArea already destroyed - and eventFilter()
     // dereferences it for every event.  The status bar (and with it the
     // thinking button) is deleted below, after the main widget, and neither
-    // tree is covered by the widget() check – remove their filters
+    // tree is covered by the widget() check - remove their filters
     // unconditionally.
     if (QWidget *w = widget()) {
         w->removeEventFilter(this);
@@ -960,9 +960,9 @@ bool ChatEditor::isDesignModePreferred() const
 
 QWidget *ChatEditor::displayServerProps()
 {
-    // A single rich‑text label, laid out like Qt Creator's "Open a document"
+    // A single rich-text label, laid out like Qt Creator's "Open a document"
     // placeholder (see Locator::updateEditorManagerPlaceholderText()): a
-    // centred heading, a separator and a left‑aligned list.  The model name
+    // centred heading, a separator and a left-aligned list.  The model name
     // and the directory in the list are links; the model name opens the model
     // details dialog and the directory a folder picker.  The label is centred
     // in the message area by the layout (see showWelcomeScreen()), the way
@@ -975,7 +975,7 @@ QWidget *ChatEditor::displayServerProps()
     m_connectionLabel->setWordWrap(true);
     // The event filter (on ChatEditor) right-clicks the working directory
     // link and offers the reset shortcuts (a regular click opens the folder
-    // picker).  QLabel has no hit‑test API for its links, so the link under
+    // picker).  QLabel has no hit-test API for its links, so the link under
     // the cursor is tracked from linkHovered() (emitted by Qt's own hit test
     // with the link name, or an empty string when leaving it).  The filter
     // is removed with the label when the welcome screen goes away.
@@ -1018,7 +1018,7 @@ QString ChatEditor::selectedModelDisplayName() const
     const QString selected = cm.selectedModel();
     if (!selected.isEmpty())
         return selected;
-    // Single‑model server that does not expose /models: fall back to the
+    // Single-model server that does not expose /models: fall back to the
     // loaded model's file name from the server props.
     const QString name = FilePath::fromUserInput(cm.serverProps().model_path).fileName();
     return name.isEmpty() ? QStringLiteral("model") : name;
@@ -1033,7 +1033,7 @@ void ChatEditor::updateConnectionLabel()
     // The model name and the directory are links (the model name opens the
     // model details dialog, the directory a folder picker).  The link markup
     // is not translatable, so it is built here and substituted into the
-    // translatable sentence through its placeholders – a translation can put
+    // translatable sentence through its placeholders - a translation can put
     // the placeholders where they read best.  The values are escaped so a
     // file name with HTML metacharacters is not interpreted.
     const QString modelLink =
@@ -1067,11 +1067,11 @@ void ChatEditor::updateConnectionLabel()
     }
     // Laid out like Qt Creator's "Open a document" placeholder (see
     // Locator::updateEditorManagerPlaceholderText()): a centred heading, a
-    // separator and a left‑aligned list.  Each piece of visible text is its
+    // separator and a left-aligned list.  Each piece of visible text is its
     // own translatable string (no markup in them); the theme tokens in the
     // structural HTML are resolved afterwards.
     // The list's table gets an explicit width of ~85% of the message area:
-    // Qt's rich‑text engine honours the HTML width attribute (not a CSS
+    // Qt's rich-text engine honours the HTML width attribute (not a CSS
     // width style) and wraps the cell content at it, so the rows wrap when
     // the screen is not wide enough.  Rebuilt on viewport resizes (see
     // eventFilter()); the attribute is omitted until the viewport has a
@@ -1145,7 +1145,7 @@ void ChatEditor::showModelDetails()
     form->setLabelAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     auto addRow = [&](const QString &label, const QString &value) {
-        auto *valueLabel = new QLabel(value.isEmpty() ? QStringLiteral("–") : value, &dialog);
+        auto *valueLabel = new QLabel(value.isEmpty() ? QStringLiteral("-") : value, &dialog);
         valueLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
         valueLabel->setWordWrap(true);
         form->addRow(label, valueLabel);
@@ -1371,7 +1371,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
     // document heights (see MarkdownLabel::notifyGeometryChanged() for why
     // the HFW caches must be invalidated, and fixMessageHeights() for the
     // explicit-height workaround).  Only layout-related event types are
-    // dispatched — a full processEvents() could re-enter refreshMessages()
+    // dispatched - a full processEvents() could re-enter refreshMessages()
     // through unrelated signals.
     QCoreApplication::sendPostedEvents(nullptr, QEvent::LayoutRequest);
     QCoreApplication::sendPostedEvents(nullptr, QEvent::Resize);
@@ -1390,7 +1390,7 @@ void ChatEditor::fixMessageHeights()
 
         // Only set the message's fixed height.  The label sizes naturally
         // via its sizeHint (which uses the document's current size).  We
-        // must NOT set fixed height on the label — it causes an infinite
+        // must NOT set fixed height on the label - it causes an infinite
         // layout loop because the document reflows asynchronously.
         msg->recomputeFixedHeight();
     }
@@ -1409,8 +1409,8 @@ void ChatEditor::zoomFont(int direction, QWidget *indicatorWidget)
     // immediately; the (expensive) re-render is debounced per editor so a
     // burst of Ctrl+mouse-wheel notches only re-renders once the user pauses.
     const int newZoom = qBound(50, settings().chatFontZoom.value() + direction * 10, 300);
-    // Show the resulting size right away – also at the clamped ends, as
-    // feedback – even though the re-render is still debounced.
+    // Show the resulting size right away - also at the clamped ends, as
+    // feedback - even though the re-render is still debounced.
     showZoomIndicator(indicatorWidget, newZoom);
     if (newZoom == settings().chatFontZoom.value())
         return;
@@ -1478,7 +1478,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     ViewingChat chat = ChatManager::instance().getViewingChat(msg.convId);
 
     // A user/tool message that does not extend the currently shown leaf
-    // switches the visible branch (e.g. the user edited an old message) –
+    // switches the visible branch (e.g. the user edited an old message) -
     // fall back to a filtered rebuild for that case.
     if (pendingId < 0 && !m_messageWidgets.isEmpty()
         && m_messageWidgets.last()->message().id != msg.parent) {
@@ -1512,7 +1512,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
         for (qint64 cid : parent->children) {
             siblings.append(cid);
             if (msg.id == cid)
-                siblingIdx = siblings.size(); // 1‑based index
+                siblingIdx = siblings.size(); // 1-based index
         }
     }
 
@@ -1572,7 +1572,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
 
     // Settle layout and heights synchronously (the same technique
     // refreshMessages() uses).  This matters for the "Preparing ..." ->
-    // tool‑bubble transition: the assistant bubble's shrink and the tool
+    // tool-bubble transition: the assistant bubble's shrink and the tool
     // bubble's insertion then land in a single paint instead of two
     // separate frames, and the freshly added bubble is measured at its
     // real width right away instead of the 300 px default of an unshown
@@ -1582,10 +1582,10 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     fixMessageHeights();
 }
 
-// Pre‑wrap the document of a freshly created message widget at the width
+// Pre-wrap the document of a freshly created message widget at the width
 // its label will end up with.  An unshown QTextDocument wraps at its 300 px
 // default, so without this the first layout pass reports a wrong height
-// (usually too tall) – with the viewport pinned to the bottom that reads as
+// (usually too tall) - with the viewport pinned to the bottom that reads as
 // the whole conversation jumping up and then back down.  Setting the real
 // width before the widget is laid out makes the very first size hint already
 // correct.
@@ -1631,7 +1631,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         // content exists.  Do not create the bubble for those: an empty
         // bubble would push the pinned viewport up for a blank strip, and
         // the real content (thinking section, text, or the tool line)
-        // arriving a moment later would push it up again – the visible
+        // arriving a moment later would push it up again - the visible
         // "up and then down" wobble after a tool call.  The status bar
         // still receives the progress/timing updates below.
         m_input->setIsGenerating(true);
@@ -1640,7 +1640,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         return;
     }
     if (it == m_messageWidgets.end()) {
-        // Add a “loading” bubble
+        // Add a "loading" bubble
         Message msg;
         msg.id = pm.id;
         msg.role = "assistant";
@@ -1703,7 +1703,7 @@ void ChatEditor::onStopRequested(bool fromKey)
     // stop button and Escape act on the chat shown in this editor.
     const QString convId = m_viewingConvId;
 
-    // Stopping a running task (sub‑agent) conversation fails the "task" tool
+    // Stopping a running task (sub-agent) conversation fails the "task" tool
     // waiting in the parent conversation, so an Escape key (easy to press
     // by accident) asks for confirmation first; the stop button does not.
     if (fromKey && ChatManager::instance().isTaskConversationRunning(convId)
@@ -1730,8 +1730,8 @@ void ChatEditor::onStopRequested(bool fromKey)
 
 bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
 {
-    // The thinking button's light‑bulb icon is a rendered icon‑font glyph,
-    // so re‑render it when the button's palette (theme) or font changes.
+    // The thinking button's light-bulb icon is a rendered icon-font glyph,
+    // so re-render it when the button's palette (theme) or font changes.
     if (obj == m_thinkingButton
             && (event->type() == QEvent::PaletteChange
                 || event->type() == QEvent::FontChange)) {
@@ -1755,16 +1755,16 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
         return true;
     }
 
-    // Esc stops an in‑progress generation (LLM streaming or a running
+    // Esc stops an in-progress generation (LLM streaming or a running
     // tool) no matter which widget in the chat editor has focus.  The
     // ChatInput consumes the event first when one of its children is
     // focused, so this only fires for the message area, find bar, status
-    // bar, ….
+    // bar, ....
     if (obj == widget() && event->type() == QEvent::ShortcutOverride) {
         if (auto *keyEvent = static_cast<QKeyEvent *>(event);
             keyEvent->key() == Qt::Key_Escape) {
             if (m_findPlaceHolder->isVisible()) {
-                // One Escape hides the in‑chat find bar and puts the focus
+                // One Escape hides the in-chat find bar and puts the focus
                 // back on the input.  The standard Find bar does not do
                 // this: its Escape (the global "Return to Editor"
                 // shortcut) only moves the focus out of the bar, so a
@@ -1787,7 +1787,7 @@ bool ChatEditor::eventFilter(QObject *obj, QEvent *event)
     // See the constructor for why both the viewport and the message container
     // are filtered: the container catches the event before the scroll area's
     // own scroll filter can consume it on a scrollable view, the viewport
-    // covers the non‑scrollable case.
+    // covers the non-scrollable case.
     if ((obj == m_scrollArea->viewport() || obj == m_messageContainer)
         && event->type() == QEvent::Wheel) {
         if (auto *wheelEvent = static_cast<QWheelEvent *>(event);
@@ -1828,9 +1828,9 @@ void ChatEditor::onEditRequested(const Message &sentMsg)
     // (and delete) the message widgets.
     const Message msg = sentMsg;
     // "Human Editor" mode: assistant messages are edited in place in a
-    // regular text editor (split next to the chat) – the whole message is
+    // regular text editor (split next to the chat) - the whole message is
     // editable (the user can type anywhere), not just appended to and
-    // re‑sent.  Saving the editor commits the change.
+    // re-sent.  Saving the editor commits the change.
     if (msg.role == "assistant" && ChatManager::instance().isHumanEditor()) {
         openHumanEditorDocument(msg.convId, msg.id, msg.content);
         return;
@@ -1921,8 +1921,8 @@ void ChatEditor::syncThinkingLevel()
         for (QAction *a : std::as_const(actions))
             a->setChecked(a->data().toString() == level);
     }
-    // The light‑bulb icon does not depend on the level: it is set once when
-    // the button is created and re‑rendered only on palette/font changes
+    // The light-bulb icon does not depend on the level: it is set once when
+    // the button is created and re-rendered only on palette/font changes
     // (see eventFilter()).
     m_thinkingButton->setText(label);
     m_thinkingButton->setToolTip(
@@ -1951,7 +1951,7 @@ void ChatEditor::updateModelCombo()
 
     m_modelCombo->blockSignals(true);
     m_modelCombo->clear();
-    // The "Human Editor" pseudo‑model: the "assistant" side of the
+    // The "Human Editor" pseudo-model: the "assistant" side of the
     // conversation is a human typing Markdown in a text editor split next
     // to the chat, so the chat doubles as a Markdown editor with live
     // preview.
@@ -2009,7 +2009,7 @@ void ChatEditor::openHumanEditorDocument(const QString &convId, qint64 msgId, co
     const QString uniqueId = msgId > 0
         ? (QStringLiteral("llamacpp-message-") + QString::number(msgId))
         : (QStringLiteral("llamacpp-reply-") + QString::number(QDateTime::currentMSecsSinceEpoch()));
-    // The (throw‑away) file path doubles as the document's identity; the
+    // The (throw-away) file path doubles as the document's identity; the
     // real content is passed separately and the tab shows a friendly name.
     const QString path = humanEditorFilePath(uniqueId);
 
@@ -2031,9 +2031,9 @@ void ChatEditor::openHumanEditorDocument(const QString &convId, qint64 msgId, co
     }
 
     // openEditorWithContents() does not put the path on the document (it only
-    // uses it to pick the factory); a file‑less document would trigger a
+    // uses it to pick the factory); a file-less document would trigger a
     // "Save As" dialog on save (isSaveAsNeeded() is true when filePath() is
-    // empty), so point it at the throw‑away file explicitly.
+    // empty), so point it at the throw-away file explicitly.
     editor->document()->setFilePath(FilePath::fromString(path));
     editor->document()->setPreferredDisplayName(
         msgId > 0 ? Tr::tr("Edit Message") : Tr::tr("Human Editor"));
@@ -2131,7 +2131,7 @@ void ChatEditor::onMessageExtraUpdated(const Message &msg, const QList<QVariantM
         w->message().extra = newExtra;
         w->messageCompleted(true);
         // Apply the (grown) height in the same frame instead of waiting for
-        // the queued documentSizeChanged fixup – avoids a one‑frame jump
+        // the queued documentSizeChanged fixup - avoids a one-frame jump
         // when the tool result appears.
         w->recomputeFixedHeight();
     }
@@ -2147,7 +2147,7 @@ void ChatEditor::updateSpeedLabel(const Message &msg)
     if (msg.content.isEmpty() && msg.promptProgress.total > 0) {
         // The server reports processed tokens *including* the cached
         // prefix (processed >= cache), so the cached part must be
-        // excluded on both sides – like the llama.cpp web UI – or a
+        // excluded on both sides - like the llama.cpp web UI - or a
         // mostly-cached prompt (every turn after the first) shows ~100%
         // from the very first event and stays there while only the small
         // uncached delta is being processed.
@@ -2252,7 +2252,7 @@ void ChatEditor::updateSteeringButton()
 
     // The menu only changes when the queue does (steeringQueueChanged)
     // or the conversation switches (refreshMessages), so rebuilding it
-    // here keeps it in sync without an about‑to‑show hook.
+    // here keeps it in sync without an about-to-show hook.
     m_steeringMenu->clear();
     for (int i = 0; i < queued.size(); ++i) {
         const QString text = queued.at(i);
@@ -2260,7 +2260,7 @@ void ChatEditor::updateSteeringButton()
         QString label = firstLine;
         if (label.size() > 60) {
             int cut = 60;
-            // Don't split a surrogate pair (e.g. an emoji) in half – the
+            // Don't split a surrogate pair (e.g. an emoji) in half - the
             // orphaned high surrogate would render as a broken glyph.
             if (label.at(cut - 1).isHighSurrogate() && label.at(cut).isLowSurrogate())
                 --cut;
@@ -2280,8 +2280,8 @@ void ChatEditor::updateSteeringButton()
 void ChatEditor::scrollToBottom()
 {
     // Pin the viewport to the bottom and resume automatic following. Only
-    // call this for user‑initiated actions (send, regenerate, sibling
-    // switch); never for streamed data – the AutoScrollArea keeps the view
+    // call this for user-initiated actions (send, regenerate, sibling
+    // switch); never for streamed data - the AutoScrollArea keeps the view
     // on the newest message on its own while the user is pinned to the
     // bottom and must not yank the view down while the user reads further up.
     m_scrollArea->followToBottom();

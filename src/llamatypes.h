@@ -37,17 +37,17 @@ struct PromptProgress
  * displayed in the UI.
  *
  * root
- *  ├── message 1
- *  │      └── message 2
- *  │             └── message 3
- *  └── message 4
- *        └── message 5
+ *  +-- message 1
+ *  |      `-- message 2
+ *  |             `-- message 3
+ *  `-- message 4
+ *        `-- message 5
  *
  * In the above example, assuming that user wants to edit message 2, a new branch will be created:
  *
- *          ├── message 2
- *          │   └── message 3
- *          └── message 6
+ *          +-- message 2
+ *          |   `-- message 3
+ *          `-- message 6
  *
  * Message 2 and 6 are siblings, and message 6 is the new branch.
  *
@@ -58,7 +58,7 @@ struct PromptProgress
 
 struct Message
 {
-    qint64 id; // 64‑bit is plenty
+    qint64 id; // 64-bit is plenty
     QString convId;
     QString type;     // "text" | "root"
     qint64 timestamp; // from QDateTime::currentMSecsSinceEpoch()
@@ -68,7 +68,7 @@ struct Message
     PromptProgress promptProgress;
     QList<QVariantMap> extra; // array of MessageExtra
 
-    // Node relations – stored in the DB, not serialised directly
+    // Node relations - stored in the DB, not serialised directly
     qint64 parent;
     QList<qint64> children;
     bool haveContent = false;
@@ -76,7 +76,7 @@ struct Message
     QString toolCallPreview;    // optional summary of the partial arguments, e.g. "Add src/main.cpp"
 
     // Transient (not persisted): the stream reported a context-overflow
-    // error, so the (empty) assistant message must not be committed – the
+    // error, so the (empty) assistant message must not be committed - the
     // turn ends with a visible error suggesting to continue in a new
     // conversation instead.
     bool overflowError = false;
@@ -121,11 +121,11 @@ struct APIMessage
 
 struct Conversation
 {
-    QString id; // e.g. “conv-1234567890”
+    QString id; // e.g. "conv-1234567890"
     qint64 lastModified{-1};
     qint64 currNode{-1}; // id of the node currently shown
     QString name;
-    QString parentId; // id of the parent conversation (empty for top‑level); set for task (sub‑agent) conversations
+    QString parentId; // id of the parent conversation (empty for top-level); set for task (sub-agent) conversations
 };
 
 struct ViewingChat

@@ -11,9 +11,9 @@
 namespace LlamaCpp {
 
 /**
- * Tree model of the conversations.  Task (sub‑agent) conversations are
+ * Tree model of the conversations.  Task (sub-agent) conversations are
  * nested as children of the conversation that spawned them (via
- * Conversation::parentId).  Top‑level conversations have an empty parentId.
+ * Conversation::parentId).  Top-level conversations have an empty parentId.
  */
 class ConversationsModel : public QAbstractItemModel
 {

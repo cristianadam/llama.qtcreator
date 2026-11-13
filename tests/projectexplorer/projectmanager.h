@@ -20,7 +20,7 @@ public:
     //! until the next setStartupProject or resetStartupProject call.
     static Project *setStartupProject(const QString &projectDirectory)
     {
-        // One stub instance for the whole test run – it is never touched
+        // One stub instance for the whole test run - it is never touched
         // after being unregistered, so keeping it is harmless.
         static Project stub;
         stub.setProjectDirectoryForTest(projectDirectory);

@@ -29,7 +29,7 @@ public:
     void addFilesFromMimeData(const QMimeData *mimeData);
 
     //! The message text edit (the ChatEditor moves the focus back to it
-    //! when the in‑chat find bar is closed with Escape).
+    //! when the in-chat find bar is closed with Escape).
     QTextEdit *textEdit() const { return m_txt; }
 
 signals:

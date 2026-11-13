@@ -23,7 +23,7 @@ namespace LlamaCpp {
 class Storage;
 class Tool;
 
-//! Sanitizes a conversation name (usually model‑generated) for use as a
+//! Sanitizes a conversation name (usually model-generated) for use as a
 //! document name: newlines, tabs and other control characters become plain
 //! spaces, runs of whitespace are squeezed and the length is capped, so the
 //! name always stays on a single line in the editor tab and the document
@@ -38,7 +38,7 @@ struct ToolCall
 };
 
 //! Tool calls aggregated while an assistant stream is in flight (per
-//! conversation).  Slots are never removed mid-stream – removing one would
+//! conversation).  Slots are never removed mid-stream - removing one would
 //! shift the indices the server keeps sending; the \a done set marks slots
 //! whose arguments already parsed and were committed to the pending message.
 struct StreamingToolCalls
@@ -63,7 +63,7 @@ public:
     //! ("Save as Markdown" in the conversations view and the editor's save
     //! path).  Tool messages render their tool call and result as a
     //! collapsible <details> block.  Returns an empty string for messages
-    //! that have nothing to show (e.g. a tool‑call‑only assistant wrapper,
+    //! that have nothing to show (e.g. a tool-call-only assistant wrapper,
     //! whose tool call is exported with the tool message instead).
     static QString messageToMarkdown(const Message &msg);
 
@@ -108,7 +108,7 @@ public:
                      std::function<void(qint64)> onChunk);
 
     //! Number of user messages queued for \a convId while a reply was being
-    //! generated (mid‑run steering, see sendMessage()).
+    //! generated (mid-run steering, see sendMessage()).
     int steeringQueueSize(const QString &convId) const;
 
     //! The queued steering messages of \a convId, in queue order (for the
@@ -146,7 +146,7 @@ public:
     //! to load the model when it is not loaded yet.
     void selectModel(const QString &id);
 
-    //! True when the "Human Editor" pseudo‑model is selected: the
+    //! True when the "Human Editor" pseudo-model is selected: the
     //! "assistant" side of the conversation is a human typing Markdown in
     //! a text editor split next to the chat, not a llama.cpp model (no
     //! server request is made).
@@ -160,7 +160,7 @@ public:
     //! editor was closed without saving / the generation was stopped).
     void abortHumanEditorMessage(const QString &convId);
 
-    //! In‑place edit of a stored message's content ("Human Editor" mode):
+    //! In-place edit of a stored message's content ("Human Editor" mode):
     //! updates the database and emits Storage::messageContentUpdated.
     void updateMessageContent(const QString &convId, qint64 msgId, const QString &content);
 
@@ -169,9 +169,9 @@ public:
     // message, closing it without saving aborts a pending reply.
 
     //! Registers \a document (shown in \a editor) as a "Human Editor"
-    //! session.  \a msgId > 0: in‑place edit of that stored message;
+    //! session.  \a msgId > 0: in-place edit of that stored message;
     //! otherwise a new pending reply for \a convId.  \a filePath is the
-    //! throw‑away temp file backing the document, removed when the editor
+    //! throw-away temp file backing the document, removed when the editor
     //! closes.
     void registerHumanEditorSession(Core::IDocument *document,
                                     Core::IEditor *editor,
@@ -192,15 +192,15 @@ public:
 
     Conversation createConversation(const QString &name);
 
-    //! Creates a conversation used by the "task" tool as a sub‑agent session.
+    //! Creates a conversation used by the "task" tool as a sub-agent session.
     //! Unlike createConversation() it does not make the new conversation the
     //! active one, so the UI keeps showing the parent conversation.
     Conversation createTaskConversation(const QString &name);
 
     //! Sets the system prompt and the whitelist of tools that may be used in
     //! a task conversation.  When the whitelist is empty every enabled tool
-    //! is available.  "task" itself is never advertised in a sub‑conversation
-    //! (no sub‑agent recursion).
+    //! is available.  "task" itself is never advertised in a sub-conversation
+    //! (no sub-agent recursion).
     void configureTaskConversation(const QString &convId,
                                    const QString &systemPrompt,
                                    const QStringList &allowedTools);
@@ -209,10 +209,10 @@ public:
     void renameConversation(const QString &convId, const QString &name);
     bool conversationExists(const QString &convId);
 
-    //! True when \a convId is a task (sub‑agent) conversation that is still
+    //! True when \a convId is a task (sub-agent) conversation that is still
     //! working (streaming a reply or running a tool).  Such a conversation
     //! keeps running in the background when its editor is closed: the
-    //! sub‑agent finishes on its own and reports back to the parent
+    //! sub-agent finishes on its own and reports back to the parent
     //! conversation.
     bool isTaskConversationRunning(const QString &convId) const;
     void deleteMessageBranch(const QString &convId, qint64 msgId);
@@ -239,13 +239,13 @@ public:
     //! is created and the threshold trigger fires again at the next quiet
     //! point.  Running the document as a normal turn reuses the warm prompt
     //! cache of the previous turn instead of a fresh full-history request.
-    //! Called from the auto‑handoff threshold trigger, which is checked for
-    //! every assistant turn – a tool loop is handed off once the current
+    //! Called from the auto-handoff threshold trigger, which is checked for
+    //! every assistant turn - a tool loop is handed off once the current
     //! tool batch has reported back (m_handoffPending); the "recently
     //! handed off" guard skips conversations handed off less than six
     //! messages ago.
     //! Returns true when the handoff prompt was appended and the document
-    //! generation started; the caller of a deferred (tool‑batch) handoff
+    //! generation started; the caller of a deferred (tool-batch) handoff
     //! falls back to the regular next turn when it is false.
     bool handoffConversation(const QString &convId, qint64 leafNodeId);
 
@@ -273,7 +273,7 @@ signals:
     //! The pending "Human Editor" assistant message was discarded.
     void humanEditorAborted(const QString &convId);
 
-    // emitted when the active conversation changes – UI can react
+    // emitted when the active conversation changes - UI can react
     void messageAppended(const LlamaCpp::Message &msg, qint64 pendingId);
     void pendingMessageChanged(const LlamaCpp::Message &msg);
 
@@ -311,7 +311,7 @@ private:
     void applyModelSseEvent(const QJsonObject &envelope);
 
     //! Lightweight identity probe (role, model, build, context) for servers
-    //! without the /models/sse feed (single‑model mode, older versions):
+    //! without the /models/sse feed (single-model mode, older versions):
     //! they give no signal that they (re)started with a different model, so
     //! the probe runs periodically and refreshes the props and model list
     //! when its answer changed (the web UI needs no such probe: a browser
@@ -320,7 +320,7 @@ private:
 
     QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
 
-    //! Persists the user messages queued for \a convId (mid‑run steering) as
+    //! Persists the user messages queued for \a convId (mid-run steering) as
     //! a chain of user messages after \a afterId.  Returns the id of the
     //! last persisted message, or \a afterId when the queue is empty.
     qint64 flushSteeringQueue(const QString &convId, qint64 afterId);
@@ -330,7 +330,7 @@ private:
     //! the waiting "task" tool when \a pm belongs to a task conversation.
     void failTurn(Message pm, const QString &error);
 
-    //! Creates the continuation of a handed‑off conversation: a new
+    //! Creates the continuation of a handed-off conversation: a new
     //! conversation ("Continuation of <name>") whose first message is the
     //! handoff document (code fences stripped), seeded with an immediate
     //! reply and opened in an editor.  \a handoffLeaf is the id of the
@@ -343,7 +343,7 @@ private:
                          const std::function<void(QJsonObject &payload)> &payloadBuilder,
                          std::function<void(qint64)> onChunk);
 
-    // Fills the payload for auxiliary requests (conversation title, follow‑up
+    // Fills the payload for auxiliary requests (conversation title, follow-up
     // suggestions, the handoff document). Unlike addCommonPayloadParams() it
     // does NOT apply the user's sampling settings and max_tokens: the token
     // budget is capped at @p maxTokens and thinking is turned off, so these
@@ -383,7 +383,7 @@ private:
     QString m_activeConvId;
 
     QHash<QString, Message> m_pendingMessages;
-    //! The in‑flight chat stream of each conversation.  Guarded pointers:
+    //! The in-flight chat stream of each conversation.  Guarded pointers:
     //! the reply deletes itself (deleteLater) when it finishes, so an entry
     //! can outlive it.
     QHash<QString, QPointer<QNetworkReply>> m_abortControllers;
@@ -391,7 +391,7 @@ private:
     QHash<QString, QNetworkReply *> m_followUpReplies;
     QHash<QString, StreamingToolCalls> m_streamingToolCalls;
 
-    //! Per‑stream bookkeeping the finished handler needs besides the pending
+    //! Per-stream bookkeeping the finished handler needs besides the pending
     //! message (kept here: Message is shared with storage and the UI).
     struct StreamStatus
     {
@@ -408,7 +408,7 @@ private:
     QHash<QString, int> m_consecutiveToolTurns;
 
     //! Number of tools currently executing (per conversation).  Tools run
-    //! asynchronously, so a conversation stays "busy" until every in‑flight
+    //! asynchronously, so a conversation stays "busy" until every in-flight
     //! tool has reported back.
     QHash<QString, int> m_runningTools;
 
@@ -418,12 +418,12 @@ private:
     QHash<QString, QVector<std::shared_ptr<Tool>>> m_activeTools;
 
     //! Conversations where the user asked to stop while tools were running.
-    //! When the last in‑flight tool of such a conversation reports back, the
+    //! When the last in-flight tool of such a conversation reports back, the
     //! conversation ends there instead of the model getting another turn.
     QSet<QString> m_stopRequested;
 
-    //! User messages typed while a reply was being generated (mid‑run
-    //! steering, like the steering/follow‑up queues of pi and opencode).
+    //! User messages typed while a reply was being generated (mid-run
+    //! steering, like the steering/follow-up queues of pi and opencode).
     //! They are persisted and handed to the model at the next loop point:
     //! after the current tool batch, or when the reply would end.
     struct SteeringMessage
@@ -437,14 +437,14 @@ private:
     //! (the handoff prompt message was appended, the reply is streaming).
     //! The auxiliary payload parameters apply (capped budget, thinking
     //! off, chat model for the warm prompt cache), and the finished
-    //! handler hands the reply over to a new conversation – or drops the
+    //! handler hands the reply over to a new conversation - or drops the
     //! handoff exchange again when no usable document was written.
     struct HandoffTurn {
         //! The handoff prompt message appended to the conversation (the
         //! root of the branch that is dropped when the handoff fails).
         qint64 promptId{-1};
         //! The leaf the prompt was appended to (where the error note of a
-        //! failed handoff is re‑anchored).
+        //! failed handoff is re-anchored).
         qint64 leafId{-1};
     };
     QHash<QString, HandoffTurn> m_handoffTurns;
@@ -456,23 +456,23 @@ private:
     //! branch has grown since the last handoff.
     QHash<QString, qint64> m_lastHandoffLeaf;
 
-    //! Conversations whose current tool batch must trigger the auto‑handoff
+    //! Conversations whose current tool batch must trigger the auto-handoff
     //! once every tool has reported back, instead of the model getting
-    //! another turn: the context threshold is exceeded and the in‑flight
+    //! another turn: the context threshold is exceeded and the in-flight
     //! turn carried tool calls, so the handoff is deferred to the end of
     //! the batch (executeToolAndSendResult()).
     QSet<QString> m_handoffPending;
 
-    // Task‑conversation (sub‑agent) state
+    // Task-conversation (sub-agent) state
     struct TaskConversationConfig
     {
         QString systemPrompt;
         QStringList allowedTools; // empty = every enabled tool
     };
-    //! Task conversations whose sub‑agent is still running, i.e. whose
+    //! Task conversations whose sub-agent is still running, i.e. whose
     //! parent's "task" tool is still waiting for the result: cleared when
     //! the task finishes, fails, is stopped or is deleted.  The
-    //! persistent sub‑agent identity of a (finished) task conversation
+    //! persistent sub-agent identity of a (finished) task conversation
     //! lives in m_taskConfigs, so it can be reopened and worked on with
     //! the same system prompt and tool whitelist.
     QSet<QString> m_taskConversations;
@@ -483,10 +483,10 @@ private:
     struct HumanEditorSession
     {
         QString convId;
-        qint64 msgId{0}; // >0: in‑place edit of a stored message; 0: pending reply
+        qint64 msgId{0}; // >0: in-place edit of a stored message; 0: pending reply
         const Core::IDocument *document{nullptr};
         Core::IEditor *editor{nullptr};
-        QString filePath; // throw‑away temp file, removed when the editor closes
+        QString filePath; // throw-away temp file, removed when the editor closes
         bool committed{false}; // content already saved to the chat
     };
     QHash<const Core::IDocument *, HumanEditorSession> m_humanEditorSessions;

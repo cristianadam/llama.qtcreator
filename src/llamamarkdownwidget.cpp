@@ -40,7 +40,7 @@ namespace {
 // The editor's font (family + size), scaled by the chat font zoom.  It is
 // used as the conversation's monospace (code) font, and its size drives the
 // proportional (prose) font so the two stay consistent.  Using the editor
-// font's size – instead of a fixed one – keeps the chat text the same size
+// font's size - instead of a fixed one - keeps the chat text the same size
 // as the code the user is writing, and lets Ctrl+mouse-wheel / the zoom
 // commands rescale it around that base.
 QFont editorFont()
@@ -94,7 +94,7 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
     setOpenLinks(false);
 
     // Code uses the editor font.  Prose keeps the platform's default
-    // (sans‑serif) family but is sized to match the editor font, so the
+    // (sans-serif) family but is sized to match the editor font, so the
     // reading text stays proportional while still matching the size of the
     // code the user is writing.
     const QFont monoFont = editorFont();
@@ -136,7 +136,7 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
     viewport()->installEventFilter(hoverFilter);
 
     // All labels share the single spinner movie (created once, on first
-    // use – see sharedSpinnerMovie()): a per‑label movie would render the
+    // use - see sharedSpinnerMovie()): a per-label movie would render the
     // frames once per label per tick.
     setMovie(sharedSpinnerMovie());
 
@@ -177,7 +177,7 @@ void MarkdownLabel::setMarkdown(const QString &markdown, bool completed)
     m_markdownConversionTimer.start();
     auto guard = qScopeGuard([this] { m_markdownConversionTimer.restart(); });
 
-    // Make sure the widget’s minimum width is large enough for the
+    // Make sure the widget's minimum width is large enough for the
     // longest line in the markdown.
     adjustMinimumWidth(markdown);
 
@@ -200,13 +200,13 @@ void MarkdownLabel::resizeEvent(QResizeEvent *event)
 {
     MarkdownRenderer::resizeEvent(event);          // keep normal behaviour
     if (viewport()->width() > 0)
-        document()->setTextWidth(viewport()->width()); // re‑wrap at new width
+        document()->setTextWidth(viewport()->width()); // re-wrap at new width
     // SVG images were rasterized at the old text width; re-serve them so
     // they track the new column width (loadResource() is not called again
     // for URLs the document has already fetched).
     refreshSvgResources();
     // Raster images (data: attachments, local files) were scaled at the old
-    // width too — they can have been first loaded while the widget was
+    // width too - they can have been first loaded while the widget was
     // still hidden (200 px floor), which would keep them small after the
     // window grows.
     refreshDisplayImages();
@@ -215,14 +215,14 @@ void MarkdownLabel::resizeEvent(QResizeEvent *event)
 
 void MarkdownLabel::notifyGeometryChanged()
 {
-    // The document height just changed. Invalidate the height‑for‑width
+    // The document height just changed. Invalidate the height-for-width
     // state of this widget *and* of every ancestor that has a layout.
     //
     // Qt 6.11 caches HFW results in two places:
     //  - QBoxLayoutPrivate::calcHfw() stores hfwWidth/hfwHeight and returns
     //    the cached height for every repeated query at the same width until
     //    the layout is invalidated (qboxlayout.cpp);
-    //  - QWidgetItemV2::heightForWidth() keeps a small per‑item LRU cache of
+    //  - QWidgetItemV2::heightForWidth() keeps a small per-item LRU cache of
     //    (width, height) pairs that is only cleared by
     //    QWidgetItemV2::invalidateSizeCache() (qlayoutitem.cpp).
     //
@@ -248,10 +248,10 @@ void MarkdownLabel::wheelEvent(QWheelEvent *event)
     // The base implementation cannot be left in place: Qt 6 forwards every
     // wheel event on a QAbstractScrollArea to its own scroll bars
     // (QAbstractScrollArea::wheelEvent), and a scroll bar accepts the event
-    // as long as its value can still move – even when its policy is
+    // as long as its value can still move - even when its policy is
     // ScrollBarAlwaysOff, which only controls visibility.  A document that
     // is a single pixel taller than the viewport (streaming, an in-flight
-    // height fix-up) is therefore enough to swallow the notch – and with
+    // height fix-up) is therefore enough to swallow the notch - and with
     // Ctrl held, scrollByDelta() would even scroll the message by a whole
     // page instead of letting the zoom handler in ChatEditor see the event.
     event->ignore();
@@ -262,7 +262,7 @@ int MarkdownLabel::heightForWidth(int w) const
     // heightForWidth is disabled for layout (setHeightForWidth(false)),
     // but the layout system may still query it.  Heights are managed
     // explicitly via ChatMessage::updateFixedHeight(), so just report the
-    // height at the *current* text width — without reflowing the document
+    // height at the *current* text width - without reflowing the document
     // at the queried width (a side effect that produced inconsistent
     // results across sizing passes).
     Q_UNUSED(w)
@@ -300,7 +300,7 @@ void MarkdownLabel::setMovie(QMovie *movie)
                 this,
                 &MarkdownLabel::onSpinnerFrameChanged,
                 Qt::QueuedConnection);
-        // make sure the movie is started – it will also be started lazily
+        // make sure the movie is started - it will also be started lazily
         // the first time loadResource() is called.
         if (m_spinner->state() != QMovie::Running)
             m_spinner->start();
@@ -320,12 +320,12 @@ QVariant MarkdownLabel::loadResource(int type, const QUrl &name)
         // The movie already keeps the correct device pixel ratio.
         QImage frame = m_spinner->currentImage();
         if (frame.isNull()) {
-            // The movie may not have produced a frame yet – force an update.
+            // The movie may not have produced a frame yet - force an update.
             m_spinner->jumpToNextFrame();
             frame = m_spinner->currentImage();
         }
 
-        // Return a QImage – the layout will paint it directly.
+        // Return a QImage - the layout will paint it directly.
         return frame;
     }
 
@@ -361,7 +361,7 @@ QVariant MarkdownLabel::displayImageForUrl(const QUrl &name)
     };
 
     if (name.scheme() == QLatin1String("data")) {
-        // "data:<mime>;base64,<payload>" – image attachments of tool
+        // "data:<mime>;base64,<payload>" - image attachments of tool
         // results (read_file on an image file), shown in the expanded tool
         // call.
         const QString payload = name.toString().section(QLatin1Char(','), 1);
@@ -435,7 +435,7 @@ QVariant MarkdownLabel::renderSvgResource(const QUrl &name)
     // Render at device resolution so the picture stays crisp on HiDPI.
     // Floor at 2x: loadResource() is often first called while the widget is
     // still hidden (devicePixelRatioF() == 1), and the raster is cached
-    // until the next resize – a 1x raster then shows pixelated on Retina.
+    // until the next resize - a 1x raster then shows pixelated on Retina.
     const qreal dpr = qMax(devicePixelRatioF(), 2.0);
     QImage image(QSize(qCeil(w * dpr), qCeil(h * dpr)), QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent); // QImage(size, format) leaves pixels uninitialized;

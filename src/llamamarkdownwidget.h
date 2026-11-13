@@ -29,7 +29,7 @@ public:
     QSize sizeHint() const override;
 
     /* set the movie that will be used for all URLs that start with
-       "spinner://".  The movie is *not* owned by the document – you can
+       "spinner://".  The movie is *not* owned by the document - you can
        reuse the same QMovie for many documents if you wish. */
     void setMovie(QMovie *movie);
 

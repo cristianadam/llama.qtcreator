@@ -141,7 +141,7 @@ signals:
 
     // A diagram SVG was freshly rendered (not served from the persistent
     // cache): the chat UI persists it with the message (Message.extra) so
-    // the next render — conversation reopen, export — can reuse it.
+    // the next render - conversation reopen, export - can reuse it.
     void diagramRendered(const QString &key, const DiagramSvg &svg);
 
 protected:
@@ -258,7 +258,7 @@ private:
     // The character format the running text is inserted with: the top of the
     // inline-format stack (or a fresh format), always carrying the theme's
     // text colour unless a more specific one is already set. Centralising it
-    // here is what keeps plain text between inline spans (code, links, …)
+    // here is what keeps plain text between inline spans (code, links, ...)
     // the same colour as the surrounding text, and makes the colour come from
     // the palette rather than the widget palette (which the host can reset).
     QTextCharFormat baseCharFormat() const;

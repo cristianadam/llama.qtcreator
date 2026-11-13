@@ -42,7 +42,7 @@ public:
 
     bool isTool() const;
 
-    //! Toggles the in‑place "Edit" button on assistant messages (visible
+    //! Toggles the in-place "Edit" button on assistant messages (visible
     //! only in "Human Editor" mode, where assistant messages are edited in
     //! the split text editor).
     void setHumanEditorMode(bool on);
@@ -80,7 +80,7 @@ private:
     void applyStyleSheet();
     QString getToolUsageAndResult() const;
     bool haveToolCalls() const;
-    // True for assistant messages that consist of nothing but tool calls –
+    // True for assistant messages that consist of nothing but tool calls -
     // their tool bubble renders the call, so the empty bubble is hidden.
     bool shouldCollapse() const;
 

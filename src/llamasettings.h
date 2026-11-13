@@ -65,8 +65,8 @@ public:
     Utils::IntegerAspect dry_penalty_last_n{this};
     Utils::IntegerAspect max_tokens{this};
     Utils::StringAspect customJson{this};
-    // Optional (typically smaller) model used for auxiliary requests –
-    // conversation titles and follow‑up suggestions. Empty means: use the
+    // Optional (typically smaller) model used for auxiliary requests -
+    // conversation titles and follow-up suggestions. Empty means: use the
     // active chat model.
     Utils::StringAspect utilityModel{this};
     // "default" (the model's default), "off" (thinking disabled, sent as
@@ -83,7 +83,7 @@ public:
 
     // Skills (see the "Skills" settings page): the directories scanned for
     // SKILL.md files, and the discovered skills the user turned off (by
-    // canonical SKILL.md path – skills are enabled by default).
+    // canonical SKILL.md path - skills are enabled by default).
     Utils::StringListAspect skillsDirectories{this};
     Utils::StringListAspect disabledSkillsList{this};
 
@@ -93,7 +93,7 @@ public:
     // on land in this list.
     Utils::StringListAspect enabledMcpToolsList{this};
     // User-configured MCP servers (managed on the "Tools" settings page),
-    // stored as a JSON array of {name, url, headers} objects – see
+    // stored as a JSON array of {name, url, headers} objects - see
     // Tools::McpServerConfig. The builtin Qt Creator MCP server is not
     // listed here; it is used automatically when available.
     Utils::StringAspect mcpServersJson{this};
@@ -112,12 +112,12 @@ public:
     // Sandbox details (see the "Sandbox" settings page): directories the
     // sandbox grants on top of the project directory and the temporary
     // locations, and the network policy of the sandboxed commands.
-    //   sandboxWritableDirs – extra locations the tools may write to;
-    //   sandboxReadOnlyDirs – extra locations readable inside the sandbox
+    //   sandboxWritableDirs - extra locations the tools may write to;
+    //   sandboxReadOnlyDirs - extra locations readable inside the sandbox
     //                         (only the Windows container restricts reads);
-    //   sandboxDenyReadDirs – extra locations no tool may read, on top of
+    //   sandboxDenyReadDirs - extra locations no tool may read, on top of
     //                         the built-in credential locations;
-    //   sandboxAllowNetwork – let sandboxed bash use the network (default off).
+    //   sandboxAllowNetwork - let sandboxed bash use the network (default off).
     Utils::StringListAspect sandboxWritableDirs{this};
     Utils::StringListAspect sandboxReadOnlyDirs{this};
     Utils::StringListAspect sandboxDenyReadDirs{this};

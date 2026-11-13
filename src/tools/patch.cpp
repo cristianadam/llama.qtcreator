@@ -71,7 +71,7 @@ bool lineEquals(int pass, const QString &a, const QString &b)
 //! Where a pattern comes closest to matching, for use in error messages.
 struct ClosestMatch
 {
-    int pos = -1; // 0‑based line of the best offset
+    int pos = -1; // 0-based line of the best offset
     int matched = 0; // leading pattern lines that matched there
     int total = 0; // pattern length
     QString expected; // first pattern line that did not match
@@ -400,7 +400,7 @@ QString applyUpdateChunks(const QString &oldContents,
                 early = locateLines(lines, pattern, 0, false);
 
             if (early != -1 && early < lineIndex) {
-                // The chunk does match – just earlier than the previous chunk,
+                // The chunk does match - just earlier than the previous chunk,
                 // i.e. the hunks are out of file order.
                 message += QStringLiteral(
                                "\n\nThe chunk matches at line %1, but the previous chunk ended at "

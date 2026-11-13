@@ -41,7 +41,7 @@ QJsonObject rpcRequest(quint32 id, const QString &method, const QJsonObject &par
 
 } // namespace
 
-// Note: no "destroyed" handler that aborts pending replies here – the
+// Note: no "destroyed" handler that aborts pending replies here - the
 // replies are children of the QNetworkAccessManager member, and members
 // are destroyed before the QObject base class (which emits destroyed),
 // so such a handler would already read freed state.
@@ -60,7 +60,7 @@ void McpClient::connectTo(const QUrl &url, const QStringList &httpHeaders)
     // re-handshakes on its own, so this self-heals quickly).
     if (m_state == State::Handshaking)
         return;
-    // Re‑handshake also when only the headers changed (e.g. the server's
+    // Re-handshake also when only the headers changed (e.g. the server's
     // authentication token was rotated on the same port).
     if (m_state == State::Ready && url == m_url && httpHeaders == m_requestHeaders)
         return;
@@ -276,12 +276,12 @@ quint32 McpClient::callTool(const QString &name,
             }
 
             if (httpStatus == 404) {
-                // The server restarted and our session is stale – redo the
+                // The server restarted and our session is stale - redo the
                 // handshake so subsequent calls work, and ask for a retry.
                 m_pending.remove(requestId);
                 const ToolCallback cb = m_pendingToolCalls.take(requestId);
                 if (cb) {
-                    qCWarning(lmcp) << "Stale MCP session detected – re-handshaking.";
+                    qCWarning(lmcp) << "Stale MCP session detected - re-handshaking.";
                     startHandshake();
                     cb(Tr::tr("The MCP server restarted; the call was not "
                               "executed. Please try again."),
@@ -389,7 +389,7 @@ QNetworkReply *McpClient::post(
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     // The streamable-HTTP endpoint requires both media types in Accept.
     request.setRawHeader("Accept", "application/json, text/event-stream");
-    // Request‑specific headers registered for the server (e.g. the
+    // Request-specific headers registered for the server (e.g. the
     // "Authorization: Bearer <token>" header when token auth is enabled).
     for (const QString &header : m_requestHeaders) {
         const int separator = header.indexOf(QLatin1Char(':'));

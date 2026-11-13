@@ -8,7 +8,7 @@ namespace LlamaCpp {
 
 /*! A single discovered skill, following the Agent Skills specification
     (agentskills.io): a directory containing a SKILL.md file with YAML
-    frontmatter, or – at the root of a skill directory – a bare Markdown
+    frontmatter, or - at the root of a skill directory - a bare Markdown
     file with a description in its frontmatter. */
 struct Skill
 {
@@ -21,7 +21,7 @@ struct Skill
 };
 
 //! A non-fatal problem found while scanning (malformed file, invalid
-//! metadata, name collision, …). Invalid skills are skipped, never fatal.
+//! metadata, name collision, ...). Invalid skills are skipped, never fatal.
 struct SkillDiagnostic
 {
     QString path;

@@ -18,8 +18,8 @@ namespace LlamaCpp {
  * Connects the chat tools to MCP servers.
  *
  * Supports the MCP server built into Qt Creator (the "mcpserver" plugin,
- * which exposes the IDE itself – building, running, opening and
- * inspecting projects – as MCP tools) in addition to arbitrary
+ * which exposes the IDE itself - building, running, opening and
+ * inspecting projects - as MCP tools) in addition to arbitrary
  * user-configured servers (managed on the "Tools" settings page, stored
  * in the McpServers setting as Tools::McpServerConfig entries).
  *
@@ -47,7 +47,7 @@ public:
     static McpBridge &instance();
 
     //! Display name of the builtin Qt Creator MCP server (its tool group
-    //! name); reserved – configured servers must not use it.
+    //! name); reserved - configured servers must not use it.
     static QString builtInServerName();
 
     /*! Starts watching for the builtin Qt Creator MCP server and connects

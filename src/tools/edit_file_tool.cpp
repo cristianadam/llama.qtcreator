@@ -86,7 +86,7 @@ QString applyTextEdits(const QString &content,
             }
             if (count > 1 && !replaceAll)
                 return QStringLiteral(
-                           "Found %1 occurrences of %2 in the file. The text must be unique – "
+                           "Found %1 occurrences of %2 in the file. The text must be unique - "
                            "provide more surrounding context, or set replace_all to true.")
                             .arg(count)
                             .arg(editRef("oldText", i, total));
@@ -129,7 +129,7 @@ QString applyTextEdits(const QString &content,
                         .arg(editRef("oldText", i, total));
         if (positions.size() > 1 && !replaceAll)
             return QStringLiteral(
-                       "Found %1 occurrences of %2 in the file. The text must be unique – "
+                       "Found %1 occurrences of %2 in the file. The text must be unique - "
                        "provide more surrounding context, or set replace_all to true.")
                         .arg(positions.size())
                         .arg(editRef("oldText", i, total));
@@ -147,7 +147,7 @@ QString applyTextEdits(const QString &content,
         }
     }
 
-    // Overlap check – all regions were matched against the original content.
+    // Overlap check - all regions were matched against the original content.
     std::sort(regions.begin(), regions.end(),
               [](const Region &a, const Region &b) { return a.start < b.start; });
     for (int i = 1; i < regions.size(); ++i) {
@@ -320,7 +320,7 @@ QString EditFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
 QString EditFileTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
     // The diff is the interesting part.
-    // On failure the ✗ icon suffices in the collapsed view; the error text
+    // On failure the X icon suffices in the collapsed view; the error text
     // is only shown in the expanded details.  +1 for the opening fence line:
     // the setting counts content lines, not fences.
     return ok ? truncatedPreview(detailsMarkdown(args, result, ok), toolPreviewLineCount() + 1)
@@ -334,8 +334,8 @@ void EditFileTool::run(const QJsonObject &args,
     if (path.isEmpty())
         return done(Tr::tr("Tool error: \"path\" must be a non-empty string."), false);
 
-    // Tolerate small‑model quirks in the arguments: "edits" may arrive as
-    // a JSON string, as a single edit object, or (legacy) as top‑level
+    // Tolerate small-model quirks in the arguments: "edits" may arrive as
+    // a JSON string, as a single edit object, or (legacy) as top-level
     // "oldText"/"newText" fields next to "path".  Normalise all of them to
     // the array form before validating.
     QJsonArray editsArray = args.value("edits").toArray();
@@ -400,7 +400,7 @@ void EditFileTool::run(const QJsonObject &args,
     QString result =
             Tr::tr("Successfully replaced %1 block(s) in %2.").arg(replacements).arg(path);
     // Show the change to the model directly: without it the model tends to
-    // re‑read the file just to verify the edit, costing a round trip.
+    // re-read the file just to verify the edit, costing a round trip.
     QString diff;
     for (const auto &edit : edits) {
         for (const QString &line : edit.first.split(QLatin1Char('\n')))
@@ -413,7 +413,7 @@ void EditFileTool::run(const QJsonObject &args,
     const QStringList diffLines = diff.split(QLatin1Char('\n'), Qt::KeepEmptyParts);
     if (diffLines.size() > kMaxDiffLines)
         diff = diffLines.mid(0, kMaxDiffLines).join(QLatin1Char('\n'))
-               + QStringLiteral("\n…");
+               + QStringLiteral("\n...");
     result += QLatin1Char('\n') + codeFence(diff, QStringLiteral("diff"));
     return done(result, true);
 }

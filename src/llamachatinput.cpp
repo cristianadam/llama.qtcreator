@@ -399,12 +399,12 @@ void ChatInput::addFilesFromLocalPaths(const QStringList &filePaths)
     for (const QString &path : filePaths) {
         FilePath localFile = FilePath::fromString(path);
         if (!localFile.isLocal())
-            continue; // skip non‑local files
+            continue; // skip non-local files
 
         const QString fileName = localFile.fileName();
 
         // If a file with the same name already exists, just replace its
-        // contents – we don't want duplicate tabs.
+        // contents - we don't want duplicate tabs.
         auto existing = std::ranges::find_if(m_attachedFiles, [fileName](const auto &pair) {
             return pair.first == fileName;
         });

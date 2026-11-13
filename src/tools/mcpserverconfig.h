@@ -30,7 +30,7 @@ struct McpServerConfig
     /*! Parses the stored JSON. Empty or malformed input yields an empty
         list; individual entries that are not valid (empty name, non-http(s)
         URL) are skipped, as are entries whose name duplicates an earlier
-        one (the first entry wins – the settings JSON is hand-editable and
+        one (the first entry wins - the settings JSON is hand-editable and
         duplicate names would collapse into a single bridge client). */
     static QVector<McpServerConfig> fromJson(const QString &json)
     {

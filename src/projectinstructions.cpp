@@ -50,13 +50,13 @@ FilePath gitRootOf(const FilePath &dir)
     return {};
 }
 
-//! Truncates \a data to at most \a maxBytes on a UTF‑8 character boundary.
+//! Truncates \a data to at most \a maxBytes on a UTF-8 character boundary.
 void truncateUtf8(QByteArray &data, int maxBytes)
 {
     if (data.size() <= maxBytes)
         return;
     data.truncate(maxBytes);
-    // A cut inside a multi‑byte sequence leaves a dangling leading byte
+    // A cut inside a multi-byte sequence leaves a dangling leading byte
     // followed by continuation bytes (10xxxxxx); drop the whole sequence.
     // A trailing continuation byte can only belong to a complete sequence
     // when the cut landed exactly on a character boundary, so the lead byte

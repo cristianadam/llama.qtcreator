@@ -174,9 +174,9 @@ void LsTool::run(const QJsonObject &args,
             if (nl != -1)
                 pos = nl;
             QByteArray cut = utf8.left(pos);
-            // Never split a multi‑byte UTF‑8 sequence (a single entry name
+            // Never split a multi-byte UTF-8 sequence (a single entry name
             // can exceed the whole cap): drop an incomplete trailing code
-            // point – its continuation bytes plus the lead byte.
+            // point - its continuation bytes plus the lead byte.
             int i = cut.size() - 1;
             if (i >= 0 && (static_cast<unsigned char>(cut.at(i)) & 0xC0) == 0x80) {
                 while (i >= 0 && (static_cast<unsigned char>(cut.at(i)) & 0xC0) == 0x80)

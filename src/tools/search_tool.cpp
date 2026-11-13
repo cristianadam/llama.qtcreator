@@ -147,7 +147,7 @@ void handleRgEvent(SearchState *state, const QByteArray &line)
     state->emittedLines.insert(key);
 
     if (text.size() > kMaxLineLength) {
-        text = text.left(kMaxLineLength) + QStringLiteral("…");
+        text = text.left(kMaxLineLength) + QStringLiteral("...");
         state->linesTruncated = true;
     }
 
@@ -231,7 +231,7 @@ QString SearchTool::detailsMarkdown(const QJsonObject &arguments, const QString 
 QString SearchTool::summaryPreview(const QJsonObject &arguments, const QString &result, bool ok) const
 {
     Q_UNUSED(arguments);
-    // The pattern header is already part of the one‑line summary; preview
+    // The pattern header is already part of the one-line summary; preview
     // the matches themselves, not the header (the default preview would
     // cut off right after the opening fence and render an empty block).
     return listPreview(result, ok);

@@ -1206,7 +1206,7 @@ void MarkdownRenderer::renderDetails(const markus::Document &doc,
 {
     // Section ids are ordinal (document order). The in-progress tail is
     // re-rendered on every feed, so its sections get the ids they will have
-    // once finalized – user expand/collapse choices survive re-renders.
+    // once finalized - user expand/collapse choices survive re-renders.
     const int secId = nextDetailsId();
 
     const QString summaryText
@@ -1524,7 +1524,7 @@ QTextCharFormat MarkdownRenderer::baseCharFormat() const
     QTextCharFormat fmt = m_textCharFormatStack.isEmpty() ? QTextCharFormat()
                                                           : m_textCharFormatStack.top();
     // Guarantee the theme's text colour on the running text. A format that
-    // already carries a foreground (block quote, link, …) keeps it.
+    // already carries a foreground (block quote, link, ...) keeps it.
     if (fmt.foreground().style() == Qt::NoBrush)
         fmt.setForeground(color(TextForeground));
     return fmt;
@@ -1558,7 +1558,7 @@ void MarkdownRenderer::handleInlineCode()
 {
     QTextCharFormat fmt = baseCharFormat();
     // setFont() below copies the mono font's own point size and weight (it is
-    // the editor's code font – smaller and normal weight).  Inside a heading
+    // the editor's code font - smaller and normal weight).  Inside a heading
     // the code span must instead keep the heading's scaled, bold font, so
     // remember what the current format has before it is overwritten.
     const bool inHeading = m_headingLevel > 0;
@@ -1626,7 +1626,7 @@ int MarkdownRenderer::getBlockQuoteMargin(int depth, int paragraphMargin)
 }
 
 // Left margin for a non-quoted <details> body (tool output). A flat, clearly
-// visible step per level – unlike getBlockQuoteMargin(), whose first level is
+// visible step per level - unlike getBlockQuoteMargin(), whose first level is
 // only a single paragraph margin.
 int MarkdownRenderer::getDetailsBodyMargin(int depth)
 {
@@ -2199,8 +2199,8 @@ void MarkdownRenderer::setColorPalette(const QHash<ColorRole, QColor> &p)
     applyDocumentTextColor();
 }
 // Keeps the widget palette's Text role in step with TextForeground so the
-// document's default (unformatted) text – paragraphs, the <details> summary
-// line, tool output – renders in the theme's text colour. The document
+// document's default (unformatted) text - paragraphs, the <details> summary
+// line, tool output - renders in the theme's text colour. The document
 // layout colours fragments without an explicit foreground from the widget
 // palette, so this is what makes plain text follow the active theme instead
 // of staying at the constructor's light-theme default (dark-on-dark in the
@@ -2220,7 +2220,7 @@ void MarkdownRenderer::setBaseFont(const QFont &f)
     m_baseFontSize = f.pointSizeF();
     // Keep the document's default font and the derived paragraph margin in
     // sync (setupDocumentSettings() runs once in the constructor, before the
-    // derived class has a chance to pick a real font – see MarkdownLabel).
+    // derived class has a chance to pick a real font - see MarkdownLabel).
     m_paragraphMargin = m_baseFontSize * 2 / 3;
     if (m_doc)
         m_doc->setDefaultFont(m_baseFont);

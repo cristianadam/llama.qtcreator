@@ -540,11 +540,11 @@ QString BashTool::toolDefinition() const
 QString BashTool::oneLineSummary(const QJsonObject &arguments) const
 {
     const QString command = arguments.value("command").toString();
-    // Only the first line goes into the summary; multi‑line commands
+    // Only the first line goes into the summary; multi-line commands
     // (heredocs, etc.) are signalled with an ellipsis.
     QString firstLine = command.section(QLatin1Char('\n'), 0, 0).trimmed();
     if (command.contains(QLatin1Char('\n')))
-        firstLine += QStringLiteral(" …");
+        firstLine += QStringLiteral(" ...");
     if (firstLine.isEmpty())
         return {};
     return Tr::tr("running %1").arg(codeSpan(firstLine));
@@ -560,7 +560,7 @@ void BashTool::runLive(const QJsonObject &arguments,
                        const OutputHandler &onOutput,
                        std::function<void(const QString &, bool)> done) const
 {
-    runCommand(arguments, std::move(done), onOutput); // copy – see runCommand()
+    runCommand(arguments, std::move(done), onOutput); // copy - see runCommand()
 }
 
 void BashTool::abort()
@@ -912,7 +912,7 @@ QString BashTool::detailsMarkdown(const QJsonObject &arguments, const QString &r
     // The command and its output go into a single code block with a "$ "
     // prompt in front of the command, so the expanded details read like a
     // terminal transcript.  Failures are visible in the output itself and
-    // via the ✗ icon in the summary, so no separate error header.
+    // via the X icon in the summary, so no separate error header.
     QString block = QStringLiteral("$ ") + command;
     if (!block.endsWith(QLatin1Char('\n')))
         block += QLatin1Char('\n');
@@ -934,16 +934,16 @@ QString BashTool::summaryPreview(const QJsonObject &arguments, const QString &re
         return {};
 
     // Show the *tail* of the output: the last lines usually carry the
-    // outcome of a command (summary lines, errors, final status).  The …
+    // outcome of a command (summary lines, errors, final status).  The ...
     // marker line is on top of the maxLines content lines, like the fence
     // lines are for the other tools.
     const int maxLines = toolPreviewLineCount();
     const QStringList lines = result.split(QLatin1Char('\n'));
     QString tail = result;
     if (lines.size() > maxLines)
-        // The … marks the earlier, omitted lines; the expand icon marks
+        // The ... marks the earlier, omitted lines; the expand icon marks
         // that more details are available.
-        tail = QStringLiteral("…\n") + lines.mid(lines.size() - maxLines).join(QLatin1Char('\n'));
+        tail = QStringLiteral("...\n") + lines.mid(lines.size() - maxLines).join(QLatin1Char('\n'));
     const int maxChars = previewCharLimit(maxLines);
     if (tail.size() > maxChars)
         tail = tail.left(maxChars - 1);

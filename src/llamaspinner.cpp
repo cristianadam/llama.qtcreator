@@ -44,7 +44,7 @@ bool SpinnerHandler::read(QImage *image)
     const QSize physicalSize = logicalSize * dpr;
 
     QImage img(physicalSize, m_imageFormat);
-    img.setDevicePixelRatio(dpr); // tell Qt this is a DPR‑scaled image
+    img.setDevicePixelRatio(dpr); // tell Qt this is a DPR-scaled image
     img.fill(backgroundColor);
 
     QPainter painter(&img);
@@ -57,7 +57,7 @@ bool SpinnerHandler::read(QImage *image)
 
     const QPointF centre(w / 2.0, h / 2.0);
 
-    // Background circle (the “track” – 25 % opacity)
+    // Background circle (the "track" - 25 % opacity)
     QColor bgColor(foregroundColor);
     bgColor.setAlphaF(0.25);
 
@@ -72,14 +72,14 @@ bool SpinnerHandler::read(QImage *image)
     painter.setBrush(Qt::NoBrush);
     painter.drawEllipse(centre, radius, radius);
 
-    // Foreground “spinner” arc
-    const qreal arcSpanDeg = 90.0;                            // 90°
-    const qreal startDeg = -arcSpanDeg / 2.0;                 // centre the arc at 0°
-    const int startAngle = static_cast<int>((startDeg) * 16); // QPainter uses 1/16°
+    // Foreground "spinner" arc
+    const qreal arcSpanDeg = 90.0;                            // 90 deg
+    const qreal startDeg = -arcSpanDeg / 2.0;                 // centre the arc at 0 deg
+    const int startAngle = static_cast<int>((startDeg) * 16); // QPainter uses 1/16 deg
     const int spanAngle = static_cast<int>(arcSpanDeg * 16);
 
     // Compute the rotation that corresponds to the current frame.
-    // imageCount() returns 10, so each frame advances 36°.
+    // imageCount() returns 10, so each frame advances 36 deg.
     const qreal rotationDeg = (frameIndex % imageCount())
                               * (360.0 / static_cast<qreal>(imageCount()));
     painter.save();
@@ -87,7 +87,7 @@ bool SpinnerHandler::read(QImage *image)
     painter.rotate(rotationDeg);
     painter.translate(-centre);
 
-    // Pen for the moving arc – full opacity, same colour as foreground.
+    // Pen for the moving arc - full opacity, same colour as foreground.
     QPen fgPen(foregroundColor);
     fgPen.setWidthF(2.0 * dpr);
     fgPen.setCapStyle(Qt::RoundCap);

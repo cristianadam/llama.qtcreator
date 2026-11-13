@@ -18,8 +18,8 @@ const bool registered = [] {
     return true;
 }();
 
-//! Magic‑byte image detection, the same formats pi's read tool supports.
-//! Returns the MIME type, or an empty string for non‑images.
+//! Magic-byte image detection, the same formats pi's read tool supports.
+//! Returns the MIME type, or an empty string for non-images.
 QString imageMimeType(const QByteArray &data)
 {
     const unsigned char *p = reinterpret_cast<const unsigned char *>(data.constData());
@@ -37,7 +37,7 @@ QString imageMimeType(const QByteArray &data)
     return {};
 }
 
-// A base64‑encoded image in the prompt is pure token cost; beyond this
+// A base64-encoded image in the prompt is pure token cost; beyond this
 // size a vision model cannot use it meaningfully anyway.
 constexpr int kMaxImageBytes = 10 * 1024 * 1024; // 10 MB
 } // namespace
@@ -86,13 +86,13 @@ QString ReadFileTool::oneLineSummary(const QJsonObject &args) const
 
 QString ReadFileTool::detailsMarkdown(const QJsonObject &args, const QString &result, bool ok) const
 {
-    // Failures show the raw error; the ✗ icon in the summary already marks
+    // Failures show the raw error; the X icon in the summary already marks
     // the call as failed.
     if (!ok || result.isEmpty())
         return result;
 
     const QString path = args.value("file_path").toString();
-    // The truncation hint ("[Showing lines …]") is appended by run() and is
+    // The truncation hint ("[Showing lines ...]") is appended by run() and is
     // not part of the file; keep it outside the code fence so it is not
     // highlighted as file content.
     const int hintPos = result.lastIndexOf(QStringLiteral("\n\n[Showing lines "));
@@ -106,8 +106,8 @@ QString ReadFileTool::detailsMarkdown(const QJsonObject &args, const QString &re
     return md;
 }
 
-// Whole‑file reads are capped so a huge file (minified JS, generated
-// data, …) cannot blow the local model's context window.  The caps match
+// Whole-file reads are capped so a huge file (minified JS, generated
+// data, ...) cannot blow the local model's context window.  The caps match
 // the bash tool's output limits.
 constexpr int kMaxWholeFileLines = 2000;
 constexpr int kMaxOutputBytes = 50 * 1024; // 50 KB
@@ -160,11 +160,11 @@ void ReadFileTool::run(const QJsonObject &args,
 
     const QString fileText = QString::fromUtf8(readRes.value());
     if (fileText.isEmpty())
-        return done({}, true); // empty file – nothing to read
+        return done({}, true); // empty file - nothing to read
     const QStringList allLines = fileText.split('\n', Qt::KeepEmptyParts);
     const int totalLines = allLines.size();
 
-    int startLine = 1; // 1‑based, inclusive
+    int startLine = 1; // 1-based, inclusive
     int endLine = totalLines;
     if (!readAll) {
         if (firstLine < 1) {
@@ -177,7 +177,7 @@ void ReadFileTool::run(const QJsonObject &args,
         startLine = firstLine;
         endLine = qMin(lastLineIncl, totalLines);
 
-        // Enforce the 250‑line hard limit per call.
+        // Enforce the 250-line hard limit per call.
         if (endLine - startLine + 1 > 250)
             endLine = startLine + 249;
     } else if (totalLines > kMaxWholeFileLines) {
@@ -194,7 +194,7 @@ void ReadFileTool::run(const QJsonObject &args,
 
     // Join the slice, cutting at a line boundary when the byte cap is hit.
     // The byte count is accumulated (one toUtf8() per line) instead of
-    // re‑encoding the growing text on every iteration.
+    // re-encoding the growing text on every iteration.
     QString text;
     qint64 byteSize = 0;
     int shownLastLine = endLine;

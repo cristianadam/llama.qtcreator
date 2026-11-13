@@ -40,7 +40,7 @@ using namespace Utils;
 
 namespace LlamaCpp {
 
-// Returns the thinking‑control kwarg of the chat template
+// Returns the thinking-control kwarg of the chat template
 // ("enable_thinking", "reasoning_effort" or "thinking"), or an empty string
 // when the template does not expose a known one (or does not support
 // thinking at all, see chatTemplateSupportsThinking()).
@@ -113,10 +113,10 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
         payload["model"] = model;
 }
 
-// Auxiliary requests (conversation title, follow‑up suggestions) are
+// Auxiliary requests (conversation title, follow-up suggestions) are
 // short housekeeping calls that fire right after every chat completion.
-// Sending them with the full chat settings – especially an uncapped
-// max_tokens and a high reasoning level – makes them occupy the server's
+// Sending them with the full chat settings - especially an uncapped
+// max_tokens and a high reasoning level - makes them occupy the server's
 // slot for a long time and delays the user's next prompt. Keep them cheap:
 // - no user sampling settings (a low temperature is enough here)
 // - a hard max_tokens cap
@@ -130,7 +130,7 @@ void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens,
     payload["temperature"] = 0.2;
     payload["top_p"] = 0.9;
     // Disable thinking in the way the template understands it: boolean
-    // kwargs (Qwen‑style "enable_thinking", DeepSeek‑0528‑style "thinking")
+    // kwargs (Qwen-style "enable_thinking", DeepSeek-0528-style "thinking")
     // go into chat_template_kwargs, while "reasoning_effort" templates take
     // the OAI field with the value "none" (cf. the title generation in
     // llama.cpp's tools/ui, which sends chat_template_kwargs with
@@ -170,7 +170,7 @@ static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTo
     for (const QString &toolName : std::as_const(creatorsList)) {
         std::unique_ptr<Tool> tool = ToolFactory::instance().create(toolName);
         if (!tool)
-            continue; // e.g. a remote tool that disappeared mid‑flight
+            continue; // e.g. a remote tool that disappeared mid-flight
 
         QJsonParseError err;
         QJsonDocument doc = QJsonDocument::fromJson(tool->toolDefinition().toUtf8(), &err);
@@ -183,27 +183,27 @@ static void addToolsToPayload(QJsonObject &payload, const QStringList *allowedTo
         const QString name = functionObj.value(QStringLiteral("name")).toString();
 
         if (allowedTools && !allowedTools->contains(name)) {
-            // Not part of the conversation‑specific tool whitelist (task
-            // sub‑agent) – it must not be advertised either.  An empty
+            // Not part of the conversation-specific tool whitelist (task
+            // sub-agent) - it must not be advertised either.  An empty
             // whitelist means no tools at all.
             continue;
         }
 
         if (!isToolEnabled(name)) {
-            // Skip disabled tools – they must never be advertised to the server.
+            // Skip disabled tools - they must never be advertised to the server.
             qCInfo(llamaChatTools).nospace()
                 << "Tool '" << name << "' is disabled, not adding it to payload.";
             continue;
         }
 
         if (name == QLatin1String("skill") && Skills::enabledSkills().isEmpty()) {
-            // No skills to load – advertising the tool would only cost
+            // No skills to load - advertising the tool would only cost
             // context. It reappears as soon as a skill is enabled.
             continue;
         }
         if (name == QLatin1String("websearch")
                 && !Tools::WebSearchConfig::fromSettings().isConfigured()) {
-            // No search backend configured – every call would fail.
+            // No search backend configured - every call would fail.
             continue;
         }
 
@@ -263,7 +263,7 @@ ChatManager::ChatManager(QObject *parent)
     connect(m_storage, &Storage::messageExtraUpdated, this, &ChatManager::messageExtraUpdated);
 
     // "Human Editor" documents: saving the split text editor commits its
-    // content as a chat message (a new assistant reply, or the in‑place
+    // content as a chat message (a new assistant reply, or the in-place
     // edit of a stored message).
     connect(Core::EditorManager::instance(),
             &Core::EditorManager::aboutToSave,
@@ -273,7 +273,7 @@ ChatManager::ChatManager(QObject *parent)
                 if (it == m_humanEditorSessions.end())
                     return;
                 // A pending reply is committed at most once (a later save is a
-                // plain file save); an in‑place edit re‑updates the message on
+                // plain file save); an in-place edit re-updates the message on
                 // every save.
                 if (it->committed && it->msgId <= 0)
                     return;
@@ -288,12 +288,12 @@ ChatManager::ChatManager(QObject *parent)
                 else
                     commitHumanEditorMessage(it->convId, content);
 
-                // Note: the throw‑away file is removed when the editor closes
-                // (not here – the actual file write happens after this signal).
+                // Note: the throw-away file is removed when the editor closes
+                // (not here - the actual file write happens after this signal).
             });
 
     // Closing a "Human Editor" editor without saving aborts the pending
-    // reply (an in‑place edit simply keeps the old content).
+    // reply (an in-place edit simply keeps the old content).
     connect(Core::EditorManager::instance(),
             &Core::EditorManager::editorAboutToClose,
             this,
@@ -304,7 +304,7 @@ ChatManager::ChatManager(QObject *parent)
                     if (it->editor != editor)
                         continue;
                     // A pending reply that was never saved is discarded; an
-                    // in‑place edit that was never saved keeps the old text.
+                    // in-place edit that was never saved keeps the old text.
                     if (it->msgId <= 0 && !it->committed)
                         abortHumanEditorMessage(it->convId);
                     if (!it->filePath.isEmpty())
@@ -362,7 +362,7 @@ void ChatManager::checkServerIdentity()
             return; // unchanged
 
         // The server (re)started with a different model or configuration:
-        // refresh the props and the model list (the latter re‑selects a
+        // refresh the props and the model list (the latter re-selects a
         // valid model and updates the combo and the welcome screen).
         initServerProps();
         refreshModels();
@@ -521,7 +521,7 @@ void ChatManager::refreshModels()
                         selected = true;
                 if (!selected && !isHumanEditor()) {
                     // Fall back to the loaded model, or the first one if none
-                    // is loaded yet.  The "Human Editor" pseudo‑model is not
+                    // is loaded yet.  The "Human Editor" pseudo-model is not
                     // in the server's list, so it must not be clobbered.
                     m_selectedModel = m_models.first().id;
                     for (const auto &m : std::as_const(m_models))
@@ -691,7 +691,7 @@ void ChatManager::handleModelSseData(const QByteArray &chunk)
     m_modelSseBuffer += chunk;
     int sep;
     while ((sep = m_modelSseBuffer.indexOf("\n\n")) >= 0) {
-        // Decode the record whole (not the chunks) so a multi-byte UTF‑8
+        // Decode the record whole (not the chunks) so a multi-byte UTF-8
         // character split across two reads cannot corrupt the JSON.
         const QString record = QString::fromUtf8(m_modelSseBuffer.left(sep));
         m_modelSseBuffer.remove(0, sep + 2);
@@ -793,7 +793,7 @@ static QString toolCallToMarkdown(const Message &msg)
         formattedArgs = QString::fromUtf8(QJsonDocument(args).toJson(QJsonDocument::Indented));
     }
 
-    // Reuse the tool's one‑line summary so the export matches what the UI
+    // Reuse the tool's one-line summary so the export matches what the UI
     // shows in the collapsed tool bubble.
     QString summary = QStringLiteral("Tool: %1").arg(functionName);
     if (const std::unique_ptr<Tool> tool = ToolFactory::instance().create(functionName))
@@ -836,7 +836,7 @@ QString ChatManager::messageToMarkdown(const Message &msg)
     processedContent.replace(ThinkingSectionParser::endToken(),
                              "\n</details>\n\n");
 
-    // A tool‑call‑only assistant message renders through its tool bubble,
+    // A tool-call-only assistant message renders through its tool bubble,
     // whose call + result are exported with the tool message instead.
     if (processedContent.trimmed().isEmpty()) {
         for (const QVariantMap &e : msg.extra) {
@@ -908,12 +908,12 @@ void ChatManager::sendMessage(const QString &convId,
     // A user message breaks any tool-call streak (runaway guard).
     m_consecutiveToolTurns.remove(convId);
 
-    // Mid‑run steering: while a reply is being generated (streaming or a
+    // Mid-run steering: while a reply is being generated (streaming or a
     // tool running) the message is queued and handed to the model at the
-    // next loop point – after the current tool batch, or when the reply
-    // would end – mirroring the steering/follow‑up queues of pi and
+    // next loop point - after the current tool batch, or when the reply
+    // would end - mirroring the steering/follow-up queues of pi and
     // opencode.  It is persisted (and joined to the branch) at that point,
-    // not now: the in‑flight assistant message is not committed yet, so it
+    // not now: the in-flight assistant message is not committed yet, so it
     // cannot be the queued message's parent.
     if (isGenerating(convId)) {
         m_steeringQueue[convId].append(SteeringMessage{content, extra});
@@ -935,7 +935,7 @@ void ChatManager::sendMessage(const QString &convId,
     newMsg.content = content;
     newMsg.parent = parent;
     newMsg.children.clear();
-    newMsg.extra = extra; // simple wrapper – see MessageExtra
+    newMsg.extra = extra; // simple wrapper - see MessageExtra
 
     m_storage->appendMsg(newMsg, parent);
     onChunk(newMsg.id);
@@ -996,9 +996,9 @@ qint64 ChatManager::flushSteeringQueue(const QString &convId, qint64 afterId)
 }
 
 // Context overflow: the server refused the request because the history no
-// longer fits the context window.  "context" alone is too broad – "context
+// longer fits the context window.  "context" alone is too broad - "context
 // canceled" and "context deadline exceeded" are transport errors, not a
-// too‑long history – so it must come with a size‑related word.
+// too-long history - so it must come with a size-related word.
 static bool isContextOverflowError(const QString &msg)
 {
     const QString lower = msg.toLower();
@@ -1046,7 +1046,7 @@ static bool parseJsonObject(const QByteArray &text, QJsonObject *obj)
 // payload, ":" lines are comments / keep-alives.  An "error:" field or an
 // "event: error" event is reported as an {"error": ...} chunk (or through
 // \a onError when it is not JSON).  A block without any SSE field is a raw
-// response body – the JSON error object of an HTTP 4xx/5xx reply – and is
+// response body - the JSON error object of an HTTP 4xx/5xx reply - and is
 // handed over as a chunk as well.  A payload that does not parse is logged
 // and skipped; it never ends the stream.
 static void dispatchSSEEvent(const QByteArray &event,
@@ -1238,7 +1238,7 @@ void ChatManager::generateMessage(const QString &convId,
         return;
     }
 
-    // Fresh tool-call aggregation state for this stream (per conversation –
+    // Fresh tool-call aggregation state for this stream (per conversation -
     // several chats may stream in parallel).
     m_streamingToolCalls.insert(convId, {});
     m_streamStatus.insert(convId, {});
@@ -1254,7 +1254,7 @@ void ChatManager::generateMessage(const QString &convId,
             // the warm prompt cache the handoff turn relies on.  The
             // handoff prompt asks for a plain document; if the model calls
             // a tool anyway, the m_handoffTurns flag is kept across the
-            // tool‑call turns until the document is written.
+            // tool-call turns until the document is written.
             if (settings().toolsEnabled()) {
                 const auto it = m_taskConfigs.constFind(convId);
                 if (it != m_taskConfigs.constEnd()) {
@@ -1263,7 +1263,7 @@ void ChatManager::generateMessage(const QString &convId,
                         : it->allowedTools;
                     allowed.removeAll(QStringLiteral("task")); // no recursion
                     addToolsToPayload(payload, &allowed);
-                    // First sub‑agent turn: force a tool call so smaller
+                    // First sub-agent turn: force a tool call so smaller
                     // models start working instead of narrating a plan.
                     // Later turns stay free, so the subagent can still
                     // finish with a plain report.
@@ -1297,7 +1297,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     auto allMsgs = m_storage->getMessages(convId);
     auto leafMsgs = m_storage->filterByLeafNodeId(allMsgs, leafNodeId, false);
 
-    // Only the most recent messages are needed to suggest follow‑ups; sending
+    // Only the most recent messages are needed to suggest follow-ups; sending
     // the whole history is expensive for long conversations or dense models.
     static constexpr int kFollowUpContextMessages = 6;
     auto recentMsgs = leafMsgs.mid(qMax(0, leafMsgs.size() - kFollowUpContextMessages));
@@ -1341,14 +1341,14 @@ void ChatManager::followUpQuestions(const QString &convId,
         reply->deleteLater();
 
         if (reply->error() != QNetworkReply::NoError) {
-            qCWarning(llamaChatNetwork) << "Follow‑up request failed:" << reply->errorString();
+            qCWarning(llamaChatNetwork) << "Follow-up request failed:" << reply->errorString();
             return;
         }
 
         QByteArray data = reply->readAll();
         QJsonDocument doc = QJsonDocument::fromJson(data);
         if (!doc.isObject()) {
-            qCWarning(llamaChatNetwork) << "Follow‑up JSON malformed";
+            qCWarning(llamaChatNetwork) << "Follow-up JSON malformed";
             return;
         }
 
@@ -1383,7 +1383,7 @@ void ChatManager::followUpQuestions(const QString &convId,
         QJsonParseError err;
         QJsonDocument parsed = QJsonDocument::fromJson(content.toUtf8(), &err);
         if (err.error != QJsonParseError::NoError) {
-            qCWarning(llamaChatNetwork) << "Could not parse follow‑up JSON:" << err.errorString();
+            qCWarning(llamaChatNetwork) << "Could not parse follow-up JSON:" << err.errorString();
             qCWarning(llamaChatNetwork) << "The faulty content was:" << content.toUtf8();
             return;
         }
@@ -1491,7 +1491,7 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     msgArray.append(prompt);
     payload["messages"] = msgArray;
 
-    // Short housekeeping request – capped token budget, no streaming
+    // Short housekeeping request - capped token budget, no streaming
     payload["stream"] = false;
     payload["cache_prompt"] = true;
     payload["reasoning_format"] = "deepseek";
@@ -1564,7 +1564,7 @@ bool ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
         return false;
     // "Human Editor" mode: the reply would be written by a human in a
     // split editor, and the finished handler that creates the continuation
-    // never runs – the m_handoffTurns flag would leak into the next real
+    // never runs - the m_handoffTurns flag would leak into the next real
     // turn.
     if (isHumanEditor())
         return false;
@@ -1600,7 +1600,7 @@ bool ChatManager::handoffConversation(const QString &convId, qint64 leafNodeId)
     // The handoff prompt is appended as a regular user message: the reply
     // (the handoff document) is streamed in this conversation, reusing the
     // warm prompt cache of the previous turn instead of a fresh
-    // full‑history request, and the user sees the whole exchange.  The
+    // full-history request, and the user sees the whole exchange.  The
     // document is then copied as the seed message of a new conversation
     // (createHandoffContinuation() in the finished handler).
     // User-editable prompt ("Prompts" settings page); fall back to the
@@ -1716,7 +1716,7 @@ void ChatManager::stopGenerating(const QString &convId)
             controller->deleteLater();
     }
 
-    // Tools that are running cannot be aborted the network way – ask each
+    // Tools that are running cannot be aborted the network way - ask each
     // of them to stop (kill their process / abort their request) and
     // remember that the conversation must not continue once they report
     // back (the flag is cleared in executeToolAndSendResult()'s
@@ -1738,7 +1738,7 @@ void ChatManager::replaceMessageAndGenerate(const QString &convId,
     if (isGenerating(convId))
         return;
 
-    // A user‑initiated replace breaks any tool-call streak (runaway guard),
+    // A user-initiated replace breaks any tool-call streak (runaway guard),
     // and the steering messages queued for the old branch are stale.
     m_consecutiveToolTurns.remove(convId);
     m_steeringQueue.remove(convId);
@@ -1796,7 +1796,7 @@ void ChatManager::updateMessageContent(const QString &convId, qint64 msgId, cons
         if (m.id != msgId)
             continue;
         m.content = content;
-        // Emits messageContentUpdated, which the chat UI uses to re‑render
+        // Emits messageContentUpdated, which the chat UI uses to re-render
         // the message in place.
         m_storage->updateMessageContent(m);
         return;
@@ -1890,7 +1890,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     // Parallel tool calls: filterByLeafNodeId() follows a single parent
     // chain, so of several sibling tool results only the one on the leaf
     // path survives the filter.  Collect the missing siblings so that every
-    // tool_call in the request has a matching tool result – a dangling
+    // tool_call in the request has a matching tool result - a dangling
     // tool_call confuses the model and violates the chat protocol.  The
     // results are keyed by (assistant, tool_call id) so they can be emitted
     // in the assistant's tool_calls order: the tools run in parallel, so
@@ -1899,7 +1899,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     QHash<qint64, QStringList> toolCallOrder;
     // Kept alive for the whole function: toolResultsByCall stores pointers
     // into it for the sibling results fetched from storage (a use of a
-    // block‑scoped vector here was a use‑after‑free).
+    // block-scoped vector here was a use-after-free).
     QVector<Message> allMessages;
     if (!msgs.isEmpty()) {
         QSet<qint64> keptIds;
@@ -1924,7 +1924,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
                 }
             }
         }
-        // Only fetch the conversation from storage when the leaf‑path filter
+        // Only fetch the conversation from storage when the leaf-path filter
         // actually dropped a result; a full getMessages() per request is
         // wasteful in long conversations.
         const QSet<QString> unresolved = callIds - resultIds;
@@ -1948,14 +1948,14 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     const bool isTaskConversation = !msgs.isEmpty()
             && m_taskConfigs.contains(msgs.first().convId);
     if (!msgs.isEmpty()) {
-        // Task conversations run with their own (sub‑agent) system prompt.
+        // Task conversations run with their own (sub-agent) system prompt.
         const auto it = m_taskConfigs.constFind(msgs.first().convId);
         if (it != m_taskConfigs.constEnd() && !it->systemPrompt.trimmed().isEmpty())
             sysMsgText = it->systemPrompt;
     }
     if (!isTaskConversation) {
         // Append the project instructions (AGENTS.md / CLAUDE.md) for
-        // regular conversations; task conversations get their own sub‑agent
+        // regular conversations; task conversations get their own sub-agent
         // system prompt and no ambient project context.
         Project *project = ProjectManager::startupProject();
         if (project && projectInstructionsEnabled(project)) {
@@ -1984,7 +1984,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         res.append(sys);
     }
 
-    // Tool results re‑emitted in call order after their assistant message
+    // Tool results re-emitted in call order after their assistant message
     // (must not be emitted again at their natural position in \a msgs).
     QSet<qint64> emittedToolMsgIds;
     for (int i = 0; i < msgs.size(); ++i) {
@@ -2016,8 +2016,8 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             res.append(out);
 
             // Emit the tool results of a parallel batch right after their
-            // assistant message, in tool_calls order (the leaf‑path filter
-            // dropped the siblings; the leaf result is re‑emitted here too
+            // assistant message, in tool_calls order (the leaf-path filter
+            // dropped the siblings; the leaf result is re-emitted here too
             // and skipped at its natural position above).
             if (msg.role == "assistant") {
                 const auto rit = toolResultsByCall.constFind(msg.id);
@@ -2051,7 +2051,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             continue;
         }
 
-        // user msg with extra – build array of parts
+        // user msg with extra - build array of parts
         QJsonArray parts;
         for (const QVariantMap &e : msg.extra) {
             if (e.value("type").toString() == "context") {
@@ -2169,7 +2169,7 @@ void ChatManager::mergeToolCallDeltas(StreamingToolCalls &state,
 
         // Defensively mark the batch boundary implicitly, too: if a delta
         // lands on an already committed slot but carries a *different* id,
-        // a new batch must have started without a text chunk in between –
+        // a new batch must have started without a text chunk in between -
         // without the re-base the call would merge into the committed slot
         // and be silently lost.  (A committed slot always has a non-empty
         // id: a missing one gets the synthetic "tool_<index>" fallback at
@@ -2224,7 +2224,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                                   std::function<void(qint64)> onChunk)
 {
     QJsonObject payload;
-    payloadBuilder(payload); // <- fills the request‑specific fields
+    payloadBuilder(payload); // <- fills the request-specific fields
 
     payload["stream"] = true;
     payload["cache_prompt"] = true;
@@ -2374,7 +2374,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     emit pendingMessageChanged(pm);
                 }
             }
-            onChunk(-1); // UI scroll‑to‑bottom
+            onChunk(-1); // UI scroll-to-bottom
         },
         [this, convId](const QString &err) {
             // Never delete (or abort) the reply here: a reply deleted while
@@ -2406,8 +2406,8 @@ void ChatManager::sendChatRequest(const QString &convId,
         const bool stopped = status.stopped
                 || reply->error() == QNetworkReply::OperationCanceledError;
 
-        // The in‑flight turn was a handoff document (see
-        // handoffConversation()).  The flag is kept for tool‑call turns so
+        // The in-flight turn was a handoff document (see
+        // handoffConversation()).  The flag is kept for tool-call turns so
         // the continuation is created from the document message, not from
         // an intermediate tool turn.
         const bool isHandoffTurn = m_handoffTurns.contains(convId);
@@ -2463,7 +2463,7 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
             if (!pm.content.trimmed().isEmpty())
                 qCWarning(llamaChatNetwork)
-                    << "Context overflow in" << convId << "– dropping the partial "
+                    << "Context overflow in" << convId << "- dropping the partial "
                     << "reply (" << pm.content.size() << " chars).";
             pm.content.clear();
             pm.haveContent = false;
@@ -2557,9 +2557,9 @@ void ChatManager::sendChatRequest(const QString &convId,
                 // Runaway guard (the web UI caps its agentic loop with
                 // maxTurns and asks the user to continue): a local model can
                 // loop tool calls forever, so after a long streak of
-                // tool‑only turns the calls are not executed – the model
+                // tool-only turns the calls are not executed - the model
                 // gets a failed result telling it to finish instead.
-                // Task (sub‑agent) conversations are exempt: their result
+                // Task (sub-agent) conversations are exempt: their result
                 // is consumed by the parent conversation, so a limit there
                 // would force the user to reopen the task and continue it
                 // manually. The limit is configurable on the Tools settings
@@ -2588,15 +2588,15 @@ void ChatManager::sendChatRequest(const QString &convId,
                         m_storage->appendMsg(toolMsg, pm.id);
                         lastTool = toolMsg;
                     }
-                    // Mid‑run steering: queued user messages join the next
+                    // Mid-run steering: queued user messages join the next
                     // request.
                     generateMessage(convId, flushSteeringQueue(convId, lastTool.id), [](qint64) {});
                 } else {
                     m_consecutiveToolTurns.insert(convId, turns);
                     // Parallel tool calls: the next assistant turn is
                     // requested only once *all* results are in, so the
-                    // follow‑up request carries every tool result (the
-                    // missing siblings are re‑added by
+                    // follow-up request carries every tool result (the
+                    // missing siblings are re-added by
                     // normalizeMsgsForAPI()).  Without this, each finished
                     // tool would trigger its own request and the
                     // isGenerating() guard would drop all but the first.
@@ -2619,11 +2619,11 @@ void ChatManager::sendChatRequest(const QString &convId,
                 });
             }
 
-            // The context threshold of the auto‑handoff.  Checked for every
-            // assistant turn, not only the tool‑free ones: a tool loop can
+            // The context threshold of the auto-handoff.  Checked for every
+            // assistant turn, not only the tool-free ones: a tool loop can
             // run on for many turns, so the handoff must be able to fire in
             // the middle of a sequence of operations.  A handoff turn never
-            // triggers another handoff, and sub‑agents are skipped (a visible
+            // triggers another handoff, and sub-agents are skipped (a visible
             // continuation would not make sense for a background task).
             bool handoffThresholdExceeded = false;
             if (!isHandoffTurn && !isTaskConversation
@@ -2639,9 +2639,9 @@ void ChatManager::sendChatRequest(const QString &convId,
             }
 
             if (!haveToolExecution) {
-                // Mid‑run steering: messages queued while this reply was
-                // generated keep the loop alive (pi's follow‑up messages /
-                // opencode's queued inputs) – unless the user stopped the
+                // Mid-run steering: messages queued while this reply was
+                // generated keep the loop alive (pi's follow-up messages /
+                // opencode's queued inputs) - unless the user stopped the
                 // generation (or it failed), in which case the queue waits
                 // for the next user action (like the tool path in
                 // executeToolAndSendResult()).
@@ -2655,7 +2655,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     // conversation in every case.  A document cut off at the
                     // capped budget is still usable as the seed of the
                     // continuation; only a turn that was stopped, failed or
-                    // produced nothing has no usable document – no
+                    // produced nothing has no usable document - no
                     // continuation is created then, and the threshold trigger
                     // fires again at the next quiet point.
                     if (complete)
@@ -2665,14 +2665,14 @@ void ChatManager::sendChatRequest(const QString &convId,
                 } else if (continueLoop)
                     generateMessage(convId, flushSteeringQueue(convId, pm.id), onChunk);
                 else if (isTaskConversation) {
-                    // The sub‑agent reached its final answer (or the stream
-                    // was stopped / failed / produced nothing) – hand the
+                    // The sub-agent reached its final answer (or the stream
+                    // was stopped / failed / produced nothing) - hand the
                     // result back to the "task" tool waiting in the parent
                     // conversation.
                     m_taskConversations.remove(convId);
                     emit taskConversationFinished(convId, pm.content, complete);
                 } else if (complete) {
-                    // Only suggest follow‑ups for complete generations.
+                    // Only suggest follow-ups for complete generations.
                     followUpQuestions(convId,
                                       pm.id,
                                       [this, convId, leafNodeId = pm.id](const QStringList &questions) {
@@ -2680,15 +2680,15 @@ void ChatManager::sendChatRequest(const QString &convId,
                                       });
                 }
 
-                // Auto‑handoff at a quiet point (no in‑flight tool calls,
+                // Auto-handoff at a quiet point (no in-flight tool calls,
                 // the reply would end): hand the conversation over to a new
                 // one before it fills the model's context window.  Skipped
-                // when the loop continues – the next turn's (larger) prompt
+                // when the loop continues - the next turn's (larger) prompt
                 // is checked the same way once it ends.
                 if (handoffThresholdExceeded && !continueLoop)
                     handoffConversation(convId, pm.id);
             } else if (toolsWereRun && handoffThresholdExceeded) {
-                // Tool‑call turn: the handoff is deferred to the end of the
+                // Tool-call turn: the handoff is deferred to the end of the
                 // current tool batch (executeToolAndSendResult()), instead
                 // of the model getting another turn.
                 m_handoffPending.insert(convId);
@@ -2703,7 +2703,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
                                            std::function<void(qint64)> onChunk,
                                            std::shared_ptr<int> batchRemaining)
 {
-    // Append a synthetic “failed” tool‑result and continue the conversation,
+    // Append a synthetic "failed" tool-result and continue the conversation,
     // so the model gets another turn to react (and retry) instead of the
     // conversation dying on a tool error.
     auto sendFailedToolResult = [this, convId, &assistantMsg, &tool, onChunk,
@@ -2734,14 +2734,14 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     // Check whether the requested tool is enabled.
     if (!isToolEnabled(tool.name)) {
         qCWarning(llamaChatTools) << "Tool" << tool.name
-                                  << "was called but is disabled – skipping.";
+                                  << "was called but is disabled - skipping.";
         sendFailedToolResult(QStringLiteral("Tool disabled"));
         return;
     }
 
-    // Task (sub‑agent) conversations may only use their whitelisted tools –
+    // Task (sub-agent) conversations may only use their whitelisted tools -
     // the payload advertises just those, but a model can still call any
-    // tool by name – and never "task" itself (no sub‑agent recursion).
+    // tool by name - and never "task" itself (no sub-agent recursion).
     if (const auto it = m_taskConfigs.constFind(convId); it != m_taskConfigs.constEnd()) {
         const bool recursion = tool.name == QLatin1String("task");
         if (recursion || (!it->allowedTools.isEmpty() && !it->allowedTools.contains(tool.name))) {
@@ -2759,7 +2759,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     QJsonDocument doc = QJsonDocument::fromJson(tool.arguments.toUtf8(), &err);
     if (err.error != QJsonParseError::NoError) {
         // Small models often emit raw control characters (real newlines in a
-        // command/content string) or invalid escapes – try a string‑literal
+        // command/content string) or invalid escapes - try a string-literal
         // repair before giving up.
         const QString repaired = repairJson(tool.arguments);
         if (repaired != tool.arguments)
@@ -2791,7 +2791,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
     Message toolMsg = createToolMessage(assistantMsg);
 
-    // The tool runs asynchronously – keep the conversation busy (spinner
+    // The tool runs asynchronously - keep the conversation busy (spinner
     // spinning, no new messages accepted) until it has reported back.
     m_runningTools[convId]++;
 
@@ -2829,7 +2829,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         toolJsonMsg["tool_call_id"] = tool.id;
         toolJsonMsg["name"] = tool.name;
         // An image attachment (read_file on an image) travels as content
-        // parts – text plus image_url – which llama-server tokenizes for
+        // parts - text plus image_url - which llama-server tokenizes for
         // vision models.
         QString toolText = toolOutput;
         QString dataUrl;
@@ -2893,7 +2893,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
         // start, e.g. it was skipped by the "recently handed off" guard).
         if (m_handoffPending.remove(convId) && handoffConversation(convId, toolMsg.id))
             return;
-        // Mid‑run steering: user messages queued while the tools ran join
+        // Mid-run steering: user messages queued while the tools ran join
         // the next request.
         generateMessage(toolMsg.convId, flushSteeringQueue(toolMsg.convId, toolMsg.id), onChunk);
     };
@@ -2906,7 +2906,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
 
 bool ChatManager::conversationExists(const QString &convId)
 {
-    // getOneConversation() returns a default‑constructed Conversation (empty
+    // getOneConversation() returns a default-constructed Conversation (empty
     // id) when the conversation is unknown.
     return m_storage->getOneConversation(convId).id == convId;
 }
@@ -2917,7 +2917,7 @@ bool ChatManager::isTaskConversationRunning(const QString &convId) const
         return false;
     // The same "busy" condition stopGenerating() checks: a pending
     // (streaming) message or a tool that has not reported back yet.  The
-    // sub‑agent's tool loop never goes quiet while it works (the stream and
+    // sub-agent's tool loop never goes quiet while it works (the stream and
     // the tool hand over synchronously), so this is true for the whole run.
     return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
 }
@@ -2928,7 +2928,7 @@ void ChatManager::deleteConversation(const QString &convId)
     // running tools first, so nothing continues the deleted conversation.
     stopGenerating(convId);
 
-    // A task conversation deleted while its sub‑agent is still running must
+    // A task conversation deleted while its sub-agent is still running must
     // fail the waiting "task" tool in the parent conversation.
     if (m_taskConversations.contains(convId)) {
         m_taskConversations.remove(convId);
@@ -2959,7 +2959,7 @@ QString sanitizeConversationName(const QString &name)
     out.reserve(name.size());
     for (int i = 0; i < name.size(); ++i) {
         const QChar ch = name.at(i);
-        // Keep surrogate pairs (e.g. emojis) intact – the individual halves
+        // Keep surrogate pairs (e.g. emojis) intact - the individual halves
         // are not "printable" on their own and would be dropped.
         if (ch.isHighSurrogate() && i + 1 < name.size()
                 && name.at(i + 1).isLowSurrogate()) {
@@ -2982,7 +2982,7 @@ QString sanitizeConversationName(const QString &name)
         int cut = out.lastIndexOf(QLatin1Char(' '), maxLen);
         if (cut < maxLen / 2)
             cut = maxLen;
-        out = out.left(cut).trimmed() + QChar(0x2026); // …
+        out = out.left(cut).trimmed() + QStringLiteral("...");
     }
     return out;
 }

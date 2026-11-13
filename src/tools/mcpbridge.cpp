@@ -23,7 +23,7 @@ McpBridge &McpBridge::instance()
     // Intentionally leaked: a QObject singleton that is destroyed during the
     // static-destruction phase at exit (after the QCoreApplication and the
     // Core::McpManager it talks to are already gone) leads to
-    // use‑after‑free.
+    // use-after-free.
     static McpBridge *inst = new McpBridge;
     return *inst;
 }
@@ -123,7 +123,7 @@ McpBridge::ToolCallHandle McpBridge::callTool(
                  false);
         return {};
     }
-    // The call mutates only the client's own state (pending calls, …), not
+    // The call mutates only the client's own state (pending calls, ...), not
     // the bridge's server list, so the const-ness can be dropped there.
     Tools::McpClient *client = const_cast<Tools::McpClient *>(server->client);
     const quint32 requestId = client->callTool(name, arguments, std::move(callback));
@@ -162,7 +162,7 @@ QPair<QUrl, QStringList> McpBridge::builtInServerConnection() const
         if (info.id != QLatin1String(kQtCreatorMcpServerId))
             continue;
         if (const QUrl *url = std::get_if<QUrl>(&info.launchInfo))
-            // httpHeaders carries the server's authentication header ("Authorization: Bearer …")
+            // httpHeaders carries the server's authentication header ("Authorization: Bearer ...")
             // when token auth is enabled, empty otherwise.
             return {*url, info.httpHeaders};
         return {};

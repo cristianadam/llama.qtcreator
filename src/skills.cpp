@@ -65,7 +65,7 @@ QPair<QString, QString> splitFrontmatter(const QString &content)
 
 //! Reads and validates one skill file. Returns an empty Skill and sets
 //! \a error when the file must be skipped; \a warning (when non-null) receives
-//! a non-fatal problem – the skill is still loaded.
+//! a non-fatal problem - the skill is still loaded.
 Skill loadSkillFromFile(const QString &filePath, bool isDeclaredSkill,
                         QString *error, QString *warning)
 {
@@ -116,8 +116,8 @@ Skill loadSkillFromFile(const QString &filePath, bool isDeclaredSkill,
     if (fm["disable-model-invocation"].IsScalar())
         skill.disableModelInvocation = fm["disable-model-invocation"].as<bool>();
 
-    // A bare (non‑declared) Markdown file without a description is not a
-    // skill – skip it silently, the way pi does.
+    // A bare (non-declared) Markdown file without a description is not a
+    // skill - skip it silently, the way pi does.
     if (!isDeclaredSkill && description.isEmpty())
         return skill;
 
@@ -138,7 +138,7 @@ Skill loadSkillFromFile(const QString &filePath, bool isDeclaredSkill,
         return {};
 
     // Like pi: a declared skill whose name does not match its directory is
-    // kept, but flagged – it is the most common authoring mistake. (Bare
+    // kept, but flagged - it is the most common authoring mistake. (Bare
     // root files fall back to the *file* name, so no check applies there.)
     if (warning && isDeclaredSkill && explicitName && name != parentDirName)
         *warning = Tr::tr("name \"%1\" does not match its directory \"%2\"")
@@ -181,7 +181,7 @@ void scanDir(const QString &dir,
         out.skills.append(skill);
     };
 
-    // A directory containing SKILL.md is a skill root – load it and stop.
+    // A directory containing SKILL.md is a skill root - load it and stop.
     for (const QFileInfo &entry : entries) {
         if (entry.fileName() != QLatin1String("SKILL.md") || !entry.isFile())
             continue;
@@ -281,7 +281,7 @@ QString Skills::formatForPrompt(const QVector<Skill> &skills)
     if (skills.isEmpty())
         return QString();
 
-    // Model‑facing text, kept in English on purpose (not translated).
+    // Model-facing text, kept in English on purpose (not translated).
     // The skill tool (not read_file) loads a skill: it returns the
     // instructions, the base directory and the accompanying files, so the
     // list only needs name and description.

@@ -61,7 +61,7 @@ QString McpTool::oneLineSummary(const QJsonObject &arguments) const
 
 QString McpTool::streamingSummary(const QString &partialArguments) const
 {
-    // Mid-stream the arguments are a truncated JSON text – pick up the
+    // Mid-stream the arguments are a truncated JSON text - pick up the
     // first string value that has arrived so far; the closing quote is
     // optional since it has not arrived yet while streaming.
     static const QRegularExpression re(R"rx("([a-zA-Z_][a-zA-Z0-9_\-]*)"\s*:\s*"((?:[^"\\]|\\.)*)"?)rx");

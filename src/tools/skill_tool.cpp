@@ -130,7 +130,7 @@ void SkillTool::run(const QJsonObject &args,
     // Shared cached scan (refreshed at the start of every model turn), so
     // this always agrees with what the system message advertised. An
     // explicit invocation may also load skills that are not advertised
-    // (unchecked on the settings page) – like pi's explicit /skill:
+    // (unchecked on the settings page) - like pi's explicit /skill:
     // invocation.
     const QVector<Skill> skills = Skills::allSkills();
     const Skill *skill = nullptr;

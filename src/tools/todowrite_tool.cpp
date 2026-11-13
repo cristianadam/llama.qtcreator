@@ -153,7 +153,7 @@ QString TodoWriteTool::streamingSummary(const QString &partialArguments) const
 QString TodoWriteTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
     Q_UNUSED(result);
-    // On failure the ✗ icon plus the one‑line summary are enough; the error
+    // On failure the X icon plus the one-line summary are enough; the error
     // text is only shown in the expanded details.
     if (!ok)
         return {};
@@ -175,7 +175,7 @@ QString TodoWriteTool::detailsMarkdown(const QJsonObject &args, const QString &r
     // On failure show the error, not the rejected list.
     if (!ok)
         return result;
-    // The expanded view always shows the complete list: the one‑line summary
+    // The expanded view always shows the complete list: the one-line summary
     // promises every task ("N tasks"), so the details must deliver it all.
     const QJsonArray todos = args.value("todos").toArray();
     return todoChecklistMarkdown(todos, 0, todos.size());

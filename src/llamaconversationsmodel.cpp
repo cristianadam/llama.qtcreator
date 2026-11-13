@@ -92,7 +92,7 @@ QVariant ConversationsModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole:
         return c.name;
     case Qt::ToolTipRole:
-        // Render the lastModified as ISO‑8601 for readability
+        // Render the lastModified as ISO-8601 for readability
         return QDateTime::fromMSecsSinceEpoch(c.lastModified, Qt::LocalTime).toString(Qt::ISODate);
     case TimestampRole:
         // Custom role: return the raw epoch value

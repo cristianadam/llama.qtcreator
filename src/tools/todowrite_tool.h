@@ -6,7 +6,7 @@
 namespace LlamaCpp::Tools {
 
 /**
- * "todo_write" – maintains the conversation's task list for tracking
+ * "todo_write" - maintains the conversation's task list for tracking
  * progress on multi-step work (like opencode's todowrite tool).
  *
  * The tool is stateless: the model always sends the complete list and the

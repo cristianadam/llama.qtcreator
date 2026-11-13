@@ -31,7 +31,7 @@ Utils::FilePath findProjectInstructionsFile(const Utils::FilePath &projectDir);
 QString loadProjectInstructions(const Utils::FilePath &projectDir);
 
 //! True when the project instructions should be loaded for \a project: the
-//! per‑project setting when a project (with its llama.cpp settings) is
+//! per-project setting when a project (with its llama.cpp settings) is
 //! given, the global one otherwise.
 bool projectInstructionsEnabled(ProjectExplorer::Project *project);
 

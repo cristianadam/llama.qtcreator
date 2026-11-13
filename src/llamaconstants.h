@@ -40,7 +40,7 @@ namespace LlamaCpp::Constants {
 
     const char LLAMACPP_LOCATOR_ID[] = "LlamaCpp.Locator";
 
-    // The "Human Editor" pseudo‑model in the chat's model selector: the
+    // The "Human Editor" pseudo-model in the chat's model selector: the
     // "assistant" side of the conversation is a human typing Markdown in a
     // text editor split next to the chat instead of a llama.cpp model, so
     // the chat doubles as a Markdown editor with live preview.

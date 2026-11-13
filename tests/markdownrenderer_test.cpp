@@ -147,14 +147,14 @@ static QString rectStr(const QRectF &r)
 
 // finish() Flush()es the streaming parser: whatever is pending becomes a
 // stable block, and the next feed() starts a *new* block after it. So a
-// message that is still streaming must never be finished mid-stream —
+// message that is still streaming must never be finished mid-stream -
 // rendering the first chunk with feed()+finish() and streaming the rest
 // splits the first token into its own paragraph (this is how the ChatMessage
 // ctor used to break the first line of every streamed reply).
 void MarkdownRendererTest::finishFinalizesPendingBlocks()
 {
     const QString full
-        = QStringLiteral("I can use the **bash** tool to find out the date — "
+        = QStringLiteral("I can use the **bash** tool to find out the date - "
                          "for example, by running the `date` command in the shell.");
 
     auto blockCount = [](MarkdownRenderer &r) {
@@ -165,7 +165,7 @@ void MarkdownRendererTest::finishFinalizesPendingBlocks()
     };
 
     // Correct streaming pattern: feed the growing buffer, finish once at the
-    // end — one paragraph.
+    // end - one paragraph.
     {
         MarkdownRenderer renderer;
         renderer.feed(full.left(1).toUtf8());
@@ -562,7 +562,7 @@ void MarkdownRendererTest::toolCallSummaryWithOutputPreview()
     // (one-line description, blank line, fenced preview), like pi and
     // opencode show on collapsed tool calls.
     const QString text
-        = "<details data-tool=\"true\"><summary>bash ls -la\n\n```\nl4\nl5\n…\n```</summary>\n\n"
+        = "<details data-tool=\"true\"><summary>bash ls -la\n\n```\nl4\nl5\n...\n```</summary>\n\n"
           "full output body\n</details>\n";
     renderer.feed(text.toUtf8());
     renderer.finish();
@@ -576,7 +576,7 @@ void MarkdownRendererTest::toolCallSummaryWithOutputPreview()
     for (QTextBlock blk = doc->firstBlock(); blk.isValid(); blk = blk.next()) {
         const QTextBlockFormat fmt = blk.blockFormat();
         const bool isToggle = fmt.property(MarkdownRenderer::DetailsToggleBlockProp).toBool();
-        // The body is a non‑toggle block, so check it before skipping those.
+        // The body is a non-toggle block, so check it before skipping those.
         if (blk.text() == QStringLiteral("full output body"))
             bodyHidden = !blk.isVisible();
         // The fence must be interpreted, never rendered as raw backticks.
@@ -811,7 +811,7 @@ void MarkdownRendererTest::svgCodeBlockWithoutLanguageTag()
     MarkdownRenderer renderer;
     renderer.document()->setTextWidth(500);
     // No language on the fence (the write/apply_patch tool views and many
-    // models emit SVG this way) – detection must work from the content.
+    // models emit SVG this way) - detection must work from the content.
     const QString text
         = QStringLiteral("```\n"
                          "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" height=\"10\">\n"

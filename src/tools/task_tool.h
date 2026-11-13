@@ -5,15 +5,15 @@
 namespace LlamaCpp::Tools {
 
 /**
- * "task" – delegates a self‑contained subtask to a sub‑agent that works in a
- * separate conversation (like opencode's task tool).  When the sub‑agent
+ * "task" - delegates a self-contained subtask to a sub-agent that works in a
+ * separate conversation (like opencode's task tool).  When the sub-agent
  * finishes, its final report is returned as the tool result in the parent
- * conversation; the sub‑conversation stays in the conversation list so the
+ * conversation; the sub-conversation stays in the conversation list so the
  * user (or the model) can go back to it for further work.
  *
- * Supported sub‑agent types:
- *   "explore"  – read‑only tools, meant for codebase exploration
- *   "general"  – every enabled tool except "task" and "ask_user"
+ * Supported sub-agent types:
+ *   "explore"  - read-only tools, meant for codebase exploration
+ *   "general"  - every enabled tool except "task" and "ask_user"
  */
 class TaskTool : public LlamaCpp::Tool
 {
@@ -31,7 +31,7 @@ public:
     void abort() override;
 
 private:
-    //! The sub‑conversation of the currently running task (empty when
+    //! The sub-conversation of the currently running task (empty when
     //! idle), so abort() can stop it.
     mutable QString m_convId;
 };
@@ -40,11 +40,11 @@ private:
 QString taskSystemPromptFor(const QString &subagentType);
 
 //! The whitelist of tools the given subagent type may use, filtered against
-//! \a availableTools.  "explore" is restricted to the read‑only tools,
+//! \a availableTools.  "explore" is restricted to the read-only tools,
 //! "general" gets everything except "task" and "ask_user".
 QStringList taskToolsFor(const QString &subagentType, const QStringList &availableTools);
 
-//! Strips a leading thinking section (think‑token block) from a stored
+//! Strips a leading thinking section (think-token block) from a stored
 //! assistant message so that only the final report remains.
 QString taskFinalReport(const QString &content);
 

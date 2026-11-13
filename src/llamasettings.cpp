@@ -609,7 +609,7 @@ LlamaSettings::LlamaSettings()
     enabledToolsList.setSettingsKey("EnabledToolsList");
     enabledToolsList.setDefaultValue(creatorsList);
 
-    // MCP tools are disabled by default – enabling them individually keeps
+    // MCP tools are disabled by default - enabling them individually keeps
     // the context usage under control.
     enabledMcpToolsList.setSettingsKey("EnabledMcpToolsList");
     enabledMcpToolsList.setDefaultValue(QStringList());
