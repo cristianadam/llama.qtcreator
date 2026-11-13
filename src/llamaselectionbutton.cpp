@@ -57,7 +57,7 @@ void SelectionPromptButton::updateState()
 
     // Only the editor the locator will actually read the selection from gets
     // the button: the locator prompts use the current text editor's selection.
-    const bool enabled = settings().enableLlamaCpp() && settings().selectionPromptButton();
+    const bool enabled = settings().selectionPromptButton();
     const bool isCurrent = m_editor == TextEditorWidget::currentTextEditorWidget();
     const QTextCursor cursor = m_editor->textCursor();
     if (!enabled || !isCurrent || !cursor.hasSelection()) {
@@ -122,7 +122,6 @@ SelectionPromptButtonManager::SelectionPromptButtonManager()
             this,
             &SelectionPromptButtonManager::handleEditorAboutToClose);
     settings().selectionPromptButton.addOnChanged(this, [this] { handleSettingsChanged(); });
-    settings().enableLlamaCpp.addOnChanged(this, [this] { handleSettingsChanged(); });
 
     // An editor may already be current by the time we connect (e.g. session
     // restore finished first): handle it so it gets its button too.

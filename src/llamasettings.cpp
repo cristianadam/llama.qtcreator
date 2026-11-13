@@ -93,13 +93,15 @@ SandboxSettingsPage::SandboxSettingsPage()
 
 // The static instance makes the page appear automatically.
 
-static void initEnableAspect(BoolAspect &enableLlamaCpp)
+static void initEnableAspect(BoolAspect &enableFim)
 {
-    enableLlamaCpp.setSettingsKey(Constants::ENABLE_LLAMACPP);
-    enableLlamaCpp.setDisplayName(Tr::tr("Enable llama.cpp"));
-    enableLlamaCpp.setLabelText(Tr::tr("Enable llama.cpp"));
-    enableLlamaCpp.setToolTip(Tr::tr("Enables the llama.cpp integration."));
-    enableLlamaCpp.setDefaultValue(true);
+    enableFim.setSettingsKey(Constants::ENABLE_LLAMACPP);
+    enableFim.setDisplayName(Tr::tr("Enable FIM"));
+    enableFim.setLabelText(Tr::tr("Enable FIM"));
+    enableFim.setToolTip(Tr::tr("Enables the FIM (fill-in-the-middle) completion in the text "
+                                "editor. The chat, tools and web search settings are independent "
+                                "of this."));
+    enableFim.setDefaultValue(true);
 }
 
 LlamaSettings &settings()
@@ -849,97 +851,31 @@ LlamaSettings::LlamaSettings()
         "(required for the \"tavily\" provider)."));
     webSearchTavilyApiKey.setHistoryCompleter("LlamaCpp.WebSearchTavilyApiKey.History");
 
-    initEnableAspect(enableLlamaCpp);
+    initEnableAspect(enableFim);
 
     readSettings();
 
-    // Keep the derived, non-persisted autoHandoffEnabled in sync with
-    // enableLlamaCpp && autoHandoff (the enabler of the threshold aspect).
-    // The default is true so the page's Reset button (which resets every
-    // aspect to its default) cannot leave it in a stale disabled state.
-    autoHandoffEnabled.setDefaultValue(true);
-    // Read the volatile (not the internal) values: the lambda runs from
-    // volatileValueChanged, i.e. before Apply copies the volatile values
-    // into the internal ones; the internal autoHandoff() would still hold
-    // the previous value and the enabler would end up inverted.
-    const auto updateAutoHandoffEnabled = [this] {
-        autoHandoffEnabled.setVolatileValue(
-            enableLlamaCpp.volatileValue() && autoHandoff.volatileValue(),
-            Utils::BaseAspect::DoEmit);
-    };
-    // Follow volatileValueChanged (not changed) so the threshold row reacts
-    // live while the settings page is open, like the rows gated directly on
-    // enableLlamaCpp (the enabler reads the checker's volatile value).
-    connect(&enableLlamaCpp, &Utils::BaseAspect::volatileValueChanged, this, updateAutoHandoffEnabled);
-    connect(&autoHandoff, &Utils::BaseAspect::volatileValueChanged, this, updateAutoHandoffEnabled);
-    // Re-assert if something writes the derived value directly (the page's
-    // Reset button resets every aspect to its default, bypassing the sync).
-    connect(&autoHandoffEnabled, &Utils::BaseAspect::volatileValueChanged, this, updateAutoHandoffEnabled);
-    updateAutoHandoffEnabled();
-
-    endpoint.setEnabler(&enableLlamaCpp);
-    apiKey.setEnabler(&enableLlamaCpp);
-    nPrefix.setEnabler(&enableLlamaCpp);
-    nSuffix.setEnabler(&enableLlamaCpp);
-    nPredict.setEnabler(&enableLlamaCpp);
-    stopStrings.setEnabler(&enableLlamaCpp);
-    tMaxPromptMs.setEnabler(&enableLlamaCpp);
-    tMaxPredictMs.setEnabler(&enableLlamaCpp);
-    showInfo.setEnabler(&enableLlamaCpp);
-    autoFim.setEnabler(&enableLlamaCpp);
-    maxLineSuffix.setEnabler(&enableLlamaCpp);
-    maxCacheKeys.setEnabler(&enableLlamaCpp);
-    ringNChunks.setEnabler(&enableLlamaCpp);
-    ringChunkSize.setEnabler(&enableLlamaCpp);
-    ringScope.setEnabler(&enableLlamaCpp);
-    ringUpdateMs.setEnabler(&enableLlamaCpp);
-
-    chatEndpoint.setEnabler(&enableLlamaCpp);
-    chatApiKey.setEnabler(&enableLlamaCpp);
-    systemMessage.setEnabler(&enableLlamaCpp);
-    utilityModel.setEnabler(&enableLlamaCpp);
-    pasteLongTextToFileLen.setEnabler(&enableLlamaCpp);
-    samplers.setEnabler(&enableLlamaCpp);
-    temperature.setEnabler(&enableLlamaCpp);
-    dynatemp_range.setEnabler(&enableLlamaCpp);
-    dynatemp_exponent.setEnabler(&enableLlamaCpp);
-    top_k.setEnabler(&enableLlamaCpp);
-    top_p.setEnabler(&enableLlamaCpp);
-    min_p.setEnabler(&enableLlamaCpp);
-    xtc_probability.setEnabler(&enableLlamaCpp);
-    xtc_threshold.setEnabler(&enableLlamaCpp);
-    typical_p.setEnabler(&enableLlamaCpp);
-    repeat_last_n.setEnabler(&enableLlamaCpp);
-    repeat_penalty.setEnabler(&enableLlamaCpp);
-    presence_penalty.setEnabler(&enableLlamaCpp);
-    frequency_penalty.setEnabler(&enableLlamaCpp);
-    dry_multiplier.setEnabler(&enableLlamaCpp);
-    dry_base.setEnabler(&enableLlamaCpp);
-    dry_allowed_length.setEnabler(&enableLlamaCpp);
-    dry_penalty_last_n.setEnabler(&enableLlamaCpp);
-    max_tokens.setEnabler(&enableLlamaCpp);
-    customJson.setEnabler(&enableLlamaCpp);
-    toolsEnabled.setEnabler(&enableLlamaCpp);
-    sandboxCommands.setEnabler(&enableLlamaCpp);
-    loadProjectInstructions.setEnabler(&enableLlamaCpp);
-    maxToolTurns.setEnabler(&enableLlamaCpp);
-    webSearchProvider.setEnabler(&enableLlamaCpp);
-    webSearchExaUrl.setEnabler(&enableLlamaCpp);
-    webSearchExaApiKey.setEnabler(&enableLlamaCpp);
-    webSearchGoogleUrl.setEnabler(&enableLlamaCpp);
-    webSearchGoogleApiKey.setEnabler(&enableLlamaCpp);
-    webSearchGoogleCx.setEnabler(&enableLlamaCpp);
-    webSearchBraveUrl.setEnabler(&enableLlamaCpp);
-    webSearchBraveApiKey.setEnabler(&enableLlamaCpp);
-    webSearchTavilyUrl.setEnabler(&enableLlamaCpp);
-    webSearchTavilyApiKey.setEnabler(&enableLlamaCpp);
-    titlePrompt.setEnabler(&enableLlamaCpp);
-    followUpPrompt.setEnabler(&enableLlamaCpp);
-    handoffPrompt.setEnabler(&enableLlamaCpp);
-    autoHandoff.setEnabler(&enableLlamaCpp);
-    handoffThreshold.setEnabler(&autoHandoffEnabled);
-    locatorPrompts.setEnabler(&enableLlamaCpp);
-    selectionPromptButton.setEnabler(&enableLlamaCpp);
+    // The FIM page's "Enable FIM" toggle gates only the FIM aspects; the
+    // chat, tools and web search pages work with FIM turned off.
+    endpoint.setEnabler(&enableFim);
+    apiKey.setEnabler(&enableFim);
+    modelFim.setEnabler(&enableFim);
+    nPrefix.setEnabler(&enableFim);
+    nSuffix.setEnabler(&enableFim);
+    nPredict.setEnabler(&enableFim);
+    nCmpl.setEnabler(&enableFim);
+    stopStrings.setEnabler(&enableFim);
+    tMaxPromptMs.setEnabler(&enableFim);
+    tMaxPredictMs.setEnabler(&enableFim);
+    showInfo.setEnabler(&enableFim);
+    autoFim.setEnabler(&enableFim);
+    maxLineSuffix.setEnabler(&enableFim);
+    maxCacheKeys.setEnabler(&enableFim);
+    ringNChunks.setEnabler(&enableFim);
+    ringChunkSize.setEnabler(&enableFim);
+    ringScope.setEnabler(&enableFim);
+    ringUpdateMs.setEnabler(&enableFim);
+    handoffThreshold.setEnabler(&autoHandoff);
 
     // The options dialog wires up its dirty tracking (Apply button, "unapplied
     // changes" prompt) from the aspect container only for provider pages
@@ -959,7 +895,7 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
     useGlobalSettings.setSettingsKey(Constants::LLAMACPP_USE_GLOBAL_SETTINGS);
     useGlobalSettings.setSettingsPageId(Constants::LLAMACPP_FIM_OPTIONS_ID);
 
-    initEnableAspect(enableLlamaCpp);
+    initEnableAspect(enableFim);
 
     sandboxCommands.setSettingsKey(Constants::LLAMACPP_PROJECT_SANDBOX_COMMANDS);
     sandboxCommands.setDefaultValue(false);
@@ -973,7 +909,7 @@ LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
     Store map = storeFromVariant(project->namedSettings(Constants::LLAMACPP_PROJECT_SETTINGS_ID));
     fromMap(map);
 
-    enableLlamaCpp.addOnChanged(this, [this, project] { save(project); });
+    enableFim.addOnChanged(this, [this, project] { save(project); });
     useGlobalSettings.addOnChanged(this, [this, project] { save(project); });
     loadProjectInstructions.setSettingsKey(Constants::LLAMACPP_PROJECT_LOAD_PROJECT_INSTRUCTIONS);
     loadProjectInstructions.setDefaultValue(false);
@@ -1007,11 +943,11 @@ void LlamaProjectSettings::setUseGlobalSettings(bool useGlobal)
     useGlobalSettings.setValue(useGlobal);
 }
 
-bool LlamaProjectSettings::isEnabled() const
+bool LlamaProjectSettings::isFimEnabled() const
 {
     if (useGlobalSettings())
-        return settings().enableLlamaCpp();
-    return enableLlamaCpp();
+        return settings().enableFim();
+    return enableFim();
 }
 
 void LlamaProjectSettings::save(ProjectExplorer::Project *project)
@@ -1027,9 +963,9 @@ void LlamaProjectSettings::save(ProjectExplorer::Project *project)
 // (its three columns): FIM, Chat and Web Search. Each page embeds its
 // aspects in a plain IOptionsPageWidget; a settings-provider page would
 // render the container's single layouter on every page, so a widget creator
-// is needed for per-page layouts. The shared "Enable llama.cpp" master
-// toggle is shown only on the FIM page (it still enables/disables all the
-// aspects of the other pages via their enabler).
+// is needed for per-page layouts. The FIM page carries the "Enable FIM"
+// toggle; it gates only the FIM aspects, so the chat and web search pages
+// keep working with FIM turned off.
 // Applying or cancelling a page acts on the whole shared settings
 // container, which is what the old single page did.
 namespace {
@@ -1052,7 +988,7 @@ Core::IOptionsPageWidget *createFimSettingsWidget()
     auto *widget = new Core::IOptionsPageWidget;
     // clang-format off
     Column {
-        s.enableLlamaCpp, br,
+        s.enableFim, br,
         Row {s.endpoint}, br,
         Row {s.apiKey}, br,
         Row {s.modelFim, st}, br,

@@ -161,10 +161,10 @@ void LlamaPlugin::initialize()
     Core::Command *toggleCmd
         = ActionManager::registerAction(&m_toggleAction, Constants::LLAMACPP_TOGGLE_ENABLE_DISABLE);
     m_toggleAction.setCheckable(true);
-    m_toggleAction.setChecked(settings().enableLlamaCpp());
+    m_toggleAction.setChecked(settings().enableFim());
     m_toggleAction.setIcon(LLAMACPP_ICON.icon());
     connect(&m_toggleAction, &QAction::triggered, this, [this](bool checked) {
-        settings().enableLlamaCpp.setValue(checked);
+        settings().enableFim.setValue(checked);
         settings().apply();
         settings().writeSettings();
     });
@@ -260,17 +260,16 @@ void LlamaPlugin::initialize()
         .addOnTriggered(this, [this] { ChatEditor::resetFontZoom(); });
 
     auto updateActions = [this] {
-        const bool enabled = settings().enableLlamaCpp();
-        m_toggleAction.setToolTip(enabled ? Tr::tr("Disable llama.cpp.") : Tr::tr("Enable llama.cpp."));
+        const bool enabled = settings().enableFim();
+        m_toggleAction.setToolTip(enabled ? Tr::tr("Disable FIM") : Tr::tr("Enable FIM"));
         m_toggleAction.setChecked(enabled);
         m_requestAction.setEnabled(enabled);
         m_toogleAutoFimAction.setEnabled(enabled);
-        m_selectionPromptButtonAction.setEnabled(enabled);
         m_nextCompletionAction.setEnabled(enabled);
         m_prevCompletionAction.setEnabled(enabled);
     };
 
-    settings().enableLlamaCpp.addOnChanged(this, updateActions);
+    settings().enableFim.addOnChanged(this, updateActions);
     settings().selectionPromptButton.addOnChanged(this, [this] {
         m_selectionPromptButtonAction.setChecked(settings().selectionPromptButton());
     });
@@ -316,7 +315,7 @@ void LlamaPlugin::initialize()
             &LlamaPlugin::handleDocumentSaved);
 
     connect(qApp->clipboard(), &QClipboard::dataChanged, this, [this] {
-        if (qApp->clipboard()->text().isEmpty() || !settings().enableLlamaCpp())
+        if (qApp->clipboard()->text().isEmpty() || !settings().enableFim())
             return;
         pick_chunk(qApp->clipboard()->text().split("\n"), false, true);
     });
@@ -390,7 +389,7 @@ void LlamaPlugin::settingsUpdated()
 
     m_cacheData.setMaxCost(settings().maxCacheKeys.value());
 
-    if (!settings().enableLlamaCpp()) {
+    if (!settings().enableFim()) {
         hideCompletionHint();
 
         if (m_fimReply && m_fimReply->isRunning())
@@ -410,7 +409,7 @@ ExtensionSystem::IPlugin::ShutdownFlag LlamaPlugin::aboutToShutdown()
 
 void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
 {
-    if (!editor || !settings().enableLlamaCpp())
+    if (!editor || !settings().enableFim())
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
@@ -433,7 +432,7 @@ void LlamaPlugin::handleCurrentEditorChanged(Core::IEditor *editor)
 
 void LlamaPlugin::handleEditorAboutToClose(Core::IEditor *editor)
 {
-    if (!editor || !settings().enableLlamaCpp())
+    if (!editor || !settings().enableFim())
         return;
 
     TextEditorWidget *editorWidget = TextEditorWidget::fromEditor(editor);
@@ -454,7 +453,7 @@ void LlamaPlugin::handleCursorPositionChanged()
 {
     m_lastUserActivity.restart();
 
-    if (!settings().enableLlamaCpp())
+    if (!settings().enableFim())
         return;
 
     hideCompletionHint();
@@ -493,7 +492,7 @@ void LlamaPlugin::pick_chunk_at_cursor(TextEditorWidget *editor)
 void LlamaPlugin::handleDocumentSaved(Core::IDocument *document)
 {
     TextEditorWidget *editor = TextEditorWidget::currentTextEditorWidget();
-    if (!isValid(editor) || !document || !settings().enableLlamaCpp())
+    if (!isValid(editor) || !document || !settings().enableFim())
         return;
 
     if (editor->textDocument()->filePath() != document->filePath())

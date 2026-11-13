@@ -15,7 +15,9 @@ class LlamaSettings : public Utils::AspectContainer
 public:
     LlamaSettings();
 
-    Utils::BoolAspect enableLlamaCpp{this};
+    // Master switch of the FIM (fill-in-the-middle) completion only; the
+    // chat, tools and web search settings are independent of it.
+    Utils::BoolAspect enableFim{this};
 
     // FIM
     Utils::StringAspect endpoint{this};
@@ -172,10 +174,6 @@ public:
     // Context-window usage (in percent of the model's n_ctx) at which the
     // auto-handoff kicks in.
     Utils::IntegerAspect handoffThreshold{this};
-    // Derived, non-persisted (no settings key) mirror of
-    // enableLlamaCpp && autoHandoff; Utils::Aspect::setEnabler only takes a
-    // single BoolAspect, so this is what gates the handoff threshold.
-    Utils::BoolAspect autoHandoffEnabled{this};
 
     // Web search (websearch tool)
     Utils::StringAspect webSearchProvider{this};
@@ -207,9 +205,9 @@ public:
     void save(ProjectExplorer::Project *project);
     void setUseGlobalSettings(bool useGlobalSettings);
 
-    bool isEnabled() const;
+    bool isFimEnabled() const;
 
-    Utils::BoolAspect enableLlamaCpp{this};
+    Utils::BoolAspect enableFim{this};
     ProjectExplorer::UseGlobalAspect useGlobalSettings{Utils::Id(), this};
     // Per-project override for the global "Sandbox commands" setting.
     Utils::BoolAspect sandboxCommands{this};

@@ -28,7 +28,7 @@ public:
 
         Column {
             m_settings->useGlobalSettings,
-            m_settings->enableLlamaCpp,
+            m_settings->enableFim,
             m_settings->sandboxCommands,
             m_settings->loadProjectInstructions,
             st,
@@ -47,7 +47,7 @@ private:
     void applyGlobalState()
     {
         const bool useGlobal = m_settings->useGlobalSettings();
-        m_settings->enableLlamaCpp.setEnabled(!useGlobal);
+        m_settings->enableFim.setEnabled(!useGlobal);
         m_settings->sandboxCommands.setEnabled(!useGlobal);
         m_settings->loadProjectInstructions.setEnabled(!useGlobal);
     }
