@@ -1417,6 +1417,7 @@ void ChatEditor::zoomFont(int direction, QWidget *indicatorWidget)
         return;
     settings().chatFontZoom.setValue(newZoom);
     settings().apply();
+    settings().writeSettings();
     for (ChatEditor *editor : std::as_const(s_instances))
         if (editor->widget() && editor->widget()->isVisible())
             editor->m_zoomDebounceTimer->start();
@@ -1429,6 +1430,7 @@ void ChatEditor::resetFontZoom(QWidget *indicatorWidget)
         return;
     settings().chatFontZoom.setValue(100);
     settings().apply();
+    settings().writeSettings();
     for (ChatEditor *editor : std::as_const(s_instances))
         if (editor->widget() && editor->widget()->isVisible())
             editor->m_zoomDebounceTimer->start();

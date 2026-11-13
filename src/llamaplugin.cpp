@@ -166,6 +166,7 @@ void LlamaPlugin::initialize()
     connect(&m_toggleAction, &QAction::triggered, this, [this](bool checked) {
         settings().enableLlamaCpp.setValue(checked);
         settings().apply();
+        settings().writeSettings();
     });
 
     Core::Command *toggleAutoFimCmd
@@ -177,6 +178,7 @@ void LlamaPlugin::initialize()
 
         settings().autoFim.setValue(checked);
         settings().apply();
+        settings().writeSettings();
 
         if (checked) {
             // Show the llama.cpp text hint
@@ -197,6 +199,7 @@ void LlamaPlugin::initialize()
     connect(&m_selectionPromptButtonAction, &QAction::triggered, this, [this](bool checked) {
         settings().selectionPromptButton.setValue(checked);
         settings().apply();
+        settings().writeSettings();
     });
 
     Core::Command *nextCompletionCmd =

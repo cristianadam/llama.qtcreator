@@ -10,6 +10,7 @@
 
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
+#include <utils/guiutils.h>
 #include <utils/layoutbuilder.h>
 #include <utils/pathchooser.h>
 
@@ -939,6 +940,16 @@ LlamaSettings::LlamaSettings()
     handoffThreshold.setEnabler(&autoHandoffEnabled);
     locatorPrompts.setEnabler(&enableLlamaCpp);
     selectionPromptButton.setEnabler(&enableLlamaCpp);
+
+    // The options dialog wires up its dirty tracking (Apply button, "unapplied
+    // changes" prompt) from the aspect container only for provider pages
+    // (IOptionsPageWidgetPrivate::setAspects). All llama.cpp pages use custom
+    // widgets (setWidgetCreator), so replicate that wiring here: re-check the
+    // dialog's dirty state whenever any aspect changes. Without it, editing a
+    // field leaves the Apply button disabled and the change is silently
+    // discarded when leaving the settings mode (volatile values are never
+    // applied, so they do not reach writeSettings()).
+    connect(this, &AspectContainer::volatileValueChanged, &Utils::checkSettingsDirty);
 }
 
 LlamaProjectSettings::LlamaProjectSettings(ProjectExplorer::Project *project)
