@@ -72,6 +72,40 @@ if (TARGET llamatools_test)
   qt_wrap_cpp(llamatools_test_moc llamatools_test.cpp TARGET llamatools_test)
 endif()
 
+add_qtc_test(sandboxwidget_test
+  NEEDS_GUI
+  INCLUDES
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../src
+  DEPENDS
+    Qt::Test Qt::Core Qt::Gui Qt::Widgets
+    QtCreator::Utils
+    QtCreator::Core
+    QtCreator::ProjectExplorer
+    QtCreator::yaml-cpp
+  SOURCES
+    sandboxwidget_test.cpp
+    ../src/sandboxsettingswidget.cpp
+    ../src/llamasettings.cpp
+    ../src/promptssettingswidget.cpp
+    ../src/skillssettingswidget.cpp
+    ../src/skills.cpp
+    ../src/toolsettingswidget.cpp
+    ../src/tools/mxc.cpp
+    ../src/tools/linux_sandbox.cpp
+    ../src/tools/windows_sandbox.cpp
+    ../src/tools/bash_tool.cpp
+    ../src/tools/tool_utils.cpp
+    ../src/tools/tool.cpp
+    ../src/tools/niubash.cpp
+    ../src/tools/mcpbridge.cpp
+    ../src/tools/mcpclient.cpp
+    ../src/tools/mcptool.cpp
+    ../src/tools/ripgrep.cpp
+    ../src/llamasyntaxhighligher.cpp
+    sandboxstatus_stub.cpp
+)
+
 add_qtc_test(llamalocator_test
   INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}

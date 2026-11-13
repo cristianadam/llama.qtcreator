@@ -27,11 +27,6 @@ SandboxSettingsWidget::SandboxSettingsWidget()
     // disabled from its state.
     m_masterCheck = new QCheckBox(settings().sandboxCommands.displayName(), this);
     m_masterCheck->setToolTip(settings().sandboxCommands.toolTip());
-    m_masterCheck->setChecked(settings().sandboxCommands());
-    connect(m_masterCheck, &QCheckBox::toggled, this, [this](bool checked) {
-        settings().sandboxCommands.setValue(checked);
-        applyMasterState();
-    });
 
     // Shown while the sandbox backend of this host (bubblewrap on Linux,
     // sandbox-exec on macOS, the Microsoft MXC runtime on Windows) is
@@ -41,6 +36,22 @@ SandboxSettingsWidget::SandboxSettingsWidget()
     // place.
     m_backendWarning = new Utils::InfoLabel(QString(), Utils::InfoLabelType::Warning, this);
     m_backendWarning->setVisible(false);
+
+    // The backend check (updateBackendWarning) enables / disables the
+    // master toggle and the detail controls, so it must not run while
+    // the widgets are not in a layout yet: the options dialog shows the
+    // tab as soon as it is created, and the aspect widgets write their
+    // volatile values into the GUI when they are added to a layout, so
+    // the first showMxc() call below can land mid-constructor, before
+    // the layout is attached. Run it after attachTo() instead; the
+    // widget starts in the enabled state, and the backend state is
+    // applied then (and again from the aspect signal, which is harmless
+    // because it only re-sets the same state).
+    m_masterCheck->setChecked(settings().sandboxCommands());
+    connect(m_masterCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        settings().sandboxCommands.setValue(checked);
+        applyMasterState();
+    });
 
     m_writable = makeDirList(
         Tr::tr("Writable directories:"),
@@ -95,7 +106,10 @@ SandboxSettingsWidget::SandboxSettingsWidget()
                 : Tr::tr("The sandboxed bash tool on Windows runs in a Microsoft "
                          "MXC process container."));
             settings().mxcPath.setPlaceHolderText(inUse.toUserOutput());
-            updateBackendWarning();
+            // updateBackendWarning() is not called from here: the first
+            // call runs after the layout is attached (see below), and the
+            // later ones come from the mxcPath signal, by which time the
+            // widgets are in the layout.
         };
         showMxc();
         connect(&settings().mxcPath, &Utils::BaseAspect::changed, this, showMxc);
@@ -182,7 +196,11 @@ SandboxSettingsWidget::SandboxSettingsWidget()
     }.attachTo(this);
 
     loadFromSettings();
-    applyMasterState();
+
+    // The backend check runs after the layout is attached, because it
+    // enables / disables the master toggle and the detail controls (see
+    // the note above). The earlier showMxc() call only set the status
+    // line and the placeholder text, so nothing is skipped.
     updateBackendWarning();
 }
 
@@ -276,7 +294,10 @@ void SandboxSettingsWidget::updateBackendWarning()
 {
     // The reason is empty when the sandbox backend of this host is
     // usable, otherwise it says why not (bubblewrap or sandbox-exec not
-    // installed, the MXC runtime not downloaded on Windows).
+    // installed, the MXC runtime not downloaded on Windows). The calls
+    // below touch the master toggle and the detail controls, which must
+    // be laid out first (see the constructor, where this runs for the
+    // first time after attachTo()).
     const QString reason = SandboxStatus::unavailableReason();
     m_backendWarning->setVisible(!reason.isEmpty());
     if (!reason.isEmpty())
