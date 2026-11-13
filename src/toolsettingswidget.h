@@ -127,6 +127,9 @@ private:
     // Runaway tool-loop guard: the maximum number of consecutive tool-only
     // turns before the calls are no longer executed (0 = no limit).
     QSpinBox *m_maxToolTurnsSpin = nullptr;
+    // Collapsed tool-call preview: the number of result lines shown below
+    // the one-line summary (the same count for every tool).
+    QSpinBox *m_toolPreviewLinesSpin = nullptr;
     // MCP server management buttons, in a column to the right of the tools
     // tree (like the skill directory buttons on the Skills page); they act
     // on the selected server group row.

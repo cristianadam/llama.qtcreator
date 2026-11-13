@@ -42,11 +42,12 @@ public:
     /*! Returns a short markdown preview of the outcome that is shown in the
         tool call's summary (below the one‑line description), so the result
         is visible without expanding the details – like pi and opencode show
-        a few output lines on a collapsed tool call.  The preview must stay
-        small (a few lines); return an empty string to show nothing.  The
-        default derives it from detailsMarkdown() and is empty on failure:
-        the ✗ icon in the summary marks the call as failed, and the error
-        text is only shown in the expanded details. */
+        a few output lines on a collapsed tool call.  The preview is limited
+        to the "Tool preview lines" setting (toolPreviewLineCount()); return
+        an empty string to show nothing.  The default derives it from
+        detailsMarkdown() and is empty on failure: the ✗ icon in the summary
+        marks the call as failed, and the error text is only shown in the
+        expanded details. */
     virtual QString summaryPreview(const QJsonObject &arguments,
                                    const QString &result,
                                    bool ok) const;
@@ -104,20 +105,30 @@ QString codeFence(const QString &content, const QString &info = {});
 //! inner backtick.
 QString codeSpan(const QString &text);
 
-//! Truncates \a text for inline display: at most \a maxLines lines and 300
-//! characters.  A code fence left open by the cut is closed so the markdown
-//! stays well‑formed.  No ellipsis is appended: the details header already
-//! gets the expand icon, which signals more content.  Returns an empty
-//! string for empty input.
+//! Truncates \a text for inline display: at most \a maxLines lines and
+//! previewCharLimit(\a maxLines) characters.  A code fence left open by the
+//! cut is closed so the markdown stays well‑formed.  No ellipsis is appended:
+//! the details header already gets the expand icon, which signals more
+//! content.  Returns an empty string for empty input.
 QString truncatedPreview(const QString &text, int maxLines);
 
+//! The number of lines shown in a collapsed tool‑call preview (the "Tool
+//! preview lines" setting, clamped to at least 1).  Every tool uses the
+//! same count, so the previews are comparable across tools.
+int toolPreviewLineCount();
+
+//! Character budget of a \a maxLines‑line preview: 120 characters per line,
+//! the width of a modern terminal.
+int previewCharLimit(int maxLines);
+
 //! Collapsed‑view preview for tools whose result is a plain list of lines
-//! (find, ls, search): the first few lines inside a well‑formed code fence.
-//! The default preview would truncate detailsMarkdown() after three lines,
-//! which for these tools lands right after the opening fence of the result
-//! block and renders an empty code block.  On failure (or for an empty
-//! result) returns an empty string: the ✗ icon marks the failed call, and
-//! the error text is only shown in the expanded details.
+//! (find, ls, search): the first toolPreviewLineCount() lines inside a
+//! well‑formed code fence.  The default preview would truncate
+//! detailsMarkdown() after a few lines, which for these tools lands right
+//! after the opening fence of the result block and renders an empty code
+//! block.  On failure (or for an empty result) returns an empty string: the
+//! ✗ icon marks the failed call, and the error text is only shown in the
+//! expanded details.
 QString listPreview(const QString &result, bool ok);
 
 //! Wraps \a text and an image \a dataUrl (e.g. "data:image/png;base64,\u2026")

@@ -304,10 +304,12 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
 
 QString ApplyPatchTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
-    // The per‑file diff is the interesting part; give it a couple of extra
-    // lines.  On failure the ✗ icon suffices in the collapsed view; the
-    // error text is only shown in the expanded details.
-    return ok ? truncatedPreview(detailsMarkdown(args, result, ok), 8) : QString();
+    // The per‑file diff is the interesting part.  On failure the ✗ icon
+    // suffices in the collapsed view; the error text is only shown in the
+    // expanded details.  +1 for the opening fence line: the setting counts
+    // content lines, not fences.
+    return ok ? truncatedPreview(detailsMarkdown(args, result, ok), toolPreviewLineCount() + 1)
+              : QString();
 }
 
 void ApplyPatchTool::run(const QJsonObject &args,

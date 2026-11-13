@@ -41,17 +41,17 @@ QString todoChecklistMarkdown(const QJsonArray &todos, int start, int end)
     return md.trimmed();
 }
 
-// Sliding window of kWindowSize around the in_progress task, so long lists
-// stay compact in the collapsed summary: the first 3 at the start, the last
-// 3 once everything is done, and the current task always visible in between.
-// Short lists are shown in full, since a 3-item window would only hide a
-// single item.
+// Sliding window of toolPreviewLineCount() items around the in_progress
+// task, so long lists stay compact in the collapsed summary: the first
+// window at the start, the last window once everything is done, and the
+// current task always visible in between.  Short lists are shown in full,
+// since a window would only hide a single item.
 QPair<int, int> todoSummaryWindow(const QJsonArray &todos)
 {
     const int n = todos.size();
-    constexpr int kWindowSize = 3;
+    const int windowSize = toolPreviewLineCount();
     int start = 0;
-    if (n > kWindowSize + 1) {
+    if (n > windowSize + 1) {
         int inProgress = -1;
         bool anyPending = false;
         for (int i = 0; i < n; ++i) {
@@ -62,10 +62,10 @@ QPair<int, int> todoSummaryWindow(const QJsonArray &todos)
                 anyPending = true;
         }
         if (inProgress >= 0)
-            start = qBound(0, inProgress - 1, n - kWindowSize);
+            start = qBound(0, inProgress - 1, n - windowSize);
         else if (!anyPending)
-            start = n - kWindowSize; // all done: show the final 3
-        return {start, qMin(start + kWindowSize, n)};
+            start = n - windowSize; // all done: show the final window
+        return {start, qMin(start + windowSize, n)};
     }
     return {0, n};
 }
@@ -164,9 +164,9 @@ QString TodoWriteTool::summaryPreview(const QJsonObject &args, const QString &re
     QString preview = todoChecklistMarkdown(todos, start, end);
     // The window already keeps the preview to a few lines; only cap the
     // length, in case a single task content string is unusually long.
-    constexpr int kMaxChars = 300; // same cap as truncatedPreview()
-    if (preview.size() > kMaxChars)
-        preview = preview.left(kMaxChars - 1);
+    const int maxChars = previewCharLimit(toolPreviewLineCount());
+    if (preview.size() > maxChars)
+        preview = preview.left(maxChars - 1);
     return preview;
 }
 

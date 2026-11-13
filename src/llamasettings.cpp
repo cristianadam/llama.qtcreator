@@ -744,6 +744,18 @@ LlamaSettings::LlamaSettings()
         "(sub-agent) conversations are not limited. Set to 0 for no "
         "limit."));
 
+    toolPreviewLines.setSettingsKey("ToolPreviewLines");
+    toolPreviewLines.setDefaultValue(8);
+    toolPreviewLines.setRange(1, 100);
+    toolPreviewLines.setDisplayName(Tr::tr("Tool preview lines"));
+    toolPreviewLines.setLabelText(Tr::tr("Tool preview lines:"));
+    toolPreviewLines.setToolTip(Tr::tr(
+        "The number of lines of a tool's result that are shown in the "
+        "collapsed tool-call summary, below the one-line description. The "
+        "same count is used by all tools, and by the live output tail of a "
+        "running call. The preview is additionally capped at 120 characters "
+        "per line."));
+
     //
     // Web search (websearch tool)
     //

@@ -537,12 +537,14 @@ QString ChatMessage::getToolUsageAndResult() const
         if (!liveOutput.trimmed().isEmpty()) {
             // Live tail of the output (e.g. a running bash command): the
             // last few lines, like the preview of a finished call.
+            const int maxLines = toolPreviewLineCount();
             const QStringList lines = liveOutput.split(QLatin1Char('\n'));
-            QString tail = lines.size() > 3
-                    ? lines.mid(lines.size() - 3).join(QLatin1Char('\n'))
+            QString tail = lines.size() > maxLines
+                    ? lines.mid(lines.size() - maxLines).join(QLatin1Char('\n'))
                     : liveOutput;
-            if (tail.size() > 240)
-                tail = tail.left(237) + QStringLiteral("…");
+            const int maxChars = previewCharLimit(maxLines);
+            if (tail.size() > maxChars)
+                tail = tail.left(maxChars - 3) + QStringLiteral("…");
             summaryText += QStringLiteral("\n\n") + codeFence(tail, QStringLiteral("terminal"));
         }
     } else {

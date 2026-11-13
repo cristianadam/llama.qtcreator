@@ -934,16 +934,19 @@ QString BashTool::summaryPreview(const QJsonObject &arguments, const QString &re
         return {};
 
     // Show the *tail* of the output: the last lines usually carry the
-    // outcome of a command (summary lines, errors, final status).
-    constexpr int kMaxLines = 3;
+    // outcome of a command (summary lines, errors, final status).  The …
+    // marker line is on top of the maxLines content lines, like the fence
+    // lines are for the other tools.
+    const int maxLines = toolPreviewLineCount();
     const QStringList lines = result.split(QLatin1Char('\n'));
     QString tail = result;
-    if (lines.size() > kMaxLines)
+    if (lines.size() > maxLines)
         // The … marks the earlier, omitted lines; the expand icon marks
         // that more details are available.
-        tail = QStringLiteral("…\n") + lines.mid(lines.size() - kMaxLines + 1).join(QLatin1Char('\n'));
-    if (tail.size() > 240)
-        tail = tail.left(237);
+        tail = QStringLiteral("…\n") + lines.mid(lines.size() - maxLines).join(QLatin1Char('\n'));
+    const int maxChars = previewCharLimit(maxLines);
+    if (tail.size() > maxChars)
+        tail = tail.left(maxChars - 1);
     return codeFence(tail, QStringLiteral("terminal"));
 }
 

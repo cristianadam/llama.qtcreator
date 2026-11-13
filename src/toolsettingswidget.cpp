@@ -284,6 +284,25 @@ ToolsSettingsWidget::ToolsSettingsWidget()
     maxToolTurnsLayout->addWidget(m_maxToolTurnsSpin);
     maxToolTurnsLayout->addStretch();
 
+    // Collapsed tool-call preview: the number of result lines shown below
+    // the one-line summary (the same count for every tool).
+    auto *toolPreviewLinesLabel = new QLabel(settings().toolPreviewLines.labelText(), this);
+    m_toolPreviewLinesSpin = new QSpinBox(this);
+    m_toolPreviewLinesSpin->setRange(1, 100);
+    m_toolPreviewLinesSpin->setValue(settings().toolPreviewLines());
+    m_toolPreviewLinesSpin->setToolTip(settings().toolPreviewLines.toolTip());
+    toolPreviewLinesLabel->setBuddy(m_toolPreviewLinesSpin);
+    connect(m_toolPreviewLinesSpin,
+            QOverload<int>::of(&QSpinBox::valueChanged),
+            this,
+            [](int value) { settings().toolPreviewLines.setValue(value); });
+    auto *toolPreviewLinesRow = new QWidget(this);
+    auto *toolPreviewLinesLayout = new QHBoxLayout(toolPreviewLinesRow);
+    toolPreviewLinesLayout->setContentsMargins(0, 0, 0, 0);
+    toolPreviewLinesLayout->addWidget(toolPreviewLinesLabel);
+    toolPreviewLinesLayout->addWidget(m_toolPreviewLinesSpin);
+    toolPreviewLinesLayout->addStretch();
+
     // MCP server management, laid out like the skill directories on the
     // Skills page: buttons in a column to the right of the tree, acting on
     // the selected server group row (every group except "Internal"; the
@@ -310,6 +329,7 @@ ToolsSettingsWidget::ToolsSettingsWidget()
         If(HostOsInfo::isWindowsHost()) >> Then{niubashGroup},
         m_loadInstructionsCheck,
         maxToolTurnsRow,
+        toolPreviewLinesRow,
         Row{
             Column{filterLineEdit, m_view},
             Column{m_addServerButton, m_editServerButton, m_removeServerButton, st},
@@ -648,6 +668,7 @@ void ToolsSettingsWidget::cancel()
     settings().readSettings(); // reload from .ini
     m_loadInstructionsCheck->setChecked(settings().loadProjectInstructions());
     m_maxToolTurnsSpin->setValue(settings().maxToolTurns());
+    m_toolPreviewLinesSpin->setValue(settings().toolPreviewLines());
     fillModel(); // also drop server groups that were added but not applied
     updateModelFromEnabledTools(); // reflect the stored state in the UI
 }

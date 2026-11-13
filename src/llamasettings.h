@@ -141,6 +141,11 @@ public:
     // Runaway tool-loop guard: the maximum number of consecutive
     // tool-only turns before the calls are no longer executed (0 = no limit).
     Utils::IntegerAspect maxToolTurns{this};
+    // Number of lines of a tool's result that are shown in the collapsed
+    // tool-call summary, below the one-line description.  The same count is
+    // used by every tool and by the live output tail of a running call; the
+    // preview is additionally capped at 120 characters per line.
+    Utils::IntegerAspect toolPreviewLines{this};
 
     // Editable prompts (see the "Prompts" settings page)
     Utils::StringAspect titlePrompt{this};

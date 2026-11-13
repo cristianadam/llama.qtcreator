@@ -416,6 +416,7 @@ private slots:
     void codeFence_escaping();
     void codeSpan_escaping();
     void preview_truncatedPreview();
+    void preview_defaultLineCount();
     void preview_bashTail();
     void preview_bashShort();
     void preview_editDiff();
@@ -1842,22 +1843,54 @@ void LlamaToolsTest::preview_truncatedPreview()
     // Character overflow also truncates and keeps the fence closed.
     const QString wide = QStringLiteral("```\n") + QString(500, QLatin1Char('x'));
     const QString wideCut = truncatedPreview(wide, 10);
-    QVERIFY(wideCut.size() <= 300 + 10); // cut + fence close
+    QVERIFY(wideCut.size() <= previewCharLimit(10) + 10); // cut + fence close
     QVERIFY(wideCut.endsWith(QStringLiteral("\n```")));
 
     // Fenceless text is just cut.
     QCOMPARE(truncatedPreview(QStringLiteral("a\nb\nc\nd"), 2), QString("a\nb"));
 }
 
+void LlamaToolsTest::preview_defaultLineCount()
+{
+    // The default preview (a single fenced block) shows
+    // toolPreviewLineCount() content lines: the opening fence line does not
+    // eat a line of the budget.
+    Tools::WriteTool tool;
+    QJsonObject args;
+    QString content;
+    for (int i = 1; i <= 12; ++i)
+        content += QStringLiteral("line%1\n").arg(i);
+    content.chop(1);
+    args[QStringLiteral("path")] = QStringLiteral("f.txt");
+    args[QStringLiteral("content")] = content;
+
+    const QString preview = tool.summaryPreview(args, QString(), true);
+    QCOMPARE(preview,
+             QStringLiteral("```text\nline1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\n```"));
+}
+
 void LlamaToolsTest::preview_bashTail()
 {
     Tools::BashTool tool;
 
-    // Long output: the *tail* is shown, prefixed with an ellipsis line.
-    const QString output = QStringLiteral("l1\nl2\nl3\nl4\nl5");
+    // Long output: the *tail* is shown, prefixed with an ellipsis line. The
+    // line count comes from the "Tool preview lines" setting (8 by default);
+    // the … marker line is on top of the content lines.
+    QString output;
+    for (int i = 1; i <= 10; ++i)
+        output += QStringLiteral("l%1\n").arg(i);
+    output.chop(1);
     const QString preview = tool.summaryPreview(QJsonObject(), output, true);
-    QCOMPARE(preview, QString("```terminal\n…\nl4\nl5\n```"));
-    QVERIFY(!preview.contains("l1"));
+    QCOMPARE(preview,
+             QString("```terminal\n…\nl3\nl4\nl5\nl6\nl7\nl8\nl9\nl10\n```"));
+    QVERIFY(!preview.contains("l1\n"));
+
+    // The setting is honoured: with 3 lines the compact tail is shown.
+    const int oldLines = settings().toolPreviewLines();
+    settings().toolPreviewLines.setValue(3);
+    const QString compact = tool.summaryPreview(QJsonObject(), output, true);
+    QCOMPARE(compact, QString("```terminal\n…\nl8\nl9\nl10\n```"));
+    settings().toolPreviewLines.setValue(oldLines);
 
     // Short output passes through, still fenced.
     const QString shortPreview = tool.summaryPreview(QJsonObject(), QStringLiteral("ok"), true);
@@ -1869,10 +1902,10 @@ void LlamaToolsTest::preview_bashTail()
 
 void LlamaToolsTest::preview_bashShort()
 {
-    // A single long line is character‑capped.
+    // A single long line is character‑capped (120 characters per line).
     Tools::BashTool tool;
-    const QString preview = tool.summaryPreview(QJsonObject(), QString(500, QLatin1Char('y')), true);
-    QVERIFY(preview.size() < 300);
+    const QString preview = tool.summaryPreview(QJsonObject(), QString(2000, QLatin1Char('y')), true);
+    QVERIFY(preview.size() <= previewCharLimit(8) + 16); // cap + fence overhead
     // The fence stays clean; no trailing ellipsis.
     QVERIFY(preview.endsWith(QStringLiteral("\n```")));
 }
@@ -1901,8 +1934,12 @@ void LlamaToolsTest::preview_editDiff()
 void LlamaToolsTest::preview_todoBase()
 {
     // The collapsed summary previews the checklist with a sliding window of
-    // 3 around the in_progress task.
+    // toolPreviewLineCount() around the in_progress task.
     Tools::TodoWriteTool tool;
+
+    // The fixtures below are sized for a 3‑item window.
+    const int oldLines = settings().toolPreviewLines();
+    settings().toolPreviewLines.setValue(3);
 
     QJsonObject args;
     QJsonArray todos;
@@ -1918,6 +1955,8 @@ void LlamaToolsTest::preview_todoBase()
     QVERIFY(preview.contains("- [ ] task 0"));
     QVERIFY(!preview.contains("task 4")); // outside the 3-item window
     QVERIFY(preview.endsWith(QStringLiteral("- [ ] task 2")));
+
+    settings().toolPreviewLines.setValue(oldLines);
 }
 
 // ============================================================================
@@ -1957,6 +1996,10 @@ void LlamaToolsTest::todowrite_ok()
 void LlamaToolsTest::todowrite_slidingWindow()
 {
     Tools::TodoWriteTool todo;
+
+    // The fixtures below are sized for a 3‑item window.
+    const int oldLines = settings().toolPreviewLines();
+    settings().toolPreviewLines.setValue(3);
 
     auto makeArgs = [](const QStringList &statuses) {
         QJsonObject args;
@@ -2072,6 +2115,8 @@ void LlamaToolsTest::todowrite_slidingWindow()
            QStringLiteral("- [ ] task2"),
            QStringLiteral("- [ ] task3")},
           {});
+
+    settings().toolPreviewLines.setValue(oldLines);
 }
 
 void LlamaToolsTest::todowrite_emptyList()
@@ -4956,10 +5001,15 @@ void LlamaToolsTest::search_summaries()
     QCOMPARE(preview, QStringLiteral("```\na.cpp:1: x\nb.cpp:2: y\nc.cpp:3: z\n```"));
     QVERIFY(!preview.contains("Pattern:"));
 
-    // A long result is cut to a few lines; the fence stays well‑formed.
-    const QString longPreview
-        = tool.summaryPreview(mdArgs, QStringLiteral("l1\nl2\nl3\nl4\nl5"), true);
-    QCOMPARE(longPreview, QStringLiteral("```\nl1\nl2\nl3\n```"));
+    // A long result is cut to the "Tool preview lines" count (8 by default);
+    // the fence stays well‑formed.
+    QString longResult;
+    for (int i = 1; i <= 12; ++i)
+        longResult += QStringLiteral("l%1\n").arg(i);
+    longResult.chop(1);
+    const QString longPreview = tool.summaryPreview(mdArgs, longResult, true);
+    QCOMPARE(longPreview,
+             QStringLiteral("```\nl1\nl2\nl3\nl4\nl5\nl6\nl7\nl8\n```"));
 
     // On failure no preview: the ✗ icon marks the call, the error text is
     // only shown in the expanded details.
@@ -5131,9 +5181,13 @@ void LlamaToolsTest::find_summaries()
 
     // The collapsed preview shows the file list itself, not the pattern
     // header (the default preview would render an empty code block).
-    const QString preview
-        = tool.summaryPreview(mdArgs, QStringLiteral("a.json\nb.json\nc.json\nd.json"), true);
-    QCOMPARE(preview, QStringLiteral("```\na.json\nb.json\nc.json\n```"));
+    QString fileResult;
+    for (int i = 1; i <= 12; ++i)
+        fileResult += QStringLiteral("f%1.json\n").arg(i);
+    fileResult.chop(1);
+    const QString preview = tool.summaryPreview(mdArgs, fileResult, true);
+    QCOMPARE(preview,
+             QStringLiteral("```\nf1.json\nf2.json\nf3.json\nf4.json\nf5.json\nf6.json\nf7.json\nf8.json\n```"));
     QVERIFY(!preview.contains("Pattern:"));
 
     QCOMPARE(tool.summaryPreview(mdArgs, QStringLiteral("boom"), false), QString());

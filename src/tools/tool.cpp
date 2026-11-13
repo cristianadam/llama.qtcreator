@@ -1,12 +1,27 @@
 #include "tool.h"
 
 #include "llamatr.h"
+#include "llamasettings.h"
 
 #include <QJsonArray>
 
 #include <algorithm>
 
 namespace LlamaCpp {
+
+// The character budget of a preview is derived from its line count: 120
+// characters per line, the width of a modern terminal.
+constexpr int kPreviewCharsPerLine = 120;
+
+int toolPreviewLineCount()
+{
+    return qMax(1, settings().toolPreviewLines());
+}
+
+int previewCharLimit(int maxLines)
+{
+    return qMax(1, maxLines) * kPreviewCharsPerLine;
+}
 
 QString Tool::detailsMarkdown(const QJsonObject &arguments, const QString &result, bool ok) const
 {
@@ -25,7 +40,10 @@ QString Tool::summaryPreview(const QJsonObject &arguments, const QString &result
     // collapsed view; the error text is only shown in the expanded details.
     if (!ok)
         return {};
-    return truncatedPreview(detailsMarkdown(arguments, result, ok), 3);
+    // +1 for the opening fence line: detailsMarkdown() is usually a single
+    // fenced block, and the setting counts content lines, not fences.
+    return truncatedPreview(detailsMarkdown(arguments, result, ok),
+                            toolPreviewLineCount() + 1);
 }
 
 QString codeFence(const QString &content, const QString &info)
@@ -62,14 +80,15 @@ QString truncatedPreview(const QString &text, int maxLines)
     if (text.isEmpty())
         return {};
 
-    constexpr int kMaxChars = 300;
+    maxLines = qMax(1, maxLines);
+    const int maxChars = previewCharLimit(maxLines);
 
     const QStringList lines = text.split(QLatin1Char('\n'));
     QString preview = text;
     if (lines.size() > maxLines)
         preview = lines.mid(0, maxLines).join(QLatin1Char('\n'));
-    if (preview.size() > kMaxChars) {
-        preview = preview.left(kMaxChars - 1);
+    if (preview.size() > maxChars) {
+        preview = preview.left(maxChars - 1);
         // A character cut may leave a partial code fence at the end.
         while (preview.endsWith(QLatin1Char('`')))
             preview.chop(1);
@@ -102,9 +121,9 @@ QString listPreview(const QString &result, bool ok)
     // newline‑only result, which codeFence() would render as an empty block.
     if (!ok || result.trimmed().isEmpty())
         return {};
-    // 4 = 3 content lines + the opening fence line; truncatedPreview() closes
-    // the fence left open by the cut so the markdown stays well‑formed.
-    return truncatedPreview(codeFence(result), 4);
+    // +1 for the opening fence line; truncatedPreview() closes the fence
+    // left open by the cut so the markdown stays well‑formed.
+    return truncatedPreview(codeFence(result), toolPreviewLineCount() + 1);
 }
 
 namespace {
