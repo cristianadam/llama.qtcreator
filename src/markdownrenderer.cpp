@@ -2033,8 +2033,17 @@ void MarkdownRenderer::mousePressEvent(QMouseEvent *ev)
         QTextBlock blk = cur.block();
         if (blk.isValid()) {
             const QTextBlockFormat fmt = blk.blockFormat();
+            const int secId = fmt.property(DetailsSectionIdProp).toInt();
             if (fmt.property(DetailsToggleBlockProp).toBool()) {
-                int secId = fmt.property(DetailsSectionIdProp).toInt();
+                toggleSection(secId);
+                ev->accept();
+                return;
+            }
+            // Ctrl+click (Cmd on macOS) anywhere in an expanded section body
+            // collapses it, so long tool output doesn't force the user to
+            // scroll back up to the summary header to toggle it off.
+            if (secId > 0
+                && (ev->modifiers() & (Qt::ControlModifier | Qt::MetaModifier))) {
                 toggleSection(secId);
                 ev->accept();
                 return;

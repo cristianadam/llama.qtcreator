@@ -145,7 +145,9 @@ MarkdownLabel::MarkdownLabel(QWidget *parent)
         const QString command = link.left(idx);
 
         if (command == "details-toggle")
-            QToolTip::showText(QCursor::pos(), Tr::tr("Toggle the details of the tool usage"));
+            QToolTip::showText(QCursor::pos(), Tr::tr(
+                "Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the "
+                "content collapses the block."));
         else
             QToolTip::showText(QCursor::pos(), link);
     });
