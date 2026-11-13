@@ -2,6 +2,7 @@
 
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "tools/linux_sandbox.h"
 #include "tools/mxc.h"
 
 #include <coreplugin/messagemanager.h>
@@ -39,7 +40,7 @@ QString unavailableReason()
             return Tr::tr("the sandbox-exec executable was not found");
         return {};
     }
-    if (QStandardPaths::findExecutable("bwrap").isEmpty())
+    if (Tools::findBwrap().isEmpty())
         return Tr::tr("bubblewrap (bwrap) was not found; install it (e.g. "
                       "'apt install bubblewrap' or 'dnf install bubblewrap')");
     return {};

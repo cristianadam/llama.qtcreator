@@ -2,6 +2,7 @@
 #include "factory.h"
 #include "llamasettings.h"
 #include "llamatr.h"
+#include "linux_sandbox.h"
 #include "niubash.h"
 #include "tool_utils.h"
 #include "windows_sandbox.h"
@@ -274,88 +275,8 @@ SandboxSpec sandboxSpec(const QString &cwd,
              { QStringLiteral("-p"), macSandboxProfile(cwd) },
              {} };
 #else
-    const FilePath exe =
-        FilePath::fromUserInput(QStandardPaths::findExecutable("bwrap"));
-    if (!exe.exists())
-        return { {}, {}, Tr::tr("bubblewrap (bwrap) was not found. Install it "
-                                "(e.g. 'apt install bubblewrap' or 'dnf install "
-                                "bubblewrap') or uncheck 'Sandbox commands' "
-                                "in the Llama settings to run commands without "
-                                "a sandbox.") };
-    QStringList args = { QStringLiteral("--ro-bind"), QStringLiteral("/"),
-                         QStringLiteral("/"),
-                         QStringLiteral("--bind"), cwd, cwd };
-    // A fresh, empty /tmp for the command. Skipped when the working
-    // directory is inside it, as the later mount would wipe out the
-    // writable cwd bind.
-    if (!pathCovers(QStringLiteral("/tmp"), cwd))
-        args << QStringLiteral("--tmpfs") << QStringLiteral("/tmp");
-    // The read-only root still exposes the host's Unix sockets (D-Bus
-    // session bus, ssh-agent, gpg-agent, docker.sock, Wayland/X11), which
-    // --unshare-net does not cover: mask the runtime directories with empty
-    // tmpfses. /var/run is normally a symlink to /run and then follows the
-    // mask. Skipped when the working directory is inside one of them (the
-    // later mount would wipe out the writable cwd bind). Name resolution
-    // (/etc/resolv.conf -> /run/...) breaks, so the masks are skipped when
-    // the network is allowed (the command needs DNS then).
-    if (!sandboxAllowsNetwork()) {
-        QStringList runtimeDirs = { QStringLiteral("/run") };
-        if (!QFileInfo(QStringLiteral("/var/run")).isSymLink())
-            runtimeDirs << QStringLiteral("/var/run");
-        const QString xdgRuntimeDir = qEnvironmentVariable("XDG_RUNTIME_DIR");
-        if (!xdgRuntimeDir.isEmpty() && !pathCovers(QStringLiteral("/run"), xdgRuntimeDir))
-            runtimeDirs << xdgRuntimeDir;
-        for (const QString &runtimeDir : std::as_const(runtimeDirs)) {
-            if (pathCovers(runtimeDir, cwd) || !QFileInfo(runtimeDir).isDir())
-                continue;
-            args << QStringLiteral("--tmpfs") << runtimeDir;
-        }
-    }
-    // NixOS keeps the whole system profile (PATH) under /run/current-system.
-    if (QFileInfo::exists(QStringLiteral("/run/current-system"))
-        && !pathCovers(QStringLiteral("/run"), cwd))
-        args << QStringLiteral("--ro-bind") << QStringLiteral("/run/current-system")
-             << QStringLiteral("/run/current-system");
-    // Extra writable directories from the Sandbox settings page, bound on
-    // top of the read-only root (and after the fresh /tmp, so a writable
-    // directory inside /tmp survives). Only existing directories can be
-    // bound; the secret and protected mounts below still take precedence.
-    for (const QString &dir : sandboxWritableDirs())
-        if (QFileInfo(dir).isDir())
-            args << QStringLiteral("--bind") << dir << dir;
-    args << QStringLiteral("--dev") << QStringLiteral("/dev")
-        << QStringLiteral("--proc") << QStringLiteral("/proc")
-        << QStringLiteral("--unshare-pid")
-        << QStringLiteral("--unshare-ipc")
-        << QStringLiteral("--unshare-uts");
-    // No network by default; the Sandbox settings page can lift it.
-    if (!sandboxAllowsNetwork())
-        args << QStringLiteral("--unshare-net");
-    args
-        // A new session: no TIOCSTI injection into the controlling terminal.
-        << QStringLiteral("--new-session")
-        << QStringLiteral("--die-with-parent");
-    // Hide the credential locations plus the user-configured deny-read
-    // directories - the read equivalent of the macOS deny-read rules: empty
-    // tmpfses over the directories, /dev/null over the files. Skipped when
-    // the working directory is inside one of them, as the later mount would
-    // wipe out the writable cwd bind.
-    for (const SecretReadPath &secret : denyReadPaths()) {
-        if (pathCovers(secret.path, cwd))
-            continue;
-        if (QDir(secret.path).exists())
-            args << QStringLiteral("--tmpfs") << secret.path;
-        else if (QFileInfo(secret.path).isFile())
-            args << QStringLiteral("--ro-bind") << QStringLiteral("/dev/null")
-                 << secret.path;
-    }
-    // The protected locations in the working directory (git hooks and
-    // config, Qt Creator's per-project settings) stay read-only: their
-    // content runs outside the sandbox. Last, so that they sit on top of
-    // the writable cwd bind.
-    for (const QString &path : protectedSubpaths(cwd))
-        args << QStringLiteral("--ro-bind") << path << path;
-    return { exe.toUserOutput(), args, {} };
+    const LinuxSandboxSpec linux = linuxSandboxSpec(cwd);
+    return { linux.program, linux.arguments, linux.error };
 #endif
 }
 

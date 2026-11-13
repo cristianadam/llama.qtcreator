@@ -128,6 +128,7 @@ add_qtc_plugin(LlamaCpp
     src/tools/web_utils.cpp src/tools/web_utils.h
     src/tools/webfetch_tool.cpp src/tools/webfetch_tool.h
     src/tools/websearch_tool.cpp src/tools/websearch_tool.h
+    src/tools/linux_sandbox.cpp src/tools/linux_sandbox.h
     src/tools/windows_sandbox.cpp src/tools/windows_sandbox.h
     src/projectinstructions.cpp src/projectinstructions.h
     src/promptssettingswidget.cpp src/promptssettingswidget.h

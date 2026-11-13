@@ -33,6 +33,7 @@
 #include <markdownrenderer.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
+#include <tools/linux_sandbox.h>
 #include <tools/mcptool.h>
 #include <tools/windows_sandbox.h>
 #include <tools/mcpserverconfig.h>
@@ -475,6 +476,9 @@ private slots:
     void windowsSandboxSpecProbeFailed();
     void windowsSandboxSpecUnavailable();
     void windowsSandboxSpec();
+    void linuxSandboxSpecUnavailable();
+    void linuxSandboxSpecProbeFailed();
+    void linuxSandboxSpecProbeOk();
     void quoteWindowsArgumentRules();
     void sandboxPathCovers();
     void sandboxPathTraversal();
@@ -3375,6 +3379,32 @@ static QString writeFakeWxcExec(const QString &dir)
     return path;
 }
 
+// Writes a fake bwrap shell script: when BWRAP_FAKE_ERROR is set, it
+// prints that text to stderr and exits 1 (simulating a sandbox setup
+// failure), otherwise it exits 0. The arguments are ignored, so the same
+// fake serves the probe and the (never reached) real command. Returns the
+// script path (executable).
+static QString writeFakeBwrap(const QString &dir)
+{
+    const QString path = dir + QStringLiteral("/bwrap-fake");
+    QFile file(path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return {};
+    file.write("#!/bin/sh\n"
+               "if [ -n \"$BWRAP_FAKE_ERROR\" ]; then\n"
+               "  printf '%s\\n' \"$BWRAP_FAKE_ERROR\" >&2\n"
+               "  exit 1\n"
+               "fi\n"
+               "exit 0\n");
+    file.close();
+    QFile::setPermissions(path,
+                          QFile::permissions(path)
+                                  | QFileDevice::ExeOwner
+                                  | QFileDevice::ExeGroup
+                                  | QFileDevice::ExeOther);
+    return path;
+}
+
 // The real wxc-exec.exe the Windows tests run against (LLAMA_WXC_EXEC, then
 // the configured runtime, then the downloaded one); empty while none is
 // available. The fake cannot run on Windows (it is a shell script), so
@@ -3443,6 +3473,108 @@ void LlamaToolsTest::windowsSandboxSpecUnavailable()
     QVERIFY(!spec.error.isEmpty());
     QVERIFY(spec.error.contains(QStringLiteral("wxc-exec")));
     QVERIFY(spec.error.contains("settings page"));
+}
+
+// A missing LLAMA_BWRAP falls back to bwrap on the PATH, so the
+// unavailable path is only reachable without one.
+void LlamaToolsTest::linuxSandboxSpecUnavailable()
+{
+    if (!QStandardPaths::findExecutable(QStringLiteral("bwrap")).isEmpty())
+        QSKIP("bwrap is installed; LLAMA_BWRAP falls back to it");
+    qputenv("LLAMA_BWRAP", "/nonexistent/bwrap");
+
+    const LlamaCpp::Tools::LinuxSandboxSpec spec
+        = LlamaCpp::Tools::linuxSandboxSpec(QDir::tempPath());
+
+    qunsetenv("LLAMA_BWRAP");
+
+    QVERIFY(spec.program.isEmpty());
+    QVERIFY(!spec.error.isEmpty());
+    QVERIFY(spec.error.contains(QStringLiteral("bubblewrap")));
+    QVERIFY(spec.error.contains(QStringLiteral("install")));
+}
+
+// The kernel can refuse the sandbox setup even though bwrap is installed:
+// the functional probe must catch it and turn the known failure signatures
+// into an actionable message (in particular the AppArmor restriction of
+// unprivileged user namespaces on Ubuntu 24.04 and newer). Each test uses
+// its own fake (a fresh QTemporaryDir path), so the probe cache (keyed by
+// executable) does not interfere with the test order.
+void LlamaToolsTest::linuxSandboxSpecProbeFailed()
+{
+#if defined(Q_OS_WIN)
+    // The fake is a shell script that QProcess cannot execute on Windows:
+    // the probe would time out instead of failing fast, and the timeout
+    // message is not the classified one.
+    QSKIP("the fake bwrap is a shell script; it cannot execute on Windows");
+#endif
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString fake = writeFakeBwrap(dir.path());
+    QVERIFY(!fake.isEmpty());
+    qputenv("LLAMA_BWRAP", fake.toUtf8());
+
+    // The signature of a restricted unprivileged user namespace with the
+    // network namespace unshared (the default configuration): the
+    // loopback setup inside it is refused.
+    qputenv("BWRAP_FAKE_ERROR",
+            "bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted");
+    const LlamaCpp::Tools::LinuxSandboxSpec restricted
+        = LlamaCpp::Tools::linuxSandboxSpec(QDir::tempPath());
+
+    // The same restriction, failing the uid map setup instead (the
+    // configuration without the network namespace).
+    qputenv("BWRAP_FAKE_ERROR", "bwrap: setting up uid map: Permission denied");
+    const LlamaCpp::Tools::LinuxSandboxSpec uidMap
+        = LlamaCpp::Tools::linuxSandboxSpec(QDir::tempPath());
+
+    qunsetenv("BWRAP_FAKE_ERROR");
+    qunsetenv("LLAMA_BWRAP");
+
+    for (const LlamaCpp::Tools::LinuxSandboxSpec &spec
+         : { restricted, uidMap }) {
+        QVERIFY(spec.program.isEmpty());
+        QVERIFY(!spec.error.isEmpty());
+        // The failure is classified and actionable: it names the AppArmor
+        // restriction and its remedy.
+        QVERIFY(spec.error.contains(QStringLiteral("AppArmor")));
+        QVERIFY(spec.error.contains(QStringLiteral(
+            "apparmor_restrict_unprivileged_userns")));
+    }
+}
+
+// A working bwrap (the probe passes) yields the confining wrapper: the
+// read-only root, the writable working directory, fresh namespaces and no
+// network access by default.
+void LlamaToolsTest::linuxSandboxSpecProbeOk()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString fake = writeFakeBwrap(dir.path());
+    QVERIFY(!fake.isEmpty());
+    qputenv("LLAMA_BWRAP", fake.toUtf8());
+
+    const QString cwd = QDir::tempPath();
+    const LlamaCpp::Tools::LinuxSandboxSpec spec
+        = LlamaCpp::Tools::linuxSandboxSpec(cwd);
+
+    qunsetenv("LLAMA_BWRAP");
+
+    QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
+    QCOMPARE(spec.program, fake);
+    const QStringList args = spec.arguments;
+    QVERIFY(args.contains(QStringLiteral("--ro-bind")));
+    QVERIFY(args.contains(QStringLiteral("/")));
+    QVERIFY(args.contains(QStringLiteral("--bind")));
+    QVERIFY(args.contains(cwd));
+    QVERIFY(args.contains(QStringLiteral("--dev")));
+    QVERIFY(args.contains(QStringLiteral("--proc")));
+    QVERIFY(args.contains(QStringLiteral("--unshare-pid")));
+    QVERIFY(args.contains(QStringLiteral("--unshare-ipc")));
+    QVERIFY(args.contains(QStringLiteral("--unshare-uts")));
+    QVERIFY(args.contains(QStringLiteral("--unshare-net")));
+    QVERIFY(args.contains(QStringLiteral("--new-session")));
+    QVERIFY(args.contains(QStringLiteral("--die-with-parent")));
 }
 
 void LlamaToolsTest::windowsSandboxSpec()
