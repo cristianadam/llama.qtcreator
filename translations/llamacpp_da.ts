@@ -23,9 +23,13 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>Slå llama.cpp til/fra</translation>
+        <translation type="vanished">Slå llama.cpp til/fra</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>Slå FIM til/fra</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -58,7 +62,7 @@
         <translation>llama.cpp-samtale</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+51"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -68,7 +72,7 @@
         <translation>Vis en lille knap i bunden af den valgte tekst i editoren, der åbner llama.cpp-lokatoren.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Skift til den næste cachelagrede fuldendelseskandidat på den aktuelle position (tryk på Ctrl+G, derefter Ned).</translation>
     </message>
@@ -98,17 +102,27 @@
         <translation>Åbn indstillingssiden for llama.cpp.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>Deaktiver llama.cpp.</translation>
+        <translation type="vanished">Deaktiver llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">Aktiver llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>Deaktiver FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>Aktiver llama.cpp.</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>Aktiver FIM</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -155,7 +169,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -167,24 +181,21 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1097"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>Aktiver llama.cpp</translation>
+        <translation type="vanished">Aktiver llama.cpp</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Aktiverer integrationen af llama.cpp.</translation>
+        <translation type="vanished">Aktiverer integrationen af llama.cpp.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../src/llamasettings.cpp" line="-1026"/>
         <source>Endpoint</source>
         <translation>Slutpunkt</translation>
     </message>
@@ -243,12 +254,12 @@
         <translation type="vanished">Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-92"/>
         <source>Tools</source>
         <translation>Værktøjer</translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+98"/>
         <source>Max Token Predictions</source>
         <translation>Maksimale token-forudsigelser</translation>
     </message>
@@ -363,7 +374,7 @@
         <translation type="vanished">Det maksimale antal gemte fuldendelser, der skal opbevares i result_cache.</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Opsummarér titlen på samtalen på få ord, herunder ét emoji. Brug det sprog, der bruges i samtalen. Brug almindelig tekst, ingen markdown.</translation>
     </message>
@@ -405,7 +416,12 @@
         <translation>Sandbox</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>Aktiverer FIM (fill-in-the-middle)-fuldendelse i teksteditoren. Indstillingerne for chat, værktøjer og websøgning er uafhængige af dette.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>FIM-model</translation>
     </message>
@@ -870,18 +886,25 @@
         <translation>Brugerdefineret JSON-streng med ekstra parametre.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>Bash:</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>Den bash-eksekverbar, der bruges til at køre bash-værktøjet med. Hvis feltet er tomt, bruges den standardbash (Git Bash). niubash - en nativ, MSYS2-fri Bash - kan desuden køre i Windows-sandboxen, hvor Git Bash ikke kan; brug Download...-knappen til at installere den, og Reset... til at skifte imellem de to.</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
-        <translation>Vis tokens pr. sekund</translation>
+        <translation type="vanished">Vis tokens pr. sekund</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Vis tokens pr. sekund i chat-grænsefladen.</translation>
+        <translation type="vanished">Vis tokens pr. sekund i chat-grænsefladen.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-240"/>
         <source>Thinking Level</source>
         <translation>Tænkeniveau</translation>
     </message>
@@ -991,19 +1014,32 @@
         <translation>Et ripgrep (rg) -program til at køre search- og find-værktøjerne med. Hvis feltet er tomt, bruges det fra PATH, herefter det, der er downloadet fra denne side.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash:</translation>
+        <translation type="vanished">niubash:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>En niubash bash-launcher (winuxcmd\bin\bash.exe) til at køre bash-værktøjet med på Windows. niubash er en nativ, MSYS2-fri Bash, og kan derfor - i modsætning til Git Bash - køre i Windows-sandboxen. Hvis feltet er tomt, bruges den, der er downloadet fra denne side, herefter Git Bash.</translation>
+        <translation type="vanished">En niubash bash-launcher (winuxcmd\bin\bash.exe) til at køre bash-værktøjet med på Windows. niubash er en nativ, MSYS2-fri Bash, og kan derfor - i modsætning til Git Bash - køre i Windows-sandboxen. Hvis feltet er tomt, bruges den, der er downloadet fra denne side, herefter Git Bash.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+32"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke - modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>Værktøjsforhåndsvisningslinjer</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>Værktøjsforhåndsvisningslinjer:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>Antallet af linjer af et værktøjs resultat, der vises i det foldede værktøjsopkaldsresumé, under beskrivelsen på én linje. Det samme antal bruges af alle værktøjer og af live-output-halen fra et kørende opkald. Forhåndsvisningen er desuden begrænset til 120 tegn pr. linje.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1020,7 +1056,7 @@
         <translation type="vanished">Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-281"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt til samtaletitel</translation>
     </message>
@@ -1131,12 +1167,12 @@
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="-493"/>
+        <location line="-489"/>
         <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
         <translation>Samtalen ovenfor er lang og vil blive fortsat i en ny samtale med et frisk kontekstvindue. Skriv et overleveringsdokument, der gør det muligt for den nye samtale at fortsætte arbejdet sømløst uden at se de tidligere beskeder. Strukturer det som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, udførte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er fuldført, hvad er i gang, mødt fejl) og ## Næste trin (hvad der skal gøres for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Svar ikke på brugerens sidste besked; skriv kun overleveringsdokumentet.</translation>
     </message>
     <message>
-        <location line="+441"/>
+        <location line="+437"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
         <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne. &quot;default&quot; bruger modellens standard, &quot;off&quot; deaktiverer tænkning, og de konkrete niveauer er dem, som serveren rapporterer for modellens chat-skabelon.</translation>
     </message>
@@ -1201,7 +1237,7 @@
     <message>
         <location line="+16"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox-kommandoer</translation>
@@ -1215,15 +1251,15 @@
         <translation type="vanished">Hvis markeret, er chat-værktøjerne indesluttet i en sandbox: bash-kommandoer køres i en platformssandbox, der blokkerer skrivninger til systemplaceringer (bubblewrap/bwrap på Linux, sandbox-exec på macOS, srt-win fra @anthropic-ai/sandbox-runtime på Windows), og filværktøjerne kan kun skrive inde i projektmappe og midlertidige placeringer. Placeringer med legitimationsoplysninger (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) kan ikke læses af noget værktøj, og sandboxede kommandoer har ingen netværksadgang (værktøjerne webfetch og websearch påvirkes ikke). På Windows kræver sandboxen en engangsinstallation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (én UAC-forespørgsel); srt-win-eksekverbaren skal være på PATH (LLAMA_SRT_WIN kan pege på den).</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-184"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Indlæs projektinstruktioner</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Hvis markeret, tilføjes den aktuelle projekts instruktionsfil til chats systembesked. Filen er AGENTS.md, og der faldes tilbage til CLAUDE.md. Filen søges efter i projektmappe og opad mod git-repositoryens rod, så et monorepo kan have én fælles instruktionsfil til alle dets projekter. Filer større end 32 KB beskæres.</translation>
     </message>
@@ -1242,7 +1278,7 @@
         <translation type="vanished">En lokal model kan gentage værktøjsopkald i det uendelige, så efter dette antal på hinanden følgende runder med kun værktøj udføres opkaldene ikke – modellen får i stedet et mislykket resultat, der fortæller den at afslutte. Samtaler for opgaver (under-agenter) er ikke begrænset. Sæt til 0 for ingen begrænsning.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>Web-søgeudbyder</translation>
     </message>
@@ -1390,7 +1426,7 @@
         <translation>API-nøgle til Tavily. Få en på tavily.com (kræves for udbyderen &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Tilsidesætter den globale indstilling &apos;Sandbox-kommandoer&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad sandboxen begrænser.</translation>
     </message>
@@ -1400,7 +1436,7 @@
         <translation>Tilsidesætter den globale indstilling &apos;Indlæs projektinstruktioner&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad der indlæses.</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; kræver ingen API-nøgle</translation>
     </message>
@@ -1502,7 +1538,7 @@
         <translation type="vanished">Forrige søgeresultat</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>Send til Llama Chat</translation>
     </message>
@@ -1531,7 +1567,7 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+1112"/>
+        <location line="+1109"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Fjern &quot;%1&quot;</translation>
     </message>
@@ -1540,19 +1576,19 @@
         <translation type="vanished">Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-346"/>
+        <location line="-342"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Menneskelig redaktør</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Du er forbundet med %1 og bruger %2 som den aktuelle mappe</translation>
     </message>
@@ -1677,12 +1713,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>Vælg arbejdsmappe</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1726,7 +1762,7 @@
         <translation type="vanished">Behandler: %1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Prompt-behandling:&lt;/b&gt;&lt;br&gt;Samlede tokens: %1&lt;br&gt;Behandlet: %2&lt;br&gt;Cachelagret: %3&lt;br&gt;Tid: %4 ms</translation>
     </message>
@@ -1735,12 +1771,12 @@
         <translation type="vanished">Opretter en ny samtale for at fortsætte denne – opsummerer samtalen...</translation>
     </message>
     <message>
-        <location line="-921"/>
+        <location line="-919"/>
         <source>Follow-up questions:</source>
         <translation>Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-606"/>
+        <location line="-611"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Beskeder i køen - sendes efter det aktuelle skridt</translation>
     </message>
@@ -1749,7 +1785,7 @@
         <translation type="vanished">Hastighed: %1 tokens pr. sekund</translation>
     </message>
     <message>
-        <location line="+1546"/>
+        <location line="+1549"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Tid: %2 ms&lt;br&gt;Hastighed: %3 tokens pr. sekund&lt;br&gt;&lt;br&gt;&lt;b&gt;Generering:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Tid: %5 ms&lt;br&gt;Hastighed: %6 tokens pr. sekund</translation>
     </message>
@@ -1758,7 +1794,7 @@
         <translation type="vanished">Kontekst: %1% brugt</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontekst: %1% brugt.&lt;br&gt;  %2 tokens fra %3.</translation>
     </message>
@@ -1913,7 +1949,7 @@
         <translation>Slet denne meddelelse</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>Billede</translation>
     </message>
@@ -2030,7 +2066,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1167"/>
+        <location filename="../src/llamasettings.cpp" line="-1123"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -2065,7 +2101,7 @@ Indbyggede prompts: %1
 Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>SVG-billede</translation>
     </message>
@@ -2096,9 +2132,8 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Kopieret til udklipsholderen</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>Vis/fjern detaljer om værktøjsbrug</translation>
+        <translation type="vanished">Vis/fjern detaljer om værktøjsbrug</translation>
     </message>
     <message>
         <location filename="../src/llamachatinput.cpp" line="-39"/>
@@ -2473,12 +2508,12 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Sandboxning (kommandoer, mapper, netværk) konfigureres på indstillingssiden for sandboxen.</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>Rediger</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Værktøjerne search og find bruger ripgrep, som ikke er installeret på dette system.</translation>
     </message>
@@ -2487,7 +2522,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+103"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Bash-værktøjet i sandbox på Windows bruger Microsoft MXC-runtime (wxc-exec), som ikke er installeret på dette system.</translation>
     </message>
@@ -2496,7 +2531,7 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Windows-sandbox-runtime: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2526,17 +2561,18 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Den indbyggede Qt Creator MCP-server, der håndteres af selve Qt Creator (Værktøjer → MCP i Qt Creator-indstillingerne).</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>Gennemse...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>Nulstil...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>Nulstil arbejdsmappen til startprojektets mappe (rydder tilsidesættelsen) eller til standardprojektmappe.</translation>
     </message>
@@ -2551,22 +2587,44 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>Bash-værktøjet på Windows kører Git Bash, som ikke kan initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash, en nativ MSYS2-fri Bash, der kan det, er ikke installeret på dette system.</translation>
+        <translation type="vanished">Bash-værktøjet på Windows kører Git Bash, som ikke kan initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash, en nativ MSYS2-fri Bash, der kan det, er ikke installeret på dette system.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>Bash-værktøjet på Windows kører niubash, som kan initialisere inde i Windows-sandboxen.</translation>
+        <translation type="vanished">Bash-værktøjet på Windows kører niubash, som kan initialisere inde i Windows-sandboxen.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash (Windows-sandbox-bash)</translation>
+        <translation type="vanished">niubash (Windows-sandbox-bash)</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>Skifter bash-værktøjet mellem Git Bash (standard, ryddet fra feltet) og den downloadede niubash (den eneste bash, der kører i Windows-sandboxen).</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH, eller download niubash herunder.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>Den standardbash (Git Bash) kan ikke initialisere inde i Windows-sandboxen (microsoft/mxc#1061). Download niubash for at køre bash-værktøjet i sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>Denne bash kan initialisere inde i Windows-sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>Bash (Windows)</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2632,7 +2690,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>Beskrivelse</translation>
     </message>
@@ -2653,7 +2711,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>Navn: %1</translation>
     </message>
@@ -2720,9 +2778,9 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+122"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add...</source>
         <translation>Tilføj...</translation>
     </message>
@@ -2763,7 +2821,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2832,7 +2890,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>Fejl:</translation>
     </message>
@@ -2877,7 +2935,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Samtalen passer ikke længere i modellens kontekstvindue.</translation>
     </message>
@@ -2978,7 +3036,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Microsoft MXC-runtime (wxc-exec) er ikke installeret; download den på indstillingssiden for Llama-værktøjerne</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>Microsoft MXC-runtime (wxc-exec), som Windows-sandboxen bruger, er kun tilgængelig til Windows x86-64 og arm64</translation>
     </message>
@@ -3018,7 +3076,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Problemer med sandboxen for llama.cpp chat-værktøjerne.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-181"/>
         <source>Writable directories:</source>
         <translation>Skrivbare mapper:</translation>
     </message>
@@ -3054,8 +3112,8 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-235"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>Download...</translation>
     </message>
@@ -3065,7 +3123,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Det sandboxede bash-værktøj på Windows køres i en Microsoft MXC procescontainer.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Windows-runtime</translation>
     </message>
@@ -3080,7 +3138,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Netværk</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>Vælg en mappe</translation>
     </message>
@@ -3090,7 +3148,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Spørg llama.cpp om markeringen (åbner llama.cpp-lokatoren)</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>Syntaksdefinitioner: %1</translation>
     </message>
@@ -3103,6 +3161,11 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>Syntaksdefinitioner: starter download</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>Vis/fjern detaljer om værktøjsbrug. Ctrl+klik (Cmd på macOS) på indholdet folder blokken sammen.</translation>
     </message>
 </context>
 <context>
@@ -3159,7 +3222,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>slettet</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
@@ -3168,22 +3231,42 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) er installeret, men kernen nægter at opsætte dens sandbox: %1. På Ubuntu 24.04 og nyere skyldes dette normalt AppArmor&apos;s begrænsning af upriviligerede brugernavnerum: kør &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (tilføj den til /etc/sysctl.d/ for at gøre den permanent), eller giv bwrap en AppArmor-profil med &apos;userns&apos;-attributtet. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) er installeret, men upriviligerede brugernavnerum er deaktiveret på dette system: %1. På Debian og dets afledte, aktiverer du dem med &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) fejlede at opsætte sandboxen: %1. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) opsatte ikke sandboxen i tide. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Output beskåret: %1]</translation>
     </message>
@@ -3289,7 +3372,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>rediger %1</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
@@ -3437,8 +3520,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
     </message>
     <message>
@@ -3559,12 +3646,11 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Søgning fejlede: %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut og prøv igen.</translation>
+        <translation type="vanished">Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut og prøv igen.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3589,7 +3675,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Ingen resultater fundet for &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut, og prøv igen.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
@@ -3751,7 +3842,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
@@ -3909,7 +4000,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>indlæs færdighed %1</translation>
     </message>
@@ -3965,7 +4056,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fælles ressourcer kan ikke adgås i sandboxen.</translation>
     </message>
@@ -3978,7 +4069,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>Nulstil til projektmappe</translation>
     </message>
@@ -3998,7 +4089,27 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Brug standardprojektmappe, indstillingen, hvor nye projekter oprettes.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Nulstil til Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Rydder bash-overskrivelsen: bash-værktøjet bruger den standardbash, Git Bash (en genkendt bash på PATH, herefter den, der leveres med Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Nulstil til niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Brug den downloadede niubash, en nativ, MSYS2-fri Bash, der - i modsætning til Git Bash - kan køre i Windows-sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne. Åbn et projekt for at arbejde med dets filer.</translation>
     </message>
@@ -4156,12 +4267,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>Download niubash</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>Download niubash %1 fra GitHub?</translation>
     </message>

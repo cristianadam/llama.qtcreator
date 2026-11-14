@@ -24,9 +24,13 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>切換啟用/停用 llama.cpp</translation>
+        <translation type="vanished">切換啟用/停用 llama.cpp</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>切換啟用/停用 FIM</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -54,7 +58,7 @@
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+31"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -64,7 +68,7 @@
         <translation>在編輯器的文字選取區域底部顯示一個小按鈕，用於開啟 llama.cpp 定位器。</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>切換到目前位置的下一個快取補全候選（按 Ctrl+G，再按向下鍵）。</translation>
     </message>
@@ -94,17 +98,27 @@
         <translation>開啟 llama.cpp 設定頁面。</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>停用 llama.cpp。</translation>
+        <translation type="vanished">停用 llama.cpp。</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">啟用 llama.cpp。</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>停用 FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>啟用 llama.cpp。</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>啟用 FIM</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 從 %1 獲取 FIM 完成時出錯：%2</translation>
     </message>
@@ -151,7 +165,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -163,29 +177,26 @@
         <translation>聊天</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1126"/>
+        <location filename="../src/llamasettings.cpp" line="-1082"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>啟用 llama.cpp</translation>
+        <translation type="vanished">啟用 llama.cpp</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>啟用 llama.cpp 整合功能。</translation>
+        <translation type="vanished">啟用 llama.cpp 整合功能。</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+56"/>
         <source>Endpoint</source>
         <translation>端點</translation>
     </message>
@@ -359,7 +370,7 @@
         <translation type="vanished">在 result_cache 中要保留的最大快取完成數量。</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>用幾個字（包含一個 emoji）概括對話標題。使用對話中使用的語言。使用純文字，不要 markdown。</translation>
     </message>
@@ -406,7 +417,12 @@
         <translation>沙箱</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>啟用文字編輯器中的 FIM（fill-in-the-middle）補全。聊天、工具和網路搜尋的設定與此獨立。</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>FIM 模型</translation>
     </message>
@@ -871,18 +887,25 @@
         <translation>附加參數的自訂 JSON 字串。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>bash：</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>用於執行 bash 工具的 bash 可執行檔。留空則使用預設 bash（Git Bash）。niubash - 原生、無需 MSYS2 的 Bash - 還可以在 Git Bash 無法運行的 Windows 沙箱中運行；使用「下載...」按鈕來安裝它，使用「重設...」在兩者之間切換。</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
-        <translation>顯示每秒代幣數</translation>
+        <translation type="vanished">顯示每秒代幣數</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>在聊天介面中顯示每秒代幣數。</translation>
+        <translation type="vanished">在聊天介面中顯示每秒代幣數。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-240"/>
         <source>Thinking Level</source>
         <translation>思考層級</translation>
     </message>
@@ -902,21 +925,19 @@
         <translation>用於運行搜尋和尋找工具的 ripgrep（rg）可執行檔。留空則使用 PATH 上的一個，然後是使用從此頁面下載的一個。</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash：</translation>
+        <translation type="vanished">niubash：</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>用於在 Windows 上運行 bash 工具的 niubash bash 啟動器（winuxcmd\bin\bash.exe）。niubash 是原生、無需 MSYS2 的 Bash，因此與 Git Bash 不同，它可以在 Windows 沙箱中運行。留空則使用從此頁面下載的一個，然後是 Git Bash。</translation>
+        <translation type="vanished">用於在 Windows 上運行 bash 工具的 niubash bash 啟動器（winuxcmd\bin\bash.exe）。niubash 是原生、無需 MSYS2 的 Bash，因此與 Git Bash 不同，它可以在 Windows 沙箱中運行。留空則使用從此頁面下載的一個，然後是 Git Bash。</translation>
     </message>
     <message>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
         <translation type="vanished">具備思考能力的模型的思考（推理）層級：&quot;default&quot;、&quot;off&quot;、&quot;low&quot;、&quot;medium&quot;、&quot;high&quot; 或 &quot;max&quot;。</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-222"/>
         <source>Chat Font Zoom</source>
         <translation>聊天字體縮放</translation>
     </message>
@@ -1013,9 +1034,24 @@
         <translation type="vanished">當對話歷史使用的模型上下文窗口超過此百分比時，對話會被自動壓縮。</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+39"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>本地模型可能永遠循環呼叫工具，因此在連續進行如此多輪僅含工具的輪次後，呼叫將不再執行 - 模型會收到一個失敗結果，告訴它改為完成任務。任務（子代理）對話不受限制。設為 0 表示不限。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>工具預覽行數</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>工具預覽行數：</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>摺疊的工具呼叫摘要中、一行描述下方顯示的工具結果行數。所有工具和執行中呼叫的即時輸出結尾都使用相同的行數。預覽每行另外限制為 120 個字元。</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1032,7 +1068,7 @@
         <translation type="vanished">用於輔助請求（如對話標題和後續建議）的模型。使用小模型以釋放主要聊天模型。留空則使用目前活躍的聊天模型。</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-281"/>
         <source>Conversation Title Prompt</source>
         <translation>對話標題提示</translation>
     </message>
@@ -1197,7 +1233,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱命令</translation>
@@ -1211,15 +1247,15 @@
         <translation type="vanished">選中後，聊天工具將被限制在沙箱中：bash 命令在平台沙箱中執行，阻止對系統位置的寫入（Linux 上使用 bubblewrap/bwrap，macOS 上使用 sandbox-exec，Windows 上使用 @anthropic-ai/sandbox-runtime 的 srt-win），檔案工具只能寫入專案目錄和臨時位置。憑證位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）對任何工具都不可讀，沙箱中的命令沒有網路存取（webfetch 和 websearch 工具不受影響）。在 Windows 上沙箱需要一次性的安裝：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（一次 UAC 提示）；srt-win 可執行檔必須在 PATH 上（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-184"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>載入專案指令</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>選中後，目前專案的專案指令檔案會附加到聊天系統訊息中。該檔案是 AGENTS.md，若不存在則回退到 CLAUDE.md，從專案目錄開始向上查找直到 git 儲存庫根目錄，因此 monorepo 可以為所有專案保持單一指令檔案。超過 32 KB 的檔案會被截斷。</translation>
     </message>
@@ -1238,7 +1274,7 @@
         <translation type="vanished">本地模型可能永遠循環呼叫工具，因此在連續進行如此多輪僅含工具的輪次後，呼叫將不再執行 – 模型會收到一個失敗結果，告訴它改為完成任務。任務（子代理）對話不受限制。設為 0 表示不限。</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>網路搜尋供應商</translation>
     </message>
@@ -1386,7 +1422,7 @@
         <translation>Tavily 的 API 金鑰，可至 tavily.com 取得（「tavily」供應商所需）。</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>覆寫此專案的全域「沙箱命令」設定。請參閱 Llama 工具頁面上的全域設定以了解沙箱的限制。</translation>
     </message>
@@ -1396,7 +1432,7 @@
         <translation>覆寫此專案的全域「載入專案指令」設定。請參閱 Llama 工具頁面上的全域設定以了解載入的內容。</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; 無需 API 金鑰</translation>
     </message>
@@ -1498,7 +1534,7 @@
         <translation type="vanished">上一個搜尋結果</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>傳送至 Llama 聊天</translation>
     </message>
@@ -1531,12 +1567,12 @@
         <translation type="vanished">後續問題：</translation>
     </message>
     <message>
-        <location line="-522"/>
+        <location line="-527"/>
         <source>Queued messages - sent after the current step</source>
         <translation>佇列中的訊息 - 在目前的步驟之後發送</translation>
     </message>
     <message>
-        <location line="+418"/>
+        <location line="+423"/>
         <source>Download definitions</source>
         <translation>下載定義</translation>
     </message>
@@ -1561,19 +1597,19 @@
         <translation>後續問題：</translation>
     </message>
     <message>
-        <location line="+682"/>
+        <location line="+683"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考層級：%1（適用於新訊息）</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人工編輯器</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>你已連線到 %1，以 %2 作為目前目錄</translation>
     </message>
@@ -1678,12 +1714,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>選擇工作目錄</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1727,7 +1763,7 @@
         <translation type="vanished">處理中：%1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;提示處理：&lt;/b&gt;&lt;br&gt;總代幣數：%1&lt;br&gt;已處理：%2&lt;br&gt;已快取：%3&lt;br&gt;時間：%4 毫秒</translation>
     </message>
@@ -1745,7 +1781,7 @@
         <translation type="vanished">上下文：已使用 %1%</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>上下文：已使用 %1%。&lt;br&gt;  來自 %3 的 %2 個代幣。</translation>
     </message>
@@ -1909,7 +1945,7 @@
         <translation>刪除此訊息</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>圖片</translation>
     </message>
@@ -2030,7 +2066,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 對話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1167"/>
+        <location filename="../src/llamasettings.cpp" line="-1123"/>
         <source>Create a summary of {selection}</source>
         <translation>建立 {selection} 的摘要</translation>
     </message>
@@ -2079,7 +2115,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>正在收集 git 變更</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>SVG 圖片</translation>
     </message>
@@ -2110,9 +2146,8 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>已複製到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>切換工具使用的詳細資訊</translation>
+        <translation type="vanished">切換工具使用的詳細資訊</translation>
     </message>
     <message>
         <location filename="../src/llamachatinput.cpp" line="-39"/>
@@ -2503,12 +2538,12 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">沙箱（命令、目錄、網路）在沙箱設定頁面上設定。</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>編輯</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>搜尋和尋找工具使用 ripgrep，但此系統未安裝。</translation>
     </message>
@@ -2517,7 +2552,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">ripgrep：%1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+103"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Windows 上的沙箱 bash 工具使用 Microsoft MXC 執行階段（wxc-exec），此系統未安裝它。</translation>
     </message>
@@ -2526,7 +2561,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Windows 沙箱執行階段：%1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL：%1</translation>
@@ -2556,17 +2591,18 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Qt Creator 內建的 MCP 伺服器，由 Qt Creator 本身管理（Qt Creator 設定中的工具 → MCP）。</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>瀏覽...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>重設...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>將工作目錄重設為啟動專案的目錄（清除覆寫）或預設專案目錄。</translation>
     </message>
@@ -2581,22 +2617,44 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>Windows 上的 bash 工具運行 Git Bash，但 Git Bash 無法在 Windows 沙箱內初始化（microsoft/mxc#1061）。可以這樣做的原生、無需 MSYS2 的 Bash（niubash）未在此系統上安裝。</translation>
+        <translation type="vanished">Windows 上的 bash 工具運行 Git Bash，但 Git Bash 無法在 Windows 沙箱內初始化（microsoft/mxc#1061）。可以這樣做的原生、無需 MSYS2 的 Bash（niubash）未在此系統上安裝。</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>Windows 上的 bash 工具運行 niubash，它可以在 Windows 沙箱內初始化。</translation>
+        <translation type="vanished">Windows 上的 bash 工具運行 niubash，它可以在 Windows 沙箱內初始化。</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash（Windows 沙箱 bash）</translation>
+        <translation type="vanished">niubash（Windows 沙箱 bash）</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>在 Git Bash（預設，從欄位中清除）和已下載的 niubash（唯一可在 Windows 沙箱中運行的 bash）之間切換 bash 工具。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>找不到 bash shell。請安裝 Git for Windows（https://git-scm.com/download/win）或在 PATH 中加入 bash，或在下方下載 niubash。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>預設 bash（Git Bash）無法在 Windows 沙箱內初始化（microsoft/mxc#1061）。下載 niubash 以在沙箱中運行 bash 工具。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>此 bash 可以在 Windows 沙箱內初始化。</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>bash（Windows）</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2662,7 +2720,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>描述</translation>
     </message>
@@ -2683,7 +2741,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>名稱：%1</translation>
     </message>
@@ -2728,9 +2786,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+122"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add...</source>
         <translation>新增...</translation>
     </message>
@@ -2781,7 +2839,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">壓縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>標題</translation>
@@ -2840,7 +2898,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名稱「%1」與 %2 衝突 – 保留第一個</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>錯誤：</translation>
     </message>
@@ -2885,7 +2943,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">對話已壓縮 – 較早的訊息已被摘要以適配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>對話已無法容納於模型的上下文窗口中。</translation>
     </message>
@@ -2986,7 +3044,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Microsoft MXC 執行階段（wxc-exec）未安裝；請在 Llama 工具設定頁面下載</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>Windows 沙箱使用的 Microsoft MXC 執行階段（wxc-exec）僅適用於 Windows x86-64 和 arm64</translation>
     </message>
@@ -3026,7 +3084,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>llama.cpp 聊天工具的沙箱問題。</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-181"/>
         <source>Writable directories:</source>
         <translation>可寫入目錄：</translation>
     </message>
@@ -3062,8 +3120,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-235"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>下載...</translation>
     </message>
@@ -3073,7 +3131,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Windows 上的沙箱 bash 工具在 Microsoft MXC 程序容器中運行。</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Windows 執行階段</translation>
     </message>
@@ -3088,7 +3146,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>網路</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>選擇目錄</translation>
     </message>
@@ -3098,7 +3156,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>就選取內容提示 llama.cpp（開啟 llama.cpp 定位器）</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>語法定義：%1</translation>
     </message>
@@ -3111,6 +3169,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>語法定義：開始下載</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>切換工具使用的詳細資訊。在內容上按 Ctrl+點擊（macOS 上是 Cmd）可摺疊該區塊。</translation>
     </message>
 </context>
 <context>
@@ -3167,7 +3230,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>已刪除</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>成功。已更新以下檔案：</translation>
     </message>
@@ -3176,22 +3239,42 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">找不到 bash shell。請安裝 Git for Windows（https://git-scm.com/download/win）或在 PATH 中加入 bash。</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>找不到 bash shell。請安裝 Git for Windows（https://git-scm.com/download/win）或在 PATH 中加入 bash，或從 Llama.cpp 聊天工具設定頁面下載 niubash。</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>找不到 sandbox-exec 可執行檔；此系統無法使用沙箱。</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）已安裝，但核心拒絕設定其沙箱：%1。在 Ubuntu 24.04 及更新版本上，這通常是 AppArmor 對非特權使用者命名空間的限制：執行 &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos;（將其加入 /etc/sysctl.d/ 以永久生效），或為 bwrap 提供一個具有 &apos;userns&apos; 屬性的 AppArmor 設定檔。或者在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）已安裝，但此系統上已停用非特權使用者命名空間：%1。在 Debian 及其衍生版本上，使用 &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; 來啟用它們。或者在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）設定沙箱失敗：%1。檢查它能否在此系統上運行，或在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）未能及時設定沙箱。檢查它能否在此系統上運行，或在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>找不到 bubblewrap（bwrap）。請安裝它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[輸出已截斷：%1]</translation>
     </message>
@@ -3297,7 +3380,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>編輯 %1</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>工具錯誤：&quot;path&quot; 必須是非空字串。</translation>
@@ -3445,9 +3528,13 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> 請使用 first_line=%1, last_line_inclusive=%2 繼續。</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>你是「explore」子代理，在一個與主對話隔離的獨立對話中運行。探索程式碼庫並使用可用的唯讀工具回答任務：使用「find」按名稱定位檔案，「search」搜尋檔案內容，「read_file」讀取相關部分。不要修改任何檔案，也不要執行會變更內容的命令。自主工作；你無法向使用者提問。完成後，回覆一份簡潔的報告，包含關鍵發現、相關檔案路徑（含行號），以及主對話繼續工作所需的一切。</translation>
+        <translation type="vanished">你是「explore」子代理，在一個與主對話隔離的獨立對話中運行。探索程式碼庫並使用可用的唯讀工具回答任務：使用「find」按名稱定位檔案，「search」搜尋檔案內容，「read_file」讀取相關部分。不要修改任何檔案，也不要執行會變更內容的命令。自主工作；你無法向使用者提問。完成後，回覆一份簡潔的報告，包含關鍵發現、相關檔案路徑（含行號），以及主對話繼續工作所需的一切。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>你是「explore」子代理，在一個與主對話隔離的獨立對話中運行。探索程式碼庫並使用可用的唯讀工具來回答任務：使用「find」按名稱定位檔案，使用「search」搜尋檔案內容，使用「read_file」讀取相關部分。不要修改任何檔案，也不要執行會變更內容的命令。自主工作；你無法向使用者提問。完成後，回覆一份簡潔的報告，包含關鍵發現、相關檔案路徑（含行號），以及主對話繼續工作所需的一切。</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3567,12 +3654,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>搜尋失敗：%1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>搜尋失敗：DuckDuckGo 目前正對請求進行速率限制；請稍候一分鐘後再試。</translation>
+        <translation type="vanished">搜尋失敗：DuckDuckGo 目前正對請求進行速率限制；請稍候一分鐘後再試。</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3597,7 +3683,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>找不到「%1」的結果。</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>搜尋失敗：DuckDuckGo 目前正在對請求進行速率限制；請稍等一分鐘再試。</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>搜尋失敗：Tavily 後端未設定。請在 Llama.cpp 設定中設定 API 金鑰。</translation>
     </message>
@@ -3759,7 +3850,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>專案：%1</translation>
@@ -3917,7 +4008,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[輸出已截斷為 %1 KB。精確化模式或減少上下文以查看所有匹配。]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>載入技能 %1</translation>
     </message>
@@ -3973,7 +4064,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>任務列表已更新：%1 / %2 已完成。</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>不允許存取「%1」：裝置路徑和管理共用在沙箱中無法存取。</translation>
     </message>
@@ -3986,7 +4077,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">不允許寫入「%1」：沙箱只允許寫入專案目錄和臨時位置。</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>重設為專案目錄</translation>
     </message>
@@ -4006,7 +4097,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>使用預設專案目錄，即建立新專案時使用的設定。</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>重設為 Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>清除 bash 覆寫：bash 工具使用預設 bash，即 Git Bash（PATH 上可識別的 bash，然後是隨 Git for Windows 一起提供的那個）。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>重設為 niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>使用已下載的 niubash，一個原生、無需 MSYS2 的 Bash - 與 Git Bash 不同，它可以在 Windows 沙箱中運行。</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>不允許寫入「%1」：未開啟專案，所以沙箱只允許寫入暫存位置和沙箱設定中的其他可寫入目錄。請開啟專案以處理其檔案。</translation>
     </message>
@@ -4164,12 +4275,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP 工具「%1」已被使用者停止。</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>下載 niubash</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>從 GitHub 下載 niubash %1？</translation>
     </message>

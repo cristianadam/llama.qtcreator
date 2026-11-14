@@ -24,9 +24,13 @@
         <translation>Strg+G</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>llama.cpp aktivieren/deaktivieren</translation>
+        <translation type="vanished">llama.cpp aktivieren/deaktivieren</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>FIM aktivieren/deaktivieren</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -54,7 +58,7 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+31"/>
         <source>Ctrl+Shift+G</source>
         <translation>Strg+Umschalt+G</translation>
     </message>
@@ -64,7 +68,7 @@
         <translation>Zeigt einen kleinen Button am unteren Rand einer Textauswahl im Editor an, der den llama.cpp-Locator öffnet.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Wechselt zum nächsten zwischengespeicherten Vervollständigungskandidaten an der aktuellen Position (Strg+G drücken, dann Pfeil nach unten).</translation>
     </message>
@@ -94,17 +98,27 @@
         <translation>Öffnet die llama.cpp-Einstellungsseite.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>llama.cpp deaktivieren.</translation>
+        <translation type="vanished">llama.cpp deaktivieren.</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">llama.cpp aktivieren.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>FIM deaktivieren</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>llama.cpp aktivieren.</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>FIM aktivieren</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fehler beim Abrufen der FIM-Vervollständigung von %1: %2</translation>
     </message>
@@ -151,7 +165,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -163,29 +177,26 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1126"/>
+        <location filename="../src/llamasettings.cpp" line="-1082"/>
         <source>Tools</source>
         <translation>Werkzeuge</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>llama.cpp-Integration aktivieren</translation>
+        <translation type="vanished">llama.cpp-Integration aktivieren</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Aktiviert die Integration von llama.cpp.</translation>
+        <translation type="vanished">Aktiviert die Integration von llama.cpp.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+56"/>
         <source>Endpoint</source>
         <translation>Endpoint</translation>
     </message>
@@ -360,7 +371,7 @@
         <translation type="vanished">Maximale Anzahl der zwischengespeicherten Vervollständigungen, die im Ergebnis-Cache behalten werden sollen.</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Fassen Sie den Titel der Konversation in wenigen Worten zusammen, einschließlich eines Emojis. Verwenden Sie die in der Konversation verwendete Sprache. Verwenden Sie reinen Text, kein Markdown.</translation>
     </message>
@@ -407,7 +418,12 @@
         <translation>Sandbox</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>Aktiviert die FIM (Fill-in-the-Middle)-Vervollständigung im Texteditor. Die Einstellungen für Chat, Werkzeuge und Websuche sind davon unabhängig.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>FIM-Modell</translation>
     </message>
@@ -867,18 +883,25 @@
         <translation>Benutzerdefinierte JSON-Parameter als String.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>Bash:</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>Der bash-Executabler, mit dem das bash-Tool ausgeführt wird. Wenn leer, wird das Standard-Bash verwendet (Git Bash). niubash - ein natives, MSYS2-freies Bash - kann zusätzlich in der Windows-Sandbox ausgeführt werden, wo Git Bash das nicht kann; verwenden Sie den Download...-Button, um es zu installieren, und den Reset...-Button, um zwischen den beiden umzuschalten.</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
-        <translation>Tokens pro Sekunde anzeigen</translation>
+        <translation type="vanished">Tokens pro Sekunde anzeigen</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Zeigt die Token-Geschwindigkeit pro Sekunde in der Chat-Benutzeroberfläche an.</translation>
+        <translation type="vanished">Zeigt die Token-Geschwindigkeit pro Sekunde in der Chat-Benutzeroberfläche an.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-240"/>
         <source>Thinking Level</source>
         <translation>Denkstufe</translation>
     </message>
@@ -898,21 +921,19 @@
         <translation>Ein ripgrep-(rg-)Executabler, mit dem die search- und find-Tools ausgeführt werden. Wenn leer, wird der auf dem PATH vorhandene verwendet, dann der von dieser Seite heruntergeladene.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash:</translation>
+        <translation type="vanished">niubash:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>Ein niubash-Bash-Startprogramm (winuxcmd\bin\bash.exe), mit dem das bash-Tool auf Windows ausgeführt wird. niubash ist ein natives, MSYS2-freies Bash, kann daher - im Gegensatz zu Git Bash - in der Windows-Sandbox ausgeführt werden. Wenn leer, wird der von dieser Seite heruntergeladene verwendet, dann Git Bash.</translation>
+        <translation type="vanished">Ein niubash-Bash-Startprogramm (winuxcmd\bin\bash.exe), mit dem das bash-Tool auf Windows ausgeführt wird. niubash ist ein natives, MSYS2-freies Bash, kann daher - im Gegensatz zu Git Bash - in der Windows-Sandbox ausgeführt werden. Wenn leer, wird der von dieser Seite heruntergeladene verwendet, dann Git Bash.</translation>
     </message>
     <message>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
         <translation type="vanished">Denk- (Schlussfolgerungs-)stufe für Modelle mit Denkfähigkeit: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; oder &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-222"/>
         <source>Chat Font Zoom</source>
         <translation>Chat-Textvergrößerung</translation>
     </message>
@@ -1009,9 +1030,24 @@
         <translation type="vanished">Die Konversation wird automatisch kompaktiert, wenn ihr Verlauf mehr als diesen Prozentsatz des Kontextfensters des Modells belegt.</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+39"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Ein lokales Modell kann Werkzeugaufrufe in einer Endlosschleife ausführen, daher werden nach dieser Anzahl aufeinanderfolgender Runden mit nur Werkzeugaufrufen die Aufrufe nicht ausgeführt - das Modell erhält ein fehlgeschlagenes Ergebnis, das es anweist, stattdessen abzuschließen. Aufgaben- (Unteragenten-)Konversationen sind nicht begrenzt. Auf 0 setzen für keine Grenze.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>Werkzeugvorschau-Zeilen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>Werkzeugvorschau-Zeilen:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>Die Anzahl der Zeilen eines Werkzeugergebnisses, die in der zusammengeklappten Werkzeugaufruf-Zusammenfassung unter der einzeiligen Beschreibung angezeigt werden. Dieselbe Anzahl wird von allen Werkzeugen und vom Ende der Live-Ausgabe eines laufenden Aufrufs verwendet. Die Vorschau ist zusätzlich auf 120 Zeichen pro Zeile begrenzt.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1028,7 +1064,7 @@
         <translation type="vanished">Modell, das für Hilfsanfragen wie Konversationstitel und Anschlussvorschläge verwendet wird. Verwenden Sie ein kleines Modell, um das Haupt-Chat-Modell frei zu halten. Leer lassen, um das aktive Chat-Modell zu verwenden.</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-281"/>
         <source>Conversation Title Prompt</source>
         <translation>Konversationstitel-Prompt</translation>
     </message>
@@ -1193,7 +1229,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Befehle in Sandbox ausführen</translation>
@@ -1207,15 +1243,15 @@
         <translation type="vanished">Wenn aktiviert, sind die Chat-Tools auf eine Sandbox beschränkt: Bash-Befehle werden in einer Plattformsandbox ausgeführt, die Schreibvorgänge an Systempositionen blockiert (bubblewrap/bwrap auf Linux, sandbox-exec auf macOS, srt-win von @anthropic-ai/sandbox-runtime auf Windows), und die Dateitools dürfen nur innerhalb des Projektverzeichnisses und in temporären Positionen schreiben. Credential-Positionen (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) sind für kein Tool lesbar, und gesandboxte Befehle haben keinen Netzwerkzugriff (die webfetch- und websearch-Tools sind nicht betroffen). Auf Windows benötigt die Sandbox eine einmalige Installation: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (ein UAC-Dialog); die srt-win-Executabler muss im PATH sein (LLAMA_SRT_WIN kann auf sie verweisen).</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-184"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Projektanweisungen laden</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Wenn aktiviert, wird die Projektanweisungsdatei des aktuellen Projekts an die Chat-Systemnachricht angehängt. Die Datei ist AGENTS.md, mit CLAUDE.md als Fallback, und wird im Projektverzeichnis gesucht und bis zur Wurzel des Git-Repositories hochsuchend verfolgt, sodass ein Monorepo eine einzige Anweisungsdatei für alle seine Projekte verwenden kann. Dateien größer als 32 KB werden abgeschnitten.</translation>
     </message>
@@ -1234,7 +1270,7 @@
         <translation type="vanished">Ein lokales Modell kann Werkzeugaufrufe in einer Endlosschleife ausführen, daher werden nach dieser Anzahl aufeinanderfolgender Runden mit nur Werkzeugaufrufen die Aufrufe nicht ausgeführt – das Modell erhält ein fehlgeschlagenes Ergebnis, das es anweist, stattdessen abzuschließen. Aufgaben- (Unteragenten-)Konversationen sind nicht begrenzt. Auf 0 setzen für keine Grenze.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>Web-Suchanbieter</translation>
     </message>
@@ -1382,7 +1418,7 @@
         <translation>API-Schlüssel für Tavily, erhältlich unter tavily.com (erforderlich für den &quot;tavily&quot;-Anbieter).</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Überschreibt die globale Einstellung &apos;Befehle in Sandbox ausführen&apos; für dieses Projekt. Was die Sandbox beschränkt, zeigt die globale Einstellung auf der Llama-Tools-Seite.</translation>
     </message>
@@ -1392,7 +1428,7 @@
         <translation>Überschreibt die globale Einstellung &apos;Projektanweisungen laden&apos; für dieses Projekt. Was geladen wird, zeigt die globale Einstellung auf der Llama-Tools-Seite.</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; benötigt keinen API-Schlüssel</translation>
     </message>
@@ -1494,7 +1530,7 @@
         <translation type="vanished">Vorheriges Suchergebnis</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>An Llama-Chat senden</translation>
     </message>
@@ -1527,12 +1563,12 @@
         <translation type="vanished">Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="-522"/>
+        <location line="-527"/>
         <source>Queued messages - sent after the current step</source>
         <translation>In der Warteschlange stehende Nachrichten - gesendet nach dem aktuellen Schritt</translation>
     </message>
     <message>
-        <location line="+418"/>
+        <location line="+423"/>
         <source>Download definitions</source>
         <translation>Definitionen herunterladen</translation>
     </message>
@@ -1557,19 +1593,19 @@
         <translation>Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="+682"/>
+        <location line="+683"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Denkstufe: %1 (gilt für neue Nachrichten)</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Verbunden mit %1, aktuelles Verzeichnis: %2</translation>
     </message>
@@ -1674,12 +1710,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>Arbeitsverzeichnis auswählen</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1723,7 +1759,7 @@
         <translation type="vanished">Verarbeitung: %1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Prompt-Verarbeitung:&lt;/b&gt;&lt;br&gt;Tokens gesamt: %1&lt;br&gt;Verarbeitet: %2&lt;br&gt;Zwischengespeichert: %3&lt;br&gt;Zeit: %4 ms</translation>
     </message>
@@ -1741,7 +1777,7 @@
         <translation type="vanished">Kontext: %1% verwendet</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontext: %1% verwendet.&lt;br&gt;  %2 Tokens von %3.</translation>
     </message>
@@ -1905,7 +1941,7 @@
         <translation>Diese Nachricht löschen</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
@@ -2033,7 +2069,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>llama.cpp-Konversationen</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1167"/>
+        <location filename="../src/llamasettings.cpp" line="-1123"/>
         <source>Create a summary of {selection}</source>
         <translation>Zusammenfassung von **„{selection}“** erstellen</translation>
     </message>
@@ -2082,7 +2118,7 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>Git-Änderungen werden gesammelt</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>SVG-Bild</translation>
     </message>
@@ -2113,9 +2149,8 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>In die Zwischenablage kopiert</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>Details der Werkzeugverwendung an- bzw. ausblenden</translation>
+        <translation type="vanished">Details der Werkzeugverwendung an- bzw. ausblenden</translation>
     </message>
     <message>
         <location filename="../src/llamachatinput.cpp" line="-39"/>
@@ -2498,12 +2533,12 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation type="vanished">Sandboxing (Befehle, Verzeichnisse, Netzwerk) wird auf der Sandbox-Einstellungsseite konfiguriert.</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Die search- und find-Tools verwenden ripgrep, das auf diesem System nicht installiert ist.</translation>
     </message>
@@ -2512,7 +2547,7 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+103"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Das gesandboxte bash-Tool auf Windows verwendet die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die auf diesem System nicht installiert ist.</translation>
     </message>
@@ -2521,7 +2556,7 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation type="vanished">Windows-Sandbox-Laufzeitumgebung: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2551,17 +2586,18 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation type="vanished">Der eingebaute Qt Creator-MCP-Server, der von Qt Creator selbst verwaltet wird (Tools → MCP in den Qt Creator-Einstellungen).</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>Durchsuchen...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>Zurücksetzen...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>Setzt das Arbeitsverzeichnis auf das Verzeichnis des Startprojekts zurück (löscht die Überschreibung) oder auf das Standardprojektverzeichnis.</translation>
     </message>
@@ -2576,22 +2612,44 @@ Sie können beliebige andere Prompts eingeben - diese werden für spätere Verwe
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>Das bash-Tool auf Windows führt Git Bash aus, das sich innerhalb der Windows-Sandbox nicht initialisieren kann (microsoft/mxc#1061). niubash, ein natives MSYS2-freies Bash, das es kann, ist auf diesem System nicht installiert.</translation>
+        <translation type="vanished">Das bash-Tool auf Windows führt Git Bash aus, das sich innerhalb der Windows-Sandbox nicht initialisieren kann (microsoft/mxc#1061). niubash, ein natives MSYS2-freies Bash, das es kann, ist auf diesem System nicht installiert.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>Das bash-Tool auf Windows führt niubash aus, das sich innerhalb der Windows-Sandbox initialisieren kann.</translation>
+        <translation type="vanished">Das bash-Tool auf Windows führt niubash aus, das sich innerhalb der Windows-Sandbox initialisieren kann.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash (Windows-Sandbox-Bash)</translation>
+        <translation type="vanished">niubash (Windows-Sandbox-Bash)</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>Schaltet das bash-Tool zwischen Git Bash (Standard, wird aus dem Feld gelöscht) und dem heruntergeladenen niubash (das einzige Bash, das in der Windows-Sandbox läuft) um.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu, oder laden Sie niubash unten herunter.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>Das Standard-Bash (Git Bash) kann sich innerhalb der Windows-Sandbox nicht initialisieren (microsoft/mxc#1061). Laden Sie niubash herunter, um das bash-Tool in der Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>Dieses Bash kann sich innerhalb der Windows-Sandbox initialisieren.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>Bash (Windows)</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2657,7 +2715,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
@@ -2678,7 +2736,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>Name: %1</translation>
     </message>
@@ -2723,9 +2781,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+122"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add...</source>
         <translation>Hinzufügen...</translation>
     </message>
@@ -2776,7 +2834,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Kompaktierung</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2835,7 +2893,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Name &quot;%1&quot; kollidiert mit %2 – der erste bleibt erhalten</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>Fehler:</translation>
     </message>
@@ -2880,7 +2938,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konversation kompaktiert – frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Die Konversation passt nicht mehr in das Kontextfenster des Modells.</translation>
     </message>
@@ -2981,7 +3039,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">die Microsoft-MXC-Laufzeitumgebung (wxc-exec) ist nicht installiert; laden Sie sie auf der Llama-Tools-Einstellungsseite herunter</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>die Microsoft-MXC-Laufzeitumgebung (wxc-exec), die die Windows-Sandbox verwendet, ist nur für Windows x86-64 und arm64 verfügbar</translation>
     </message>
@@ -3021,7 +3079,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Probleme mit der Sandbox der llama.cpp-Chat-Tools.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-181"/>
         <source>Writable directories:</source>
         <translation>Schreibbare Verzeichnisse:</translation>
     </message>
@@ -3057,8 +3115,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-235"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>Herunterladen...</translation>
     </message>
@@ -3068,7 +3126,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Das in der Sandbox ausgeführte bash-Tool unter Windows läuft in einem Microsoft-MXC-Prozesscontainer.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Windows-Laufzeitumgebung</translation>
     </message>
@@ -3083,7 +3141,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>Verzeichnis auswählen</translation>
     </message>
@@ -3093,7 +3151,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>llama.cpp zur Auswahl abfragen (öffnet den llama.cpp-Locator)</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>Syntaxdefinitionen: %1</translation>
     </message>
@@ -3106,6 +3164,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>Syntaxdefinitionen: Download wird gestartet</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>Blendet die Details der Werkzeugverwendung ein- bzw. aus. Ein Ctrl-Klick (Cmd auf macOS) auf den Inhalt klappt den Block zusammen.</translation>
     </message>
 </context>
 <context>
@@ -3162,7 +3225,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>gelöscht</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>Erfolg. Die folgenden Dateien wurden aktualisiert:</translation>
     </message>
@@ -3171,22 +3234,42 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Kein Bash-Shell gefunden. Installieren Sie Git for Windows (https://git-scm.com/download/win) oder fügen Sie ein Bash dem PATH hinzu, oder laden Sie niubash von der Llama.cpp-Chat-Tools-Einstellungsseite herunter.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Die sandbox-exec-Executabler wurde nicht gefunden; Sandboxing ist auf diesem System nicht verfügbar.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) ist installiert, aber der Kernel verweigert das Einrichten seiner Sandbox: %1. Auf Ubuntu 24.04 und neuer ist dies in der Regel die Einschränkung der nicht privilegierten Benutzernamensräume durch AppArmor: Führen Sie &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; aus (fügen Sie es /etc/sysctl.d/ hinzu, um es dauerhaft zu machen) oder geben Sie bwrap ein AppArmor-Profil mit dem Attribut &apos;userns&apos;. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) ist installiert, aber nicht privilegierte Benutzernamensräume sind auf diesem System deaktiviert: %1. Aktivieren Sie sie auf Debian und seinen Derivaten mit &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativ deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) konnte die Sandbox nicht einrichten: %1. Prüfen Sie, ob es auf diesem System ausgeführt werden kann, oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) hat die Sandbox nicht rechtzeitig eingerichtet. Prüfen Sie, ob es auf diesem System ausgeführt werden kann, oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) wurde nicht gefunden. Installieren Sie es (z. B. &apos;apt install bubblewrap&apos; oder &apos;dnf install bubblewrap&apos;) oder deaktivieren Sie &apos;Befehle in Sandbox ausführen&apos; in den Llama-Einstellungen, um Befehle ohne Sandbox auszuführen.</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Ausgabe gekürzt: %1]</translation>
     </message>
@@ -3292,7 +3375,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>%1 bearbeiten</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Tool-Fehler: &quot;path&quot; muss eine nicht leere Zeichenfolge sein.</translation>
@@ -3440,8 +3523,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> Fortfahren mit first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Sie sind der &quot;explore&quot;-Subagent, der in einer separaten Konversation läuft, die von der Hauptkonversation isoliert ist. Erkunden Sie die Codebase und beantworten Sie die Aufgabe mit den für Sie verfügbaren schreibgeschützten Tools: Verwenden Sie &quot;find&quot;, um Dateien nach Name zu lokalisieren, &quot;search&quot;, um Dateiinhalte zu durchsuchen, und &quot;read_file&quot;, um die relevanten Abschnitte zu lesen. Ändern Sie keine Datei und führen Sie keine Befehle aus, die etwas verändern. Arbeiten Sie autonom; Sie können den Nutzer nicht Fragen stellen. Wenn Sie fertig sind, antworten Sie mit einem einzigen knappen Bericht, der die wichtigsten Erkenntnisse, relevante Dateipfade mit Zeilennummern und alles enthält, was die Hauptkonversation benötigt, um die Arbeit fortzusetzen.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Sie sind der &quot;explore&quot;-Subagent, der in einer separaten Konversation läuft, die von der Hauptkonversation isoliert ist. Erkunden Sie die Codebase und beantworten Sie die Aufgabe mit den für Sie verfügbaren schreibgeschützten Tools: Verwenden Sie &quot;find&quot;, um Dateien nach Name zu lokalisieren, &quot;search&quot;, um Dateiinhalte zu durchsuchen, und &quot;read_file&quot;, um die relevanten Abschnitte zu lesen. Ändern Sie keine Datei und führen Sie keine Befehle aus, die etwas verändern. Arbeiten Sie autonom; Sie können den Nutzer nicht Fragen stellen. Wenn Sie fertig sind, antworten Sie mit einem einzigen knappen Bericht, der die wichtigsten Erkenntnisse, relevante Dateipfade mit Zeilennummern und alles enthält, was die Hauptkonversation benötigt, um die Arbeit fortzusetzen.</translation>
     </message>
     <message>
@@ -3562,12 +3649,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Suche fehlgeschlagen: %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>Suche fehlgeschlagen: DuckDuckGo begrenzt Anfragen derzeit; warten Sie eine Minute und versuchen Sie es erneut.</translation>
+        <translation type="vanished">Suche fehlgeschlagen: DuckDuckGo begrenzt Anfragen derzeit; warten Sie eine Minute und versuchen Sie es erneut.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3592,7 +3678,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Keine Ergebnisse für &quot;%1&quot; gefunden.</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Suche fehlgeschlagen: DuckDuckGo begrenzt gerade die Anzahl der Anfragen; warten Sie eine Minute und versuchen Sie es erneut.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Suche fehlgeschlagen: Das Tavily-Backend ist nicht konfiguriert. Setzen Sie den API-Schlüssel in den Llama.cpp-Einstellungen.</translation>
     </message>
@@ -3754,7 +3845,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
@@ -3912,7 +4003,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Ausgabe auf %1 KB gekürzt. Verfeinern Sie das Muster oder reduzieren Sie den Kontext, um alle Treffer zu sehen.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>Skill %1 laden</translation>
     </message>
@@ -3968,7 +4059,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Aufgabenliste aktualisiert: %1 von %2 abgeschlossen.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Zugriff auf &quot;%1&quot; ist nicht erlaubt: Gerätepfade und administrative Freigaben sind innerhalb der Sandbox nicht zugänglich.</translation>
     </message>
@@ -3981,7 +4072,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Schreiben nach &quot;%1&quot; ist nicht erlaubt: Die Sandbox erlaubt Schreibvorgänge nur innerhalb des Projektverzeichnisses und in temporären Positionen.</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>Auf Projektverzeichnis zurücksetzen</translation>
     </message>
@@ -4001,7 +4092,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Verwendet das Standardprojektverzeichnis, in dem neue Projekte erstellt werden.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Auf Git Bash zurücksetzen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Löscht die bash-Überschreibung: Das bash-Tool verwendet das Standard-Bash, Git Bash (ein erkanntes Bash im PATH, dann das mit Git for Windows gelieferte).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Auf niubash zurücksetzen</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Verwendet das heruntergeladene niubash, ein natives MSYS2-freies Bash, das - im Gegensatz zu Git Bash - in der Windows-Sandbox ausgeführt werden kann.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Schreiben nach &quot;%1&quot; ist nicht erlaubt: Es ist kein Projekt geöffnet, daher erlaubt die Sandbox Schreibvorgänge nur in temporären Orten und den zusätzlichen schreibbaren Verzeichnissen aus den Sandbox-Einstellungen. Öffnen Sie ein Projekt, um an seinen Dateien zu arbeiten.</translation>
     </message>
@@ -4159,12 +4270,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP-Tool &quot;%1&quot; wurde vom Benutzer gestoppt.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>niubash herunterladen</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>niubash %1 von GitHub herunterladen?</translation>
     </message>

@@ -226,9 +226,13 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Nouvelle conversation</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>Activer/désactiver l&apos;intégration de llama.cpp</translation>
+        <translation type="vanished">Activer/désactiver l&apos;intégration de llama.cpp</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>Activer/désactiver la complétion FIM</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -256,7 +260,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+31"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Maj+G</translation>
     </message>
@@ -266,7 +270,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Afficher un petit bouton en bas d&apos;une sélection de texte dans l&apos;éditeur qui ouvre le localisateur llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Passer au candidat de complétion suivante en cache à la position actuelle (appuyez sur Ctrl+G, puis sur la flèche bas).</translation>
     </message>
@@ -296,17 +300,27 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Ouvrir la page des paramètres de llama.cpp.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>Désactive l&apos;intégration de llama.cpp.</translation>
+        <translation type="vanished">Désactive l&apos;intégration de llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">Active l&apos;intégration de llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>Désactiver la complétion FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>Active l&apos;intégration de llama.cpp.</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>Activer la complétion FIM</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Erreur lors de la récupération de la complétion FIM depuis %1 : %2</translation>
     </message>
@@ -353,7 +367,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -365,24 +379,21 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1097"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>Activer l&apos;intégration de llama.cpp</translation>
+        <translation type="vanished">Activer l&apos;intégration de llama.cpp</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Active l&apos;intégration avec le serveur llama.cpp.</translation>
+        <translation type="vanished">Active l&apos;intégration avec le serveur llama.cpp.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../src/llamasettings.cpp" line="-1026"/>
         <source>Endpoint</source>
         <translation>Point d&apos;accès (Endpoint)</translation>
     </message>
@@ -426,12 +437,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-92"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+64"/>
         <source>API Key</source>
         <translation>Clé API</translation>
     </message>
@@ -561,7 +572,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre maximal de complétions mises en cache à conserver dans le cache des résultats.</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Résumez le titre de la conversation en quelques mots, en incluant un emoji. Utilisez la langue utilisée dans la conversation. Utilisez du texte brut, sans Markdown.</translation>
     </message>
@@ -635,7 +646,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Bac à sable</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>Active la complétion FIM (fill-in-the-middle) dans l&apos;éditeur de texte. Les paramètres du chat, des outils et de la recherche web sont indépendants de celui-ci.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>Modèle FIM</translation>
     </message>
@@ -1100,13 +1116,21 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Chaîne de configuration JSON personnalisée contenant des paramètres supplémentaires.</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location line="+2"/>
-        <source>Show Tokens Per Second</source>
-        <translation>Afficher le nombre de jetons générés par seconde</translation>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>bash :</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>Exécutable bash utilisé pour exécuter l&apos;outil bash. S&apos;il est vide, le bash par défaut est utilisé (Git Bash). niubash - un Bash natif sans MSYS2 - peut en outre s&apos;exécuter dans le bac à sable Windows, ce que Git Bash ne peut pas ; utilisez le bouton Télécharger... pour l&apos;installer et Réinitialiser... pour passer de l&apos;un à l&apos;autre.</translation>
+    </message>
+    <message>
+        <source>Show Tokens Per Second</source>
+        <translation type="vanished">Afficher le nombre de jetons générés par seconde</translation>
+    </message>
+    <message>
+        <location line="-237"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
         <translation>Niveau de réflexion (raisonnement) pour les modèles capables de réflexion. « default » utilise la valeur par défaut du modèle, « off » désactive la réflexion, et les niveaux concrets sont ceux que le serveur signale pour le gabarit de chat du modèle.</translation>
     </message>
@@ -1187,14 +1211,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Un exécutable ripgrep (rg) pour exécuter les outils de recherche et de localisation. S&apos;il est vide, celui du PATH est utilisé, puis celui téléchargé depuis cette page.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash :</translation>
+        <translation type="vanished">niubash :</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>Un lanceur niubash (winuxcmd\bin\bash.exe) pour exécuter l&apos;outil bash sous Windows. niubash est un Bash natif, sans MSYS2, il peut donc - contrairement à Git Bash - s&apos;exécuter dans le bac à sable Windows. S&apos;il est vide, celui téléchargé depuis cette page est utilisé, puis Git Bash.</translation>
+        <translation type="vanished">Un lanceur niubash (winuxcmd\bin\bash.exe) pour exécuter l&apos;outil bash sous Windows. niubash est un Bash natif, sans MSYS2, il peut donc - contrairement à Git Bash - s&apos;exécuter dans le bac à sable Windows. S&apos;il est vide, celui téléchargé depuis cette page est utilisé, puis Git Bash.</translation>
     </message>
     <message>
         <source>Compaction Prompt</source>
@@ -1205,7 +1227,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Invitation envoyée au modèle pour résumer l&apos;historique de la conversation lorsqu&apos;il est compacté pour tenir dans la fenêtre de contexte.</translation>
     </message>
     <message>
-        <location line="-185"/>
+        <location line="-177"/>
         <location filename="../src/promptssettingswidget.cpp" line="+3"/>
         <source>Follow-Up Questions</source>
         <translation>Questions complémentaires</translation>
@@ -1230,9 +1252,24 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Compacter automatiquement les longues conversations</translation>
     </message>
     <message>
-        <location line="+195"/>
+        <location line="+196"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Un modèle local peut boucler indéfiniment sur des appels d&apos;outils, donc après ce nombre de tours consécutifs ne faisant que des appels d&apos;outils, les appels ne sont plus exécutés - le modèle reçoit un résultat en échec l&apos;invitant à terminer à la place. Les conversations de tâche (sous-agent) ne sont pas limitées. Définissez la valeur sur 0 pour aucune limite.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>Lignes d&apos;aperçu des outils</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>Lignes d&apos;aperçu des outils :</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>Nombre de lignes du résultat d&apos;un outil affichées dans le résumé replié de l&apos;appel d&apos;outil, sous la description en une ligne. Le même nombre est utilisé par tous les outils et par la fin de la sortie en direct d&apos;un appel en cours. L&apos;aperçu est en outre limité à 120 caractères par ligne.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1249,7 +1286,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Lorsque la conversation utilise environ 80 % de la fenêtre de contexte du modèle, son historique est résumé en un message marqueur compact, et seul le résumé ainsi que les messages qui le suivent sont envoyés au modèle par la suite. L&apos;historique complet reste visible dans le chat. Utilisé également pour récupérer d&apos;une erreur de dépassement de contexte : l&apos;historique est compacté et la requête est réessayée une fois.</translation>
     </message>
     <message>
-        <location line="-203"/>
+        <location line="-216"/>
         <source>Built-in prompts of the &quot;ll&quot; locator. Only the first line of a prompt is shown in the menu; the full text is sent to the model. &quot;{selection}&quot; is replaced with the selected text, &quot;{file}&quot; and &quot;{line}&quot; with the current file and cursor line, &quot;{diagnostics}&quot; with the errors and warnings of the current file, and &quot;{git_diff}&quot; with the uncommitted changes of its git repository.</source>
         <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
     </message>
@@ -1293,7 +1330,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Commandes dans un bac à sable</translation>
@@ -1303,7 +1340,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, un conteneur de processus Microsoft MXC sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable utilise le runtime wxc-exec.exe épinglé, téléchargeable depuis la page des paramètres des outils (LLAMA_WXC_EXEC peut pointer vers lui), et nécessite Windows 11 24H2 ou une version plus récente. Les dossiers supplémentaires et la politique réseau sont configurés sur la page des paramètres Bac à sable.</translation>
     </message>
     <message>
-        <location line="-287"/>
+        <location line="-244"/>
         <source>Sandbox writable directories</source>
         <translation>Dossiers en écriture du bac à sable</translation>
     </message>
@@ -1351,15 +1388,15 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Si cette option est cochée, les outils du chat sont confinés dans un bac à sable : les commandes bash s&apos;exécutent dans un bac à sable de la plateforme qui bloque les écritures vers les emplacements système (bubblewrap/bwrap sur Linux, sandbox-exec sur macOS, srt-win de @anthropic-ai/sandbox-runtime sur Windows), et les outils de fichiers ne peuvent écrire que dans le dossier du projet et les emplacements temporaires. Les emplacements de jetons d&apos;authentification (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) ne sont lisibles par aucun outil, et les commandes en bac à sable n&apos;ont pas d&apos;accès au réseau (les outils webfetch et websearch ne sont pas affectés). Sur Windows, le bac à sable nécessite une installation unique : &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (une invite UAC) ; l&apos;exécutable srt-win doit être dans le PATH (LLAMA_SRT_WIN peut pointer vers lui).</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+34"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Charger les instructions du projet</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Si cette option est cochée, le fichier d&apos;instructions du projet actuel est ajouté au message du système du chat. Le fichier est AGENTS.md, avec CLAUDE.md en secours, et est recherché dans le dossier du projet puis en remontant jusqu&apos;à la racine du dépôt git, afin qu&apos;un monorepo puisse conserver un seul fichier d&apos;instructions pour tous ses projets. Les fichiers de plus de 32 Ko sont tronqués.</translation>
     </message>
@@ -1378,7 +1415,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Un modèle local peut boucler indéfiniment sur des appels d&apos;outils, donc après ce nombre de tours consécutifs ne faisant que des appels d&apos;outils, les appels ne sont plus exécutés – le modèle reçoit un résultat en échec l&apos;invitant à terminer à la place. Les conversations de tâche (sous-agent) ne sont pas limitées. Définissez la valeur sur 0 pour aucune limite.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>Fournisseur de recherche web</translation>
     </message>
@@ -1526,7 +1563,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Clé API pour Tavily, à obtenir sur tavily.com (requise pour le fournisseur « tavily »).</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Remplace le paramètre global « Commandes dans un bac à sable » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce que le bac à sable restreint.</translation>
     </message>
@@ -1536,7 +1573,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Remplace le paramètre global « Charger les instructions du projet » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce qui est chargé.</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>« duckduckgo » ne requiert aucune clé API</translation>
     </message>
@@ -1555,12 +1592,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde :</translation>
     </message>
     <message>
-        <location line="-749"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
+        <translation type="vanished">Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-705"/>
         <source>Thinking Level</source>
         <translation>Niveau de réflexion</translation>
     </message>
@@ -1731,7 +1767,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Résultat de recherche précédent</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>Envoyer à Llama Chat</translation>
     </message>
@@ -1764,12 +1800,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Questions supplémentaires :</translation>
     </message>
     <message>
-        <location line="-522"/>
+        <location line="-527"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Messages en file d&apos;attente - envoyés après l&apos;étape en cours</translation>
     </message>
     <message>
-        <location line="+418"/>
+        <location line="+423"/>
         <source>Download definitions</source>
         <translation>Télécharger les définitions</translation>
     </message>
@@ -1794,19 +1830,19 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Questions complémentaires :</translation>
     </message>
     <message>
-        <location line="+682"/>
+        <location line="+683"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Niveau de réflexion : %1 (s&apos;applique aux nouveaux messages)</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Éditeur humain</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Vous êtes connecté à %1 en utilisant %2 comme dossier actuel</translation>
     </message>
@@ -1911,12 +1947,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>Sélectionner le dossier de travail</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1960,7 +1996,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Traitement : %1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Traitement de l&apos;invitation :&lt;/b&gt;&lt;br&gt;Jetons au total : %1&lt;br&gt;Traités : %2&lt;br&gt;En cache : %3&lt;br&gt;Durée : %4 ms</translation>
     </message>
@@ -1978,7 +2014,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Contexte : %1% utilisé</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Contexte : %1% utilisé.&lt;br&gt;  %2 jetons provenant de %3.</translation>
     </message>
@@ -2133,7 +2169,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Supprimer ce message</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>Image</translation>
     </message>
@@ -2265,9 +2301,8 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation>Collecte des modifications git</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>Afficher/masquer les détails de l&apos;utilisation de l&apos;outil</translation>
+        <translation type="vanished">Afficher/masquer les détails de l&apos;utilisation de l&apos;outil</translation>
     </message>
     <message>
         <source>Search</source>
@@ -2296,7 +2331,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation>Réfléchit</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>Image SVG</translation>
     </message>
@@ -2337,9 +2372,9 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+192"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+225"/>
         <location filename="../src/skillssettingswidget.cpp" line="+63"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+168"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+217"/>
         <source>Add...</source>
         <translation>Ajouter...</translation>
     </message>
@@ -2390,7 +2425,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Compaction</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titre</translation>
@@ -2401,7 +2436,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation>Localisateur (« ll »)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="-217"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-266"/>
         <source>Select a tool to view its definition</source>
         <translation>Sélectionnez un outil pour afficher sa définition</translation>
     </message>
@@ -2423,12 +2458,12 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Le bac à sable (commandes, dossiers, réseau) est configuré sur la page des paramètres Bac à sable.</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>Modifier</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Les outils de recherche et de localisation utilisent ripgrep, qui n&apos;est pas installé sur ce système.</translation>
     </message>
@@ -2437,7 +2472,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">ripgrep : %1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-124"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-135"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>L&apos;outil bash en bac à sable sur Windows utilise le runtime Microsoft MXC (wxc-exec), qui n&apos;est pas installé sur ce système.</translation>
     </message>
@@ -2446,7 +2481,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Runtime du bac à sable Windows : %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL : %1</translation>
@@ -2476,17 +2511,18 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Le serveur MCP intégré de Qt Creator, géré par Qt Creator lui-même (Outils → MCP dans les paramètres de Qt Creator).</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>Parcourir...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>Réinitialiser...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>Réinitialise le dossier de travail sur celui du projet de démarrage (efface le remplacement) ou sur le dossier des projets par défaut.</translation>
     </message>
@@ -2501,22 +2537,44 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>L&apos;outil bash sous Windows exécute Git Bash, qui ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash, un Bash natif sans MSYS2 qui peut le faire, n&apos;est pas installé sur ce système.</translation>
+        <translation type="vanished">L&apos;outil bash sous Windows exécute Git Bash, qui ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash, un Bash natif sans MSYS2 qui peut le faire, n&apos;est pas installé sur ce système.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>L&apos;outil bash sous Windows exécute niubash, qui peut s&apos;initialiser dans le bac à sable Windows.</translation>
+        <translation type="vanished">L&apos;outil bash sous Windows exécute niubash, qui peut s&apos;initialiser dans le bac à sable Windows.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash (bash du bac à sable Windows)</translation>
+        <translation type="vanished">niubash (bash du bac à sable Windows)</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>Bascule l&apos;outil bash entre Git Bash (le défaut, effacé du champ) et le niubash téléchargé (le seul bash qui s&apos;exécute dans le bac à sable Windows).</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash ci-dessous.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>Le bash par défaut (Git Bash) ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). Téléchargez niubash pour exécuter l&apos;outil bash dans le bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>Ce bash peut s&apos;initialiser dans le bac à sable Windows.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>Bash (Windows)</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2582,7 +2640,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -2603,7 +2661,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>Nom : %1</translation>
     </message>
@@ -2686,7 +2744,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>Erreur :</translation>
     </message>
@@ -2731,7 +2789,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Conversation compactée – les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>La conversation ne tient plus dans la fenêtre de contexte du modèle.</translation>
     </message>
@@ -2832,7 +2890,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">le runtime Microsoft MXC (wxc-exec) n&apos;est pas installé ; téléchargez-le sur la page des paramètres Outils Llama</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>le runtime Microsoft MXC (wxc-exec) utilisé par le bac à sable Windows n&apos;est disponible que pour Windows x86-64 et arm64</translation>
     </message>
@@ -2908,8 +2966,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-312"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-362"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>Télécharger...</translation>
     </message>
@@ -2919,7 +2977,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>L&apos;outil bash en bac à sable sous Windows s&apos;exécute dans un conteneur de processus Microsoft MXC.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Runtime Windows</translation>
     </message>
@@ -2934,7 +2992,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>Choisir un dossier</translation>
     </message>
@@ -2944,7 +3002,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Interroger llama.cpp au sujet de la sélection (ouvre le localisateur llama.cpp)</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>Définitions de syntaxe : %1</translation>
     </message>
@@ -2957,6 +3015,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>Définitions de syntaxe : démarrage du téléchargement</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>Afficher/masquer les détails de l&apos;utilisation de l&apos;outil. Un clic Ctrl (Cmd sur macOS) sur le contenu replie le bloc.</translation>
     </message>
 </context>
 <context>
@@ -3377,7 +3440,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>supprimé</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
@@ -3386,22 +3449,42 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) est installé, mais le noyau refuse de configurer son bac à sable : %1. Sur Ubuntu 24.04 et les versions plus récentes, il s&apos;agit généralement de la restriction d&apos;AppArmor sur les espaces de noms d&apos;utilisateur non privilégiés : exécutez &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (ajoutez-le à /etc/sysctl.d/ pour le rendre permanent) ou donnez à bwrap un profil AppArmor avec l&apos;attribut &apos;userns&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) est installé, mais les espaces de noms d&apos;utilisateur non privilégiés sont désactivés sur ce système : %1. Sur Debian et ses dérivés, activez-les avec &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) a échoué à configurer le bac à sable : %1. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) n&apos;a pas configuré le bac à sable à temps. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Sortie tronquée : %1]</translation>
     </message>
@@ -3507,7 +3590,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>modifier %1</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
@@ -3655,8 +3738,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
     </message>
     <message>
@@ -3777,12 +3864,11 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Échec de la recherche : %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
+        <translation type="vanished">Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3807,7 +3893,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Aucun résultat trouvé pour « %1 ».</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Échec de la recherche : le backend Tavily n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
@@ -3969,7 +4060,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projet : %1</translation>
@@ -4127,7 +4218,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>charger la compétence %1</translation>
     </message>
@@ -4183,7 +4274,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
     </message>
@@ -4196,7 +4287,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>Réinitialiser vers le dossier du projet</translation>
     </message>
@@ -4216,7 +4307,27 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Utilise le dossier des projets par défaut, celui dans lequel les nouveaux projets sont créés.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Réinitialiser vers Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Efface le remplacement du bash : l&apos;outil bash utilise le bash par défaut, Git Bash (un bash reconnu sur le PATH, puis celui fourni avec Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Réinitialiser vers niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Utilise le niubash téléchargé, un Bash natif sans MSYS2 qui - contrairement à Git Bash - peut s&apos;exécuter dans le bac à sable Windows.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
     </message>
@@ -4374,12 +4485,12 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>L&apos;outil MCP « %1 » a été arrêté par l&apos;utilisateur.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>Télécharger niubash</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>Télécharger niubash %1 depuis GitHub ?</translation>
     </message>

@@ -24,9 +24,13 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>Zapnout/vypnout llama.cpp</translation>
+        <translation type="vanished">Zapnout/vypnout llama.cpp</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>Zapnout/vypnout FIM</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -54,7 +58,7 @@
         <translation>Nastavení</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+31"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -64,7 +68,7 @@
         <translation>Zobrazit malé tlačítko pod vybraným textem v editoru, které otevře prohledávač llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Přepnout na další navrhované dokončení v mezipaměti na aktuální pozici (stiskněte Ctrl+G a pak šipku dolů).</translation>
     </message>
@@ -94,17 +98,27 @@
         <translation>Otevřít stránku nastavení llama.cpp.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>Vypnout llama.cpp.</translation>
+        <translation type="vanished">Vypnout llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">Zapnout llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>Vypnout FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>Zapnout llama.cpp.</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>Zapnout FIM</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Chyba při načítání dokončení FIM z %1: %2</translation>
     </message>
@@ -151,7 +165,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -163,24 +177,21 @@
         <translation>Chat</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1097"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>Povolit LlamaCpp</translation>
+        <translation type="vanished">Povolit LlamaCpp</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Povoluje integraci LlamaCpp.</translation>
+        <translation type="vanished">Povoluje integraci LlamaCpp.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location filename="../src/llamasettings.cpp" line="-1026"/>
         <source>Endpoint</source>
         <translation>Konečný bod</translation>
     </message>
@@ -239,12 +250,12 @@
         <translation type="vanished">Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
     </message>
     <message>
-        <location line="-90"/>
+        <location line="-92"/>
         <source>Tools</source>
         <translation>Nástroje</translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+95"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Počet řádků kódu za pozicí kurzoru, které mají být zahrnuty v lokální příponě.</translation>
     </message>
@@ -364,7 +375,7 @@
         <translation type="vanished">Maximální počet uložených dokončení, které mají zůstat v mezipaměti výsledků.</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Shrňte název konverzace v několika slovech včetně jednoho emotikonu. Použijte jazyk, který se v konverzaci používá. Použijte obyčejný text, bez markdownu.</translation>
     </message>
@@ -415,7 +426,12 @@
         <translation>Pískoviště</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>Zapne dokončení FIM (fill-in-the-middle) v textovém editoru. Nastavení chatu, nástrojů a vyhledávání na webu jsou od toho nezávislá.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>Model FIM</translation>
     </message>
@@ -875,18 +891,25 @@
         <translation>Vlastní řetězec JSON s dalšími parametry.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>bash:</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>Spustitelný soubor bash, se kterým se spouští nástroj bash. Pokud je prázdné, použije se výchozí bash (Git Bash). niubash - nativní Bash bez MSYS2 - se navíc může spouštět v pískovišti Windows, kde Git Bash ne; použijte tlačítko Stáhnout... k instalaci a Resetovat... k přepínání mezi oběma.</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
-        <translation>Zobrazit tokany za sekundu</translation>
+        <translation type="vanished">Zobrazit tokany za sekundu</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Zobrazit tokany za sekundu v rozhraní chatu.</translation>
+        <translation type="vanished">Zobrazit tokany za sekundu v rozhraní chatu.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-240"/>
         <source>Thinking Level</source>
         <translation>Úroveň přemýšlení</translation>
     </message>
@@ -906,21 +929,19 @@
         <translation>Spustitelný soubor ripgrep (rg), se kterým se spouštějí nástroje search a find. Pokud je prázdné, použije se ten z PATH, pak ten stažený z této stránky.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash:</translation>
+        <translation type="vanished">niubash:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>Spouštěč bash niubash (winuxcmd\bin\bash.exe), se kterým se na Windows spouští nástroj bash. niubash je nativní Bash bez MSYS2, takže - na rozdíl od Git Bash - se může spouštět v pískovišti Windows. Pokud je prázdné, použije se ten stažený z této stránky, pak Git Bash.</translation>
+        <translation type="vanished">Spouštěč bash niubash (winuxcmd\bin\bash.exe), se kterým se na Windows spouští nástroj bash. niubash je nativní Bash bez MSYS2, takže - na rozdíl od Git Bash - se může spouštět v pískovišti Windows. Pokud je prázdné, použije se ten stažený z této stránky, pak Git Bash.</translation>
     </message>
     <message>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
         <translation type="vanished">Úroveň přemýšlení (uvážování) pro modely podporující přemýšlení: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; nebo &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-222"/>
         <source>Chat Font Zoom</source>
         <translation>Zvětšení písma chatu</translation>
     </message>
@@ -1017,9 +1038,24 @@
         <translation type="vanished">Konverzace se automaticky stlačí, když její historie využije více než tento procentuální podíl okna kontextu modelu.</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+39"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou - model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>Řádky náhledu nástrojů</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>Řádky náhledu nástrojů:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>Počet řádků výsledku nástroje, které se zobrazí v sbaleném souhrnu volání nástroje, pod jednorádkovým popisem. Stejný počet používají všechny nástroje i živý konec výstupu probíhajícího volání. Náhled je navíc omezen na 120 znaků na řádek.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1036,7 +1072,7 @@
         <translation type="vanished">Model používaný pro pomocné požadavky, jako jsou názvy konverzací a doplňující návrhy. Použijte malý model, abyste hlavní chatový model ponechali volný. Pokud pole ponecháte prázdné, použije se aktivní chatový model.</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-281"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt názvu konverzace</translation>
     </message>
@@ -1201,7 +1237,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Přikazy v pískovišti</translation>
@@ -1215,15 +1251,15 @@
         <translation type="vanished">Pokud je zaškrtnuto, chatové nástroje jsou omezeny do pískoviště: příkazy bash se spouštějí v pískovišti platformy, které blokuje zápis do systémových umístění (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS, srt-win z @anthropic-ai/sandbox-runtime na Windows), a nástroje pro soubory mohou zapisovat pouze do adresáře projektu a dočasných umístění. Umístění přihlašovacích údajů (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) není čitelné žádným nástrojem a přikazy v pískovišti nemají přístup k síti (nástroje webfetch a websearch nejsou ovlivněny). Na Windows pískoviště vyžaduje jednorázovou instalaci: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedno okno UAC); spustitelný soubor srt-win musí být v proměnné PATH (LLAMA_SRT_WIN na něj může ukazovat).</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-184"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Načíst instrukce projektu</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Pokud je zaškrtnuto, soubor s instrukcemi projektu aktuálního projektu se připojí ke systémové zprávě chatu. Souborem je AGENTS.md, případně CLAUDE.md, a hledá se v adresáři projektu a směrem nahoru až ke kořeni git repozitáře, takže monorepo může mít jediný soubor s instrukcemi pro všechny své projekty. Soubory větší než 32 KB se oříznou.</translation>
     </message>
@@ -1242,7 +1278,7 @@
         <translation type="vanished">Lokální model může volat nástroje do nekonečna, proto se po tomto počtu po sobě jdoucích kol jen s volbami nástrojů volání neprovedou – model dostane neúspěšný výsledek, který mu říká, ať místo toho dokončí. Konverzace úloh (pod-agentů) nejsou omezeny. Nastavte 0 pro neomezený počet.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>Poskytovatel webového vyhledávání</translation>
     </message>
@@ -1390,7 +1426,7 @@
         <translation>API klíč pro Tavily, získáte ho na tavily.com (vyžadován u poskytovatele &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Přepisuje globální nastavení &apos;Přikazy v pískovišti&apos; pro tento projekt. O tom, co pískoviště omezuje, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
@@ -1400,7 +1436,7 @@
         <translation>Přepisuje globální nastavení &apos;Načíst instrukce projektu&apos; pro tento projekt. O tom, co se načte, se dozvíte u globálního nastavení na stránce Nástroje Llama.</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; nevyžaduje API klíč</translation>
     </message>
@@ -1502,7 +1538,7 @@
         <translation type="vanished">Předchozí výsledek vyhledávání</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>Odeslat do chatu Llama</translation>
     </message>
@@ -1535,12 +1571,12 @@
         <translation type="vanished">Následující otázky:</translation>
     </message>
     <message>
-        <location line="-522"/>
+        <location line="-527"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Zprávy ve frontě - odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+418"/>
+        <location line="+423"/>
         <source>Download definitions</source>
         <translation>Stáhnout definice</translation>
     </message>
@@ -1565,19 +1601,19 @@
         <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+682"/>
+        <location line="+683"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Úroveň přemýšlení: %1 (platí pro nové zprávy)</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Lidský editor</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Jste připojeni k %1, aktuální adresář je %2</translation>
     </message>
@@ -1682,12 +1718,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>Vybrat pracovní adresář</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1731,7 +1767,7 @@
         <translation type="vanished">Zpracování: %1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Zpracování promptu:&lt;/b&gt;&lt;br&gt;Celkem tokánů: %1&lt;br&gt;Zpracováno: %2&lt;br&gt;V mezipaměti: %3&lt;br&gt;Čas: %4 ms</translation>
     </message>
@@ -1749,7 +1785,7 @@
         <translation type="vanished">Kontext: použito %1%</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontext: použito %1%.&lt;br&gt;  %2 tokány z %3.</translation>
     </message>
@@ -1929,7 +1965,7 @@ Chcete ho přepsat?</translation>
         <translation>Smažit tuto zprávu</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>Obrázek</translation>
     </message>
@@ -2025,7 +2061,7 @@ Chcete ho přepsat?</translation>
         <translation>Konverzace LlamaCpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1167"/>
+        <location filename="../src/llamasettings.cpp" line="-1123"/>
         <source>Create a summary of {selection}</source>
         <translation>Vytvořit shrnutí výběru</translation>
     </message>
@@ -2074,7 +2110,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Sběr git změn</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>Obrázek SVG</translation>
     </message>
@@ -2105,9 +2141,8 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>Zkopírováno do schránky</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>Zapnout/vypnout podrobnosti použití nástrojů</translation>
+        <translation type="vanished">Zapnout/vypnout podrobnosti použití nástrojů</translation>
     </message>
     <message>
         <location filename="../src/llamachatinput.cpp" line="-39"/>
@@ -2498,12 +2533,12 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Pískoviště (příkazy, adresáře, síť) se nastavuje na stránce nastavení Pískoviště.</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Nástroje search a find používají ripgrep, který není na tomto systému nainstalován.</translation>
     </message>
@@ -2512,7 +2547,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+103"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Nástroj bash v pískovišti na Windows používá runtime Microsoft MXC (wxc-exec), který není na tomto systému nainstalován.</translation>
     </message>
@@ -2521,7 +2556,7 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Runtime pískoviště Windows: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2551,17 +2586,18 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation type="vanished">Vestavěný MCP server Qt Creator, spravovaný samotným Qt Creator (Nástroje → MCP v nastavení Qt Creator).</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>Procházet...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>Resetovat...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>Vrátí pracovní adresář na adresář úvodního projektu (zruší přepsání) nebo na výchozí adresář projektů.</translation>
     </message>
@@ -2576,22 +2612,44 @@ Můžete zadat jakýkoli jiný prompt - budou uloženy pro příští použití.
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>Nástroj bash na Windows spouští Git Bash, který se nedá inicializovat uvnitř pískoviště Windows (microsoft/mxc#1061). niubash, nativní Bash bez MSYS2, který to zvládne, není na tomto systému nainstalován.</translation>
+        <translation type="vanished">Nástroj bash na Windows spouští Git Bash, který se nedá inicializovat uvnitř pískoviště Windows (microsoft/mxc#1061). niubash, nativní Bash bez MSYS2, který to zvládne, není na tomto systému nainstalován.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>Nástroj bash na Windows spouští niubash, který se dá inicializovat uvnitř pískoviště Windows.</translation>
+        <translation type="vanished">Nástroj bash na Windows spouští niubash, který se dá inicializovat uvnitř pískoviště Windows.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash (bash pískoviště Windows)</translation>
+        <translation type="vanished">niubash (bash pískoviště Windows)</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>Přepíná nástroj bash mezi Git Bash (výchozí, vymaže se z pole) a staženým niubash (jediný bash, který běží v pískovišti Windows).</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>Nenalezen žádný bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH, nebo stáhněte níže niubash.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>Výchozí bash (Git Bash) se nedá inicializovat uvnitř pískoviště Windows (microsoft/mxc#1061). Stáhněte niubash, abyste mohli spouštět nástroj bash v pískovišti.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>Tento bash se dá inicializovat uvnitř pískoviště Windows.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>bash (Windows)</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2657,7 +2715,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -2678,7 +2736,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>Název: %1</translation>
     </message>
@@ -2723,9 +2781,9 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+122"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add...</source>
         <translation>Přidat...</translation>
     </message>
@@ -2776,7 +2834,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Název</translation>
@@ -2835,7 +2893,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>Chyba:</translation>
     </message>
@@ -2880,7 +2938,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konverzace se již nevešla do okna kontextu modelu.</translation>
     </message>
@@ -2981,7 +3039,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">runtime Microsoft MXC (wxc-exec) není nainstalován; stáhněte ho na stránce nastavení nástrojů Llama</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>runtime Microsoft MXC (wxc-exec), který používá pískoviště Windows, je k dispozici pouze pro Windows x86-64 a arm64</translation>
     </message>
@@ -3021,7 +3079,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Problémy s pískovištěm nástrojů Llama.cpp Chat.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-181"/>
         <source>Writable directories:</source>
         <translation>Zapisovatelné adresáře:</translation>
     </message>
@@ -3057,8 +3115,8 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-235"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>Stáhnout...</translation>
     </message>
@@ -3068,7 +3126,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nástroj bash v pískovišti na Windows se spouští v procesním kontejneru Microsoft MXC.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Provozní prostředí Windows</translation>
     </message>
@@ -3083,7 +3141,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Síť</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>Vyberte adresář</translation>
     </message>
@@ -3093,7 +3151,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vyslat prompt do llama.cpp o výběr (otevře prohledávač llama.cpp)</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>Definice syntaxe: %1</translation>
     </message>
@@ -3106,6 +3164,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>Definice syntaxe: stahování se spouští</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>Zapnout/vypnout podrobnosti použití nástrojů. Ctrl+klik (na macOS Cmd) na obsah sbalí blok.</translation>
     </message>
 </context>
 <context>
@@ -3162,7 +3225,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>smazáno</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>Úspěch. Byly aktualizovány následující soubory:</translation>
     </message>
@@ -3171,22 +3234,42 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Nenalezena bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Nenalezen žádný bash shell. Nainstalujte Git for Windows (https://git-scm.com/download/win) nebo přidejte bash do PATH, nebo stáhněte niubash ze stránky nastavení nástrojů Llama.cpp Chat.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Spustitelný soubor sandbox-exec nebyl nalezen; pískoviště na tomto systému není k dispozici.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je nainstalován, ale jádro odmítá nastavit jeho pískoviště: %1. Na Ubuntu 24.04 a novějším je to obvykle omezení AppArmor pro neprivilegované uživatelské jmenné prostory: spusťte &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (pro trvalost ho přidejte do /etc/sysctl.d/), nebo bwrap dejte profil AppArmor s atributem &apos;userns&apos;. Jako alternativu v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je nainstalován, ale neprivilegované uživatelské jmenné prostory jsou na tomto systému zakázány: %1. Na Debianu a jeho odvozeninách je povolte příkazem &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Jako alternativu v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) se nepodařilo nastavit pískoviště: %1. Zkontrolujte, že se na tomto systému může spouštět, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nestihl nastavit pískoviště. Zkontrolujte, že se na tomto systému může spouštět, nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) nebyl nalezen. Nainstalujte ho (např. &apos;apt install bubblewrap&apos; nebo &apos;dnf install bubblewrap&apos;) nebo v nastavení Llama zrušte zaškrtnutí &apos;Přikazy v pískovišti&apos;, abyste příkazy spouštěli bez pískoviště.</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Výstup oříznut: %1]</translation>
     </message>
@@ -3292,7 +3375,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>upravit %1</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Chyba nástroje: &quot;path&quot; musí být neprázdný řetězec.</translation>
@@ -3440,8 +3523,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation> Pokračujte s first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Jste pod-agent &quot;explore&quot;, který běží v samostatné konverzaci izolované od hlavní. Prozkoumejte kódbázi a odpovězte na úlohu pomocí dostupných nástrojů jen pro čtení: k lokalizaci souborů podle názvu použijte &quot;find&quot;, k vyhledávání obsahu souborů &quot;search&quot; a k čtení příslušných úseků &quot;read_file&quot;. Žádný soubor nemodifikujte a nespouštějte příkazy, které cokoli mění. Pracujte autonomně; nemůžete uživatele ptát se na otázky. Až budete hotovi, odpovězte jedním stručným výstupem obsahujícím klíčové zjištění, příslušné cesty k souborům s čísly řádků a vše, co potřebuje hlavní konverzace pro pokračování v práci.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation>Jste pod-agent &quot;explore&quot;, který běží v samostatné konverzaci izolované od hlavní. Prozkoumejte kódbázi a odpovězte na úlohu pomocí dostupných nástrojů jen pro čtení: k lokalizaci souborů podle názvu použijte &quot;find&quot;, k vyhledávání obsahu souborů &quot;search&quot; a k čtení příslušných úseků &quot;read_file&quot;. Žádný soubor nemodifikujte a nespouštějte příkazy, které cokoli mění. Pracujte autonomně; nemůžete uživatele ptát se na otázky. Až budete hotovi, odpovězte jedním stručným výstupem obsahujícím klíčové zjištění, příslušné cesty k souborům s čísly řádků a vše, co potřebuje hlavní konverzace pro pokračování v práci.</translation>
     </message>
     <message>
@@ -3562,12 +3649,11 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vyhledávání selhalo: %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>Vyhledávání selhalo: DuckDuckGo právě omezuje frekvenci požadavků; počkejte minutu a zkuste to znovu.</translation>
+        <translation type="vanished">Vyhledávání selhalo: DuckDuckGo právě omezuje frekvenci požadavků; počkejte minutu a zkuste to znovu.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3592,7 +3678,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Nenalezeny žádné výsledky pro &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Vyhledávání selhalo: DuckDuckGo právě omezuje počet požadavků; počkejte minutu a zkuste to znovu.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Vyhledávání selhalo: backend Tavily není nakonfigurován. Nastavte API klíč v nastavení Llama.cpp.</translation>
     </message>
@@ -3754,7 +3845,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
@@ -3912,7 +4003,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>[Výstup oříznut na %1 KB. Pro zobrazení všech shod upřesněte vzor nebo zmenšete kontext.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>načíst dovednost %1</translation>
     </message>
@@ -3968,7 +4059,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Seznam úloh byl aktualizován: dokončeno %1 z %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Přístup k &quot;%1&quot; není povolen: cesty k zařízením a administrativní sdílené složky nejsou uvnitř pískoviště dostupné.</translation>
     </message>
@@ -3981,7 +4072,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Zápis do &quot;%1&quot; není povolen: pískoviště umožňuje zápis pouze do adresáře projektu a dočasných umístění.</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>Resetovat na adresář projektu</translation>
     </message>
@@ -4001,7 +4092,27 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Použije výchozí adresář projektů, nastavení, do kterého se vytvářejí nové projekty.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Resetovat na Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Vymaže přepsání bash: nástroj bash použije výchozí bash, Git Bash (rozpoznaný bash v PATH, pak ten dodávaný s Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Resetovat na niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Použije stažený niubash, nativní Bash bez MSYS2, který - na rozdíl od Git Bash - se může spouštět v pískovišti Windows.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Zápis do &quot;%1&quot; není povolen: není otevřen žádný projekt, takže pískoviště umožňuje zápis pouze do dočasných umístění a do dalších zapisovatelných adresářů ze nastavení Pískoviště. Otevřete projekt, abyste mohli pracovat s jeho soubory.</translation>
     </message>
@@ -4159,12 +4270,12 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>MCP nástroj &quot;%1&quot; byl zastaven uživatelem.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>Stáhnout niubash</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>Stáhnout niubash %1 z GitHubu?</translation>
     </message>

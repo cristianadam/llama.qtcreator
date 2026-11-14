@@ -24,9 +24,13 @@
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Toggle enable/disable llama.cpp</source>
-        <translation>Uključi/isključi funkciju llama.cpp</translation>
+        <translation type="vanished">Uključi/isključi funkciju llama.cpp</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaplugin.h" line="-1"/>
+        <source>Toggle enable/disable FIM</source>
+        <translation>Uključi/isključi FIM</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -54,7 +58,7 @@
         <translation>Postavke</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+29"/>
+        <location filename="../src/llamaplugin.cpp" line="+31"/>
         <source>Ctrl+Shift+G</source>
         <translation>Ctrl+Shift+G</translation>
     </message>
@@ -64,7 +68,7 @@
         <translation>Prikaži mali gumb na dnu izabranog teksta u uređivaču koji otvara lokator llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>Cycle to the next cached completion candidate at the current position (press Ctrl+G, then Down).</source>
         <translation>Prebaci na sljedećeg keširanog kandidata za dovršenje na trenutnoj poziciji (pritisnite Ctrl+G, zatim Down).</translation>
     </message>
@@ -94,17 +98,27 @@
         <translation>Otvorite stranicu postavaka llama.cpp.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>Disable llama.cpp.</source>
-        <translation>Onemogući funkciju llama.cpp.</translation>
+        <translation type="vanished">Onemogući funkciju llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Enable llama.cpp.</source>
+        <translation type="vanished">Omogući funkciju llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Disable FIM</source>
+        <translation>Onemogući FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <source>Enable llama.cpp.</source>
-        <translation>Omogući funkciju llama.cpp.</translation>
+        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location line="+1"/>
+        <source>Enable FIM</source>
+        <translation>Omogući FIM</translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -151,7 +165,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1180"/>
+        <location filename="../src/llamasettings.cpp" line="+1037"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -163,29 +177,26 @@
         <translation>Razgovor</translation>
     </message>
     <message>
-        <location line="-1291"/>
+        <location line="-1293"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1126"/>
+        <location filename="../src/llamasettings.cpp" line="-1082"/>
         <source>Tools</source>
         <translation>Alati</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location line="+1"/>
         <source>Enable llama.cpp</source>
-        <translation>Omogući alat llama.cpp</translation>
+        <translation type="vanished">Omogući alat llama.cpp</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Enables the llama.cpp integration.</source>
-        <translation>Omogućava integraciju s alatom llama.cpp.</translation>
+        <translation type="vanished">Omogućava integraciju s alatom llama.cpp.</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+56"/>
         <source>Endpoint</source>
         <translation>Krajnja točka</translation>
     </message>
@@ -359,7 +370,7 @@
         <translation type="vanished">Maksimalan broj generiranih odgovora koji se čuvaju u kešu rezultata.</translation>
     </message>
     <message>
-        <location line="-204"/>
+        <location line="-206"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Sažmi naslov razgovora u nekoliko riječi uključujući jedan emoji. Koristi jezik koji se koristi u razgovoru. Koristi običan tekst, bez markdowna.</translation>
     </message>
@@ -406,7 +417,12 @@
         <translation>Sandbox</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+13"/>
+        <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
+        <translation>Omogućuje FIM (fill-in-the-middle) dovršenje u uređivaču teksta. Postavke razgovora, alata i web pretrage ne ovise o ovoj postavci.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
         <source>FIM Model</source>
         <translation>FIM model</translation>
     </message>
@@ -871,18 +887,25 @@
         <translation>Prilagođeni JSON niz dodatnih parametara.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+244"/>
+        <source>bash:</source>
+        <translation>bash:</translation>
+    </message>
+    <message>
         <location line="+2"/>
+        <source>The bash executable to run the bash tool with. If empty, the default bash is used (Git Bash). niubash - a native, MSYS2-free Bash - can additionally run in the Windows sandbox, where Git Bash cannot; use the Download... button to install it and Reset... to switch between the two.</source>
+        <translation>Izvedbena datoteka bash za pokretanje bash alata. Ako je prazna, koristi se zadani bash (Git Bash). niubash - nativni Bash bez MSYS2-a - može se dodatno izvršavati u Windows sandboxu, gdje se Git Bash ne može; koristite gumb Preuzmi... za njegovu instalaciju, a gumb Vrati... za prebacivanje između njih dvoje.</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
-        <translation>Prikaži broj tokena po sekundi</translation>
+        <translation type="vanished">Prikaži broj tokena po sekundi</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Show tokens per second in the chat UI.</source>
-        <translation>Prikaži broj tokena po sekundi u sučelju razgovora.</translation>
+        <translation type="vanished">Prikaži broj tokena po sekundi u sučelju razgovora.</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="-240"/>
         <source>Thinking Level</source>
         <translation>Razina razmišljanja</translation>
     </message>
@@ -902,21 +925,19 @@
         <translation>Izvedbena datoteka ripgrep (rg) za pokretanje alata za pretragu i pronalaženje. Ako je prazna, koristi se ona s PATH-a, zatim ona preuzeta s ove stranice.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>niubash:</source>
-        <translation>niubash:</translation>
+        <translation type="vanished">niubash:</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>A niubash bash launcher (winuxcmd\bin\bash.exe) to run the bash tool with on Windows. niubash is a native, MSYS2-free Bash, so - unlike Git Bash - it can run in the Windows sandbox. If empty, the one downloaded from this page is used, then Git Bash.</source>
-        <translation>Niubash bash pokretač (winuxcmd\bin\bash.exe) za pokretanje bash alata na Windowsu. niubash je nativni Bash bez MSYS2-a, pa - za razliku od Git Basha - može se izvršavati u Windows sandboxu. Ako je prazan, koristi se onaj preuzet s ove stranice, zatim Git Bash.</translation>
+        <translation type="vanished">Niubash bash pokretač (winuxcmd\bin\bash.exe) za pokretanje bash alata na Windowsu. niubash je nativni Bash bez MSYS2-a, pa - za razliku od Git Basha - može se izvršavati u Windows sandboxu. Ako je prazan, koristi se onaj preuzet s ove stranice, zatim Git Bash.</translation>
     </message>
     <message>
         <source>Thinking (reasoning) level for thinking-capable models: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; or &quot;max&quot;.</source>
         <translation type="vanished">Razina razmišljanja (razlaganja) za modele sposobne za razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ili &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-230"/>
+        <location line="-222"/>
         <source>Chat Font Zoom</source>
         <translation>Uvećanje fonta razgovora</translation>
     </message>
@@ -1013,9 +1034,24 @@
         <translation type="vanished">Razgovor se automatski sažima kada njegova povijest koristi više od tog postotka prozora konteksta modela.</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+39"/>
         <source>A local model can loop tool calls forever, so after this many consecutive tool-only turns the calls are not executed - the model gets a failed result telling it to finish instead. Task (sub-agent) conversations are not limited. Set to 0 for no limit.</source>
         <translation>Lokalni model može u nedogled ponavljati pozive alata, pa se nakon navedenog broja uzastopnih okretanja s isključivo pozivima alata pozivi više ne izvršavaju - model umjesto toga dobiva neuspjeli rezultat u kojem se traži da završi. Razgovori zadatka (potagenta) nisu ograničeni. Postavite 0 za neograničen broj.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Tool preview lines</source>
+        <translation>Redci pregleda alata</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Tool preview lines:</source>
+        <translation>Redci pregleda alata:</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The number of lines of a tool&apos;s result that are shown in the collapsed tool-call summary, below the one-line description. The same count is used by all tools, and by the live output tail of a running call. The preview is additionally capped at 120 characters per line.</source>
+        <translation>Broj redaka rezultata alata koji se prikazuju u sklopljenom sažetku poziva alata, ispod jedno-redne opisa. Isti broj koriste svi alati i živ rep izlaza poziva u tijeku. Pregled je dodatno ograničen na 120 znakova po retku.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -1032,7 +1068,7 @@
         <translation type="vanished">Model koji se koristi za pomoćne zahtjeve kao što su naslovi razgovora i prijedlozi dodatnih pitanja. Koristite mali model kako biste glavni model za razgovor ostavili slobodnim. Ostavite prazno za korištenje aktivnog modela za razgovor.</translation>
     </message>
     <message>
-        <location line="-268"/>
+        <location line="-281"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt za naslov razgovora</translation>
     </message>
@@ -1197,7 +1233,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+308"/>
+        <location line="+265"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>Sandbox komande</translation>
@@ -1211,15 +1247,15 @@
         <translation type="vanished">Ako je označeno, alati razgovora ograničeni su u sandboxu: bash komande izvršavaju se u sandboxu platforme koji blokira upise u sustavske lokacije (bubblewrap/bwrap na Linuxu, sandbox-exec na macOS-u, srt-win iz @anthropic-ai/sandbox-runtime na Windowsu), a alati za datoteke mogu pisati samo unutar direktorija projekta i privremenih lokacija. Lokacije vjerodajnica (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) nisu čitljive niti jednom alatu, a sandbox komande nemaju pristup mreži (alati webfetch i websearch nisu pogođeni). Na Windowsu sandbox zahtijeva jednokratnu instalaciju: &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); srt-win izvedbena datoteka mora biti na PATH-u (LLAMA_SRT_WIN može ukazivati na nju).</translation>
     </message>
     <message>
-        <location line="-228"/>
+        <location line="-184"/>
         <location line="+1"/>
-        <location line="+240"/>
+        <location line="+196"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>Učitaj upute projekta</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-196"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>Ako je označeno, datoteka s uputama projekta trenutnog projekta dodaje se na sustavnu poruku razgovora. Datoteka je AGENTS.md, s povlačenjem na CLAUDE.md, i traži se u direktoriju projekta uz penjanje prema korijenu git repozitorija, tako da monorepo može zadržati jednu datoteku s uputama za sve svoje projekte. Datoteke veće od 32 KB se skraćuju.</translation>
     </message>
@@ -1238,7 +1274,7 @@
         <translation type="vanished">Lokalni model može beskonačno zlati pozive alata, pa se nakon navedenog broja uzastopnih okretanja koja sadrže samo pozive alata pozivi više ne izvršavaju – model dobiva neuspješan rezultat u kojem se traži da umjesto toga završi. Razgovori zadatka (pod-agenta) nisu ograničeni. Postavite na 0 za neograničen broj.</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+24"/>
         <source>Web Search Provider</source>
         <translation>Pružatelj web pretrage</translation>
     </message>
@@ -1386,7 +1422,7 @@
         <translation>API ključ za Tavily, dobije se na tavily.com (obavezan za pružatelja &quot;tavily&quot;).</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+56"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>Prepisuje globalnu postavku &apos;Sandbox komande&apos; za ovaj projekt. Pogledajte globalnu postavku na stranici Llama Alati za ono što sandbox ograničava.</translation>
     </message>
@@ -1396,7 +1432,7 @@
         <translation>Prepisuje globalnu postavku &apos;Učitaj upute projekta&apos; za ovaj projekt. Pogledajte globalnu postavku na stranici Llama Alati za ono što se učitava.</translation>
     </message>
     <message>
-        <location line="+177"/>
+        <location line="+180"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; ne zahtijeva API ključ</translation>
     </message>
@@ -1498,7 +1534,7 @@
         <translation type="vanished">Prethodni rezultat pretrage</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location line="+222"/>
         <source>Send to Llama Chat</source>
         <translation>Pošalji u Llama razgovor</translation>
     </message>
@@ -1531,12 +1567,12 @@
         <translation type="vanished">Nadaljnja pitanja:</translation>
     </message>
     <message>
-        <location line="-522"/>
+        <location line="-527"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Poruke u redu čekanja - šalju se nakon trenutačnoga koraka</translation>
     </message>
     <message>
-        <location line="+418"/>
+        <location line="+423"/>
         <source>Download definitions</source>
         <translation>Preuzmi definicije</translation>
     </message>
@@ -1561,19 +1597,19 @@
         <translation>Dodatna pitanja:</translation>
     </message>
     <message>
-        <location line="+682"/>
+        <location line="+683"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Razina razmišljanja: %1 (primjenjuje se na nove poruke)</translation>
     </message>
     <message>
-        <location line="-911"/>
-        <location line="+940"/>
+        <location line="-912"/>
+        <location line="+941"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Ljudski urednik</translation>
     </message>
     <message>
-        <location line="-992"/>
+        <location line="-993"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Povezani ste s %1, s %2 kao trenutnim direktorijem</translation>
     </message>
@@ -1678,12 +1714,12 @@
     </message>
     <message>
         <location line="+12"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+125"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+126"/>
         <source>Select Working Directory</source>
         <translation>Odaberite radni direktorij</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+246"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1727,7 +1763,7 @@
         <translation type="vanished">Obrađivanje: %1%</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+53"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Obrađivanje prompta:&lt;/b&gt;&lt;br&gt;Ukupno tokena: %1&lt;br&gt;Obrađeno: %2&lt;br&gt;Keširano: %3&lt;br&gt;Vrijeme: %4 ms</translation>
     </message>
@@ -1745,7 +1781,7 @@
         <translation type="vanished">Kontekst: korišteno %1%</translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+53"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Kontekst: korišteno %1%.&lt;br&gt;  %2 tokena iz %3.</translation>
     </message>
@@ -1909,7 +1945,7 @@
         <translation>Izbriši ovu poruku</translation>
     </message>
     <message>
-        <location line="+299"/>
+        <location line="+301"/>
         <source>Image</source>
         <translation>Slika</translation>
     </message>
@@ -2027,7 +2063,7 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1167"/>
+        <location filename="../src/llamasettings.cpp" line="-1123"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
@@ -2076,7 +2112,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Prikupljanje git promjena</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+686"/>
+        <location filename="../src/markdownrenderer.cpp" line="+697"/>
         <source>SVG image</source>
         <translation>SVG slika</translation>
     </message>
@@ -2107,9 +2143,8 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Kopirano u međuspremnik</translation>
     </message>
     <message>
-        <location filename="../src/llamamarkdownwidget.cpp" line="+149"/>
         <source>Toggle the details of the tool usage</source>
-        <translation>Prikaži/sakri detalje upotrebe alata</translation>
+        <translation type="vanished">Prikaži/sakri detalje upotrebe alata</translation>
     </message>
     <message>
         <location filename="../src/llamachatinput.cpp" line="-39"/>
@@ -2468,12 +2503,12 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Sandbox (komande, direktoriji, mreža) konfigurira se na stranici postavaka Sandbox.</translation>
     </message>
     <message>
-        <location line="+206"/>
+        <location line="+255"/>
         <source>Edit</source>
         <translation>Uredi</translation>
     </message>
     <message>
-        <location line="-134"/>
+        <location line="-183"/>
         <source>The search and find tools use ripgrep, which is not installed on this system.</source>
         <translation>Alati za pretragu i pronalaženje koriste ripgrep koji nije instaliran na ovom sustavu.</translation>
     </message>
@@ -2482,7 +2517,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">ripgrep: %1</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+81"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+103"/>
         <source>The sandboxed bash tool on Windows uses the Microsoft MXC runtime (wxc-exec), which is not installed on this system.</source>
         <translation>Sandbox bash alat na Windowsu koristi Microsoftov MXC runtime (wxc-exec) koji nije instaliran na ovom sustavu.</translation>
     </message>
@@ -2491,7 +2526,7 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Windows sandbox runtime: %1</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+340"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+390"/>
         <location line="+11"/>
         <source>URL: %1</source>
         <translation>URL: %1</translation>
@@ -2521,17 +2556,18 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Ugrađeni Qt Creator MCP server kojim upravlja sam Qt Creator (Alati → MCP u postavkama Qt Creatora).</translation>
     </message>
     <message>
-        <location line="-395"/>
+        <location line="-445"/>
         <source>Browse...</source>
         <translation>Pregledaj...</translation>
     </message>
     <message>
         <location line="+21"/>
+        <location line="+70"/>
         <source>Reset...</source>
         <translation>Vrati...</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-69"/>
         <source>Reset the working directory to the startup project&apos;s directory (clears the override) or to the default projects directory.</source>
         <translation>Vrati radni direktorij na direktorij projekta pokretanja (uklanja prepisivanje) ili na zadani direktorij projekata.</translation>
     </message>
@@ -2546,22 +2582,44 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>ripgrep</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>The bash tool on Windows runs Git Bash, which cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash, a native MSYS2-free Bash that can, is not installed on this system.</source>
-        <translation>Bash alat na Windowsu pokreće Git Bash koji se ne može inicializirati unutar Windows sandboka (microsoft/mxc#1061). niubash, nativni Bash bez MSYS2-a koji to može, nije instaliran na ovom sustavu.</translation>
+        <translation type="vanished">Bash alat na Windowsu pokreće Git Bash koji se ne može inicializirati unutar Windows sandboka (microsoft/mxc#1061). niubash, nativni Bash bez MSYS2-a koji to može, nije instaliran na ovom sustavu.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The bash tool on Windows runs niubash, which can initialize inside the Windows sandbox.</source>
-        <translation>Bash alat na Windowsu pokreće niubash koji se može inicializirati unutar Windows sandboka.</translation>
+        <translation type="vanished">Bash alat na Windowsu pokreće niubash koji se može inicializirati unutar Windows sandboka.</translation>
     </message>
     <message>
-        <location line="+35"/>
         <source>niubash (Windows sandbox bash)</source>
-        <translation>niubash (bash Windows sandboka)</translation>
+        <translation type="vanished">niubash (bash Windows sandboka)</translation>
     </message>
     <message>
-        <location line="+428"/>
+        <location line="+22"/>
+        <source>Switch the bash tool between Git Bash (the default, cleared from the field) and the downloaded niubash (the only bash that runs in the Windows sandbox).</source>
+        <translation>Prebacuje bash alat između Git Basha (zadano, uklanja se iz polja) i preuzetog niubasha (jedini bash koji se izvršava u Windows sandboxu).</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash below.</source>
+        <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH, ili preuzmite niubash niže.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The default bash (Git Bash) cannot initialize inside the Windows sandbox (microsoft/mxc#1061). Download niubash to run the bash tool in the sandbox.</source>
+        <translation>Zadani bash (Git Bash) ne može se inicializirati unutar Windows sandboka (microsoft/mxc#1061). Preuzmite niubash za pokretanje bash alata u sandboxu.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This bash can initialize inside the Windows sandbox.</source>
+        <translation>Ovaj bash može se inicializirati unutar Windows sandboka.</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>bash (Windows)</source>
+        <translation>bash (Windows)</translation>
+    </message>
+    <message>
+        <location line="+448"/>
         <location line="+51"/>
         <location line="+254"/>
         <source>MCP Server</source>
@@ -2626,7 +2684,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-919"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-970"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>
@@ -2647,7 +2705,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+400"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+450"/>
         <source>Name: %1</source>
         <translation>Ime: %1</translation>
     </message>
@@ -2692,9 +2750,9 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+13"/>
-        <location filename="../src/sandboxsettingswidget.cpp" line="+111"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="+122"/>
         <location filename="../src/skillssettingswidget.cpp" line="-353"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-128"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-129"/>
         <source>Add...</source>
         <translation>Dodaj...</translation>
     </message>
@@ -2745,7 +2803,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1631"/>
+        <location filename="../src/llamachateditor.cpp" line="-1633"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -2804,7 +2862,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1195"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
         <source>Error:</source>
         <translation>Greška:</translation>
     </message>
@@ -2849,7 +2907,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Razgovor je sažet – ranije poruke su sažete kako bi se uklopile u prozor konteksta.</translation>
     </message>
     <message>
-        <location line="+1250"/>
+        <location line="+1264"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Razgovor se više ne uklapa u prozor konteksta modela.</translation>
     </message>
@@ -2950,7 +3008,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Microsoftov MXC runtime (wxc-exec) nije instaliran; preuzmite ga na stranici postavaka Llama Alati</translation>
     </message>
     <message>
-        <location filename="../src/sandboxstatus.cpp" line="+30"/>
+        <location filename="../src/sandboxstatus.cpp" line="+31"/>
         <source>the Microsoft MXC runtime (wxc-exec) the Windows sandbox uses is available for Windows x86-64 and arm64 only</source>
         <translation>Microsoftov MXC runtime (wxc-exec) koji sandbox na Windowsu koristi dostupan je samo za Windows x86-64 i arm64</translation>
     </message>
@@ -2990,7 +3048,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Problemi s sandboxom alata za razgovor u llama.cpp-u.</translation>
     </message>
     <message>
-        <location filename="../src/sandboxsettingswidget.cpp" line="-170"/>
+        <location filename="../src/sandboxsettingswidget.cpp" line="-181"/>
         <source>Writable directories:</source>
         <translation>Upisivi direktoriji:</translation>
     </message>
@@ -3026,8 +3084,8 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+16"/>
-        <location filename="../src/toolsettingswidget.cpp" line="-186"/>
-        <location line="+97"/>
+        <location filename="../src/toolsettingswidget.cpp" line="-235"/>
+        <location line="+99"/>
         <source>Download...</source>
         <translation>Preuzmi…</translation>
     </message>
@@ -3037,7 +3095,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Sandbox bash alat na Windowsu izvršava se u Microsoftovom MXC procesnom kontejneru.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+30"/>
         <source>Windows runtime</source>
         <translation>Windows runtime</translation>
     </message>
@@ -3052,7 +3110,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Mreža</translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+51"/>
         <source>Choose a Directory</source>
         <translation>Odaberite direktorij</translation>
     </message>
@@ -3062,7 +3120,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Promptiraj llama.cpp o izabranom tekstu (otvara lokator llama.cpp)</translation>
     </message>
     <message>
-        <location filename="../src/llamasyntaxhighligher.cpp" line="+163"/>
+        <location filename="../src/llamasyntaxhighligher.cpp" line="+165"/>
         <source>Syntax definitions: %1</source>
         <translation>Definicije sintakse: %1</translation>
     </message>
@@ -3075,6 +3133,11 @@ Authorization: Bearer &lt;token&gt;</source>
         <location line="+6"/>
         <source>Syntax definitions: starting download</source>
         <translation>Definicije sintakse: pokretanje preuzimanja</translation>
+    </message>
+    <message>
+        <location filename="../src/llamamarkdownwidget.cpp" line="+148"/>
+        <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
+        <translation>Prikazuje ili sakriva detalje korištenja alata. Ctrl+klik (Cmd na macOS-u) na sadržaj sklapa blok.</translation>
     </message>
 </context>
 <context>
@@ -3131,7 +3194,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>izbrisano</translation>
     </message>
     <message>
-        <location line="+201"/>
+        <location line="+203"/>
         <source>Success. Updated the following files:</source>
         <translation>Uspješno. Ažurirane su sljedeće datoteke:</translation>
     </message>
@@ -3140,22 +3203,42 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+124"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat.</translation>
     </message>
     <message>
-        <location line="+147"/>
+        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je instaliran, ali kernel odbija postaviti njegov sandbox: %1. Na Ubuntu 24.04 i novijim verzijama to je obično AppArmorovo ograničenje nepovlaštenih korisničkih prostora imena: pokrenite &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (dodajte ga u /etc/sysctl.d/ da bi promjena bila trajna) ili dodijelite bwrapu AppArmor profil s atributom &apos;userns&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je instaliran, ali na ovom sustavu nepovlašteni korisnički prostori imena su onemogućeni: %1. Na Debianu i njegovim izvedbama omogućite ih naredbom &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
         <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nije uspio postaviti sandbox: %1. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nije u roku postavio sandbox. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
         <translation>bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location line="+217"/>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Izlaz skraćen: %1]</translation>
     </message>
@@ -3259,7 +3342,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>uredi %1</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+37"/>
         <location filename="../src/tools/write_tool.cpp" line="+123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
@@ -3407,9 +3490,13 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodbazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
+        <translation type="vanished">Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodbazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodovu bazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -3525,12 +3612,11 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Pretraga neuspješna: %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation>Pretraga neuspješna: DuckDuckGo trenutačno ograničava brzinu zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
+        <translation type="vanished">Pretraga neuspješna: DuckDuckGo trenutačno ograničava brzinu zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -3555,7 +3641,12 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Nema rezultata za &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location line="-79"/>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Pretraga nije uspjela: DuckDuckGo trenutačno ograničava broj zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Pretraga neuspješna: Tavily backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
     </message>
@@ -3713,7 +3804,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+152"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
         <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
@@ -3871,7 +3962,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+115"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
         <translation>učitaj vještinu %1</translation>
     </message>
@@ -3927,7 +4018,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+513"/>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
         <translation>Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativne mrežne podjele nisu dostupne unutar sandboka.</translation>
     </message>
@@ -3940,7 +4031,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
     </message>
     <message>
-        <location line="-41"/>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
         <translation>Vrati na direktorij projekta</translation>
     </message>
@@ -3960,7 +4051,27 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Koristi zadani direktorij projekata, mjesto u kojem se po zadano stvaraju novi projekti.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Vrati na Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Ukloni prepisivanje basha: bash alat koristi zadani bash, Git Bash (prepoznati bash na PATH-u, zatim onaj isporučen uz Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Vrati na niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Koristi preuzeti niubash, nativni Bash bez MSYS2-a koji se - za razliku od Git Basha - može izvršavati u Windows sandboxu.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
         <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
     </message>
@@ -4118,12 +4229,12 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-205"/>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
         <translation>Preuzmi niubash</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
         <translation>Preuzeti niubash %1 s GitHuba?</translation>
     </message>
