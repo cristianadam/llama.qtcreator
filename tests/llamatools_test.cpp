@@ -335,6 +335,7 @@ private slots:
     void parse_missingMarkers();
     void parse_missingMarkersTolerated();
     void parse_updateWithoutChunks();
+    void parse_updateUnifiedHeader();
     void parse_emptyEnvelope();
     void parse_addFileMissingPrefixTolerated();
     void parse_addFileStarLines();
@@ -359,6 +360,7 @@ private slots:
 
     // ApplyPatchTool::run
     void tool_fullPatch();
+    void tool_updateUnifiedHeader();
     void tool_addFileInStartupProject();
     void absoluteProjectPath_generalDirFallback();
     void tool_addMarkdownFile();
@@ -744,6 +746,45 @@ void LlamaToolsTest::parse_updateWithoutChunks()
     QVERIFY(error.contains("at least one @@ chunk"));
 }
 
+void LlamaToolsTest::parse_updateUnifiedHeader()
+{
+    // A unified-diff-style @@ header: the line ranges are dropped, only the
+    // trailing context (if any) is kept.
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: app.py\n"
+        "@@ -2,2 +2,2 @@ def greet():\n"
+        "     x = 1\n"
+        "-    print(\"Hi\")\n"
+        "+    print(\"Hello, world!\")\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks;
+    QCOMPARE(Patch::parse(patchText, hunks), QString());
+    QCOMPARE(hunks.size(), 1);
+    QCOMPARE(hunks.first().type, Patch::HunkType::Update);
+    QCOMPARE(hunks.first().chunks.size(), 1);
+    const auto &chunk = hunks.first().chunks.first();
+    QCOMPARE(chunk.changeContext, QStringLiteral("def greet():"));
+    QCOMPARE(chunk.oldLines, QStringList({QStringLiteral("    x = 1"), QStringLiteral("    print(\"Hi\")")}));
+    QCOMPARE(chunk.newLines, QStringList({QStringLiteral("    x = 1"), QStringLiteral("    print(\"Hello, world!\")")}));
+
+    // Without a trailing context the changeContext must be empty - the old
+    // behavior would have kept "-1,3 +1,4 @@" as the context.
+    const QString patchText2 = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: list.txt\n"
+        "@@ -1,3 +1,4 @@\n"
+        "+new\n"
+        "*** End Patch");
+
+    QVector<Patch::Hunk> hunks2;
+    QCOMPARE(Patch::parse(patchText2, hunks2), QString());
+    QCOMPARE(hunks2.first().chunks.size(), 1);
+    QCOMPARE(hunks2.first().chunks.first().changeContext, QString());
+    QCOMPARE(hunks2.first().chunks.first().newLines, QStringList({QStringLiteral("new")}));
+}
+
 void LlamaToolsTest::parse_emptyEnvelope()
 {
     const QString patchText = QStringLiteral("*** Begin Patch\n*** End Patch");
@@ -1034,6 +1075,47 @@ void LlamaToolsTest::tool_fullPatch()
     QCOMPARE(readTextFile(gTempDir->filePath("nested/new.txt")), QString("created\n"));
     QVERIFY(!QFile::exists(gTempDir->filePath("delete.txt")));
     QCOMPARE(readTextFile(gTempDir->filePath("modify.txt")), QString("line1\nchanged\n"));
+}
+
+void LlamaToolsTest::tool_updateUnifiedHeader()
+{
+    // Regression: a model that emits a unified-diff-style header (line
+    // ranges, no trailing context) used to feed "-2,2 +2,2 @@" into the
+    // context lookup and fail with "Failed to find context ...". The
+    // ranges must be ignored - even when they are wrong.
+    writeTextFile(gTempDir->filePath("unified.txt"), "a\nb\nc\n");
+
+    const QString patchText = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: unified.txt\n"
+        "@@ -2,2 +2,2 @@\n"
+        "-b\n"
+        "+B\n"
+        "*** End Patch");
+
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = patchText;
+
+    auto [output, ok] = runTool(args);
+    QVERIFY2(ok, qPrintable(output));
+    QVERIFY(!output.contains("Failed to find context"));
+    QCOMPARE(readTextFile(gTempDir->filePath("unified.txt")), QString("a\nB\nc\n"));
+
+    // A wrong count in the range must not matter either.
+    const QString patchText2 = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: unified.txt\n"
+        "@@ -1,99 +1,99 @@\n"
+        "-c\n"
+        "+C\n"
+        "*** End Patch");
+
+    QJsonObject args2;
+    args2[QStringLiteral("patchText")] = patchText2;
+
+    auto [output2, ok2] = runTool(args2);
+    QVERIFY2(ok2, qPrintable(output2));
+    QCOMPARE(readTextFile(gTempDir->filePath("unified.txt")), QString("a\nB\nC\n"));
 }
 
 void LlamaToolsTest::tool_move()

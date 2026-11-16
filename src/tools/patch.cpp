@@ -276,7 +276,14 @@ QString parse(const QString &patchText, QVector<Hunk> &hunksOut)
                 }
 
                 UpdateChunk chunk;
-                chunk.changeContext = lines.at(i).mid(2).trimmed();
+                const QString header = lines.at(i);
+                static const QRegularExpression unifiedHeaderRe(QStringLiteral(R"(^@@\s*-\d+,?\d*\s*\+\d+,?\d*\s*@@\s*(.*)$)"));
+                const auto match = unifiedHeaderRe.match(header);
+                if (match.hasMatch()) {
+                    chunk.changeContext = match.captured(1).trimmed();
+                } else {
+                    chunk.changeContext = header.mid(2).trimmed();
+                }
                 ++i;
 
                 while (i < endIdx && !lines.at(i).startsWith(QLatin1Char('@'))) {
