@@ -279,7 +279,7 @@ LlamaSettings::LlamaSettings()
     chatEndpoint.setSettingsKey("ChatEndpoint");
     chatEndpoint.setLabelText(Tr::tr("Chat Endpoint:"));
     chatEndpoint.setDisplayStyle(StringAspect::LineEditDisplay);
-    chatEndpoint.setDefaultValue("http://127.0.0.1:8080");
+    chatEndpoint.setDefaultValue("http://127.0.0.1:9931");
     chatEndpoint.setToolTip(Tr::tr("llama.cpp server chat endpoint"));
     chatEndpoint.setHistoryCompleter("LlamaCpp.ChatEndpoint.History");
 

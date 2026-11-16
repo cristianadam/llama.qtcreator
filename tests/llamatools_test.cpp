@@ -2303,8 +2303,8 @@ void LlamaToolsTest::webfetch_normalizeUrl()
 {
     QCOMPARE(Tools::normalizeFetchUrl(QStringLiteral(" https://doc.qt.io/qt-6/ ")),
              QString("https://doc.qt.io/qt-6/"));
-    QCOMPARE(Tools::normalizeFetchUrl(QStringLiteral("http://localhost:8080/api")),
-             QString("http://localhost:8080/api"));
+    QCOMPARE(Tools::normalizeFetchUrl(QStringLiteral("http://localhost:9931/api")),
+              QString("http://localhost:9931/api"));
     QVERIFY(Tools::normalizeFetchUrl(QStringLiteral("doc.qt.io/qt-6/")).isEmpty());
     QVERIFY(Tools::normalizeFetchUrl(QStringLiteral("ftp://example.com/x")).isEmpty());
     QVERIFY(Tools::normalizeFetchUrl(QString()).isEmpty());
@@ -2464,7 +2464,7 @@ void LlamaToolsTest::websearch_isConfigured()
     QVERIFY(!c.isConfigured());
 
     // Exa: a *custom* endpoint (e.g. local proxy) works keyless.
-    c.exaUrl = QStringLiteral("http://127.0.0.1:8080/mcp");
+    c.exaUrl = QStringLiteral("http://127.0.0.1:9931/mcp");
     QVERIFY(c.isConfigured());
 
     // Google: needs both key and cx.
