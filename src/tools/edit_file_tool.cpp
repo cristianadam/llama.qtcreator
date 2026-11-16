@@ -122,11 +122,28 @@ QString applyTextEdits(const QString &content,
             positions = findPositions(pattern);
         }
 
-        if (positions.isEmpty())
-            return QStringLiteral(
-                       "Could not find %1 in the file. The text must match exactly, "
-                       "including whitespace and indentation.")
-                        .arg(editRef("oldText", i, total));
+        if (positions.isEmpty()) {
+            QString error = QStringLiteral(
+                "Could not find %1 in the file. This usually happens because of "
+                "mismatched whitespace, indentation, or because the provided text "
+                "doesn't cover full lines. Please read the file again to verify "
+                "the exact content.")
+                .arg(editRef("oldText", i, total));
+
+            const Patch::ClosestMatch cm = Patch::closestMatch(lines, pattern, 0);
+            if (cm.pos != -1 && cm.matched > 0) {
+                error += QStringLiteral(
+                    "\n\nClosest match at line %1: %2 of %3 lines matched.")
+                    .arg(cm.pos + 1)
+                    .arg(cm.matched)
+                    .arg(cm.total);
+                if (!cm.expected.isEmpty())
+                    error += QStringLiteral(
+                               "\nExpected:\n%1\nActual:\n%2")
+                             .arg(cm.expected, cm.actual);
+            }
+            return error;
+        }
         if (positions.size() > 1 && !replaceAll)
             return QStringLiteral(
                        "Found %1 occurrences of %2 in the file. The text must be unique - "
@@ -196,6 +213,7 @@ Edit a file by replacing exact text. Use this for small, targeted changes to a s
 - oldText must match the file exactly, including whitespace and indentation, and occur exactly once, unless replace_all is true. When the text occurs several times, add surrounding context lines to make it unique.
 - Multiple edits in one call are all matched against the original file (not incrementally) and must not overlap. If two changes touch the same block or nearby lines, merge them into one edit instead.
 - Read the file first (read_file) and copy the current text into oldText verbatim, keeping it as small as possible while still being unique.
+- If the edit fails, the error message tells you why (closest match, expected vs actual line). Do NOT assume the edit succeeded: re-read the file, correct oldText, and retry.
 )desc";
 
     QJsonObject oldTextProperty;

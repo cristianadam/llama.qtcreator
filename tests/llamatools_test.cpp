@@ -390,6 +390,7 @@ private slots:
     void editfile_uniqueError();
     void editfile_replaceAll();
     void editfile_notFound();
+    void editfile_notFoundDiagnostic();
     void editfile_noChange();
     void editfile_emptyOldText();
     void editfile_overlap();
@@ -1526,6 +1527,19 @@ void LlamaToolsTest::editfile_notFound()
     const QString result = applyEdits(QStringLiteral("alpha\n"), {{QStringLiteral("beta"), QStringLiteral("B")}});
     QVERIFY(result.startsWith("<error:"));
     QVERIFY(result.contains("Could not find"));
+}
+
+void LlamaToolsTest::editfile_notFoundDiagnostic()
+{
+    // The first line matches but the second is wrong: the diagnostic should
+    // point the model at the closest match.
+    const QString result = applyEdits(
+        QStringLiteral("foo bar\nbaz qux\n"),
+        {{QStringLiteral("foo bar\nhello world"), QStringLiteral("changed")}});
+    QVERIFY(result.startsWith("<error:"));
+    QVERIFY(result.contains("Could not find"));
+    QVERIFY(result.contains("Closest match"));
+    QVERIFY(result.contains("1 of 2 lines matched"));
 }
 
 void LlamaToolsTest::editfile_noChange()

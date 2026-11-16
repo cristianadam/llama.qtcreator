@@ -8,8 +8,6 @@
 namespace LlamaCpp {
 namespace Patch {
 
-namespace {
-
 QString stripHeredoc(const QString &input)
 {
     // Tolerate patches wrapped in a heredoc: cat <<'EOF'\n...\nEOF or <<EOF\n...\nEOF
@@ -68,16 +66,6 @@ bool lineEquals(int pass, const QString &a, const QString &b)
     }
 }
 
-//! Where a pattern comes closest to matching, for use in error messages.
-struct ClosestMatch
-{
-    int pos = -1; // 0-based line of the best offset
-    int matched = 0; // leading pattern lines that matched there
-    int total = 0; // pattern length
-    QString expected; // first pattern line that did not match
-    QString actual; // the file line found there instead
-};
-
 // Counts how many leading pattern lines match at each offset (whitespace
 // insensitive) and keeps the best offset, so a failed match can point the
 // model at the right place in the file.
@@ -106,6 +94,8 @@ ClosestMatch closestMatch(const QStringList &lines, const QStringList &pattern, 
     }
     return best;
 }
+
+namespace {
 
 int tryMatch(const QStringList &lines,
              const QStringList &pattern,

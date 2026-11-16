@@ -7,6 +7,15 @@
 namespace LlamaCpp {
 namespace Patch {
 
+struct ClosestMatch
+{
+    int pos = -1;
+    int matched = 0;
+    int total = 0;
+    QString expected;
+    QString actual;
+};
+
 struct UpdateChunk
 {
     QStringList oldLines; // lines as they appear in the file (context + removed)
@@ -70,6 +79,18 @@ int locateLines(const QStringList &lines,
                 const QStringList &pattern,
                 int startIndex,
                 bool eof = false);
+
+/**
+ * Finds where \a pattern comes closest to matching in \a lines, searching
+ * from \a startIndex. Uses whitespace-insensitive comparison to count how
+ * many leading pattern lines match at each offset.
+ *
+ * Returns the best offset and the first expected/actual line pair that
+ * did not match, for use in diagnostic error messages.
+ */
+ClosestMatch closestMatch(const QStringList &lines,
+                          const QStringList &pattern,
+                          int startIndex);
 
 /**
  * Applies the update chunks to \a oldContents and writes the new content to
