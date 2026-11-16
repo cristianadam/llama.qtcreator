@@ -3574,7 +3574,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
         <source>Edit file</source>
         <translation>Modifier un fichier</translation>
     </message>
@@ -4528,6 +4528,23 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
         <translation>Échec de la décompression de niubash : %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
+        <source>get current time</source>
+        <translation>obtenir l'heure actuelle</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
+        <source>get runtime info</source>
+        <translation>obtenir les informations d'exécution</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>Système d'exploitation : %1
+Dossier de travail : %2</translation>
     </message>
 </context>
 </TS>

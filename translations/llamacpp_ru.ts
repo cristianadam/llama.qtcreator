@@ -3372,7 +3372,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
         <source>Edit file</source>
         <translation>Редактировать файл</translation>
     </message>
@@ -4326,6 +4326,23 @@ You can type any other prompt - they are remembered for next time.</source>
         <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
         <translation>Не удалось распаковать niubash: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
+        <source>get current time</source>
+        <translation>получить текущее время</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
+        <source>get runtime info</source>
+        <translation>получить информацию о runtime</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>ОС: %1
+Рабочий каталог: %2</translation>
     </message>
 </context>
 </TS>

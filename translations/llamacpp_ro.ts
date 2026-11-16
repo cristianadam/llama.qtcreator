@@ -2889,51 +2889,51 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="286"/>
         <source>Edit file</source>
         <translation>Modificare fișier</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="271"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="289"/>
         <source>edit %1 (%2 blocks)</source>
         <translation>modifică %1 (%2 blocuri)</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="272"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="298"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="290"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="316"/>
         <source>edit %1</source>
         <translation>modifică %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="335"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="353"/>
         <location filename="../src/tools/write_tool.cpp" line="123"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Eroare de unelță: &quot;path&quot; trebuie să fie un șir nevid.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="365"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="383"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
         <translation>Eroare de unelță: fiecare modificare are nevoie de un &quot;oldText&quot; și un &quot;newText&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="371"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="389"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
         <translation>Eroare de unelță: &quot;edits&quot; trebuie să conțină cel puțin o înlocuire.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="380"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="398"/>
         <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
         <translation>Nu se poate modifica &quot;%1&quot;: fișierul nu a fost găsit. Folosiți read_file pentru a verifica calea sau write pentru a crea fișierul.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="387"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="394"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="398"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="405"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="412"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="416"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
         <translation>Nu se poate modifica &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="401"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="419"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
         <translation>S-a înlocuit cu succes %1 bloc(uri) în %2.</translation>
     </message>
@@ -3783,6 +3783,23 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location filename="../src/tools/niubash.cpp" line="297"/>
         <source>Unpacking niubash failed: %1</source>
         <translation>Extragerea niubash a eșuat: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="42"/>
+        <source>get current time</source>
+        <translation>obține ora curentă</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="44"/>
+        <source>get runtime info</source>
+        <translation>obține informații de runtime</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="57"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>Sistem de operare: %1
+Director de lucru: %2</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QDateTime>
 #include <QHostAddress>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -15,6 +16,8 @@
 #include <QTcpSocket>
 #include <QProcessEnvironment>
 #include <QRegularExpression>
+#include <QSysInfo>
+#include <QTimeZone>
 #include <QtTest/QtTest>
 
 #include <tuple>
@@ -43,6 +46,8 @@
 #include <tools/skill_tool.h>
 #include <tools/find_tool.h>
 #include <tools/ls_tool.h>
+#include <tools/getdatetime_tool.h>
+#include <tools/getinfo_tool.h>
 #include <tools/ripgrep.h>
 #include <tools/mxc.h>
 #include <tools/niubash.h>
@@ -536,6 +541,14 @@ private slots:
     void ls_badPath();
     void ls_summaries();
 
+    // GetDatetimeTool
+    void getdatetime_toolDefinition();
+    void getdatetime_run();
+
+    // GetInfoTool
+    void getinfo_toolDefinition();
+    void getinfo_run();
+
     // Ripgrep (download module)
     void ripgrep_metadata();
     void ripgrep_resolvedPath();
@@ -555,6 +568,7 @@ private slots:
     void factory_webTools();
     void factory_task();
     void factory_searchFind();
+    void factory_infoTools();
     void factory_remoteProvider();
 
     // ChatManager::messageToMarkdown
@@ -5430,6 +5444,107 @@ void LlamaToolsTest::ls_summaries()
 }
 
 // ============================================================================
+// GetDatetimeTool / GetInfoTool
+// ============================================================================
+
+void LlamaToolsTest::getdatetime_toolDefinition()
+{
+    Tools::GetDatetimeTool tool;
+    QCOMPARE(tool.name(), QString("get_datetime"));
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(tool.toolDefinition().toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QVERIFY(doc.isObject());
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("get_datetime"));
+    QVERIFY(!function["description"].toString().isEmpty());
+
+    // The tool takes no arguments.
+    const QJsonObject parameters = function["parameters"].toObject();
+    QCOMPARE(parameters["type"].toString(), QString("object"));
+    QVERIFY(parameters["strict"].toBool());
+    QCOMPARE(parameters["properties"].toObject().size(), 0);
+    QCOMPARE(parameters["required"].toArray().size(), 0);
+
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("get current time"));
+}
+
+void LlamaToolsTest::getdatetime_run()
+{
+    const auto [output, ok] = runTool<Tools::GetDatetimeTool>({});
+    QVERIFY2(ok, qPrintable(output));
+
+    // Local ISO 8601 with the explicit UTC offset, plus the IANA zone name.
+    const QRegularExpression pattern(
+        QStringLiteral("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2} "
+                       "\\([^()]+\\)$"));
+    QVERIFY2(pattern.match(output).hasMatch(), qPrintable(output));
+    QVERIFY(output.endsWith(QStringLiteral("(")
+                                 + QString::fromUtf8(QTimeZone::systemTimeZoneId())
+                                 + QStringLiteral(")")));
+
+    // The reported time must be the current one (within a generous margin),
+    // and the offset part must match the system time zone's offset.
+    const int sep = output.lastIndexOf(QLatin1Char(' '));
+    const QString iso = output.left(sep);
+    const QDateTime reported =
+        QDateTime::fromString(iso.left(19), QStringLiteral("yyyy-MM-dd'T'HH:mm:ss"));
+    QVERIFY(reported.isValid());
+    QVERIFY(qAbs(QDateTime::currentDateTime().secsTo(reported)) < 60);
+    const int offsetSeconds = QTimeZone::systemTimeZone().offsetFromUtc(reported);
+    const QString expectedOffset = QString::asprintf("%c%02d:%02d",
+                                                     offsetSeconds < 0 ? '-' : '+',
+                                                     qAbs(offsetSeconds) / 3600,
+                                                     (qAbs(offsetSeconds) % 3600) / 60);
+    QCOMPARE(iso.right(6), expectedOffset);
+}
+
+void LlamaToolsTest::getinfo_toolDefinition()
+{
+    Tools::GetInfoTool tool;
+    QCOMPARE(tool.name(), QString("get_info"));
+
+    QJsonParseError err;
+    const QJsonDocument doc = QJsonDocument::fromJson(tool.toolDefinition().toUtf8(), &err);
+    QCOMPARE(err.error, QJsonParseError::NoError);
+    QVERIFY(doc.isObject());
+
+    const QJsonObject function = doc.object()["function"].toObject();
+    QCOMPARE(function["name"].toString(), QString("get_info"));
+    QVERIFY(!function["description"].toString().isEmpty());
+
+    // The tool takes no arguments.
+    const QJsonObject parameters = function["parameters"].toObject();
+    QCOMPARE(parameters["type"].toString(), QString("object"));
+    QVERIFY(parameters["strict"].toBool());
+    QCOMPARE(parameters["properties"].toObject().size(), 0);
+    QCOMPARE(parameters["required"].toArray().size(), 0);
+
+    QCOMPARE(tool.oneLineSummary(QJsonObject()), QString("get runtime info"));
+}
+
+void LlamaToolsTest::getinfo_run()
+{
+    // Pin the tools' working directory (the "current directory" from the
+    // settings) for the duration of the call, restore it right after.
+    const QString saved = settings().workingDirectory.value();
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    settings().workingDirectory.setValue(dir.path());
+
+    const auto [output, ok] = runTool<Tools::GetInfoTool>({});
+    settings().workingDirectory.setValue(saved);
+
+    QVERIFY2(ok, qPrintable(output));
+    const QStringList lines = output.split(QLatin1Char('\n'));
+    QCOMPARE(lines.size(), 2);
+    QCOMPARE(lines.first(), QStringLiteral("OS: ") + QSysInfo::prettyProductName());
+    QCOMPARE(lines.last(), QStringLiteral("Working directory: ") + dir.path());
+}
+
+// ============================================================================
 // Ripgrep (download module)
 // ============================================================================
 
@@ -5497,6 +5612,16 @@ void LlamaToolsTest::factory_searchFind()
 {
     auto &factory = ToolFactory::instance();
     for (const QString &name : {QStringLiteral("search"), QStringLiteral("find")}) {
+        auto tool = factory.create(name);
+        QVERIFY2(tool != nullptr, qPrintable(name));
+        QCOMPARE(tool->name(), name);
+    }
+}
+
+void LlamaToolsTest::factory_infoTools()
+{
+    auto &factory = ToolFactory::instance();
+    for (const QString &name : {QStringLiteral("get_datetime"), QStringLiteral("get_info")}) {
         auto tool = factory.create(name);
         QVERIFY2(tool != nullptr, qPrintable(name));
         QCOMPARE(tool->name(), name);

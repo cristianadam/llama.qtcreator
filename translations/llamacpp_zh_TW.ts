@@ -3364,7 +3364,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
         <source>Edit file</source>
         <translation>編輯檔案</translation>
     </message>
@@ -4318,6 +4318,23 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
         <translation>解包 niubash 失敗：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
+        <source>get current time</source>
+        <translation>取得目前時間</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
+        <source>get runtime info</source>
+        <translation>取得執行階段資訊</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>作業系統: %1
+工作目錄: %2</translation>
     </message>
 </context>
 </TS>

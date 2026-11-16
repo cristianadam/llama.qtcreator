@@ -3363,7 +3363,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+268"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
         <source>Edit file</source>
         <translation>Edytuj plik</translation>
     </message>
@@ -4317,6 +4317,23 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
         <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
         <translation>Rozpakowywanie niubash nie powiodło się: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
+        <source>get current time</source>
+        <translation>uzyskaj bieżący czas</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
+        <source>get runtime info</source>
+        <translation>uzyskaj informacje o runtime</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>System operacyjny: %1
+Katalog roboczy: %2</translation>
     </message>
 </context>
 </TS>

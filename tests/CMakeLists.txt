@@ -56,6 +56,8 @@ add_qtc_test(llamatools_test
     ../src/tools/search_tool.cpp
     ../src/tools/find_tool.cpp
     ../src/tools/ls_tool.cpp
+    ../src/tools/getdatetime_tool.cpp
+    ../src/tools/getinfo_tool.cpp
     ../src/tools/ripgrep.cpp
     ../src/tools/niubash.cpp
     ../src/tools/mxc.cpp

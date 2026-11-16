@@ -116,6 +116,8 @@ add_qtc_plugin(LlamaCpp
     src/tools/search_tool.cpp src/tools/search_tool.h
     src/tools/find_tool.cpp src/tools/find_tool.h
     src/tools/ls_tool.cpp src/tools/ls_tool.h
+    src/tools/getdatetime_tool.cpp src/tools/getdatetime_tool.h
+    src/tools/getinfo_tool.cpp src/tools/getinfo_tool.h
     src/tools/ripgrep.cpp src/tools/ripgrep.h
     src/tools/niubash.cpp src/tools/niubash.h
     src/tools/mxc.cpp src/tools/mxc.h
