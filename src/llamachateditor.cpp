@@ -217,7 +217,11 @@ QString thinkingLevelDisplay(const QString &level)
 // button's text line height (icon-font glyphs are designed to fill the em
 // square, so they land cleanly in a square box of that size), and coloured
 // with the button's palette so it follows the theme (the caller re-renders
-// it on palette changes).
+// it on palette changes).  The Normal color group is used explicitly: the
+// palette is the *effective* one, so a plain color(WindowText) would pick
+// up the Disabled group's gray while the button is disabled, and a palette
+// or font change in that state would bake it into the icon (re-enabling
+// sends no such event); the style grays the icon itself when disabled.
 QIcon lucideGlyphIcon(QLatin1Char glyph, QWidget *button)
 {
     // The button may not have a window (yet); fall back to the primary
@@ -241,7 +245,7 @@ QIcon lucideGlyphIcon(QLatin1Char glyph, QWidget *button)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::TextAntialiasing, true);
     painter.setFont(font);
-    painter.setPen(button->palette().color(QPalette::WindowText));
+    painter.setPen(button->palette().color(QPalette::Normal, QPalette::WindowText));
     painter.drawText(QRectF(0, 0, logicalSize, logicalSize), Qt::AlignCenter, QString(glyph));
     return QIcon(pixmap);
 }
