@@ -706,8 +706,9 @@ void ChatMessage::recomputeFixedHeight()
     // does not include it) plus the layout spacing between label and
     // action row, plus the action row height.  Forgetting any of these
     // clipped the bubble.
+    const int lastCodeBlockAdj = 2;
     const int marginAdj = m_markdownLabel->contentsMargins().top()
-            + m_markdownLabel->contentsMargins().bottom();
+            + m_markdownLabel->contentsMargins().bottom() + lastCodeBlockAdj;
     const int actionRowH = m_actionLayout ? m_actionLayout->sizeHint().height() : 0;
     setFixedHeight(docH + marginAdj + m_mainLayout->spacing() + actionRowH);
 }
