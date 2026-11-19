@@ -1726,7 +1726,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Dossier de travail : %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>Modèle LLM</translation>
     </message>
@@ -2119,7 +2119,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Retirer toutes les %1 entrées de l&apos;historique de saisie enregistrées ?</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>Fichiers joints</translation>
     </message>
@@ -2169,7 +2169,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Supprimer ce message</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Image</translation>
     </message>
@@ -2198,7 +2198,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Identifiant de la conversation</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Créer une nouvelle conversation avec Llama.cpp</translation>
     </message>
@@ -2208,7 +2208,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Actualiser</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>Renommer...</translation>
     </message>
@@ -2223,12 +2223,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Exporter sous forme de Markdown</translation>
     </message>
@@ -2238,19 +2238,36 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Exporter sous forme de HTML</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>Supprimer la conversation</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Confirmez-vous la suppression de la conversation :
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+8"/>
+        <source>… and %1 more</source>
+        <translation>… et %1 de plus</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Voulez-vous vraiment supprimer les %1 conversations :
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>Supprimer les conversations</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>Exporter la conversation sous forme de Markdown</translation>
     </message>
@@ -3389,7 +3406,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Ajouter %1</translation>
     </message>
@@ -3504,7 +3521,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>Sortie complète enregistrée dans : %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>exécution de %1</translation>
     </message>
@@ -3574,7 +3591,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Modifier un fichier</translation>
     </message>
@@ -3591,7 +3608,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
     </message>
@@ -4238,7 +4255,7 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation>(aucun)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>mettre à jour la liste des tâches</translation>
@@ -4532,18 +4549,18 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
     <message>
         <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation>obtenir l'heure actuelle</translation>
+        <translation>obtenir l&apos;heure actuelle</translation>
     </message>
     <message>
         <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation>obtenir les informations d'exécution</translation>
+        <translation>obtenir les informations d&apos;exécution</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation>Système d'exploitation : %1
+        <translation>Système d&apos;exploitation : %1
 Dossier de travail : %2</translation>
     </message>
 </context>

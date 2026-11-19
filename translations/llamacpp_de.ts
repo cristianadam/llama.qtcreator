@@ -1489,7 +1489,7 @@
         <translation type="vanished">Arbeitsverzeichnis: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>LLM-Modell</translation>
     </message>
@@ -1891,7 +1891,7 @@
         <translation type="vanished">Klicken, um den Denkprozess aus- bzw. einzublenden</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>Angehängte Dateien</translation>
     </message>
@@ -1941,7 +1941,7 @@
         <translation>Diese Nachricht löschen</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
@@ -1980,7 +1980,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation type="vanished">Konversations-ID</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Erstellt eine neue Konversation mit llama.cpp</translation>
     </message>
@@ -1990,7 +1990,7 @@ Möchten Sie sie überschreiben?</translation>
         <translation>Aktualisieren</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>Umbenennen...</translation>
     </message>
@@ -2005,12 +2005,12 @@ Möchten Sie sie überschreiben?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Als Markdown speichern</translation>
     </message>
@@ -2020,19 +2020,36 @@ Möchten Sie sie überschreiben?</translation>
         <translation>Als HTML speichern</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+101"/>
+        <source>… and %1 more</source>
+        <translation>… und %1 weitere</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Möchten Sie die %1 Konversationen wirklich löschen:
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Delete Conversation</source>
         <translation>Konversation löschen</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Möchten Sie die Konversation wirklich löschen:
 %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+16"/>
+        <source>Delete Conversations</source>
+        <translation>Konversationen löschen</translation>
+    </message>
+    <message>
+        <location line="+85"/>
         <location line="+40"/>
         <source>Cannot write file:
 %1</source>
@@ -3174,7 +3191,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>%1 hinzufügen</translation>
     </message>
@@ -3289,7 +3306,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Vollständige Ausgabe gespeichert unter: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>führe %1 aus</translation>
     </message>
@@ -3359,7 +3376,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Datei bearbeiten</translation>
     </message>
@@ -3376,7 +3393,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Tool-Fehler: &quot;path&quot; muss eine nicht leere Zeichenfolge sein.</translation>
     </message>
@@ -4023,7 +4040,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(keine)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>Aufgabenliste aktualisieren</translation>

@@ -50,38 +50,38 @@
         <translation type="vanished">Directorul de lucru: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="612"/>
+        <location filename="../src/llamachateditor.cpp" line="616"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="635"/>
+        <location filename="../src/llamachateditor.cpp" line="639"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Mesaje în coadă - trimise după pasul curent</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="645"/>
+        <location filename="../src/llamachateditor.cpp" line="649"/>
         <source>Follow up</source>
         <translation>Întrebări de urmărire</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="646"/>
+        <location filename="../src/llamachateditor.cpp" line="650"/>
         <source>Generate follow-up questions after each reply</source>
         <translation>Generează întrebări de urmărire după fiecare răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="663"/>
+        <location filename="../src/llamachateditor.cpp" line="667"/>
         <location filename="../src/promptssettingswidget.cpp" line="123"/>
         <source>Title</source>
         <translation>Titlu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="664"/>
+        <location filename="../src/llamachateditor.cpp" line="668"/>
         <source>Generate a conversation title after the first reply</source>
         <translation>Generează un titlu al conversației după primul răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="687"/>
+        <location filename="../src/llamachateditor.cpp" line="691"/>
         <source>Thinking level</source>
         <translation>Nivel de gândire</translation>
     </message>
@@ -98,7 +98,7 @@
         <translation type="vanished">Rezultatul anterior</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="909"/>
+        <location filename="../src/llamachateditor.cpp" line="913"/>
         <source>Send to Llama Chat</source>
         <translation>Trimite la Llama Chat</translation>
     </message>
@@ -115,36 +115,36 @@
         <translation type="vanished">Viziune: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1161"/>
-        <location filename="../src/llamachateditor.cpp" line="1162"/>
+        <location filename="../src/llamachateditor.cpp" line="1165"/>
+        <location filename="../src/llamachateditor.cpp" line="1166"/>
         <source>yes</source>
         <translation>da</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1161"/>
-        <location filename="../src/llamachateditor.cpp" line="1162"/>
+        <location filename="../src/llamachateditor.cpp" line="1165"/>
+        <location filename="../src/llamachateditor.cpp" line="1166"/>
         <source>no</source>
         <translation>nu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1246"/>
+        <location filename="../src/llamachateditor.cpp" line="1250"/>
         <source>Follow-up questions:</source>
         <translation>Întrebări de urmărire:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1929"/>
+        <location filename="../src/llamachateditor.cpp" line="1933"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Nivel de gândire: %1 (se aplică mesajelor noi)</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1017"/>
-        <location filename="../src/llamachateditor.cpp" line="1958"/>
-        <location filename="../src/llamachateditor.cpp" line="2039"/>
+        <location filename="../src/llamachateditor.cpp" line="1021"/>
+        <location filename="../src/llamachateditor.cpp" line="1962"/>
+        <location filename="../src/llamachateditor.cpp" line="2043"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1046"/>
+        <location filename="../src/llamachateditor.cpp" line="1050"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Sunteți conectat la %1, cu %2 ca director curent</translation>
     </message>
@@ -153,12 +153,12 @@
         <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1096"/>
+        <location filename="../src/llamachateditor.cpp" line="1100"/>
         <source>Hello there</source>
         <translation>Bună!</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1098"/>
+        <location filename="../src/llamachateditor.cpp" line="1102"/>
         <source>Type a message or upload files to get started</source>
         <translation>Scrieți un mesaj sau încărcați fișiere pentru a începe</translation>
     </message>
@@ -167,149 +167,149 @@
         <translation type="vanished">Faceți clic pe numele modelului pentru a vedea detaliile sale sau pe director pentru a modifica unde rulează uneltele.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1058"/>
+        <location filename="../src/llamachateditor.cpp" line="1062"/>
         <source>Download definitions</source>
         <translation>Descarcă definițiile</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1060"/>
+        <location filename="../src/llamachateditor.cpp" line="1064"/>
         <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
         <translation>%1 și %2 (și alte definiții de sintaxă) lipsesc, de aceea fragmentele de cod corespunzătoare nu vor fi evidențiate. %3</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1084"/>
+        <location filename="../src/llamachateditor.cpp" line="1088"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1101"/>
+        <location filename="../src/llamachateditor.cpp" line="1105"/>
         <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
         <translation>Faceți clic pe numele modelului pentru a vedea detaliile sale sau pe director pentru a modifica unde rulează uneltele (faceți clic cu dreapta pe acesta pentru a reseta directorul la proiect).</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1140"/>
+        <location filename="../src/llamachateditor.cpp" line="1144"/>
         <source>Model Details</source>
         <translation>Detalii model</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1154"/>
+        <location filename="../src/llamachateditor.cpp" line="1158"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1155"/>
+        <location filename="../src/llamachateditor.cpp" line="1159"/>
         <source>Model path:</source>
         <translation>Calea modelului:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1157"/>
+        <location filename="../src/llamachateditor.cpp" line="1161"/>
         <source>Type:</source>
         <translation>Tip:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1159"/>
+        <location filename="../src/llamachateditor.cpp" line="1163"/>
         <source>Parallel slots:</source>
         <translation>Sloturi paralele:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1160"/>
+        <location filename="../src/llamachateditor.cpp" line="1164"/>
         <source>Context:</source>
         <translation>Context:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1161"/>
+        <location filename="../src/llamachateditor.cpp" line="1165"/>
         <source>Vision:</source>
         <translation>Viziune:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1162"/>
+        <location filename="../src/llamachateditor.cpp" line="1166"/>
         <source>Audio:</source>
         <translation>Audio:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1164"/>
+        <location filename="../src/llamachateditor.cpp" line="1168"/>
         <source>BOS token:</source>
         <translation>Token BOS:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1166"/>
+        <location filename="../src/llamachateditor.cpp" line="1170"/>
         <source>EOS token:</source>
         <translation>Token EOS:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1168"/>
+        <location filename="../src/llamachateditor.cpp" line="1172"/>
         <source>Reasoning effort:</source>
         <translation>Efort de raționament:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1170"/>
+        <location filename="../src/llamachateditor.cpp" line="1174"/>
         <source>Build:</source>
         <translation>Build:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1189"/>
-        <location filename="../src/llamachateditor.cpp" line="1191"/>
+        <location filename="../src/llamachateditor.cpp" line="1193"/>
+        <location filename="../src/llamachateditor.cpp" line="1195"/>
         <source>Chat template:</source>
         <translation>Șablon de chat:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1190"/>
+        <location filename="../src/llamachateditor.cpp" line="1194"/>
         <source>Not reported by the server (the model is not loaded?).</source>
         <translation>Neraportat de server (modelul nu este încărcat?).</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1192"/>
+        <location filename="../src/llamachateditor.cpp" line="1196"/>
         <source>Tool-use template:</source>
         <translation>Șablon de utilizare a uneltelor:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1198"/>
+        <location filename="../src/llamachateditor.cpp" line="1202"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1210"/>
+        <location filename="../src/llamachateditor.cpp" line="1214"/>
         <location filename="../src/toolsettingswidget.cpp" line="126"/>
         <source>Select Working Directory</source>
         <translation>Selectați directorul de lucru</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1456"/>
+        <location filename="../src/llamachateditor.cpp" line="1460"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1711"/>
+        <location filename="../src/llamachateditor.cpp" line="1715"/>
         <source>Stop Task</source>
         <translation>Oprește sarcina</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1712"/>
+        <location filename="../src/llamachateditor.cpp" line="1716"/>
         <source>The task is still running. Do you really want to stop it?</source>
         <translation>Sarcina este încă în curs de rulare. Doriți cu adevărat să o opriți?</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2039"/>
+        <location filename="../src/llamachateditor.cpp" line="2043"/>
         <source>Edit Message</source>
         <translation>Editare mesaj</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2099"/>
+        <location filename="../src/llamachateditor.cpp" line="2103"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Se vor șterge %1 mesaje, inclusiv: %2 mesaje de utilizator și %3 răspunsuri ale asistentului ...</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2105"/>
+        <location filename="../src/llamachateditor.cpp" line="2109"/>
         <source>Confirm Branch Deletion</source>
         <translation>Confirmare ștergere ramificație</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2111"/>
+        <location filename="../src/llamachateditor.cpp" line="2115"/>
         <source>Delete Message</source>
         <translation>Șterge mesajul</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2112"/>
+        <location filename="../src/llamachateditor.cpp" line="2116"/>
         <source>Are you sure you want to delete this message?</source>
         <translation>Sigur doriți să ștergeți acest mesaj?</translation>
     </message>
@@ -318,7 +318,7 @@
         <translation type="vanished">Se procesează: %1%</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2165"/>
+        <location filename="../src/llamachateditor.cpp" line="2169"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Procesare prompt:&lt;/b&gt;&lt;br&gt;Tokeni totali: %1&lt;br&gt;Procesate: %2&lt;br&gt;În cache: %3&lt;br&gt;Timp: %4 ms</translation>
     </message>
@@ -327,7 +327,7 @@
         <translation type="vanished">Viteză: %1 t/s</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2184"/>
+        <location filename="../src/llamachateditor.cpp" line="2188"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokeni: %1&lt;br&gt;Timp: %2 ms&lt;br&gt;Viteză: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generare:&lt;/b&gt;&lt;br&gt;Tokeni: %4&lt;br&gt;Timp: %5 ms&lt;br&gt;Viteză: %6 t/s</translation>
     </message>
@@ -336,22 +336,22 @@
         <translation type="vanished">Context: %1% utilizat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2237"/>
+        <location filename="../src/llamachateditor.cpp" line="2241"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Context: %1% utilizat.&lt;br&gt;  %2 tokeni din %3.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2251"/>
+        <location filename="../src/llamachateditor.cpp" line="2255"/>
         <source>%1 queued</source>
         <translation>%1 în coadă</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2271"/>
+        <location filename="../src/llamachateditor.cpp" line="2275"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Elimină &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2273"/>
+        <location filename="../src/llamachateditor.cpp" line="2277"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Elimină mesajul din coadă (nu va fi trimis)</translation>
     </message>
@@ -364,7 +364,7 @@
         <translation type="vanished">*Se creează o conversație nouă pentru a continua aceasta – se rezumă conversația…</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2296"/>
+        <location filename="../src/llamachateditor.cpp" line="2300"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Editor de chat LlamaCpp</translation>
     </message>
@@ -571,77 +571,77 @@
         <translation>**Notă:** Modelul a terminat rândul fără un răspuns.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="142"/>
+        <location filename="../src/llamachatmessage.cpp" line="141"/>
         <source>Attached files</source>
         <translation>Fișiere atașate</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="216"/>
+        <location filename="../src/llamachatmessage.cpp" line="215"/>
         <source>Go to previous message</source>
         <translation>Mergi la mesajul anterior</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="223"/>
+        <location filename="../src/llamachatmessage.cpp" line="222"/>
         <source>Go to next message</source>
         <translation>Mergi la mesajul următor</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="234"/>
+        <location filename="../src/llamachatmessage.cpp" line="233"/>
         <source>Edit the message</source>
         <translation>Editează mesajul</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="242"/>
+        <location filename="../src/llamachatmessage.cpp" line="241"/>
         <source>Edit the message in the Markdown editor</source>
         <translation>Editează mesajul în editorul Markdown</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="249"/>
+        <location filename="../src/llamachatmessage.cpp" line="248"/>
         <source>Re-generate the answer</source>
         <translation>Regenerează răspunsul</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="257"/>
+        <location filename="../src/llamachatmessage.cpp" line="256"/>
         <source>Copy the message to clipboard</source>
         <translation>Copiază mesajul în clipboard</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="260"/>
+        <location filename="../src/llamachatmessage.cpp" line="259"/>
         <source>Copy verbatim</source>
         <translation>Copiază verbatim</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="262"/>
+        <location filename="../src/llamachatmessage.cpp" line="261"/>
         <source>Copy HTML</source>
         <translation>Copiază HTML</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="270"/>
+        <location filename="../src/llamachatmessage.cpp" line="269"/>
         <source>Delete this message</source>
         <translation>Șterge acest mesaj</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="571"/>
+        <location filename="../src/llamachatmessage.cpp" line="560"/>
         <source>Image</source>
         <translation>Imagine</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Creează o conversație nouă în llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="137"/>
+        <location filename="../src/llamaconversationsview.cpp" line="140"/>
         <source>Refresh</source>
         <translation>Reîmprospătează</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="255"/>
+        <location filename="../src/llamaconversationsview.cpp" line="279"/>
         <source>Rename...</source>
         <translation>Redenumește...</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="256"/>
+        <location filename="../src/llamaconversationsview.cpp" line="280"/>
         <source>Summarize</source>
         <translation>Rezumă</translation>
     </message>
@@ -650,28 +650,28 @@
         <translation type="vanished">Continuă într-o conversație nouă</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="257"/>
-        <location filename="../src/llamaconversationsview.cpp" line="325"/>
+        <location filename="../src/llamaconversationsview.cpp" line="281"/>
+        <location filename="../src/llamaconversationsview.cpp" line="401"/>
         <source>Delete</source>
         <translation>Șterge</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="258"/>
+        <location filename="../src/llamaconversationsview.cpp" line="282"/>
         <source>Save as Markdown</source>
         <translation>Salvează ca Markdown</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="261"/>
+        <location filename="../src/llamaconversationsview.cpp" line="285"/>
         <source>Save as HTML</source>
         <translation>Salvează ca HTML</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="318"/>
+        <location filename="../src/llamaconversationsview.cpp" line="394"/>
         <source>Delete Conversation</source>
         <translation>Ștergere conversație</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="319"/>
+        <location filename="../src/llamaconversationsview.cpp" line="378"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Sigur doriți să ștergeți conversația:
@@ -679,30 +679,47 @@
     </message>
     <message>
         <location filename="../src/llamaconversationsview.cpp" line="386"/>
+        <source>… and %1 more</source>
+        <translation>… și încă %1</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaconversationsview.cpp" line="387"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Sigur doriți să ștergeți %1 conversații:
+%2</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaconversationsview.cpp" line="394"/>
+        <source>Delete Conversations</source>
+        <translation>Ștergere conversații</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaconversationsview.cpp" line="466"/>
         <source>Save Conversation as Markdown</source>
         <translation>Salvare conversație ca Markdown</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="398"/>
-        <location filename="../src/llamaconversationsview.cpp" line="438"/>
+        <location filename="../src/llamaconversationsview.cpp" line="478"/>
+        <location filename="../src/llamaconversationsview.cpp" line="518"/>
         <source>Error</source>
         <translation>Eroare</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="399"/>
-        <location filename="../src/llamaconversationsview.cpp" line="439"/>
+        <location filename="../src/llamaconversationsview.cpp" line="479"/>
+        <location filename="../src/llamaconversationsview.cpp" line="519"/>
         <source>Cannot write file:
 %1</source>
         <translation>Nu se poate scrie fișierul:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="426"/>
+        <location filename="../src/llamaconversationsview.cpp" line="506"/>
         <source>Save Conversation as HTML</source>
         <translation>Salvare conversație ca HTML</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="450"/>
+        <location filename="../src/llamaconversationsview.cpp" line="530"/>
         <source>llama.cpp Conversations</source>
         <translation>Conversații llama.cpp</translation>
     </message>
@@ -2704,58 +2721,58 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="173"/>
         <source>Add %1</source>
         <translation>Adaugă %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="183"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="175"/>
         <source>Delete %1</source>
         <translation>Șterge %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="186"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="178"/>
         <source>Edit %1</source>
         <translation>Modifică %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="187"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="179"/>
         <source>Move %1 to %2</source>
         <translation>Mută %1 în %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="189"/>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="196"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="188"/>
         <source>Apply patch</source>
         <translation>Aplică patch</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="201"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="193"/>
         <source>Apply patch to %1 files</source>
         <translation>Aplică patch pentru %1 fișiere</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="280"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="272"/>
         <source>created</source>
         <translation>creat</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="286"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="278"/>
         <source>edited</source>
         <translation>modificat</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="288"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="280"/>
         <source>moved</source>
         <translation>mutat</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="297"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="289"/>
         <source>deleted</source>
         <translation>șters</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="500"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="492"/>
         <source>Success. Updated the following files:</source>
         <translation>Succes. Au fost actualizate următoarele fișiere:</translation>
     </message>
@@ -2819,49 +2836,49 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Ieșirea completă salvată în: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="568"/>
+        <location filename="../src/tools/bash_tool.cpp" line="557"/>
         <source>running %1</source>
         <translation>rulează %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="615"/>
+        <location filename="../src/tools/bash_tool.cpp" line="604"/>
         <source>Error: the command must not be empty.</source>
         <translation>Eroare: comanda nu trebuie să fie goală.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="633"/>
+        <location filename="../src/tools/bash_tool.cpp" line="622"/>
         <source>Error: working directory does not exist: %1</source>
         <translation>Eroare: directorul de lucru nu există: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="642"/>
-        <location filename="../src/tools/bash_tool.cpp" line="668"/>
-        <location filename="../src/tools/bash_tool.cpp" line="697"/>
+        <location filename="../src/tools/bash_tool.cpp" line="631"/>
+        <location filename="../src/tools/bash_tool.cpp" line="657"/>
+        <location filename="../src/tools/bash_tool.cpp" line="686"/>
         <source>Error: %1</source>
         <translation>Eroare: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="654"/>
+        <location filename="../src/tools/bash_tool.cpp" line="643"/>
         <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
         <translation>Eroare: sandboxul nu poate face &quot;%1&quot; scribil: este (sau conține) directorul home sau rădăcina unui sistem de fișiere. Deschideți un proiect pentru a rula comenzi în directorul său.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="874"/>
+        <location filename="../src/tools/bash_tool.cpp" line="863"/>
         <source>Command was stopped by the user.</source>
         <translation>Comanda a fost oprită de utilizator.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="877"/>
+        <location filename="../src/tools/bash_tool.cpp" line="866"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
         <translation>Comanda a expirat după %1 ms. Încercați din nou cu un timeout mai mare dacă comanda ar trebui să dureze mai mult.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="882"/>
+        <location filename="../src/tools/bash_tool.cpp" line="871"/>
         <source>Failed to start the command: %1</source>
         <translation>Pornirea comenzii a eșuat: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="884"/>
+        <location filename="../src/tools/bash_tool.cpp" line="873"/>
         <location filename="../src/tools/find_tool.cpp" line="308"/>
         <location filename="../src/tools/find_tool.cpp" line="315"/>
         <location filename="../src/tools/search_tool.cpp" line="382"/>
@@ -2870,17 +2887,17 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>eroare necunoscută</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="888"/>
+        <location filename="../src/tools/bash_tool.cpp" line="877"/>
         <source>Command terminated abnormally (crashed).</source>
         <translation>Comanda s-a încheiat anormal (crash).</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="891"/>
+        <location filename="../src/tools/bash_tool.cpp" line="880"/>
         <source>Command exited with code %1.</source>
         <translation>Comanda s-a încheiat cu codul %1.</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="942"/>
+        <location filename="../src/tools/bash_tool.cpp" line="931"/>
         <source>Working directory: %1
 
 </source>
@@ -2889,51 +2906,51 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="284"/>
         <source>Edit file</source>
         <translation>Modificare fișier</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="289"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="287"/>
         <source>edit %1 (%2 blocks)</source>
         <translation>modifică %1 (%2 blocuri)</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="290"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="316"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="288"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="314"/>
         <source>edit %1</source>
         <translation>modifică %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="353"/>
-        <location filename="../src/tools/write_tool.cpp" line="123"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="351"/>
+        <location filename="../src/tools/write_tool.cpp" line="120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Eroare de unelță: &quot;path&quot; trebuie să fie un șir nevid.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="383"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="381"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
         <translation>Eroare de unelță: fiecare modificare are nevoie de un &quot;oldText&quot; și un &quot;newText&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="389"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="387"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
         <translation>Eroare de unelță: &quot;edits&quot; trebuie să conțină cel puțin o înlocuire.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="398"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="396"/>
         <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
         <translation>Nu se poate modifica &quot;%1&quot;: fișierul nu a fost găsit. Folosiți read_file pentru a verifica calea sau write pentru a crea fișierul.</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="405"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="412"/>
-        <location filename="../src/tools/edit_file_tool.cpp" line="416"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="403"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="410"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="414"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
         <translation>Nu se poate modifica &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="419"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="417"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
         <translation>S-a înlocuit cu succes %1 bloc(uri) în %2.</translation>
     </message>
@@ -3416,38 +3433,38 @@ Authorization: Bearer &lt;token&gt;</translation>
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="142"/>
-        <location filename="../src/tools/todowrite_tool.cpp" line="150"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="138"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="146"/>
         <source>update task list</source>
         <translation>actualizare listă de taskuri</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="143"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="139"/>
         <source>update task list (%1 tasks)</source>
         <translation>actualizare listă de taskuri (%1 taskuri)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="189"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="185"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
         <translation>Eroare de unelță: &quot;todos&quot; trebuie să conțină cel puțin un task.</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="198"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="194"/>
         <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
         <translation>Eroare de unelță: taskul %1 are un &quot;content&quot; gol.</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="202"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="198"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
         <translation>Eroare de unelță: taskul %1 are starea necunoscută &quot;%2&quot; (așteptat &quot;pending&quot;, &quot;in_progress&quot; sau &quot;completed&quot;).</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="214"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="210"/>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
         <translation>Eroare de unelță: doar un singur task poate fi &quot;in_progress&quot; o dată (%1 dat).</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="220"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="216"/>
         <source>Task list updated: %1 of %2 completed.</source>
         <translation>Lista de taskuri a fost actualizată: %1 din %2 completate.</translation>
     </message>
@@ -3704,38 +3721,38 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="75"/>
+        <location filename="../src/tools/write_tool.cpp" line="72"/>
         <source>Write file</source>
         <translation>Scriere fișier</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="76"/>
-        <location filename="../src/tools/write_tool.cpp" line="102"/>
+        <location filename="../src/tools/write_tool.cpp" line="73"/>
+        <location filename="../src/tools/write_tool.cpp" line="99"/>
         <source>write %1</source>
         <translation>scrie %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="125"/>
+        <location filename="../src/tools/write_tool.cpp" line="122"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Eroare de unelță: &quot;content&quot; este obligatoriu.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="132"/>
+        <location filename="../src/tools/write_tool.cpp" line="129"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
         <translation>Nu se poate scrie în &quot;%1&quot;: o cale părinte este un fișier.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="138"/>
+        <location filename="../src/tools/write_tool.cpp" line="135"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
         <translation>Nu se poate scrie în &quot;%1&quot;: nu se poate crea directorul: %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="145"/>
+        <location filename="../src/tools/write_tool.cpp" line="142"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
         <translation>Nu se poate scrie în &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="147"/>
+        <location filename="../src/tools/write_tool.cpp" line="144"/>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation>S-au scris cu succes %1 octeți în %2.</translation>
     </message>

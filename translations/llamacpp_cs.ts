@@ -1497,7 +1497,7 @@
         <translation type="vanished">Pracovní adresář: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1915,7 +1915,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">Všechny soubory (*)</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+234"/>
+        <location filename="../src/llamachatmessage.cpp" line="+233"/>
         <source>Edit the message</source>
         <translation>Upravit zprávu</translation>
     </message>
@@ -1965,7 +1965,7 @@ Chcete ho přepsat?</translation>
         <translation>Smažit tuto zprávu</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Obrázek</translation>
     </message>
@@ -1982,7 +1982,7 @@ Chcete ho přepsat?</translation>
         <translation type="vanished">ID konverzace</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Vytvoří novou konverzaci s LlamaCpp</translation>
     </message>
@@ -1992,7 +1992,7 @@ Chcete ho přepsat?</translation>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>Přejmenovat...</translation>
     </message>
@@ -2007,12 +2007,12 @@ Chcete ho přepsat?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Uložit jako Markdown</translation>
     </message>
@@ -2022,18 +2022,35 @@ Chcete ho přepsat?</translation>
         <translation>Uložit jako HTML</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>Smazat konverzaci</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Jste si jistí, že chcete smazat konverzaci: %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+8"/>
+        <source>… and %1 more</source>
+        <translation>… a dalších %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Opravdu chcete smazat %1 konverzací:
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>Smazat konverzace</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>Uložit konverzaci jako Markdown</translation>
     </message>
@@ -3174,7 +3191,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Přidat %1</translation>
     </message>
@@ -3289,7 +3306,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Úplný výstup uložen do: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>spouštění %1</translation>
     </message>
@@ -3359,7 +3376,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Upravit soubor</translation>
     </message>
@@ -3376,7 +3393,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Chyba nástroje: &quot;path&quot; musí být neprázdný řetězec.</translation>
     </message>
@@ -4023,7 +4040,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(žádné)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>aktualizovat seznam úloh</translation>

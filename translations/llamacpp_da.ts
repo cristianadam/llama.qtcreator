@@ -1497,7 +1497,7 @@
         <translation type="vanished">Arbejdsmappe: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>LLM-model</translation>
     </message>
@@ -1899,7 +1899,7 @@
         <translation type="vanished">Klik for at udvide / skjule tænkeprocessen</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>Vedhæftede filer</translation>
     </message>
@@ -1949,7 +1949,7 @@
         <translation>Slet denne meddelelse</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Billede</translation>
     </message>
@@ -1985,7 +1985,7 @@ Vil du overskrive den?</translation>
         <translation type="vanished">Konversations-id</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Opretter en ny samtale med llama.cpp</translation>
     </message>
@@ -1995,7 +1995,7 @@ Vil du overskrive den?</translation>
         <translation>Opdater</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>Omdøb...</translation>
     </message>
@@ -2010,12 +2010,12 @@ Vil du overskrive den?</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Slet</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Gem som Markdown</translation>
     </message>
@@ -2025,19 +2025,36 @@ Vil du overskrive den?</translation>
         <translation>Gem som HTML</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>Slet denne samtale</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Er du sikker på, at du vil slette denne samtale:
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+8"/>
+        <source>… and %1 more</source>
+        <translation>… og %1 flere</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Er du sikker på, at du vil slette %1 samtaler:
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>Slet samtaler</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>Gem denne samtale som Markdown</translation>
     </message>
@@ -3171,7 +3188,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Tilføj %1</translation>
     </message>
@@ -3286,7 +3303,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>kører %1</translation>
     </message>
@@ -3356,7 +3373,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Rediger fil</translation>
     </message>
@@ -3373,7 +3390,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
@@ -4020,7 +4037,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>(ingen)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>opdater opgaveliste</translation>

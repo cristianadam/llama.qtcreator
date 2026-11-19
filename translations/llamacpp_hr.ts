@@ -1493,7 +1493,7 @@
         <translation type="vanished">Radni direktorij: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>LLM model</translation>
     </message>
@@ -1895,7 +1895,7 @@
         <translation type="obsolete">Kliknite za prikazivanje / sakrivanje procesa razmišljanja</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>Dodane datoteke</translation>
     </message>
@@ -1945,7 +1945,7 @@
         <translation>Izbriši ovu poruku</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Slika</translation>
     </message>
@@ -1982,7 +1982,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">ID razgovora</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Stvara novi razgovor s alatom llama.cpp</translation>
     </message>
@@ -1992,7 +1992,7 @@ Do you want to overwrite it?</source>
         <translation>Osvježi</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>Preimenuj...</translation>
     </message>
@@ -2007,12 +2007,12 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Izbriši</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Spremi kao Markdown</translation>
     </message>
@@ -2022,19 +2022,36 @@ Do you want to overwrite it?</source>
         <translation>Spremi kao HTML</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>Izbriši razgovor</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Jeste li sigurni da želite izbrisati razgovor:
 %1</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+8"/>
+        <source>… and %1 more</source>
+        <translation>… i još %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Jeste li sigurni da želite izbrisati %1 razgovora:
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>Izbriši razgovore</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>Spremi razgovor kao Markdown</translation>
     </message>
@@ -3143,7 +3160,7 @@ Authorization: Bearer &lt;token&gt;</source>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Dodaj %1</translation>
     </message>
@@ -3258,7 +3275,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Puni izlaz spremljen u: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>izvršavanje %1</translation>
     </message>
@@ -3326,7 +3343,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Radni direktorij: %1\n\n</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Uredi datoteku</translation>
     </message>
@@ -3343,7 +3360,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
     </message>
@@ -3982,7 +3999,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>(nema)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>ažuriraj popis zadataka</translation>

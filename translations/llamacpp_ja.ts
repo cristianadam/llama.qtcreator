@@ -1544,7 +1544,7 @@
         <translation type="vanished">考え中 %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>添付ファイル</translation>
     </message>
@@ -1594,7 +1594,7 @@
         <translation>このメッセージを削除</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>イメージ</translation>
     </message>
@@ -1631,7 +1631,7 @@ Do you want to overwrite it?</source>
         <translation type="vanished">会話 ID</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+133"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+136"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>新しい llama.cpp 会話を作成します</translation>
     </message>
@@ -1641,7 +1641,7 @@ Do you want to overwrite it?</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+139"/>
         <source>Rename...</source>
         <translation>名前を変更...</translation>
     </message>
@@ -1656,12 +1656,12 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-119"/>
         <source>Save as Markdown</source>
         <translation>Markdown として保存</translation>
     </message>
@@ -1671,18 +1671,35 @@ Do you want to overwrite it?</source>
         <translation>HTML として保存</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>会話を削除</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>会話 %1 を削除してよろしいですか?</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+8"/>
+        <source>… and %1 more</source>
+        <translation>… その他 %1 件</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>本当に %1 件の会話を削除してもよろしいですか?
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>会話を削除</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>会話を Markdown として保存</translation>
     </message>
@@ -1857,7 +1874,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">作業ディレクトリ: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>LLM モデル</translation>
     </message>
@@ -2867,7 +2884,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>%1 を追加</translation>
     </message>
@@ -2982,7 +2999,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>完全な出力を以下に保存しました: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>%1 を実行中</translation>
     </message>
@@ -3052,7 +3069,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>ファイルを編集</translation>
     </message>
@@ -3069,7 +3086,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>ツールエラー: &quot;path&quot; は空でない文字列でなければなりません。</translation>
     </message>
@@ -3716,7 +3733,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>（なし）</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>タスクリストを更新</translation>

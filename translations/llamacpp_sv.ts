@@ -238,7 +238,7 @@
         <translation type="vanished">Arbetskatalog: %1</translation>
     </message>
     <message>
-        <location line="+412"/>
+        <location line="+416"/>
         <source>LLM model</source>
         <translation>LLM-modell</translation>
     </message>
@@ -635,7 +635,7 @@
         <translation type="vanished">Klicka för att expandera eller dölja tankemönstret</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="+142"/>
+        <location filename="../src/llamachatmessage.cpp" line="+141"/>
         <source>Attached files</source>
         <translation>Bifogade filer</translation>
     </message>
@@ -685,7 +685,7 @@
         <translation>Ta bort detta meddelande</translation>
     </message>
     <message>
-        <location line="+301"/>
+        <location line="+291"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
@@ -1140,12 +1140,12 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/llamaconversationsview.cpp" line="+450"/>
+        <location filename="../src/llamaconversationsview.cpp" line="+530"/>
         <source>llama.cpp Conversations</source>
         <translation>Llama.cpp-konversationer</translation>
     </message>
     <message>
-        <location line="-192"/>
+        <location line="-248"/>
         <source>Save as Markdown</source>
         <translation>Spara som Markdown</translation>
     </message>
@@ -1155,34 +1155,34 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
     </message>
     <message>
         <location line="-1"/>
-        <location line="+68"/>
+        <location line="+120"/>
         <source>Delete</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location line="-64"/>
+        <location line="-116"/>
         <source>Save as HTML</source>
         <translation>Spara som HTML</translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+109"/>
         <source>Delete Conversation</source>
         <translation>Ta bort konversation</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-16"/>
         <source>Are you sure you want to delete the conversation:
 %1</source>
         <translation>Är du säker på att du vill ta bort konversationen:
 %1</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+128"/>
         <source>Save Conversation as HTML</source>
         <translation>Spara konversation som HTML</translation>
     </message>
     <message>
-        <location line="-171"/>
+        <location line="-227"/>
         <source>Rename...</source>
         <translation>Byt namn...</translation>
     </message>
@@ -1192,12 +1192,29 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation>Sammanfatta</translation>
     </message>
     <message>
-        <location line="-119"/>
+        <location line="-140"/>
         <source>Refresh</source>
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location line="+249"/>
+        <location line="+246"/>
+        <source>… and %1 more</source>
+        <translation>… och %1 till</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Are you sure you want to delete the %1 conversations:
+%2</source>
+        <translation>Är du säker på att du vill ta bort %1 konversationer:
+%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete Conversations</source>
+        <translation>Ta bort konversationer</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Save Conversation as Markdown</source>
         <translation>Spara konversation som Markdown</translation>
     </message>
@@ -1232,7 +1249,7 @@ Du kan ange andra prompts – de sparas för nästa gång.</translation>
         <translation type="vanished">Konversations-ID</translation>
     </message>
     <message>
-        <location line="-306"/>
+        <location line="-383"/>
         <source>Creates a new llama.cpp conversation</source>
         <translation>Skapar en ny konversation för llama.cpp</translation>
     </message>
@@ -3190,7 +3207,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 <context>
     <name>Tr</name>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+181"/>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Lägg till %1</translation>
     </message>
@@ -3305,7 +3322,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Hela utdata sparad till: %1</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+113"/>
         <source>running %1</source>
         <translation>kör %1</translation>
     </message>
@@ -3375,7 +3392,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+286"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
         <translation>Redigera fil</translation>
     </message>
@@ -3392,7 +3409,7 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+123"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Verktygsfel: &quot;path&quot; måste vara en icke-tom sträng.</translation>
     </message>
@@ -4039,7 +4056,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>(inga)</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+142"/>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
         <location line="+8"/>
         <source>update task list</source>
         <translation>uppdatera uppgiftslistan</translation>
