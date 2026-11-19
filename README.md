@@ -37,6 +37,7 @@ server.
 - Project instructions: the project's `AGENTS.md` / `CLAUDE.md` (searched up to the git repository root) is loaded and appended to the chat system message; can be disabled globally or per project
 - [Skills](https://agentskills.io): configure skill directories on the "Skills" settings page; skills (`SKILL.md` files) are advertised to the model and loaded on demand via the `skill` tool
 - Conversations get automatic titles, long conversations are automatically continued in a new conversation seeded with a handoff summary of the task, current state and next steps when they approach the model's context window, and messages sent while a reply is in progress are queued
+- The conversations view supports multi-selection (Ctrl/Shift+click), and the Delete key removes the selected conversations (task conversations nested under a deleted parent are re-parented to the top level)
 - Export a conversation as Markdown or HTML
 - [Tools usage](https://github.com/cristianadam/llama.qtcreator/wiki/Tools)
 

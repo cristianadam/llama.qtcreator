@@ -9,6 +9,7 @@
 #include <utils/utilsicons.h>
 
 #include <QFileDialog>
+#include <QKeyEvent>
 #include <QKeySequence>
 #include <QLabel>
 #include <QMenu>
@@ -92,6 +93,8 @@ private:
     void expansionChanged(const QModelIndex &idx, bool expanded);
     QModelIndex selectedIndex();
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
     bool deleteConversation();
     bool renameConversation();
     bool summarizeConversation();
@@ -158,6 +161,11 @@ ConversationsView::ConversationsView()
     m_filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_conversationsView->setModel(m_filterModel);
 
+    // Multiple conversations can be selected (Ctrl/Shift+click) so several
+    // can be deleted at once; Delete/Backspace then removes them.
+    m_conversationsView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_conversationsView->installEventFilter(this);
+
     auto filterEdit = new FancyLineEdit(this);
     filterEdit->setFiltering(true);
     connect(filterEdit,
@@ -222,6 +230,22 @@ void ConversationsView::newConversation()
 void ConversationsView::showEvent(QShowEvent *)
 {
     refresh();
+}
+
+bool ConversationsView::eventFilter(QObject *obj, QEvent *event)
+{
+    // The key events reach the view itself (the viewport proxies its focus
+    // to it), and QAbstractItemView ignores Delete/Backspace, so the filter
+    // is the hook for the "delete the selection" keyboard mapping.  While
+    // an inline editor (rename) has focus the events go to it instead.
+    if (obj == m_conversationsView && event->type() == QEvent::KeyPress) {
+        auto *keyEvent = static_cast<QKeyEvent *>(event);
+        if ((keyEvent->key() == Qt::Key_Delete || keyEvent->key() == Qt::Key_Backspace)
+                && keyEvent->modifiers() == Qt::NoModifier
+                && deleteConversation())
+            return true;
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 QList<QToolButton *> ConversationsView::createToolButtons()
@@ -306,19 +330,71 @@ QModelIndex ConversationsView::selectedIndex()
 
 bool ConversationsView::deleteConversation()
 {
-    const QModelIndex selected = selectedIndex();
-    if (!selected.isValid())
+    // One source index per selected row (the selection may span several
+    // levels of the tree, e.g. a conversation and its task conversations).
+    const QModelIndexList selected = m_conversationsView->selectionModel()->selectedRows();
+    if (selected.isEmpty())
         return false;
 
-    const QString name = selected.data(Qt::DisplayRole).toString();
-    const QString convId = selected.data(ConversationsModel::ConversationIdRole).toString();
+    QList<QModelIndex> rows;
+    QSet<QString> ids;
+    for (const QModelIndex &idx : selected) {
+        const QModelIndex src = m_filterModel->mapToSource(idx);
+        if (!src.isValid())
+            continue;
+        const QString id = src.data(ConversationsModel::ConversationIdRole).toString();
+        if (!ids.contains(id)) {
+            ids.insert(id);
+            rows.append(src);
+        }
+    }
+    if (rows.isEmpty())
+        return false;
 
-    QMessageBox *messageBox
-        = new QMessageBox(QMessageBox::Warning,
-                          Tr::tr("Delete Conversation"),
-                          Tr::tr("Are you sure you want to delete the conversation:\n%1").arg(name),
-                          QMessageBox::Discard | QMessageBox::Cancel,
-                          window());
+    // A selected conversation nested under another selected one is not
+    // deleted: deleting the ancestor re-parents it to the top level, the
+    // same as deleting it on its own.
+    QStringList names;
+    QStringList toDelete;
+    for (int i = 0; i < rows.size(); ++i) {
+        bool nested = false;
+        for (QModelIndex anc = rows.at(i).parent(); anc.isValid() && !nested;
+             anc = anc.parent())
+            for (int j = 0; j < rows.size(); ++j)
+                if (i != j && anc == rows.at(j)) {
+                    nested = true;
+                    break;
+                }
+        if (nested)
+            continue;
+        toDelete.append(rows.at(i).data(ConversationsModel::ConversationIdRole).toString());
+        names.append(rows.at(i).data(Qt::DisplayRole).toString());
+    }
+    if (toDelete.isEmpty())
+        return false;
+
+    QString text;
+    if (toDelete.size() == 1) {
+        text = Tr::tr("Are you sure you want to delete the conversation:\n%1").arg(names.at(0));
+    } else {
+        // Cap the list so a huge selection does not fill the screen.
+        QStringList listed;
+        const int shown = qMin(names.size(), 10);
+        for (int i = 0; i < shown; ++i)
+            listed << names.at(i);
+        if (names.size() > shown)
+            listed << Tr::tr("… and %1 more").arg(names.size() - shown);
+        text = Tr::tr("Are you sure you want to delete the %1 conversations:\n%2")
+                   .arg(toDelete.size())
+                   .arg(listed.join(QLatin1Char('\n')));
+    }
+
+    QMessageBox *messageBox = new QMessageBox(
+        QMessageBox::Warning,
+        toDelete.size() == 1 ? Tr::tr("Delete Conversation") : Tr::tr("Delete Conversations"),
+        text,
+        QMessageBox::Discard | QMessageBox::Cancel,
+        window());
 
     // Change the text and role of the discard button
     auto deleteButton = static_cast<QPushButton *>(messageBox->button(QMessageBox::Discard));
@@ -326,9 +402,13 @@ bool ConversationsView::deleteConversation()
     messageBox->addButton(deleteButton, QMessageBox::AcceptRole);
     messageBox->setDefaultButton(deleteButton);
 
-    connect(messageBox, &QDialog::accepted, this, [this, convId]() {
-        ChatManager::instance().deleteConversation(convId);
-    });
+    connect(messageBox,
+            &QDialog::accepted,
+            this,
+            [this, toDelete]() {
+                for (const QString &convId : toDelete)
+                    ChatManager::instance().deleteConversation(convId);
+            });
     messageBox->setAttribute(Qt::WA_DeleteOnClose);
     messageBox->open();
 
