@@ -169,4 +169,38 @@ QString toolResultText(const QJsonValue &content)
     return text.join(QLatin1Char('\n'));
 }
 
+ToolCallInfo toolCallInfoForMessage(const QList<QVariantMap> &extra)
+{
+    QVector<ToolCallInfo> calls;
+    for (const QVariantMap &e : extra) {
+        if (!e.contains("tool_calls"))
+            continue;
+        for (const QJsonValue &v : e.value("tool_calls").toJsonArray()) {
+            const QJsonObject callObj = v.toObject();
+            ToolCallInfo call;
+            call.id = callObj.value("id").toString();
+            const QJsonObject fn = callObj.value("function").toObject();
+            call.name = fn.value("name").toString();
+            call.argumentsJson = fn.value("arguments").toString();
+            calls.append(call);
+        }
+    }
+    if (calls.isEmpty())
+        return {};
+
+    for (const QVariantMap &e : extra) {
+        if (!e.contains("tool_result"))
+            continue;
+        const QString id
+            = e.value("tool_result").toJsonObject().value("tool_call_id").toString();
+        for (const ToolCallInfo &call : calls)
+            if (!id.isEmpty() && call.id == id)
+                return call;
+    }
+
+    // No result yet (still running): a running message carries only its
+    // own call.
+    return calls.first();
+}
+
 } // namespace LlamaCpp

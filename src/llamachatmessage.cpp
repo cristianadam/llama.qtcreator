@@ -431,8 +431,9 @@ void ChatMessage::applyStyleSheet()
 
 QString ChatMessage::getToolUsageAndResult() const
 {
-    QString functionName;
-    QString argumentsJson;
+    const ToolCallInfo call = toolCallInfoForMessage(m_msg.extra);
+    const QString functionName = call.name;
+    const QString argumentsJson = call.argumentsJson;
     QString functionResult;
     QString toolStatus;
     QString liveOutput; // tail of the output while the tool is still running
@@ -440,15 +441,6 @@ QString ChatMessage::getToolUsageAndResult() const
 
     if (!m_msg.extra.isEmpty()) {
         for (const QVariantMap &e : m_msg.extra) {
-            if (e.contains("tool_calls")) {
-                QJsonArray calls = e.value("tool_calls").toJsonArray();
-                if (!calls.isEmpty()) {
-                    QJsonObject callObj = calls.first().toObject();
-                    functionName = callObj.value("function").toObject().value("name").toString();
-                    argumentsJson
-                        = callObj.value("function").toObject().value("arguments").toString();
-                }
-            }
             if (e.contains("tool_result")) {
                 QJsonObject result = e.value("tool_result").toJsonObject();
                 if (!result.isEmpty()) {

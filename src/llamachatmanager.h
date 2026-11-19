@@ -97,9 +97,13 @@ public:
     //! commit; a committed message's stored extra is updated in place.
     void saveDiagramSvg(const LlamaCpp::Message &msg, const QVariantMap &entry);
 
-    QVector<Message> filterByLeafNodeId(const QVector<Message> &messages,
-                                        qint64 leafNodeId,
-                                        bool includeRoot);
+    //! The branch ending at \a leafNodeId, with every parallel tool batch
+    //! expanded to all of its tool messages (the leaf path keeps only the
+    //! one the branch continues from), in the assistant's tool_calls
+    //! order.
+    static QVector<Message> displayMessagesForLeaf(const QVector<Message> &messages,
+                                                   qint64 leafNodeId,
+                                                   bool includeRoot);
 
     void sendMessage(const QString &convId,
                      qint64 leafNodeId,

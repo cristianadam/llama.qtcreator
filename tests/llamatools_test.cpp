@@ -480,6 +480,8 @@ private slots:
     void bashLiveOutputHandlerLifetime();
     void streamingToolCallAggregation();
     void toolResultOrdering();
+    void toolCallInfoForMessage();
+    void displayMessagesForLeaf();
     void sandboxFileTools();
     void projectSandboxOverride();
     void windowsSandboxSpecProbeFailed();
@@ -575,6 +577,7 @@ private slots:
     void messageToMarkdown_userAssistant();
     void messageToMarkdown_thinkingSection();
     void messageToMarkdown_toolCall();
+    void messageToMarkdown_parallelToolCallMatch();
     void messageToMarkdown_toolOnlyAssistant();
     void messageToMarkdown_embedsCachedMermaidSvg();
     void messageToMarkdown_embedsCachedMathSvg();
@@ -3250,6 +3253,174 @@ void LlamaToolsTest::toolResultOrdering()
     }
 }
 
+// The call a tool message displays is the one its result refers to; while
+// the result is still pending, the first call (the only one a running
+// message carries).
+void LlamaToolsTest::toolCallInfoForMessage()
+{
+    auto callExtra = [](const QString &id, const QString &name, const QString &args) {
+        QJsonObject fn;
+        fn[QStringLiteral("name")] = name;
+        fn[QStringLiteral("arguments")] = args;
+        QJsonObject call;
+        call[QStringLiteral("id")] = id;
+        call[QStringLiteral("function")] = fn;
+        QVariantMap extra;
+        QJsonArray calls;
+        calls.append(call);
+        extra[QStringLiteral("tool_calls")] = calls;
+        return extra;
+    };
+    auto resultExtra = [](const QString &id) {
+        QJsonObject result;
+        result[QStringLiteral("tool_call_id")] = id;
+        result[QStringLiteral("content")] = QStringLiteral("out");
+        QVariantMap extra;
+        extra[QStringLiteral("tool_result")] = result;
+        return extra;
+    };
+
+    // The result of the FIRST call: the second call must not leak in.
+    {
+        QList<QVariantMap> extra;
+        extra << callExtra("call_a", "edit_file", QStringLiteral("{\"path\":\"a.cpp\"}"))
+              << callExtra("call_b", "edit_file", QStringLiteral("{\"path\":\"b.cpp\"}"))
+              << resultExtra("call_a");
+        const ToolCallInfo info = LlamaCpp::toolCallInfoForMessage(extra);
+        QCOMPARE(info.id, QString("call_a"));
+        QCOMPARE(info.name, QString("edit_file"));
+        QCOMPARE(info.argumentsJson, QString("{\"path\":\"a.cpp\"}"));
+    }
+    // ...and of the last.
+    {
+        QList<QVariantMap> extra;
+        extra << callExtra("call_a", "bash", QStringLiteral("{\"command\":\"a\"}"))
+              << callExtra("call_b", "bash", QStringLiteral("{\"command\":\"b\"}"))
+              << resultExtra("call_b");
+        const ToolCallInfo info = LlamaCpp::toolCallInfoForMessage(extra);
+        QCOMPARE(info.id, QString("call_b"));
+        QCOMPARE(info.argumentsJson, QString("{\"command\":\"b\"}"));
+    }
+    // No result yet (still running): the first call is displayed.
+    {
+        QList<QVariantMap> extra;
+        extra << callExtra("call_b", "bash", QStringLiteral("{\"command\":\"b\"}"));
+        const ToolCallInfo info = LlamaCpp::toolCallInfoForMessage(extra);
+        QCOMPARE(info.id, QString("call_b"));
+    }
+    // A result with no matching call still shows the first call.
+    {
+        QList<QVariantMap> extra;
+        extra << callExtra("call_a", "bash", QStringLiteral("{\"command\":\"a\"}"))
+              << resultExtra("call_unknown");
+        const ToolCallInfo info = LlamaCpp::toolCallInfoForMessage(extra);
+        QCOMPARE(info.id, QString("call_a"));
+    }
+    // No tool call at all.
+    {
+        const ToolCallInfo info = LlamaCpp::toolCallInfoForMessage({resultExtra("call_a")});
+        QVERIFY(info.name.isEmpty());
+        QVERIFY(info.id.isEmpty());
+    }
+}
+
+// The display list of a branch shows every tool message of a parallel
+// batch, in the assistant's tool_calls order.
+void LlamaToolsTest::displayMessagesForLeaf()
+{
+    auto makeMsg = [](qint64 id, qint64 parent, const QString &role, const QString &type = "text") {
+        Message m;
+        m.id = id;
+        m.parent = parent;
+        m.role = role;
+        m.type = type;
+        m.timestamp = 1000 + id;
+        return m;
+    };
+    auto callExtra = [](const QString &id, const QString &name) {
+        QJsonObject fn;
+        fn[QStringLiteral("name")] = name;
+        fn[QStringLiteral("arguments")] = QStringLiteral("{}");
+        QJsonObject call;
+        call[QStringLiteral("id")] = id;
+        call[QStringLiteral("function")] = fn;
+        QVariantMap extra;
+        QJsonArray calls;
+        calls.append(call);
+        extra[QStringLiteral("tool_calls")] = calls;
+        return extra;
+    };
+    auto toolMsg = [&makeMsg, &callExtra](qint64 id, qint64 parent, const QString &callId) {
+        Message m = makeMsg(id, parent, "tool");
+        // Stored format: its own call (shown while running) plus the result.
+        m.extra << callExtra(callId, "edit_file");
+        QJsonObject result;
+        result[QStringLiteral("tool_call_id")] = callId;
+        result[QStringLiteral("content")] = QStringLiteral("result of %1").arg(callId);
+        QVariantMap extra;
+        extra[QStringLiteral("tool_result")] = result;
+        m.extra << extra;
+        return m;
+    };
+
+    Message root = makeMsg(1, -1, QString(), "root");
+    Message user = makeMsg(2, 1, "user");
+    Message assistant = makeMsg(3, 2, "assistant");
+    assistant.extra << callExtra("call_a", "edit_file")
+                    << callExtra("call_b", "edit_file")
+                    << callExtra("call_c", "edit_file");
+    assistant.children = {10, 11, 12};
+    Message toolA = toolMsg(10, 3, "call_a");
+    Message toolB = toolMsg(11, 3, "call_b");
+    Message toolC = toolMsg(12, 3, "call_c");
+    Message finalAssistant = makeMsg(13, 12, "assistant");
+    finalAssistant.content = QStringLiteral("done");
+
+    auto displayIds = [](const QVector<Message> &msgs, qint64 leaf) {
+        QVector<qint64> ids;
+        for (const Message &m : ChatManager::displayMessagesForLeaf(msgs, leaf, false))
+            ids << m.id;
+        return ids;
+    };
+
+    // The branch continues from tool C: the whole batch is shown, in call order.
+    {
+        QVector<Message> messages{root, user, assistant, toolA, toolB, toolC, finalAssistant};
+        QCOMPARE(displayIds(messages, 13), QVector<qint64>({2, 3, 10, 11, 12, 13}));
+    }
+    // The branch continues from a non-last call: the batch is still in call order.
+    {
+        Message toolA2 = toolA;
+        toolA2.children = {14};
+        Message finalAssistant2 = makeMsg(14, 10, "assistant");
+        finalAssistant2.content = QStringLiteral("done");
+        QVector<Message> messages{root, user, assistant, toolA2, toolB, toolC, finalAssistant2};
+        QCOMPARE(displayIds(messages, 14), QVector<qint64>({2, 3, 10, 11, 12, 14}));
+    }
+    // A still-running tool is ordered by its call id like the finished ones.
+    {
+        Message running = makeMsg(15, 3, "tool");
+        running.extra << callExtra("call_c", "edit_file");
+        Message assistant2 = assistant;
+        assistant2.children = {10, 11, 15};
+        QVector<Message> messages{root, user, assistant2, toolA, toolB, running};
+        QCOMPARE(displayIds(messages, 15), QVector<qint64>({2, 3, 10, 11, 15}));
+    }
+    // A branch without a tool batch is unchanged (root included).
+    {
+        Message root2 = makeMsg(1, -1, QString(), "root");
+        Message user2 = makeMsg(2, 1, "user");
+        user2.children = {5};
+        Message assistant2 = makeMsg(5, 2, "assistant");
+        assistant2.content = QStringLiteral("hi");
+        QVector<Message> messages{root2, user2, assistant2};
+        QVector<qint64> ids;
+        for (const Message &m : ChatManager::displayMessagesForLeaf(messages, 5, true))
+            ids << m.id;
+        QCOMPARE(ids, QVector<qint64>({1, 2, 5}));
+    }
+}
+
 // The live-output handler is a local that is destroyed while the command is
 // still running - the tool must keep its own copy (regression test for a
 // use-after-free of the caller's handler on the first readyRead).
@@ -5915,6 +6086,43 @@ void LlamaToolsTest::messageToMarkdown_toolCall()
     QVERIFY(md.contains(QStringLiteral("**Result**")));
     QVERIFY(md.contains(QStringLiteral("total 0")));
     QVERIFY(md.endsWith(QStringLiteral("\n</details>\n\n")));
+}
+
+// The export shows the call the message's result refers to, not the last
+// entry of the tool-call list.
+void LlamaToolsTest::messageToMarkdown_parallelToolCallMatch()
+{
+    auto callExtra = [](const QString &id, const QString &path) {
+        QJsonObject fn;
+        fn[QStringLiteral("name")] = QStringLiteral("edit_file");
+        fn[QStringLiteral("arguments")]
+            = QStringLiteral("{\"path\":\"%1\"}").arg(path);
+        QJsonObject call;
+        call[QStringLiteral("id")] = id;
+        call[QStringLiteral("function")] = fn;
+        QVariantMap extra;
+        QJsonArray calls;
+        calls.append(call);
+        extra[QStringLiteral("tool_calls")] = calls;
+        return extra;
+    };
+
+    Message toolMsg;
+    toolMsg.role = "tool";
+    toolMsg.extra << callExtra("call_a", "a.cpp")
+                  << callExtra("call_b", "b.cpp");
+    QJsonObject result;
+    result[QStringLiteral("tool_call_id")] = QStringLiteral("call_a");
+    result[QStringLiteral("content")] = QStringLiteral("Edited a.cpp");
+    QVariantMap resultExtra;
+    resultExtra[QStringLiteral("tool_result")] = result;
+    resultExtra[QStringLiteral("tool_status")] = QStringLiteral("success");
+    toolMsg.extra << resultExtra;
+
+    const QString md = ChatManager::messageToMarkdown(toolMsg);
+    // The FIRST call (the one the result refers to) - not the last entry.
+    QVERIFY2(md.contains(QStringLiteral("a.cpp")), qPrintable(md));
+    QVERIFY2(!md.contains(QStringLiteral("b.cpp")), qPrintable(md));
 }
 
 void LlamaToolsTest::messageToMarkdown_toolOnlyAssistant()

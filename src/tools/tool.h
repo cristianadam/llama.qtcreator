@@ -3,9 +3,21 @@
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QString>
+#include <QVariantMap>
+
+#include <QList>
 #include <functional>
 
 namespace LlamaCpp {
+
+//! A tool call from a "tool_calls" extra (id, function name, raw argument
+//! JSON).
+struct ToolCallInfo
+{
+    QString id;
+    QString name;
+    QString argumentsJson;
+};
 
 class Tool
 {
@@ -147,5 +159,10 @@ bool splitToolResultImage(const QString &output, QString &text, QString &dataUrl
 //! string or an array of content parts (text + image_url); image parts are
 //! skipped.
 QString toolResultText(const QJsonValue &content);
+
+//! The call a "tool" message displays: the one its "tool_result" refers
+//! to, or the first call while the result is still pending.  Empty when
+//! the message has no tool call.
+ToolCallInfo toolCallInfoForMessage(const QList<QVariantMap> &extra);
 
 } // namespace LlamaCpp

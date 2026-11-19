@@ -321,21 +321,13 @@ static QString markdownToHtml(const QString &content, const QMap<QString, Diagra
 
 static QString toolCallToHtml(const Message &msg)
 {
-    QString functionName;
-    QString argumentsJson;
+    const ToolCallInfo call = toolCallInfoForMessage(msg.extra);
+    const QString functionName = call.name;
+    const QString argumentsJson = call.argumentsJson;
     QString functionResult;
     QString toolStatus;
 
     for (const QVariantMap &e : msg.extra) {
-        if (e.contains("tool_calls")) {
-            QJsonArray calls = e.value("tool_calls").toJsonArray();
-            if (!calls.isEmpty()) {
-                QJsonObject callObj = calls.first().toObject();
-                functionName = callObj.value("function").toObject().value("name").toString();
-                argumentsJson
-                    = callObj.value("function").toObject().value("arguments").toString();
-            }
-        }
         if (e.contains("tool_result")) {
             QJsonObject result = e.value("tool_result").toJsonObject();
             if (!result.isEmpty())

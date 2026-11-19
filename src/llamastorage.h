@@ -25,9 +25,10 @@ public:
 
     QVector<Message> getMessages(const QString &convId);
     void appendMsg(Message &msg, qint64 parentNodeId);
-    QVector<Message> filterByLeafNodeId(const QVector<Message> &msgs,
-                                        qint64 leafNodeId,
-                                        bool includeRoot);
+    //! The messages of the parent chain ending at \a leafNodeId, oldest first.
+    static QVector<Message> filterByLeafNodeId(const QVector<Message> &msgs,
+                                               qint64 leafNodeId,
+                                               bool includeRoot);
     bool updateMessageExtra(const LlamaCpp::Message &msg, const QList<QVariantMap> &extra);
     bool updateMessageContent(const Message &msg);
     bool deleteMessageBranch(qint64 msgId);

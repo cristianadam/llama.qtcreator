@@ -759,21 +759,13 @@ ViewingChat ChatManager::getViewingChat(const QString &convId) const
 // string when the message carries no tool call.
 static QString toolCallToMarkdown(const Message &msg)
 {
-    QString functionName;
-    QString argumentsJson;
+    const ToolCallInfo call = toolCallInfoForMessage(msg.extra);
+    const QString functionName = call.name;
+    const QString argumentsJson = call.argumentsJson;
     QString functionResult;
     QString toolStatus;
 
     for (const QVariantMap &e : msg.extra) {
-        if (e.contains("tool_calls")) {
-            const QJsonArray calls = e.value("tool_calls").toJsonArray();
-            if (!calls.isEmpty()) {
-                const QJsonObject callObj = calls.first().toObject();
-                functionName = callObj.value("function").toObject().value("name").toString();
-                argumentsJson
-                    = callObj.value("function").toObject().value("arguments").toString();
-            }
-        }
         if (e.contains("tool_result"))
             functionResult = toolResultText(e.value("tool_result").toJsonObject().value("content"));
         if (e.contains("tool_status"))
@@ -889,11 +881,75 @@ void ChatManager::saveDiagramSvg(const Message &msg, const QVariantMap &entry)
     }
 }
 
-QVector<Message> ChatManager::filterByLeafNodeId(const QVector<Message> &messages,
-                                                 qint64 leafNodeId,
-                                                 bool includeRoot)
+QVector<Message> ChatManager::displayMessagesForLeaf(const QVector<Message> &messages,
+                                                     qint64 leafNodeId,
+                                                     bool includeRoot)
 {
-    return m_storage->filterByLeafNodeId(messages, leafNodeId, includeRoot);
+    const QVector<Message> leafPath
+        = Storage::filterByLeafNodeId(messages, leafNodeId, includeRoot);
+
+    QMap<qint64, const Message *> byId;
+    for (const Message &m : messages)
+        byId.insert(m.id, &m);
+
+    QVector<Message> res;
+    QSet<qint64> emitted;
+    for (const Message &msg : leafPath) {
+        if (emitted.contains(msg.id))
+            continue;
+
+        QVector<const Message *> toolChildren;
+        QHash<QString, const Message *> byCallId;
+        for (qint64 cid : msg.children) {
+            auto it = byId.constFind(cid);
+            if (it == byId.constEnd() || it.value()->role != "tool")
+                continue;
+            toolChildren.append(it.value());
+            const QString callId = toolCallInfoForMessage(it.value()->extra).id;
+            if (!callId.isEmpty())
+                byCallId.insert(callId, it.value());
+        }
+
+        if (toolChildren.isEmpty()) {
+            res.append(msg);
+            emitted.insert(msg.id);
+            continue;
+        }
+
+        // The batch in the assistant's tool_calls order, not completion order.
+        std::stable_sort(toolChildren.begin(), toolChildren.end(),
+                         [](const Message *a, const Message *b) {
+                             return a->timestamp < b->timestamp;
+                         });
+        QVector<const Message *> ordered;
+        QSet<const Message *> referenced;
+        for (const QVariantMap &e : msg.extra) {
+            if (!e.contains("tool_calls"))
+                continue;
+            for (const QJsonValue &v : e.value("tool_calls").toJsonArray()) {
+                const QString id = v.toObject().value("id").toString();
+                auto cit = byCallId.constFind(id);
+                if (cit == byCallId.constEnd())
+                    continue;
+                ordered.append(cit.value());
+                referenced.insert(cit.value());
+                byCallId.erase(cit);
+            }
+        }
+        for (const Message *m : toolChildren)
+            if (!referenced.contains(m))
+                ordered.append(m);
+
+        res.append(msg);
+        emitted.insert(msg.id);
+        for (const Message *m : ordered) {
+            if (emitted.contains(m->id))
+                continue;
+            res.append(*m);
+            emitted.insert(m->id);
+        }
+    }
+    return res;
 }
 
 void ChatManager::sendMessage(const QString &convId,
@@ -1837,7 +1893,7 @@ LlamaCppServerProps ChatManager::serverProps() const
     return m_serverProps;
 }
 
-static Message createToolMessage(const Message &assistantCall)
+static Message createToolMessage(const Message &assistantCall, const QString &callId)
 {
     Message toolMsg;
     toolMsg.convId = assistantCall.convId;
@@ -1848,7 +1904,22 @@ static Message createToolMessage(const Message &assistantCall)
     toolMsg.parent = assistantCall.id; // link to the assistant that called it
     toolMsg.children.clear();
 
-    toolMsg.extra << assistantCall.extra; // copy the tool calling for display
+    // Only this message's own call: a still-running bubble cannot match
+    // by tool_call_id yet (the result arrives later), so it must not
+    // carry its siblings' calls.
+    for (const QVariantMap &e : assistantCall.extra) {
+        if (!e.contains("tool_calls"))
+            continue;
+        QJsonArray calls;
+        for (const QJsonValue &v : e.value("tool_calls").toJsonArray())
+            if (v.toObject().value("id").toString() == callId)
+                calls.append(v);
+        if (calls.isEmpty())
+            continue;
+        QVariantMap copy = e;
+        copy["tool_calls"] = calls;
+        toolMsg.extra << copy;
+    }
     return toolMsg;
 }
 
@@ -2570,7 +2641,7 @@ void ChatManager::sendChatRequest(const QString &convId,
                     m_consecutiveToolTurns.insert(convId, 0);
                     Message lastTool;
                     for (const ToolCall &tool : tools) {
-                        Message toolMsg = createToolMessage(pm);
+                        Message toolMsg = createToolMessage(pm, tool.id);
                         QJsonObject toolJsonMsg;
                         toolJsonMsg["role"] = "tool";
                         toolJsonMsg["tool_call_id"] = tool.id;
@@ -2708,7 +2779,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     // conversation dying on a tool error.
     auto sendFailedToolResult = [this, convId, &assistantMsg, &tool, onChunk,
                                  batchRemaining](const QString &content) {
-        Message toolMsg = createToolMessage(assistantMsg);
+        Message toolMsg = createToolMessage(assistantMsg, tool.id);
         QJsonObject toolJsonMsg;
         toolJsonMsg["role"] = "tool";
         toolJsonMsg["tool_call_id"] = tool.id;
@@ -2789,7 +2860,7 @@ void ChatManager::executeToolAndSendResult(const QString &convId,
     // runs; unregistered in toolFinished below.
     m_activeTools[convId].append(realTool);
 
-    Message toolMsg = createToolMessage(assistantMsg);
+    Message toolMsg = createToolMessage(assistantMsg, tool.id);
 
     // The tool runs asynchronously - keep the conversation busy (spinner
     // spinning, no new messages accepted) until it has reported back.

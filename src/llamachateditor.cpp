@@ -1306,9 +1306,8 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
     }
 
     // Filter the messages that belong to the requested leaf node
-    const QVector<Message> currNodes = ChatManager::instance().filterByLeafNodeId(messages,
-                                                                                  leafNodeId,
-                                                                                  true);
+    const QVector<Message> currNodes
+        = ChatManager::displayMessagesForLeaf(messages, leafNodeId, true);
 
     QMap<qint64, Message> map;
     for (const Message &m : messages) {
