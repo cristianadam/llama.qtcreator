@@ -13,7 +13,6 @@
 #include <QMimeData>
 #include <QPlainTextEdit>
 #include <QProcess>
-#include <QPushButton>
 #include <QRegularExpression>
 #include <QScrollArea>
 #include <QTemporaryFile>
@@ -400,27 +399,17 @@ void ChatMessage::applyStyleSheet()
         }
 
         QToolButton {
-            border: 1px solid Token_Foreground_Muted;
+            background: none;
+            border: none;
             font-family: lucideicons_outline;
             font-size: 14px;
-            border-radius: 6px;
             padding: 4px -2px;
         }
         QToolButton:hover {
-            background-color: Token_Foreground_Muted;
+            font-size: 16px;
         }
         QToolButton::menu-indicator {
             image: none;
-        }
-
-        QPushButton {
-           border: 1px solid Token_Foreground_Muted;
-           border-radius: 6px;
-           padding: 4px 4px;
-        }
-
-        QPushButton:hover {
-            background-color: Token_Foreground_Muted;
         }
 
         QMenu {
