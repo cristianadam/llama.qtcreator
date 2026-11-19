@@ -25,7 +25,7 @@ QString GetDatetimeTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "get_datetime",
-            "description": "Returns the current local date and time in ISO 8601 format with the UTC offset, and the IANA time zone name. Use it whenever the task depends on the current date or time: relative dates (\"today\", \"tomorrow\", \"next week\"), timestamps, file dates.",
+            "description": "Returns the current local date and time as ISO 8601 with the UTC offset, plus the IANA time zone name. Use it whenever the task depends on the current date or time: relative dates (\"today\", \"tomorrow\", \"next week\"), timestamps, file dates.",
             "parameters": {
                 "type": "object",
                 "properties": {},

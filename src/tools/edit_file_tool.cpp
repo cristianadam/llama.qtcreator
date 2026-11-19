@@ -208,12 +208,12 @@ QString EditFileTool::name() const
 QString EditFileTool::toolDefinition() const
 {
     const QString description = R"desc(
-Edit a file by replacing exact text. Use this for small, targeted changes to a single file; use apply_patch for multi-file changes, file renames and deletions.
+Edits a file by replacing exact text; for small, targeted changes to a single file (apply_patch handles multi-file changes, renames, deletions).
 
-- oldText must match the file exactly, including whitespace and indentation, and occur exactly once, unless replace_all is true. When the text occurs several times, add surrounding context lines to make it unique.
-- Multiple edits in one call are all matched against the original file (not incrementally) and must not overlap. If two changes touch the same block or nearby lines, merge them into one edit instead.
-- Read the file first (read_file) and copy the current text into oldText verbatim, keeping it as small as possible while still being unique.
-- If the edit fails, the error message tells you why (closest match, expected vs actual line). Do NOT assume the edit succeeded: re-read the file, correct oldText, and retry.
+- oldText must match the file exactly (whitespace and indentation) and occur once, unless replace_all is true; if it occurs several times, add surrounding context to make it unique.
+- All edits in one call are matched against the original file (not incrementally) and must not overlap; merge changes to the same block or nearby lines into one edit.
+- Read the file first and copy the current text into oldText verbatim, as small as possible while still unique.
+- On failure the error explains why (closest match, expected vs actual); never assume success - re-read the file, correct oldText, retry.
 )desc";
 
     QJsonObject oldTextProperty;
@@ -224,7 +224,7 @@ Edit a file by replacing exact text. Use this for small, targeted changes to a s
     QJsonObject newTextProperty;
     newTextProperty[QStringLiteral("type")] = QStringLiteral("string");
     newTextProperty[QStringLiteral("description")] =
-        QStringLiteral("Replacement text. Must differ from oldText.");
+        QStringLiteral("Replacement text (must differ from oldText).");
 
     QJsonObject editProperties;
     editProperties[QStringLiteral("oldText")] = oldTextProperty;
@@ -235,25 +235,24 @@ Edit a file by replacing exact text. Use this for small, targeted changes to a s
     editItem[QStringLiteral("properties")] = editProperties;
     editItem[QStringLiteral("required")] = QJsonArray{QStringLiteral("oldText"),
                                                        QStringLiteral("newText")};
-    editItem[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject editsProperty;
     editsProperty[QStringLiteral("type")] = QStringLiteral("array");
     editsProperty[QStringLiteral("items")] = editItem;
     editsProperty[QStringLiteral("minItems")] = 1;
     editsProperty[QStringLiteral("description")] = QStringLiteral(
-        "One or more targeted replacements, each matched against the original file.");
+        "Targeted replacements, each matched against the original file.");
 
     QJsonObject pathProperty;
     pathProperty[QStringLiteral("type")] = QStringLiteral("string");
     pathProperty[QStringLiteral("description")] =
-        QStringLiteral("The file to edit. Relative to the project directory, or absolute.");
+        QStringLiteral("File to edit; relative to the project directory, or absolute.");
 
     QJsonObject replaceAllProperty;
     replaceAllProperty[QStringLiteral("type")] = QStringLiteral("boolean");
     replaceAllProperty[QStringLiteral("description")] =
-        QStringLiteral("Replace every occurrence of each oldText instead of requiring a "
-                       "unique match. Defaults to false.");
+        QStringLiteral("Replace every occurrence of each oldText "
+                       "(default: require a unique match).");
 
     QJsonObject properties;
     properties[QStringLiteral("path")] = pathProperty;
@@ -265,7 +264,6 @@ Edit a file by replacing exact text. Use this for small, targeted changes to a s
     parameters[QStringLiteral("properties")] = properties;
     parameters[QStringLiteral("required")] = QJsonArray{QStringLiteral("path"),
                                                          QStringLiteral("edits")};
-    parameters[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject function;
     function[QStringLiteral("name")] = QStringLiteral("edit_file");

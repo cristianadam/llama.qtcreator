@@ -110,20 +110,13 @@ QString ApplyPatchTool::toolDefinition() const
 {
     const QString description = R"desc(
 Apply a patch that creates, updates and/or deletes files.
-The patch is wrapped in *** Begin Patch / *** End Patch markers and contains one section per file.
+The patch is wrapped in *** Begin Patch / *** End Patch markers and has one section per file.
 
-*** Add File: <path>
-Create a new file, or fully replace an existing file.
-Every following line is the file content, prefixed with +.
+*** Add File: <path> - create a new file or fully replace it; every following line is content prefixed with +.
 
-*** Update File: <path>
-Modify an existing file with one or more hunks.
-Optionally followed by *** Move to: <new path> to rename the file.
-Each hunk starts with @@, optionally followed by a context line used to disambiguate the location (e.g. @@ def main():).
-Inside a hunk: a line starting with a space is context (unchanged), - removes a line, + adds a line.
+*** Update File: <path> - modify with one or more hunks; optionally followed by *** Move to: <new path> to rename. Each hunk starts with @@ (optionally a context line to disambiguate, e.g. @@ def main():). In a hunk: a line starting with a space is context (unchanged), - removes a line, + adds a line.
 
-*** Delete File: <path>
-Delete an existing file. Nothing follows this line.
+*** Delete File: <path> - delete; nothing follows.
 
 Example:
 
@@ -141,17 +134,17 @@ Example:
 *** End Patch
 
 Guidelines:
-- Include at least 3 context lines above and below each change so the location is unambiguous; if a line occurs several times, add context or an @@ context line to target the right occurrence.
+- Include at least 3 context lines around each change (if a line repeats, add context or an @@ context line).
 - When changing a function or a block, rewrite the whole unit instead of scattered line edits.
-- If the change affects most of a file, or the file is small, prefer *** Add File: with the complete new content over many hunks.
-- A hunk without removed lines is an insertion; a *** End of File line anchors it to the end of the file.
-- When a hunk cannot be located, the error reports the closest match - adjust the patch and retry.
+- If the change touches most of a file or the file is small, prefer *** Add File: with the full new content.
+- A hunk with no removed lines is an insertion; *** End of File anchors it to the file end.
+- If a hunk cannot be located, the error reports the closest match - adjust and retry.
 )desc";
 
     QJsonObject patchTextProperty;
     patchTextProperty[QStringLiteral("type")] = QStringLiteral("string");
     patchTextProperty[QStringLiteral("description")] = QStringLiteral(
-        "The full patch text. File paths are relative to the workspace root (or absolute).");
+        "The full patch text; file paths are relative to the workspace root (or absolute).");
 
     QJsonObject properties;
     properties[QStringLiteral("patchText")] = patchTextProperty;
@@ -160,7 +153,6 @@ Guidelines:
     parameters[QStringLiteral("type")] = QStringLiteral("object");
     parameters[QStringLiteral("properties")] = properties;
     parameters[QStringLiteral("required")] = QJsonArray{QStringLiteral("patchText")};
-    parameters[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject function;
     function[QStringLiteral("name")] = QStringLiteral("apply_patch");

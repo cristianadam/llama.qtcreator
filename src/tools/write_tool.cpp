@@ -31,19 +31,17 @@ QString WriteTool::name() const
 QString WriteTool::toolDefinition() const
 {
     const QString description = R"desc(
-Create a new file or completely overwrite an existing one with the given content. Parent directories are created automatically. For small, targeted changes to an existing file use edit_file instead (and read_file it first); overwriting replaces the entire content, so read the file first if you need to keep parts of it.
+Creates a new file or fully overwrites an existing one. Parent directories are created automatically. For small, targeted changes to an existing file use edit_file (read_file it first); overwriting replaces the entire content, so read the file first if you need to keep parts of it.
 )desc";
 
     QJsonObject pathProperty;
     pathProperty[QStringLiteral("type")] = QStringLiteral("string");
     pathProperty[QStringLiteral("description")] =
-        QStringLiteral("The file to create or overwrite. Relative to the project directory, "
+        QStringLiteral("File to create or overwrite; relative to the project directory, "
                        "or absolute.");
 
     QJsonObject contentProperty;
     contentProperty[QStringLiteral("type")] = QStringLiteral("string");
-    contentProperty[QStringLiteral("description")] =
-        QStringLiteral("The full content to write to the file.");
 
     QJsonObject properties;
     properties[QStringLiteral("path")] = pathProperty;
@@ -54,7 +52,6 @@ Create a new file or completely overwrite an existing one with the given content
     parameters[QStringLiteral("properties")] = properties;
     parameters[QStringLiteral("required")] = QJsonArray{QStringLiteral("path"),
                                                          QStringLiteral("content")};
-    parameters[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject function;
     function[QStringLiteral("name")] = QStringLiteral("write");

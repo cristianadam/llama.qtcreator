@@ -80,21 +80,19 @@ QString TodoWriteTool::name() const
 QString TodoWriteTool::toolDefinition() const
 {
     const QString description = R"desc(
-Create or update the task list used to track progress on multi-step work. Always send the complete list; each call replaces the previous one. Use it proactively for tasks with 3 or more steps: plan the work first, then update it as you go. Exactly one task may be in_progress at a time; set it to completed as soon as it is done. Task content is a short imperative phrase.
+Create or update the task list that tracks multi-step work. Always send the complete list; each call replaces the previous one. Use it proactively for tasks with 3+ steps: plan first, then update as you go. Exactly one task may be in_progress at a time; mark it completed as soon as it is done. Task content is a short imperative phrase.
 )desc";
 
     QJsonObject contentProperty;
     contentProperty[QStringLiteral("type")] = QStringLiteral("string");
     contentProperty[QStringLiteral("description")] =
-        QStringLiteral("Short description of the task.");
+        QStringLiteral("Short task description.");
 
     QJsonObject statusProperty;
     statusProperty[QStringLiteral("type")] = QStringLiteral("string");
     statusProperty[QStringLiteral("enum")] = QJsonArray{QLatin1String(kPending),
                                                         QLatin1String(kInProgress),
                                                         QLatin1String(kCompleted)};
-    statusProperty[QStringLiteral("description")] =
-        QStringLiteral("Current state of the task.");
 
     QJsonObject todoProperties;
     todoProperties[QStringLiteral("content")] = contentProperty;
@@ -105,14 +103,13 @@ Create or update the task list used to track progress on multi-step work. Always
     todoItem[QStringLiteral("properties")] = todoProperties;
     todoItem[QStringLiteral("required")] = QJsonArray{QStringLiteral("content"),
                                                        QStringLiteral("status")};
-    todoItem[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject todosProperty;
     todosProperty[QStringLiteral("type")] = QStringLiteral("array");
     todosProperty[QStringLiteral("items")] = todoItem;
     todosProperty[QStringLiteral("minItems")] = 1;
     todosProperty[QStringLiteral("description")] =
-        QStringLiteral("The complete, ordered list of tasks. Replaces the previous list.");
+        QStringLiteral("The complete, ordered list of tasks (replaces the previous list).");
 
     QJsonObject properties;
     properties[QStringLiteral("todos")] = todosProperty;
@@ -121,7 +118,6 @@ Create or update the task list used to track progress on multi-step work. Always
     parameters[QStringLiteral("type")] = QStringLiteral("object");
     parameters[QStringLiteral("properties")] = properties;
     parameters[QStringLiteral("required")] = QJsonArray{QStringLiteral("todos")};
-    parameters[QStringLiteral("additionalProperties")] = false;
 
     QJsonObject function;
     function[QStringLiteral("name")] = QStringLiteral("todo_write");

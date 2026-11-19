@@ -493,37 +493,27 @@ QString BashTool::name() const
 QString BashTool::toolDefinition() const
 {
     QString description = QStringLiteral(
-        "Executes a command in a bash shell and returns its combined output "
-        "(stdout and stderr). Commands use bash/POSIX syntax on all platforms "
-        "(Windows uses a native bash: niubash when available, otherwise Git "
-        "Bash). Use this for terminal operations like git, "
-        "npm, docker, running builds or tests; do not use it for reading, "
-        "writing, editing or searching files - use the dedicated tools for "
-        "that. The output may contain ANSI escape sequences for terminal "
-        "colors (commands run with CLICOLOR_FORCE and FORCE_COLOR set); "
-        "ignore them when interpreting the output. Output is limited to "
-        "the last 2000 lines or 50 KB; when "
-        "truncated, the full output is saved to a temporary file and its "
-        "path is reported. Non-zero exit codes, crashes and timeouts are "
-        "reported as failures, including the output produced so far.");
+        "Executes a bash/POSIX command and returns combined stdout and stderr "
+        "(Windows uses a native bash). Use for terminal operations (git, npm, "
+        "docker, builds, tests); not for reading, writing, editing or searching "
+        "files - use the dedicated tools. Output may contain ANSI color escapes; "
+        "ignore them. Limited to the last 2000 lines or 50 KB; when truncated, the "
+        "full output is saved to a temp file and its path is reported. Non-zero "
+        "exit, crash, or timeout is a failure, including the output produced so far.");
     if (sandboxEnabled(ProjectManager::startupProject())) {
         QString note = QStringLiteral(
-            " Commands run in a sandbox: only the working directory, "
-            "temporary locations and the extra writable directories from "
-            "the Sandbox settings are writable (except .git, .qtcreator "
-            "and *.user files), credential locations (~/.ssh, ~/.aws, "
-            "~/.gnupg, ~/.kube, ~/.netrc, ~/.git-credentials, ~/.config/gh, "
-            "...) are not readable, and credential environment variables "
-            "are removed");
+            " Commands run sandboxed: only the working directory, temp locations "
+            "and the extra writable dirs (Sandbox settings) are writable (except "
+            ".git, .qtcreator, *.user); credential locations (~/.ssh, ~/.aws, "
+            "~/.gnupg, ~/.kube, ~/.netrc, ~/.git-credentials, ~/.config/gh, ...) "
+            "are not readable, and credential env vars are removed");
         if (!sandboxAllowsNetwork())
             note += QStringLiteral(
-                ". There is no network access - use the webfetch "
-                "and websearch tools for that");
+                ". No network access - use the webfetch and websearch tools");
         note += QStringLiteral(
-            ". The workdir must be inside one of the writable locations; "
-            "on Linux /tmp is fresh and empty for each command, and on "
-            "Windows the command runs in a process container that sees "
-            "only the granted locations.");
+            ". workdir must be inside a writable location; on Linux /tmp is "
+            "fresh per command, on Windows the command runs in a container "
+            "seeing only the granted locations.");
         description += note;
     }
     return QString::fromUtf8(R"raw(
@@ -536,12 +526,11 @@ QString BashTool::toolDefinition() const
                 "type": "object",
                 "properties": {
                     "command": {
-                        "type": "string",
-                        "description": "The command to execute."
+                        "type": "string"
                     },
                     "workdir": {
                         "type": "string",
-                        "description": "Working directory. Defaults to the project directory; use this instead of 'cd'."
+                        "description": "Working directory (defaults to the project directory); use instead of 'cd'."
                     },
                     "timeout": {
                         "type": "integer",

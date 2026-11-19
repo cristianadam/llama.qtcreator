@@ -123,13 +123,13 @@ QString TaskTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "task",
-            "description": "Launches a new agent that handles a self-contained subtask in a separate conversation, isolated from the current one. The subagent cannot see this conversation, so the prompt must be fully self-contained (include all relevant context). While it works, the current conversation is paused; when the subagent finishes, its final report is returned as the tool result. The sub-conversation can be opened and closed at any time without interrupting the task. Use this for exploratory or long-running work that would clutter the current conversation, e.g. exploring an unfamiliar codebase.",
+            "description": "Launches a new agent that handles a self-contained subtask in a separate conversation, isolated from the current one. The subagent cannot see this conversation, so the prompt must be fully self-contained (include all relevant context). While it works, the current conversation is paused; when the subagent finishes, its final report is returned as the tool result. The sub-conversation can be opened and closed at any time without interrupting the task. Use it for exploratory or long-running work that would clutter the current conversation (e.g. exploring an unfamiliar codebase).",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "description": { "type": "string", "description": "A short (3-5 word) summary of the subtask, used as the title of the sub-conversation." },
-                    "prompt": { "type": "string", "description": "The full, self-contained task for the subagent; it cannot see this conversation, so include every relevant detail." },
-                    "subagent_type": { "type": "string", "enum": ["explore", "general"], "description": "\"explore\": read-only subagent for exploring code and answering questions (default). \"general\": full tool access for tasks that modify files or run commands." }
+                    "description": { "type": "string", "description": "Short (3-5 word) subtask summary; used as the sub-conversation title." },
+                    "prompt": { "type": "string", "description": "The full, self-contained task; the subagent cannot see this conversation, so include every relevant detail." },
+                    "subagent_type": { "type": "string", "enum": ["explore", "general"], "description": "\"explore\": read-only, for exploring code and answering questions (default). \"general\": full tool access, for modifying files or running commands." }
                 },
                 "required": ["description", "prompt"],
                 "strict": true

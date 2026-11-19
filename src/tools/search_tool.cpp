@@ -178,17 +178,17 @@ QString SearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "search",
-            "description": "Searches file contents for a pattern using ripgrep. Returns matching lines as 'path:line: text' with paths relative to the searched directory, respecting .gitignore. Output is limited to the first 100 matches or 50 KB, whichever is hit first.",
+            "description": "Searches file contents for a pattern (ripgrep). Returns matching lines as 'path:line: text', paths relative to the searched directory, respecting .gitignore. Limited to the first 100 matches or 50 KB.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "pattern": { "type": "string", "description": "Search pattern (regular expression, or literal string when literal is true)." },
-                    "path": { "type": "string", "description": "Directory or file to search, absolute or relative to the project directory. Defaults to the project directory." },
-                    "glob": { "type": "string", "description": "Only search files matching this glob, e.g. '*.cpp'." },
-                    "ignore_case": { "type": "boolean", "description": "Case-insensitive. Defaults to false." },
-                    "literal": { "type": "boolean", "description": "Treat the pattern as a literal string. Defaults to false." },
-                    "context": { "type": "integer", "description": "Lines to show before and after each match (0 to 20). Defaults to 0." },
-                    "limit": { "type": "integer", "description": "Maximum number of matches (1 to 1000). Defaults to 100." }
+                    "pattern": { "type": "string", "description": "Pattern: a regex, or a literal string when literal is true." },
+                    "path": { "type": "string", "description": "Directory or file to search (default: project directory); absolute or relative to it." },
+                    "glob": { "type": "string", "description": "Only files matching this glob (e.g. '*.cpp')." },
+                    "ignore_case": { "type": "boolean", "description": "Case-insensitive (default false)." },
+                    "literal": { "type": "boolean", "description": "Treat the pattern as a literal string (default false)." },
+                    "context": { "type": "integer", "description": "Lines before and after each match (0-20, default 0)." },
+                    "limit": { "type": "integer", "description": "Max matches (1-1000, default 100)." }
                 },
                 "required": ["pattern"],
                 "strict": true

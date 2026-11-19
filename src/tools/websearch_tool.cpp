@@ -112,12 +112,12 @@ QString WebSearchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "websearch",
-            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. Use this to find the right page to read, then use webfetch to retrieve its full content.",
+            "description": "Searches the web and returns a numbered list of results with title, URL and snippet. Use it to find the right page to read, then use webfetch to retrieve its full content.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": { "type": "string", "description": "The search query." },
-                    "max_results": { "type": "integer", "description": "Maximum number of results to return. Defaults to 5, maximum 10." }
+                    "query": { "type": "string" },
+                    "max_results": { "type": "integer", "description": "Max results (default 5, max 10)." }
                 },
                 "required": ["query"],
                 "strict": true

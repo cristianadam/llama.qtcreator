@@ -27,7 +27,7 @@ QString GetInfoTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "get_info",
-            "description": "Returns runtime info: the operating system name/version and the current working directory (the directory relative tool paths and bash commands use). Use it before running platform-specific commands, or when the user asks about the environment.",
+            "description": "Returns runtime info: the OS name/version and the current working directory (the directory relative tool paths and bash commands use). Use it before running platform-specific commands, or when the user asks about the environment.",
             "parameters": {
                 "type": "object",
                 "properties": {},

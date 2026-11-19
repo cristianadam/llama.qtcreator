@@ -143,13 +143,13 @@ QString WebFetchTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "webfetch",
-            "description": "Fetches a URL and returns its content as compact, LLM-friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as-is. The returned content is truncated at 50000 characters. Local and private network addresses (localhost, 10.x, 192.168.x, link-local, ...) cannot be fetched.",
+            "description": "Fetches a URL and returns its content as compact, LLM-friendly text. HTML pages are stripped to lightweight markdown (or plain text); other content types are returned as-is. Content is truncated at 50000 characters. Local and private addresses (localhost, 10.x, 192.168.x, link-local, ...) cannot be fetched.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "url": { "type": "string", "description": "The fully-formed URL to fetch (http:// or https://)." },
-                    "format": { "type": "string", "enum": ["markdown", "text", "html"], "description": "Output format. \"markdown\" (default): HTML stripped to light markdown. \"text\": visible plain text. \"html\": raw page source." },
-                    "timeout": { "type": "integer", "description": "Timeout in seconds. Defaults to 30, maximum 120." }
+                    "url": { "type": "string", "description": "Fully-formed URL (http:// or https://)." },
+                    "format": { "type": "string", "enum": ["markdown", "text", "html"], "description": "Output format: \"markdown\" (default) strips HTML to light markdown, \"text\" is visible plain text, \"html\" is raw source." },
+                    "timeout": { "type": "integer", "description": "Timeout in seconds (default 30, max 120)." }
                 },
                 "required": ["url"],
                 "strict": true

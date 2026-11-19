@@ -113,13 +113,13 @@ QString FindTool::toolDefinition() const
         "type": "function",
         "function": {
             "name": "find",
-            "description": "Finds files by glob pattern using ripgrep. Returns matching file paths relative to the searched directory, one per line, respecting .gitignore. Output is limited to the first 1000 results or 50 KB, whichever is hit first.",
+            "description": "Finds files by glob pattern (ripgrep). Returns matching paths relative to the searched directory, one per line, respecting .gitignore. Limited to the first 1000 results or 50 KB.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "pattern": { "type": "string", "description": "Glob pattern to match files against, e.g. '*.cpp', '**/*.json'." },
-                    "path": { "type": "string", "description": "Directory to search, absolute or relative to the project directory. Defaults to the project directory." },
-                    "limit": { "type": "integer", "description": "Maximum number of results (1 to 5000). Defaults to 1000." }
+                    "pattern": { "type": "string", "description": "Glob pattern (e.g. '*.cpp', '**/*.json')." },
+                    "path": { "type": "string", "description": "Directory to search (default: project directory); absolute or relative to it." },
+                    "limit": { "type": "integer", "description": "Max results (1-5000, default 1000)." }
                 },
                 "required": ["pattern"],
                 "strict": true
