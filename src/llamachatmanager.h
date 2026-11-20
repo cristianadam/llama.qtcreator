@@ -305,6 +305,12 @@ private:
     void initServerProps();
     void updateModelPolling();
 
+    //! Router mode: fetches the selected model's details from
+    //! /props?model=<id> (proxied to its child server; the server-level
+    //! /props is a dummy there) while the model is loaded; otherwise the
+    //! cached details are dropped.
+    void refreshModelProps();
+
     //! The router-mode server's model status feed (GET /models/sse, the same
     //! feed the llama.cpp web UI reads): its events keep m_models live, and a
     //! broken stream that reconnects is how a server (re)start is detected
@@ -371,6 +377,12 @@ private:
 
     QNetworkAccessManager m_network;
     LlamaCppServerProps m_serverProps;
+    //! Router mode: the selected model's details from /props?model=<id>
+    //! (see refreshModelProps()); serverProps() returns these when they
+    //! describe the selected model.
+    LlamaCppServerProps m_modelProps;
+    QString m_modelPropsId;
+    QPointer<QNetworkReply> m_modelPropsReply;
 
     QList<ModelEntry> m_models;
     QString m_selectedModel;

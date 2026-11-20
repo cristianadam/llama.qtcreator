@@ -135,7 +135,7 @@ void ChatManager::addAuxiliaryPayloadParams(QJsonObject &payload, int maxTokens,
     // the OAI field with the value "none" (cf. the title generation in
     // llama.cpp's tools/ui, which sends chat_template_kwargs with
     // enable_thinking: false).
-    const QString thinkingKwarg = chatTemplateThinkingKwarg(m_serverProps.chat_template);
+    const QString thinkingKwarg = chatTemplateThinkingKwarg(serverProps().chat_template);
     if (thinkingKwarg == QLatin1String("reasoning_effort"))
         payload["reasoning_effort"] = QStringLiteral("none");
     else if (!thinkingKwarg.isEmpty())
@@ -317,15 +317,46 @@ ChatManager::ChatManager(QObject *parent)
 
 static QNetworkReply *getServerProps(QNetworkAccessManager *manager,
                                      const QString &baseUrl,
-                                     const QString &apiKey)
+                                     const QString &apiKey,
+                                     const QString &model = {})
 {
-    QUrl url(baseUrl + "/props");
+    // In router mode the server-level answer is a dummy; the model's
+    // details come from /props?model=<id>, proxied to its child server.
+    QUrl url(baseUrl + "/props"
+             + (model.isEmpty() ? QString()
+                                : QStringLiteral("?model=")
+                                      + QUrl::toPercentEncoding(model)));
     QNetworkRequest req(url);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     if (!apiKey.isEmpty())
         req.setRawHeader("Authorization", ("Bearer " + apiKey).toUtf8());
 
     return manager->get(req);
+}
+
+static LlamaCppServerProps parseServerProps(const QByteArray &json)
+{
+    LlamaCppServerProps props;
+    const QJsonObject obj = QJsonDocument::fromJson(json).object();
+    props.build_info = obj.value("build_info").toString();
+    props.model_path = obj.value("model_path").toString();
+    props.model_ftype = obj.value("model_ftype").toString();
+    props.total_slots = obj.value("total_slots").toInt();
+    QJsonObject genSettings = obj.value("default_generation_settings").toObject();
+    props.n_ctx = genSettings.value("n_ctx").toInt();
+    QJsonObject mod = obj.value("modalities").toObject();
+    props.modalities.vision = mod.value("vision").toBool();
+    props.modalities.audio = mod.value("audio").toBool();
+    props.chat_template = obj.value("chat_template").toString();
+    props.chat_template_tool_use = obj.value("chat_template_tool_use").toString();
+    const QJsonObject caps = obj.value("chat_template_caps").toObject();
+    const QJsonArray effortLevels = caps.value("reasoning_effort_levels").toArray();
+    for (const QJsonValue &value : effortLevels)
+        props.reasoningEffortLevels << value.toString();
+    props.bos_token = obj.value("bos_token").toString();
+    props.eos_token = obj.value("eos_token").toString();
+    props.role = obj.value("role").toString();
+    return props;
 }
 
 void ChatManager::refreshServerProps()
@@ -380,28 +411,16 @@ void ChatManager::initServerProps()
             reply->deleteLater();
             return;
         }
-        QByteArray b = reply->readAll();
-        QJsonDocument doc = QJsonDocument::fromJson(b);
-        QJsonObject obj = doc.object();
-        m_serverProps.build_info = obj.value("build_info").toString();
-        m_serverProps.model_path = obj.value("model_path").toString();
-        m_serverProps.model_ftype = obj.value("model_ftype").toString();
-        m_serverProps.total_slots = obj.value("total_slots").toInt();
-        QJsonObject genSettings = obj.value("default_generation_settings").toObject();
-        m_serverProps.n_ctx = genSettings.value("n_ctx").toInt();
-        QJsonObject mod = obj.value("modalities").toObject();
-        m_serverProps.modalities.vision = mod.value("vision").toBool();
-        m_serverProps.modalities.audio = mod.value("audio").toBool();
-        m_serverProps.chat_template = obj.value("chat_template").toString();
-        m_serverProps.chat_template_tool_use = obj.value("chat_template_tool_use").toString();
-        const QJsonObject caps = obj.value("chat_template_caps").toObject();
-        m_serverProps.reasoningEffortLevels.clear();
-        const QJsonArray effortLevels = caps.value("reasoning_effort_levels").toArray();
-        for (const QJsonValue &value : effortLevels)
-            m_serverProps.reasoningEffortLevels << value.toString();
-        m_serverProps.bos_token = obj.value("bos_token").toString();
-        m_serverProps.eos_token = obj.value("eos_token").toString();
-        m_serverProps.role = obj.value("role").toString();
+        m_serverProps = parseServerProps(reply->readAll());
+        // The cached model details and any in-flight fetch are for the
+        // previous server; drop both.
+        if (QNetworkReply *modelReply = m_modelPropsReply) {
+            m_modelPropsReply = nullptr;
+            modelReply->abort();
+            modelReply->deleteLater();
+        }
+        m_modelProps = LlamaCppServerProps();
+        m_modelPropsId.clear();
         reply->deleteLater();
 
         // The /models/sse feed only exists in router mode; keep it in sync
@@ -415,6 +434,11 @@ void ChatManager::initServerProps()
         } else {
             closeModelSseFeed();
         }
+
+        // The role is known now: the model list may have arrived before this
+        // answer (startup, endpoint change), in which case its
+        // refreshModelProps() call could not fetch the details yet.
+        refreshModelProps();
 
         emit serverPropsUpdated();
     });
@@ -477,7 +501,7 @@ static bool chatTemplateSupportsThinking(const QString &tmpl)
 
 bool ChatManager::serverSupportsThinking() const
 {
-    return chatTemplateSupportsThinking(m_serverProps.chat_template);
+    return chatTemplateSupportsThinking(serverProps().chat_template);
 }
 
 QList<ChatManager::ModelEntry> ChatManager::models() const
@@ -531,6 +555,9 @@ void ChatManager::refreshModels()
                         }
                 }
             }
+            // The selected model's details (router mode) follow the list:
+            // a load finished while polling, or the auto-selection changed.
+            refreshModelProps();
         } else {
             qCWarning(llamaChatNetwork) << "Failed to fetch model list:" << reply->errorString();
         }
@@ -538,6 +565,66 @@ void ChatManager::refreshModels()
 
         emit modelsUpdated();
         updateModelPolling();
+    });
+}
+
+void ChatManager::refreshModelProps()
+{
+    // The server-level /props of a router-mode server is a dummy; the
+    // model's details come from /props?model=<id>, which the router
+    // proxies to the model's child server.  Only a loaded model answers,
+    // so fetch for the selected model while it is loaded and drop the
+    // cache otherwise.
+    const bool router = m_serverProps.role == QLatin1String("router");
+    QString loadedModel;
+    if (router) {
+        for (const auto &m : std::as_const(m_models))
+            if (m.id == m_selectedModel
+                && (m.status == QLatin1String("loaded") || m.status == QLatin1String("sleeping")))
+                loadedModel = m.id;
+    }
+    if (loadedModel.isEmpty()) {
+        if (QNetworkReply *reply = m_modelPropsReply) {
+            // Clear the pointer first so the finished handler the abort
+            // triggers cannot touch stale state.
+            m_modelPropsReply = nullptr;
+            reply->abort();
+            reply->deleteLater();
+        }
+        if (!m_modelPropsId.isEmpty()) {
+            m_modelPropsId.clear();
+            m_modelProps = LlamaCppServerProps();
+            emit serverPropsUpdated();
+        }
+        return;
+    }
+    if (loadedModel == m_modelPropsId)
+        return; // already cached
+    QNetworkReply *reply = getServerProps(&m_network,
+                                          settings().chatEndpoint.value(),
+                                          settings().chatApiKey.value(),
+                                          loadedModel);
+    if (QNetworkReply *superseded = m_modelPropsReply) {
+        m_modelPropsReply = reply; // the old handler bails on the mismatch
+        superseded->abort();
+        superseded->deleteLater();
+    } else {
+        m_modelPropsReply = reply;
+    }
+    connect(reply, &QNetworkReply::finished, this, [this, reply, loadedModel]() {
+        if (m_modelPropsReply != reply)
+            return; // superseded by a newer request
+        m_modelPropsReply = nullptr;
+        reply->deleteLater();
+        if (reply->error() != QNetworkReply::NoError) {
+            // The model unloaded (or the server restarted) meanwhile; the
+            // next list update re-fetches.
+            qCWarning(llamaChatNetwork) << "Failed to fetch model props:" << reply->errorString();
+            return;
+        }
+        m_modelProps = parseServerProps(reply->readAll());
+        m_modelPropsId = loadedModel;
+        emit serverPropsUpdated();
     });
 }
 
@@ -549,6 +636,7 @@ void ChatManager::selectModel(const QString &id)
 
     // The "Human Editor" endpoint is not a server model: no load request.
     if (isHumanEditor()) {
+        refreshModelProps(); // drops the details of the last real model
         emit modelsUpdated();
         return;
     }
@@ -576,6 +664,9 @@ void ChatManager::selectModel(const QString &id)
         break;
     }
 
+    // The new selection's details: fetched now when the model is already
+    // loaded, by the list polling once the load finishes.
+    refreshModelProps();
     emit modelsUpdated();
     updateModelPolling();
 }
@@ -738,6 +829,7 @@ void ChatManager::applyModelSseEvent(const QJsonObject &envelope)
         }
         if (changed) {
             updateModelPolling();
+            refreshModelProps(); // the selected model loaded or unloaded
             emit modelsUpdated();
         }
     }
@@ -1895,6 +1987,11 @@ Core::IEditor *ChatManager::humanEditorEditor(const QString &convId, bool pendin
 
 LlamaCppServerProps ChatManager::serverProps() const
 {
+    // Router mode: the server-level /props is a dummy (no model details);
+    // the selected model's details are cached by refreshModelProps().
+    if (m_serverProps.role == QLatin1String("router") && !m_modelPropsId.isEmpty()
+        && m_modelPropsId == m_selectedModel)
+        return m_modelProps;
     return m_serverProps;
 }
 
