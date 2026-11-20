@@ -81,6 +81,16 @@ public:
     // options-page entry for it (like thinkingLevel).
     Utils::IntegerAspect chatFontZoom{this};
 
+    // Server (see the "Server" settings page): the llama.cpp runtime and how
+    // the managed server runs. The chat API key (chatApiKey) doubles as the
+    // server's: when set, the managed server requires it (LLAMA_API_KEY).
+    Utils::FilePathAspect llamaPath{this};
+    Utils::StringAspect serverHost{this};
+    Utils::IntegerAspect serverPort{this};
+    Utils::FilePathAspect serverModelsDir{this};
+    Utils::StringAspect serverArguments{this};
+    Utils::BoolAspect serverAutoStart{this};
+
     // Skills (see the "Skills" settings page): the directories scanned for
     // SKILL.md files, and the discovered skills the user turned off (by
     // canonical SKILL.md path - skills are enabled by default).
@@ -246,6 +256,12 @@ class SandboxSettingsPage : public Core::IOptionsPage
 {
 public:
     SandboxSettingsPage();
+};
+
+class ServerSettingsPage : public Core::IOptionsPage
+{
+public:
+    ServerSettingsPage();
 };
 
 } // namespace LlamaCpp

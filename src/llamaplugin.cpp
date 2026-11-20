@@ -44,10 +44,13 @@
 #include "llamaconversationsview.h"
 #include "llamaicons.h"
 #include "llamalocatorfilter.h"
+#include "llamaoutputpane.h"
 #include "llamaselectionbutton.h"
 #include "llamaplugin.h"
 #include "llamaprojectpanel.h"
 #include "llamasettings.h"
+#include "llamaserver.h"
+#include "llamaruntime.h"
 #include "llamaspinner.h"
 #include "llamatr.h"
 #include "katexengine.h"
@@ -110,6 +113,13 @@ FilePath LlamaPlugin::getTranslationFilePath(const QString &translationFile)
 
 void LlamaPlugin::initialize()
 {
+    // Register the "llama.cpp" output pane. This must happen in initialize()
+    // (not the constructor): the pane builds an OutputWindow and registers
+    // editor actions, which need the core plugin to be initialized first.
+    // Constructing it here (a dependency-ordered phase) also lets the output
+    // pane manager pick it up for the Output window's button row.
+    llamaOutputPane();
+
     // Publish the tools served by MCP servers (the builtin Qt Creator
     // server, and any user-configured servers) as chat tools.
     ToolFactory::instance().setRemoteToolProvider(&McpBridge::instance());
@@ -231,6 +241,47 @@ void LlamaPlugin::initialize()
         ICore::showSettings(Constants::LLAMACPP_CHAT_OPTIONS_ID);
     });
 
+    Core::Command *serverCmd = ActionManager::registerAction(
+        &m_serverAction, Constants::LLAMACPP_TOGGLE_SERVER);
+    m_serverAction.setToolTip(Tr::tr("Start or stop the llama-server the plugin manages "
+                                     "(the details are on the Server settings page)."));
+    connect(&m_serverAction, &QAction::triggered, this, [this] {
+        const auto state = server().state();
+        if (state == LlamaServer::State::Starting || state == LlamaServer::State::Running)
+            server().stop();
+        else
+            server().start();
+    });
+    // A QAction with a menu shows up as a submenu; the status icon keeps its
+    // own QMenu (one parent per QMenu), populated from the same list.
+    Core::Command *modelsMenuCmd = ActionManager::registerAction(
+        &m_modelsMenuAction, Constants::LLAMACPP_MODELS_MENU);
+    m_modelsMenuAction.setToolTip(
+        Tr::tr("The models of the server the chat is connected to; selecting one "
+               "loads it and makes it the active chat model."));
+    m_modelsToolsMenu = new QMenu(Tr::tr("Models"));
+    m_modelsMenuAction.setMenu(m_modelsToolsMenu);
+    connect(&server(), &LlamaServer::stateChanged, this, [this](LlamaServer::State state) {
+        updateServerAction();
+        // Pick the (re)started server up instead of waiting for the chat's
+        // identity probe.
+        if (state == LlamaServer::State::Running) {
+            ChatManager::instance().refreshServerProps();
+            ChatManager::instance().refreshModels();
+        }
+    });
+    connect(&runtime(), &LlamaRuntime::resolvedPathChanged, this,
+            [this](const QString &) {
+                updateServerAction();
+                // A new binary means the running server runs an outdated one:
+                // restart it.
+                if (server().launchSettingsChanged())
+                    server().restart();
+            });
+    connect(&ChatManager::instance(), &ChatManager::modelsUpdated, this,
+            [this] { updateModelsMenu(); });
+    updateServerAction();
+
     auto menuContainer = ActionManager::actionContainer(Constants::LLAMACPP_MENU_ID);
     menuContainer->addAction(newConversationCmd);
     menuContainer->addSeparator();
@@ -238,7 +289,9 @@ void LlamaPlugin::initialize()
     menuContainer->addAction(toggleCmd);
     menuContainer->addAction(toggleAutoFimCmd);
     menuContainer->addAction(toggleSelectionPromptButtonCmd);
+    menuContainer->addAction(serverCmd);
     menuContainer->addAction(statusCmd);
+    menuContainer->addAction(modelsMenuCmd);
     menuContainer->addSeparator();
     menuContainer->addAction(preferencesCmd);
 
@@ -288,9 +341,13 @@ void LlamaPlugin::initialize()
     statusMenu->addAction(&m_toggleAction);
     statusMenu->addAction(&m_toogleAutoFimAction);
     statusMenu->addAction(&m_selectionPromptButtonAction);
+    statusMenu->addAction(&m_serverAction);
     statusMenu->addAction(&m_statusAction);
+    m_modelsMenu = new QMenu(Tr::tr("Models"), statusMenu);
+    statusMenu->addMenu(m_modelsMenu);
     statusMenu->addSeparator();
     statusMenu->addAction(&m_preferencesAction);
+    updateModelsMenu();
     toggleButton->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(toggleButton, &QToolButton::customContextMenuRequested,
             toggleButton, [statusMenu](const QPoint &) { statusMenu->exec(QCursor::pos()); });
@@ -358,6 +415,11 @@ bool LlamaPlugin::delayedInitialize()
     settingsUpdated();
     connect(&settings(), &AspectContainer::applied, this, &LlamaPlugin::settingsUpdated);
 
+    // Start the managed server on startup when asked to.
+    if (settings().serverAutoStart() && !runtime().resolvedPath().isEmpty()
+        && server().state() == LlamaServer::State::Stopped)
+        server().start();
+
     return true;
 }
 
@@ -400,10 +462,73 @@ void LlamaPlugin::settingsUpdated()
         m_ringChunks.clear();
         m_ringQueued.clear();
     }
+
+    // Restart the managed server when its launch configuration changed.
+    if (server().launchSettingsChanged())
+        server().restart();
+}
+
+void LlamaPlugin::updateServerAction()
+{
+    const auto state = server().state();
+    const bool running = state == LlamaServer::State::Starting
+                         || state == LlamaServer::State::Running;
+    m_serverAction.setText(running ? Tr::tr("Stop server") : Tr::tr("Start server"));
+    m_serverAction.setEnabled(running || !runtime().resolvedPath().isEmpty());
+}
+
+void LlamaPlugin::updateModelsMenu()
+{
+    if (m_modelsMenu)
+        populateModelsMenu(m_modelsMenu);
+    if (m_modelsToolsMenu)
+        populateModelsMenu(m_modelsToolsMenu);
+}
+
+void LlamaPlugin::populateModelsMenu(QMenu *menu)
+{
+    // A QAction can only sit in one menu at a time, so the previous
+    // population is dropped.
+    const QList<QAction *> actions = menu->actions();
+    for (QAction *action : actions) {
+        menu->removeAction(action);
+        action->deleteLater();
+    }
+    auto *refresh = new QAction(Tr::tr("Refresh models"), menu);
+    refresh->setToolTip(Tr::tr("Re-read the model list from the server."));
+    connect(refresh, &QAction::triggered, this, [] {
+        ChatManager::instance().refreshModels();
+    });
+    menu->addAction(refresh);
+    auto &chatManager = ChatManager::instance();
+    const QList<ChatManager::ModelEntry> models = chatManager.models();
+    if (models.isEmpty()) {
+        auto *empty = new QAction(Tr::tr("No models (is the server running?)"), menu);
+        empty->setEnabled(false);
+        menu->addAction(empty);
+        return;
+    }
+    menu->addSeparator();
+    const QString selected = chatManager.selectedModel();
+    for (const auto &entry : models) {
+        auto *action = new QAction(entry.id, menu);
+        action->setCheckable(true);
+        action->setChecked(entry.id == selected);
+        if (!entry.status.isEmpty() && entry.status != QLatin1String("loaded"))
+            action->setText(entry.id + QLatin1Char(' ')
+                            + QLatin1Char('(') + entry.status + QLatin1Char(')'));
+        connect(action, &QAction::triggered, this, [id = entry.id] {
+            ChatManager::instance().selectModel(id);
+        });
+        menu->addAction(action);
+    }
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag LlamaPlugin::aboutToShutdown()
 {
+    // Stop the managed server before the process tree goes away.
+    if (server().state() != LlamaServer::State::Stopped)
+        server().stop();
     return SynchronousShutdown;
 }
 

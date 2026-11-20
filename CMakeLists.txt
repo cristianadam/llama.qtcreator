@@ -79,6 +79,7 @@ add_qtc_plugin(LlamaCpp
     src/llamachatmessage.cpp src/llamachatmessage.h
     src/llamalocatorfilter.cpp src/llamalocatorfilter.h
     src/llamalocatorprompts.cpp src/llamalocatorprompts.h
+    src/llamaoutputpane.cpp src/llamaoutputpane.h
     src/llamaselectionbutton.cpp src/llamaselectionbutton.h
     src/llamaconversationsmodel.cpp src/llamaconversationsmodel.h
     src/llamaconversationsview.cpp src/llamaconversationsview.h
@@ -88,6 +89,9 @@ add_qtc_plugin(LlamaCpp
     src/llamamarkdownwidget.cpp src/llamamarkdownwidget.h
     src/llamaplugin.cpp src/llamaplugin.h
     src/llamaprojectpanel.cpp src/llamaprojectpanel.h
+    src/llamaserver.cpp src/llamaserver.h
+    src/llamaruntime.cpp src/llamaruntime.h
+    src/modellogos.h
     src/sandboxstatus.cpp src/sandboxstatus.h
     src/llamasettings.cpp src/llamasettings.h
     src/llamastorage.cpp src/llamastorage.h
@@ -135,6 +139,7 @@ add_qtc_plugin(LlamaCpp
     src/projectinstructions.cpp src/projectinstructions.h
     src/promptssettingswidget.cpp src/promptssettingswidget.h
     src/sandboxsettingswidget.cpp src/sandboxsettingswidget.h
+    src/serversettingswidget.cpp src/serversettingswidget.h
     src/skills.cpp src/skills.h
     src/skillssettingswidget.cpp src/skillssettingswidget.h
     src/toolsettingswidget.cpp src/toolsettingswidget.h

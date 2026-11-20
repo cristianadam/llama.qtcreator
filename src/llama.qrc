@@ -4,6 +4,18 @@
         <file>../images/settingscategory_llama@2x.png</file>
         <file>../images/llama.png</file>
         <file>../images/llama@2x.png</file>
+        <file>../images/llama.svg</file>
+        <file>../images/logos/qwen.svg</file>
+        <file>../images/logos/gemma.svg</file>
+        <file>../images/logos/gpt.svg</file>
+        <file>../images/logos/mistral.svg</file>
+        <file>../images/logos/z.svg</file>
+        <file>../images/logos/nvidia.svg</file>
+        <file>../images/logos/poolside.svg</file>
+        <file>../images/logos/deepseek.svg</file>
+        <file>../images/logos/cloudflare.svg</file>
+        <file>../images/logos/liquid.svg</file>
+        <file>../images/logos/meta.svg</file>
         <file>../images/lucideicons_outline.ttf</file>
         <file alias="mermaid/mermaid.min.js">../3rdparty/mermaid/mermaid.min.js</file>
         <file alias="mermaid/domshim.js">../3rdparty/mermaid/domshim.js</file>

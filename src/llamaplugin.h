@@ -55,6 +55,10 @@ private slots:
 private:
     void settingsUpdated();
 
+    void updateServerAction();
+    void updateModelsMenu();
+    void populateModelsMenu(QMenu *menu);
+
     // Completion handling
     void fim(int pos_x, int pos_y, bool isAuto = false, const QStringList& prev = {});
     void fim_on_response(int pos_x,
@@ -154,6 +158,12 @@ private:
     QAction m_statusAction{Tr::tr("Show Server Status")};
     QAction m_selectionPromptButtonAction{Tr::tr("Selection prompt button")};
     QAction m_preferencesAction{Tr::tr("Preferences")};
+    // Managed server: the "Models" submenus (a QMenu has one parent, so
+    // each menu gets its own).
+    QAction m_serverAction{Tr::tr("Start server")};
+    QAction m_modelsMenuAction{Tr::tr("Models")};
+    QMenu *m_modelsMenu = nullptr; // the status icon's context menu
+    QMenu *m_modelsToolsMenu = nullptr; // the Tools > llama.cpp menu
 };
 
 } // namespace LlamaCpp

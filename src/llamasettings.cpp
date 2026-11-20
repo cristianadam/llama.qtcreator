@@ -3,6 +3,7 @@
 #include "llamatr.h"
 #include "promptssettingswidget.h"
 #include "sandboxsettingswidget.h"
+#include "serversettingswidget.h"
 #include "skillssettingswidget.h"
 #include "tools/factory.h"
 #include "tools/tool.h"
@@ -91,6 +92,15 @@ SandboxSettingsPage::SandboxSettingsPage()
     setWidgetCreator([] { return new LlamaCpp::SandboxSettingsWidget; });
 }
 
+ServerSettingsPage::ServerSettingsPage()
+{
+    setId(Constants::LLAMACPP_SERVER_OPTIONS_ID); // unique identifier
+    setDisplayName(Tr::tr("Server"));             // title shown in the Settings dialog
+    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
+    setSettingsProvider([] { return &LlamaCpp::settings(); });
+    setWidgetCreator([] { return new LlamaCpp::ServerSettingsWidget; });
+}
+
 // The static instance makes the page appear automatically.
 
 static void initEnableAspect(BoolAspect &enableFim)
@@ -109,6 +119,7 @@ LlamaSettings &settings()
     static ToolsSettingsPage theToolsPage;
     static SkillsSettingsPage theSkillsPage;
     static SandboxSettingsPage theSandboxPage;
+    static ServerSettingsPage theServerPage;
 
     static LlamaSettings settings;
     return settings;
@@ -857,6 +868,67 @@ LlamaSettings::LlamaSettings()
         "API key for Tavily, get one at tavily.com "
         "(required for the \"tavily\" provider)."));
     webSearchTavilyApiKey.setHistoryCompleter("LlamaCpp.WebSearchTavilyApiKey.History");
+
+    // Server (the "Server" settings page).
+    llamaPath.setSettingsKey("LlamaPath");
+    llamaPath.setDisplayName(Tr::tr("llama.cpp binary"));
+    llamaPath.setLabelText(Tr::tr("llama.cpp:"));
+    llamaPath.setExpectedKind(PathChooserKind::File);
+    llamaPath.setPlaceHolderText(Tr::tr("Managed install or PATH"));
+    llamaPath.setToolTip(Tr::tr(
+        "The llama (or llama-server) binary the plugin starts. When empty, the "
+        "managed install (the one the download button installed) is used, then "
+        "the llama found on the PATH (brew, winget)."));
+
+    serverHost.setDisplayName(Tr::tr("Server Host"));
+    serverHost.setSettingsKey("ServerHost");
+    serverHost.setLabelText(Tr::tr("Host:"));
+    serverHost.setDisplayStyle(StringAspect::LineEditDisplay);
+    serverHost.setDefaultValue("127.0.0.1");
+    serverHost.setToolTip(Tr::tr(
+        "The interface the managed server listens on. 0.0.0.0 lets other "
+        "machines on the network reach it (in that case set an API key on the "
+        "Chat page, the server will require it)."));
+
+    serverPort.setDisplayName(Tr::tr("Server Port"));
+    serverPort.setSettingsKey("ServerPort");
+    serverPort.setLabelText(Tr::tr("Port:"));
+    serverPort.setDefaultValue(9931);
+    serverPort.setRange(1, 65535);
+    serverPort.setToolTip(Tr::tr(
+        "The port the managed server listens on. The chat (Chat settings "
+        "page) must point at the same host and port."));
+
+    serverModelsDir.setSettingsKey("ServerModelsDir");
+    serverModelsDir.setDisplayName(Tr::tr("Server Models Directory"));
+    serverModelsDir.setLabelText(Tr::tr("Models directory:"));
+    serverModelsDir.setExpectedKind(PathChooserKind::Directory);
+    serverModelsDir.setDefaultValue(
+        QDir(QDir::homePath()).filePath(QStringLiteral(".llama/models")));
+    serverModelsDir.setToolTip(Tr::tr(
+        "The directory passed to the server as --models-dir: the .gguf files "
+        "in it are listed as loadable models. It defaults to ~/.llama/models, "
+        "the same directory the Llama tray apps use, so the models of one are "
+        "visible to the other."));
+
+    serverArguments.setDisplayName(Tr::tr("Server Arguments"));
+    serverArguments.setSettingsKey("ServerArguments");
+    serverArguments.setLabelText(Tr::tr("Extra arguments:"));
+    serverArguments.setDisplayStyle(StringAspect::LineEditDisplay);
+    serverArguments.setDefaultValue("");
+    serverArguments.setPlaceHolderText(Tr::tr("For example: --ctx-size 8192 --cache-type-k q8_0"));
+    serverArguments.setToolTip(Tr::tr(
+        "Extra command line arguments for the managed server, appended last, "
+        "so they win on repeated flags (llama.cpp keeps the last occurrence). "
+        "See the llama-server help for the full list."));
+
+    serverAutoStart.setDisplayName(Tr::tr("Start the server when Qt Creator starts"));
+    serverAutoStart.setSettingsKey("ServerAutoStart");
+    serverAutoStart.setLabelText(Tr::tr("Start the server when Qt Creator starts"));
+    serverAutoStart.setDefaultValue(false);
+    serverAutoStart.setToolTip(Tr::tr(
+        "Starts the managed server on startup when a llama.cpp binary is "
+        "available; the server stops again when Qt Creator exits."));
 
     initEnableAspect(enableFim);
 

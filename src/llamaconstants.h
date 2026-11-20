@@ -15,6 +15,8 @@ namespace LlamaCpp::Constants {
     const char LLAMACPP_NEXT_COMPLETION[] = "LlamaCpp.NextCompletion";
     const char LLAMACPP_PREV_COMPLETION[] = "LlamaCpp.PrevCompletion";
     const char LLAMACPP_SHOW_SERVER_STATUS[] = "LlamaCpp.ShowServerStatus";
+    const char LLAMACPP_TOGGLE_SERVER[] = "LlamaCpp.ToggleServer";
+    const char LLAMACPP_MODELS_MENU[] = "LlamaCpp.ModelsMenu";
     const char LLAMACPP_TOGGLE_SELECTION_PROMPT_BUTTON[] = "LlamaCpp.ToggleSelectionPromptButton";
     const char LLAMACPP_SHOW_PREFERENCES[] = "LlamaCpp.ShowPreferences";
 
@@ -28,6 +30,11 @@ namespace LlamaCpp::Constants {
     const char LLAMACPP_TOOLS_OPTIONS_ID[] = "LlamaCpp.Tools";
     const char LLAMACPP_SKILLS_OPTIONS_ID[] = "LlamaCpp.Skills";
     const char LLAMACPP_SANDBOX_OPTIONS_ID[] = "LlamaCpp.Sandbox";
+    const char LLAMACPP_SERVER_OPTIONS_ID[] = "LlamaCpp.Server";
+    const char LLAMACPP_OUTPUT_PANE_ID[] = "LlamaCppOutput";
+    const char LLAMACPP_OUTPUT_PANE_CONTEXT_ID[] = "LlamaCpp.ServerOutputPane";
+    const char LLAMACPP_OUTPUT_PANE_ZOOM_KEY[] = "LlamaCpp/ServerOutput/Zoom";
+    const char LLAMACPP_OUTPUT_PANE_FILTER_KEY[] = "LlamaCpp.ServerOutput.Filter";
     const char LLAMACPP_GENERAL_OPTIONS_CATEGORY[] = "ZY.LlamaCpp";
     const char LLAMACPP_GENERAL_OPTIONS_DISPLAY_CATEGORY[] = "LlamaCpp";
 

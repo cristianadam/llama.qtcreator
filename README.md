@@ -66,6 +66,18 @@ The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server 
 
 ![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings@2x.webp)
 
+Or let the plugin manage the server itself: the **Server** settings page
+(Settings ▸ llama.cpp ▸ Server) finds or downloads the runtime (the official
+llama.cpp install script - the same one the Llama tray apps use, so an
+existing install is picked up), and starts/stops `llama-server` with a
+configurable host, port, models directory and extra arguments. It shows the
+server's terminal output (the start command line, then the colored log) in a
+dedicated "llama.cpp" pane of the Output window (filterable and clearable),
+checks the install channel for newer builds, and can start the server when
+Qt Creator starts (it stops it again on exit). The status icon's context
+menu lists the server's models - selecting one loads it - and starts/stops
+the managed server. A chat API key (Chat settings page), when set, is
+required by the managed server as well.
 
 #### Mac OS
 
