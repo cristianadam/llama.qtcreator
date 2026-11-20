@@ -1493,7 +1493,7 @@
         <translation type="vanished">工作目錄：%1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM 模型</translation>
     </message>
@@ -1502,7 +1502,7 @@
         <translation type="vanished">佇列中的訊息 – 在目前的步驟之後發送</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>後續</translation>
     </message>
@@ -1597,19 +1597,19 @@
         <translation>後續問題：</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考層級：%1（適用於新訊息）</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人工編輯器</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>你已連線到 %1，以 %2 作為目前目錄</translation>
     </message>
@@ -1724,7 +1724,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>停止任務</translation>
     </message>
@@ -1786,7 +1786,12 @@
         <translation>上下文：已使用 %1%。&lt;br&gt;  來自 %3 的 %2 個代幣。</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>時間：%1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 已入佇列</translation>
     </message>
@@ -1945,7 +1950,7 @@
         <translation>刪除此訊息</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>圖片</translation>
     </message>
@@ -2856,7 +2861,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">壓縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>標題</translation>
@@ -2915,7 +2920,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名稱「%1」與 %2 衝突 – 保留第一個</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>錯誤：</translation>
     </message>
@@ -2960,7 +2965,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">對話已壓縮 – 較早的訊息已被摘要以適配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>對話已無法容納於模型的上下文窗口中。</translation>
     </message>
@@ -3005,7 +3010,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">交接請求返回了空文件。</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>正在建立新對話以繼續此對話...</translation>
     </message>
@@ -3024,7 +3029,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>對話太長，無法交接：歷史加上交接文件已無法容納進模型的上下文窗口。</translation>
     </message>

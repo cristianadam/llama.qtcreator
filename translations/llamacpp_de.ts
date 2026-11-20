@@ -1489,7 +1489,7 @@
         <translation type="vanished">Arbeitsverzeichnis: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM-Modell</translation>
     </message>
@@ -1498,7 +1498,7 @@
         <translation type="vanished">In der Warteschlange stehende Nachrichten – gesendet nach dem aktuellen Schritt</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Anschlussfragen</translation>
     </message>
@@ -1593,19 +1593,19 @@
         <translation>Nachfragefragen:</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Denkstufe: %1 (gilt für neue Nachrichten)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Verbunden mit %1, aktuelles Verzeichnis: %2</translation>
     </message>
@@ -1720,7 +1720,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Aufgabe stoppen</translation>
     </message>
@@ -1782,7 +1782,12 @@
         <translation>Kontext: %1% verwendet.&lt;br&gt;  %2 Tokens von %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>Zeit: %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 in der Warteschlange</translation>
     </message>
@@ -1941,7 +1946,7 @@
         <translation>Diese Nachricht löschen</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
@@ -2851,7 +2856,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Kompaktierung</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2910,7 +2915,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Name &quot;%1&quot; kollidiert mit %2 – der erste bleibt erhalten</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Fehler:</translation>
     </message>
@@ -2955,7 +2960,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konversation kompaktiert – frühere Nachrichten wurden zusammengefasst, um in das Kontextfenster zu passen.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Die Konversation passt nicht mehr in das Kontextfenster des Modells.</translation>
     </message>
@@ -3000,7 +3005,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Die Übergabe-Anfrage hat ein leeres Dokument zurückgegeben.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Erstelle eine neue Konversation, um diese fortzusetzen...</translation>
     </message>
@@ -3019,7 +3024,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Die Konversation ist zu lang für eine Übergabe: Verlauf plus Übergabedokument passen nicht mehr in das Kontextfenster des Modells.</translation>
     </message>

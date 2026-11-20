@@ -1497,7 +1497,7 @@
         <translation type="vanished">Робочий каталог: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>Модель LLM</translation>
     </message>
@@ -1506,7 +1506,7 @@
         <translation type="vanished">Повідомлення в черзі – надсилаються після поточного кроку</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Продовження</translation>
     </message>
@@ -1567,7 +1567,12 @@
         <translation>ні</translation>
     </message>
     <message>
-        <location line="+1109"/>
+        <location line="+1099"/>
+        <source>Time: %1</source>
+        <translation>Час: %1</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Видалити &quot;%1&quot;</translation>
     </message>
@@ -1576,19 +1581,19 @@
         <translation type="vanished">Запитання продовження:</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-360"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Рівень мислення: %1 (стосується нових повідомлень)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Людина-редактор</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Ви підключені до %1 з поточним каталогом %2</translation>
     </message>
@@ -1723,7 +1728,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Зупинити завдання</translation>
     </message>
@@ -1771,7 +1776,7 @@
         <translation type="vanished">Створення нової розмови, щоб продовжити цю – узагальнення розмови...</translation>
     </message>
     <message>
-        <location line="-919"/>
+        <location line="-922"/>
         <source>Follow-up questions:</source>
         <translation>Додаткові запитання:</translation>
     </message>
@@ -1785,7 +1790,7 @@
         <translation type="vanished">Швидкість: %1 токенів/секунду</translation>
     </message>
     <message>
-        <location line="+1549"/>
+        <location line="+1552"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Запит:&lt;/b&gt;&lt;br&gt;Токени: %1&lt;br&gt;Час: %2 мс&lt;br&gt;Швидкість: %3 токенів/секунду&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерація:&lt;/b&gt;&lt;br&gt;Токени: %4&lt;br&gt;Час: %5 мс&lt;br&gt;Швидкість: %6 токенів/секунду</translation>
     </message>
@@ -1799,7 +1804,7 @@
         <translation>Контекст: використано %1%.&lt;br&gt;  %2 токенів з %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+32"/>
         <source>%1 queued</source>
         <translation>%1 у черзі</translation>
     </message>
@@ -1953,7 +1958,7 @@
         <translation>Видалити це повідомлення</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Зображення</translation>
     </message>
@@ -2829,7 +2834,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Стиснення</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Назва</translation>
@@ -2888,7 +2893,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Помилка:</translation>
     </message>
@@ -2933,7 +2938,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Розмова більше не вміщується в контекстне вікно моделі.</translation>
     </message>
@@ -2978,7 +2983,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Запит на передання повернув порожній документ.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Створення нової розмови для продовження цієї...</translation>
     </message>
@@ -2997,7 +3002,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Розмова занадто довга для передання: історія разом із документом передання більше не вміщується в контекстне вікно моделі.</translation>
     </message>

@@ -1497,7 +1497,7 @@
         <translation type="vanished">Arbejdsmappe: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM-model</translation>
     </message>
@@ -1506,7 +1506,7 @@
         <translation type="vanished">Beskeder i køen – sendes efter det aktuelle skridt</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Opfølg</translation>
     </message>
@@ -1567,7 +1567,12 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+1109"/>
+        <location line="+1099"/>
+        <source>Time: %1</source>
+        <translation>Tid: %1</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Fjern &quot;%1&quot;</translation>
     </message>
@@ -1576,19 +1581,19 @@
         <translation type="vanished">Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-360"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Menneskelig redaktør</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Du er forbundet med %1 og bruger %2 som den aktuelle mappe</translation>
     </message>
@@ -1723,7 +1728,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Stop opgave</translation>
     </message>
@@ -1771,7 +1776,7 @@
         <translation type="vanished">Opretter en ny samtale for at fortsætte denne – opsummerer samtalen...</translation>
     </message>
     <message>
-        <location line="-919"/>
+        <location line="-922"/>
         <source>Follow-up questions:</source>
         <translation>Følgende spørgsmål:</translation>
     </message>
@@ -1785,7 +1790,7 @@
         <translation type="vanished">Hastighed: %1 tokens pr. sekund</translation>
     </message>
     <message>
-        <location line="+1549"/>
+        <location line="+1552"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Tid: %2 ms&lt;br&gt;Hastighed: %3 tokens pr. sekund&lt;br&gt;&lt;br&gt;&lt;b&gt;Generering:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Tid: %5 ms&lt;br&gt;Hastighed: %6 tokens pr. sekund</translation>
     </message>
@@ -1799,7 +1804,7 @@
         <translation>Kontekst: %1% brugt.&lt;br&gt;  %2 tokens fra %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+32"/>
         <source>%1 queued</source>
         <translation>%1 i køen</translation>
     </message>
@@ -1949,7 +1954,7 @@
         <translation>Slet denne meddelelse</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Billede</translation>
     </message>
@@ -2838,7 +2843,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2907,7 +2912,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Fejl:</translation>
     </message>
@@ -2952,7 +2957,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Samtalen passer ikke længere i modellens kontekstvindue.</translation>
     </message>
@@ -2997,7 +3002,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Overleveringsforespørgslen returnerede et tomt dokument.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Opretter en ny samtale for at fortsætte denne...</translation>
     </message>
@@ -3016,7 +3021,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Samtalen er for lang til at overlevere: historikken plus overleveringsdokumentet passer ikke længere i modellens kontekstvindue.</translation>
     </message>

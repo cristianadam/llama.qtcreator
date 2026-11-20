@@ -1594,7 +1594,7 @@
         <translation>このメッセージを削除</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>イメージ</translation>
     </message>
@@ -1874,7 +1874,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">作業ディレクトリ: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM モデル</translation>
     </message>
@@ -1883,7 +1883,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">キューに入ったメッセージ – 現在のステップの後に送信されます</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>フォローアップ</translation>
     </message>
@@ -1944,7 +1944,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="+1109"/>
+        <location line="+1099"/>
+        <source>Time: %1</source>
+        <translation>時間: %1</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>「%1」を削除</translation>
     </message>
@@ -1953,19 +1958,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">フォローアップ質問:</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-360"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人間エディター</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>%1 に接続しています。現在のディレクトリは %2 です。</translation>
     </message>
@@ -2100,7 +2105,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>タスクを停止</translation>
     </message>
@@ -2148,7 +2153,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">この会話を継続するために新しい会話を作成しています – 会話を要約しています...</translation>
     </message>
     <message>
-        <location line="-919"/>
+        <location line="-922"/>
         <source>Follow-up questions:</source>
         <translation>続きの質問:</translation>
     </message>
@@ -2162,7 +2167,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">速度: %1 トークン/秒</translation>
     </message>
     <message>
-        <location line="+1549"/>
+        <location line="+1552"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;プロンプト:&lt;/b&gt;&lt;br&gt;トークン数: %1&lt;br&gt;処理時間: %2 ミリ秒&lt;br&gt;速度: %3 トークン/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成:&lt;/b&gt;&lt;br&gt;トークン数: %4&lt;br&gt;処理時間: %5 ミリ秒&lt;br&gt;速度: %6 トークン/秒</translation>
     </message>
@@ -2176,7 +2181,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>コンテキスト: %1% 使用。&lt;br&gt;  %2 トークンが %3 から。</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+32"/>
         <source>%1 queued</source>
         <translation>%1 がキューに追加されました</translation>
     </message>
@@ -2284,7 +2289,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -2603,7 +2608,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>エラー:</translation>
     </message>
@@ -2648,7 +2653,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>会話はもはやモデルのコンテキストウィンドウに収まりません。</translation>
     </message>
@@ -2693,7 +2698,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">引き継ぎリクエストは空のドキュメントを返しました。</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>この会話を継続するために新しい会話を作成しています...</translation>
     </message>
@@ -2712,7 +2717,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>会話が引き継ぎに長すぎます: 履歴と引き継ぎドキュメントでモデルのコンテキストウィンドウに収まらなくなりました。</translation>
     </message>

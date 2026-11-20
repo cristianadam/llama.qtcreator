@@ -58,6 +58,8 @@ public:
     void refreshServerProps();
 
     bool isGenerating(const QString &convId) const;
+    //! Start timestamp of the in-flight turn of \a convId, 0 when idle.
+    qint64 pendingTurnStart(const QString &convId) const;
     ViewingChat getViewingChat(const QString &convId) const;
     //! Renders a single message as Markdown for the conversation export
     //! ("Save as Markdown" in the conversations view and the editor's save

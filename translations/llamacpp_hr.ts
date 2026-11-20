@@ -1493,7 +1493,7 @@
         <translation type="vanished">Radni direktorij: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM model</translation>
     </message>
@@ -1502,7 +1502,7 @@
         <translation type="vanished">Poruke u redu čekanja – šalju se nakon trenutnog koraka</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Dodatno pitanje</translation>
     </message>
@@ -1597,19 +1597,19 @@
         <translation>Dodatna pitanja:</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Razina razmišljanja: %1 (primjenjuje se na nove poruke)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Ljudski urednik</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Povezani ste s %1, s %2 kao trenutnim direktorijem</translation>
     </message>
@@ -1724,7 +1724,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Zaustavi zadatak</translation>
     </message>
@@ -1786,7 +1786,12 @@
         <translation>Kontekst: korišteno %1%.&lt;br&gt;  %2 tokena iz %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>Vrijeme: %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 u redu čekanja</translation>
     </message>
@@ -1945,7 +1950,7 @@
         <translation>Izbriši ovu poruku</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Slika</translation>
     </message>
@@ -2820,7 +2825,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -2879,7 +2884,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Greška:</translation>
     </message>
@@ -2924,7 +2929,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Razgovor je sažet – ranije poruke su sažete kako bi se uklopile u prozor konteksta.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Razgovor se više ne uklapa u prozor konteksta modela.</translation>
     </message>
@@ -2969,7 +2974,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Zahtjev za prijenos vratio je prazan dokument.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Stvaranje novog razgovora za nastavak ovog...</translation>
     </message>
@@ -2988,7 +2993,7 @@ Authorization: Bearer &lt;token&gt;</source>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Razgovor je predugačak za prijenos: povijest i prijenosni dokument više ne stanu u prozor konteksta modela.</translation>
     </message>

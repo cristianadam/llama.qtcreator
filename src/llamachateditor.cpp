@@ -265,6 +265,21 @@ QString lucideGlyphLabelText(const QWidget *label, QLatin1Char glyph, const QStr
         .arg(text);
 }
 
+static QString formatDurationMs(qint64 ms)
+{
+    if (ms < 60'000)
+        return QString::number(ms / 1000.0, 'f', 1) + QLatin1String(" s");
+    const qint64 totalSecs = ms / 1000;
+    const int hours = int(totalSecs / 3600);
+    const int minutes = int((totalSecs % 3600) / 60);
+    const int seconds = int(totalSecs % 60);
+    if (hours > 0)
+        return QStringLiteral("%1h %2m").arg(hours).arg(minutes);
+    if (seconds > 0)
+        return QStringLiteral("%1m %2s").arg(minutes).arg(seconds);
+    return QStringLiteral("%1m").arg(minutes);
+}
+
 } // namespace
 
 // ---------------------------------------------------------------------------
@@ -625,11 +640,17 @@ ChatEditor::ChatEditor()
     m_speedLabel->setTextFormat(Qt::RichText);
     statusLayout->addWidget(m_speedLabel);
 
+    m_timeLabel = new QLabel(m_statusBar);
+    m_timeLabel->setTextFormat(Qt::RichText);
+    statusLayout->addWidget(m_timeLabel);
+
     m_contextLabel = new QLabel(m_statusBar);
     m_contextLabel->setVisible(false);
     // Rich text: embeds a lucide glyph (see lucideGlyphLabelText).
     m_contextLabel->setTextFormat(Qt::RichText);
     statusLayout->addWidget(m_contextLabel);
+
+    updateTimeLabel();
 
     // Mid-run steering: user messages sent while a reply is being
     // generated are queued; the popup lists them and each entry can be
@@ -1353,6 +1374,7 @@ void ChatEditor::refreshMessages(const QVector<Message> &messages,
         updateSpeedLabel(lastMsg);
         updateContextLabel(lastMsg);
     }
+    updateTimeLabel();
     updateSteeringButton();
 
     // If there were no messages, show the welcome screen (centred in the
@@ -1561,6 +1583,7 @@ void ChatEditor::onMessageAppended(const Message &msg, qint64 pendingId)
     if (msg.role == "assistant") {
         updateSpeedLabel(msg);
         updateContextLabel(msg);
+        updateTimeLabel();
     }
 
     // Stay in the "generating" state while a tool is still executing
@@ -1640,6 +1663,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
         m_input->setIsGenerating(true);
         updateSpeedLabel(pm);
         updateContextLabel(pm);
+        updateTimeLabel();
         return;
     }
     if (it == m_messageWidgets.end()) {
@@ -1671,6 +1695,7 @@ void ChatEditor::onPendingMessageChanged(const Message &pm)
 
     updateSpeedLabel(pm);
     updateContextLabel(pm);
+    updateTimeLabel();
 
     // No explicit scroll: while the user is pinned to the bottom the
     // AutoScrollArea follows the growing content, and we must not yank the
@@ -2241,6 +2266,24 @@ void ChatEditor::updateContextLabel(const Message &msg)
             .arg(percentStr)
             .arg(QLocale().toString(usedTokens))
             .arg(QLocale().toString(maxCtx)));
+}
+
+void ChatEditor::updateTimeLabel()
+{
+    // Cumulative wall-clock time of the visible conversation: the stamped
+    // turn times plus the in-flight turn's elapsed time (its turn_ms is
+    // only known once the stream ends).
+    qint64 total = 0;
+    for (ChatMessage *cm : m_messageWidgets)
+        total += cm->message().timings.turn_ms;
+    const qint64 pendingStart = ChatManager::instance().pendingTurnStart(m_viewingConvId);
+    if (pendingStart > 0)
+        total += QDateTime::currentMSecsSinceEpoch() - pendingStart;
+
+    const QString duration = formatDurationMs(total);
+    // "S" is the lucide glyph for time; see lucideGlyphLabelText.
+    m_timeLabel->setText(lucideGlyphLabelText(m_timeLabel, QLatin1Char('S'), duration));
+    m_timeLabel->setToolTip(Tr::tr("Time: %1").arg(duration));
 }
 
 void ChatEditor::updateSteeringButton()

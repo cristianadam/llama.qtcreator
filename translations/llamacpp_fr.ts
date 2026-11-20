@@ -1726,7 +1726,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Dossier de travail : %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>Modèle LLM</translation>
     </message>
@@ -1735,7 +1735,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Messages en file d&apos;attente – envoyés après l&apos;étape en cours</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Questions complémentaires</translation>
     </message>
@@ -1830,19 +1830,19 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Questions complémentaires :</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Niveau de réflexion : %1 (s&apos;applique aux nouveaux messages)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Éditeur humain</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Vous êtes connecté à %1 en utilisant %2 comme dossier actuel</translation>
     </message>
@@ -1957,7 +1957,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Arrêter la tâche</translation>
     </message>
@@ -2019,7 +2019,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Contexte : %1% utilisé.&lt;br&gt;  %2 jetons provenant de %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>Durée : %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 en file d&apos;attente</translation>
     </message>
@@ -2169,7 +2174,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Supprimer ce message</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Image</translation>
     </message>
@@ -2442,7 +2447,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Compaction</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titre</translation>
@@ -2761,7 +2766,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Erreur :</translation>
     </message>
@@ -2806,7 +2811,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Conversation compactée – les messages antérieurs ont été résumés pour tenir dans la fenêtre de contexte.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>La conversation ne tient plus dans la fenêtre de contexte du modèle.</translation>
     </message>
@@ -2851,7 +2856,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">La requête de reprise a renvoyé un document vide.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Création d&apos;une nouvelle conversation pour poursuivre celle-ci...</translation>
     </message>
@@ -2870,7 +2875,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>La conversation est trop longue pour la transmettre : l&apos;historique et le document de reprise ne tiennent plus dans la fenêtre de contexte du modèle.</translation>
     </message>

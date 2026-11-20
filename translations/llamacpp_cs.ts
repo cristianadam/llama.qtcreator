@@ -1497,7 +1497,7 @@
         <translation type="vanished">Pracovní adresář: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1506,7 +1506,7 @@
         <translation type="vanished">Zprávy ve frontě – odešlou se po aktuálním kroku</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Následující otázky</translation>
     </message>
@@ -1601,19 +1601,19 @@
         <translation>Následující otázky:</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Úroveň přemýšlení: %1 (platí pro nové zprávy)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Lidský editor</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Jste připojeni k %1, aktuální adresář je %2</translation>
     </message>
@@ -1728,7 +1728,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Zastavit úlohu</translation>
     </message>
@@ -1790,7 +1790,12 @@
         <translation>Kontext: použito %1%.&lt;br&gt;  %2 tokány z %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>Čas: %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 ve frontě</translation>
     </message>
@@ -1965,7 +1970,7 @@ Chcete ho přepsat?</translation>
         <translation>Smažit tuto zprávu</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Obrázek</translation>
     </message>
@@ -2851,7 +2856,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Stlačení</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Název</translation>
@@ -2910,7 +2915,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">název &quot;%1&quot; kolizuje s %2 – zachovává se první</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Chyba:</translation>
     </message>
@@ -2955,7 +2960,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konverzace stlačena – dřívější zprávy byly shrnuty, aby se vešly do okna kontextu.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konverzace se již nevešla do okna kontextu modelu.</translation>
     </message>
@@ -3000,7 +3005,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Požadavek na předání vrátil prázdný dokument.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Vytváření nové konverzace pro pokračování této...</translation>
     </message>
@@ -3019,7 +3024,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Konverzace je příliš dlouhá na předání: historie a dokument předání už nevměstnají do okna kontextu modelu.</translation>
     </message>

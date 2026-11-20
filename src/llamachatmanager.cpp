@@ -748,6 +748,11 @@ bool ChatManager::isGenerating(const QString &convId) const
     return m_pendingMessages.contains(convId) || m_runningTools.value(convId) > 0;
 }
 
+qint64 ChatManager::pendingTurnStart(const QString &convId) const
+{
+    return m_pendingMessages.contains(convId) ? m_pendingMessages[convId].timestamp : 0;
+}
+
 ViewingChat ChatManager::getViewingChat(const QString &convId) const
 {
     ViewingChat vc{m_storage->getOneConversation(convId), m_storage->getMessages(convId)};
@@ -2469,6 +2474,11 @@ void ChatManager::sendChatRequest(const QString &convId,
             return; // already handled (should not happen)
 
         Message pm = m_pendingMessages.take(convId);
+
+        // Turn duration: the timestamp is taken when the request goes out,
+        // so stopped and failed turns keep their partial time.
+        pm.timings.turn_ms = QDateTime::currentMSecsSinceEpoch() - pm.timestamp;
+
         const StreamingToolCalls streaming = m_streamingToolCalls.take(convId);
         StreamStatus status = m_streamStatus.take(convId);
 

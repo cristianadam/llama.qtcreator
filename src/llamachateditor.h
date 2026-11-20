@@ -98,6 +98,7 @@ public slots:
 private:
     void updateSpeedLabel(const Message &msg);
     void updateContextLabel(const Message &msg);
+    void updateTimeLabel();
     //! Shows/hides the "queued messages" popup button (mid-run steering)
     //! and rebuilds its menu (one removable entry per queued message).
     void updateSteeringButton();
@@ -171,8 +172,9 @@ private:
     bool m_workdirLinkHovered{false}; // the welcome screen's dir link is under the cursor
     QWidget *m_followUpWidget{nullptr};
     QPointer<QWidget> m_statusBar; // returned by toolBar(); owned by this editor
-    QLabel *m_contextLabel{nullptr};
     QLabel *m_speedLabel{nullptr};
+    QLabel *m_timeLabel{nullptr};
+    QLabel *m_contextLabel{nullptr};
     QToolButton *m_thinkingButton{nullptr};
     QMenu *m_thinkingMenu{nullptr};
     QActionGroup *m_thinkingActions{nullptr};

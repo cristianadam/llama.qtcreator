@@ -16,6 +16,8 @@ struct TimingReport
     double prompt_ms{0};
     double predicted_n{0};
     double predicted_ms{0};
+    // Wall-clock turn duration in ms, stamped client-side; 0 for old messages.
+    qint64 turn_ms{0};
 };
 
 struct PromptProgress

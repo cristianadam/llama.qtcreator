@@ -45,6 +45,7 @@ static QString serialize(const TimingReport &tr)
     obj["prompt_ms"] = tr.prompt_ms;
     obj["predicted_n"] = tr.predicted_n;
     obj["predicted_ms"] = tr.predicted_ms;
+    obj["turn_ms"] = tr.turn_ms;
 
     QJsonDocument doc(obj);
     return QString::fromUtf8(doc.toJson(QJsonDocument::Compact));
@@ -69,6 +70,8 @@ static TimingReport deserializeTimingsReport(const QString &json)
     getDouble("prompt_ms", result.prompt_ms);
     getDouble("predicted_n", result.predicted_n);
     getDouble("predicted_ms", result.predicted_ms);
+    if (obj.contains("turn_ms"))
+        result.turn_ms = obj["turn_ms"].toInteger();
 
     return result;
 }

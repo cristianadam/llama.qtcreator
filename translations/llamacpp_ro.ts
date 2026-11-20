@@ -50,38 +50,38 @@
         <translation type="vanished">Directorul de lucru: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="616"/>
+        <location filename="../src/llamachateditor.cpp" line="632"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="639"/>
+        <location filename="../src/llamachateditor.cpp" line="661"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Mesaje în coadă - trimise după pasul curent</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="649"/>
+        <location filename="../src/llamachateditor.cpp" line="671"/>
         <source>Follow up</source>
         <translation>Întrebări de urmărire</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="650"/>
+        <location filename="../src/llamachateditor.cpp" line="672"/>
         <source>Generate follow-up questions after each reply</source>
         <translation>Generează întrebări de urmărire după fiecare răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="667"/>
+        <location filename="../src/llamachateditor.cpp" line="689"/>
         <location filename="../src/promptssettingswidget.cpp" line="123"/>
         <source>Title</source>
         <translation>Titlu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="668"/>
+        <location filename="../src/llamachateditor.cpp" line="690"/>
         <source>Generate a conversation title after the first reply</source>
         <translation>Generează un titlu al conversației după primul răspuns</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="691"/>
+        <location filename="../src/llamachateditor.cpp" line="713"/>
         <source>Thinking level</source>
         <translation>Nivel de gândire</translation>
     </message>
@@ -98,7 +98,7 @@
         <translation type="vanished">Rezultatul anterior</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="913"/>
+        <location filename="../src/llamachateditor.cpp" line="935"/>
         <source>Send to Llama Chat</source>
         <translation>Trimite la Llama Chat</translation>
     </message>
@@ -115,36 +115,36 @@
         <translation type="vanished">Viziune: %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1165"/>
-        <location filename="../src/llamachateditor.cpp" line="1166"/>
+        <location filename="../src/llamachateditor.cpp" line="1187"/>
+        <location filename="../src/llamachateditor.cpp" line="1188"/>
         <source>yes</source>
         <translation>da</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1165"/>
-        <location filename="../src/llamachateditor.cpp" line="1166"/>
+        <location filename="../src/llamachateditor.cpp" line="1187"/>
+        <location filename="../src/llamachateditor.cpp" line="1188"/>
         <source>no</source>
         <translation>nu</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1250"/>
+        <location filename="../src/llamachateditor.cpp" line="1272"/>
         <source>Follow-up questions:</source>
         <translation>Întrebări de urmărire:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1933"/>
+        <location filename="../src/llamachateditor.cpp" line="1958"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Nivel de gândire: %1 (se aplică mesajelor noi)</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1021"/>
-        <location filename="../src/llamachateditor.cpp" line="1962"/>
-        <location filename="../src/llamachateditor.cpp" line="2043"/>
+        <location filename="../src/llamachateditor.cpp" line="1043"/>
+        <location filename="../src/llamachateditor.cpp" line="1987"/>
+        <location filename="../src/llamachateditor.cpp" line="2068"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1050"/>
+        <location filename="../src/llamachateditor.cpp" line="1072"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Sunteți conectat la %1, cu %2 ca director curent</translation>
     </message>
@@ -153,12 +153,12 @@
         <translation type="vanished">&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;&lt;table&gt;&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1100"/>
+        <location filename="../src/llamachateditor.cpp" line="1122"/>
         <source>Hello there</source>
         <translation>Bună!</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1102"/>
+        <location filename="../src/llamachateditor.cpp" line="1124"/>
         <source>Type a message or upload files to get started</source>
         <translation>Scrieți un mesaj sau încărcați fișiere pentru a începe</translation>
     </message>
@@ -167,149 +167,149 @@
         <translation type="vanished">Faceți clic pe numele modelului pentru a vedea detaliile sale sau pe director pentru a modifica unde rulează uneltele.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1062"/>
+        <location filename="../src/llamachateditor.cpp" line="1084"/>
         <source>Download definitions</source>
         <translation>Descarcă definițiile</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1064"/>
+        <location filename="../src/llamachateditor.cpp" line="1086"/>
         <source>%1 and %2 (and other syntax definitions) are missing, so matching code snippets will not be highlighted. %3</source>
         <translation>%1 și %2 (și alte definiții de sintaxă) lipsesc, de aceea fragmentele de cod corespunzătoare nu vor fi evidențiate. %3</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1088"/>
+        <location filename="../src/llamachateditor.cpp" line="1110"/>
         <source>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;body style=&quot;color:Token_Text_Muted; font-size:14px&quot;&gt;&lt;div align=&apos;center&apos;&gt;&lt;div style=&quot;font-size:20px; font-weight:bold; color:Token_Text_Default&quot;&gt;%1&lt;/div&gt;%5&lt;tr&gt;&lt;td&gt;&lt;hr/&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%2&lt;/div&gt;&lt;div style=&quot;margin-top: 5px&quot;&gt;%3&lt;/div&gt;%4&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1105"/>
+        <location filename="../src/llamachateditor.cpp" line="1127"/>
         <source>Click the model name to see its details, or the directory to change where the tools run (right-click it to reset the directory to the project).</source>
         <translation>Faceți clic pe numele modelului pentru a vedea detaliile sale sau pe director pentru a modifica unde rulează uneltele (faceți clic cu dreapta pe acesta pentru a reseta directorul la proiect).</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1144"/>
+        <location filename="../src/llamachateditor.cpp" line="1166"/>
         <source>Model Details</source>
         <translation>Detalii model</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1158"/>
+        <location filename="../src/llamachateditor.cpp" line="1180"/>
         <source>Model:</source>
         <translation>Model:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1159"/>
+        <location filename="../src/llamachateditor.cpp" line="1181"/>
         <source>Model path:</source>
         <translation>Calea modelului:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1161"/>
+        <location filename="../src/llamachateditor.cpp" line="1183"/>
         <source>Type:</source>
         <translation>Tip:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1163"/>
+        <location filename="../src/llamachateditor.cpp" line="1185"/>
         <source>Parallel slots:</source>
         <translation>Sloturi paralele:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1164"/>
+        <location filename="../src/llamachateditor.cpp" line="1186"/>
         <source>Context:</source>
         <translation>Context:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1165"/>
+        <location filename="../src/llamachateditor.cpp" line="1187"/>
         <source>Vision:</source>
         <translation>Viziune:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1166"/>
+        <location filename="../src/llamachateditor.cpp" line="1188"/>
         <source>Audio:</source>
         <translation>Audio:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1168"/>
+        <location filename="../src/llamachateditor.cpp" line="1190"/>
         <source>BOS token:</source>
         <translation>Token BOS:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1170"/>
+        <location filename="../src/llamachateditor.cpp" line="1192"/>
         <source>EOS token:</source>
         <translation>Token EOS:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1172"/>
+        <location filename="../src/llamachateditor.cpp" line="1194"/>
         <source>Reasoning effort:</source>
         <translation>Efort de raționament:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1174"/>
+        <location filename="../src/llamachateditor.cpp" line="1196"/>
         <source>Build:</source>
         <translation>Build:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1193"/>
-        <location filename="../src/llamachateditor.cpp" line="1195"/>
+        <location filename="../src/llamachateditor.cpp" line="1215"/>
+        <location filename="../src/llamachateditor.cpp" line="1217"/>
         <source>Chat template:</source>
         <translation>Șablon de chat:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1194"/>
+        <location filename="../src/llamachateditor.cpp" line="1216"/>
         <source>Not reported by the server (the model is not loaded?).</source>
         <translation>Neraportat de server (modelul nu este încărcat?).</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1196"/>
+        <location filename="../src/llamachateditor.cpp" line="1218"/>
         <source>Tool-use template:</source>
         <translation>Șablon de utilizare a uneltelor:</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1202"/>
+        <location filename="../src/llamachateditor.cpp" line="1224"/>
         <source>Close</source>
         <translation>Închide</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1214"/>
+        <location filename="../src/llamachateditor.cpp" line="1236"/>
         <location filename="../src/toolsettingswidget.cpp" line="126"/>
         <source>Select Working Directory</source>
         <translation>Selectați directorul de lucru</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1460"/>
+        <location filename="../src/llamachateditor.cpp" line="1482"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1715"/>
+        <location filename="../src/llamachateditor.cpp" line="1740"/>
         <source>Stop Task</source>
         <translation>Oprește sarcina</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="1716"/>
+        <location filename="../src/llamachateditor.cpp" line="1741"/>
         <source>The task is still running. Do you really want to stop it?</source>
         <translation>Sarcina este încă în curs de rulare. Doriți cu adevărat să o opriți?</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2043"/>
+        <location filename="../src/llamachateditor.cpp" line="2068"/>
         <source>Edit Message</source>
         <translation>Editare mesaj</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2103"/>
+        <location filename="../src/llamachateditor.cpp" line="2128"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Se vor șterge %1 mesaje, inclusiv: %2 mesaje de utilizator și %3 răspunsuri ale asistentului ...</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2109"/>
+        <location filename="../src/llamachateditor.cpp" line="2134"/>
         <source>Confirm Branch Deletion</source>
         <translation>Confirmare ștergere ramificație</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2115"/>
+        <location filename="../src/llamachateditor.cpp" line="2140"/>
         <source>Delete Message</source>
         <translation>Șterge mesajul</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2116"/>
+        <location filename="../src/llamachateditor.cpp" line="2141"/>
         <source>Are you sure you want to delete this message?</source>
         <translation>Sigur doriți să ștergeți acest mesaj?</translation>
     </message>
@@ -318,7 +318,7 @@
         <translation type="vanished">Se procesează: %1%</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2169"/>
+        <location filename="../src/llamachateditor.cpp" line="2194"/>
         <source>&lt;b&gt;Prompt Processing:&lt;/b&gt;&lt;br&gt;Total Tokens: %1&lt;br&gt;Processed: %2&lt;br&gt;Cached: %3&lt;br&gt;Time: %4 ms</source>
         <translation>&lt;b&gt;Procesare prompt:&lt;/b&gt;&lt;br&gt;Tokeni totali: %1&lt;br&gt;Procesate: %2&lt;br&gt;În cache: %3&lt;br&gt;Timp: %4 ms</translation>
     </message>
@@ -327,7 +327,7 @@
         <translation type="vanished">Viteză: %1 t/s</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2188"/>
+        <location filename="../src/llamachateditor.cpp" line="2213"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokeni: %1&lt;br&gt;Timp: %2 ms&lt;br&gt;Viteză: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generare:&lt;/b&gt;&lt;br&gt;Tokeni: %4&lt;br&gt;Timp: %5 ms&lt;br&gt;Viteză: %6 t/s</translation>
     </message>
@@ -336,22 +336,27 @@
         <translation type="vanished">Context: %1% utilizat</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2241"/>
+        <location filename="../src/llamachateditor.cpp" line="2266"/>
         <source>Context: %1% used.&lt;br&gt;  %2 tokens from %3.</source>
         <translation>Context: %1% utilizat.&lt;br&gt;  %2 tokeni din %3.</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2255"/>
+        <location filename="../src/llamachateditor.cpp" line="2287"/>
+        <source>Time: %1</source>
+        <translation>Timp: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/llamachateditor.cpp" line="2298"/>
         <source>%1 queued</source>
         <translation>%1 în coadă</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2275"/>
+        <location filename="../src/llamachateditor.cpp" line="2318"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Elimină &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2277"/>
+        <location filename="../src/llamachateditor.cpp" line="2320"/>
         <source>Remove the queued message (it will not be sent)</source>
         <translation>Elimină mesajul din coadă (nu va fi trimis)</translation>
     </message>
@@ -364,7 +369,7 @@
         <translation type="vanished">*Se creează o conversație nouă pentru a continua aceasta – se rezumă conversația…</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="2300"/>
+        <location filename="../src/llamachateditor.cpp" line="2343"/>
         <source>LlamaCpp Chat Editor</source>
         <translation>Editor de chat LlamaCpp</translation>
     </message>
@@ -437,7 +442,7 @@
         <translation>Doriți să ștergeți toate cele %1 intrări salvate din istoricul de intrare?</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="1250"/>
         <source>Error:</source>
         <translation>Eroare:</translation>
     </message>
@@ -478,7 +483,7 @@
         <translation type="vanished">Conversația a fost compactată - mesajele anterioare au fost rezumate pentru a se încadra în fereastra de context.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2458"/>
+        <location filename="../src/llamachatmanager.cpp" line="2536"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Conversația nu se mai încadrează în fereastra de context a modelului.</translation>
     </message>
@@ -523,17 +528,17 @@
         <translation type="vanished">Cererea de preluare a returnat un document gol.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1614"/>
+        <location filename="../src/llamachatmanager.cpp" line="1670"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Se creează o conversație nouă pentru a continua aceasta...</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1662"/>
+        <location filename="../src/llamachatmanager.cpp" line="1718"/>
         <source>Continuation of %1</source>
         <translation>Continuarea lui %1</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="1664"/>
+        <location filename="../src/llamachatmanager.cpp" line="1720"/>
         <source>This conversation continues the work of a previous conversation whose context window ran out. The handoff document below describes the task, the current state and the next steps. Continue from the next steps.
 
 </source>
@@ -542,17 +547,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2451"/>
+        <location filename="../src/llamachatmanager.cpp" line="2529"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Conversația este prea lungă pentru a fi preluată: istoricul plus documentul de preluare nu se mai încadrează în fereastra de context a modelului.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2454"/>
+        <location filename="../src/llamachatmanager.cpp" line="2532"/>
         <source>Switch to a model with a larger context or start a new conversation.</source>
         <translation>Treceți la un model cu un context mai mare sau începeți o conversație nouă.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2460"/>
+        <location filename="../src/llamachatmanager.cpp" line="2538"/>
         <source>Enable &quot;Automatically continue in a new conversation&quot; in the Llama settings to hand the work over to a new conversation before the context window fills up.</source>
         <translation>Activați „Automatically continue in a new conversation” (Continuare automată într-o conversație nouă) în setările Llama pentru a preda lucrul unei conversații noi înainte ca fereastra de context să se umple.</translation>
     </message>
@@ -561,12 +566,12 @@
         <translation type="vanished">Continuați într-o conversație nouă pentru a continua lucrul.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2520"/>
+        <location filename="../src/llamachatmanager.cpp" line="2598"/>
         <source>**Note:** The reply was truncated: the model reached the maximum number of output tokens.</source>
         <translation>**Notă:** Răspunsul a fost trunchiat: modelul a atins numărul maxim de tokeni de ieșire.</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="2523"/>
+        <location filename="../src/llamachatmanager.cpp" line="2601"/>
         <source>**Note:** The model ended its turn without an answer.</source>
         <translation>**Notă:** Modelul a terminat rândul fără un răspuns.</translation>
     </message>
@@ -621,7 +626,7 @@
         <translation>Șterge acest mesaj</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmessage.cpp" line="560"/>
+        <location filename="../src/llamachatmessage.cpp" line="552"/>
         <source>Image</source>
         <translation>Imagine</translation>
     </message>

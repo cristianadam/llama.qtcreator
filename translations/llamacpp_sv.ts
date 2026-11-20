@@ -238,7 +238,7 @@
         <translation type="vanished">Arbetskatalog: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM-modell</translation>
     </message>
@@ -247,7 +247,7 @@
         <translation type="vanished">Köade meddelanden – skickas efter det aktuella steget</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Uppföljning</translation>
     </message>
@@ -342,19 +342,19 @@
         <translation>Uppföljningsfrågor:</translation>
     </message>
     <message>
-        <location line="+683"/>
+        <location line="+686"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tänknivå: %1 (gäller nya meddelanden)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Människoredigerare</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Du är ansluten till %1 och använder %2 som aktuell katalog</translation>
     </message>
@@ -469,7 +469,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Stoppa uppgiften</translation>
     </message>
@@ -531,7 +531,12 @@
         <translation>Kontext: %1% använt.&lt;br&gt;  %2 token från %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
+        <source>Time: %1</source>
+        <translation>Tid: %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>%1 queued</source>
         <translation>%1 köat</translation>
     </message>
@@ -685,7 +690,7 @@
         <translation>Ta bort detta meddelande</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
@@ -2607,7 +2612,7 @@ Du kan ange andra prompts - de sparas för nästa gång.</translation>
         <translation type="vanished">Komprimering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -2926,7 +2931,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">namnet &quot;%1&quot; krockar med %2 – behåller den första</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Fel:</translation>
     </message>
@@ -2971,7 +2976,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Konversationen komprimerad – tidigare meddelanden sammanfattades för att passa i kontextfönstret.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konversationen passar inte längre i modellens kontextfönster.</translation>
     </message>
@@ -3016,7 +3021,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">Överlämningsbegäran returnerade ett tomt dokument.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Skapar en ny konversation för att fortsätta den här...</translation>
     </message>
@@ -3035,7 +3040,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Konversationen är för lång för överlämnning: historiken plus överlämningsdokumentet får inte plats i modellens kontextfönster längre.</translation>
     </message>

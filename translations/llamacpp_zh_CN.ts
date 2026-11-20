@@ -1501,7 +1501,7 @@
         <translation type="vanished">工作目录：%1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>LLM 模型</translation>
     </message>
@@ -1510,7 +1510,7 @@
         <translation type="vanished">排队消息 – 在当前步骤之后发送</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>后续问题</translation>
     </message>
@@ -1571,7 +1571,12 @@
         <translation>否</translation>
     </message>
     <message>
-        <location line="+1109"/>
+        <location line="+1099"/>
+        <source>Time: %1</source>
+        <translation>时间：%1</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>删除“%1”</translation>
     </message>
@@ -1580,19 +1585,19 @@
         <translation type="vanished">后续问题：</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-360"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考级别：%1（适用于新消息）</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人工编辑器</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>你已连接到 %1，使用 %2 作为当前目录</translation>
     </message>
@@ -1727,7 +1732,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>停止任务</translation>
     </message>
@@ -1775,7 +1780,7 @@
         <translation type="vanished">正在创建新对话以继续此对话 – 正在总结对话...</translation>
     </message>
     <message>
-        <location line="-919"/>
+        <location line="-922"/>
         <source>Follow-up questions:</source>
         <translation>后续问题：</translation>
     </message>
@@ -1789,7 +1794,7 @@
         <translation type="vanished">速度：%1 令牌/秒</translation>
     </message>
     <message>
-        <location line="+1549"/>
+        <location line="+1552"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;提示：&lt;/b&gt;&lt;br&gt;令牌数：%1&lt;br&gt;时间：%2 毫秒&lt;br&gt;速度：%3 令牌/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成：&lt;/b&gt;&lt;br&gt;令牌数：%4&lt;br&gt;时间：%5 毫秒&lt;br&gt;速度：%6 令牌/秒</translation>
     </message>
@@ -1803,7 +1808,7 @@
         <translation>上下文：已使用 %1%。&lt;br&gt;  来自 %3 的 %2 个令牌。</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+32"/>
         <source>%1 queued</source>
         <translation>%1 已排队</translation>
     </message>
@@ -1953,7 +1958,7 @@
         <translation>删除此消息</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>图像</translation>
     </message>
@@ -2873,7 +2878,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">压缩</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>标题</translation>
@@ -2932,7 +2937,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">名称“%1”与 %2 冲突——保留第一个</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>错误：</translation>
     </message>
@@ -2977,7 +2982,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">对话已压缩 – 较早的消息已被总结以适配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>对话已超出模型的上下文窗口。</translation>
     </message>
@@ -3022,7 +3027,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">交接请求返回了一个空文档。</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>正在创建新对话以继续此对话...</translation>
     </message>
@@ -3041,7 +3046,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>对话过长，无法交接：历史加上交接文档已超出模型的上下文窗口。</translation>
     </message>

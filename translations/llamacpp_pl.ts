@@ -1497,7 +1497,7 @@
         <translation type="vanished">Katalog roboczy: %1</translation>
     </message>
     <message>
-        <location line="+416"/>
+        <location line="+432"/>
         <source>LLM model</source>
         <translation>Model LLM</translation>
     </message>
@@ -1506,7 +1506,7 @@
         <translation type="vanished">Kolejkowane wiadomości – wysłane po bieżącym kroku</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+39"/>
         <source>Follow up</source>
         <translation>Pytanie uzupełniające</translation>
     </message>
@@ -1567,7 +1567,12 @@
         <translation>nie</translation>
     </message>
     <message>
-        <location line="+1109"/>
+        <location line="+1099"/>
+        <source>Time: %1</source>
+        <translation>Czas: %1</translation>
+    </message>
+    <message>
+        <location line="+31"/>
         <source>Remove &quot;%1&quot;</source>
         <translation>Usuń &quot;%1&quot;</translation>
     </message>
@@ -1576,19 +1581,19 @@
         <translation type="vanished">Pytania uzupełniające:</translation>
     </message>
     <message>
-        <location line="-342"/>
+        <location line="-360"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Poziom myślenia: %1 (dotyczy nowych wiadomości)</translation>
     </message>
     <message>
-        <location line="-912"/>
-        <location line="+941"/>
+        <location line="-915"/>
+        <location line="+944"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>Edytor ludzki</translation>
     </message>
     <message>
-        <location line="-993"/>
+        <location line="-996"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Jesteś połączony z %1, używając %2 jako bieżącego katalogu</translation>
     </message>
@@ -1723,7 +1728,7 @@
         <translation>Zoom: %1%</translation>
     </message>
     <message>
-        <location line="+255"/>
+        <location line="+258"/>
         <source>Stop Task</source>
         <translation>Zatrzymaj zadanie</translation>
     </message>
@@ -1771,7 +1776,7 @@
         <translation type="vanished">Tworzenie nowej konwersacji, aby kontynuować tę – podsumowywanie konwersacji...</translation>
     </message>
     <message>
-        <location line="-919"/>
+        <location line="-922"/>
         <source>Follow-up questions:</source>
         <translation>Dodatkowe pytania:</translation>
     </message>
@@ -1785,7 +1790,7 @@
         <translation type="vanished">Prędkość: %1 t/s</translation>
     </message>
     <message>
-        <location line="+1549"/>
+        <location line="+1552"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Pytanie:&lt;/b&gt;&lt;br&gt;Tokeny: %1&lt;br&gt;Czas: %2 ms&lt;br&gt;Prędkość: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generowanie:&lt;/b&gt;&lt;br&gt;Tokeny: %4&lt;br&gt;Czas: %5 ms&lt;br&gt;Prędkość: %6 t/s</translation>
     </message>
@@ -1799,7 +1804,7 @@
         <translation>Kontekst: użyto %1%.&lt;br&gt;  %2 tokenów z %3.</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+32"/>
         <source>%1 queued</source>
         <translation>%1 w kolejce</translation>
     </message>
@@ -1945,7 +1950,7 @@
         <translation>Usuń tę wiadomość</translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+283"/>
         <source>Image</source>
         <translation>Obraz</translation>
     </message>
@@ -2855,7 +2860,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
         <translation type="vanished">Kompaktowanie</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1633"/>
+        <location filename="../src/llamachateditor.cpp" line="-1654"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Tytuł</translation>
@@ -2914,7 +2919,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
         <translation type="vanished">nazwa &quot;%1&quot; koliduje z %2 – zachowano pierwszą</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1194"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
         <source>Error:</source>
         <translation>Błąd:</translation>
     </message>
@@ -2959,7 +2964,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
         <translation type="vanished">Konwersacja skompaktowana – wcześniejsze wiadomości zostały podsumowane, aby zmieścić się w oknie kontekstu.</translation>
     </message>
     <message>
-        <location line="+1264"/>
+        <location line="+1286"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Konwersacja nie mieści się już w oknie kontekstu modelu.</translation>
     </message>
@@ -3004,7 +3009,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
         <translation type="vanished">Żądanie przekazania zwróciło pusty dokument.</translation>
     </message>
     <message>
-        <location line="-844"/>
+        <location line="-866"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Tworzenie nowej konwersacji, aby kontynuować tę...</translation>
     </message>
@@ -3023,7 +3028,7 @@ Możesz wpisać inne polecenie - zostaną zapamiętane na kolejny raz.</translat
 </translation>
     </message>
     <message>
-        <location line="+787"/>
+        <location line="+809"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Konwersacja jest zbyt długa, aby ją przekazać: historia wraz z dokumentem przekazania nie mieszczą się już w oknie kontekstu modelu.</translation>
     </message>
