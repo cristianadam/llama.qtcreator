@@ -163,7 +163,7 @@ void LlamaRuntime::install()
         return;
     m_installing = true;
     emit installStarted();
-    emit installProgress(Tr::tr("Downloading the install script…"));
+    emit installProgress(Tr::tr("Downloading the install script..."));
 
     const QUrl url(installScriptUrl());
     QNetworkRequest request(url);
@@ -212,7 +212,7 @@ void LlamaRuntime::install()
         }
         file.close();
 
-        emit installProgress(Tr::tr("Installing llama.cpp (this can take a minute)…"));
+        emit installProgress(Tr::tr("Installing llama.cpp (this can take a minute)..."));
         if (m_installProcess)
             m_installProcess->deleteLater();
         auto *process = new QProcess(this);

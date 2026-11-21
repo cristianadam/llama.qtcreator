@@ -80,6 +80,10 @@ public:
     // Ctrl+mouse-wheel over the chat or the chat zoom commands; there is no
     // options-page entry for it (like thinkingLevel).
     Utils::IntegerAspect chatFontZoom{this};
+    // The chat model selected in the chat status bar, remembered so a
+    // restart resumes with it (a router-mode server also re-loads it).
+    // No options-page entry.
+    Utils::StringAspect lastSelectedModel{this};
 
     // Server (see the "Server" settings page): the llama.cpp runtime and how
     // the managed server runs. The chat API key (chatApiKey) doubles as the

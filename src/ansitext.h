@@ -45,4 +45,11 @@ QVector<HighlightFragment> decodeAnsiText(const QString &text, const QTextCharFo
 // Strips all ANSI escape sequences from \a text (HTML export, copy & paste).
 QString stripAnsiSequences(const QString &text);
 
+// Converts the ANSI SGR (color/style) escape sequences in \a text into
+// inline HTML spans (color, background, bold, italic, underline), escaping
+// the text and turning line breaks into <br/>: the result is ready for a
+// QLabel or any other rich-text sink. Text without escapes is returned
+// escaped, so it is a plain-text label's text as well.
+QString ansiToHtml(const QString &text);
+
 } // namespace LlamaCpp

@@ -2,6 +2,7 @@
 
 #include <QtTest>
 
+#include "llamacatalog.h"
 #include "llamaserver.h"
 #include "llamaruntime.h"
 
@@ -73,6 +74,22 @@ private slots:
     void formatSize_gb();
     void formatSize_mb();
     void formatSize_unknown();
+
+    void sse_singleEvent();
+    void sse_multipleEvents();
+    void sse_splitAcrossChunks();
+    void sse_ignoresNonDataLines();
+    void sse_malformedJson();
+
+    void progressTotals_multipleUrls();
+    void progressTotals_empty();
+
+    void catalog_full();
+    void catalog_modalitiesFromFlags();
+    void catalog_modalitiesExplicit();
+    void catalog_goodFirstModel();
+    void catalog_malformed();
+    void catalog_serverModelId();
 };
 
 void LlamaServerTest::tokenize_simple()
@@ -471,6 +488,223 @@ void LlamaServerTest::formatSize_unknown()
 {
     QCOMPARE(formatByteSize(0), QStringLiteral("?"));
     QCOMPARE(formatByteSize(-1), QStringLiteral("?"));
+}
+
+void LlamaServerTest::sse_singleEvent()
+{
+    QString buffer;
+    const QList<ModelSseEvent> events = parseModelSseChunk(
+        buffer,
+        QByteArrayLiteral(
+            "data: {\"model\": \"m1\", \"event\": \"model_status\", "
+            "\"data\": {\"status\": \"loaded\"}}\n\n"));
+    QCOMPARE(events.size(), 1);
+    QCOMPARE(events.at(0).event, QStringLiteral("model_status"));
+    QCOMPARE(events.at(0).model, QStringLiteral("m1"));
+    QCOMPARE(events.at(0).data.value("status").toString(), QStringLiteral("loaded"));
+    QVERIFY(buffer.isEmpty());
+}
+
+void LlamaServerTest::sse_multipleEvents()
+{
+    QString buffer;
+    const QList<ModelSseEvent> events = parseModelSseChunk(
+        buffer,
+        QByteArrayLiteral(
+            "data: {\"model\": \"m1\", \"event\": \"download_progress\", "
+            "\"data\": {\"progress\": {}}}\n\n"
+            "data: {\"model\": \"m1\", \"event\": \"download_finished\"}\n\n"));
+    QCOMPARE(events.size(), 2);
+    QCOMPARE(events.at(0).event, QStringLiteral("download_progress"));
+    QCOMPARE(events.at(1).event, QStringLiteral("download_finished"));
+    // download_finished carries no "data" field.
+    QVERIFY(events.at(1).data.isEmpty());
+    QVERIFY(buffer.isEmpty());
+}
+
+void LlamaServerTest::sse_splitAcrossChunks()
+{
+    QString buffer;
+    // The first chunk ends mid-block: nothing is complete yet.
+    const QList<ModelSseEvent> first = parseModelSseChunk(
+        buffer, QByteArrayLiteral("data: {\"model\": \"m1\", \"ev"));
+    QVERIFY(first.isEmpty());
+    QVERIFY(!buffer.isEmpty());
+    // The second chunk completes the block.
+    const QList<ModelSseEvent> second = parseModelSseChunk(
+        buffer, QByteArrayLiteral("ent\": \"download_finished\"}\n\n"));
+    QCOMPARE(second.size(), 1);
+    QCOMPARE(second.at(0).event, QStringLiteral("download_finished"));
+    QVERIFY(buffer.isEmpty());
+}
+
+void LlamaServerTest::sse_ignoresNonDataLines()
+{
+    QString buffer;
+    // Comment / keep-alive lines carry no payload.
+    const QList<ModelSseEvent> events =
+        parseModelSseChunk(buffer, QByteArrayLiteral(": ping\n\n"
+                                                     ": ping\ndata: {\"model\": \"*\", "
+                                                     "\"event\": \"models_reload\"}\n\n"));
+    QCOMPARE(events.size(), 1);
+    QCOMPARE(events.at(0).event, QStringLiteral("models_reload"));
+    QCOMPARE(events.at(0).model, QStringLiteral("*"));
+}
+
+void LlamaServerTest::sse_malformedJson()
+{
+    QString buffer;
+    const QList<ModelSseEvent> events =
+        parseModelSseChunk(buffer, QByteArrayLiteral("data: not json\n\n"));
+    QVERIFY(events.isEmpty());
+    QVERIFY(buffer.isEmpty());
+}
+
+void LlamaServerTest::progressTotals_multipleUrls()
+{
+    const QJsonObject data = QJsonDocument::fromJson(QByteArrayLiteral(
+        "{\"progress\": {\"https://a/1\": {\"done\": 100, \"total\": 300}, "
+        "\"https://a/2\": {\"done\": 50, \"total\": 200}}}"))
+                                  .object();
+    qint64 done = -1;
+    qint64 total = -1;
+    downloadProgressTotals(data, &done, &total);
+    QCOMPARE(done, 150);
+    QCOMPARE(total, 500);
+}
+
+void LlamaServerTest::progressTotals_empty()
+{
+    qint64 done = -1;
+    qint64 total = -1;
+    downloadProgressTotals(QJsonObject(), &done, &total);
+    QCOMPARE(done, 0);
+    QCOMPARE(total, 0);
+}
+
+void LlamaServerTest::catalog_full()
+{
+    const QByteArray json = R"([
+        {
+            "name": "GPT-OSS",
+            "brand": "OpenAI",
+            "description": "OpenAI's family",
+            "license": "Apache 2.0",
+            "featured": true,
+            "sizes": [
+                {
+                    "name": "GPT-OSS 20B",
+                    "params": "20B",
+                    "builds": [
+                        {"quant": "mxfp4", "size": "12.1 GB",
+                         "sizeBytes": 12109566560,
+                         "repo": "ggml-org/gpt-oss-20b-GGUF"}
+                    ]
+                }
+            ]
+        }
+    ])";
+    const QList<CatalogFamily> families = parseCatalog(json);
+    QCOMPARE(families.size(), 1);
+    const CatalogFamily &family = families.at(0);
+    QCOMPARE(family.name, QStringLiteral("GPT-OSS"));
+    QCOMPARE(family.brand, QStringLiteral("OpenAI"));
+    QCOMPARE(family.description, QStringLiteral("OpenAI's family"));
+    QCOMPARE(family.license, QStringLiteral("Apache 2.0"));
+    QVERIFY(family.featured);
+    QVERIFY(!family.nonCommercial);
+    QCOMPARE(family.sizes.size(), 1);
+    const CatalogSize &size = family.sizes.at(0);
+    QCOMPARE(size.name, QStringLiteral("GPT-OSS 20B"));
+    QCOMPARE(size.params, QStringLiteral("20B"));
+    // No vision/audio flag: text only.
+    QCOMPARE(size.inputModalities, (QStringList{QStringLiteral("text")}));
+    QCOMPARE(size.builds.size(), 1);
+    const CatalogBuild &build = size.builds.at(0);
+    QCOMPARE(build.quant, QStringLiteral("mxfp4"));
+    QCOMPARE(build.size, QStringLiteral("12.1 GB"));
+    QCOMPARE(build.sizeBytes, 12109566560);
+    QCOMPARE(build.repo, QStringLiteral("ggml-org/gpt-oss-20b-GGUF"));
+}
+
+void LlamaServerTest::catalog_modalitiesFromFlags()
+{
+    const QByteArray json = R"([
+        {"name": "f", "sizes": [
+            {"name": "s", "vision": true, "audio": true,
+             "builds": [{"quant": "Q8_0", "size": "1 GB", "sizeBytes": 1,
+                         "repo": "a/b"}]}
+        ]}
+    ])";
+    const QList<CatalogFamily> families = parseCatalog(json);
+    QCOMPARE(families.size(), 1);
+    QCOMPARE(families.at(0).sizes.at(0).inputModalities,
+             (QStringList{QStringLiteral("text"),
+                          QStringLiteral("image"),
+                          QStringLiteral("audio")}));
+}
+
+void LlamaServerTest::catalog_modalitiesExplicit()
+{
+    // An explicit modality list wins over the flags.
+    const QByteArray json = R"([
+        {"name": "f", "sizes": [
+            {"name": "s", "audio": true, "inputModalities": ["text", "image"],
+             "builds": [{"quant": "Q8_0", "size": "1 GB", "sizeBytes": 1,
+                         "repo": "a/b"}]}
+        ]}
+    ])";
+    const QList<CatalogFamily> families = parseCatalog(json);
+    QCOMPARE(families.size(), 1);
+    QCOMPARE(families.at(0).sizes.at(0).inputModalities,
+             (QStringList{QStringLiteral("text"), QStringLiteral("image")}));
+}
+
+void LlamaServerTest::catalog_goodFirstModel()
+{
+    const QByteArray json = R"([
+        {"name": "f", "sizes": [
+            {"name": "s", "goodFirstModel": true,
+             "builds": [{"quant": "Q4_K_M", "size": "1 GB", "sizeBytes": 1,
+                         "repo": "a/b"}]}
+        ]}
+    ])";
+    const QList<CatalogFamily> families = parseCatalog(json);
+    QCOMPARE(families.size(), 1);
+    QVERIFY(families.at(0).sizes.at(0).builds.at(0).goodFirstModel);
+}
+
+void LlamaServerTest::catalog_malformed()
+{
+    QVERIFY(parseCatalog(QByteArray()).isEmpty());
+    QVERIFY(parseCatalog(QByteArrayLiteral("not json")).isEmpty());
+    QVERIFY(parseCatalog(QByteArrayLiteral("{}")).isEmpty());
+    // A family without sizes and a build without a repo are skipped.
+    const QByteArray json = R"([
+        {"name": "no sizes"},
+        {"name": "f", "sizes": [
+            {"name": "s", "builds": [{"quant": "Q8_0", "size": "1 GB"}]}
+        ]}
+    ])";
+    QVERIFY(parseCatalog(json).isEmpty());
+}
+
+void LlamaServerTest::catalog_serverModelId()
+{
+    const QByteArray json = R"([
+        {"name": "f", "sizes": [
+            {"name": "s", "builds": [
+                {"quant": "Q4_0", "size": "1 GB", "sizeBytes": 1, "repo": "a/b"},
+                {"quant": "", "size": "1 GB", "sizeBytes": 1, "repo": "c/d"}
+            ]}
+        ]}
+    ])";
+    const QList<CatalogFamily> families = parseCatalog(json);
+    QCOMPARE(families.size(), 1);
+    QCOMPARE(families.at(0).sizes.at(0).builds.at(0).serverModelId(),
+             QStringLiteral("a/b:Q4_0"));
+    QCOMPARE(families.at(0).sizes.at(0).builds.at(1).serverModelId(),
+             QStringLiteral("c/d"));
 }
 
 QTEST_GUILESS_MAIN(LlamaServerTest)

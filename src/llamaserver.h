@@ -1,11 +1,13 @@
 #pragma once
 
+#include <QNetworkAccessManager>
 #include <QObject>
 #include <QProcess>
+#include <QJsonObject>
 #include <QString>
 #include <QStringList>
+#include <QUrl>
 
-class QNetworkAccessManager;
 class QNetworkReply;
 class QTimer;
 class QProcessEnvironment;
@@ -58,6 +60,20 @@ QStringList buildServeArguments(const QString &binaryName,
 // The "b<build>" tag of a --version output ("" when unrecognizable).
 QString parseVersionTag(const QString &versionOutput);
 
+// One event of the router's /models/sse stream.
+struct ModelSseEvent
+{
+    QString event; // model_status|status_change|download_progress|download_finished|...
+    QString model; // the model id ("*" for models_reload)
+    QJsonObject data; // the event's "data" field ({} when absent)
+};
+
+// The complete events of a /models/sse byte chunk; \a buffer carries the partial block between chunks.
+QList<ModelSseEvent> parseModelSseChunk(QString &buffer, const QByteArray &chunk);
+
+// The done/total bytes of a download_progress event, summed over the urls of its "progress" map.
+void downloadProgressTotals(const QJsonObject &data, qint64 *done, qint64 *total);
+
 // The managed server's process environment: the system environment, the
 // chat API key (when set), and LLAMA_ARG_LOG_COLORS=on: the server only
 // colorizes its log when it detects a terminal (isatty), and it runs with
@@ -96,6 +112,17 @@ public:
     // models directory.
     void refreshModels(bool reload = false);
 
+    // Model operations against the running server; failures report modelActionFailed().
+    void loadModel(const QString &modelId);
+    void unloadModel(const QString &modelId);
+    void removeModel(const QString &modelId);
+
+    // Downloads \a modelId ("repo:quant") through the server; the progress comes over /models/sse. One download at a time.
+    void downloadModel(const QString &modelId);
+    void cancelDownload();
+    bool isDownloading() const { return m_downloading; }
+    QString downloadingModel() const { return m_downloadingModel; }
+
     void start();
     void stop();
     void restart();
@@ -109,6 +136,15 @@ signals:
     void outputAppended(const QString &text);
     void outputReset();
     void modelsUpdated(const QList<ServerModel> &models);
+    // A load/unload/remove request failed (transport or server error).
+    void modelActionFailed(const QString &modelId, const QString &error);
+    // A load/unload request went out; the plugin follows it with the chat's active model.
+    void modelLoadRequested(const QString &modelId);
+    void modelUnloadRequested(const QString &modelId);
+    // The download of downloadingModel(): started, byte progress (total 0 when unknown), terminal report.
+    void downloadStarted(const QString &modelId);
+    void downloadProgress(qint64 done, qint64 total);
+    void downloadFinished(bool success, const QString &message);
 
 private:
     struct LaunchConfig
@@ -134,6 +170,15 @@ private:
     void startHealthTimer();
     void stopHealthTimer();
     void probeHealth();
+    void openSseStream();
+    void closeSseStream();
+    void onSseData(const QByteArray &chunk);
+    void handleSseEvent(const ModelSseEvent &event);
+    void finishDownload(bool success, const QString &message);
+    void sendModelRequest(const QString &modelId, QNetworkAccessManager::Operation op,
+                          const QUrl &url, const QByteArray &body);
+    void checkDownloadStatus(); // the /models poll when /models/sse is unavailable
+    void inspectDownloadStatus(); // against the fresh listing
     void onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void appendOutput(const QString &text);
     void resetOutput();
@@ -148,10 +193,17 @@ private:
     QNetworkAccessManager *m_network = nullptr;
     QNetworkReply *m_healthReply = nullptr;
     QNetworkReply *m_modelReply = nullptr;
+    QNetworkReply *m_actionReply = nullptr;
+    QNetworkReply *m_sseReply = nullptr;
     QTimer *m_healthTimer = nullptr;
     QTimer *m_startTimeoutTimer = nullptr;
+    QTimer *m_downloadWatchTimer = nullptr;
     bool m_stopping = false;
     QList<ServerModel> m_models;
+    bool m_downloading = false;
+    QString m_downloadingModel;
+    QString m_sseBuffer;
+    bool m_sseAvailable = true; // the last /models/sse open succeeded
 };
 
 LlamaServer &server();

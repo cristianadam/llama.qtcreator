@@ -504,6 +504,11 @@ LlamaSettings::LlamaSettings()
                "font size. Adjust with Ctrl+mouse-wheel over the chat or the chat "
                "zoom in/out commands."));
 
+    // No options-page entry: the selection is made in the chat status bar.
+    lastSelectedModel.setDisplayName(Tr::tr("Last Selected Model"));
+    lastSelectedModel.setSettingsKey("LastSelectedModel");
+    lastSelectedModel.setDefaultValue("");
+
     utilityModel.setDisplayName(Tr::tr("Utility Model"));
     utilityModel.setSettingsKey("UtilityModel");
     utilityModel.setLabelText(Tr::tr("Utility Model:"));

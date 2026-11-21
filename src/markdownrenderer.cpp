@@ -29,6 +29,7 @@
 
 #include "ansitext.h"
 #include "katexengine.h"
+#include "llamaicons.h"
 #include "llamasyntaxhighlighter.h"
 #include "llamatr.h"
 #include "mermaidengine.h"
@@ -1645,7 +1646,7 @@ int MarkdownRenderer::getDetailsBodyMargin(int depth)
 // Returns true if the block carried the direction icon.
 static bool setSectionIconGlyph(QTextBlock &blk, bool visible)
 {
-    const QChar glyph = visible ? QChar('M') : QChar('N');
+    const QChar glyph = visible ? Lucide::ChevronUp : Lucide::ChevronDown;
     for (auto it = blk.begin(); it != blk.end(); ++it) {
         const QTextFragment frag = it.fragment();
         const QTextCharFormat fmt = frag.charFormat();
@@ -1696,13 +1697,13 @@ void MarkdownRenderer::toggleSection(int secId)
 
 QString MarkdownRenderer::sectionIconHtml(int secId, bool isVisible) const
 {
-    QString icon = isVisible ? "M" : "N";
+    const QChar icon = isVisible ? Lucide::ChevronUp : Lucide::ChevronDown;
     return QString(
                    "&nbsp;<a href=\"details-toggle:%1\" style=\"text-decoration:none; color: %2\">"
                    "<span style=\"font-family: lucideicons_outline\">%3</span></a>")
                    .arg(secId)
                    .arg(colorToRgba(color(TextForeground)))
-                   .arg(icon);
+                   .arg(QString(icon));
 }
 
 // ---------------------------------------------------------------------------

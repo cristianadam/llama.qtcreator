@@ -88,6 +88,48 @@ QString parseVersionTag(const QString &versionOutput)
     return {};
 }
 
+QList<ModelSseEvent> parseModelSseChunk(QString &buffer, const QByteArray &chunk)
+{
+    QList<ModelSseEvent> events;
+    buffer += QString::fromUtf8(chunk);
+    // An event is a "data: <json>" block terminated by a blank line.
+    int end;
+    while ((end = buffer.indexOf(QLatin1String("\n\n"))) >= 0) {
+        const QString block = buffer.left(end);
+        buffer.remove(0, end + 2);
+        ModelSseEvent event;
+        for (const QString &line : block.split(QLatin1Char('\n'))) {
+            if (!line.startsWith(QLatin1String("data:")))
+                continue; // comment / keep-alive lines carry no payload
+            QJsonParseError parseError;
+            const QJsonDocument doc = QJsonDocument::fromJson(line.mid(5).trimmed().toUtf8(),
+                                                              &parseError);
+            if (parseError.error != QJsonParseError::NoError)
+                continue;
+            const QJsonObject obj = doc.object();
+            event.event = obj.value("event").toString();
+            event.model = obj.value("model").toString();
+            event.data = obj.value("data").toObject();
+            break;
+        }
+        if (!event.event.isEmpty())
+            events.append(event);
+    }
+    return events;
+}
+
+void downloadProgressTotals(const QJsonObject &data, qint64 *done, qint64 *total)
+{
+    *done = 0;
+    *total = 0;
+    const QJsonObject progress = data.value("progress").toObject();
+    for (auto it = progress.constBegin(); it != progress.constEnd(); ++it) {
+        const QJsonObject entry = it.value().toObject();
+        *done += entry.value("done").toVariant().toLongLong();
+        *total += entry.value("total").toVariant().toLongLong();
+    }
+}
+
 QProcessEnvironment serverProcessEnvironment(const QString &apiKey)
 {
     QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
@@ -230,6 +272,11 @@ LlamaServer::LlamaServer(QObject *parent)
     m_healthTimer->setSingleShot(false);
     connect(m_healthTimer, &QTimer::timeout, this, &LlamaServer::probeHealth);
 
+    // The download's completion watch when /models/sse is unavailable.
+    m_downloadWatchTimer = new QTimer(this);
+    m_downloadWatchTimer->setInterval(2000);
+    connect(m_downloadWatchTimer, &QTimer::timeout, this, &LlamaServer::checkDownloadStatus);
+
     m_startTimeoutTimer->setInterval(120 * 1000);
     m_startTimeoutTimer->setSingleShot(true);
     connect(m_startTimeoutTimer, &QTimer::timeout, this, [this] {
@@ -328,6 +375,8 @@ void LlamaServer::start()
     m_activeConfig = config;
     m_binaryPath = config.binaryPath;
     m_stopping = false;
+    // A restarted server may be a different build: re-probe /models/sse.
+    m_sseAvailable = true;
     resetOutput();
     if (!m_models.isEmpty()) {
         m_models.clear();
@@ -376,6 +425,16 @@ void LlamaServer::stop()
     if (m_modelReply) {
         m_modelReply->abort();
         m_modelReply = nullptr;
+    }
+    if (m_actionReply) {
+        m_actionReply->abort();
+        m_actionReply = nullptr;
+    }
+    if (m_downloading)
+        finishDownload(false, Tr::tr("The server was stopped."));
+    else {
+        m_downloadWatchTimer->stop();
+        closeSseStream();
     }
     if (!m_models.isEmpty()) {
         m_models.clear();
@@ -488,7 +547,310 @@ void LlamaServer::refreshModels(bool reload)
             }
         }
         emit modelsUpdated(m_models);
+        // A download watched through the model list is checked against the fresh listing.
+        if (m_downloading)
+            inspectDownloadStatus();
     });
+}
+
+namespace {
+// The "message" of a llama-server error body, or the body itself when unrecognizable.
+QString serverErrorMessage(const QByteArray &body)
+{
+    const QJsonObject obj = QJsonDocument::fromJson(body).object();
+    const QJsonValue error = obj.value("error");
+    if (error.isObject()) {
+        const QString message = error.toObject().value("message").toString();
+        if (!message.isEmpty())
+            return message;
+    } else if (error.isString()) {
+        return error.toString();
+    }
+    return QString::fromUtf8(body).trimmed();
+}
+
+// A model the server runs for requests (the unloadable states).
+bool isModelRunning(const QString &status)
+{
+    return status == QLatin1String("loaded") || status == QLatin1String("loading")
+           || status == QLatin1String("sleeping");
+}
+} // namespace
+
+void LlamaServer::sendModelRequest(const QString &modelId,
+                                   QNetworkAccessManager::Operation op,
+                                   const QUrl &url,
+                                   const QByteArray &body)
+{
+    if (m_state != State::Running) {
+        emit modelActionFailed(modelId, Tr::tr("The server is not running."));
+        return;
+    }
+    if (m_actionReply) {
+        m_actionReply->abort();
+        m_actionReply = nullptr;
+    }
+    QNetworkRequest request(url);
+    if (!m_activeConfig.apiKey.isEmpty())
+        request.setRawHeader("Authorization",
+                             (QStringLiteral("Bearer ") + m_activeConfig.apiKey).toUtf8());
+    QNetworkReply *reply = nullptr;
+    if (op == QNetworkAccessManager::PostOperation)
+        reply = m_network->post(request, body);
+    else if (op == QNetworkAccessManager::DeleteOperation)
+        reply = m_network->deleteResource(request);
+    else
+        reply = m_network->get(request);
+    m_actionReply = reply;
+    connect(reply, &QNetworkReply::finished, this, [this, modelId] {
+        QNetworkReply *r = qobject_cast<QNetworkReply *>(sender());
+        if (m_actionReply == r)
+            m_actionReply = nullptr;
+        if (!r)
+            return;
+        const int code = r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (r->error() != QNetworkReply::NoError || code < 200 || code >= 300) {
+            QString message;
+            if (r->error() == QNetworkReply::OperationCanceledError) {
+                // Aborted by a stop(); the state change reports it.
+            } else if (code == 404 || code == 405) {
+                message = Tr::tr(
+                    "The server does not support this operation: the model "
+                    "endpoints exist only in router mode (start it without a "
+                    "fixed --model).");
+            } else {
+                message = Tr::tr("The server rejected the request: %1")
+                              .arg(serverErrorMessage(r->readAll()));
+            }
+            if (!message.isEmpty())
+                emit modelActionFailed(modelId, message);
+        }
+        r->deleteLater();
+    });
+}
+
+void LlamaServer::loadModel(const QString &modelId)
+{
+    // No selection change when the server is stopped (the plugin follows the signal).
+    if (m_state == State::Running)
+        emit modelLoadRequested(modelId);
+    QUrl url(QStringLiteral("http://%1:%2/models/load")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port));
+    sendModelRequest(modelId,
+                     QNetworkAccessManager::PostOperation,
+                     url,
+                     QJsonDocument(QJsonObject{{"model", modelId}}).toJson());
+}
+
+void LlamaServer::unloadModel(const QString &modelId)
+{
+    if (m_state == State::Running)
+        emit modelUnloadRequested(modelId);
+    QUrl url(QStringLiteral("http://%1:%2/models/unload")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port));
+    sendModelRequest(modelId,
+                     QNetworkAccessManager::PostOperation,
+                     url,
+                     QJsonDocument(QJsonObject{{"model", modelId}}).toJson());
+}
+
+void LlamaServer::removeModel(const QString &modelId)
+{
+    QUrl url(QStringLiteral("http://%1:%2/models?model=%3")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port)
+                 .arg(modelId.toUtf8().toPercentEncoding()));
+    sendModelRequest(modelId, QNetworkAccessManager::DeleteOperation, url, {});
+}
+
+void LlamaServer::downloadModel(const QString &modelId)
+{
+    if (m_downloading)
+        return; // one download at a time
+    if (m_state != State::Running) {
+        emit downloadFinished(false, Tr::tr("The server is not running."));
+        return;
+    }
+    m_downloading = true;
+    m_downloadingModel = modelId;
+    m_sseBuffer.clear();
+    emit downloadStarted(modelId);
+
+    // The SSE stream first, so no early progress event is missed; without it the model-list watch is the fallback.
+    if (m_sseAvailable)
+        openSseStream();
+    else
+        m_downloadWatchTimer->start();
+
+    QUrl url(QStringLiteral("http://%1:%2/models")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port));
+    QNetworkRequest request(url);
+    if (!m_activeConfig.apiKey.isEmpty())
+        request.setRawHeader("Authorization",
+                             (QStringLiteral("Bearer ") + m_activeConfig.apiKey).toUtf8());
+    QNetworkReply *reply = m_network->post(
+        request, QJsonDocument(QJsonObject{{"model", modelId}}).toJson());
+    connect(reply, &QNetworkReply::finished, this, [this, reply] {
+        const int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (m_downloading && reply->error() != QNetworkReply::NoError
+            && code < 200) {
+            // No HTTP answer at all: the server went away mid-download.
+            if (m_state == State::Running)
+                finishDownload(false, Tr::tr("The connection to the server was lost."));
+        } else if (m_downloading && (code < 200 || code >= 300)) {
+            finishDownload(false,
+                           Tr::tr("The server rejected the download: %1")
+                               .arg(serverErrorMessage(reply->readAll())));
+        }
+        reply->deleteLater();
+    });
+}
+
+void LlamaServer::cancelDownload()
+{
+    if (!m_downloading)
+        return;
+    // The server stops the transfer; the SSE stream reports it (stopped: true), or the unload answer when there is no stream.
+    const QString modelId = m_downloadingModel;
+    QUrl url(QStringLiteral("http://%1:%2/models/unload")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port));
+    QNetworkRequest request(url);
+    if (!m_activeConfig.apiKey.isEmpty())
+        request.setRawHeader("Authorization",
+                             (QStringLiteral("Bearer ") + m_activeConfig.apiKey).toUtf8());
+    QNetworkReply *reply = m_network->post(
+        request, QJsonDocument(QJsonObject{{"model", modelId}}).toJson());
+    connect(reply, &QNetworkReply::finished, this, [this, reply] {
+        const int code = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (m_downloading && m_sseReply == nullptr
+            && (reply->error() == QNetworkReply::NoError
+                || (code >= 200 && code < 300))) {
+            finishDownload(false, Tr::tr("The download was stopped."));
+        }
+        reply->deleteLater();
+    });
+}
+
+void LlamaServer::openSseStream()
+{
+    if (m_sseReply)
+        return;
+    QUrl url(QStringLiteral("http://%1:%2/models/sse")
+                 .arg(serverConnectAddress(m_activeConfig.host))
+                 .arg(m_activeConfig.port));
+    QNetworkRequest request(url);
+    if (!m_activeConfig.apiKey.isEmpty())
+        request.setRawHeader("Authorization",
+                             (QStringLiteral("Bearer ") + m_activeConfig.apiKey).toUtf8());
+    // An open-ended stream: no transfer timeout.
+    request.setTransferTimeout(0);
+    m_sseReply = m_network->get(request);
+    connect(m_sseReply, &QNetworkReply::readyRead, this, [this] {
+        if (m_sseReply)
+            onSseData(m_sseReply->readAll());
+    });
+    connect(m_sseReply, &QNetworkReply::finished, this, [this] {
+        QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+        if (m_sseReply == reply)
+            m_sseReply = nullptr;
+        if (!reply)
+            return;
+        // Only a server-side answer says anything about the endpoint (not our own abort).
+        if (reply->error() != QNetworkReply::OperationCanceledError)
+            m_sseAvailable = reply->error() == QNetworkReply::NoError
+                             && reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 200;
+        reply->deleteLater();
+        // Without the stream the model-list watch is the completion signal.
+        if (m_downloading && !m_downloadWatchTimer->isActive())
+            m_downloadWatchTimer->start();
+    });
+}
+
+void LlamaServer::closeSseStream()
+{
+    if (!m_sseReply)
+        return;
+    m_sseReply->abort();
+    m_sseReply = nullptr;
+}
+
+void LlamaServer::onSseData(const QByteArray &chunk)
+{
+    for (const ModelSseEvent &event : parseModelSseChunk(m_sseBuffer, chunk))
+        handleSseEvent(event);
+}
+
+void LlamaServer::handleSseEvent(const ModelSseEvent &event)
+{
+    if (!m_downloading || event.model != m_downloadingModel)
+        return;
+    if (event.event == QLatin1String("download_progress")) {
+        qint64 done = 0;
+        qint64 total = 0;
+        downloadProgressTotals(event.data, &done, &total);
+        emit downloadProgress(done, total);
+    } else if (event.event == QLatin1String("download_finished")) {
+        finishDownload(true, Tr::tr("The download is complete."));
+    } else if (event.event == QLatin1String("download_failed")) {
+        QString message;
+        if (event.data.value("stopped").toBool())
+            message = Tr::tr("The download was stopped.");
+        else {
+            QString detail = event.data.value("message").toString();
+            if (detail.isEmpty())
+                detail = event.data.value("error").toString();
+            message = Tr::tr("The download failed%1.")
+                          .arg(detail.isEmpty() ? QString()
+                                                : (QLatin1Char(' ') + detail));
+        }
+        finishDownload(false, message);
+    }
+}
+
+void LlamaServer::finishDownload(bool success, const QString &message)
+{
+    if (!m_downloading)
+        return;
+    m_downloading = false;
+    m_downloadingModel.clear();
+    m_downloadWatchTimer->stop();
+    closeSseStream();
+    emit downloadFinished(success, message);
+    // The finished download resurfaces in the list (a failed one is resumable).
+    refreshModels();
+}
+
+void LlamaServer::checkDownloadStatus()
+{
+    if (!m_downloading)
+        return;
+    // The fresh listing is inspected in the refreshModels reply (inspectDownloadStatus).
+    refreshModels();
+}
+
+void LlamaServer::inspectDownloadStatus()
+{
+    if (!m_downloading)
+        return;
+    for (const ServerModel &model : m_models) {
+        if (model.id != m_downloadingModel)
+            continue;
+        if (isModelRunning(model.status)
+            || model.status == QLatin1String("downloaded")
+            || model.status == QLatin1String("unloaded")) {
+            finishDownload(true, Tr::tr("The download is complete."));
+        } else if (model.status == QLatin1String("incomplete")) {
+            finishDownload(false,
+                           Tr::tr("The download failed; the partial files stay, so "
+                                  "downloading again resumes it."));
+        }
+        return; // still downloading
+    }
+    // Not listed yet: still running, keep watching.
 }
 
 void LlamaServer::onProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)

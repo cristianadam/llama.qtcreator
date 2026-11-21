@@ -5,6 +5,7 @@
 #include "llamatr.h"
 
 #include <coreplugin/outputwindow.h>
+#include <texteditor/fontsettings.h>
 #include <utils/shutdownguard.h>
 
 namespace LlamaCpp {
@@ -20,6 +21,13 @@ LlamaOutputPane::LlamaOutputPane(QObject *parent)
         Core::Context(Constants::LLAMACPP_OUTPUT_PANE_CONTEXT_ID),
         Utils::Key(Constants::LLAMACPP_OUTPUT_PANE_ZOOM_KEY));
     m_widget->setReadOnly(true);
+
+    // Like the other output panes, use the editor's font.
+    connect(&TextEditor::globalFontSettings(), &TextEditor::FontSettings::changed,
+            m_widget, [this] {
+                m_widget->setBaseFont(TextEditor::globalFontSettings().data().font());
+            });
+    m_widget->setBaseFont(TextEditor::globalFontSettings().data().font());
 
     connect(this, &Core::IOutputPane::zoomInRequested, m_widget, &Core::OutputWindow::zoomIn);
     connect(this, &Core::IOutputPane::zoomOutRequested, m_widget, &Core::OutputWindow::zoomOut);

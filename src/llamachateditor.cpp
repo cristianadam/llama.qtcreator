@@ -1979,6 +1979,10 @@ void ChatEditor::updateModelCombo()
 
     m_modelCombo->blockSignals(true);
     m_modelCombo->clear();
+    // "No model": no model active; picking it (or clicking the selected
+    // model in the Models menu) unloads the previous one and resets the
+    // selection.
+    m_modelCombo->addItem(Tr::tr("No model"), QString());
     // The "Human Editor" pseudo-model: the "assistant" side of the
     // conversation is a human typing Markdown in a text editor split next
     // to the chat, so the chat doubles as a Markdown editor with live

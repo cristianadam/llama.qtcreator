@@ -110,6 +110,7 @@ private slots:
     void terminalBlockDecodesAnsiColors();
     void toolCallCodeBlockCarriesThemeForeground();
     void ansiDecodeAndStrip();
+    void ansiToHtml();
     void list();
     void thinkingSection();
     void detailsSummaryMarkdown();
@@ -367,6 +368,23 @@ void MarkdownRendererTest::ansiDecodeAndStrip()
     for (const HighlightFragment &f : std::as_const(partial))
         partialJoined += f.text;
     QCOMPARE(partialJoined, QStringLiteral("x"));
+}
+
+void MarkdownRendererTest::ansiToHtml()
+{
+    // Without escapes the text is returned HTML-escaped, line breaks as
+    // <br/> (and a plain label would show it as is).
+    QCOMPARE(LlamaCpp::ansiToHtml(QStringLiteral("a < b & c\nd\re")),
+             QStringLiteral("a &lt; b &amp; c<br/>d<br/>e"));
+
+    setTerminalAnsiColor(1, QColor(200, 30, 30));
+    const QString html = LlamaCpp::ansiToHtml(QStringLiteral("ok \x1b[1;31mfail\x1b[0m\nnext"));
+    // The colored, bold run becomes a span with the terminal theme's red.
+    QVERIFY2(html.contains(
+                 QStringLiteral("<span style=\"color: #c81e1e; font-weight: bold\">fail</span>")),
+             qPrintable(html));
+    // No raw escapes survive.
+    QVERIFY(!html.contains(QChar(0x1B)));
 }
 
 void MarkdownRendererTest::thinkingSection()

@@ -70,6 +70,7 @@ add_qtc_plugin(LlamaCpp
   SOURCES
     src/llama.qrc
     src/llamaicons.h
+    src/llamaicons.cpp
     src/ansitext.cpp src/ansitext.h
     src/autoscrollarea.cpp src/autoscrollarea.h
     src/fimcache.cpp src/fimcache.h
@@ -89,8 +90,10 @@ add_qtc_plugin(LlamaCpp
     src/llamamarkdownwidget.cpp src/llamamarkdownwidget.h
     src/llamaplugin.cpp src/llamaplugin.h
     src/llamaprojectpanel.cpp src/llamaprojectpanel.h
+    src/llamacatalog.cpp src/llamacatalog.h
     src/llamaserver.cpp src/llamaserver.h
     src/llamaruntime.cpp src/llamaruntime.h
+    src/modeldownloaddialog.cpp src/modeldownloaddialog.h
     src/modellogos.h
     src/sandboxstatus.cpp src/sandboxstatus.h
     src/llamasettings.cpp src/llamasettings.h

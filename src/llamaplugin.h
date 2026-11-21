@@ -158,12 +158,10 @@ private:
     QAction m_statusAction{Tr::tr("Show Server Status")};
     QAction m_selectionPromptButtonAction{Tr::tr("Selection prompt button")};
     QAction m_preferencesAction{Tr::tr("Preferences")};
-    // Managed server: the "Models" submenus (a QMenu has one parent, so
-    // each menu gets its own).
+    // Managed server: the "Models" submenu, shared between the Tools > llama.cpp menu
+    // and the status icon's context menu (addMenu does not reparent).
     QAction m_serverAction{Tr::tr("Start server")};
-    QAction m_modelsMenuAction{Tr::tr("Models")};
-    QMenu *m_modelsMenu = nullptr; // the status icon's context menu
-    QMenu *m_modelsToolsMenu = nullptr; // the Tools > llama.cpp menu
+    QMenu *m_modelsMenu = nullptr;
 };
 
 } // namespace LlamaCpp

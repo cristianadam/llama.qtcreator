@@ -1,8 +1,16 @@
 #pragma once
 
+#include <QColor>
 #include <QPair>
+#include <QPixmap>
 #include <QString>
 #include <QVector>
+
+#include <QFile>
+#include <QGuiApplication>
+#include <QPainter>
+#include <QScreen>
+#include <QtSvg/QSvgRenderer>
 
 namespace LlamaCpp {
 
@@ -38,6 +46,34 @@ inline QString modelLogoResource(const QString &name)
         if (haystack.contains(entry.first))
             return entry.second;
     return QStringLiteral(":/images/llama.svg");
+}
+
+// The logo rendered in \a color: the SVGs fill with "currentColor", which
+// QSvgRenderer does not resolve (it falls back to black - invisible on a
+// dark background), so the requested color is substituted into the source
+// before rendering. An empty pixmap is returned when the resource cannot be
+// loaded.
+inline QPixmap modelLogoPixmap(const QString &name, int size, const QColor &color)
+{
+    QFile file(modelLogoResource(name));
+    if (!file.open(QIODevice::ReadOnly))
+        return {};
+    QString svg = QString::fromUtf8(file.readAll());
+    svg.replace(QLatin1String("currentColor"), color.name());
+    QSvgRenderer renderer(svg.toUtf8());
+    if (renderer.defaultSize().isEmpty())
+        return {};
+    const qreal dpr = QGuiApplication::primaryScreen()
+                          ? QGuiApplication::primaryScreen()->devicePixelRatio()
+                          : 1.0;
+    const int physicalSize = int(size * dpr);
+    QPixmap pixmap(physicalSize, physicalSize);
+    pixmap.setDevicePixelRatio(dpr);
+    pixmap.fill(Qt::transparent);
+    QPainter painter(&pixmap);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    renderer.render(&painter, QRectF(0, 0, size, size));
+    return pixmap;
 }
 
 } // namespace LlamaCpp

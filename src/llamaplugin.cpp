@@ -236,9 +236,9 @@ void LlamaPlugin::initialize()
 
     Core::Command *preferencesCmd
         = ActionManager::registerAction(&m_preferencesAction, Constants::LLAMACPP_SHOW_PREFERENCES);
-    m_preferencesAction.setToolTip(Tr::tr("Open the llama.cpp settings page."));
+    m_preferencesAction.setToolTip(Tr::tr("Open the llama.cpp Server settings page."));
     connect(&m_preferencesAction, &QAction::triggered, this, [] {
-        ICore::showSettings(Constants::LLAMACPP_CHAT_OPTIONS_ID);
+        ICore::showSettings(Constants::LLAMACPP_SERVER_OPTIONS_ID);
     });
 
     Core::Command *serverCmd = ActionManager::registerAction(
@@ -252,15 +252,14 @@ void LlamaPlugin::initialize()
         else
             server().start();
     });
-    // A QAction with a menu shows up as a submenu; the status icon keeps its
-    // own QMenu (one parent per QMenu), populated from the same list.
-    Core::Command *modelsMenuCmd = ActionManager::registerAction(
-        &m_modelsMenuAction, Constants::LLAMACPP_MODELS_MENU);
-    m_modelsMenuAction.setToolTip(
+    // The "Models" submenu: a real menu container, because the menu shows the command's proxy action,
+    // which never picks up the registered action's menu. The status icon's context menu shares the same QMenu (addMenu does not reparent).
+    auto *modelsMenuContainer = ActionManager::createMenu(Constants::LLAMACPP_MODELS_MENU);
+    m_modelsMenu = modelsMenuContainer->menu();
+    m_modelsMenu->setTitle(Tr::tr("Models"));
+    m_modelsMenu->setToolTip(
         Tr::tr("The models of the server the chat is connected to; selecting one "
                "loads it and makes it the active chat model."));
-    m_modelsToolsMenu = new QMenu(Tr::tr("Models"));
-    m_modelsMenuAction.setMenu(m_modelsToolsMenu);
     connect(&server(), &LlamaServer::stateChanged, this, [this](LlamaServer::State state) {
         updateServerAction();
         // Pick the (re)started server up instead of waiting for the chat's
@@ -268,6 +267,23 @@ void LlamaPlugin::initialize()
         if (state == LlamaServer::State::Running) {
             ChatManager::instance().refreshServerProps();
             ChatManager::instance().refreshModels();
+        }
+    });
+    // The loaded model becomes the chat's active model (selectModel must not post a second load request).
+    connect(&server(), &LlamaServer::modelLoadRequested, this, [](const QString &modelId) {
+        ChatManager::instance().selectModel(modelId, /* load */ false);
+    });
+    // The just-unloaded model is no longer active: pick another loaded model,
+    // keeping the selection (shown as "(unloaded)") when nothing else is loaded.
+    connect(&server(), &LlamaServer::modelUnloadRequested, this, [](const QString &modelId) {
+        ChatManager &chat = ChatManager::instance();
+        if (chat.selectedModel() != modelId)
+            return;
+        for (const auto &m : server().models()) {
+            if (m.id != modelId && m.status == QLatin1String("loaded")) {
+                chat.selectModel(m.id, /* load */ false);
+                break;
+            }
         }
     });
     connect(&runtime(), &LlamaRuntime::resolvedPathChanged, this,
@@ -291,7 +307,7 @@ void LlamaPlugin::initialize()
     menuContainer->addAction(toggleSelectionPromptButtonCmd);
     menuContainer->addAction(serverCmd);
     menuContainer->addAction(statusCmd);
-    menuContainer->addAction(modelsMenuCmd);
+    menuContainer->addMenu(modelsMenuContainer);
     menuContainer->addSeparator();
     menuContainer->addAction(preferencesCmd);
 
@@ -343,7 +359,6 @@ void LlamaPlugin::initialize()
     statusMenu->addAction(&m_selectionPromptButtonAction);
     statusMenu->addAction(&m_serverAction);
     statusMenu->addAction(&m_statusAction);
-    m_modelsMenu = new QMenu(Tr::tr("Models"), statusMenu);
     statusMenu->addMenu(m_modelsMenu);
     statusMenu->addSeparator();
     statusMenu->addAction(&m_preferencesAction);
@@ -481,8 +496,6 @@ void LlamaPlugin::updateModelsMenu()
 {
     if (m_modelsMenu)
         populateModelsMenu(m_modelsMenu);
-    if (m_modelsToolsMenu)
-        populateModelsMenu(m_modelsToolsMenu);
 }
 
 void LlamaPlugin::populateModelsMenu(QMenu *menu)
@@ -514,11 +527,21 @@ void LlamaPlugin::populateModelsMenu(QMenu *menu)
         auto *action = new QAction(entry.id, menu);
         action->setCheckable(true);
         action->setChecked(entry.id == selected);
-        if (!entry.status.isEmpty() && entry.status != QLatin1String("loaded"))
+        action->setToolTip(
+            Tr::tr("Selects and loads the model. Click the selected model again to "
+                   "unload it and reset the selection."));
+        if (!entry.status.isEmpty() && entry.status != QLatin1String("loaded")
+            && entry.status != QLatin1String("unloaded"))
             action->setText(entry.id + QLatin1Char(' ')
                             + QLatin1Char('(') + entry.status + QLatin1Char(')'));
         connect(action, &QAction::triggered, this, [id = entry.id] {
-            ChatManager::instance().selectModel(id);
+            auto &chat = ChatManager::instance();
+            if (id == chat.selectedModel()) {
+                // Toggle off: unloads the model and resets the selection.
+                chat.selectModel(QString());
+            } else {
+                chat.selectModel(id);
+            }
         });
         menu->addAction(action);
     }

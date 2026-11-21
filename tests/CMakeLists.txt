@@ -32,6 +32,9 @@ add_qtc_test(llamatools_test
     ../src/promptssettingswidget.h
     ../src/sandboxsettingswidget.cpp
     ../src/serversettingswidget.cpp
+    ../src/llamaicons.cpp
+    ../src/llamacatalog.cpp
+    ../src/modeldownloaddialog.cpp
     ../src/llamaoutputpane.cpp
     ../src/llamaserver.cpp
     ../src/llamaruntime.cpp
@@ -84,7 +87,7 @@ add_qtc_test(sandboxwidget_test
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
-    Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Network
+    Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Network Qt::Svg
     QtCreator::Utils
     QtCreator::Core
     QtCreator::ProjectExplorer
@@ -98,9 +101,13 @@ add_qtc_test(sandboxwidget_test
     ../src/skills.cpp
     ../src/toolsettingswidget.cpp
     ../src/serversettingswidget.cpp
+    ../src/llamaicons.cpp
+    ../src/llamacatalog.cpp
+    ../src/modeldownloaddialog.cpp
     ../src/llamaoutputpane.cpp
     ../src/llamaserver.cpp
     ../src/llamaruntime.cpp
+    ../src/ansitext.cpp
     ../src/tools/mxc.cpp
     ../src/tools/linux_sandbox.cpp
     ../src/tools/windows_sandbox.cpp
@@ -121,7 +128,7 @@ add_qtc_test(llamaserver_test
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../src
   DEPENDS
-    Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Network
+    Qt::Test Qt::Core Qt::Gui Qt::Widgets Qt::Network Qt::Svg
     Qt::TaskTree
     QtCreator::Utils
     QtCreator::Core
@@ -132,6 +139,10 @@ add_qtc_test(llamaserver_test
     ../src/llamaserver.cpp
     ../src/llamaruntime.cpp
     ../src/serversettingswidget.cpp
+    ../src/ansitext.cpp
+    ../src/llamaicons.cpp
+    ../src/llamacatalog.cpp
+    ../src/modeldownloaddialog.cpp
     ../src/llamaoutputpane.cpp
     ../src/llamasettings.cpp
     ../src/promptssettingswidget.cpp

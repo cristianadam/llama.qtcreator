@@ -543,16 +543,35 @@ void ChatManager::refreshModels()
                 for (const auto &m : std::as_const(m_models))
                     if (m.id == m_selectedModel)
                         selected = true;
-                if (!selected && !isHumanEditor()) {
-                    // Fall back to the loaded model, or the first one if none
-                    // is loaded yet.  The "Human Editor" pseudo-model is not
-                    // in the server's list, so it must not be clobbered.
-                    m_selectedModel = m_models.first().id;
-                    for (const auto &m : std::as_const(m_models))
-                        if (m.status == QLatin1String("loaded")) {
-                            m_selectedModel = m.id;
-                            break;
-                        }
+                if (!selected && !isHumanEditor() && !m_noModelChosen) {
+                    // The selection vanished (a restart, a removed model):
+                    // resume with the remembered one when the server still
+                    // offers it, loading it when it is not loaded yet, so a
+                    // restart works like before it.
+                    const QString remembered = settings().lastSelectedModel.value();
+                    bool restored = false;
+                    for (const auto &m : std::as_const(m_models)) {
+                        if (m.id != remembered)
+                            continue;
+                        m_selectedModel = m.id;
+                        restored = true;
+                        requestModelLoad(m.id);
+                        break;
+                    }
+                    if (!restored) {
+                        // Fall back to the loaded model; when none is loaded
+                        // nothing is selected (a router-mode server lists the
+                        // unloaded models of the models directory too, so the
+                        // first entry is not necessarily an active model).
+                        // The "Human Editor" pseudo-model is not in the
+                        // server's list, so it must not be clobbered.
+                        m_selectedModel.clear();
+                        for (const auto &m : std::as_const(m_models))
+                            if (m.status == QLatin1String("loaded")) {
+                                m_selectedModel = m.id;
+                                break;
+                            }
+                    }
                 }
             }
             // The selected model's details (router mode) follow the list:
@@ -628,22 +647,8 @@ void ChatManager::refreshModelProps()
     });
 }
 
-void ChatManager::selectModel(const QString &id)
+void ChatManager::requestModelLoad(const QString &id)
 {
-    if (id.isEmpty() || id == m_selectedModel)
-        return;
-    m_selectedModel = id;
-
-    // The "Human Editor" endpoint is not a server model: no load request.
-    if (isHumanEditor()) {
-        refreshModelProps(); // drops the details of the last real model
-        emit modelsUpdated();
-        return;
-    }
-
-    // Router mode: ask the server to load the model when it is not loaded
-    // yet. The load endpoint returns before loading completes, so the
-    // polling started by updateModelPolling() tracks the progress.
     for (const auto &m : std::as_const(m_models)) {
         if (m.id != id || m.status.isEmpty()
             || m.status == QLatin1String("loaded") || m.status == QLatin1String("loading"))
@@ -663,6 +668,71 @@ void ChatManager::selectModel(const QString &id)
         });
         break;
     }
+}
+
+// The selection is made outside the options dialog (the chat's model
+// combo, the Models menu), so persist it like the menu toggles do.
+static void persistSettings()
+{
+    settings().apply();
+    settings().writeSettings();
+}
+
+void ChatManager::requestModelUnload(const QString &id)
+{
+    QUrl url(settings().chatEndpoint.value() + "/models/unload");
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    if (!settings().chatApiKey.value().isEmpty())
+        req.setRawHeader("Authorization", ("Bearer " + settings().chatApiKey.value()).toUtf8());
+    QJsonObject body;
+    body["model"] = id;
+    QNetworkReply *reply = m_network.post(req, QJsonDocument(body).toJson());
+    connect(reply, &QNetworkReply::finished, [reply]() {
+        if (reply->error() != QNetworkReply::NoError)
+            qCWarning(llamaChatNetwork) << "Failed to unload model:" << reply->errorString();
+        reply->deleteLater();
+    });
+}
+
+void ChatManager::selectModel(const QString &id, bool load)
+{
+    if (id == m_selectedModel)
+        return;
+    const QString previous = m_selectedModel;
+    m_selectedModel = id;
+    m_noModelChosen = id.isEmpty();
+
+    if (id.isEmpty()) {
+        // No model active: unload the previous one (when it was a real
+        // model) and forget the remembered selection, so a restart does
+        // not load it again.
+        if (!previous.isEmpty() && previous != QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID))
+            requestModelUnload(previous);
+        settings().lastSelectedModel.setValue(QString());
+        persistSettings();
+        refreshModelProps();
+        emit modelsUpdated();
+        updateModelPolling();
+        return;
+    }
+
+    // Remember the selection so a restart resumes with this model; the
+    // "Human Editor" endpoint is not a server model and is not remembered.
+    if (!isHumanEditor()) {
+        settings().lastSelectedModel.setValue(id);
+        persistSettings();
+    }
+
+    // The "Human Editor" endpoint is not a server model: no load request.
+    if (isHumanEditor()) {
+        refreshModelProps(); // drops the details of the last real model
+        emit modelsUpdated();
+        return;
+    }
+
+    if (load)
+        requestModelLoad(id);
 
     // The new selection's details: fetched now when the model is already
     // loaded, by the list polling once the load finishes.

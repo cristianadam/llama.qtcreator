@@ -383,7 +383,7 @@ bool ConversationsView::deleteConversation()
         for (int i = 0; i < shown; ++i)
             listed << names.at(i);
         if (names.size() > shown)
-            listed << Tr::tr("… and %1 more").arg(names.size() - shown);
+            listed << Tr::tr("... and %1 more").arg(names.size() - shown);
         text = Tr::tr("Are you sure you want to delete the %1 conversations:\n%2")
                    .arg(toDelete.size())
                    .arg(listed.join(QLatin1Char('\n')));

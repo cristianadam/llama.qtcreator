@@ -1,5 +1,7 @@
 #include "ansitext.h"
 
+#include <QFont>
+
 #include <utils/theme/theme.h>
 
 namespace LlamaCpp {
@@ -153,6 +155,29 @@ void applySgrSequence(const QString &params, SgrState &state, const QColor *pale
     }
 }
 
+// The CSS color of \a color: the hex spelling at full opacity, an rgba()
+// otherwise (the dim SGR style drops the foreground to 60%).
+QString cssColor(const QColor &color)
+{
+    if (color.alpha() == 255)
+        return color.name();
+    return QStringLiteral("rgba(%1, %2, %3, %4)")
+        .arg(color.red())
+        .arg(color.green())
+        .arg(color.blue())
+        .arg(color.alpha() / 255.0, 0, 'f', 2);
+}
+
+// Escapes the HTML special characters of \a text.
+QString escapeHtmlText(const QString &text)
+{
+    QString out = text;
+    out.replace(QLatin1String("&"), QLatin1String("&amp;"));
+    out.replace(QLatin1String("<"), QLatin1String("&lt;"));
+    out.replace(QLatin1String(">"), QLatin1String("&gt;"));
+    return out;
+}
+
 } // namespace
 
 // The palette is the theme's terminal tokens (the same source of truth the
@@ -283,6 +308,43 @@ QString stripAnsiSequences(const QString &text)
         }
     }
     return out;
+}
+
+QString ansiToHtml(const QString &text)
+{
+    // A carriage return (progress bars) is a line break, like \n.
+    QString normalized = text;
+    normalized.replace(QStringLiteral("\r\n"), QChar('\n'));
+    normalized.replace(QChar('\r'), QChar('\n'));
+
+    auto escape = [](const QString &s) {
+        return escapeHtmlText(s).replace(QLatin1Char('\n'), QLatin1String("<br/>"));
+    };
+
+    if (!containsAnsiSequences(normalized))
+        return escape(normalized);
+
+    QString html;
+    for (const HighlightFragment &fragment : decodeAnsiText(normalized, QTextCharFormat())) {
+        const QTextCharFormat &fmt = fragment.format;
+        QStringList style;
+        if (fmt.foreground().style() != Qt::NoBrush)
+            style << QStringLiteral("color: %1").arg(cssColor(fmt.foreground().color()));
+        if (fmt.background().style() != Qt::NoBrush)
+            style << QStringLiteral("background-color: %1").arg(cssColor(fmt.background().color()));
+        if (fmt.fontWeight() >= QFont::Bold)
+            style << QStringLiteral("font-weight: bold");
+        if (fmt.fontItalic())
+            style << QStringLiteral("font-style: italic");
+        if (fmt.underlineStyle() != QTextCharFormat::NoUnderline)
+            style << QStringLiteral("text-decoration: underline");
+        if (style.isEmpty())
+            html += escape(fragment.text);
+        else
+            html += QStringLiteral("<span style=\"%1\">%2</span>")
+                        .arg(style.join(QLatin1String("; ")), escape(fragment.text));
+    }
+    return html;
 }
 
 } // namespace LlamaCpp

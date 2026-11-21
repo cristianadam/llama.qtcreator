@@ -1,10 +1,13 @@
 #include "serversettingswidget.h"
 
+#include "ansitext.h"
+#include "llamaicons.h"
 #include "llamaoutputpane.h"
 #include "llamasettings.h"
 #include "llamaserver.h"
 #include "llamaruntime.h"
 #include "llamatr.h"
+#include "modeldownloaddialog.h"
 #include "modellogos.h"
 
 #include <coreplugin/icore.h>
@@ -12,13 +15,11 @@
 #include <utils/qtcassert.h>
 
 #include <QCheckBox>
-#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QListWidget>
+#include <QMenu>
 #include <QMessageBox>
-#include <QPainter>
-#include <QScreen>
 #include <QPushButton>
 #include <QProgressDialog>
 #include <QTimer>
@@ -27,36 +28,14 @@
 namespace LlamaCpp {
 using namespace Layouting;
 
+// The item data role carrying the model id of a row.
+static constexpr int ModelIdRole = Qt::UserRole + 1;
+// The id of the list's "no models" placeholder row.
+static const QString kEmptyRowId = QStringLiteral("\0empty");
+
 static QString link(const char *url)
 {
     return QString("<a href=\"%1\">%1</a>").arg(QLatin1String(url));
-}
-
-// Renders a glyph of the bundled lucide icon font as a pixmap (an icon-font
-// character in a themed settings widget would show up verbatim).
-static QIcon lucideGlyph(QChar glyph, const QColor &color, int pixelSize)
-{
-    const qreal dpr = QGuiApplication::primaryScreen()
-                          ? QGuiApplication::primaryScreen()->devicePixelRatio()
-                          : 1.0;
-    QFont font(QStringLiteral("lucideicons_outline"));
-    font.setPixelSize(pixelSize);
-    const int physicalSize = int(pixelSize * dpr);
-    QPixmap pixmap(physicalSize, physicalSize);
-    pixmap.setDevicePixelRatio(dpr);
-    pixmap.fill(Qt::transparent);
-    QPainter painter(&pixmap);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setRenderHint(QPainter::TextAntialiasing, true);
-    painter.setFont(font);
-    painter.setPen(color);
-    painter.drawText(QRectF(0, 0, pixelSize, pixelSize), Qt::AlignCenter, QString(glyph));
-    return QIcon(pixmap);
-}
-
-static QIcon lucideButtonIcon(QChar glyph, const QPushButton *button)
-{
-    return lucideGlyph(glyph, button->palette().color(QPalette::WindowText), 16);
 }
 
 static QString modelDetails(const ServerModel &model)
@@ -76,92 +55,139 @@ static QString modelDetails(const ServerModel &model)
     return parts.join(QStringLiteral(" \u00B7 "));
 }
 
-// One model of the Server page's list: logo, name, details, modality
-// marks, and - while the server runs - the live status.
+// One model of the Server page's list: logo, name, details, modality marks,
+// and - while the server runs - the live status. Updated in place on
+// refreshes, so the list's scroll position and selection survive.
 class ModelRow : public QWidget
 {
 public:
     ModelRow(const ServerModel &model, bool live, QWidget *parent)
         : QWidget(parent)
+        , m_modelId(model.id)
     {
         auto *layout = new QHBoxLayout(this);
         layout->setContentsMargins(6, 5, 6, 5);
         layout->setSpacing(8);
 
-        auto *logo = new QLabel(this);
-        logo->setFixedSize(28, 28);
-        logo->setScaledContents(true);
-        logo->setFrameShape(QFrame::StyledPanel);
-        logo->setStyleSheet(QStringLiteral("border-radius: 6px;"));
-        logo->setPixmap(QIcon(modelLogoResource(model.id)).pixmap(28, 28));
-        layout->addWidget(logo, 0, Qt::AlignVCenter);
+        m_logo = new QLabel(this);
+        m_logo->setFixedSize(28, 28);
+        m_logo->setScaledContents(true);
+        m_logo->setFrameShape(QFrame::StyledPanel);
+        m_logo->setStyleSheet(QStringLiteral("border-radius: 6px;"));
+        // The logo is a monochrome "currentColor" SVG painted in the palette
+        // color; re-render it when the theme changes (see eventFilter()).
+        m_logo->installEventFilter(this);
+        m_logo->setPixmap(modelLogoPixmap(model.id, 28,
+                                          m_logo->palette().color(QPalette::WindowText)));
+        layout->addWidget(m_logo, 0, Qt::AlignVCenter);
 
         auto *column = new QWidget(this);
         auto *columnLayout = new QVBoxLayout(column);
         columnLayout->setContentsMargins(0, 0, 0, 0);
         columnLayout->setSpacing(1);
-        auto *name = new QLabel(model.id, column);
-        name->setToolTip(model.path);
-        QFont nameFont = name->font();
+        m_name = new QLabel(model.id, column);
+        m_name->setToolTip(model.path);
+        QFont nameFont = m_name->font();
         nameFont.setWeight(QFont::DemiBold);
-        name->setFont(nameFont);
-        columnLayout->addWidget(name);
-        const QString details = modelDetails(model);
-        if (!details.isEmpty()) {
-            auto *sub = new QLabel(details, column);
-            sub->setStyleSheet(QStringLiteral("color: gray; font-size: 11px;"));
-            columnLayout->addWidget(sub);
-        }
+        m_name->setFont(nameFont);
+        columnLayout->addWidget(m_name);
+        m_details = new QLabel(column);
+        m_details->setStyleSheet(QStringLiteral("color: gray; font-size: 11px;"));
+        columnLayout->addWidget(m_details);
         layout->addWidget(column, 1);
 
         // The modality marks (the lucide eye/ear/video glyphs); "text" is
         // not marked.
-        for (const QString &modality : model.inputModalities) {
-            const QChar glyph = modality == QLatin1String("image")
-                                    ? QChar('2')
-                                    : modality == QLatin1String("audio")
-                                          ? QChar('6')
-                                          : modality == QLatin1String("video")
-                                                ? QChar('3')
-                                                : QChar();
-            if (glyph.isNull())
-                continue;
-            auto *mark = new QLabel(this);
-            mark->setPixmap(lucideGlyph(glyph, Qt::gray, 13).pixmap(13, 13));
-            mark->setToolTip(modality);
-            layout->addWidget(mark, 0, Qt::AlignVCenter);
-        }
+        m_marks = new QWidget(this);
+        m_marksLayout = new QHBoxLayout(m_marks);
+        m_marksLayout->setContentsMargins(0, 0, 0, 0);
+        m_marksLayout->setSpacing(4);
+        layout->addWidget(m_marks, 0, Qt::AlignVCenter);
 
-        if (live) {
-            const QChar glyph = statusGlyph(model.status);
-            const QColor color = statusColor(model.status);
-            auto *status = new QWidget(this);
-            auto *statusLayout = new QHBoxLayout(status);
-            statusLayout->setContentsMargins(0, 0, 0, 0);
-            statusLayout->setSpacing(4);
-            if (!glyph.isNull()) {
-                auto *icon = new QLabel(status);
-                icon->setPixmap(lucideGlyph(glyph, color, 13).pixmap(13, 13));
-                statusLayout->addWidget(icon);
-            }
-            auto *text = new QLabel(statusText(model.status), status);
-            text->setStyleSheet(QStringLiteral("color: %1; font-size: 11px;")
-                                     .arg(color.name()));
-            statusLayout->addWidget(text);
-            layout->addWidget(status, 0, Qt::AlignVCenter);
-        }
+        m_status = new QWidget(this);
+        auto *statusLayout = new QHBoxLayout(m_status);
+        statusLayout->setContentsMargins(0, 0, 0, 0);
+        statusLayout->setSpacing(4);
+        m_statusIcon = new QLabel(m_status);
+        statusLayout->addWidget(m_statusIcon);
+        m_statusText = new QLabel(m_status);
+        m_statusText->setStyleSheet(QStringLiteral("font-size: 11px;"));
+        statusLayout->addWidget(m_statusText);
+        layout->addWidget(m_status, 0, Qt::AlignVCenter);
+
+        updateModel(model, live);
+    }
+
+    void updateModel(const ServerModel &model, bool live)
+    {
+        m_name->setToolTip(model.path);
+        const QString details = modelDetails(model);
+        m_details->setText(details);
+        m_details->setVisible(!details.isEmpty());
+        setModalities(model.inputModalities);
+        m_status->setVisible(live);
+        if (live)
+            setStatus(model.status);
+    }
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override
+    {
+        // The logo label's palette changed (theme switch): repaint the mark.
+        if (obj == m_logo && event->type() == QEvent::PaletteChange)
+            m_logo->setPixmap(modelLogoPixmap(m_modelId, 28,
+                                              m_logo->palette().color(QPalette::WindowText)));
+        return QWidget::eventFilter(obj, event);
     }
 
 private:
+    QLabel *m_logo = nullptr;
+    QString m_modelId;
+    void setModalities(const QStringList &modalities)
+    {
+        while (QLayoutItem *item = m_marksLayout->takeAt(0)) {
+            delete item->widget();
+            delete item;
+        }
+        for (const QString &modality : modalities) {
+            const QChar glyph = modality == QLatin1String("image")
+                                    ? Lucide::Eye
+                                    : modality == QLatin1String("audio")
+                                          ? Lucide::Ear
+                                          : modality == QLatin1String("video")
+                                                ? Lucide::Video
+                                                : QChar();
+            if (glyph.isNull())
+                continue;
+            auto *mark = new QLabel(m_marks);
+            mark->setPixmap(lucideGlyph(glyph, Qt::gray, 13).pixmap(13, 13));
+            mark->setToolTip(modality);
+            m_marksLayout->addWidget(mark);
+        }
+        m_marks->setVisible(m_marksLayout->count() > 0);
+    }
+
+    void setStatus(const QString &status)
+    {
+        const QChar glyph = statusGlyph(status);
+        const QColor color = statusColor(status);
+        m_statusIcon->setVisible(!glyph.isNull());
+        if (!glyph.isNull())
+            m_statusIcon->setPixmap(lucideGlyph(glyph, color, 13).pixmap(13, 13));
+        m_statusText->setText(statusText(status));
+        m_statusText->setStyleSheet(QStringLiteral("color: %1; font-size: 11px;")
+                                         .arg(color.name()));
+    }
+
     static QChar statusGlyph(const QString &status)
     {
         if (status == QLatin1String("loaded") || status == QLatin1String("sleeping"))
-            return QChar('Z'); // circle-check
+            return Lucide::CircleCheck;
         if (status == QLatin1String("loading") || status == QLatin1String("downloading")
             || status == QLatin1String("incomplete"))
-            return QChar('0'); // loader-circle
+            return Lucide::LoaderCircle;
         if (status == QLatin1String("failed"))
-            return QChar('4'); // circle-alert
+            return Lucide::TriangleExclamationPoint;
         return QChar();
     }
     static QColor statusColor(const QString &status)
@@ -175,9 +201,9 @@ private:
     static QString statusText(const QString &status)
     {
         if (status == QLatin1String("loading"))
-            return Tr::tr("loading…");
+            return Tr::tr("loading...");
         if (status == QLatin1String("downloading") || status == QLatin1String("incomplete"))
-            return Tr::tr("downloading…");
+            return Tr::tr("downloading...");
         if (status == QLatin1String("failed"))
             return Tr::tr("failed");
         if (status == QLatin1String("sleeping"))
@@ -186,6 +212,14 @@ private:
             return Tr::tr("loaded");
         return Tr::tr("not loaded");
     }
+
+    QLabel *m_name = nullptr;
+    QLabel *m_details = nullptr;
+    QWidget *m_marks = nullptr;
+    QLayout *m_marksLayout = nullptr;
+    QWidget *m_status = nullptr;
+    QLabel *m_statusIcon = nullptr;
+    QLabel *m_statusText = nullptr;
 };
 
 ServerSettingsWidget::ServerSettingsWidget()
@@ -198,8 +232,8 @@ ServerSettingsWidget::ServerSettingsWidget()
     // placeholder (like ripgrep's on the Tools page).
     m_runtimeStatus = new QLabel(this);
     m_runtimeStatus->setWordWrap(true);
-    m_installButton = new QPushButton(Tr::tr("Download llama.cpp…"), this);
-    m_installButton->setIcon(lucideButtonIcon(QChar('1'), m_installButton)); // download
+    m_installButton = new QPushButton(Tr::tr("Download llama.cpp..."), this);
+    m_installButton->setIcon(lucideButtonIcon(Lucide::Download, m_installButton));
     m_installButton->setToolTip(Tr::tr(
         "Downloads and runs the official llama.cpp install script. The build is "
         "not pinned: the script installs whatever the install channel marks as "
@@ -213,10 +247,14 @@ ServerSettingsWidget::ServerSettingsWidget()
     // itself while it is stopped.
     m_modelHint = new QLabel(this);
     m_modelHint->setWordWrap(true);
+    m_modelDownloadButton = new QPushButton(Tr::tr("Download models..."), this);
+    m_modelDownloadButton->setIcon(lucideButtonIcon(Lucide::Download, m_modelDownloadButton));
+    m_modelDownloadButton->setToolTip(Tr::tr(
+        "Browses the llama.app model catalog and downloads a model through "
+        "the running server into its model cache. The server must be running."));
     m_modelRefreshButton = new QPushButton(Tr::tr("Refresh"), this);
-    m_modelRefreshButton->setFlat(true);
     m_modelRefreshButton->setIcon(
-        lucideButtonIcon(QChar('A'), m_modelRefreshButton)); // refresh-cw
+        lucideButtonIcon(Lucide::RefreshCw, m_modelRefreshButton));
     m_modelRefreshButton->setToolTip(Tr::tr(
         "Re-reads the model list. While the server runs, it also makes the "
         "server rescan the models directory, so new .gguf files show up "
@@ -224,7 +262,20 @@ ServerSettingsWidget::ServerSettingsWidget()
     m_modelList = new QListWidget(this);
     m_modelList->setMinimumHeight(120);
     m_modelList->setMaximumHeight(260);
-    m_modelList->setSelectionMode(QAbstractItemView::NoSelection);
+    m_modelList->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_modelList->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_modelList->setToolTip(Tr::tr(
+        "The models the server offers. Select one to load or unload it on the "
+        "server, or right-click it for more actions."));
+    m_modelLoadButton = new QPushButton(Tr::tr("Load model"), this);
+    m_modelLoadButton->setToolTip(Tr::tr(
+        "Loads the selected model on the server (starts its model process), or "
+        "unloads it when it is running."));
+    m_modelRemoveButton = new QPushButton(Tr::tr("Remove model"), this);
+    m_modelRemoveButton->setIcon(lucideButtonIcon(Lucide::Trash, m_modelRemoveButton));
+    m_modelRemoveButton->setToolTip(Tr::tr(
+        "Removes the selected model from the server's model cache (a model "
+        "that was downloaded by the server)."));
     m_modelPollTimer = new QTimer(this);
     m_modelPollTimer->setInterval(5000);
     connect(m_modelPollTimer, &QTimer::timeout, this, [this] {
@@ -236,6 +287,10 @@ ServerSettingsWidget::ServerSettingsWidget()
     m_startStopButton = new QPushButton(Tr::tr("Start server"), this);
     m_stateLabel = new QLabel(this);
     m_stateLabel->setWordWrap(true);
+    // Let the URL be selected and copied with the mouse.
+    m_stateLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    // Expand over the row's free space itself, instead of a trailing stretch.
+    m_stateLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_showOutputButton = new QPushButton(Tr::tr("Show output"), this);
     m_showOutputButton->setToolTip(Tr::tr(
         "Shows the managed server's terminal output (stdout and stderr) in "
@@ -244,6 +299,7 @@ ServerSettingsWidget::ServerSettingsWidget()
 
     m_chatHint = new QLabel(this);
     m_chatHint->setWordWrap(true);
+    m_chatHint->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
     QCheckBox *autoStart = new QCheckBox(s.serverAutoStart.displayName(), this);
     autoStart->setToolTip(s.serverAutoStart.toolTip());
@@ -283,14 +339,15 @@ ServerSettingsWidget::ServerSettingsWidget()
         Group {
             title(Tr::tr("Models")),
             Column {
-                Row {m_modelHint, st, m_modelRefreshButton},
+                Row {m_modelHint, st, m_modelDownloadButton, m_modelRefreshButton},
                 m_modelList,
+                Row {m_modelLoadButton, m_modelRemoveButton, st},
             },
         }.emerge(),
         Group {
             title(Tr::tr("Control")),
             Column {
-                Row {m_startStopButton, m_stateLabel, st},
+                Row {m_startStopButton, m_stateLabel},
                 Row {m_showOutputButton, st},
             },
         }.emerge(),
@@ -362,7 +419,7 @@ ServerSettingsWidget::ServerSettingsWidget()
             });
 
     connect(&rt, &LlamaRuntime::installStarted, this, [this] {
-        m_installDialog = new QProgressDialog(Tr::tr("Installing llama.cpp…"),
+        m_installDialog = new QProgressDialog(Tr::tr("Installing llama.cpp..."),
                                               nullptr,
                                               0,
                                               0,
@@ -416,6 +473,11 @@ ServerSettingsWidget::ServerSettingsWidget()
     connect(&srv, &LlamaServer::modelsUpdated, this, [this](const QList<ServerModel> &) {
         updateModelList();
     });
+    connect(&srv, &LlamaServer::modelActionFailed, this, [this](const QString &, const QString &error) {
+        QMessageBox::warning(Core::ICore::dialogParent(),
+                             Tr::tr("llama.cpp"),
+                             error);
+    });
     connect(&s.serverModelsDir, &Utils::BaseAspect::changed, this, [this] {
         updateModelList();
     });
@@ -425,6 +487,55 @@ ServerSettingsWidget::ServerSettingsWidget()
             server().refreshModels(/* reload */ true);
         else
             updateModelList();
+    });
+    connect(m_modelDownloadButton, &QPushButton::clicked, this, [this] {
+        if (server().state() != LlamaServer::State::Running)
+            return;
+        auto *dialog = new ModelDownloadDialog(Core::ICore::dialogParent());
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->open();
+    });
+    connect(m_modelList, &QListWidget::currentRowChanged, this, [this](int) {
+        updateModelButtons();
+    });
+    connect(m_modelList, &QListWidget::itemDoubleClicked, this, [this](QListWidgetItem *item) {
+        if (item && item->data(ModelIdRole).toString() != kEmptyRowId)
+            toggleModelLoad();
+    });
+    connect(m_modelList, &QListWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
+        const int row = m_modelList->indexAt(pos).row();
+        if (row < 0)
+            return;
+        const ServerModel model = modelAt(row);
+        if (model.id.isEmpty())
+            return; // the "no models" placeholder row
+        const bool running = server().state() == LlamaServer::State::Running;
+        if (!running)
+            return; // the model actions need the server
+        // Select the right-clicked row (a right-click selects it on macOS, but not everywhere).
+        m_modelList->setCurrentRow(row);
+        QMenu menu(this);
+        const bool modelRunning = isModelRunningStatus(model.status);
+        auto *loadAction = menu.addAction(
+            modelRunning ? Tr::tr("Unload model") : Tr::tr("Load model"));
+        connect(loadAction, &QAction::triggered, this, [this] {
+            toggleModelLoad();
+        });
+        if (model.canRemove) {
+            auto *removeAction = menu.addAction(Tr::tr("Remove model..."));
+            connect(removeAction, &QAction::triggered, this, [this, model] {
+                removeSelectedModel(model);
+            });
+        }
+        menu.exec(m_modelList->viewport()->mapToGlobal(pos));
+    });
+    connect(m_modelLoadButton, &QPushButton::clicked, this, [this] {
+        toggleModelLoad();
+    });
+    connect(m_modelRemoveButton, &QPushButton::clicked, this, [this] {
+        const ServerModel model = selectedModel();
+        if (!model.id.isEmpty())
+            removeSelectedModel(model);
     });
 
     connect(&s.serverHost, &Utils::BaseAspect::changed, this, [this] { updateChatHint(); });
@@ -483,7 +594,7 @@ void ServerSettingsWidget::updateServerState()
     const bool running = srv.state() == LlamaServer::State::Starting
                          || srv.state() == LlamaServer::State::Running;
     m_startStopButton->setIcon(
-        lucideButtonIcon(running ? QChar('I') : QChar('Y'), m_startStopButton));
+        lucideButtonIcon(running ? Lucide::Square : Lucide::Play, m_startStopButton));
     switch (srv.state()) {
     case LlamaServer::State::Stopped:
         m_startStopButton->setText(Tr::tr("Start server"));
@@ -491,7 +602,7 @@ void ServerSettingsWidget::updateServerState()
         break;
     case LlamaServer::State::Starting:
         m_startStopButton->setText(Tr::tr("Stop server"));
-        m_stateLabel->setText(Tr::tr("Starting the server…"));
+        m_stateLabel->setText(Tr::tr("Starting the server..."));
         break;
     case LlamaServer::State::Running:
         m_startStopButton->setText(Tr::tr("Stop server"));
@@ -499,11 +610,20 @@ void ServerSettingsWidget::updateServerState()
         break;
     case LlamaServer::State::Failed:
         m_startStopButton->setText(Tr::tr("Start server"));
-        m_stateLabel->setText(srv.errorMessage().isEmpty()
-                                  ? Tr::tr("The server failed to start. See its output.")
-                                  : srv.errorMessage());
+        const QString error = srv.errorMessage();
+        if (error.isEmpty()) {
+            m_stateLabel->setText(Tr::tr("The server failed to start. See its output."));
+        } else if (containsAnsiSequences(error)) {
+            // The tail of the server log carries the ANSI color codes it
+            // emitted; decode them into spans, the plain label would show
+            // the raw escape sequences.
+            m_stateLabel->setText(ansiToHtml(error));
+        } else {
+            m_stateLabel->setText(error);
+        }
         break;
     }
+    updateModelButtons();
 }
 
 void ServerSettingsWidget::updateChatHint()
@@ -514,6 +634,78 @@ void ServerSettingsWidget::updateChatHint()
                            .arg(QStringLiteral("http://%1:%2")
                                     .arg(settings().serverHost())
                                     .arg(settings().serverPort())));
+}
+
+int ServerSettingsWidget::modelRow(const QString &id) const
+{
+    for (int i = 0; i < m_modelList->count(); ++i) {
+        if (m_modelList->item(i)->data(ModelIdRole).toString() == id)
+            return i;
+    }
+    return -1;
+}
+
+ServerModel ServerSettingsWidget::modelAt(int row) const
+{
+    if (row < 0 || row >= m_modelList->count())
+        return {};
+    const QString id = m_modelList->item(row)->data(ModelIdRole).toString();
+    const auto it = m_modelsById.constFind(id);
+    return it != m_modelsById.constEnd() ? *it : ServerModel {};
+}
+
+ServerModel ServerSettingsWidget::selectedModel() const
+{
+    return modelAt(m_modelList->currentRow());
+}
+
+bool ServerSettingsWidget::isModelRunningStatus(const QString &status)
+{
+    return status == QLatin1String("loaded") || status == QLatin1String("loading")
+           || status == QLatin1String("sleeping");
+}
+
+void ServerSettingsWidget::toggleModelLoad()
+{
+    const ServerModel model = selectedModel();
+    if (model.id.isEmpty())
+        return;
+    if (isModelRunningStatus(model.status))
+        server().unloadModel(model.id);
+    else
+        server().loadModel(model.id);
+}
+
+void ServerSettingsWidget::removeSelectedModel(const ServerModel &model)
+{
+    if (!model.canRemove)
+        return;
+    const int answer = QMessageBox::question(
+        Core::ICore::dialogParent(),
+        Tr::tr("Remove model"),
+        Tr::tr("Remove the model \"%1\" from the server's model cache? The model's "
+               "files are deleted; downloading again restores it.")
+            .arg(model.id),
+        QMessageBox::Yes | QMessageBox::No);
+    if (answer == QMessageBox::Yes)
+        server().removeModel(model.id);
+}
+
+void ServerSettingsWidget::updateModelButtons()
+{
+    QTC_ASSERT(m_modelList, return);
+    const bool running = server().state() == LlamaServer::State::Running;
+    const ServerModel model = selectedModel();
+    const bool hasModel = !model.id.isEmpty();
+    const bool modelRunning = hasModel && isModelRunningStatus(model.status);
+    m_modelDownloadButton->setEnabled(running);
+    m_modelRefreshButton->setEnabled(running);
+    m_modelLoadButton->setText(modelRunning ? Tr::tr("Unload model") : Tr::tr("Load model"));
+    m_modelLoadButton->setIcon(lucideButtonIcon(modelRunning ? Lucide::Square : Lucide::Play,
+                                                m_modelLoadButton));
+    m_modelLoadButton->setEnabled(running && hasModel
+                                  && model.status != QLatin1String("downloading"));
+    m_modelRemoveButton->setEnabled(running && hasModel && model.canRemove);
 }
 
 void ServerSettingsWidget::updateModelList()
@@ -529,23 +721,50 @@ void ServerSettingsWidget::updateModelList()
     else
         models = scanModelsDirectory(settings().serverModelsDir().toUserOutput());
 
-    // The item widgets are children of the viewport, not of the items, so
-    // deleting the items alone would leak them.
-    while (m_modelList->count() > 0) {
-        auto *item = m_modelList->item(0);
-        auto *widget = m_modelList->itemWidget(item);
-        m_modelList->takeItem(0);
-        delete widget;
-        delete item;
+    // The rows are updated in place (never rebuilt), so the scroll position and selection survive; the selection is tracked by id.
+    const QString selectedId = modelAt(m_modelList->currentRow()).id;
+
+    m_modelsById.clear();
+    for (const ServerModel &model : models)
+        m_modelsById.insert(model.id, model);
+
+    // Drop the rows of the models that are gone (and the empty-state placeholder).
+    for (int i = m_modelList->count() - 1; i >= 0; --i) {
+        auto *item = m_modelList->item(i);
+        const QString id = item->data(ModelIdRole).toString();
+        const bool keep = id == kEmptyRowId ? models.isEmpty() : m_modelsById.contains(id);
+        if (!keep) {
+            // The item widget is a child of the viewport, not of the item: deleting the item alone would leak it.
+            delete m_modelList->itemWidget(item);
+            m_modelList->takeItem(i);
+            delete item;
+        }
     }
 
-    if (models.isEmpty()) {
+    // Update the surviving rows and append the new ones (appending keeps the positions stable).
+    for (const ServerModel &model : models) {
+        const int existingRow = modelRow(model.id);
+        if (existingRow >= 0) {
+            static_cast<ModelRow *>(m_modelList->itemWidget(m_modelList->item(existingRow)))
+                ->updateModel(model, live);
+        } else {
+            auto *item = new QListWidgetItem(m_modelList);
+            item->setData(ModelIdRole, model.id);
+            auto *row = new ModelRow(model, live, m_modelList);
+            item->setSizeHint(row->sizeHint());
+            m_modelList->addItem(item);
+            m_modelList->setItemWidget(item, row);
+        }
+    }
+
+    if (models.isEmpty() && modelRow(kEmptyRowId) < 0) {
         auto *item = new QListWidgetItem(m_modelList);
+        item->setData(ModelIdRole, kEmptyRowId);
         auto *empty = new QWidget(m_modelList);
         auto *emptyLayout = new QHBoxLayout(empty);
         emptyLayout->setContentsMargins(6, 5, 6, 5);
         auto *mark = new QLabel(empty);
-        mark->setPixmap(lucideGlyph(QChar('5'), Qt::gray, 14).pixmap(14, 14)); // bot
+        mark->setPixmap(lucideGlyph(Lucide::Bot, Qt::gray, 14).pixmap(14, 14));
         auto *label = new QLabel(
             live ? Tr::tr("The server reports no models.")
                  : Tr::tr("No models in the models directory."),
@@ -556,13 +775,12 @@ void ServerSettingsWidget::updateModelList()
         emptyLayout->addStretch();
         item->setSizeHint(empty->sizeHint());
         m_modelList->setItemWidget(item, empty);
-    } else {
-        for (const ServerModel &model : models) {
-            auto *item = new QListWidgetItem(m_modelList);
-            auto *row = new ModelRow(model, live, m_modelList);
-            item->setSizeHint(row->sizeHint());
-            m_modelList->setItemWidget(item, row);
-        }
+    }
+
+    if (!selectedId.isEmpty()) {
+        const int row = modelRow(selectedId);
+        if (row >= 0)
+            m_modelList->setCurrentRow(row);
     }
 
     m_modelHint->setText(live
@@ -571,6 +789,7 @@ void ServerSettingsWidget::updateModelList()
                              : Tr::tr("The server is stopped: the models directory is "
                                       "listed as-is."));
     m_modelRefreshButton->setEnabled(live ? !server().isRefreshingModels() : true);
+    updateModelButtons();
 }
 
 } // namespace LlamaCpp

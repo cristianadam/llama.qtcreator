@@ -148,9 +148,12 @@ public:
     QList<ModelEntry> models() const;
     QString selectedModel() const;
     void refreshModels();
-    //! Switches the active model; in router mode this also asks the server
-    //! to load the model when it is not loaded yet.
-    void selectModel(const QString &id);
+    //! Switches the active model; in router mode this also asks the server to load the model when it is not loaded yet
+    //! (\a load = false when the caller already sent the load request, e.g. the Server page).
+    //! An empty \a id resets the selection to "no model" and unloads the
+    //! previous one (the Models menu's toggle-off and the combo's "No
+    //! model" entry).
+    void selectModel(const QString &id, bool load = true);
 
     //! True when the "Human Editor" pseudo-model is selected: the
     //! "assistant" side of the conversation is a human typing Markdown in
@@ -311,6 +314,14 @@ private:
     //! cached details are dropped.
     void refreshModelProps();
 
+    //! Asks the server to load the model (POST /models/load) when it is not
+    //! loaded yet; the endpoint returns before loading completes, so the
+    //! polling started by updateModelPolling() tracks the progress.
+    void requestModelLoad(const QString &id);
+
+    //! Asks the server to unload the model (POST /models/unload).
+    void requestModelUnload(const QString &id);
+
     //! The router-mode server's model status feed (GET /models/sse, the same
     //! feed the llama.cpp web UI reads): its events keep m_models live, and a
     //! broken stream that reconnects is how a server (re)start is detected
@@ -386,6 +397,9 @@ private:
 
     QList<ModelEntry> m_models;
     QString m_selectedModel;
+    //! The user explicitly picked "no model" (empty selection); the
+    //! refreshModels() fallback must not re-pick one over that choice.
+    bool m_noModelChosen{false};
     QTimer *m_modelPollTimer{nullptr}; // polls /models while a model is loading
     //! The router's /models/sse feed (see openModelSseFeed()); null when the
     //! server is not in router mode or the feed is between connects.

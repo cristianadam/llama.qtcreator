@@ -3,9 +3,11 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QHostAddress>
+#include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QPixmap>
 #include <QEventLoop>
 #include <QHostAddress>
 #include <QStandardPaths>
@@ -34,6 +36,7 @@
 #include <skills.h>
 #include <llamathinkingsectionparser.h>
 #include <markdownrenderer.h>
+#include <modellogos.h>
 #include <tools/apply_patch_tool.h>
 #include <tools/factory.h>
 #include <tools/linux_sandbox.h>
@@ -640,6 +643,8 @@ private slots:
     void repairJson_invalidEscapes();
     void repairJson_validUnchanged();
     void repairJson_structureNotFixed();
+    void modelLogoPixmap_paintsRequestedColor();
+    void modelLogoPixmap_fallbackIsLlamaMark();
 };
 
 static QTemporaryDir *gTempDir = nullptr;
@@ -7295,6 +7300,47 @@ void LlamaToolsTest::repairJson_structureNotFixed()
 
     const QString notJson = QStringLiteral("sure, here is the JSON: {\"a\": 1");
     QVERIFY(QJsonDocument::fromJson(repairJson(notJson).toUtf8(), &err).isNull());
+}
+
+void LlamaToolsTest::modelLogoPixmap_paintsRequestedColor()
+{
+    // The logo SVGs fill with "currentColor"; the helper must paint the mark
+    // in the requested palette color (the default black was invisible on a
+    // dark background).
+    const QColor color(200, 30, 30);
+    const QPixmap pm = modelLogoPixmap(QStringLiteral("qwen"), 28, color);
+    QVERIFY(!pm.isNull());
+    QCOMPARE(pm.size(), QSize(int(28 * pm.devicePixelRatio()),
+                              int(28 * pm.devicePixelRatio())));
+    const QImage img = pm.toImage().convertToFormat(QImage::Format_ARGB32);
+    int painted = 0;
+    int offColor = 0;
+    for (int y = 0; y < img.height(); ++y) {
+        for (int x = 0; x < img.width(); ++x) {
+            const QRgb px = img.pixel(x, y);
+            if (qAlpha(px) == 0)
+                continue;
+            ++painted;
+            if (qAbs(qRed(px) - color.red()) > 32
+                    || qAbs(qGreen(px) - color.green()) > 32
+                    || qAbs(qBlue(px) - color.blue()) > 32)
+                ++offColor;
+        }
+    }
+    QVERIFY(painted > 100);
+    QVERIFY2(offColor < painted / 10,
+             qPrintable(QStringLiteral("%1 of %2 painted pixels are off-color")
+                            .arg(offColor)
+                            .arg(painted)));
+}
+
+void LlamaToolsTest::modelLogoPixmap_fallbackIsLlamaMark()
+{
+    // An unknown brand falls back to the llama mark, painted the same way.
+    const QPixmap pm = modelLogoPixmap(QStringLiteral("acme-super-model"), 28, Qt::white);
+    QVERIFY(!pm.isNull());
+    QCOMPARE(pm.size(), QSize(int(28 * pm.devicePixelRatio()),
+                              int(28 * pm.devicePixelRatio())));
 }
 
 } // namespace LlamaCpp
