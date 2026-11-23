@@ -3,6 +3,7 @@
 #include "llamasettings.h"
 #include "llamatr.h"
 #include "linux_sandbox.h"
+#include "niubash.h"
 #include "tool_utils.h"
 #include "windows_sandbox.h"
 
@@ -155,6 +156,29 @@ BashSpec bashSpec()
                     "or download niubash from the Llama.cpp Chat tools "
                     "settings page.") };
 }
+
+#if defined(Q_OS_WIN)
+// The cmd.exe switch spelling a command given to the active bash must use.
+// Git Bash (an MSYS2 shell) rewrites argument tokens before the child sees
+// them, and a bare "cmd /c" trips its MSYS2 path conversion: "/c" is read as
+// a drive-relative path (C:\), so the doubled-slash escape "cmd //c" is the
+// MSYS2-safe spelling. niubash is a native, MSYS2-free bash that passes its
+// arguments through untouched (path contract), so the plain "cmd /c" spelling
+// it works with is the right one; "cmd //c" reaches cmd.exe verbatim, //c is
+// not a switch cmd knows, and cmd opens an interactive session - a hang, not
+// an error.
+QString cmdSwitchSpelling(const BashSpec &spec)
+{
+    const FilePath program = FilePath::fromUserInput(spec.program);
+    if (Niubash::downloadedPath().isFile() && program == Niubash::downloadedPath())
+        return QStringLiteral("cmd /c");
+    if (windowsShellInstallRoot(spec.program).error.isEmpty())
+        return QStringLiteral("cmd //c");
+    // A custom "bash:" override that is not the downloaded niubash: assume
+    // the MSYS2 spelling, the one Git Bash and MSYS2 bashes need.
+    return QStringLiteral("cmd //c");
+}
+#endif
 
 // Escapes a path for use inside a double-quoted sandbox-exec profile string.
 QString profileString(const QString &path)
@@ -500,6 +524,15 @@ QString BashTool::toolDefinition() const
         "ignore them. Limited to the last 2000 lines or 50 KB; when truncated, the "
         "full output is saved to a temp file and its path is reported. Non-zero "
         "exit, crash, or timeout is a failure, including the output produced so far.");
+#if defined(Q_OS_WIN)
+    if (const BashSpec spec = bashSpec(); spec.error.isEmpty())
+        description += QStringLiteral(
+            " The bash runs on Windows. To run a Windows command, use "
+            "%1 (the doubled slash is MSYS's escape for its argument "
+            "rewriting; it is required with Git Bash and must be omitted "
+            "with niubash, whose arguments pass through untouched).")
+                .arg(cmdSwitchSpelling(spec));
+#endif
     if (sandboxEnabled(ProjectManager::startupProject())) {
         QString note = QStringLiteral(
             " Commands run sandboxed: only the working directory, temp locations "
