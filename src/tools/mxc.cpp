@@ -27,14 +27,14 @@ using namespace Utils;
 namespace LlamaCpp::Tools::Mxc {
 
 // The Microsoft MXC release the Windows sandbox is pinned to (the
-// @microsoft/mxc-sdk npm package, the same binaries the microsoft/mxc v1.0.1
+// @microsoft/mxc-sdk npm package, the same binaries the microsoft/mxc v1.1.0
 // release publishes). A published release never changes, so the checksums
 // belong to this version and no other.
-const char packageVersion[] = "1.0.1";
+const char packageVersion[] = "1.1.0";
 const char packageProject[] = "https://github.com/microsoft/mxc";
 const char packageLicense[] = "https://github.com/microsoft/mxc/blob/main/LICENSE";
-const char packageUrl[] = "https://registry.npmjs.org/@microsoft/mxc-sdk/-/mxc-sdk-1.0.1.tgz";
-const char packageSha256[] = "416d9607c9d4652395d95c3d9c5f5605f1f2f845da1a63228bee41b7392cef49";
+const char packageUrl[] = "https://registry.npmjs.org/@microsoft/mxc-sdk/-/mxc-sdk-1.1.0.tgz";
+const char packageSha256[] = "22806bcc1ff61768c47c8463905129cd479a96bcfcd54c9acf93f316e4b82e19";
 
 // The launcher binary the sandbox wraps commands in, inside the package. The
 // release ships one build per architecture, each pinned to its own size and
@@ -52,13 +52,13 @@ static const BinarySpec &binarySpec()
 {
     static const BinarySpec x64{
         "package/bin/x64/wxc-exec.exe",
-        12152632,
-        "090f5d1f7bb93104ab08dcd4e8034ef954aeefcdaf6658dde5f7dff4cfc12f3a",
+        12700520,
+        "6d466c6b0109bab4bcace6738e11f886d801ea977346db49707488fcbd3afc8a",
     };
     static const BinarySpec arm64{
         "package/bin/arm64/wxc-exec.exe",
-        5945656,
-        "91aa4171e8809f33f19622c381116188eab7d8c8cffad231230a31b58146ee77",
+        7278392,
+        "afbffebc7ba0ef06c6cd24eff0a3792db3e25faca388e4aaca092745ea328fd6",
     };
     return QSysInfo::buildCpuArchitecture() == QLatin1String("arm64") ? arm64 : x64;
 }
@@ -72,7 +72,7 @@ bool isSupportedPlatform()
 {
     if (!HostOsInfo::isWindowsHost())
         return false;
-    // MXC 1.0.1 ships a Windows build for x86-64 and arm64 only.
+    // MXC 1.1.0 ships a Windows build for x86-64 and arm64 only.
     const QString architecture = QSysInfo::buildCpuArchitecture();
     return architecture == QLatin1String("x86_64") || architecture == QLatin1String("arm64");
 }

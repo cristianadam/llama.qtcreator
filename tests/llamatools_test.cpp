@@ -2805,9 +2805,9 @@ void LlamaToolsTest::bash_timeout()
     QVERIFY(output.contains("timed out after 500 ms"));
 }
 
-// Restores the global sandbox setting (and, when \a restoreHome is set,
-// the HOME environment variable) when the scope is left, even when a
-// failing assertion returns early from the test.
+// Restores the global sandbox setting, the HOME and LLAMA_WXC_EXEC
+// environment variables when the scope is left, even when a failing
+// assertion returns early from the test.
 class SandboxTestEnv
 {
 public:
@@ -2815,7 +2815,9 @@ public:
         : m_sandbox(settings().sandboxCommands()),
           m_home(qEnvironmentVariable("HOME")),
           m_hadHome(!m_home.isEmpty()),
-          m_restoreHome(restoreHome)
+          m_restoreHome(restoreHome),
+          m_wxcExec(qEnvironmentVariable("LLAMA_WXC_EXEC")),
+          m_hadWxcExec(!m_wxcExec.isEmpty())
     {
         settings().sandboxCommands.setValue(true);
     }
@@ -2829,6 +2831,11 @@ public:
             else
                 qunsetenv("HOME");
         }
+        // The fake-wxc-exec tests unset LLAMA_WXC_EXEC when they are done,
+        // which removes the variable the real container tests need; put the
+        // value back when it was set at construction time.
+        if (m_hadWxcExec)
+            qputenv("LLAMA_WXC_EXEC", m_wxcExec.toUtf8());
     }
 
 private:
@@ -2836,6 +2843,8 @@ private:
     QString m_home;
     bool m_hadHome = false;
     bool m_restoreHome = false;
+    QString m_wxcExec;
+    bool m_hadWxcExec = false;
 };
 
 void LlamaToolsTest::bash_sandbox()
@@ -3756,12 +3765,17 @@ static QString realWxcExec()
 }
 
 // A bash that can initialize inside the container: niubash (configured or
-// downloaded). The MSYS2/Cygwin-based shells, like Git Bash, abort in the
-// AppContainer (microsoft/mxc#1061), so they cannot be used.
+// downloaded), then the default bash (Git for Windows or MSYS2 on this
+// host). The MSYS2/Cygwin-based shells abort in the AppContainer
+// (microsoft/mxc#1061) and are only a last resort, so the order is
+// niubash first.
 static QString containerBash()
 {
     const Utils::FilePath niubash = LlamaCpp::Tools::Niubash::resolvedPath();
-    return niubash.exists() ? niubash.toUserOutput() : QString();
+    if (niubash.exists())
+        return niubash.toUserOutput();
+    const Utils::FilePath bash = LlamaCpp::Tools::defaultGitBash();
+    return bash.exists() ? bash.toUserOutput() : QString();
 }
 #endif
 
@@ -3777,6 +3791,8 @@ void LlamaToolsTest::windowsSandboxSpecProbeFailed()
     QTemporaryDir dir;
     QVERIFY(dir.isValid());
     const QString fake = writeFakeWxcExec(dir.path());
+    const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+    const bool hadWxcExec = !oldWxcExec.isEmpty();
     qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
     qputenv("WXC_FAKE_PROBE_FAIL", "1");
 
@@ -3784,7 +3800,12 @@ void LlamaToolsTest::windowsSandboxSpecProbeFailed()
         QDir::tempPath(), QProcessEnvironment(), "bash -c echo", 1000, {});
 
     qunsetenv("WXC_FAKE_PROBE_FAIL");
-    qunsetenv("LLAMA_WXC_EXEC");
+    // The test runs before windowsSandboxSpec() and friends: restore the
+    // override (qunsetenv would remove it for good and skip them).
+    if (hadWxcExec)
+        qputenv("LLAMA_WXC_EXEC", oldWxcExec.toUtf8());
+    else
+        qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY(spec.program.isEmpty());
     QVERIFY(!spec.error.isEmpty());
@@ -3801,12 +3822,19 @@ void LlamaToolsTest::windowsSandboxSpecUnavailable()
     // unavailable path is only reachable without one.
     if (Tools::Mxc::isDownloaded())
         QSKIP("the MXC runtime is installed; LLAMA_WXC_EXEC falls back to it");
+    const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+    const bool hadWxcExec = !oldWxcExec.isEmpty();
     qputenv("LLAMA_WXC_EXEC", "/nonexistent/wxc-exec");
 
     const LlamaCpp::Tools::WindowsSandboxSpec spec = LlamaCpp::Tools::windowsSandboxSpec(
         QDir::tempPath(), QProcessEnvironment(), "bash -c echo", 1000, {});
 
-    qunsetenv("LLAMA_WXC_EXEC");
+    // The test runs before windowsSandboxSpec() and friends: restore the
+    // override (qunsetenv would remove it for good and skip them).
+    if (hadWxcExec)
+        qputenv("LLAMA_WXC_EXEC", oldWxcExec.toUtf8());
+    else
+        qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY(spec.program.isEmpty());
     QVERIFY(!spec.error.isEmpty());
@@ -3937,17 +3965,28 @@ void LlamaToolsTest::windowsSandboxSpec()
                   "from the Sandbox settings page");
         const QString shellPath = containerBash();
         if (shellPath.isEmpty())
-            QSKIP("no niubash: download it from the tools settings page");
+            QSKIP("no container-capable bash: download niubash from the tools "
+                  "settings page");
         const QString shellRoot = LlamaCpp::Tools::windowsShellInstallRoot(shellPath).root;
         QVERIFY2(!shellRoot.isEmpty(), qPrintable(shellPath));
+        const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+        const bool hadWxcExec = !oldWxcExec.isEmpty();
         qputenv("LLAMA_WXC_EXEC", exe.toUtf8());
         struct ExeGuard
         {
+            QString wxcExec;
+            bool hadWxcExec;
+            // Restore, not just unset: the override set before the test
+            // run (or by an earlier test) is needed by the tests that
+            // follow.
             ~ExeGuard()
             {
-                qunsetenv("LLAMA_WXC_EXEC");
+                if (hadWxcExec)
+                    qputenv("LLAMA_WXC_EXEC", wxcExec.toUtf8());
+                else
+                    qunsetenv("LLAMA_WXC_EXEC");
             }
-        } exeGuard;
+        } exeGuard{ oldWxcExec, hadWxcExec };
 
         QTemporaryDir workdir;
         QVERIFY(workdir.isValid());
@@ -4024,7 +4063,14 @@ void LlamaToolsTest::windowsSandboxSpec()
                                + QString::fromLocal8Bit(start.readAllStandardError());
 
         QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
-        QCOMPARE(spec.program, exe);
+        // spec.program is a normalized FilePath spelling (forward slashes),
+        // so compare in the normalized spelling (the test sets the override
+        // with backslashes on Windows).
+        QString program = spec.program;
+        program.replace(QLatin1Char('\\'), QLatin1Char('/'));
+        QString exeNormalized = exe;
+        exeNormalized.replace(QLatin1Char('\\'), QLatin1Char('/'));
+        QCOMPARE(program, exeNormalized);
         // The complete wrapper: the configuration (with the command line
         // embedded) is the single argument, nothing follows it.
         QCOMPARE(spec.arguments.size(), 2);
@@ -4063,6 +4109,8 @@ void LlamaToolsTest::windowsSandboxSpec()
     const QString configOut = workdir.path() + QStringLiteral("/config.b64");
     qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
     qputenv("WXC_FAKE_CONFIG_OUT", configOut.toUtf8());
+    const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+    const bool hadWxcExec = !oldWxcExec.isEmpty();
 
     QProcessEnvironment env;
     env.insert("PATH", "/usr/bin");
@@ -4099,7 +4147,12 @@ void LlamaToolsTest::windowsSandboxSpec()
     QVERIFY2(start.waitForFinished(10000), qPrintable(fake));
 
     qunsetenv("WXC_FAKE_CONFIG_OUT");
-    qunsetenv("LLAMA_WXC_EXEC");
+    // The fake replaced the override the real container tests need: restore
+    // it rather than removing it for good.
+    if (hadWxcExec)
+        qputenv("LLAMA_WXC_EXEC", oldWxcExec.toUtf8());
+    else
+        qunsetenv("LLAMA_WXC_EXEC");
 
     QVERIFY2(spec.error.isEmpty(), qPrintable(spec.error));
     QCOMPARE(spec.program, fake);
@@ -4642,15 +4695,26 @@ void LlamaToolsTest::windowsSandboxSpecExtraDirs()
                   "from the Sandbox settings page");
         const QString shellPath = containerBash();
         if (shellPath.isEmpty())
-            QSKIP("no niubash: download it from the tools settings page");
+            QSKIP("no container-capable bash: download niubash from the tools "
+                  "settings page");
+        const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+        const bool hadWxcExec = !oldWxcExec.isEmpty();
         qputenv("LLAMA_WXC_EXEC", exe.toUtf8());
         struct ExeGuard
         {
+            QString wxcExec;
+            bool hadWxcExec;
+            // Restore, not just unset: the override set before the test
+            // run (or by an earlier test) is needed by the tests that
+            // follow.
             ~ExeGuard()
             {
-                qunsetenv("LLAMA_WXC_EXEC");
+                if (hadWxcExec)
+                    qputenv("LLAMA_WXC_EXEC", wxcExec.toUtf8());
+                else
+                    qunsetenv("LLAMA_WXC_EXEC");
             }
-        } exeGuard;
+        } exeGuard{ oldWxcExec, hadWxcExec };
 
         const QStringList oldWritable = settings().sandboxWritableDirs();
         const QStringList oldReadOnly = settings().sandboxReadOnlyDirs();
@@ -4778,14 +4842,23 @@ void LlamaToolsTest::windowsSandboxSpecExtraDirs()
     const QString configOut = workdir.path() + QStringLiteral("/config.b64");
     qputenv("LLAMA_WXC_EXEC", fake.toUtf8());
     qputenv("WXC_FAKE_CONFIG_OUT", configOut.toUtf8());
+    const QString oldWxcExec = qEnvironmentVariable("LLAMA_WXC_EXEC");
+    const bool hadWxcExec = !oldWxcExec.isEmpty();
     struct EnvGuard
     {
+        QString wxcExec;
+        bool hadWxcExec;
+        // Restore, not just unset: the override set before the test run
+        // (or by an earlier test) is needed by the tests that follow.
         ~EnvGuard()
         {
             qunsetenv("WXC_FAKE_CONFIG_OUT");
-            qunsetenv("LLAMA_WXC_EXEC");
+            if (hadWxcExec)
+                qputenv("LLAMA_WXC_EXEC", wxcExec.toUtf8());
+            else
+                qunsetenv("LLAMA_WXC_EXEC");
         }
-    } envGuard;
+    } envGuard{ oldWxcExec, hadWxcExec };
 
     QProcessEnvironment env;
     env.insert("PATH", "/usr/bin");
