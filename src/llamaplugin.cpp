@@ -25,6 +25,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QCursor>
+#include <QFont>
 #include <QMenu>
 #include <QMessageBox>
 #include <QNetworkReply>
@@ -269,23 +270,10 @@ void LlamaPlugin::initialize()
             ChatManager::instance().refreshModels();
         }
     });
-    // The loaded model becomes the chat's active model (selectModel must not post a second load request).
-    connect(&server(), &LlamaServer::modelLoadRequested, this, [](const QString &modelId) {
-        ChatManager::instance().selectModel(modelId, /* load */ false);
-    });
-    // The just-unloaded model is no longer active: pick another loaded model,
-    // keeping the selection (shown as "(unloaded)") when nothing else is loaded.
-    connect(&server(), &LlamaServer::modelUnloadRequested, this, [](const QString &modelId) {
-        ChatManager &chat = ChatManager::instance();
-        if (chat.selectedModel() != modelId)
-            return;
-        for (const auto &m : server().models()) {
-            if (m.id != modelId && m.status == QLatin1String("loaded")) {
-                chat.selectModel(m.id, /* load */ false);
-                break;
-            }
-        }
-    });
+    // The Server page loads and unloads models without touching the chat's
+    // selection: the active chat model is picked in the chat's status bar or
+    // the Models menu, and the FIM/utility models are loaded on their own
+    // (ChatManager::ensureConfiguredModelsLoaded()).
     connect(&runtime(), &LlamaRuntime::resolvedPathChanged, this,
             [this](const QString &) {
                 updateServerAction();
@@ -455,6 +443,33 @@ void LlamaPlugin::settingsUpdated()
         m_selectedCompletion = 0;
         if (m_fimReply && m_fimReply->isRunning())
             m_fimReply->abort();
+
+        // A FIM model on a server other than the chat endpoint's is not
+        // managed by ChatManager: ask that server to load it (a no-op when
+        // it is already loaded; a non-router server answers 404, which is
+        // ignored).
+        if (!settings().modelFim.value().isEmpty()
+            && !ChatManager::fimEndpointIsChatServer()) {
+            const QUrl fim = QUrl(settings().endpoint.value());
+            QUrl url;
+            url.setScheme(fim.scheme());
+            url.setHost(fim.host());
+            url.setPort(fim.port());
+            url.setPath(QStringLiteral("/models/load"));
+            QNetworkRequest req(url);
+            req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+            if (!settings().apiKey.value().isEmpty())
+                req.setRawHeader("Authorization", "Bearer " + settings().apiKey.value().toUtf8());
+            QJsonObject body;
+            body["model"] = settings().modelFim.value();
+            QNetworkReply *reply = m_networkManager->post(req, QJsonDocument(body).toJson());
+            connect(reply, &QNetworkReply::finished, [reply] {
+                if (reply->error() != QNetworkReply::NoError)
+                    qCDebug(llamaNetwork) << "fim: failed to load the FIM model:"
+                                          << reply->errorString();
+                reply->deleteLater();
+            });
+        }
     }
 
     // Set up timer for context gathering
@@ -530,10 +545,13 @@ void LlamaPlugin::populateModelsMenu(QMenu *menu)
         action->setToolTip(
             Tr::tr("Selects and loads the model. Click the selected model again to "
                    "unload it and reset the selection."));
-        if (!entry.status.isEmpty() && entry.status != QLatin1String("loaded")
-            && entry.status != QLatin1String("unloaded"))
-            action->setText(entry.id + QLatin1Char(' ')
-                            + QLatin1Char('(') + entry.status + QLatin1Char(')'));
+        if (entry.status == QLatin1String("loaded")) {
+            // Loaded models are bold (the list updates live when a load
+            // finishes).
+            QFont font = menu->font();
+            font.setBold(true);
+            action->setFont(font);
+        }
         connect(action, &QAction::triggered, this, [id = entry.id] {
             auto &chat = ChatManager::instance();
             if (id == chat.selectedModel()) {

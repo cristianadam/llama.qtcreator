@@ -631,9 +631,6 @@ void LlamaServer::sendModelRequest(const QString &modelId,
 
 void LlamaServer::loadModel(const QString &modelId)
 {
-    // No selection change when the server is stopped (the plugin follows the signal).
-    if (m_state == State::Running)
-        emit modelLoadRequested(modelId);
     QUrl url(QStringLiteral("http://%1:%2/models/load")
                  .arg(serverConnectAddress(m_activeConfig.host))
                  .arg(m_activeConfig.port));
@@ -645,8 +642,6 @@ void LlamaServer::loadModel(const QString &modelId)
 
 void LlamaServer::unloadModel(const QString &modelId)
 {
-    if (m_state == State::Running)
-        emit modelUnloadRequested(modelId);
     QUrl url(QStringLiteral("http://%1:%2/models/unload")
                  .arg(serverConnectAddress(m_activeConfig.host))
                  .arg(m_activeConfig.port));

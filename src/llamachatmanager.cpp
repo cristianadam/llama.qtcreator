@@ -252,6 +252,12 @@ ChatManager::ChatManager(QObject *parent)
     });
     m_serverCheckTimer.start();
 
+    // A newly configured FIM/utility model must be loaded on the router
+    // (the settings dialog only stores the name); the chat selection is
+    // loaded by selectModel() itself.
+    settings().modelFim.addOnChanged(this, [this] { ensureConfiguredModelsLoaded(); });
+    settings().utilityModel.addOnChanged(this, [this] { ensureConfiguredModelsLoaded(); });
+
     connect(m_storage, &Storage::messageAppended, this, &ChatManager::messageAppended);
     connect(m_storage, &Storage::conversationCreated, [this](const QString &convId) {
         if (!m_taskConvCreationPending && !m_taskConversations.contains(convId))
@@ -574,6 +580,12 @@ void ChatManager::refreshModels()
                     }
                 }
             }
+            // The server (re)started: load the configured models (FIM,
+            // utility) that the fresh server does not have loaded yet.
+            if (m_ensureConfiguredModels) {
+                m_ensureConfiguredModels = false;
+                ensureConfiguredModelsLoaded();
+            }
             // The selected model's details (router mode) follow the list:
             // a load finished while polling, or the auto-selection changed.
             refreshModelProps();
@@ -678,6 +690,29 @@ static void persistSettings()
     settings().writeSettings();
 }
 
+bool ChatManager::fimEndpointIsChatServer()
+{
+    const QUrl fim = QUrl(settings().endpoint.value());
+    const QUrl chat = QUrl(settings().chatEndpoint.value());
+    return fim.isValid() && chat.isValid()
+           && fim.host() == chat.host() && fim.port() == chat.port();
+}
+
+bool ChatManager::isConfiguredModel(const QString &id) const
+{
+    if (id == settings().utilityModel.value())
+        return true;
+    return id == settings().modelFim.value() && fimEndpointIsChatServer();
+}
+
+void ChatManager::ensureConfiguredModelsLoaded()
+{
+    if (!settings().utilityModel.value().isEmpty())
+        requestModelLoad(settings().utilityModel.value());
+    if (!settings().modelFim.value().isEmpty())
+        requestModelLoad(settings().modelFim.value());
+}
+
 void ChatManager::requestModelUnload(const QString &id)
 {
     QUrl url(settings().chatEndpoint.value() + "/models/unload");
@@ -695,7 +730,7 @@ void ChatManager::requestModelUnload(const QString &id)
     });
 }
 
-void ChatManager::selectModel(const QString &id, bool load)
+void ChatManager::selectModel(const QString &id)
 {
     if (id == m_selectedModel)
         return;
@@ -705,9 +740,10 @@ void ChatManager::selectModel(const QString &id, bool load)
 
     if (id.isEmpty()) {
         // No model active: unload the previous one (when it was a real
-        // model) and forget the remembered selection, so a restart does
-        // not load it again.
-        if (!previous.isEmpty() && previous != QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID))
+        // model and no setting still uses it) and forget the remembered
+        // selection, so a restart does not load it again.
+        if (!previous.isEmpty() && previous != QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID)
+            && !isConfiguredModel(previous))
             requestModelUnload(previous);
         settings().lastSelectedModel.setValue(QString());
         persistSettings();
@@ -731,8 +767,7 @@ void ChatManager::selectModel(const QString &id, bool load)
         return;
     }
 
-    if (load)
-        requestModelLoad(id);
+    requestModelLoad(id);
 
     // The new selection's details: fetched now when the model is already
     // loaded, by the list polling once the load finishes.
@@ -793,10 +828,19 @@ void ChatManager::openModelSseFeed()
         if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() != 200)
             return;
         m_modelSseConnected = true;
+        // The server (re)started: the configured models (FIM, utility) must
+        // be loaded again. The load requests need the model list to know
+        // the statuses, so defer to the next list update when it has not
+        // arrived yet.
         if (m_modelSseRefreshOnReconnect) {
             m_modelSseRefreshOnReconnect = false;
+            m_ensureConfiguredModels = true;
             refreshModels();
             initServerProps();
+        } else if (m_models.isEmpty()) {
+            m_ensureConfiguredModels = true;
+        } else {
+            ensureConfiguredModelsLoaded();
         }
     });
     QObject::connect(reply, &QNetworkReply::readyRead, this, [this, reply]() {

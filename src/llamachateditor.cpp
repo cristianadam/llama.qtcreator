@@ -1996,10 +1996,14 @@ void ChatEditor::updateModelCombo()
         m_modelCombo->addItem(name.isEmpty() ? QStringLiteral("model") : name);
     } else {
         for (const auto &m : models) {
-            QString text = m.id;
-            if (!m.status.isEmpty() && m.status != QLatin1String("loaded"))
-                text += QStringLiteral(" (%1)").arg(m.status);
-            m_modelCombo->addItem(text, m.id);
+            m_modelCombo->addItem(m.id, m.id);
+            if (m.status == QLatin1String("loaded")) {
+                // Loaded models are bold (the list updates live when a load
+                // finishes).
+                QFont font = m_modelCombo->font();
+                font.setBold(true);
+                m_modelCombo->setItemData(m_modelCombo->count() - 1, font, Qt::FontRole);
+            }
         }
     }
     const int idx = m_modelCombo->findData(selected);

@@ -17,6 +17,7 @@
 #include <utils/layoutbuilder.h>
 
 #include <QComboBox>
+#include <QFont>
 #include <QLabel>
 #include <QLineEdit>
 
@@ -114,10 +115,14 @@ private:
         while (count() > 1)
             removeItem(1);
         for (const auto &m : ChatManager::instance().models()) {
-            QString text = m.id;
-            if (!m.status.isEmpty() && m.status != QLatin1String("loaded"))
-                text += QStringLiteral(" (%1)").arg(m.status);
-            addItem(text, m.id);
+            addItem(m.id, m.id);
+            if (m.status == QLatin1String("loaded")) {
+                // Loaded models are bold (the list updates live when a load
+                // finishes).
+                QFont itemFont = this->font();
+                itemFont.setBold(true);
+                setItemData(count() - 1, itemFont, Qt::FontRole);
+            }
         }
         syncFromAspect();
     }

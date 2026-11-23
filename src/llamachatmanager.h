@@ -148,12 +148,16 @@ public:
     QList<ModelEntry> models() const;
     QString selectedModel() const;
     void refreshModels();
-    //! Switches the active model; in router mode this also asks the server to load the model when it is not loaded yet
-    //! (\a load = false when the caller already sent the load request, e.g. the Server page).
-    //! An empty \a id resets the selection to "no model" and unloads the
-    //! previous one (the Models menu's toggle-off and the combo's "No
-    //! model" entry).
-    void selectModel(const QString &id, bool load = true);
+    //! True when the FIM endpoint (settings().endpoint) points at the same
+    //! host:port as the chat endpoint (settings().chatEndpoint), i.e. the
+    //! FIM model is a model of the server this manager talks to.
+    static bool fimEndpointIsChatServer();
+    //! Switches the active model; in router mode this also asks the server
+    //! to load the model when it is not loaded yet. An empty \a id resets
+    //! the selection to "no model" and unloads the previous one (the Models
+    //! menu's toggle-off and the combo's "No model" entry) - unless that
+    //! model is still in use as the FIM or utility model.
+    void selectModel(const QString &id);
 
     //! True when the "Human Editor" pseudo-model is selected: the
     //! "assistant" side of the conversation is a human typing Markdown in
@@ -322,6 +326,18 @@ private:
     //! Asks the server to unload the model (POST /models/unload).
     void requestModelUnload(const QString &id);
 
+    //! True when \a id is still in use by a setting (the utility model, or
+    //! the FIM model when the FIM endpoint is this server), so resetting
+    //! the chat selection must not unload it.
+    bool isConfiguredModel(const QString &id) const;
+
+    //! Loads the configured models the server does not have loaded yet: the
+    //! utility model and the FIM model (the chat selection is loaded by
+    //! selectModel() itself). requestModelLoad() is a no-op for a model
+    //! that is not in the list (e.g. the FIM model of a different server)
+    //! or already loaded/loading.
+    void ensureConfiguredModelsLoaded();
+
     //! The router-mode server's model status feed (GET /models/sse, the same
     //! feed the llama.cpp web UI reads): its events keep m_models live, and a
     //! broken stream that reconnects is how a server (re)start is detected
@@ -409,6 +425,9 @@ private:
     bool m_modelSseWanted{false}; // the server is in router mode
     bool m_modelSseConnected{false}; // the current feed delivered its HTTP 200
     bool m_modelSseRefreshOnReconnect{false}; // the feed broke: refresh when it is back
+    //! The server (re)started: load the configured models with the next
+    //! model list (the load requests need the list to know the statuses).
+    bool m_ensureConfiguredModels{false};
     QTimer m_modelSseReconnectTimer; // single-shot, 1 s (the web UI's reconnect delay)
     QTimer m_serverCheckTimer; // periodic identity probe (no-feed modes)
     QPointer<QNetworkReply> m_identityCheckReply; // a probe still in flight

@@ -138,9 +138,6 @@ signals:
     void modelsUpdated(const QList<ServerModel> &models);
     // A load/unload/remove request failed (transport or server error).
     void modelActionFailed(const QString &modelId, const QString &error);
-    // A load/unload request went out; the plugin follows it with the chat's active model.
-    void modelLoadRequested(const QString &modelId);
-    void modelUnloadRequested(const QString &modelId);
     // The download of downloadingModel(): started, byte progress (total 0 when unknown), terminal report.
     void downloadStarted(const QString &modelId);
     void downloadProgress(qint64 done, qint64 total);
