@@ -97,6 +97,7 @@ add_qtc_plugin(LlamaCpp
     src/modellogos.h
     src/sandboxstatus.cpp src/sandboxstatus.h
     src/llamasettings.cpp src/llamasettings.h
+    src/llamasettingspages.cpp
     src/llamastorage.cpp src/llamastorage.h
     src/llamathinkingsectionparser.cpp src/llamathinkingsectionparser.h
     src/llamatheme.cpp src/llamatheme.h

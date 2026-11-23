@@ -1,24 +1,14 @@
 #include "llamasettings.h"
 #include "llamaconstants.h"
 #include "llamatr.h"
-#include "promptssettingswidget.h"
-#include "sandboxsettingswidget.h"
-#include "serversettingswidget.h"
-#include "skillssettingswidget.h"
 #include "tools/factory.h"
-#include "tools/tool.h"
-#include "toolsettingswidget.h"
 
 #include <coreplugin/dialogs/ioptionspage.h>
 #include <projectexplorer/project.h>
 #include <utils/guiutils.h>
-#include <utils/layoutbuilder.h>
 #include <utils/pathchooser.h>
 
-#include <QComboBox>
 #include <QDir>
-#include <QLabel>
-#include <QToolTip>
 
 using namespace Utils;
 
@@ -65,44 +55,6 @@ QStringList defaultLocatorPrompts()
             Tr::tr("Fix the following errors and warnings in {file}.\n\n{diagnostics}")};
 }
 
-ToolsSettingsPage::ToolsSettingsPage()
-{
-    setId(Constants::LLAMACPP_TOOLS_OPTIONS_ID); // unique identifier
-    setDisplayName(Tr::tr("Tools"));             // title shown in the Settings dialog
-    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-    setSettingsProvider([] { return &LlamaCpp::settings(); });
-    setWidgetCreator([] { return new LlamaCpp::ToolsSettingsWidget; });
-}
-
-SkillsSettingsPage::SkillsSettingsPage()
-{
-    setId(Constants::LLAMACPP_SKILLS_OPTIONS_ID); // unique identifier
-    setDisplayName(Tr::tr("Skills"));             // title shown in the Settings dialog
-    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-    setSettingsProvider([] { return &LlamaCpp::settings(); });
-    setWidgetCreator([] { return new LlamaCpp::SkillsSettingsWidget; });
-}
-
-SandboxSettingsPage::SandboxSettingsPage()
-{
-    setId(Constants::LLAMACPP_SANDBOX_OPTIONS_ID); // unique identifier
-    setDisplayName(Tr::tr("Sandbox"));             // title shown in the Settings dialog
-    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-    setSettingsProvider([] { return &LlamaCpp::settings(); });
-    setWidgetCreator([] { return new LlamaCpp::SandboxSettingsWidget; });
-}
-
-ServerSettingsPage::ServerSettingsPage()
-{
-    setId(Constants::LLAMACPP_SERVER_OPTIONS_ID); // unique identifier
-    setDisplayName(Tr::tr("Server"));             // title shown in the Settings dialog
-    setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-    setSettingsProvider([] { return &LlamaCpp::settings(); });
-    setWidgetCreator([] { return new LlamaCpp::ServerSettingsWidget; });
-}
-
-// The static instance makes the page appear automatically.
-
 static void initEnableAspect(BoolAspect &enableFim)
 {
     enableFim.setSettingsKey(Constants::ENABLE_LLAMACPP);
@@ -116,11 +68,6 @@ static void initEnableAspect(BoolAspect &enableFim)
 
 LlamaSettings &settings()
 {
-    static ToolsSettingsPage theToolsPage;
-    static SkillsSettingsPage theSkillsPage;
-    static SandboxSettingsPage theSandboxPage;
-    static ServerSettingsPage theServerPage;
-
     static LlamaSettings settings;
     return settings;
 }
@@ -156,9 +103,10 @@ LlamaSettings::LlamaSettings()
     modelFim.setLabelText(Tr::tr("FIM Model:"));
     modelFim.setDefaultValue("");
     modelFim.setToolTip(
-        Tr::tr("Model name to use for FIM completion in case when multiple models are loaded "
-               "on the server (optional, recommended: Qwen3 Coder)."));
-    modelFim.setHistoryCompleter("LlamaCpp.ModelFim.History");
+        Tr::tr("Model to use for FIM completion when multiple models are loaded on the server "
+               "(recommended: Qwen3 Coder). The entries are the models served by the chat "
+               "endpoint; a name can also be typed, e.g. for a different server. Default uses "
+               "the server's model."));
 
     nPrefix.setDisplayName(Tr::tr("Prefix Code Lines"));
     nPrefix.setSettingsKey("NPrefix");
@@ -513,13 +461,12 @@ LlamaSettings::LlamaSettings()
     utilityModel.setSettingsKey("UtilityModel");
     utilityModel.setLabelText(Tr::tr("Utility Model:"));
     utilityModel.setDefaultValue("");
-    utilityModel.setPlaceHolderText(Tr::tr("Default: chat model"));
     utilityModel.setDisplayStyle(StringAspect::LineEditDisplay);
     utilityModel.setToolTip(
         Tr::tr("Model used for auxiliary requests such as conversation titles and "
-               "follow-up suggestions. Use a small model to keep the main chat "
-               "model free. Leave empty to use the active chat model."));
-    utilityModel.setHistoryCompleter("LlamaCpp.UtilityModel.History");
+               "follow-up suggestions; use a small model to keep the main chat "
+               "model free. The entries are the models served by the server; a "
+               "name can also be typed. Default uses the active chat model."));
 
     titlePrompt.setDisplayName(Tr::tr("Conversation Title Prompt"));
     titlePrompt.setSettingsKey("TitlePrompt");
@@ -1042,227 +989,5 @@ void LlamaProjectSettings::save(ProjectExplorer::Project *project)
 
     settings().apply();
 }
-
-// The three settings pages that replace the former single "llama.cpp" page
-// (its three columns): FIM, Chat and Web Search. Each page embeds its
-// aspects in a plain IOptionsPageWidget; a settings-provider page would
-// render the container's single layouter on every page, so a widget creator
-// is needed for per-page layouts. The FIM page carries the "Enable FIM"
-// toggle; it gates only the FIM aspects, so the chat and web search pages
-// keep working with FIM turned off.
-// Applying or cancelling a page acts on the whole shared settings
-// container, which is what the old single page did.
-namespace {
-
-void setupLlamaSettingsPage(Core::IOptionsPageWidget *widget)
-{
-    widget->setOnApply([] {
-        settings().apply();
-        settings().writeSettings();
-    });
-    widget->setOnCancel([] { settings().cancel(); });
-    widget->setDirtyChecker([] { return settings().isDirty(); });
-}
-
-Core::IOptionsPageWidget *createFimSettingsWidget()
-{
-    using namespace Layouting;
-    auto &s = settings();
-
-    auto *widget = new Core::IOptionsPageWidget;
-    // clang-format off
-    Column {
-        s.enableFim, br,
-        Row {s.endpoint}, br,
-        Row {s.apiKey}, br,
-        Row {s.modelFim, st}, br,
-        Row {s.nPrefix, st}, br,
-        Row {s.nSuffix, st}, br,
-        Row {s.nPredict, st}, br,
-        Row {s.nCmpl, st}, br,
-        Row {s.stopStrings}, br,
-        Row {s.tMaxPromptMs, st}, br,
-        Row {s.tMaxPredictMs, st}, br,
-        Row {s.showInfo, st}, br,
-        Row {s.autoFim}, br,
-        Row {s.maxLineSuffix, st}, br,
-        Row {s.maxCacheKeys, st}, br,
-        hr, br,
-        Row {s.ringNChunks, st}, br,
-        Row {s.ringChunkSize, st}, br,
-        Row {s.ringScope, st}, br,
-        Row {s.ringUpdateMs, st}, br,
-        st
-    }.attachTo(widget);
-    // clang-format on
-
-    setupLlamaSettingsPage(widget);
-    return widget;
-}
-
-Core::IOptionsPageWidget *createChatSettingsWidget()
-{
-    using namespace Layouting;
-    auto &s = settings();
-
-    auto *widget = new Core::IOptionsPageWidget;
-    // clang-format off
-    Row {
-        Column {
-            Row {s.chatEndpoint}, br,
-            Row {s.chatApiKey}, br,
-            s.systemMessage, br,
-            Row {s.utilityModel, st}, br,
-            Row {s.temperature, st}, br,
-            Row {s.top_k, st}, br,
-            Row {s.top_p, st}, br,
-            Row {s.min_p, st}, br,
-            Row {s.max_tokens, st}, br,
-            Row {s.pasteLongTextToFileLen, st}, br,
-            hr, br,
-            Row {s.samplers}, br,
-            Row {s.dynatemp_range, st}, br,
-            Row {s.dynatemp_exponent, st}, br,
-            Row {s.typical_p, st}, br,
-            Row {s.xtc_probability, st}, br,
-            Row {s.xtc_threshold, st}, br,
-            hr, br,
-            Row {s.repeat_last_n, st}, br,
-            Row {s.repeat_penalty, st}, br,
-            Row {s.presence_penalty, st}, br,
-            Row {s.frequency_penalty, st}, br,
-            Row {s.dry_multiplier, st}, br,
-            Row {s.dry_base, st}, br,
-            Row {s.dry_allowed_length, st}, br,
-            Row {s.dry_penalty_last_n, st}, br,
-            st
-        },
-        Column {
-            s.toolsEnabled, br,
-            s.selectionPromptButton, br,
-            Row {s.autoHandoff}, br,
-            Row {s.handoffThreshold, st}, br,
-            s.customJson, br,
-            st
-        }
-    }.attachTo(widget);
-    // clang-format on
-
-    setupLlamaSettingsPage(widget);
-    return widget;
-}
-
-Core::IOptionsPageWidget *createWebSearchSettingsWidget()
-{
-    using namespace Layouting;
-    auto &s = settings();
-
-    auto *widget = new Core::IOptionsPageWidget;
-
-    auto *providerCombo = new QComboBox(widget);
-    providerCombo->addItems({QStringLiteral("duckduckgo"),
-                             QStringLiteral("exa"),
-                             QStringLiteral("google"),
-                             QStringLiteral("brave"),
-                             QStringLiteral("tavily")});
-    providerCombo->setCurrentIndex(qMax(0, providerCombo->findText(s.webSearchProvider())));
-    QObject::connect(providerCombo,
-                     &QComboBox::currentTextChanged,
-                     widget,
-                     [combo = providerCombo](const QString &text) {
-                         settings().webSearchProvider.setValue(text);
-                     });
-    s.webSearchProvider.addOnChanged(providerCombo, [combo = providerCombo]() {
-        combo->setCurrentIndex(qMax(0, combo->findText(settings().webSearchProvider())));
-    });
-
-    // clang-format off
-    Column {
-        Row {new QLabel(s.webSearchProvider.labelText(), widget),
-             providerCombo,
-             new QLabel(Tr::tr("\"duckduckgo\" needs no API key"), widget),
-             st}, br,
-        hr, br,
-        Row {s.webSearchExaUrl}, br,
-        Row {s.webSearchExaApiKey}, br,
-        hr, br,
-        Row {s.webSearchGoogleUrl}, br,
-        Row {s.webSearchGoogleApiKey}, br,
-        Row {s.webSearchGoogleCx}, br,
-        hr, br,
-        Row {s.webSearchBraveUrl}, br,
-        Row {s.webSearchBraveApiKey}, br,
-        hr, br,
-        Row {s.webSearchTavilyUrl}, br,
-        Row {s.webSearchTavilyApiKey}, br,
-        st
-    }.attachTo(widget);
-    // clang-format on
-
-    setupLlamaSettingsPage(widget);
-    return widget;
-}
-
-} // namespace
-
-class LlamaFimSettingsPage : public Core::IOptionsPage
-{
-public:
-    LlamaFimSettingsPage()
-    {
-        setId(Constants::LLAMACPP_FIM_OPTIONS_ID); // unique identifier
-        setDisplayName(Tr::tr("FIM"));             // title shown in the Settings dialog
-        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-        setSettingsProvider([] { return &LlamaCpp::settings(); });
-        setWidgetCreator(createFimSettingsWidget);
-    }
-};
-
-const LlamaFimSettingsPage fimSettingsPage;
-
-class LlamaChatSettingsPage : public Core::IOptionsPage
-{
-public:
-    LlamaChatSettingsPage()
-    {
-        setId(Constants::LLAMACPP_CHAT_OPTIONS_ID); // unique identifier
-        setDisplayName(Tr::tr("Chat"));             // title shown in the Settings dialog
-        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-        setSettingsProvider([] { return &LlamaCpp::settings(); });
-        setWidgetCreator(createChatSettingsWidget);
-    }
-};
-
-const LlamaChatSettingsPage chatSettingsPage;
-
-class LlamaWebSearchSettingsPage : public Core::IOptionsPage
-{
-public:
-    LlamaWebSearchSettingsPage()
-    {
-        setId(Constants::LLAMACPP_WEBSEARCH_OPTIONS_ID); // unique identifier
-        setDisplayName(Tr::tr("Web Search"));            // title shown in the Settings dialog
-        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-        setSettingsProvider([] { return &LlamaCpp::settings(); });
-        setWidgetCreator(createWebSearchSettingsWidget);
-    }
-};
-
-const LlamaWebSearchSettingsPage webSearchSettingsPage;
-
-class LlamaPromptsPage : public Core::IOptionsPage
-{
-public:
-    LlamaPromptsPage()
-    {
-        setId(Constants::LLAMACPP_PROMPTS_OPTIONS_ID);
-        setDisplayName(Tr::tr("Prompts"));
-        setCategory(Constants::LLAMACPP_GENERAL_OPTIONS_CATEGORY);
-        setSettingsProvider([] { return &settings(); });
-        setWidgetCreator([] { return new PromptsSettingsWidget; });
-    }
-};
-
-const LlamaPromptsPage promptsPage;
 
 } // namespace LlamaCpp
