@@ -246,7 +246,7 @@ Edits a file by replacing exact text; for small, targeted changes to a single fi
     QJsonObject pathProperty;
     pathProperty[QStringLiteral("type")] = QStringLiteral("string");
     pathProperty[QStringLiteral("description")] =
-        QStringLiteral("File to edit; relative to the project directory, or absolute.");
+        QStringLiteral("File to edit; relative to the working directory, or absolute.");
 
     QJsonObject replaceAllProperty;
     replaceAllProperty[QStringLiteral("type")] = QStringLiteral("boolean");
@@ -389,14 +389,19 @@ void EditFileTool::run(const QJsonObject &args,
 
     const bool replaceAll = args.value("replace_all").toBool();
 
-    const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
+    const FilePath input = FilePath::fromUserInput(path);
+    const FilePath target = absoluteWorkingPath(input);
     if (const QString error = sandboxAccessError(target, /*isWrite=*/true); !error.isEmpty())
         return done(error, false);
-    if (!target.isFile())
-        return done(Tr::tr("Cannot edit \"%1\": file not found. Use read_file to verify the "
-                           "path, or write to create the file.")
-                        .arg(path),
+    if (!target.isFile()) {
+        const QString reason = target.exists()
+                ? Tr::tr("not a plain file")
+                : notFoundError(Tr::tr("file"), input, target);
+        return done(Tr::tr("Cannot edit %1: %2 Use read_file to verify the path, or write to "
+                           "create the file.")
+                            .arg(path, reason),
                     false);
+    }
 
     const Result<QByteArray> readRes = target.fileContents();
     if (!readRes)

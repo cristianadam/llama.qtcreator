@@ -183,7 +183,7 @@ QString SearchTool::toolDefinition() const
                 "type": "object",
                 "properties": {
                     "pattern": { "type": "string", "description": "Pattern: a regex, or a literal string when literal is true." },
-                    "path": { "type": "string", "description": "Directory or file to search (default: project directory); absolute or relative to it." },
+                    "path": { "type": "string", "description": "Directory or file to search (default: working directory); absolute or relative to it." },
                     "glob": { "type": "string", "description": "Only files matching this glob (e.g. '*.cpp')." },
                     "ignore_case": { "type": "boolean", "description": "Case-insensitive (default false)." },
                     "literal": { "type": "boolean", "description": "Treat the pattern as a literal string (default false)." },
@@ -253,13 +253,13 @@ void SearchTool::run(const QJsonObject &args,
         return done(Tr::tr("Error: the pattern must not be empty."), false);
     }
 
-    const FilePath root = absoluteProjectPath(FilePath::fromUserInput(args.value("path").toString()));
+    const FilePath input = FilePath::fromUserInput(args.value("path").toString());
+    const FilePath root = absoluteWorkingPath(input);
     if (const QString error = sandboxAccessError(root, /*isWrite=*/false); !error.isEmpty())
         return done(error, false);
     const QString rootString = root.toUserOutput();
-    if (!root.exists()) {
-        return done(Tr::tr("Error: path does not exist: %1").arg(rootString), false);
-    }
+    if (!root.exists())
+        return done(Tr::tr("Error: %1").arg(notFoundError(Tr::tr("path"), input, root)), false);
     const bool rootIsDir = QFileInfo(rootString).isDir();
 
     const int limit = qBound(1, args.value("limit").toInt(kDefaultLimit), kMaxLimit);

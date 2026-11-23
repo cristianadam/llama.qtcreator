@@ -37,7 +37,7 @@ Creates a new file or fully overwrites an existing one. Parent directories are c
     QJsonObject pathProperty;
     pathProperty[QStringLiteral("type")] = QStringLiteral("string");
     pathProperty[QStringLiteral("description")] =
-        QStringLiteral("File to create or overwrite; relative to the project directory, "
+        QStringLiteral("File to create or overwrite; relative to the working directory, "
                        "or absolute.");
 
     QJsonObject contentProperty;
@@ -122,7 +122,7 @@ void WriteTool::run(const QJsonObject &args,
         return done(Tr::tr("Tool error: \"content\" is required."), false);
     const QString content = args.value("content").toString();
 
-    const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path), /*mustExist=*/false);
+    const FilePath target = absoluteWorkingPath(FilePath::fromUserInput(path));
     if (const QString error = sandboxAccessError(target, /*isWrite=*/true); !error.isEmpty())
         return done(error, false);
     if (target.parentDir().isFile())

@@ -27,7 +27,7 @@ const bool registered = [] {
 
 QString readPatchedLines(const QString &path)
 {
-    const FilePath target = absoluteProjectPath(FilePath::fromUserInput(path));
+    const FilePath target = absoluteWorkingPath(FilePath::fromUserInput(path));
     if (!target.isFile())
         return {};
     const Result<QByteArray> readRes = target.fileContents();
@@ -337,14 +337,13 @@ void ApplyPatchTool::run(const QJsonObject &args,
     for (const Patch::Hunk &hunk : std::as_const(hunks)) {
         Op op;
         op.type = hunk.type;
-        op.source = absoluteProjectPath(FilePath::fromUserInput(hunk.path));
+        op.source = absoluteWorkingPath(FilePath::fromUserInput(hunk.path));
         op.display = hunk.path;
 
         switch (hunk.type) {
         case Patch::HunkType::Add: {
-            // The file does not exist yet; resolve without an existence probe
-            // so it lands in the project directory, not the general one.
-            op.target = absoluteProjectPath(FilePath::fromUserInput(hunk.path), /*mustExist=*/false);
+            // The file does not exist yet; it lands in the working directory.
+            op.target = absoluteWorkingPath(FilePath::fromUserInput(hunk.path));
             op.source = op.target;
             op.contents = hunk.contents;
             if (!op.contents.isEmpty() && !op.contents.endsWith(QLatin1Char('\n')))
@@ -354,9 +353,10 @@ void ApplyPatchTool::run(const QJsonObject &args,
         }
         case Patch::HunkType::Delete: {
             if (!pendingContents.contains(hunk.path) && !op.source.isFile())
-                return done(QStringLiteral("apply_patch verification failed: "
-                                           "file to delete does not exist: %1")
-                                .arg(op.display),
+                return done(QStringLiteral("apply_patch verification failed: %1")
+                                .arg(notFoundError(Tr::tr("file"),
+                                                   FilePath::fromUserInput(hunk.path),
+                                                   op.source)),
                             false);
             pendingContents.remove(hunk.path);
             break;
@@ -367,9 +367,10 @@ void ApplyPatchTool::run(const QJsonObject &args,
                 baseContents = pendingContents.value(hunk.path);
             } else {
                 if (!op.source.isFile())
-                    return done(QStringLiteral("apply_patch verification failed: "
-                                               "Failed to read file to update: %1")
-                                    .arg(op.display),
+                    return done(QStringLiteral("apply_patch verification failed: %1")
+                                    .arg(notFoundError(Tr::tr("file"),
+                                                       FilePath::fromUserInput(hunk.path),
+                                                       op.source)),
                                 false);
 
                 const Result<QByteArray> readRes = op.source.fileContents();
@@ -397,8 +398,7 @@ void ApplyPatchTool::run(const QJsonObject &args,
             pendingContents.insert(hunk.path, op.contents);
 
             if (!hunk.movePath.isEmpty()) {
-                op.target =
-                        absoluteProjectPath(FilePath::fromUserInput(hunk.movePath), /*mustExist=*/false);
+                op.target = absoluteWorkingPath(FilePath::fromUserInput(hunk.movePath));
                 op.display = hunk.movePath;
             } else {
                 op.target = op.source;

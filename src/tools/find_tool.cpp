@@ -118,7 +118,7 @@ QString FindTool::toolDefinition() const
                 "type": "object",
                 "properties": {
                     "pattern": { "type": "string", "description": "Glob pattern (e.g. '*.cpp', '**/*.json')." },
-                    "path": { "type": "string", "description": "Directory to search (default: project directory); absolute or relative to it." },
+                    "path": { "type": "string", "description": "Directory to search (default: working directory); absolute or relative to it." },
                     "limit": { "type": "integer", "description": "Max results (1-5000, default 1000)." }
                 },
                 "required": ["pattern"],
@@ -181,14 +181,17 @@ void FindTool::run(const QJsonObject &args,
         return done(Tr::tr("Error: the pattern must not be empty."), false);
     }
 
-    const FilePath root = absoluteProjectPath(FilePath::fromUserInput(args.value("path").toString()));
+    const FilePath input = FilePath::fromUserInput(args.value("path").toString());
+    const FilePath root = absoluteWorkingPath(input);
     if (const QString error = sandboxAccessError(root, /*isWrite=*/false); !error.isEmpty())
         return done(error, false);
     const QString rootString = root.toUserOutput();
     const QFileInfo rootInfo(rootString);
-    if (!rootInfo.exists() || !rootInfo.isDir()) {
+    if (!rootInfo.exists())
+        return done(Tr::tr("Error: %1").arg(notFoundError(Tr::tr("directory"), input, root)),
+                    false);
+    if (!rootInfo.isDir())
         return done(Tr::tr("Error: path is not a directory: %1").arg(rootString), false);
-    }
 
     const int limit = qBound(1, args.value("limit").toInt(kDefaultLimit), kMaxLimit);
 

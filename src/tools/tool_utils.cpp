@@ -613,7 +613,7 @@ QStringList effectiveEnabledTools()
     return enabled;
 }
 
-FilePath absoluteProjectPath(const FilePath &relPath, bool mustExist)
+FilePath absoluteWorkingPath(const FilePath &relPath)
 {
     // Cleaned, so ".." segments are resolved here and not by the file
     // system after the sandbox checks looked at the path.
@@ -622,18 +622,17 @@ FilePath absoluteProjectPath(const FilePath &relPath, bool mustExist)
                    ? FilePath::fromString(cleanedPath(path.toFSPathString()))
                    : path.cleanPath();
     };
-    const FilePath projectFilePath = cleaned(toolsWorkingDirectory().pathAppended(relPath.path()));
-    const FilePath generalFilePath
-        = cleaned(Core::DocumentManager::projectsDirectory().pathAppended(relPath.path()));
-
     if (relPath.isAbsolutePath())
         return cleaned(relPath);
-    if (!mustExist)
-        // The target may not exist yet (a file about to be created): resolve
-        // against the project directory without an existence probe.
-        return projectFilePath;
+    return cleaned(toolsWorkingDirectory().pathAppended(relPath.path()));
+}
 
-    return projectFilePath.exists() ? projectFilePath : generalFilePath;
+QString notFoundError(const QString &what, const FilePath &input, const FilePath &resolved)
+{
+    if (input.isEmpty() || input.isAbsolutePath())
+        return Tr::tr("%1 does not exist: %2").arg(what, resolved.toUserOutput());
+    return Tr::tr("%1 \"%2\" was not found in the working directory \"%3\".")
+            .arg(what, input.toUserOutput(), toolsWorkingDirectory().toUserOutput());
 }
 
 QString codeLanguageFor(const QString &filePath)

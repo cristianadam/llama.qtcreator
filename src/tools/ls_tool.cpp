@@ -74,7 +74,7 @@ QString LsTool::toolDefinition() const
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "path": { "type": "string", "description": "Directory to list (default: project directory); absolute or relative to it." },
+                    "path": { "type": "string", "description": "Directory to list (default: working directory); absolute or relative to it." },
                     "limit": { "type": "integer", "description": "Max entries (1-5000, default 500)." }
                 },
                 "required": [],
@@ -121,14 +121,17 @@ QString LsTool::summaryPreview(const QJsonObject &arguments, const QString &resu
 void LsTool::run(const QJsonObject &args,
                  std::function<void(const QString &, bool)> done) const
 {
-    const FilePath dir = absoluteProjectPath(FilePath::fromUserInput(args.value("path").toString()));
+    const FilePath input = FilePath::fromUserInput(args.value("path").toString());
+    const FilePath dir = absoluteWorkingPath(input);
     if (const QString error = sandboxAccessError(dir, /*isWrite=*/false); !error.isEmpty())
         return done(error, false);
     const QString dirString = dir.toUserOutput();
     const QFileInfo dirInfo(dirString);
-    if (!dirInfo.exists() || !dirInfo.isDir()) {
+    if (!dirInfo.exists())
+        return done(Tr::tr("Error: %1").arg(notFoundError(Tr::tr("directory"), input, dir)),
+                    false);
+    if (!dirInfo.isDir())
         return done(Tr::tr("Error: path is not a directory: %1").arg(dirString), false);
-    }
 
     const int limit = qBound(1, args.value("limit").toInt(kDefaultLimit), kMaxLimit);
 

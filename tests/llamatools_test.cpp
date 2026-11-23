@@ -370,7 +370,7 @@ private slots:
     void tool_fullPatch();
     void tool_updateUnifiedHeader();
     void tool_addFileInStartupProject();
-    void absoluteProjectPath_generalDirFallback();
+    void absoluteWorkingPath_noGeneralDirFallback();
     void tool_addMarkdownFile();
     void tool_move();
     void tool_updateSameFileTwice();
@@ -1045,12 +1045,12 @@ void LlamaToolsTest::tool_addFileInStartupProject()
     ProjectExplorer::ProjectManager::resetStartupProject();
 }
 
-void LlamaToolsTest::absoluteProjectPath_generalDirFallback()
+void LlamaToolsTest::absoluteWorkingPath_noGeneralDirFallback()
 {
-    // With a startup project open, a relative path that exists in the
-    // project directory wins, and a path that exists only in the general
-    // projects directory (gTempDir, set in initTestCase) still resolves
-    // there - the fallback must not collapse into the project directory.
+    // A relative path is resolved against the working directory (the
+    // startup project's directory when a project is open) and is never
+    // looked up in the default projects directory - even when the file
+    // exists only there.
     const Utils::FilePath projectDir = Utils::FilePath::fromString(gTempDir->filePath("fallbackproj"));
     QVERIFY(projectDir.ensureWritableDir());
     ProjectExplorer::ProjectManager::setStartupProject(projectDir.toFSPathString());
@@ -1059,12 +1059,15 @@ void LlamaToolsTest::absoluteProjectPath_generalDirFallback()
     writeTextFile(gTempDir->filePath("shared.txt"), "general\n");
     writeTextFile(gTempDir->filePath("general-only.txt"), "general\n");
 
-    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("shared.txt")),
+    QCOMPARE(absoluteWorkingPath(Utils::FilePath::fromUserInput("shared.txt")),
              projectDir.pathAppended("shared.txt"));
-    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("general-only.txt")),
-             Utils::FilePath::fromString(gTempDir->filePath("general-only.txt")));
-    // mustExist = false resolves unconditionally against the project dir.
-    QCOMPARE(absoluteProjectPath(Utils::FilePath::fromUserInput("new.txt"), /*mustExist=*/false),
+    // No fallback: a file that exists only in the default projects
+    // directory stays in the working directory and is reported missing
+    // there, not read from the other place.
+    QCOMPARE(absoluteWorkingPath(Utils::FilePath::fromUserInput("general-only.txt")),
+             projectDir.pathAppended("general-only.txt"));
+    // A file about to be created (write, apply_patch add) lands there too.
+    QCOMPARE(absoluteWorkingPath(Utils::FilePath::fromUserInput("new.txt")),
              projectDir.pathAppended("new.txt"));
 
     ProjectExplorer::ProjectManager::resetStartupProject();
@@ -1256,7 +1259,7 @@ void LlamaToolsTest::tool_updateMissingFile()
     args["patchText"] = patchText;
     auto [output, ok] = runTool(args);
     QVERIFY(!ok);
-    QVERIFY(output.contains("Failed to read file to update"));
+    QVERIFY(output.contains("was not found in the working directory"));
 }
 
 void LlamaToolsTest::tool_atomicFailure()
@@ -1634,7 +1637,7 @@ void LlamaToolsTest::editfile_missingFile()
 
     auto [output, ok] = runTool<Tools::EditFileTool>(args);
     QVERIFY(!ok);
-    QVERIFY(output.contains("file not found"));
+    QVERIFY(output.contains("was not found in the working directory"));
 }
 
 void LlamaToolsTest::editfile_emptyEdits()
@@ -4230,9 +4233,8 @@ void LlamaToolsTest::sandboxPathTraversal()
 
     // Relative paths are cleaned while they are resolved, so the sandbox
     // sees where they really point.
-    const Utils::FilePath escaped = absoluteProjectPath(
-        Utils::FilePath::fromUserInput(climb + QStringLiteral("usr/llama-sandbox-traversal")),
-        /*mustExist=*/false);
+    const Utils::FilePath escaped = absoluteWorkingPath(
+        Utils::FilePath::fromUserInput(climb + QStringLiteral("usr/llama-sandbox-traversal")));
     QVERIFY2(!escaped.toFSPathString().contains(QStringLiteral("..")),
              qPrintable(escaped.toFSPathString()));
     QVERIFY(!sandboxAccessError(escaped, /*isWrite=*/true).isEmpty());
@@ -5450,7 +5452,7 @@ void LlamaToolsTest::find_badPath()
 
     const auto [output, ok] = runAsyncTool(tool, args);
     QVERIFY(!ok);
-    QVERIFY(output.contains("not a directory"));
+    QVERIFY(output.contains("does not exist"));
 }
 
 void LlamaToolsTest::find_summaries()
@@ -5581,7 +5583,7 @@ void LlamaToolsTest::ls_badPath()
 
     const auto [output, ok] = runTool<Tools::LsTool>(args);
     QVERIFY(!ok);
-    QVERIFY(output.contains("not a directory"));
+    QVERIFY(output.contains("does not exist"));
 }
 
 void LlamaToolsTest::ls_summaries()

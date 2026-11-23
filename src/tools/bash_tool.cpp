@@ -530,7 +530,7 @@ QString BashTool::toolDefinition() const
                     },
                     "workdir": {
                         "type": "string",
-                        "description": "Working directory (defaults to the project directory); use instead of 'cd'."
+                        "description": "Working directory (relative or absolute, defaults to the tools' working directory); use instead of 'cd'."
                     },
                     "timeout": {
                         "type": "integer",

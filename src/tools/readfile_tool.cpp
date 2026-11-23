@@ -61,7 +61,7 @@ QString ReadFileTool::toolDefinition() const
                     "first_line": { "type": "integer", "description": "First line to read (1-based)." },
                     "last_line_inclusive": { "type": "integer", "description": "Last line to read, inclusive (1-based)." },
                     "should_read_entire_file": { "type": "boolean", "description": "Read the whole file (subject to the caps). Default false." },
-                    "file_path": { "type": "string", "description": "File path, absolute or relative to the project directory." }
+                    "file_path": { "type": "string", "description": "File path, absolute or relative to the working directory." }
                 },
                 "required": [ "first_line", "last_line_inclusive", "file_path" ],
                 "strict": true
@@ -120,13 +120,12 @@ void ReadFileTool::run(const QJsonObject &args,
     int lastLineIncl = args.value("last_line_inclusive").toInt(firstLine);
     bool readAll = args.value("should_read_entire_file").toBool(false);
 
-    const FilePath targetFile = absoluteProjectPath(filePath);
+    const FilePath targetFile = absoluteWorkingPath(filePath);
     if (const QString error = sandboxAccessError(targetFile, /*isWrite=*/false);
             !error.isEmpty())
         return done(error, false);
-    if (!targetFile.exists()) {
-        return done(Tr::tr("File \"%1\" does not exist.").arg(targetFile.toUserOutput()), false);
-    }
+    if (!targetFile.exists())
+        return done(notFoundError(Tr::tr("File"), filePath, targetFile), false);
 
     const Result<QByteArray> readRes = targetFile.fileContents();
     if (!readRes) {

@@ -159,17 +159,17 @@ QString sandboxAccessError(const Utils::FilePath &path, bool isWrite);
 //! own opt-in EnabledMcpToolsList.
 QStringList effectiveEnabledTools();
 
-/*! Resolves \a relPath against the startup project directory (or the project
-    directory when no project is open).
+/*! Resolves \a relPath against the tools' working directory (see
+    toolsWorkingDirectory()).  Relative paths are never looked up anywhere
+    else: a file that is missing there is missing, and the tools report it
+    as such (notFoundError) instead of falling back to another directory. */
+Utils::FilePath absoluteWorkingPath(const Utils::FilePath &relPath);
 
-    When \a mustExist is true (the default) a relative path is preferred in
-    the project directory only if it exists there, and otherwise falls back
-    to the general project directory; useful for tools that only touch
-    files that already exist.  When it is false the path is resolved against
-    the project directory unconditionally, which is what tools that create
-    new files (write, apply_patch add) need: an existence probe would always
-    fail for a fresh file and misplace it in the general project directory. */
-Utils::FilePath absoluteProjectPath(const Utils::FilePath &relPath, bool mustExist = true);
+/*! The "not found" error for a tool path: names the working directory when
+    \a input was relative, because that is where the path was looked for;
+    plain "does not exist" for absolute (or empty) input.  \a what is the
+    translatable kind of thing, e.g. "file" or "directory". */
+QString notFoundError(const QString &what, const Utils::FilePath &input, const Utils::FilePath &resolved);
 
 //! Returns the syntax-highlighting language name for a fenced code block
 //! showing the contents of \a filePath, derived from the file suffix.
