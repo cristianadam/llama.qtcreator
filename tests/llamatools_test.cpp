@@ -5719,7 +5719,12 @@ void LlamaToolsTest::getinfo_run()
     const QStringList lines = output.split(QLatin1Char('\n'));
     QCOMPARE(lines.size(), 2);
     QCOMPARE(lines.first(), QStringLiteral("OS: ") + QSysInfo::prettyProductName());
-    QCOMPARE(lines.last(), QStringLiteral("Working directory: ") + dir.path());
+    // The tool reports the working directory through FilePath::toUserOutput(),
+    // which uses the platform's native separator (backslash on Windows), so
+    // build the expectation with the same conversion rather than dir.path()
+    // (forward slashes).
+    QCOMPARE(lines.last(), QStringLiteral("Working directory: ")
+                               + Utils::FilePath::fromString(dir.path()).toUserOutput());
 }
 
 // ============================================================================
