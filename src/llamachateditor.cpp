@@ -1234,8 +1234,7 @@ void ChatEditor::changeWorkingDirectory()
     const QString dir = QFileDialog::getExistingDirectory(widget(),
                                                           Tr::tr("Select Working Directory"),
                                                           startDir,
-                                                          QFileDialog::ShowDirsOnly
-                                                              | QFileDialog::DontUseNativeDialog);
+                                                          QFileDialog::ShowDirsOnly);
     if (dir.isEmpty())
         return;
 
