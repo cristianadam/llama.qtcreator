@@ -29,7 +29,7 @@ namespace LlamaCpp::Tools::Niubash {
 
 // The niubash release the bash tool is pinned to. A published release never
 // changes, so the checksum belongs to this version and no other.
-const char packageVersion[] = "1.5.0";
+const char packageVersion[] = "1.5.1";
 const char packageProject[] = "https://github.com/unixwin/niubash";
 const char packageLicense[] = "https://github.com/unixwin/niubash/blob/master/LICENSE";
 
@@ -46,9 +46,9 @@ static const Asset &asset()
 {
     static const Asset none{nullptr, nullptr};
     static const Asset winX86_64{"win-x64",
-                                 "46f4781038bea9bbf62ebffd1ddc21ccd96a6db0b6e96db658776432e37667c0"};
+                                 "afc4d6983d3e670d839e20f584d3f5cc6ddc2bef0223c4992020152a7b10dcdd"};
     static const Asset winAarch64{"win-arm64",
-                                  "1faeee6f8da437ed3b0d13a26fb46c3d23341efb7a4698e8205d99135de6559b"};
+                                  "4cc1ec4f7cac37b0a13cea0485d4e413fdda70bfc96b89706cd44630d6d6164c"};
 
     const QString architecture = QSysInfo::buildCpuArchitecture();
     const bool isAarch64 = (architecture == QLatin1String("arm64")
