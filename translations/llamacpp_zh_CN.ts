@@ -8,12 +8,12 @@
         <translation type="vanished">llama.cpp 对话</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="+150"/>
+        <location filename="../src/llamaplugin.h" line="+154"/>
         <source>Request llama.cpp Suggestion</source>
         <translation>请求 llama.cpp 建议</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+150"/>
+        <location filename="../src/llamaplugin.cpp" line="+160"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>在当前编辑器光标位置请求 llama.cpp 的建议或补全。</translation>
     </message>
@@ -97,9 +97,8 @@
         <translation>查询 llama.cpp 服务器并报告已加载的模型。</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Open the llama.cpp settings page.</source>
-        <translation>打开 llama.cpp 设置页面。</translation>
+        <translation type="vanished">打开 llama.cpp 设置页面。</translation>
     </message>
     <message>
         <source>Disable llama.cpp.</source>
@@ -110,19 +109,76 @@
         <translation type="vanished">启用 llama.cpp。</translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+5"/>
+        <source>Open the llama.cpp Server settings page.</source>
+        <translation>打开 llama.cpp 服务器设置页面。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Start or stop the llama-server the plugin manages (the details are on the Server settings page).</source>
+        <translation>启动或停止插件管理的 llama-server（详见服务器设置页面）。</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <location filename="../src/serversettingswidget.cpp" line="+340"/>
+        <source>Models</source>
+        <translation>模型</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The models of the server the chat is connected to; selecting one loads it and makes it the active chat model.</source>
+        <translation>聊天所连接的服务器上的模型；选择一个即可加载它，并使其成为当前活动的聊天模型。</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>Disable FIM</source>
         <translation>禁用 FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+99"/>
+        <location filename="../src/llamasettings.cpp" line="+109"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>启用 FIM</translation>
     </message>
     <message>
-        <location line="+395"/>
+        <location line="+158"/>
+        <location filename="../src/serversettingswidget.cpp" line="+264"/>
+        <location line="+4"/>
+        <source>Stop server</source>
+        <translation>停止服务器</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <location filename="../src/llamaplugin.h" line="+3"/>
+        <location filename="../src/serversettingswidget.cpp" line="-321"/>
+        <location line="+313"/>
+        <location line="+12"/>
+        <source>Start server</source>
+        <translation>启动服务器</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Refresh models</source>
+        <translation>刷新模型</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Re-read the model list from the server.</source>
+        <translation>从服务器重新读取模型列表。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>No models (is the server running?)</source>
+        <translation>没有模型（服务器正在运行吗？）</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
+        <translation>选择并加载模型。再次单击已选择的模型即可卸载它并重置选择。</translation>
+    </message>
+    <message>
+        <location line="+276"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
@@ -169,7 +225,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1037"/>
+        <location filename="../src/llamasettings.cpp" line="+1104"/>
         <source>FIM</source>
         <translation>FIM 补全</translation>
     </message>
@@ -185,13 +241,18 @@
         <translation type="vanished">[llama.cpp] 从 %1 获取 FIM 补全时出错：%2</translation>
     </message>
     <message>
-        <location line="-1293"/>
+        <location filename="../src/llamaoutputpane.cpp" line="+17"/>
+        <location filename="../src/llamaplugin.cpp" line="-1431"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
+        <location filename="../src/serversettingswidget.cpp" line="-203"/>
+        <location line="+7"/>
+        <location line="+28"/>
+        <location line="+34"/>
         <source>llama.cpp</source>
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1082"/>
+        <location filename="../src/llamasettings.cpp" line="-1158"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
@@ -204,7 +265,7 @@
         <translation type="vanished">启用 llama.cpp 集成功能。</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+66"/>
         <source>Endpoint</source>
         <translation>端点</translation>
     </message>
@@ -378,7 +439,7 @@
         <translation type="vanished">在结果缓存中保留的最大缓存补全数量。</translation>
     </message>
     <message>
-        <location line="-206"/>
+        <location line="-216"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>用几个词（包含一个表情符号）概括对话标题。使用对话中使用的语言。使用纯文本，不要使用 Markdown。</translation>
     </message>
@@ -425,12 +486,18 @@
         <translation>沙箱</translation>
     </message>
     <message>
+        <location line="+9"/>
+        <location filename="../src/serversettingswidget.cpp" line="-148"/>
+        <source>Server</source>
+        <translation>服务器</translation>
+    </message>
+    <message>
         <location line="+13"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>启用文本编辑器中的 FIM（fill-in-the-middle）补全。聊天、工具和网页搜索设置与此相互独立。</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+42"/>
         <source>FIM Model</source>
         <translation>FIM 模型</translation>
     </message>
@@ -895,7 +962,12 @@
         <translation>额外参数的自定义 JSON 字符串。</translation>
     </message>
     <message>
-        <location line="+244"/>
+        <location line="+26"/>
+        <source>Last Selected Model</source>
+        <translation>上次选择的模型</translation>
+    </message>
+    <message>
+        <location line="+223"/>
         <source>bash:</source>
         <translation>bash：</translation>
     </message>
@@ -913,7 +985,7 @@
         <translation type="vanished">在聊天界面中显示每秒的令牌数量。</translation>
     </message>
     <message>
-        <location line="-240"/>
+        <location line="-245"/>
         <source>Thinking Level</source>
         <translation>思考级别</translation>
     </message>
@@ -923,7 +995,7 @@
         <translation>支持思考的模型的思考（推理）级别。“default” 使用模型的默认值，“off” 禁用思考，具体级别以服务器为该模型的聊天模板报告的级别为准。</translation>
     </message>
     <message>
-        <location line="+227"/>
+        <location line="+232"/>
         <source>ripgrep:</source>
         <translation>ripgrep：</translation>
     </message>
@@ -945,7 +1017,7 @@
         <translation type="vanished">支持思考的模型的思考（推理）级别：“default”、“off”、“low”、“medium”、“high” 或 “max”。</translation>
     </message>
     <message>
-        <location line="-222"/>
+        <location line="-227"/>
         <source>Chat Font Zoom</source>
         <translation>聊天字体缩放</translation>
     </message>
@@ -955,7 +1027,7 @@
         <translation>聊天对话字体的大小，以编辑器字体大小的百分比表示。可通过在聊天上按住 Ctrl 并滚动鼠标滚轮，或使用聊天放大/缩小命令进行调整。</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+9"/>
         <source>Utility Model</source>
         <translation>辅助模型</translation>
     </message>
@@ -1143,14 +1215,14 @@
         <translation>“ll” 定位器的内置提示词。菜单中只显示提示词的第一行；完整文本会发送给模型。“{selection}” 会被替换为选中的文本，“{file}” 和 “{line}” 会被替换为当前文件和光标所在行，“{diagnostics}” 会被替换为当前文件的错误和警告，“{git_diff}” 会被替换为其 git 仓库的未提交更改。</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
+        <location filename="../src/llamasettings.cpp" line="+7"/>
         <location line="+1"/>
-        <location filename="../src/llamaplugin.h" line="-1"/>
         <source>Selection prompt button</source>
         <translation>选区提示词按钮</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location filename="../src/llamasettings.cpp" line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>在编辑器中文本选区的底部显示一个小按钮。点击它可打开 llama.cpp 定位器，以便使用其中一个提示词将选区发送给 llama.cpp。</translation>
     </message>
@@ -1241,7 +1313,7 @@
     <message>
         <location line="+8"/>
         <location line="+1"/>
-        <location line="+265"/>
+        <location line="+326"/>
         <location line="+1"/>
         <source>Sandbox commands</source>
         <translation>沙箱化命令</translation>
@@ -1255,15 +1327,15 @@
         <translation type="vanished">如果选中，聊天工具将被限制在沙箱中：bash 命令在一个阻止写入系统位置的平台沙箱中运行（Linux 上为 bubblewrap/bwrap，macOS 上为 sandbox-exec，Windows 上为来自 @anthropic-ai/sandbox-runtime 的 srt-win），而文件工具只能在项目目录和临时位置中写入。凭据位置（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）对任何工具都不可读，且沙箱化命令没有网络访问权限（webfetch 和 websearch 工具不受影响）。在 Windows 上，沙箱需要一次性安装：&apos;npx @anthropic-ai/sandbox-runtime windows-install&apos;（会弹出一个 UAC 提示）；srt-win 可执行文件必须在 PATH 中（LLAMA_SRT_WIN 可以指向它）。</translation>
     </message>
     <message>
-        <location line="-184"/>
+        <location line="-245"/>
         <location line="+1"/>
-        <location line="+196"/>
+        <location line="+257"/>
         <location line="+1"/>
         <source>Load project instructions</source>
         <translation>加载项目说明</translation>
     </message>
     <message>
-        <location line="-196"/>
+        <location line="-257"/>
         <source>If checked, the project instructions file of the current project is appended to the chat system message. The file is AGENTS.md, falling back to CLAUDE.md, and is looked up in the project directory and walked up to the git repository root, so a monorepo can keep a single instructions file for all of its projects. Files larger than 32 KB are truncated.</source>
         <translation>如果选中，当前项目的项目说明文件会被追加到聊天系统消息中。该文件为 AGENTS.md，回退到 CLAUDE.md，并在项目目录中查找，然后逐级向上查找直到 git 仓库根目录，因此一个 monorepo 可以为所有项目保留单一说明文件。大于 32 KB 的文件会被截断。</translation>
     </message>
@@ -1430,7 +1502,103 @@
         <translation>Tavily 的 API 密钥，可在 tavily.com 获取（“tavily” 提供方所需）。</translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+7"/>
+        <source>llama.cpp binary</source>
+        <translation>llama.cpp 可执行文件</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>llama.cpp:</source>
+        <translation>llama.cpp：</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Managed install or PATH</source>
+        <translation>托管安装或 PATH</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The llama (or llama-server) binary the plugin starts. When empty, the managed install (the one the download button installed) is used, then the llama found on the PATH (brew, winget).</source>
+        <translation>插件启动的 llama（或 llama-server）可执行文件。如果为空，则使用托管安装（下载按钮安装的版本），其次使用 PATH 上找到的 llama（brew、winget）。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Server Host</source>
+        <translation>服务器主机</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Host:</source>
+        <translation>主机：</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The interface the managed server listens on. 0.0.0.0 lets other machines on the network reach it (in that case set an API key on the Chat page, the server will require it).</source>
+        <translation>托管服务器监听的网络接口。0.0.0.0 允许网络上的其他机器访问它（在这种情况下请在聊天页面设置 API 密钥，服务器将要求提供它）。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Server Port</source>
+        <translation>服务器端口</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Port:</source>
+        <translation>端口：</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The port the managed server listens on. The chat (Chat settings page) must point at the same host and port.</source>
+        <translation>托管服务器监听的端口。聊天（聊天设置页面）必须指向相同的主机和端口。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Server Models Directory</source>
+        <translation>服务器模型目录</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Models directory:</source>
+        <translation>模型目录：</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The directory passed to the server as --models-dir: the .gguf files in it are listed as loadable models. It defaults to ~/.llama/models, the same directory the Llama tray apps use, so the models of one are visible to the other.</source>
+        <translation>作为 --models-dir 传递给服务器的目录：其中的 .gguf 文件会被列为可加载的模型。默认为 ~/.llama/models，与 Llama 托盘应用使用的目录相同，因此一方的模型对另一方可见。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Server Arguments</source>
+        <translation>服务器参数</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Extra arguments:</source>
+        <translation>额外参数：</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>For example: --ctx-size 8192 --cache-type-k q8_0</source>
+        <translation>例如：--ctx-size 8192 --cache-type-k q8_0</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Extra command line arguments for the managed server, appended last, so they win on repeated flags (llama.cpp keeps the last occurrence). See the llama-server help for the full list.</source>
+        <translation>托管服务器的额外命令行参数，附加在最后，因此在重复的标志位中生效（llama.cpp 保留最后一次出现的值）。完整的列表请参见 llama-server 的帮助。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location line="+2"/>
+        <source>Start the server when Qt Creator starts</source>
+        <translation>在 Qt Creator 启动时启动服务器</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Starts the managed server on startup when a llama.cpp binary is available; the server stops again when Qt Creator exits.</source>
+        <translation>在可用 llama.cpp 可执行文件时，于启动时启动托管服务器；Qt Creator 退出时服务器再次停止。</translation>
+    </message>
+    <message>
+        <location line="+55"/>
         <source>Overrides the global &apos;Sandbox commands&apos; setting for this project. See the global setting on the Llama Tools page for what the sandbox restricts.</source>
         <translation>为该项目覆盖全局“沙箱化命令”设置。有关沙箱限制的内容，请参阅 Llama 工具页面上的全局设置。</translation>
     </message>
@@ -1501,7 +1669,7 @@
         <translation type="vanished">工作目录：%1</translation>
     </message>
     <message>
-        <location line="+432"/>
+        <location line="+431"/>
         <source>LLM model</source>
         <translation>LLM 模型</translation>
     </message>
@@ -1571,7 +1739,7 @@
         <translation>否</translation>
     </message>
     <message>
-        <location line="+1099"/>
+        <location line="+1103"/>
         <source>Time: %1</source>
         <translation>时间：%1</translation>
     </message>
@@ -1585,19 +1753,19 @@
         <translation type="vanished">后续问题：</translation>
     </message>
     <message>
-        <location line="-360"/>
+        <location line="-364"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考级别：%1（适用于新消息）</translation>
     </message>
     <message>
         <location line="-915"/>
-        <location line="+944"/>
+        <location line="+948"/>
         <location line="+81"/>
         <source>Human Editor</source>
         <translation>人工编辑器</translation>
     </message>
     <message>
-        <location line="-996"/>
+        <location line="-1000"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>你已连接到 %1，使用 %2 作为当前目录</translation>
     </message>
@@ -1717,6 +1885,7 @@
     </message>
     <message>
         <location line="+6"/>
+        <location filename="../src/modeldownloaddialog.cpp" line="+110"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1742,7 +1911,12 @@
         <translation>任务仍在运行。确定要停止它吗？</translation>
     </message>
     <message>
-        <location line="+327"/>
+        <location line="+245"/>
+        <source>No model</source>
+        <translation>无模型</translation>
+    </message>
+    <message>
+        <location line="+86"/>
         <source>Edit Message</source>
         <translation>编辑消息</translation>
     </message>
@@ -1780,7 +1954,7 @@
         <translation type="vanished">正在创建新对话以继续此对话 – 正在总结对话...</translation>
     </message>
     <message>
-        <location line="-922"/>
+        <location line="-926"/>
         <source>Follow-up questions:</source>
         <translation>后续问题：</translation>
     </message>
@@ -1794,7 +1968,7 @@
         <translation type="vanished">速度：%1 令牌/秒</translation>
     </message>
     <message>
-        <location line="+1552"/>
+        <location line="+1556"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;提示：&lt;/b&gt;&lt;br&gt;令牌数：%1&lt;br&gt;时间：%2 毫秒&lt;br&gt;速度：%3 令牌/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成：&lt;/b&gt;&lt;br&gt;令牌数：%4&lt;br&gt;时间：%5 毫秒&lt;br&gt;速度：%6 令牌/秒</translation>
     </message>
@@ -2005,6 +2179,7 @@ Do you want to overwrite it?</source>
     </message>
     <message>
         <location line="+4"/>
+        <location filename="../src/serversettingswidget.cpp" line="-75"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
@@ -2039,7 +2214,12 @@ Do you want to overwrite it?</source>
         <translation>另存为 HTML</translation>
     </message>
     <message>
-        <location line="+109"/>
+        <location line="+101"/>
+        <source>... and %1 more</source>
+        <translation>... 以及另外 %1 个</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <source>Delete Conversation</source>
         <translation>删除会话</translation>
     </message>
@@ -2051,12 +2231,11 @@ Do you want to overwrite it?</source>
 %1</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>… and %1 more</source>
-        <translation>… 及其他 %1 个</translation>
+        <translation type="vanished">… 及其他 %1 个</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+9"/>
         <source>Are you sure you want to delete the %1 conversations:
 %2</source>
         <translation>确定要删除以下 %1 个会话吗？
@@ -2097,7 +2276,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会话</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1123"/>
+        <location filename="../src/llamasettings.cpp" line="-1199"/>
         <source>Create a summary of {selection}</source>
         <translation>为所选内容创建摘要</translation>
     </message>
@@ -2132,7 +2311,7 @@ You can type any other prompt – they are remembered for next time.</source>
 您可以输入其他提示 – 这些提示将被记住以备下次使用。</translation>
     </message>
     <message>
-        <location filename="../src/markdownrenderer.cpp" line="+697"/>
+        <location filename="../src/markdownrenderer.cpp" line="+698"/>
         <source>SVG image</source>
         <translation>SVG 图像</translation>
     </message>
@@ -2145,6 +2324,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location line="+477"/>
         <location line="+34"/>
+        <location filename="../src/modeldownloaddialog.cpp" line="-23"/>
         <source>Details</source>
         <translation>详细信息</translation>
     </message>
@@ -2289,8 +2469,9 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">已创建 %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="+128"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">文件 &quot;%1&quot; 不存在。</translation>
+        <translation>文件 &quot;%1&quot; 不存在。</translation>
     </message>
     <message>
         <source>Failed to delete &quot;%1&quot;: %2</source>
@@ -2301,8 +2482,9 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">已删除文件 &quot;%1&quot;</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="vanished">读取 &quot;%1&quot; 失败：%2</translation>
+        <translation>读取 &quot;%1&quot; 失败：%2</translation>
     </message>
     <message>
         <source>Start line %1 out of range (file has %2 lines).</source>
@@ -2321,8 +2503,40 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">不支持操作 &quot;%1&quot;。</translation>
     </message>
     <message>
+        <location filename="../src/tools/write_tool.cpp" line="+72"/>
+        <source>Write file</source>
+        <translation>写入文件</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>写入 %1</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>工具错误：“content” 为必填项。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>无法写入“%1”：某个父路径是一个文件。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>无法写入“%1”：无法创建目录：%2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation type="vanished">无法写入 &quot;%1&quot;：%2</translation>
+        <translation>无法写入 &quot;%1&quot;：%2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>已成功向 %2 写入 %1 字节。</translation>
     </message>
     <message>
         <source>Edited %1</source>
@@ -2421,8 +2635,34 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">无法确定列出文件的项目 &quot;%1&quot;。</translation>
     </message>
     <message>
+        <location filename="../src/tools/ls_tool.cpp" line="+91"/>
+        <location line="+7"/>
         <source>list directory %1</source>
-        <translation type="vanished">列出目录 %1</translation>
+        <translation>列出目录 %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Path: `%1`
+
+</source>
+        <translation>路径：`%1`
+
+</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Directory is empty.</source>
+        <translation>目录为空。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>[输出已截断到 %1 KB。列出子目录以查看其余条目。]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>[已达到 %1 个条目的限制。使用 limit=%2 获取更多条目。]</translation>
     </message>
     <message>
         <source>Directory &quot;%1&quot; does not exist.</source>
@@ -2461,24 +2701,58 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">正在运行 Python</translation>
     </message>
     <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="-50"/>
         <source>read whole file %1</source>
-        <translation type="vanished">读取文件 %1 的全部内容</translation>
+        <translation>读取文件 %1 的全部内容</translation>
     </message>
     <message>
         <source>read %1:%2‑%3</source>
         <translation type="vanished">读取 %1 中的第 %2 到 %3 行</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>读取 %1</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>图像“%1”大小为 %2 MB，超过 %3 MB 的读取限制；请先调整其大小（例如使用 bash 工具）。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>图像文件“%1”（%2，%3 字节）。其内容作为图像附带。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation type="vanished">起始行必须大于或等于 1。</translation>
+        <translation>起始行必须大于或等于 1。</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="vanished">结束行必须大于或等于起始行。</translation>
+        <translation>结束行必须大于或等于起始行。</translation>
     </message>
     <message>
+        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="vanished">起始行 %1 超出文件 &quot;%2&quot; 的行数 %3。</translation>
+        <translation>起始行 %1 超出文件 &quot;%2&quot; 的行数 %3。</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>“%2” 的第 %1 行大于 %3 KB 的读取限制；无法使用此工具读取该文件。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> 已达到 %1 KB 限制。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> 请继续使用 first_line=%1, last_line_inclusive=%2。</translation>
     </message>
     <message>
         <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
@@ -2589,12 +2863,28 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>请求头：%1</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
+        <source>load skill %1</source>
+        <translation>加载技能 %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>“name” 参数为必填项。</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>未找到技能“%1”。可用技能：%2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
         <source>(none)</source>
         <translation>（无）</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>此服务器提供的工具列于下方；勾选一个工具即可在聊天中启用它。</translation>
     </message>
@@ -2878,7 +3168,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">压缩</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1654"/>
+        <location filename="../src/llamachateditor.cpp" line="-1658"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>标题</translation>
@@ -2937,7 +3227,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">名称“%1”与 %2 冲突——保留第一个</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1250"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
         <source>Error:</source>
         <translation>错误：</translation>
     </message>
@@ -2982,7 +3272,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">对话已压缩 – 较早的消息已被总结以适配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+1286"/>
+        <location line="+1289"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>对话已超出模型的上下文窗口。</translation>
     </message>
@@ -3027,7 +3317,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">交接请求返回了一个空文档。</translation>
     </message>
     <message>
-        <location line="-866"/>
+        <location line="-869"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>正在创建新对话以继续此对话...</translation>
     </message>
@@ -3046,7 +3336,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+809"/>
+        <location line="+812"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>对话过长，无法交接：历史加上交接文档已超出模型的上下文窗口。</translation>
     </message>
@@ -3214,9 +3504,486 @@ You can type any other prompt - they are remembered for next time.</source>
         <source>Toggle the details of the tool usage. Ctrl+click (Cmd on macOS) on the content collapses the block.</source>
         <translation>切换工具使用的详细信息。在内容上按 Ctrl+点击（macOS 上为 Cmd）可折叠该块。</translation>
     </message>
-</context>
-<context>
-    <name>Tr</name>
+    <message>
+        <location filename="../src/llamaruntime.cpp" line="+54"/>
+        <source>The install script server returned a non-200 response.</source>
+        <translation>安装脚本服务器返回了非 200 响应。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The install script download was redirected; redirects are refused.</source>
+        <translation>安装脚本的下载被重定向了；重定向被拒绝。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The install script did not come from %1.</source>
+        <translation>安装脚本并非来自 %1。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The install script is larger than expected; the download was refused.</source>
+        <translation>安装脚本大于预期大小；下载被拒绝。</translation>
+    </message>
+    <message>
+        <location line="+106"/>
+        <source>Downloading the install script...</source>
+        <translation>正在下载安装脚本……</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>The install script could not be written to a temporary file.</source>
+        <translation>安装脚本无法写入临时文件。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Installing llama.cpp (this can take a minute)...</source>
+        <translation>正在安装 llama.cpp（可能需要一分钟）……</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>llama.cpp installed.</source>
+        <translation>llama.cpp 已安装。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The install script failed (exit code %1).</source>
+        <translation>安装脚本失败（退出代码 %1）。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The install script could not be run.</source>
+        <translation>无法运行安装脚本。</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>The update check failed (network).</source>
+        <translation>更新检查失败（网络）。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The latest build could not be determined.</source>
+        <translation>无法确定最新的构建版本。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>A newer llama.cpp is available (b%1 → b%2).</source>
+        <translation>有更新版本的 llama.cpp 可用（b%1 → b%2）。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>You have the latest llama.cpp (b%1).</source>
+        <translation>您已使用最新版本的 llama.cpp（b%1）。</translation>
+    </message>
+    <message>
+        <location filename="../src/llamaserver.cpp" line="+285"/>
+        <source>The server did not answer within two minutes. See its output for the reason.</source>
+        <translation>服务器在两分钟内没有响应。原因请查看其输出。</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The server could not be started%1.</source>
+        <translation>无法启动服务器%1。</translation>
+    </message>
+    <message>
+        <location line="+73"/>
+        <source>No llama.cpp binary was found. Download it or set its path on this settings page.</source>
+        <translation>未找到 llama.cpp 可执行文件。请下载它，或在本设置页面设置其路径。</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>The server was stopped.</source>
+        <translation>服务器已停止。</translation>
+    </message>
+    <message>
+        <location line="+152"/>
+        <location line="+87"/>
+        <source>The server is not running.</source>
+        <translation>服务器未在运行。</translation>
+    </message>
+    <message>
+        <location line="-56"/>
+        <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
+        <translation>服务器不支持此操作：模型端点仅存在于路由器模式下（启动时不要固定 --model）。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>The server rejected the request: %1</source>
+        <translation>服务器拒绝了请求：%1</translation>
+    </message>
+    <message>
+        <location line="+80"/>
+        <source>The connection to the server was lost.</source>
+        <translation>与服务器的连接已丢失。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>The server rejected the download: %1</source>
+        <translation>服务器拒绝了下载：%1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <location line="+69"/>
+        <source>The download was stopped.</source>
+        <translation>下载已停止。</translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <location line="+48"/>
+        <source>The download is complete.</source>
+        <translation>下载已完成。</translation>
+    </message>
+    <message>
+        <location line="-39"/>
+        <source>The download failed%1.</source>
+        <translation>下载失败%1。</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>The download failed; the partial files stay, so downloading again resumes it.</source>
+        <translation>下载失败；已下载的部分文件保留，重新下载时会继续。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>The server exited unexpectedly (code %1)%2.</source>
+        <translation>服务器意外退出（代码 %1）%2。</translation>
+    </message>
+    <message>
+        <location filename="../src/modeldownloaddialog.cpp" line="-12"/>
+        <source>Download models</source>
+        <translation>下载模型</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Filter the catalog...</source>
+        <translation>筛选目录……</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Model</source>
+        <translation>模型</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Status</source>
+        <translation>状态</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <location line="+139"/>
+        <location filename="../src/serversettingswidget.cpp" line="+137"/>
+        <location filename="../src/tools/mxc.cpp" line="+160"/>
+        <location filename="../src/tools/niubash.cpp" line="+163"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
+        <source>Download</source>
+        <translation>下载</translation>
+    </message>
+    <message>
+        <location line="-137"/>
+        <source>The running server downloads the model from Hugging Face into its model cache and lists it afterwards. The quant is pinned by the selected build.</source>
+        <translation>运行中的服务器会从 Hugging Face 下载模型到其模型缓存，然后将其列入列表。量化版本由所选的构建固定。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Stop</source>
+        <translation>停止</translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <location line="+9"/>
+        <source>Downloading %1...</source>
+        <translation>正在下载 %1……</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Loading the llama.app model catalog...</source>
+        <translation>正在加载 llama.app 模型目录……</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>The model catalog could not be loaded%1. Check the network connection and try again.</source>
+        <translation>无法加载模型目录%1。请检查网络连接并重试。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The model catalog is empty or could not be parsed.</source>
+        <translation>模型目录为空或无法解析。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The models of the llama.app catalog. Downloads run through the running server into its model cache.</source>
+        <translation>llama.app 目录中的模型。下载通过运行中的服务器进行，并存入其模型缓存。</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>non-commercial</source>
+        <translation>非商业</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>A good first model: small, fast, and multimodal.</source>
+        <translation>一个好的入门模型：小巧、快速且多模态。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location line="+110"/>
+        <source>Installed</source>
+        <translation>已安装</translation>
+    </message>
+    <message>
+        <location line="-34"/>
+        <source>Starting...</source>
+        <translation>正在启动……</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Downloading: %1 of %2</source>
+        <translation>正在下载：%1 / %2</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Downloading: %1...</source>
+        <translation>正在下载：%1……</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Failed</source>
+        <translation>失败</translation>
+    </message>
+    <message>
+        <location filename="../src/serversettingswidget.cpp" line="-188"/>
+        <source>loading...</source>
+        <translation>正在加载……</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>downloading...</source>
+        <translation>正在下载……</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>failed</source>
+        <translation>失败</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>sleeping</source>
+        <translation>休眠</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>loaded</source>
+        <translation>已加载</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>not loaded</source>
+        <translation>未加载</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Download llama.cpp...</source>
+        <translation>下载 llama.cpp……</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Downloads and runs the official llama.cpp install script. The build is not pinned: the script installs whatever the install channel marks as latest.</source>
+        <translation>下载并运行官方的 llama.cpp 安装脚本。构建版本不固定：脚本会安装安装渠道标记为最新的版本。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Check for updates</source>
+        <translation>检查更新</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Checks the llama.cpp install channel for a newer build than the installed one.</source>
+        <translation>检查 llama.cpp 安装渠道是否有比已安装版本更新的构建。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Download models...</source>
+        <translation>下载模型……</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Browses the llama.app model catalog and downloads a model through the running server into its model cache. The server must be running.</source>
+        <translation>浏览 llama.app 模型目录，并通过运行中的服务器将模型下载到其模型缓存。服务器必须在运行中。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Re-reads the model list. While the server runs, it also makes the server rescan the models directory, so new .gguf files show up without a restart.</source>
+        <translation>重新读取模型列表。在服务器运行期间，还会让服务器重新扫描模型目录，这样新的 .gguf 文件无需重启即可显示。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>The models the server offers. Select one to load or unload it on the server, or right-click it for more actions.</source>
+        <translation>服务器提供的模型。选择一个以在服务器上加载或卸载它，或右键单击以获取更多操作。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+250"/>
+        <location line="+183"/>
+        <source>Load model</source>
+        <translation>加载模型</translation>
+    </message>
+    <message>
+        <location line="-432"/>
+        <source>Loads the selected model on the server (starts its model process), or unloads it when it is running.</source>
+        <translation>在服务器上加载所选模型（启动其模型进程），如果它正在运行则将其卸载。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+411"/>
+        <source>Remove model</source>
+        <translation>移除模型</translation>
+    </message>
+    <message>
+        <location line="-409"/>
+        <source>Removes the selected model from the server&apos;s model cache (a model that was downloaded by the server).</source>
+        <translation>从服务器的模型缓存中移除所选模型（由服务器下载的模型）。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Show output</source>
+        <translation>显示输出</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shows the managed server&apos;s terminal output (stdout and stderr) in the &quot;llama.cpp&quot; pane of the Output window: the start command line, then the colored log; filterable and clearable.</source>
+        <translation>在输出窗口的“llama.cpp”窗格中显示托管服务器的终端输出（stdout 和 stderr）：先是启动命令行，然后是彩色日志；可以过滤和清除。</translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>llama.cpp runtime</source>
+        <translation>llama.cpp 运行时</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Control</source>
+        <translation>控制</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Download llama.cpp from llama.app?</source>
+        <translation>从 llama.app 下载 llama.cpp？</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>The Server page runs the llama.cpp runtime, which is not installed on this system, so it can be downloaded here instead. The download fetches and runs llama.cpp&apos;s official install script. llama.cpp is published under the MIT license.</source>
+        <translation>服务器页面运行 llama.cpp 运行时，但本系统未安装它，因此可以在此处下载。下载会获取并运行 llama.cpp 的官方安装脚本。llama.cpp 以 MIT 许可证发布。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location filename="../src/tools/mxc.cpp" line="-9"/>
+        <location filename="../src/tools/niubash.cpp" line="-9"/>
+        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
+        <source>Project: %1</source>
+        <translation>项目：%1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/tools/mxc.cpp" line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
+        <source>License: %1</source>
+        <translation>许可证：%1</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Download llama.cpp</source>
+        <translation>下载 llama.cpp</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Install the update now?</source>
+        <translation>现在安装更新？</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Installing llama.cpp...</source>
+        <translation>正在安装 llama.cpp……</translation>
+    </message>
+    <message>
+        <location line="+98"/>
+        <location line="+183"/>
+        <source>Unload model</source>
+        <translation>卸载模型</translation>
+    </message>
+    <message>
+        <location line="-178"/>
+        <source>Remove model...</source>
+        <translation>移除模型……</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>No llama.cpp binary was found. Download it, or point the path field below at one of yours (llama or llama-server).</source>
+        <translation>未找到 llama.cpp 可执行文件。请下载它，或将下方的路径字段指向您自己的一个（llama 或 llama-server）。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>llama.cpp (version unknown)</source>
+        <translation>llama.cpp（版本未知）</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>llama.cpp %1</source>
+        <translation>llama.cpp %1</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Not found</source>
+        <translation>未找到</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>The server is stopped.</source>
+        <translation>服务器已停止。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Starting the server...</source>
+        <translation>正在启动服务器……</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The server is running on %1.</source>
+        <translation>服务器正在 %1 上运行。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>The server failed to start. See its output.</source>
+        <translation>服务器启动失败。请查看其输出。</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>To use this server for the chat, point the chat endpoint (Chat settings page) at %1.</source>
+        <translation>要将此服务器用于聊天，请将聊天端点（聊天设置页面）指向 %1。</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Remove the model &quot;%1&quot; from the server&apos;s model cache? The model&apos;s files are deleted; downloading again restores it.</source>
+        <translation>要从服务器的模型缓存中移除模型“%1”吗？模型的文件将被删除；重新下载可恢复它。</translation>
+    </message>
+    <message>
+        <location line="+83"/>
+        <source>The server reports no models.</source>
+        <translation>服务器报告没有模型。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>No models in the models directory.</source>
+        <translation>模型目录中没有模型。</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>The models the server offers (from the models directory).</source>
+        <translation>服务器提供的模型（来自模型目录）。</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The server is stopped: the models directory is listed as-is.</source>
+        <translation>服务器已停止：模型目录按原样列出。</translation>
+    </message>
     <message>
         <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
@@ -3274,10 +4041,6 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>成功。已更新以下文件：</translation>
     </message>
     <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="vanished">未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
-    </message>
-    <message>
         <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH，或从 Llama.cpp 聊天工具设置页面下载 niubash。</translation>
@@ -3288,32 +4051,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>未找到 sandbox-exec 可执行文件；本系统无法使用沙箱。</translation>
     </message>
     <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）已安装，但内核拒绝设置其沙箱：%1。在 Ubuntu 24.04 及更高版本上，这通常是 AppArmor 对非特权用户命名空间的限制：运行 &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos;（将其添加到 /etc/sysctl.d/ 以使其永久生效），或为 bwrap 提供一个带有 &apos;userns&apos; 属性的 AppArmor 配置文件。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）已安装，但本系统上禁用了非特权用户命名空间：%1。在 Debian 及其衍生发行版上，使用 &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; 启用它们。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）未能设置沙箱：%1。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）未能在限定时间内设置沙箱。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>未找到 bubblewrap（bwrap）。请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
+        <location line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[输出已截断：%1]</translation>
     </message>
@@ -3420,7 +4158,7 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="-24"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>工具错误：“path” 必须是非空字符串。</translation>
     </message>
@@ -3452,308 +4190,10 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>已在 %2 中成功替换 %1 个块。</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
-        <location line="+27"/>
-        <source>Cannot reach the MCP server.</source>
-        <translation>无法连接到 MCP 服务器。</translation>
-    </message>
-    <message>
-        <location line="-22"/>
-        <source>MCP initialize failed: %1</source>
-        <translation>MCP 初始化失败：%1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>MCP tools/list failed: %1</source>
-        <translation>MCP tools/list 失败：%1</translation>
-    </message>
-    <message>
-        <location line="+53"/>
-        <source>Connection to the MCP server was closed.</source>
-        <translation>与 MCP 服务器的连接已关闭。</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>MCP 服务器不可用。请检查服务器是否正在运行且可访问，然后重试。</translation>
-    </message>
-    <message>
-        <location line="+65"/>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation>MCP 工具“%1”失败：MCP 服务器未响应（连接错误或超时）。</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation>MCP 服务器已重启；该调用未被执行。请重试。</translation>
-    </message>
-    <message>
-        <location line="-61"/>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>MCP 工具“%1”失败：%2</translation>
-    </message>
-    <message>
-        <location line="+72"/>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation>MCP 服务器对工具调用返回了 HTTP %1。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation>MCP 服务器返回了空响应或格式错误的响应。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
-        <source>read whole file %1</source>
-        <translation>读取文件 %1 的全部内容</translation>
-    </message>
-    <message>
-        <source>read %1:%2‑%3</source>
-        <translation type="vanished">读取 %1 中的第 %2 到 %3 行</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>read %1</source>
-        <translation>读取 %1</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation>文件 &quot;%1&quot; 不存在。</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>读取 &quot;%1&quot; 失败：%2</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>图像“%1”大小为 %2 MB，超过 %3 MB 的读取限制；请先调整其大小（例如使用 bash 工具）。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>图像文件“%1”（%2，%3 字节）。其内容作为图像附带。</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>first_line must be &gt;= 1.</source>
-        <translation>起始行必须大于或等于 1。</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>结束行必须大于或等于起始行。</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>起始行 %1 超出文件 &quot;%2&quot; 的行数 %3。</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>“%2” 的第 %1 行大于 %3 KB 的读取限制；无法使用此工具读取该文件。</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source> %1 KB limit reached.</source>
-        <translation> 已达到 %1 KB 限制。</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> 请继续使用 first_line=%1, last_line_inclusive=%2。</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>你是 “general” 子代理，运行在一个与主对话隔离的独立对话中。使用可用的工具自主工作，直到任务完成；你不能向用户提问。完成后，回复一份简洁的报告，说明你做了什么或发现了什么，包括带行号的相关文件路径，以便主对话继续工作。</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <location line="+27"/>
-        <source>task: %1</source>
-        <translation>任务：%1</translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>工具错误：“description” 和 “prompt” 均为必填项。</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>工具错误：未知的 subagent_type “%1”（应为 “explore” 或 “general”）</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Task: %1</source>
-        <translation>任务：%1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>任务失败：子对话“%1”在没有最终答案的情况下结束（它可能已被停止或删除）。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation>任务已在子对话“%1”（id: %2）中完成。该对话保留在对话列表中，可以打开以继续工作。来自子代理的最终报告：
-
-%3</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">任务失败：子对话“%1”在没有最终答案的情况下结束（它可能已被停止或删除）。</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">任务已在子对话“%1”（id: %2）中完成。该对话保留在对话列表中，可以打开以继续工作。来自子代理的最终报告：
-
-%3</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
-        <location line="+27"/>
-        <source>fetch %1</source>
-        <translation>获取 %1</translation>
-    </message>
-    <message>
-        <location line="+112"/>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>无效的 URL“%1”：它必须以 http:// 或 https:// 开头</translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation>获取 %1 失败：响应过大（限制 5 MB）。</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Fetch failed for %1: %2</source>
-        <translation>获取 %1 失败：%2</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation>
-
-[... 内容在 %1 个字符处截断 ...]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
-        <location line="+26"/>
-        <source>search %1</source>
-        <translation>搜索 %1</translation>
-    </message>
-    <message>
-        <location line="+196"/>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation>“%1” 的搜索结果：</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="vanished">工具错误：“query” 必须是非空字符串。</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation>工具错误：“query” 必须是非空字符串。</translation>
-    </message>
-    <message>
-        <location line="+52"/>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>搜索失败：Google 后端未配置。请在 Llama.cpp 设置中设置 API 密钥和搜索引擎 ID（cx）。</translation>
-    </message>
-    <message>
-        <location line="-23"/>
-        <location line="+44"/>
-        <location line="+13"/>
-        <location line="+41"/>
-        <location line="+45"/>
-        <location line="+51"/>
-        <source>Search failed: %1</source>
-        <translation>搜索失败：%1</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">搜索失败：DuckDuckGo 目前正在限制请求频率；请等待一分钟后再试。</translation>
-    </message>
-    <message>
-        <location line="-146"/>
-        <location line="+54"/>
-        <location line="+45"/>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation>搜索失败：来自搜索提供方的响应无效。</translation>
-    </message>
-    <message>
-        <location line="-88"/>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation>未找到“%1”的结果</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>搜索失败：Brave 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
-    </message>
-    <message>
-        <location line="-59"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation>未找到“%1”的结果。</translation>
-    </message>
-    <message>
-        <location line="-192"/>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>搜索失败：DuckDuckGo 目前正在限制请求频率；请等待一分钟后再试。</translation>
-    </message>
-    <message>
-        <location line="+113"/>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>搜索失败：Tavily 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation>搜索失败：Exa 端点 URL 未配置。</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation>“%1” 的搜索结果：
-
-%2</translation>
-    </message>
-    <message>
         <location filename="../src/tools/find_tool.cpp" line="-179"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>查找文件 %1</translation>
-    </message>
-    <message>
-        <source>Pattern: `%1`</source>
-        <translation type="vanished">模式：`%1`</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -3780,7 +4220,7 @@ You can type any other prompt - they are remembered for next time.</source>
     </message>
     <message>
         <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
+        <location filename="../src/tools/ls_tool.cpp" line="-64"/>
         <source>Error: path is not a directory: %1</source>
         <translation>错误：路径不是目录：%1</translation>
     </message>
@@ -3823,34 +4263,46 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>[输出已截断到 %1 KB。使用更具体的模式以查看所有结果。]</translation>
     </message>
     <message>
-        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
-        <location line="+7"/>
-        <source>list directory %1</source>
-        <translation>列出目录 %1</translation>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
+        <source>get current time</source>
+        <translation>获取当前时间</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
+        <source>get runtime info</source>
+        <translation>获取运行时信息</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation>操作系统：%1
+工作目录：%2</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）已安装，但内核拒绝设置其沙箱：%1。在 Ubuntu 24.04 及更高版本上，这通常是 AppArmor 对非特权用户命名空间的限制：运行 &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos;（将其添加到 /etc/sysctl.d/ 以使其永久生效），或为 bwrap 提供一个带有 &apos;userns&apos; 属性的 AppArmor 配置文件。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）已安装，但本系统上禁用了非特权用户命名空间：%1。在 Debian 及其衍生发行版上，使用 &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; 启用它们。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>Path: `%1`
-
-</source>
-        <translation>路径：`%1`
-
-</translation>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）未能设置沙箱：%1。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+60"/>
-        <source>Directory is empty.</source>
-        <translation>目录为空。</translation>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）未能在限定时间内设置沙箱。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
-        <location line="+20"/>
-        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>[输出已截断到 %1 KB。列出子目录以查看其余条目。]</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>[已达到 %1 个条目的限制。使用 limit=%2 获取更多条目。]</translation>
+        <location line="+38"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>未找到 bubblewrap（bwrap）。请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
     </message>
     <message>
         <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
@@ -3858,22 +4310,63 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>MCP 工具“%1”不可用（没有已连接的 MCP 服务器提供它）。</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
-        <source>Download ripgrep</source>
-        <translation>下载 ripgrep</translation>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
+        <location line="+27"/>
+        <source>Cannot reach the MCP server.</source>
+        <translation>无法连接到 MCP 服务器。</translation>
     </message>
     <message>
-        <location line="+67"/>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation>从 GitHub 下载 ripgrep %1？</translation>
+        <location line="-22"/>
+        <source>MCP initialize failed: %1</source>
+        <translation>MCP 初始化失败：%1</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
+        <location line="+27"/>
+        <source>MCP tools/list failed: %1</source>
+        <translation>MCP tools/list 失败：%1</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="+87"/>
+        <location line="+53"/>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>与 MCP 服务器的连接已关闭。</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>MCP 服务器不可用。请检查服务器是否正在运行且可访问，然后重试。</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation>MCP 工具“%1”失败：%2</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP 工具“%1”失败：MCP 服务器未响应（连接错误或超时）。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>MCP 服务器已重启；该调用未被执行。请重试。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation>MCP 服务器对工具调用返回了 HTTP %1。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation>MCP 服务器返回了空响应或格式错误的响应。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP 工具“%1”已被用户停止。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="-65"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>下载 Windows 沙箱运行时（MXC）</translation>
     </message>
@@ -3885,31 +4378,10 @@ You can type any other prompt - they are remembered for next time.</source>
     <message>
         <location line="+2"/>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation>&apos;沙箱化命令&apos; 设置会将 Windows 上的 bash 工具限制在 Microsoft MXC 进程容器中。固定版本的 wxc-exec.exe 运行时未在本系统上安装，因此可以在此处下载。MXC 以 MIT 许可证发布。</translation>
+        <translation>“沙箱化命令”设置会将 Windows 上的 bash 工具限制在 Microsoft MXC 进程容器中。固定版本的 wxc-exec.exe 运行时未在本系统上安装，因此可以在此处下载。MXC 以 MIT 许可证发布。</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <location filename="../src/tools/niubash.cpp" line="+154"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
-        <source>Project: %1</source>
-        <translation>项目：%1</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
-        <source>License: %1</source>
-        <translation>许可证：%1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/niubash.cpp" line="+8"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
-        <source>Download</source>
-        <translation>下载</translation>
-    </message>
-    <message>
-        <location line="+25"/>
+        <location line="+38"/>
         <source>The package holds no wxc-exec.exe binary.</source>
         <translation>该包中没有 wxc-exec.exe 二进制文件。</translation>
     </message>
@@ -3929,10 +4401,6 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>Microsoft MXC 运行时仅适用于 Windows x86-64 和 arm64。</translation>
     </message>
     <message>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation type="vanished">Microsoft MXC 运行时仅适用于 Windows x86-64。</translation>
-    </message>
-    <message>
         <location line="+10"/>
         <source>Downloading the MXC runtime...</source>
         <translation>正在下载 MXC 运行时...</translation>
@@ -3943,39 +4411,9 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>下载 MXC 运行时失败：%1</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>Unpacking the MXC runtime...</source>
-        <translation>正在解压 MXC 运行时...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>解压 MXC 运行时失败：%1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
-        <source>The package holds no ripgrep binary.</source>
-        <translation>该包中没有 ripgrep 二进制文件。</translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>There is no ripgrep for this platform.</source>
-        <translation>此平台没有 ripgrep。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading ripgrep...</source>
-        <translation>正在下载 ripgrep……</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation>下载 ripgrep 失败：%1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mxc.cpp" line="-16"/>
-        <location filename="../src/tools/niubash.cpp" line="+118"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
+        <location line="+18"/>
+        <location filename="../src/tools/niubash.cpp" line="+126"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
         <source>Verifying package integrity...</source>
         <translation>正在验证包的完整性……</translation>
     </message>
@@ -3987,331 +4425,14 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>下载的包不是预期的包。</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
-        <source>Unpacking ripgrep...</source>
-        <translation>正在解压 ripgrep……</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation>解压 ripgrep 失败：%1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
-        <source>search for %1</source>
-        <translation>搜索 %1</translation>
-    </message>
-    <message>
-        <source>  Glob: `%1`</source>
-        <translation type="vanished">  Glob：`%1`</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>  Glob: %1</source>
-        <translation>  Glob：%1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>错误：未找到 ripgrep（rg）。可以从 Llama.cpp 聊天工具设置页面下载，或从 https://github.com/BurntSushi/ripgrep 手动安装，以使用 search 工具。</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Error: path does not exist: %1</source>
-        <translation>错误：路径不存在：%1</translation>
-    </message>
-    <message>
-        <location line="+114"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>[搜索在 %1 毫秒后超时。结果不完整；请缩小路径范围或优化模式。]</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>[已达到 %1 个匹配的限制。使用 limit=%2 获取更多结果，或优化模式。]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>[部分行已截断到 %1 个字符。使用 read_file 查看完整行。]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>No matches found.</source>
-        <translation>未找到匹配项。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>[输出已截断到 %1 KB。优化模式或减少上下文以查看所有匹配项。]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
-        <source>load skill %1</source>
-        <translation>加载技能 %1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>The &quot;name&quot; argument is required.</source>
-        <translation>“name” 参数为必填项。</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>未找到技能“%1”。可用技能：%2</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>(none)</source>
-        <translation>（无）</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
-        <source>update task list</source>
-        <translation>更新任务列表</translation>
-    </message>
-    <message>
-        <location line="-7"/>
-        <source>update task list (%1 tasks)</source>
-        <translation>更新任务列表（%1 个任务）</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>工具错误：“todos” 必须至少包含一个任务。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>工具错误：任务 %1 的 “content” 为空。</translation>
-    </message>
-    <message>
         <location line="+4"/>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>工具错误：任务 %1 具有未知状态“%2”（应为 “pending”、“in_progress” 或 “completed”）。</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>工具错误：同一时间只能有一个任务为 “in_progress”（给出了 %1 个）。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation>任务列表已更新：%2 个中已完成 %1 个。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>不允许访问“%1”：设备路径和管理共享在沙箱内不可访问。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation type="vanished">不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置内写入。请打开一个项目以操作其文件。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation type="vanished">不允许写入“%1”：沙箱只允许在项目目录和临时位置内写入。</translation>
-    </message>
-    <message>
-        <location line="-71"/>
-        <source>Reset to Project Directory</source>
-        <translation>重置为项目目录</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>清除工作目录覆盖：工具将在启动项目的目录中运行（未打开项目时为默认项目目录）。</translation>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>正在解压 MXC 运行时...</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Reset to Default Projects Directory</source>
-        <translation>重置为默认项目目录</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>使用默认项目目录，新项目会创建在该目录中。</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Reset to Git Bash</source>
-        <translation>重置为 Git Bash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>清除 bash 覆盖：bash 工具使用默认的 bash，即 Git Bash（PATH 上被识别的 bash，其次是随 Git for Windows 附带的那个）。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Reset to niubash</source>
-        <translation>重置为 niubash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>使用已下载的 niubash，一种原生的、无需 MSYS2 的 Bash - 与 Git Bash 不同，它可以在 Windows 沙箱中运行。</translation>
-    </message>
-    <message>
-        <location line="+53"/>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置和来自沙箱设置的额外可写目录内写入。请打开一个项目以操作其文件。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>不允许写入“%1”：沙箱只允许在项目目录、临时位置和来自沙箱设置的额外可写目录内写入。</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>不允许写入“%1”：.git、.qtcreator 和 *.user 文件在沙箱内受保护。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>不允许写入“%1”：凭据位置在沙箱内受保护。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>不允许读取“%1”：凭据位置在沙箱内不可读。</translation>
-    </message>
-    <message>
-        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">使用 &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; 一次性安装它（会弹出一个 UAC 提示）；无需注销，网络围栏基于专用沙箱用户的 SID。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation type="vanished">无法查询 Windows 沙箱后端（srt-win）（退出 %1）：%2 %3</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation type="vanished">Windows 沙箱用户尚未配置。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation type="vanished">Windows 沙箱后端（srt-win）未报告沙箱用户的 SID。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation type="vanished">Windows 沙箱无法授予沙箱用户对工作目录的访问权限（退出 %1）：%2</translation>
-    </message>
-    <message>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
-    </message>
-    <message>
-        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Windows 沙箱后端（wxc-exec）未能及时响应其功能探测。%1</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
-    </message>
-    <message>
-        <location line="+361"/>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Windows 沙箱无法设置其实时隔离探测（临时目录或主目录金丝雀）。%1</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Windows 沙箱无法在 %1 创建其实时隔离探测的金丝雀文件。%2</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows 沙箱配置过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">“%1” 处的 bash 不属于受认可的 Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个狭窄的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 放在 PATH 最前，或在 Llama 设置中取消勾选&apos;沙箱化命令&apos;。</translation>
-    </message>
-    <message>
-        <location line="+192"/>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（内部版本 %1）或更高版本；本系统为内部版本 %2。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>未找到 wxc-exec.exe（Microsoft MXC Windows 沙箱运行时）。%1</translation>
-    </message>
-    <message>
-        <location line="-162"/>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
-    </message>
-    <message>
-        <location line="-497"/>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>请从 Llama.cpp 聊天沙箱设置页面下载（固定版本、经校验和验证的 Microsoft MXC 发布版本）；也可以在那里指向自己的运行时。或者，在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location line="+537"/>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>“%1” 处的 bash 不属于受认可的 niubash、Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个窄范围的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 置于 PATH 最前面，或从 Llama.cpp 聊天工具设置页面下载 niubash，或在 Llama 设置中取消勾选“沙箱化命令”。</translation>
-    </message>
-    <message>
-        <location line="+154"/>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Windows 沙箱（Microsoft MXC）正在首次验证其隔离状态；请在几秒后重新运行命令。</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows 沙箱命令行过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
-        <source>Write file</source>
-        <translation>写入文件</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+26"/>
-        <source>write %1</source>
-        <translation>写入 %1</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>工具错误：“content” 为必填项。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>无法写入“%1”：某个父路径是一个文件。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>无法写入“%1”：无法创建目录：%2</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>无法写入 &quot;%1&quot;：%2</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>已成功写入 %1 字节到 %2。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>MCP 工具“%1”已被用户停止。</translation>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>解压 MXC 运行时失败：%1</translation>
     </message>
     <message>
         <location filename="../src/tools/niubash.cpp" line="-207"/>
@@ -4359,20 +4480,1328 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>解压 niubash 失败：%1</translation>
     </message>
     <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
-        <source>get current time</source>
-        <translation>获取当前时间</translation>
+        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
+        <source>Download ripgrep</source>
+        <translation>下载 ripgrep</translation>
     </message>
     <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
-        <source>get runtime info</source>
-        <translation>获取运行时信息</translation>
+        <location line="+67"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>从 GitHub 下载 ripgrep %1？</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>该包中没有 ripgrep 二进制文件。</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>此平台没有 ripgrep。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>正在下载 ripgrep……</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>下载 ripgrep 失败：%1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>正在解压 ripgrep……</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>解压 ripgrep 失败：%1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
+        <source>search for %1</source>
+        <translation>搜索 %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob：%1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>错误：未找到 ripgrep（rg）。可以从 Llama.cpp 聊天工具设置页面下载，或从 https://github.com/BurntSushi/ripgrep 手动安装，以使用 search 工具。</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Error: path does not exist: %1</source>
+        <translation>错误：路径不存在：%1</translation>
+    </message>
+    <message>
+        <location line="+114"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>[搜索在 %1 毫秒后超时。结果不完整；请缩小路径范围或优化模式。]</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>[已达到 %1 个匹配的限制。使用 limit=%2 获取更多结果，或优化模式。]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>[部分行已截断到 %1 个字符。使用 read_file 查看完整行。]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>未找到匹配项。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>[输出已截断到 %1 KB。优化模式或减少上下文以查看所有匹配项。]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation>你是 “general” 子代理，运行在一个与主对话隔离的独立对话中。使用可用的工具自主工作，直到任务完成；你不能向用户提问。完成后，回复一份简洁的报告，说明你做了什么或发现了什么，包括带行号的相关文件路径，以便主对话继续工作。</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+27"/>
+        <source>task: %1</source>
+        <translation>任务：%1</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation>工具错误：“description” 和 “prompt” 均为必填项。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation>工具错误：未知的 subagent_type “%1”（应为 “explore” 或 “general”）</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Task: %1</source>
+        <translation>任务：%1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>任务失败：子对话“%1”在没有最终答案的情况下结束（它可能已被停止或删除）。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>任务已在子对话“%1”（id: %2）中完成。该对话保留在对话列表中，可以打开以继续工作。来自子代理的最终报告：
+
+%3</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>更新任务列表</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>更新任务列表（%1 个任务）</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>工具错误：“todos” 必须至少包含一个任务。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>工具错误：任务 %1 的 “content” 为空。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>工具错误：任务 %1 具有未知状态“%2”（应为 “pending”、“in_progress” 或 “completed”）。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>工具错误：同一时间只能有一个任务为 “in_progress”（给出了 %1 个）。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>任务列表已更新：%2 个中已完成 %1 个。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
+        <source>Reset to Project Directory</source>
+        <translation>重置为项目目录</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>清除工作目录覆盖：工具将在启动项目的目录中运行（未打开项目时为默认项目目录）。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>重置为默认项目目录</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>使用默认项目目录，新项目会创建在该目录中。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>重置为 Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>清除 bash 覆盖：bash 工具使用默认的 bash，即 Git Bash（PATH 上被识别的 bash，其次是随 Git for Windows 附带的那个）。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>重置为 niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>使用已下载的 niubash，一种原生的、无需 MSYS2 的 Bash - 与 Git Bash 不同，它可以在 Windows 沙箱中运行。</translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>不允许访问“%1”：设备路径和管理共享在沙箱内不可访问。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置和来自沙箱设置的额外可写目录内写入。请打开一个项目以操作其文件。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>不允许写入“%1”：沙箱只允许在项目目录、临时位置和来自沙箱设置的额外可写目录内写入。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>不允许写入“%1”：.git、.qtcreator 和 *.user 文件在沙箱内受保护。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>不允许写入“%1”：凭据位置在沙箱内受保护。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>不允许读取“%1”：凭据位置在沙箱内不可读。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
+        <location line="+27"/>
+        <source>fetch %1</source>
+        <translation>获取 %1</translation>
+    </message>
+    <message>
+        <location line="+112"/>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation>无效的 URL“%1”：它必须以 http:// 或 https:// 开头</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation>获取 %1 失败：响应过大（限制 5 MB）。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Fetch failed for %1: %2</source>
+        <translation>获取 %1 失败：%2</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation>
+
+[... 内容在 %1 个字符处截断 ...]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location line="+26"/>
+        <source>search %1</source>
+        <translation>搜索 %1</translation>
+    </message>
+    <message>
+        <location line="+196"/>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation>“%1” 的搜索结果：</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation>工具错误：“query” 必须是非空字符串。</translation>
+    </message>
+    <message>
+        <location line="+29"/>
+        <location line="+44"/>
+        <location line="+13"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
+        <source>Search failed: %1</source>
+        <translation>搜索失败：%1</translation>
+    </message>
+    <message>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>搜索失败：DuckDuckGo 目前正在限制请求频率；请等待一分钟后再试。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation>未找到“%1”的结果。</translation>
+    </message>
+    <message>
+        <location line="-174"/>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation>搜索失败：Google 后端未配置。请在 Llama.cpp 设置中设置 API 密钥和搜索引擎 ID（cx）。</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <location line="+54"/>
+        <location line="+45"/>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation>搜索失败：来自搜索提供方的响应无效。</translation>
+    </message>
+    <message>
+        <location line="-88"/>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation>未找到“%1”的结果</translation>
     </message>
     <message>
         <location line="+13"/>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>搜索失败：Brave 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>搜索失败：Tavily 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation>搜索失败：Exa 端点 URL 未配置。</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation>“%1” 的搜索结果：
+
+%2</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>请从 Llama.cpp 聊天沙箱设置页面下载（固定版本、经校验和验证的 Microsoft MXC 发布版本）；也可以在那里指向自己的运行时。或者，在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Windows 沙箱后端（wxc-exec）未能及时响应其功能探测。%1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
+    </message>
+    <message>
+        <location line="+361"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows 沙箱无法设置其实时隔离探测（临时目录或主目录金丝雀）。%1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows 沙箱无法在 %1 创建其实时隔离探测的金丝雀文件。%2</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows 沙箱配置过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+41"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>“%1” 处的 bash 不属于受认可的 niubash、Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个窄范围的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 置于 PATH 最前面，或从 Llama.cpp 聊天工具设置页面下载 niubash，或在 Llama 设置中取消勾选“沙箱化命令”。</translation>
+    </message>
+    <message>
+        <location line="+111"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（内部版本 %1）或更高版本；本系统为内部版本 %2。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>未找到 wxc-exec.exe（Microsoft MXC Windows 沙箱运行时）。%1</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows 沙箱（Microsoft MXC）正在首次验证其隔离状态；请在几秒后重新运行命令。</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows 沙箱命令行过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+</context>
+<context>
+    <name>Tr</name>
+    <message>
+        <source>Add %1</source>
+        <translation type="vanished">添加 %1</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="vanished">删除 %1</translation>
+    </message>
+    <message>
+        <source>Edit %1</source>
+        <translation type="vanished">编辑 %1</translation>
+    </message>
+    <message>
+        <source>Move %1 to %2</source>
+        <translation type="vanished">将 %1 移动到 %2</translation>
+    </message>
+    <message>
+        <source>Apply patch</source>
+        <translation type="vanished">应用补丁</translation>
+    </message>
+    <message>
+        <source>Apply patch to %1 files</source>
+        <translation type="vanished">将补丁应用到 %1 个文件</translation>
+    </message>
+    <message>
+        <source>created</source>
+        <translation type="vanished">已创建</translation>
+    </message>
+    <message>
+        <source>edited</source>
+        <translation type="vanished">已编辑</translation>
+    </message>
+    <message>
+        <source>moved</source>
+        <translation type="vanished">已移动</translation>
+    </message>
+    <message>
+        <source>deleted</source>
+        <translation type="vanished">已删除</translation>
+    </message>
+    <message>
+        <source>Success. Updated the following files:</source>
+        <translation type="vanished">成功。已更新以下文件：</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
+        <translation type="vanished">未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH。</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation type="vanished">未找到 bash shell。请安装 Git for Windows（https://git-scm.com/download/win）或将 bash 添加到 PATH，或从 Llama.cpp 聊天工具设置页面下载 niubash。</translation>
+    </message>
+    <message>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation type="vanished">未找到 sandbox-exec 可执行文件；本系统无法使用沙箱。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）已安装，但内核拒绝设置其沙箱：%1。在 Ubuntu 24.04 及更高版本上，这通常是 AppArmor 对非特权用户命名空间的限制：运行 &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos;（将其添加到 /etc/sysctl.d/ 以使其永久生效），或为 bwrap 提供一个带有 &apos;userns&apos; 属性的 AppArmor 配置文件。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）已安装，但本系统上禁用了非特权用户命名空间：%1。在 Debian 及其衍生发行版上，使用 &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; 启用它们。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）未能设置沙箱：%1。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）未能在限定时间内设置沙箱。请检查它能否在本系统上运行，或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">未找到 bubblewrap（bwrap）。请安装它（例如 &apos;apt install bubblewrap&apos; 或 &apos;dnf install bubblewrap&apos;），或在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>[Output truncated: %1]</source>
+        <translation type="vanished">[输出已截断：%1]</translation>
+    </message>
+    <message>
+        <source>showing last %1 of %2 lines</source>
+        <translation type="vanished">显示最后 %1 行（共 %2 行）</translation>
+    </message>
+    <message>
+        <source>showing last %1 KB</source>
+        <translation type="vanished">显示最后 %1 KB</translation>
+    </message>
+    <message>
+        <source>Full output saved to: %1</source>
+        <translation type="vanished">完整输出已保存到：%1</translation>
+    </message>
+    <message>
+        <source>running %1</source>
+        <translation type="vanished">正在运行 %1</translation>
+    </message>
+    <message>
+        <source>Error: the command must not be empty.</source>
+        <translation type="vanished">错误：命令不能为空。</translation>
+    </message>
+    <message>
+        <source>Error: working directory does not exist: %1</source>
+        <translation type="vanished">错误：工作目录不存在：%1</translation>
+    </message>
+    <message>
+        <source>Error: %1</source>
+        <translation type="vanished">错误：%1</translation>
+    </message>
+    <message>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation type="vanished">错误：沙箱无法使“%1”可写：它是（或包含）主目录或文件系统根目录。请打开一个项目，在其目录中运行命令。</translation>
+    </message>
+    <message>
+        <source>Command was stopped by the user.</source>
+        <translation type="vanished">命令已被用户停止。</translation>
+    </message>
+    <message>
+        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
+        <translation type="vanished">命令在 %1 毫秒后超时。如果命令预计需要更长时间，请使用更大的超时时间重试。</translation>
+    </message>
+    <message>
+        <source>Failed to start the command: %1</source>
+        <translation type="vanished">启动命令失败：%1</translation>
+    </message>
+    <message>
+        <source>unknown error</source>
+        <translation type="vanished">未知错误</translation>
+    </message>
+    <message>
+        <source>Command terminated abnormally (crashed).</source>
+        <translation type="vanished">命令异常终止（崩溃）。</translation>
+    </message>
+    <message>
+        <source>Command exited with code %1.</source>
+        <translation type="vanished">命令以代码 %1 退出。</translation>
+    </message>
+    <message>
+        <source>Working directory: %1
+
+</source>
+        <translation type="vanished">工作目录：%1
+
+</translation>
+    </message>
+    <message>
+        <source>Edit file</source>
+        <translation type="vanished">编辑文件</translation>
+    </message>
+    <message>
+        <source>edit %1 (%2 blocks)</source>
+        <translation type="vanished">编辑 %1（%2 个块）</translation>
+    </message>
+    <message>
+        <source>edit %1</source>
+        <translation type="vanished">编辑 %1</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
+        <translation type="vanished">工具错误：“path” 必须是非空字符串。</translation>
+    </message>
+    <message>
+        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
+        <translation type="vanished">工具错误：每个编辑都需要 “oldText” 和 “newText”。</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
+        <translation type="vanished">工具错误：“edits” 必须至少包含一个替换。</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">无法编辑“%1”：未找到文件。使用 read_file 验证路径，或使用 write 创建文件。</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: %2</source>
+        <translation type="vanished">无法编辑“%1”：%2</translation>
+    </message>
+    <message>
+        <source>Successfully replaced %1 block(s) in %2.</source>
+        <translation type="vanished">已在 %2 中成功替换 %1 个块。</translation>
+    </message>
+    <message>
+        <source>Cannot reach the MCP server.</source>
+        <translation type="vanished">无法连接到 MCP 服务器。</translation>
+    </message>
+    <message>
+        <source>MCP initialize failed: %1</source>
+        <translation type="vanished">MCP 初始化失败：%1</translation>
+    </message>
+    <message>
+        <source>MCP tools/list failed: %1</source>
+        <translation type="vanished">MCP tools/list 失败：%1</translation>
+    </message>
+    <message>
+        <source>Connection to the MCP server was closed.</source>
+        <translation type="vanished">与 MCP 服务器的连接已关闭。</translation>
+    </message>
+    <message>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation type="vanished">MCP 服务器不可用。请检查服务器是否正在运行且可访问，然后重试。</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation type="vanished">MCP 工具“%1”失败：MCP 服务器未响应（连接错误或超时）。</translation>
+    </message>
+    <message>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation type="vanished">MCP 服务器已重启；该调用未被执行。请重试。</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation type="vanished">MCP 工具“%1”失败：%2</translation>
+    </message>
+    <message>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation type="vanished">MCP 服务器对工具调用返回了 HTTP %1。</translation>
+    </message>
+    <message>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation type="vanished">MCP 服务器返回了空响应或格式错误的响应。</translation>
+    </message>
+    <message>
+        <source>read whole file %1</source>
+        <translation type="vanished">读取文件 %1 的全部内容</translation>
+    </message>
+    <message>
+        <source>read %1:%2‑%3</source>
+        <translation type="vanished">读取 %1 中的第 %2 到 %3 行</translation>
+    </message>
+    <message>
+        <source>read %1</source>
+        <translation type="vanished">读取 %1</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">文件 &quot;%1&quot; 不存在。</translation>
+    </message>
+    <message>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation type="vanished">读取 &quot;%1&quot; 失败：%2</translation>
+    </message>
+    <message>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation type="vanished">图像“%1”大小为 %2 MB，超过 %3 MB 的读取限制；请先调整其大小（例如使用 bash 工具）。</translation>
+    </message>
+    <message>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation type="vanished">图像文件“%1”（%2，%3 字节）。其内容作为图像附带。</translation>
+    </message>
+    <message>
+        <source>first_line must be &gt;= 1.</source>
+        <translation type="vanished">起始行必须大于或等于 1。</translation>
+    </message>
+    <message>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation type="vanished">结束行必须大于或等于起始行。</translation>
+    </message>
+    <message>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation type="vanished">起始行 %1 超出文件 &quot;%2&quot; 的行数 %3。</translation>
+    </message>
+    <message>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation type="vanished">“%2” 的第 %1 行大于 %3 KB 的读取限制；无法使用此工具读取该文件。</translation>
+    </message>
+    <message>
+        <source> %1 KB limit reached.</source>
+        <translation type="vanished"> 已达到 %1 KB 限制。</translation>
+    </message>
+    <message>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation type="vanished"> 请继续使用 first_line=%1, last_line_inclusive=%2。</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">你是 “explore” 子代理，运行在一个与主对话隔离的独立对话中。探索代码库，并使用可用的只读工具回答任务：使用 “find” 按名称定位文件，使用 “search” 搜索文件内容，使用 “read_file” 读取相关部分。不要修改任何文件，也不要运行会更改任何内容的命令。自主工作；你不能向用户提问。完成后，回复一份简洁的报告，包含关键发现、带行号的相关文件路径，以及主对话继续工作所需的一切。</translation>
+    </message>
+    <message>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation type="vanished">你是 “general” 子代理，运行在一个与主对话隔离的独立对话中。使用可用的工具自主工作，直到任务完成；你不能向用户提问。完成后，回复一份简洁的报告，说明你做了什么或发现了什么，包括带行号的相关文件路径，以便主对话继续工作。</translation>
+    </message>
+    <message>
+        <source>task: %1</source>
+        <translation type="vanished">任务：%1</translation>
+    </message>
+    <message>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation type="vanished">工具错误：“description” 和 “prompt” 均为必填项。</translation>
+    </message>
+    <message>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation type="vanished">工具错误：未知的 subagent_type “%1”（应为 “explore” 或 “general”）</translation>
+    </message>
+    <message>
+        <source>Task: %1</source>
+        <translation type="vanished">任务：%1</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">任务失败：子对话“%1”在没有最终答案的情况下结束（它可能已被停止或删除）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">任务已在子对话“%1”（id: %2）中完成。该对话保留在对话列表中，可以打开以继续工作。来自子代理的最终报告：
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">任务失败：子对话“%1”在没有最终答案的情况下结束（它可能已被停止或删除）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">任务已在子对话“%1”（id: %2）中完成。该对话保留在对话列表中，可以打开以继续工作。来自子代理的最终报告：
+
+%3</translation>
+    </message>
+    <message>
+        <source>fetch %1</source>
+        <translation type="vanished">获取 %1</translation>
+    </message>
+    <message>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation type="vanished">无效的 URL“%1”：它必须以 http:// 或 https:// 开头</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation type="vanished">获取 %1 失败：响应过大（限制 5 MB）。</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: %2</source>
+        <translation type="vanished">获取 %1 失败：%2</translation>
+    </message>
+    <message>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation type="vanished">
+
+[... 内容在 %1 个字符处截断 ...]</translation>
+    </message>
+    <message>
+        <source>search %1</source>
+        <translation type="vanished">搜索 %1</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation type="vanished">“%1” 的搜索结果：</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">工具错误：“query” 必须是非空字符串。</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation type="vanished">工具错误：“query” 必须是非空字符串。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation type="vanished">搜索失败：Google 后端未配置。请在 Llama.cpp 设置中设置 API 密钥和搜索引擎 ID（cx）。</translation>
+    </message>
+    <message>
+        <source>Search failed: %1</source>
+        <translation type="vanished">搜索失败：%1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">搜索失败：DuckDuckGo 目前正在限制请求频率；请等待一分钟后再试。</translation>
+    </message>
+    <message>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation type="vanished">搜索失败：来自搜索提供方的响应无效。</translation>
+    </message>
+    <message>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation type="vanished">未找到“%1”的结果</translation>
+    </message>
+    <message>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">搜索失败：Brave 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
+    </message>
+    <message>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation type="vanished">未找到“%1”的结果。</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">搜索失败：DuckDuckGo 目前正在限制请求频率；请等待一分钟后再试。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">搜索失败：Tavily 后端未配置。请在 Llama.cpp 设置中设置 API 密钥。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation type="vanished">搜索失败：Exa 端点 URL 未配置。</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation type="vanished">“%1” 的搜索结果：
+
+%2</translation>
+    </message>
+    <message>
+        <source>find files %1</source>
+        <translation type="vanished">查找文件 %1</translation>
+    </message>
+    <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">模式：`%1`</translation>
+    </message>
+    <message>
+        <source>Pattern: %1</source>
+        <translation type="vanished">模式：%1</translation>
+    </message>
+    <message>
+        <source>  Path: %1</source>
+        <translation type="vanished">  路径：%1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation type="vanished">错误：未找到 ripgrep（rg）。可以从 Llama.cpp 聊天工具设置页面下载，或从 https://github.com/BurntSushi/ripgrep 手动安装，以使用 find 工具。</translation>
+    </message>
+    <message>
+        <source>Error: the pattern must not be empty.</source>
+        <translation type="vanished">错误：模式不能为空。</translation>
+    </message>
+    <message>
+        <source>Error: path is not a directory: %1</source>
+        <translation type="vanished">错误：路径不是目录：%1</translation>
+    </message>
+    <message>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation type="vanished">[搜索已被用户停止。结果不完整。]</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation type="vanished">[搜索在 %1 毫秒后超时。结果不完整；请使用更具体的模式。]</translation>
+    </message>
+    <message>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation type="vanished">[启动 ripgrep 失败：%1]</translation>
+    </message>
+    <message>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation type="vanished">[ripgrep 失败（退出代码 %1）：%2]</translation>
+    </message>
+    <message>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation type="vanished">[已达到 %1 个结果的限制。使用 limit=%2 获取更多结果，或使用更具体的模式。]</translation>
+    </message>
+    <message>
+        <source>No files found.</source>
+        <translation type="vanished">未找到文件。</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation type="vanished">[输出已截断到 %1 KB。使用更具体的模式以查看所有结果。]</translation>
+    </message>
+    <message>
+        <source>list directory %1</source>
+        <translation type="vanished">列出目录 %1</translation>
+    </message>
+    <message>
+        <source>Path: `%1`
+
+</source>
+        <translation type="vanished">路径：`%1`
+
+</translation>
+    </message>
+    <message>
+        <source>Directory is empty.</source>
+        <translation type="vanished">目录为空。</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation type="vanished">[输出已截断到 %1 KB。列出子目录以查看其余条目。]</translation>
+    </message>
+    <message>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation type="vanished">[已达到 %1 个条目的限制。使用 limit=%2 获取更多条目。]</translation>
+    </message>
+    <message>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation type="vanished">MCP 工具“%1”不可用（没有已连接的 MCP 服务器提供它）。</translation>
+    </message>
+    <message>
+        <source>Download ripgrep</source>
+        <translation type="vanished">下载 ripgrep</translation>
+    </message>
+    <message>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation type="vanished">从 GitHub 下载 ripgrep %1？</translation>
+    </message>
+    <message>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation type="vanished">search 和 find 工具使用 ripgrep 搜索文件内容并按名称定位文件。本系统未安装 ripgrep，因此可以在此处下载。ripgrep 以 MIT 或 Unlicense 许可证发布。</translation>
+    </message>
+    <message>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation type="vanished">下载 Windows 沙箱运行时（MXC）</translation>
+    </message>
+    <message>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation type="vanished">下载 Microsoft MXC 运行时 %1？</translation>
+    </message>
+    <message>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation type="vanished">&apos;沙箱化命令&apos; 设置会将 Windows 上的 bash 工具限制在 Microsoft MXC 进程容器中。固定版本的 wxc-exec.exe 运行时未在本系统上安装，因此可以在此处下载。MXC 以 MIT 许可证发布。</translation>
+    </message>
+    <message>
+        <source>Project: %1</source>
+        <translation type="vanished">项目：%1</translation>
+    </message>
+    <message>
+        <source>License: %1</source>
+        <translation type="vanished">许可证：%1</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="vanished">下载</translation>
+    </message>
+    <message>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation type="vanished">该包中没有 wxc-exec.exe 二进制文件。</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation type="vanished">wxc-exec.exe 二进制文件的大小不符合预期。</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation type="vanished">wxc-exec.exe 二进制文件与其预期的校验和不匹配。</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation type="vanished">Microsoft MXC 运行时仅适用于 Windows x86-64 和 arm64。</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation type="vanished">Microsoft MXC 运行时仅适用于 Windows x86-64。</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime...</source>
+        <translation type="vanished">正在下载 MXC 运行时...</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation type="vanished">下载 MXC 运行时失败：%1</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime...</source>
+        <translation type="vanished">正在解压 MXC 运行时...</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation type="vanished">解压 MXC 运行时失败：%1</translation>
+    </message>
+    <message>
+        <source>The package holds no ripgrep binary.</source>
+        <translation type="vanished">该包中没有 ripgrep 二进制文件。</translation>
+    </message>
+    <message>
+        <source>There is no ripgrep for this platform.</source>
+        <translation type="vanished">此平台没有 ripgrep。</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep...</source>
+        <translation type="vanished">正在下载 ripgrep……</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation type="vanished">下载 ripgrep 失败：%1</translation>
+    </message>
+    <message>
+        <source>Verifying package integrity...</source>
+        <translation type="vanished">正在验证包的完整性……</translation>
+    </message>
+    <message>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation type="vanished">下载的包不是预期的包。</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep...</source>
+        <translation type="vanished">正在解压 ripgrep……</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation type="vanished">解压 ripgrep 失败：%1</translation>
+    </message>
+    <message>
+        <source>search for %1</source>
+        <translation type="vanished">搜索 %1</translation>
+    </message>
+    <message>
+        <source>  Glob: `%1`</source>
+        <translation type="vanished">  Glob：`%1`</translation>
+    </message>
+    <message>
+        <source>  Glob: %1</source>
+        <translation type="vanished">  Glob：%1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation type="vanished">错误：未找到 ripgrep（rg）。可以从 Llama.cpp 聊天工具设置页面下载，或从 https://github.com/BurntSushi/ripgrep 手动安装，以使用 search 工具。</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">错误：路径不存在：%1</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation type="vanished">[搜索在 %1 毫秒后超时。结果不完整；请缩小路径范围或优化模式。]</translation>
+    </message>
+    <message>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation type="vanished">[已达到 %1 个匹配的限制。使用 limit=%2 获取更多结果，或优化模式。]</translation>
+    </message>
+    <message>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation type="vanished">[部分行已截断到 %1 个字符。使用 read_file 查看完整行。]</translation>
+    </message>
+    <message>
+        <source>No matches found.</source>
+        <translation type="vanished">未找到匹配项。</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation type="vanished">[输出已截断到 %1 KB。优化模式或减少上下文以查看所有匹配项。]</translation>
+    </message>
+    <message>
+        <source>load skill %1</source>
+        <translation type="vanished">加载技能 %1</translation>
+    </message>
+    <message>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation type="vanished">“name” 参数为必填项。</translation>
+    </message>
+    <message>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation type="vanished">未找到技能“%1”。可用技能：%2</translation>
+    </message>
+    <message>
+        <source>(none)</source>
+        <translation type="vanished">（无）</translation>
+    </message>
+    <message>
+        <source>update task list</source>
+        <translation type="vanished">更新任务列表</translation>
+    </message>
+    <message>
+        <source>update task list (%1 tasks)</source>
+        <translation type="vanished">更新任务列表（%1 个任务）</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation type="vanished">工具错误：“todos” 必须至少包含一个任务。</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation type="vanished">工具错误：任务 %1 的 “content” 为空。</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation type="vanished">工具错误：任务 %1 具有未知状态“%2”（应为 “pending”、“in_progress” 或 “completed”）。</translation>
+    </message>
+    <message>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation type="vanished">工具错误：同一时间只能有一个任务为 “in_progress”（给出了 %1 个）。</translation>
+    </message>
+    <message>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation type="vanished">任务列表已更新：%2 个中已完成 %1 个。</translation>
+    </message>
+    <message>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation type="vanished">不允许访问“%1”：设备路径和管理共享在沙箱内不可访问。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation type="vanished">不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置内写入。请打开一个项目以操作其文件。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
+        <translation type="vanished">不允许写入“%1”：沙箱只允许在项目目录和临时位置内写入。</translation>
+    </message>
+    <message>
+        <source>Reset to Project Directory</source>
+        <translation type="vanished">重置为项目目录</translation>
+    </message>
+    <message>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation type="vanished">清除工作目录覆盖：工具将在启动项目的目录中运行（未打开项目时为默认项目目录）。</translation>
+    </message>
+    <message>
+        <source>Reset to Default Projects Directory</source>
+        <translation type="vanished">重置为默认项目目录</translation>
+    </message>
+    <message>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation type="vanished">使用默认项目目录，新项目会创建在该目录中。</translation>
+    </message>
+    <message>
+        <source>Reset to Git Bash</source>
+        <translation type="vanished">重置为 Git Bash</translation>
+    </message>
+    <message>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation type="vanished">清除 bash 覆盖：bash 工具使用默认的 bash，即 Git Bash（PATH 上被识别的 bash，其次是随 Git for Windows 附带的那个）。</translation>
+    </message>
+    <message>
+        <source>Reset to niubash</source>
+        <translation type="vanished">重置为 niubash</translation>
+    </message>
+    <message>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation type="vanished">使用已下载的 niubash，一种原生的、无需 MSYS2 的 Bash - 与 Git Bash 不同，它可以在 Windows 沙箱中运行。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation type="vanished">不允许写入“%1”：未打开项目，因此沙箱只允许在临时位置和来自沙箱设置的额外可写目录内写入。请打开一个项目以操作其文件。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation type="vanished">不允许写入“%1”：沙箱只允许在项目目录、临时位置和来自沙箱设置的额外可写目录内写入。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation type="vanished">不允许写入“%1”：.git、.qtcreator 和 *.user 文件在沙箱内受保护。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation type="vanished">不允许写入“%1”：凭据位置在沙箱内受保护。</translation>
+    </message>
+    <message>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation type="vanished">不允许读取“%1”：凭据位置在沙箱内不可读。</translation>
+    </message>
+    <message>
+        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">使用 &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; 一次性安装它（会弹出一个 UAC 提示）；无需注销，网络围栏基于专用沙箱用户的 SID。或者在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
+        <translation type="vanished">无法查询 Windows 沙箱后端（srt-win）（退出 %1）：%2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox user is not provisioned. %1</source>
+        <translation type="vanished">Windows 沙箱用户尚未配置。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Windows 沙箱后端（srt-win）未报告沙箱用户的 SID。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Windows 沙箱无法授予沙箱用户对工作目录的访问权限（退出 %1）：%2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">未在 PATH 中找到 srt-win（@anthropic-ai/sandbox-runtime 的 Windows 沙箱后端）。%1 LLAMA_SRT_WIN 可以指向该可执行文件。</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">请从 Llama.cpp 聊天工具设置页面下载它（一个固定版本、经过校验和验证的 Microsoft MXC 发布版）；LLAMA_WXC_EXEC 可以指向一个 wxc-exec.exe。或者在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation type="vanished">Windows 沙箱后端（wxc-exec）未能及时响应其功能探测。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation type="vanished">Windows 沙箱后端（wxc-exec）报告 MXC 容器不可用（退出 %1）：%2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation type="vanished">Windows 沙箱无法设置其实时隔离探测（临时目录或主目录金丝雀）。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation type="vanished">Windows 沙箱无法在 %1 创建其实时隔离探测的金丝雀文件。%2</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows 沙箱配置过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">“%1” 处的 bash 不属于受认可的 Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个狭窄的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 放在 PATH 最前，或在 Llama 设置中取消勾选&apos;沙箱化命令&apos;。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows 沙箱（Microsoft MXC）需要 Windows 11 24H2（内部版本 %1）或更高版本；本系统为内部版本 %2。请在 Llama 设置中取消勾选&apos;沙箱化命令&apos;以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation type="vanished">未找到 wxc-exec.exe（Microsoft MXC Windows 沙箱运行时）。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation type="vanished">Windows 沙箱（Microsoft MXC）的实时隔离检查失败：无法验证沙箱化命令已被限制在沙箱内。%1</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">请从 Llama.cpp 聊天沙箱设置页面下载（固定版本、经校验和验证的 Microsoft MXC 发布版本）；也可以在那里指向自己的运行时。或者，在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">“%1” 处的 bash 不属于受认可的 niubash、Git for Windows 或 MSYS2 安装，因此 Windows 沙箱无法为其授予一个窄范围的只读位置。请安装 Git for Windows（https://git-scm.com/download/win）并将其 bash 置于 PATH 最前面，或从 Llama.cpp 聊天工具设置页面下载 niubash，或在 Llama 设置中取消勾选“沙箱化命令”。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation type="vanished">Windows 沙箱（Microsoft MXC）正在首次验证其隔离状态；请在几秒后重新运行命令。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows 沙箱命令行过长（%2 个字符中的 %1 个）；进程环境可能过大。请在 Llama 设置中取消勾选“沙箱化命令”以在无沙箱的情况下运行命令。</translation>
+    </message>
+    <message>
+        <source>Write file</source>
+        <translation type="vanished">写入文件</translation>
+    </message>
+    <message>
+        <source>write %1</source>
+        <translation type="vanished">写入 %1</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation type="vanished">工具错误：“content” 为必填项。</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation type="vanished">无法写入“%1”：某个父路径是一个文件。</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation type="vanished">无法写入“%1”：无法创建目录：%2</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation type="vanished">无法写入 &quot;%1&quot;：%2</translation>
+    </message>
+    <message>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation type="vanished">已成功写入 %1 字节到 %2。</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation type="vanished">MCP 工具“%1”已被用户停止。</translation>
+    </message>
+    <message>
+        <source>Download niubash</source>
+        <translation type="vanished">下载 niubash</translation>
+    </message>
+    <message>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation type="vanished">从 GitHub 下载 niubash %1？</translation>
+    </message>
+    <message>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation type="vanished">Windows 上的 bash 工具通常运行 Git Bash，但其 MSYS2 运行时无法在 Windows 沙箱内初始化（microsoft/mxc#1061）。niubash 是一种原生的、无需 MSYS2 的 Bash，可以在此初始化，因此可以在此处下载它，以便在沙箱中运行 bash 工具。niubash 以 MIT 许可证发布。</translation>
+    </message>
+    <message>
+        <source>The package holds no niubash shell.</source>
+        <translation type="vanished">该包中没有 niubash shell。</translation>
+    </message>
+    <message>
+        <source>There is no niubash for this platform.</source>
+        <translation type="vanished">此平台没有 niubash。</translation>
+    </message>
+    <message>
+        <source>Downloading niubash...</source>
+        <translation type="vanished">正在下载 niubash……</translation>
+    </message>
+    <message>
+        <source>Downloading niubash failed: %1</source>
+        <translation type="vanished">下载 niubash 失败：%1</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash...</source>
+        <translation type="vanished">正在解压 niubash……</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash failed: %1</source>
+        <translation type="vanished">解压 niubash 失败：%1</translation>
+    </message>
+    <message>
+        <source>get current time</source>
+        <translation type="vanished">获取当前时间</translation>
+    </message>
+    <message>
+        <source>get runtime info</source>
+        <translation type="vanished">获取运行时信息</translation>
+    </message>
+    <message>
         <source>OS: %1
 Working directory: %2</source>
-        <translation>操作系统: %1
+        <translation type="vanished">操作系统: %1
 工作目录: %2</translation>
     </message>
 </context>
