@@ -5728,7 +5728,7 @@ void LlamaToolsTest::getinfo_run()
 
 void LlamaToolsTest::ripgrep_metadata()
 {
-    QCOMPARE(Tools::Ripgrep::version(), QString("15.2.0"));
+    QCOMPARE(Tools::Ripgrep::version(), QString("16.0.0"));
     QCOMPARE(Tools::Ripgrep::dialogTitle(), QString("Download ripgrep"));
     // This build targets a supported desktop platform.
     QVERIFY(Tools::Ripgrep::isSupportedPlatform());
