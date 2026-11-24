@@ -269,14 +269,14 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
         switch (hunk.type) {
         case Patch::HunkType::Add:
             if (showHeaders)
-                md += QString("**%1** `%2`\n\n").arg(Tr::tr("created"), hunk.path);
+                md += QString("%1 `%2`\n\n").arg(Tr::tr("created"), hunk.path);
             md += codeFence(hunk.contents, codeLanguageFor(hunk.path)) + QStringLiteral("\n\n");
             break;
         case Patch::HunkType::Update: {
             if (showHeaders) {
                 const QString title = hunk.movePath.isEmpty()
-                        ? QString("**%1** `%2`").arg(Tr::tr("edited"), hunk.path)
-                        : QString("**%1** `%2` \u2192 `%3`")
+                        ? QString("%1 `%2`").arg(Tr::tr("edited"), hunk.path)
+                        : QString("%1 `%2` \u2192 `%3`")
                               .arg(Tr::tr("moved"), hunk.path, hunk.movePath);
                 md += title + QLatin1String("\n\n");
             }
@@ -286,7 +286,7 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
         case Patch::HunkType::Delete:
             // A deletion has no content to show - the line is the only
             // trace of it, so it always carries the file name.
-            md += QString("**%1** `%2`\n\n").arg(Tr::tr("deleted"), hunk.path);
+            md += QString("%1 `%2`\n\n").arg(Tr::tr("deleted"), hunk.path);
             break;
         }
     }
