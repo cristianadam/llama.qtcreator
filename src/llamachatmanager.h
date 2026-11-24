@@ -357,7 +357,7 @@ private:
     //! page reloads).
     void checkServerIdentity();
 
-    QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs);
+    QJsonArray normalizeMsgsForAPI(const QVector<Message> &msgs, bool includeTools = true);
 
     //! Persists the user messages queued for \a convId (mid-run steering) as
     //! a chain of user messages after \a afterId.  Returns the id of the

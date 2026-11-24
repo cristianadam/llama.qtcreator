@@ -1569,7 +1569,7 @@ void ChatManager::followUpQuestions(const QString &convId,
     static constexpr int kFollowUpContextMessages = 6;
     auto recentMsgs = leafMsgs.mid(qMax(0, leafMsgs.size() - kFollowUpContextMessages));
 
-    QJsonArray msgArray = normalizeMsgsForAPI(recentMsgs);
+    QJsonArray msgArray = normalizeMsgsForAPI(recentMsgs, /*includeTools=*/false);
 
     QJsonArray parts;
     QJsonObject txt;
@@ -1739,7 +1739,7 @@ void ChatManager::summarizeConversationTitle(const QString &convId,
     auto msgs = m_storage->getMessages(convId);
     auto leafMsgs = m_storage->filterByLeafNodeId(msgs, leafNodeId, false);
 
-    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs);
+    QJsonArray msgArray = normalizeMsgsForAPI(leafMsgs, /*includeTools=*/false);
     QJsonObject payload;
 
     // Append the prompt that asks for the title
@@ -2170,7 +2170,7 @@ QJsonValue toolResultContentForApi(const QJsonValue &content, bool keepImages)
 
 } // namespace
 
-QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
+QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs, bool includeTools)
 {
     QJsonArray res;
 
@@ -2188,7 +2188,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
     // into it for the sibling results fetched from storage (a use of a
     // block-scoped vector here was a use-after-free).
     QVector<Message> allMessages;
-    if (!msgs.isEmpty()) {
+    if (includeTools && !msgs.isEmpty()) {
         QSet<qint64> keptIds;
         bool hasToolCalls = false;
         QSet<QString> callIds;
@@ -2278,6 +2278,11 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
         const Message &msg = msgs.at(i);
         if (msg.role == "tool" && emittedToolMsgIds.contains(msg.id))
             continue;
+        // Auxiliary requests (title, follow-up) send a tool-free history:
+        // tool calls in the messages would make the model answer with a
+        // tool call of its own even though no tools are advertised.
+        if (!includeTools && msg.role == "tool")
+            continue;
         const bool keepImages = msgs.size() - i <= kImageContextMessages;
         if (msg.role != "user" || msg.extra.isEmpty()) {
             QJsonObject out;
@@ -2285,9 +2290,11 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             out["content"] = msg.content;
 
             if (msg.role == "assistant") {
-                for (const QVariantMap &e : msg.extra) {
-                    if (e.contains("tool_calls"))
-                        out["tool_calls"] = e["tool_calls"].toJsonArray();
+                if (includeTools) {
+                    for (const QVariantMap &e : msg.extra) {
+                        if (e.contains("tool_calls"))
+                            out["tool_calls"] = e["tool_calls"].toJsonArray();
+                    }
                 }
             } else if (msg.role == "tool") {
                 for (const QVariantMap &e : msg.extra) {
@@ -2306,7 +2313,7 @@ QJsonArray ChatManager::normalizeMsgsForAPI(const QVector<Message> &msgs)
             // assistant message, in tool_calls order (the leaf-path filter
             // dropped the siblings; the leaf result is re-emitted here too
             // and skipped at its natural position above).
-            if (msg.role == "assistant") {
+            if (includeTools && msg.role == "assistant") {
                 const auto rit = toolResultsByCall.constFind(msg.id);
                 if (rit != toolResultsByCall.constEnd()) {
                     auto emitToolResult = [&res, &emittedToolMsgIds, keepImages](
