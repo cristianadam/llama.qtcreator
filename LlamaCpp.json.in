@@ -11,5 +11,15 @@
     "LongDescription" : ${LONG_DESCRIPTION},
     "Url" : "https://github.com/ggml-org/llama.qtcreator",
     "DocumentationUrl" : "",
-    ${IDE_PLUGIN_DEPENDENCIES}
+    ${IDE_PLUGIN_DEPENDENCIES},
+    "Mimetypes" : [
+        "<?xml version='1.0'?>",
+        "<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>",
+        "    <mime-type type='text/x-llama.qtcreator'>",
+        "        <sub-class-of type='text/plain'/>",
+        "        <comment>llama.cpp conversation</comment>",
+        "        <glob pattern='*.llama'/>",
+        "    </mime-type>",
+        "</mime-info>"
+    ]
 }

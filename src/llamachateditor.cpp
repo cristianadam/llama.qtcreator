@@ -16,6 +16,7 @@
 #include <utils/fadingindicator.h>
 #include <utils/fsengine/fileiconprovider.h>
 #include <utils/icon.h>
+#include <utils/mimeutils.h>
 #include <utils/theme/theme.h>
 #include <utils/utilsicons.h>
 #include <utils/widgets.h>
@@ -94,6 +95,17 @@ using namespace Utils;
 
 namespace LlamaCpp {
 
+// Disables Save As: conversations are exported from the "llama.cpp Conversations" view.
+class ChatDocument : public TextDocument
+{
+public:
+    explicit ChatDocument(Utils::Id id = Utils::Id())
+        : TextDocument(id)
+    {
+    }
+    bool isSaveAsAllowed() const override { return false; }
+};
+
 namespace {
 
 // The generation speed (predicted_n / predicted_ms) arrives live with every
@@ -123,6 +135,27 @@ QString humanEditorFilePath(const QString &uniqueId)
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate))
         file.close();
     return path;
+}
+
+// Throw-away path (conversation title + ".llama") used only to resolve the llama icon.
+FilePath chatDocumentFilePath(const QString &convName)
+{
+    static const QString dirPath = [] {
+        const QString dir = QDir::tempPath() + QStringLiteral("/llama-cpp-chat");
+        QDir().mkpath(dir);
+        return dir;
+    }();
+    // Sanitize for use as a file name
+    QString safeName = convName;
+    safeName.replace(QRegularExpression(QStringLiteral("[\\/:*?\"<>|]")), QStringLiteral("_"));
+    if (safeName.isEmpty())
+        safeName = QStringLiteral("conversation");
+    const QString file = dirPath + QStringLiteral("/") + safeName + QStringLiteral(".llama");
+    // Create the file so the document is not seen as read-only (lock icon)
+    QFile f(file);
+    if (!f.exists() && f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        f.close();
+    return FilePath::fromString(file);
 }
 
 // Escapes the HTML metacharacters so a value (a model id or a directory that
@@ -532,7 +565,7 @@ private:
 QSet<ChatEditor *> ChatEditor::s_instances;
 
 ChatEditor::ChatEditor()
-    : m_document(new TextDocument())
+    : m_document(new ChatDocument())
 {
     s_instances.insert(this);
 
@@ -847,6 +880,8 @@ ChatEditor::ChatEditor()
 
                 ChatManager::instance().setCurrentConversation(m_viewingConvId);
                 m_document->setPreferredDisplayName(chat.conv.name);
+                // Throw-away path so the Open Editors view resolves the llama icon.
+                m_document->setFilePath(chatDocumentFilePath(chat.conv.name));
 
                 EditorManager::instance()->updateWindowTitles();
 
@@ -2355,15 +2390,28 @@ public:
         setDisplayName(Tr::tr("LlamaCpp Chat Editor"));
         setMimeTypes({Constants::LLAMACPP_CHAT_MIME_TYPE});
         setEditorCreator([] { return new ChatEditor; });
-        // TODO: doesn't seem to work
+    }
+
+    static void registerFileIcon();
+};
+
+void ChatEditorFactory::registerFileIcon()
+{
+    // Register the llama icon for the .llama suffix; fall back to a direct suffix overlay.
+    const MimeType mime = Utils::mimeTypeForName(Constants::LLAMACPP_CHAT_MIME_TYPE);
+    if (mime.suffixes().contains(QLatin1String("llama"))) {
         FileIconProvider::registerIconForMimeType(LLAMACPP_ICON.icon(),
                                                   QString(Constants::LLAMACPP_CHAT_MIME_TYPE));
+    } else {
+        FileIconProvider::registerIconOverlayForSuffix(
+            QStringLiteral(":/images/llama.png"), QStringLiteral("llama"));
     }
-};
+}
 
 void setupChatEditor()
 {
     static ChatEditorFactory theChatEditorFactory;
+    ChatEditorFactory::registerFileIcon();
 }
 
 } // namespace LlamaCpp
