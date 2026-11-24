@@ -138,6 +138,36 @@ public:
     //! thinking/reasoning control (same heuristics as the llama.cpp web UI).
     bool serverSupportsThinking() const;
 
+    //! The thinking levels a model's menu offers (the web UI's menu):
+    //! "default" and "off", plus the levels its chat template honours
+    //! (chat_template_caps.reasoning_effort_levels, filtered to the known
+    //! ones) or, when it honours none but supports thinking, the
+    //! token-budget levels low/medium/high/max.
+    static QStringList thinkingMenuLevels(const QStringList &templateLevels,
+                                          bool supportsThinking);
+
+    //! The stored thinking level as \a menuLevels offers it, "default" when
+    //! the menu lacks it (the web UI's resolveReasoningEffort fallback).
+    static QString resolveThinkingLevel(const QStringList &menuLevels,
+                                        const QString &storedLevel);
+
+    //! The thinking-level parameters of a chat request (the web UI's
+    //! payload): the template's thinking kwarg in chat_template_kwargs, the
+    //! OAI "reasoning_effort" field for a level the template honours, or a
+    //! "thinking_budget_tokens" budget for the remaining levels.  "default"
+    //! omits everything so the server/model default applies.
+    static void addThinkingPayloadParams(QJsonObject &payload,
+                                         const LlamaCppServerProps &props,
+                                         const QString &storedLevel);
+
+    //! The thinking levels the active model's menu offers (see
+    //! thinkingMenuLevels()).
+    QStringList thinkingLevels() const;
+
+    //! The stored thinking level, or "default" when the active model's menu
+    //! does not offer it (see resolveThinkingLevel()).
+    QString resolvedThinkingLevel() const;
+
     struct ModelEntry
     {
         QString id;

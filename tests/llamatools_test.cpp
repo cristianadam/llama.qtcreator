@@ -590,6 +590,12 @@ private slots:
     void sanitizeConversationName_singleLine();
     void sanitizeConversationName_lengthCap();
 
+    // ChatManager thinking levels (llama.cpp web UI parity)
+    void thinkingLevels_menuModes();
+    void thinkingPayload_budgetMode();
+    void thinkingPayload_templateMode();
+    void thinkingPayload_resolution();
+
     // HtmlExporter
     void htmlExport_conversationDocument();
     void htmlExport_messageDocument();
@@ -6357,6 +6363,146 @@ void LlamaToolsTest::sanitizeConversationName_lengthCap()
     const QString hardCut = sanitizeConversationName(oneWord);
     QVERIFY(hardCut.endsWith(QLatin1String("...")));
     QCOMPARE(hardCut.size(), 83);
+}
+
+void LlamaToolsTest::thinkingLevels_menuModes()
+{
+    // Template levels: offered as-is, unknown ones (e.g. "none") filtered
+    // out.
+    QCOMPARE(ChatManager::thinkingMenuLevels(
+                 {QStringLiteral("none"), QStringLiteral("low"),
+                  QStringLiteral("xhigh")},
+                 true),
+             (QStringList{QStringLiteral("default"), QStringLiteral("off"),
+                          QStringLiteral("low"), QStringLiteral("xhigh")}));
+    // No template levels, thinking supported: the token-budget levels.
+    QCOMPARE(ChatManager::thinkingMenuLevels({}, true),
+             (QStringList{QStringLiteral("default"), QStringLiteral("off"),
+                          QStringLiteral("low"), QStringLiteral("medium"),
+                          QStringLiteral("high"), QStringLiteral("max")}));
+    // No template levels, no thinking: only the base entries.
+    QCOMPARE(ChatManager::thinkingMenuLevels({}, false),
+             (QStringList{QStringLiteral("default"), QStringLiteral("off")}));
+    // A stored level the menu offers is kept...
+    QCOMPARE(ChatManager::resolveThinkingLevel(
+                 ChatManager::thinkingMenuLevels({}, true),
+                 QStringLiteral("high")),
+             QStringLiteral("high"));
+    // ...a level the menu lacks (the model changed) resolves to "default".
+    QCOMPARE(ChatManager::resolveThinkingLevel(
+                 ChatManager::thinkingMenuLevels({QStringLiteral("low")}, true),
+                 QStringLiteral("max")),
+             QStringLiteral("default"));
+}
+
+void LlamaToolsTest::thinkingPayload_budgetMode()
+{
+    // A Qwen-style template honours no reasoning_effort level, so the
+    // levels are token budgets.
+    LlamaCppServerProps props;
+    props.chat_template = QStringLiteral(
+        "{{ bos_token }}{% if enable_thinking %}think");
+
+    QJsonObject payload;
+    ChatManager::addThinkingPayloadParams(payload, props, QStringLiteral("low"));
+    QCOMPARE(payload.value("chat_template_kwargs").toObject()
+                 .value(QStringLiteral("enable_thinking"))
+                 .toBool(),
+             true);
+    QCOMPARE(payload.value("thinking_budget_tokens").toInt(), 512);
+    QVERIFY(!payload.contains(QStringLiteral("reasoning_effort")));
+
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("medium"));
+    QCOMPARE(payload.value("thinking_budget_tokens").toInt(), 2048);
+
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("high"));
+    QCOMPARE(payload.value("thinking_budget_tokens").toInt(), 8192);
+
+    // "max" is unlimited: the kwarg is injected, no budget.
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("max"));
+    QCOMPARE(payload.value("chat_template_kwargs").toObject()
+                 .value(QStringLiteral("enable_thinking"))
+                 .toBool(),
+             true);
+    QVERIFY(!payload.contains(QStringLiteral("thinking_budget_tokens")));
+
+    // "off" disables thinking in the template's kwarg.
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("off"));
+    QCOMPARE(payload.value("chat_template_kwargs").toObject()
+                 .value(QStringLiteral("enable_thinking"))
+                 .toBool(),
+             false);
+    QVERIFY(!payload.contains(QStringLiteral("thinking_budget_tokens")));
+
+    // A template with no known kwarg falls back to "enable_thinking" like
+    // the web UI does.
+    LlamaCppServerProps plain;
+    plain.chat_template = QStringLiteral("<think>\n{{ content }}\n</think>");
+    ChatManager::addThinkingPayloadParams(payload = {}, plain,
+                                          QStringLiteral("low"));
+    QCOMPARE(payload.value("chat_template_kwargs").toObject()
+                 .value(QStringLiteral("enable_thinking"))
+                 .toBool(),
+             true);
+    QCOMPARE(payload.value("thinking_budget_tokens").toInt(), 512);
+
+    // "default" sends nothing.
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("default"));
+    QVERIFY(payload.isEmpty());
+}
+
+void LlamaToolsTest::thinkingPayload_templateMode()
+{
+    // A GPT-OSS-style template honours reasoning_effort levels: they are
+    // sent as-is with no budget, and "off" maps to "none".
+    LlamaCppServerProps props;
+    props.chat_template = QStringLiteral(
+        "{% if reasoning_effort %}reasoning: {{ reasoning_effort }}{% endif %}");
+    props.reasoningEffortLevels = {QStringLiteral("low"),
+                                   QStringLiteral("medium"),
+                                   QStringLiteral("high")};
+
+    QJsonObject payload;
+    ChatManager::addThinkingPayloadParams(payload, props, QStringLiteral("low"));
+    QCOMPARE(payload.value("reasoning_effort").toString(),
+             QStringLiteral("low"));
+    QVERIFY(!payload.contains(QStringLiteral("thinking_budget_tokens")));
+    QVERIFY(!payload.contains(QStringLiteral("chat_template_kwargs")));
+
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("off"));
+    QCOMPARE(payload.value("reasoning_effort").toString(),
+             QStringLiteral("none"));
+    QVERIFY(!payload.contains(QStringLiteral("thinking_budget_tokens")));
+
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("default"));
+    QVERIFY(payload.isEmpty());
+}
+
+void LlamaToolsTest::thinkingPayload_resolution()
+{
+    // Stored levels the active model's menu lacks (the model changed from a
+    // budget-mode one) resolve to "default": nothing is sent, even though
+    // the level names look plausible.
+    LlamaCppServerProps props;
+    props.chat_template = QStringLiteral(
+        "{% if reasoning_effort %}reasoning: {{ reasoning_effort }}{% endif %}");
+    props.reasoningEffortLevels = {QStringLiteral("low"),
+                                   QStringLiteral("high")};
+
+    QJsonObject payload;
+    ChatManager::addThinkingPayloadParams(payload, props, QStringLiteral("max"));
+    QVERIFY(payload.isEmpty());
+
+    ChatManager::addThinkingPayloadParams(payload = {}, props,
+                                          QStringLiteral("medium"));
+    QVERIFY(payload.isEmpty());
 }
 
 void LlamaToolsTest::htmlExport_conversationDocument()

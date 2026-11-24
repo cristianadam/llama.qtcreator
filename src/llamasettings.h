@@ -69,10 +69,11 @@ public:
     // conversation titles and follow-up suggestions. Empty means: use the
     // active chat model.
     Utils::StringAspect utilityModel{this};
-    // "default" (the model's default), "off" (thinking disabled, sent as
-    // "none") or one of the concrete reasoning levels the server reports for
-    // the model's chat template (sent to the server as the OAI
-    // "reasoning_effort" field).
+    // "default" (the model's default), "off" (thinking disabled) or a
+    // concrete reasoning level - one the chat template honours (sent as the
+    // OAI "reasoning_effort" field) or a token-budget level
+    // (low/medium/high/max, sent as "thinking_budget_tokens") - same as the
+    // llama.cpp web UI.
     Utils::StringAspect thinkingLevel{this};
     // Size of the chat conversation font, as a percentage of the editor
     // font size (100 = exactly the editor font size). The conversation uses

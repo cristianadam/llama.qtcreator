@@ -1901,18 +1901,15 @@ void ChatEditor::onSiblingChanged(qint64 siblingId)
 
 void ChatEditor::updateThinkingMenu()
 {
-    // The concrete levels are the ones the server reports for the active
-    // model's chat template (chat_template_caps.reasoning_effort_levels);
-    // "Default" (send nothing, the model's default) and "Off" (send "none")
-    // are always offered.  When the server reports no level the template
-    // honours, the button is disabled.
-    const QStringList serverLevels =
-        ChatManager::instance().serverProps().reasoningEffortLevels;
+    // The levels are the ones the active model's menu offers (see
+    // ChatManager::thinkingLevels()): "Default" (send nothing, the model's
+    // default) and "Off", plus the levels the chat template honours or the
+    // token-budget levels (low/medium/high/max) when it honours none.  The
+    // button is disabled when no concrete level is offered.
+    const QStringList levels = ChatManager::instance().thinkingLevels();
 
     QList<QPair<QString, QString>> entries;
-    entries.append({QStringLiteral("default"), thinkingLevelDisplay(QStringLiteral("default"))});
-    entries.append({QStringLiteral("off"), thinkingLevelDisplay(QStringLiteral("off"))});
-    for (const QString &level : serverLevels)
+    for (const QString &level : levels)
         entries.append({level, thinkingLevelDisplay(level)});
 
     // Replace the previous actions (they are the menu's children and leave
@@ -1935,13 +1932,15 @@ void ChatEditor::updateThinkingMenu()
                     settings().writeSettings();
                 });
     }
-    m_thinkingButton->setEnabled(!serverLevels.isEmpty());
+    m_thinkingButton->setEnabled(levels.size() > 2);
     syncThinkingLevel();
 }
 
 void ChatEditor::syncThinkingLevel()
 {
-    const QString level = settings().thinkingLevel.value();
+    // The stored level may not be offered by the active model's menu (the
+    // model changed): it resolves to "default" then, like the payload does.
+    const QString level = ChatManager::instance().resolvedThinkingLevel();
     const QString label = thinkingLevelDisplay(level);
     if (m_thinkingMenu) {
         const QList<QAction *> actions = m_thinkingMenu->actions();

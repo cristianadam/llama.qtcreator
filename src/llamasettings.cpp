@@ -438,8 +438,10 @@ LlamaSettings::LlamaSettings()
     thinkingLevel.setDefaultValue("default");
     thinkingLevel.setToolTip(Tr::tr(
         "Thinking (reasoning) level for thinking-capable models. \"default\" "
-        "uses the model's default, \"off\" disables thinking, and the concrete "
-        "levels are the ones the server reports for the model's chat template."));
+        "uses the model's default and \"off\" disables thinking. The concrete "
+        "levels are the ones the model's chat template honours (sent as "
+        "reasoning_effort) or, when it honours none, token budgets - low 512, "
+        "medium 2048, high 8192, max unlimited - like the llama.cpp web UI."));
 
     // No options-page entry: the chat font zoom is adjusted with
     // Ctrl+mouse-wheel over the conversation or the chat zoom commands.

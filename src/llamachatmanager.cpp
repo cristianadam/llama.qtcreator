@@ -63,6 +63,20 @@ static QString chatTemplateThinkingKwarg(const QString &tmpl)
     return QString();
 }
 
+// The token budget of a budget-mode thinking level (the web UI's
+// REASONING_EFFORT_TOKENS); -1 for "max" (unlimited) and for levels that
+// are not budget levels.
+static int thinkingLevelBudgetTokens(const QString &level)
+{
+    if (level == QLatin1String("low"))
+        return 512;
+    if (level == QLatin1String("medium"))
+        return 2048;
+    if (level == QLatin1String("high"))
+        return 8192;
+    return -1;
+}
+
 static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
 {
     payload["samplers"] = settings().samplers.value();
@@ -92,21 +106,11 @@ static void addCommonPayloadParams(QJsonObject &payload, const QString &model)
     // speed labels in the status bar can be populated.
     payload["timings_per_token"] = true;
     payload["return_progress"] = true;
-    // Thinking level for reasoning models, sent as the OAI "reasoning_effort"
-    // field (the llama.cpp server maps it onto the chat template kwargs).
-    // "default" (or empty) omits the field entirely so the server/model
-    // default applies; "off" maps to "none".  A concrete level is only sent
-    // when the server reports that the active template honours it
-    // (chat_template_caps.reasoning_effort_levels).
-    const QString thinkingLevel = settings().thinkingLevel.value();
-    if (!thinkingLevel.isEmpty() && thinkingLevel != QLatin1String("default")) {
-        if (thinkingLevel == QLatin1String("off")) {
-            if (ChatManager::instance().serverSupportsThinking())
-                payload["reasoning_effort"] = QStringLiteral("none");
-        } else if (ChatManager::instance().serverProps().reasoningEffortLevels.contains(thinkingLevel)) {
-            payload["reasoning_effort"] = thinkingLevel;
-        }
-    }
+    // Thinking level, the same payload as the llama.cpp web UI (see
+    // ChatManager::addThinkingPayloadParams()).
+    ChatManager::addThinkingPayloadParams(
+        payload, ChatManager::instance().serverProps(),
+        settings().thinkingLevel.value());
     // Select the active model; required by router-mode servers, ignored by
     // single-model ones.
     if (!model.isEmpty())
@@ -511,6 +515,86 @@ static bool chatTemplateSupportsThinking(const QString &tmpl)
 bool ChatManager::serverSupportsThinking() const
 {
     return chatTemplateSupportsThinking(serverProps().chat_template);
+}
+
+QStringList ChatManager::thinkingMenuLevels(const QStringList &templateLevels,
+                                            bool supportsThinking)
+{
+    // The web UI's menu: "default" and "off", plus the levels the chat
+    // template honours (filtered to the known ones), or the token-budget
+    // levels when it honours none.
+    const QStringList levels{QStringLiteral("default"), QStringLiteral("off")};
+    static const QStringList knownLevels{QLatin1String("minimal"),
+                                         QLatin1String("low"),
+                                         QLatin1String("medium"),
+                                         QLatin1String("high"),
+                                         QLatin1String("xhigh"),
+                                         QLatin1String("max")};
+    QStringList modelLevels;
+    for (const QString &level : templateLevels) {
+        if (knownLevels.contains(level))
+            modelLevels << level;
+    }
+    if (!modelLevels.isEmpty())
+        return levels + modelLevels;
+    if (supportsThinking)
+        return levels
+               + QStringList{QLatin1String("low"), QLatin1String("medium"),
+                             QLatin1String("high"), QLatin1String("max")};
+    return levels;
+}
+
+QString ChatManager::resolveThinkingLevel(const QStringList &menuLevels,
+                                          const QString &storedLevel)
+{
+    return menuLevels.contains(storedLevel) ? storedLevel
+                                            : QStringLiteral("default");
+}
+
+void ChatManager::addThinkingPayloadParams(QJsonObject &payload,
+                                           const LlamaCppServerProps &props,
+                                           const QString &storedLevel)
+{
+    // The same payload as the web UI: an explicit level (anything but
+    // "default") overrides the server default (--reasoning) by injecting
+    // the template's thinking kwarg, or "enable_thinking" when it has no
+    // known one; a level the chat template honours goes as the OAI
+    // "reasoning_effort" field, and the remaining levels map to a token
+    // budget (low 512, medium 2048, high 8192, max unlimited) that the
+    // server's reasoning-budget sampler enforces.  "default" omits
+    // everything so the server/model default applies.
+    const QString thinkingLevel =
+        resolveThinkingLevel(thinkingMenuLevels(props.reasoningEffortLevels,
+                                                chatTemplateSupportsThinking(
+                                                    props.chat_template)),
+                             storedLevel);
+    if (thinkingLevel == QLatin1String("default"))
+        return;
+    const bool on = thinkingLevel != QLatin1String("off");
+    const QString thinkingKwarg = chatTemplateThinkingKwarg(props.chat_template);
+    if (thinkingKwarg != QLatin1String("reasoning_effort"))
+        payload["chat_template_kwargs"] = QJsonObject(
+            {{thinkingKwarg.isEmpty() ? QStringLiteral("enable_thinking")
+                                      : thinkingKwarg,
+             on}});
+    else if (!on)
+        payload["reasoning_effort"] = QStringLiteral("none");
+    if (props.reasoningEffortLevels.contains(thinkingLevel))
+        payload["reasoning_effort"] = thinkingLevel;
+    else if (const int budget = thinkingLevelBudgetTokens(thinkingLevel);
+             budget >= 0)
+        payload["thinking_budget_tokens"] = budget;
+}
+
+QStringList ChatManager::thinkingLevels() const
+{
+    return thinkingMenuLevels(serverProps().reasoningEffortLevels,
+                              serverSupportsThinking());
+}
+
+QString ChatManager::resolvedThinkingLevel() const
+{
+    return resolveThinkingLevel(thinkingLevels(), settings().thinkingLevel.value());
 }
 
 QList<ChatManager::ModelEntry> ChatManager::models() const
