@@ -115,10 +115,11 @@ private:
     static void showZoomIndicator(QWidget *widget, int zoom);
     void syncThinkingLevel();
     // Rebuilds the thinking-level menu from the levels the active model
-    // offers (ChatManager::thinkingLevels(): the chat template's levels or
-    // the token-budget levels) and enables the button only when a concrete
-    // level is offered.  Called from onServerPropsUpdated() and once from
-    // the constructor.
+    // offers (ChatManager::thinkingLevels()), enables the button only when
+    // a concrete level is offered, and shows it only when the model
+    // supports thinking.  Called from onServerPropsUpdated() and from the
+    // constructor (the props may have arrived before the editor was
+    // constructed).
     void updateThinkingMenu();
     void updateModelCombo();
     // Rebuilds the "You are connected to <model> in the <directory>" line of

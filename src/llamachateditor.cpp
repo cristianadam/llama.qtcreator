@@ -700,10 +700,10 @@ ChatEditor::ChatEditor()
     statusLayout->addWidget(m_titleButton);
 
     // Thinking-level dropdown (only shown when the model's chat template
-    // supports thinking/reasoning control, see onServerPropsUpdated()).  The
-    // level entries come from the server's reported
-    // chat_template_caps.reasoning_effort_levels (see updateThinkingMenu());
-    // the button is disabled when the server reports none.
+    // supports thinking/reasoning control).  The level entries come from
+    // the server's reported chat_template_caps.reasoning_effort_levels
+    // (see updateThinkingMenu()); the button is disabled when the server
+    // reports none.
     m_thinkingButton = new QToolButton(m_statusBar);
     m_thinkingButton->setPopupMode(QToolButton::InstantPopup);
     // A styled QToolButton defaults to icon-only; force the label next to
@@ -1933,6 +1933,9 @@ void ChatEditor::updateThinkingMenu()
                 });
     }
     m_thinkingButton->setEnabled(levels.size() > 2);
+    // Also set in the constructor: the props may have arrived before this
+    // editor existed, so no serverPropsUpdated() will follow.
+    m_thinkingButton->setVisible(ChatManager::instance().serverSupportsThinking());
     syncThinkingLevel();
 }
 
@@ -2109,10 +2112,8 @@ void ChatEditor::onMessageContentUpdated(const Message &msg)
 
 void ChatEditor::onServerPropsUpdated()
 {
-    // Show the thinking-level dropdown only for models whose chat template
-    // supports thinking/reasoning control, and rebuild its entries from the
-    // levels the server reports (disabling the button when there are none).
-    m_thinkingButton->setVisible(ChatManager::instance().serverSupportsThinking());
+    // Rebuild the thinking-level dropdown (entries, visibility, current
+    // level) from the levels the server reports.
     updateThinkingMenu();
 
     removePropsWidget();
