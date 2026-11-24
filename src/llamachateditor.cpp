@@ -2005,7 +2005,13 @@ void ChatEditor::updateModelCombo()
             }
         }
     }
-    const int idx = m_modelCombo->findData(selected);
+    // A picked model not in the server's list (yet) stays selected,
+    // unbolded like an unloaded one.
+    int idx = m_modelCombo->findData(selected);
+    if (idx < 0 && !selected.isEmpty()) {
+        m_modelCombo->addItem(selected, selected);
+        idx = m_modelCombo->count() - 1;
+    }
     m_modelCombo->setCurrentIndex(idx >= 0 ? idx : 0);
     m_modelCombo->blockSignals(false);
 }

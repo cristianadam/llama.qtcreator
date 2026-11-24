@@ -538,7 +538,10 @@ void LlamaPlugin::populateModelsMenu(QMenu *menu)
     }
     menu->addSeparator();
     const QString selected = chatManager.selectedModel();
+    bool selectedListed = false;
     for (const auto &entry : models) {
+        if (entry.id == selected)
+            selectedListed = true;
         auto *action = new QAction(entry.id, menu);
         action->setCheckable(true);
         action->setChecked(entry.id == selected);
@@ -560,6 +563,25 @@ void LlamaPlugin::populateModelsMenu(QMenu *menu)
             } else {
                 chat.selectModel(id);
             }
+        });
+        menu->addAction(action);
+    }
+    // A picked model not in the server's list (yet) stays shown,
+    // unbolded like an unloaded one.
+    if (!selected.isEmpty() && !selectedListed
+        && selected != QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID)) {
+        auto *action = new QAction(selected, menu);
+        action->setCheckable(true);
+        action->setChecked(true);
+        action->setToolTip(
+            Tr::tr("Selects and loads the model. Click the selected model again to "
+                   "unload it and reset the selection."));
+        connect(action, &QAction::triggered, this, [id = selected] {
+            auto &chat = ChatManager::instance();
+            if (id == chat.selectedModel())
+                chat.selectModel(QString());
+            else
+                chat.selectModel(id);
         });
         menu->addAction(action);
     }

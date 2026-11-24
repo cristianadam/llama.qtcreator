@@ -110,8 +110,13 @@ public:
         });
         connect(lineEdit(), &QLineEdit::editingFinished, this, [this] {
             const int idx = findText(currentText());
-            m_aspect->setVolatileValue(idx >= 0 ? currentData().toString()
-                                                : currentText().trimmed());
+            // The default entry's text stands in for the empty value; a
+            // focus-out with it must keep the current value, not clear it.
+            const QString value =
+                    idx == 0 ? m_aspect->volatileValue()
+                    : idx > 0 ? currentData().toString()
+                              : currentText().trimmed();
+            m_aspect->setVolatileValue(value);
         });
         m_aspect->addOnVolatileValueChanged(this, [this] { syncFromAspect(); });
         connect(&ChatManager::instance(), &ChatManager::modelsUpdated, this, [this] {
@@ -134,22 +139,31 @@ private:
                 setItemData(count() - 1, itemFont, Qt::FontRole);
             }
         }
-        syncFromAspect();
+        syncFromAspect(/* force */ true);
     }
 
-    void syncFromAspect()
+    void syncFromAspect(bool force = false)
     {
-        // The user is typing a not-yet-committed name: leave the text alone.
-        if (lineEdit()->hasFocus() && lineEdit()->text() != m_aspect->volatileValue())
+        // The user is typing a not-yet-committed name: leave the text
+        // alone, unless force (after updateModels() the text is an
+        // artifact of the wipe, never user input).
+        if (!force && lineEdit()->hasFocus() && lineEdit()->text() != m_aspect->volatileValue())
             return;
-        const int idx = findData(m_aspect->volatileValue());
+        const QString value = m_aspect->volatileValue();
+        // A picked model not in the server's list (yet) stays selectable,
+        // unbolded like an unloaded one.
+        int idx = findData(value);
+        if (idx < 0 && !value.isEmpty()) {
+            addItem(value, value);
+            idx = count() - 1;
+        }
         if (idx >= 0 && idx != currentIndex())
             setCurrentIndex(idx);
         // The line edit shows the value itself (the item texts equal their
         // data); an empty one shows the placeholder. setCurrentIndex() would
         // reset it to the default entry's text, so set it explicitly.
-        if (lineEdit()->text() != m_aspect->volatileValue())
-            lineEdit()->setText(m_aspect->volatileValue());
+        if (lineEdit()->text() != value)
+            lineEdit()->setText(value);
     }
 
     StringAspect *m_aspect;

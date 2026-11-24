@@ -443,8 +443,9 @@ private:
 
     QList<ModelEntry> m_models;
     QString m_selectedModel;
-    //! The user explicitly picked "no model" (empty selection); the
-    //! refreshModels() fallback must not re-pick one over that choice.
+    //! The selection is intentional (an explicit "no model", or a picked
+    //! model the server has not listed yet): the refreshModels() fallback
+    //! must not re-pick or drop the selection over that choice.
     bool m_noModelChosen{false};
     QTimer *m_modelPollTimer{nullptr}; // polls /models while a model is loading
     //! The router's /models/sse feed (see openModelSseFeed()); null when the

@@ -636,11 +636,16 @@ void ChatManager::refreshModels()
                 for (const auto &m : std::as_const(m_models))
                     if (m.id == m_selectedModel)
                         selected = true;
-                if (!selected && !isHumanEditor() && !m_noModelChosen) {
+                if (selected) {
+                    // The list contains the selection: the just-picked
+                    // guard is done, the restore paths apply again.
+                    m_noModelChosen = false;
+                } else if (!isHumanEditor() && !m_noModelChosen) {
                     // The selection vanished (a restart, a removed model):
                     // resume with the remembered one when the server still
-                    // offers it, loading it when it is not loaded yet, so a
-                    // restart works like before it.
+                    // offers it, loading it when it is not loaded yet. A
+                    // just-picked model is guarded by m_noModelChosen
+                    // until the server lists it.
                     const QString remembered = settings().lastSelectedModel.value();
                     bool restored = false;
                     for (const auto &m : std::as_const(m_models)) {
@@ -824,15 +829,23 @@ void ChatManager::selectModel(const QString &id)
         return;
     const QString previous = m_selectedModel;
     m_selectedModel = id;
-    m_noModelChosen = id.isEmpty();
+    // The selection (an explicit "no model", or a picked model) must
+    // survive the refreshModels() fallback until a list confirms it.
+    m_noModelChosen = true;
+
+    // Unload the previous model when the selection moves on; a model
+    // still used as the FIM or utility model stays loaded.
+    for (const auto &m : std::as_const(m_models)) {
+        if (m.id != previous || m.status != QLatin1String("loaded"))
+            continue;
+        if (!isConfiguredModel(previous))
+            requestModelUnload(previous);
+        break;
+    }
 
     if (id.isEmpty()) {
-        // No model active: unload the previous one (when it was a real
-        // model and no setting still uses it) and forget the remembered
-        // selection, so a restart does not load it again.
-        if (!previous.isEmpty() && previous != QLatin1String(Constants::HUMAN_EDITOR_MODEL_ID)
-            && !isConfiguredModel(previous))
-            requestModelUnload(previous);
+        // No model active: forget the remembered selection, so a
+        // restart does not load it again.
         settings().lastSelectedModel.setValue(QString());
         persistSettings();
         refreshModelProps();
