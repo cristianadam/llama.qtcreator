@@ -254,9 +254,12 @@ ChatManager::ChatManager(QObject *parent)
 
     // A newly configured FIM/utility model must be loaded on the router
     // (the settings dialog only stores the name); the chat selection is
-    // loaded by selectModel() itself.
+    // loaded by selectModel() itself, also when it changes on the Chat
+    // settings page (apply() fires the aspect's changed signal).
     settings().modelFim.addOnChanged(this, [this] { ensureConfiguredModelsLoaded(); });
     settings().utilityModel.addOnChanged(this, [this] { ensureConfiguredModelsLoaded(); });
+    settings().lastSelectedModel.addOnChanged(
+        this, [this] { selectModel(settings().lastSelectedModel.value()); });
 
     connect(m_storage, &Storage::messageAppended, this, &ChatManager::messageAppended);
     connect(m_storage, &Storage::conversationCreated, [this](const QString &convId) {
@@ -682,8 +685,9 @@ void ChatManager::requestModelLoad(const QString &id)
     }
 }
 
-// The selection is made outside the options dialog (the chat's model
-// combo, the Models menu), so persist it like the menu toggles do.
+// The chat's model combo and the Models menu are outside the options
+// dialog, so the selection they make is persisted right away, like the
+// menu toggles do (the settings page persists it through its own apply).
 static void persistSettings()
 {
     settings().apply();

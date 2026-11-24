@@ -452,10 +452,19 @@ LlamaSettings::LlamaSettings()
                "font size. Adjust with Ctrl+mouse-wheel over the chat or the chat "
                "zoom in/out commands."));
 
-    // No options-page entry: the selection is made in the chat status bar.
-    lastSelectedModel.setDisplayName(Tr::tr("Last Selected Model"));
+    // The model selected in the chat status bar: shown on the Chat
+    // settings page, where changing it selects and loads the model
+    // (empty = no model), and remembered so a restart resumes with it.
+    lastSelectedModel.setDisplayName(Tr::tr("Chat Model"));
     lastSelectedModel.setSettingsKey("LastSelectedModel");
+    lastSelectedModel.setLabelText(Tr::tr("Chat Model:"));
     lastSelectedModel.setDefaultValue("");
+    lastSelectedModel.setDisplayStyle(StringAspect::LineEditDisplay);
+    lastSelectedModel.setToolTip(
+        Tr::tr("The model the chat uses. The entries are the models served by "
+               "the server; a name can also be typed. "
+               "\"No model\" leaves the chat without an active model. Selecting a "
+               "model here loads it on the server, like the chat's model combo."));
 
     utilityModel.setDisplayName(Tr::tr("Utility Model"));
     utilityModel.setSettingsKey("UtilityModel");

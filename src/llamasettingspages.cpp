@@ -223,6 +223,14 @@ Core::IOptionsPageWidget *createChatSettingsWidget()
 
     auto *widget = new Core::IOptionsPageWidget;
 
+    // The chat model row: a ModelComboBox bound to the lastSelectedModel
+    // aspect (the aspect's own line edit is not used); applying the page
+    // selects and loads the model (see ChatManager).
+    auto *chatModelLabel = new QLabel(s.lastSelectedModel.labelText(), widget);
+    auto *chatModelCombo =
+            new ModelComboBox(&s.lastSelectedModel, Tr::tr("No model"), widget);
+    chatModelLabel->setBuddy(chatModelCombo);
+
     // The utility model row: a ModelComboBox bound to the utilityModel
     // aspect (the aspect's own line edit is not used).
     auto *utilityModelLabel = new QLabel(s.utilityModel.labelText(), widget);
@@ -236,6 +244,7 @@ Core::IOptionsPageWidget *createChatSettingsWidget()
             Row {s.chatEndpoint}, br,
             Row {s.chatApiKey}, br,
             s.systemMessage, br,
+            Row {chatModelLabel, chatModelCombo, st}, br,
             Row {utilityModelLabel, utilityModelCombo, st}, br,
             Row {s.temperature, st}, br,
             Row {s.top_k, st}, br,
