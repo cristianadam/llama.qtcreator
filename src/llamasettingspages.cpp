@@ -78,12 +78,13 @@ const ServerSettingsPage serverSettingsPage;
 // container, which is what the old single page did.
 namespace {
 
-// An editable combo bound to a StringAspect: the first entry keeps the
-// empty ("default") value, the rest are the server's models (ChatManager,
-// the chat endpoint) with a status suffix while not loaded, refreshed on
-// modelsUpdated(). It stays editable so a typed name still works - the FIM
-// endpoint may point at a different server, and the list is empty while the
-// server is down.
+// An editable combo bound to a StringAspect: the rest of the entries are
+// the server's models (ChatManager, the chat endpoint) with a status suffix
+// while not loaded, refreshed on modelsUpdated(). The empty ("default")
+// value is shown as the line edit's placeholder, not as an item text; the
+// first entry exists only to select it back from the popup. It stays
+// editable so a typed name still works - the FIM endpoint may point at a
+// different server, and the list is empty while the server is down.
 class ModelComboBox : public QComboBox
 {
 public:
@@ -93,14 +94,23 @@ public:
     {
         setEditable(true);
         setToolTip(m_aspect->toolTip());
+        // The empty value has no text of its own: the placeholder stands in
+        // for it, so the display text can never be saved as the value.
+        lineEdit()->setPlaceholderText(defaultText);
         addItem(defaultText, QString());
         updateModels();
         connect(this, qOverload<int>(&QComboBox::activated), this, [this](int) {
-            m_aspect->setVolatileValue(currentData().toString());
+            const QString value = currentData().toString();
+            m_aspect->setVolatileValue(value);
+            // QComboBox sets the line edit to the item text; an empty value
+            // must show the placeholder instead (syncFromAspect() is skipped
+            // while the line edit has focus).
+            if (value.isEmpty())
+                lineEdit()->setText(QString());
         });
         connect(lineEdit(), &QLineEdit::editingFinished, this, [this] {
             const int idx = findText(currentText());
-            m_aspect->setVolatileValue(idx >= 0 ? currentData(idx).toString()
+            m_aspect->setVolatileValue(idx >= 0 ? currentData().toString()
                                                 : currentText().trimmed());
         });
         m_aspect->addOnVolatileValueChanged(this, [this] { syncFromAspect(); });
@@ -133,10 +143,13 @@ private:
         if (lineEdit()->hasFocus() && lineEdit()->text() != m_aspect->volatileValue())
             return;
         const int idx = findData(m_aspect->volatileValue());
-        if (idx >= 0)
+        if (idx >= 0 && idx != currentIndex())
             setCurrentIndex(idx);
-        else
-            setEditText(m_aspect->volatileValue());
+        // The line edit shows the value itself (the item texts equal their
+        // data); an empty one shows the placeholder. setCurrentIndex() would
+        // reset it to the default entry's text, so set it explicitly.
+        if (lineEdit()->text() != m_aspect->volatileValue())
+            lineEdit()->setText(m_aspect->volatileValue());
     }
 
     StringAspect *m_aspect;
