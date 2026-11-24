@@ -133,7 +133,7 @@ void ChatMessage::buildUI()
     m_actionLayout = new QHBoxLayout;
     m_actionLayout->setAlignment(m_isUser ? Qt::AlignRight : Qt::AlignLeft);
     m_actionLayout->setContentsMargins(0, 0, 0, 0);
-    m_actionLayout->setSpacing(8);  // space between action buttons
+    m_actionLayout->setSpacing(4);  // space between action buttons
 
     if (m_isUser && !m_msg.extra.isEmpty()) {
         m_attachedFiles = new QToolButton(this);
