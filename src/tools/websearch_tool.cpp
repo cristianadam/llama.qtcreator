@@ -28,22 +28,6 @@ const char kTavilyDefaultUrl[] = "https://api.tavily.com/search";
 const char kDuckDuckGoDefaultUrl[] = "https://html.duckduckgo.com/html/";
 const char kExaToolName[] = "web_search_exa";
 
-//! A current desktop Firefox user agent for the host platform - the
-//! DuckDuckGo HTML endpoint serves results to browser-like clients only.
-QString duckDuckGoUserAgent()
-{
-#if defined(Q_OS_MACOS)
-    return QStringLiteral("Mozilla/5.0 (Macintosh; Intel Mac OS X 15.8; rv:159.0) "
-                          "Gecko/20100101 Firefox/159.0");
-#elif defined(Q_OS_WIN)
-    return QStringLiteral("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:159.0) "
-                          "Gecko/20100101 Firefox/159.0");
-#else
-    return QStringLiteral("Mozilla/5.0 (X11; Linux x86_64; rv:159.0) "
-                          "Gecko/20100101 Firefox/159.0");
-#endif
-}
-
 QString mcpTextContent(const QJsonObject &payload)
 {
     const QJsonArray content = payload.value(QStringLiteral("result")).toObject()
@@ -354,8 +338,6 @@ void WebSearchTool::run(const QJsonObject &args,
         u.setQuery(q);
 
         QList<QPair<QByteArray, QByteArray>> headers;
-        headers.append({QByteArrayLiteral("User-Agent"),
-                        QByteArray::fromStdString(duckDuckGoUserAgent().toStdString())});
         headers.append({QByteArrayLiteral("Accept"), QByteArrayLiteral("text/html")});
 
         return httpGet(u.toString(),

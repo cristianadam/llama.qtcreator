@@ -18,10 +18,6 @@ using namespace QtTaskTree;
 
 namespace {
 
-const char kUserAgent[] =
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) "
-    "Chrome/143.0.0.0 Safari/537.36";
-
 struct FetchState
 {
     QByteArray body;
@@ -117,7 +113,8 @@ void checkPublicUrl(const QUrl &url,
 QNetworkRequest makeRequest(const QUrl &url)
 {
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::UserAgentHeader, kUserAgent);
+    request.setHeader(QNetworkRequest::UserAgentHeader,
+                      browserUserAgent().toUtf8());
     request.setRawHeader("Accept-Language", "en-US,en;q=0.9");
     return request;
 }
@@ -235,6 +232,20 @@ void startRequest(const QNetworkRequest &request,
 }
 
 } // namespace
+
+QString browserUserAgent()
+{
+#if defined(Q_OS_MACOS)
+    return QStringLiteral("Mozilla/5.0 (Macintosh; Intel Mac OS X 15.8; rv:159.0) "
+                          "Gecko/20100101 Firefox/159.0");
+#elif defined(Q_OS_WIN)
+    return QStringLiteral("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:159.0) "
+                          "Gecko/20100101 Firefox/159.0");
+#else
+    return QStringLiteral("Mozilla/5.0 (X11; Linux x86_64; rv:159.0) "
+                          "Gecko/20100101 Firefox/159.0");
+#endif
+}
 
 bool isPublicAddress(const QHostAddress &address)
 {

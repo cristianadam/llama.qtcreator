@@ -28,6 +28,11 @@ void httpGet(const QString &url,
              HttpResponseCallback done,
              QNetworkReply **replyOut = nullptr);
 
+//! A current desktop Firefox user agent for the host platform - browser-
+//! like clients are required by some endpoints (e.g. the DuckDuckGo HTML
+//! search) and are friendlier to general web fetches too.
+QString browserUserAgent();
+
 /*! True when \a address may be fetched on behalf of the model: not
     loopback, link-local, private (RFC 1918, CGNAT 100.64/10, IPv6 ULA),
     unspecified, multicast, broadcast or otherwise reserved, also when the
