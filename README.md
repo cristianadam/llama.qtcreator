@@ -1,8 +1,10 @@
 # llama.qtcreator
 
-Local LLM assistance for Qt Creator: FIM text completion in the editor and an
-agentic chat, both powered by a [llama.cpp](https://github.com/ggml-org/llama.cpp)
-server.
+Local LLM assistance for Qt Creator, powered by a
+[llama.cpp](https://github.com/ggml-org/llama.cpp) server: FIM text
+completion in the editor and an agentic chat with a built-in agent harness -
+shell and file tools, web access, skills, subagents and sandboxing -
+rendered with Markdown, Mermaid and KaTeX, no cloud required.
 
 ![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text@2x.webp)
 
@@ -44,9 +46,11 @@ server.
 ### Chat tools
 
 - File tools (`read_file`, `write`, `edit_file`, `apply_patch`), code
-  navigation (`search`, `find`, `ls`), `bash`, `todo_write`, and `task`
-  (delegates a self-contained subtask to a subagent that works in a separate
-  conversation, shown nested under its parent in the conversation list)
+  navigation (`search`, `find`, `ls`), `bash`, `get_datetime` / `get_info`
+  (current date/time and working environment), `todo_write`, and `task`
+  (delegates a self-contained subtask to a subagent that works in a
+  separate conversation, shown nested under its parent in the conversation
+  list)
 - Web access: `webfetch` retrieves and reads pages, `websearch` queries
   Exa, Google, Brave or Tavily (API keys configured on the "Tools" settings
   page)
@@ -67,17 +71,30 @@ The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server 
 ![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings@2x.webp)
 
 Or let the plugin manage the server itself: the **Server** settings page
-(Settings ▸ llama.cpp ▸ Server) finds or downloads the runtime (the official
-llama.cpp install script - the same one the Llama tray apps use, so an
-existing install is picked up), and starts/stops `llama-server` with a
-configurable host, port, models directory and extra arguments. It shows the
-server's terminal output (the start command line, then the colored log) in a
-dedicated "llama.cpp" pane of the Output window (filterable and clearable),
-checks the install channel for newer builds, and can start the server when
-Qt Creator starts (it stops it again on exit). The status icon's context
-menu lists the server's models - selecting one loads it - and starts/stops
-the managed server. A chat API key (Chat settings page), when set, is
-required by the managed server as well.
+(Settings > llama.cpp > Server)
+
+- Finds or downloads the runtime (the official llama.cpp install script -
+  the same one the Llama tray apps use, so an existing install is picked
+  up), and starts/stops `llama-server` with a configurable host, port,
+  models directory and extra arguments
+- Shows the server's output (start command line, then the colored log) in
+  a dedicated "llama.cpp" pane of the Output window
+- Checks the install channel for newer builds; can start the server when
+  Qt Creator starts (stops it on exit)
+- Lists the server's models with their details, and loads/unloads or
+  removes them
+- "Download models..." downloads a model from the llama.app catalog into
+  the server's model cache
+- A "Models" submenu in the "llama.cpp" menu (Tools > llama.cpp) and in
+  the status icon's context menu lists the server's models - selecting one
+  loads it and makes it the active chat model (selecting it again unloads
+  it) - and starts/stops the managed server
+- A chat API key (Chat settings page), when set, is required by the
+  managed server as well
+
+The chat's model selection is remembered across restarts, and the
+configured FIM and utility models are loaded automatically (the FIM model
+on its own server when the FIM endpoint points at a different one).
 
 #### Mac OS
 
