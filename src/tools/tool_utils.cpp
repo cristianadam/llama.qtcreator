@@ -658,6 +658,8 @@ QString codeLanguageFor(const QString &filePath)
     // SVG has no dedicated syntax definition; XML highlighting reads fine.
     if (suffix == "svg")
         return QStringLiteral("xml");
+    if (suffix == "mmd" || suffix == "mermaid")
+        return QStringLiteral("mermaid");
     if (suffix == "yaml" || suffix == "yml")
         return QStringLiteral("yaml");
     if (suffix == "md")

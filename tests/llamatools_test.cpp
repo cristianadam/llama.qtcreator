@@ -428,6 +428,7 @@ private slots:
     void codeSpan_escaping();
     void preview_truncatedPreview();
     void preview_defaultLineCount();
+    void preview_diagramFilesHaveNoPreview();
     void preview_bashTail();
     void preview_bashShort();
     void preview_editDiff();
@@ -1994,6 +1995,73 @@ void LlamaToolsTest::preview_defaultLineCount()
     const QString preview = tool.summaryPreview(args, QString(), true);
     QCOMPARE(preview,
              QStringLiteral("```text\nline1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\n```"));
+}
+
+void LlamaToolsTest::preview_diagramFilesHaveNoPreview()
+{
+    // SVG and mermaid files render as a picture in the chat view, so the
+    // first lines of the file would be redundant above the preview: no
+    // preview.  (The full source is still available by expanding the
+    // tool call.)
+    const QString svg = QStringLiteral("<svg xmlns=\"http://www.w3.org/2000/svg\">\n"
+                                       "  <rect width=\"10\" height=\"10\"/>\n"
+                                       "</svg>");
+    const QString mmd = QStringLiteral("flowchart LR\n  A[Start] --> B[End]");
+
+    Tools::WriteTool writeTool;
+    for (const QString &path : {QStringLiteral("icon.svg"), QStringLiteral("diagram.mmd")}) {
+        QJsonObject args;
+        args[QStringLiteral("path")] = path;
+        args[QStringLiteral("content")]
+            = path.endsWith(QStringLiteral(".svg")) ? svg : mmd;
+        QCOMPARE(writeTool.summaryPreview(args, QString(), true), QString());
+        // The failure case keeps the default behaviour (no preview: the X
+        // icon marks the failed call).
+        QCOMPARE(writeTool.summaryPreview(args, QStringLiteral("boom"), false), QString());
+    }
+
+    ApplyPatchTool patchTool;
+    QJsonObject args;
+    args[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: icon.svg\n"
+        "+<svg xmlns=\"http://www.w3.org/2000/svg\">\n"
+        "+  <rect width=\"10\" height=\"10\"/>\n"
+        "+</svg>\n"
+        "*** End Patch");
+    QCOMPARE(patchTool.summaryPreview(args, QString(), true), QString());
+
+    // A patch that only edits (not adds) a diagram file keeps the diff
+    // preview: the diff is the interesting part.
+    QJsonObject editArgs;
+    editArgs[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Update File: icon.svg\n"
+        "@@\n"
+        " <svg xmlns=\"http://www.w3.org/2000/svg\">\n"
+        "-  <rect width=\"10\" height=\"10\"/>\n"
+        "+  <rect width=\"20\" height=\"20\"/>\n"
+        " </svg>\n"
+        "*** End Patch");
+    const QString editPreview = patchTool.summaryPreview(editArgs, QString(), true);
+    // The diff of the edit is shown (the preview is not suppressed for
+    // non-add hunks of diagram files); the changed line keeps its +/- prefix.
+    QVERIFY2(editPreview.contains(QStringLiteral("-  <rect width=\"10\"")),
+             qPrintable(editPreview));
+
+    // A mixed patch (a diagram plus a regular file) keeps the preview: the
+    // regular file's content is still worth showing.
+    QJsonObject mixedArgs;
+    mixedArgs[QStringLiteral("patchText")] = QStringLiteral(
+        "*** Begin Patch\n"
+        "*** Add File: icon.svg\n"
+        "+<svg xmlns=\"http://www.w3.org/2000/svg\">\n"
+        "+</svg>\n"
+        "*** Add File: notes.txt\n"
+        "+hello\n"
+        "*** End Patch");
+    QVERIFY2(!patchTool.summaryPreview(mixedArgs, QString(), true).isEmpty(),
+             "a mixed patch keeps the preview of its non-diagram files");
 }
 
 void LlamaToolsTest::preview_bashTail()

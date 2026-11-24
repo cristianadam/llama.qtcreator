@@ -296,12 +296,34 @@ QString ApplyPatchTool::detailsMarkdown(const QJsonObject &args, const QString &
 
 QString ApplyPatchTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
 {
-    // The per-file diff is the interesting part.  On failure the X icon
-    // suffices in the collapsed view; the error text is only shown in the
-    // expanded details.  +1 for the opening fence line: the setting counts
-    // content lines, not fences.
-    return ok ? truncatedPreview(detailsMarkdown(args, result, ok), toolPreviewLineCount() + 1)
-              : QString();
+    // The renderer shows an SVG or mermaid file as its rendered picture (the
+    // write/apply_patch view has no source body to expand), so a code fence
+    // of the first lines above it would be redundant.
+    if (!ok)
+        return {};
+
+    QVector<Patch::Hunk> hunks;
+    if (!Patch::parse(args.value("patchText").toString(), hunks).isEmpty())
+        return {};
+
+    // Suppress the preview only when every added file is a diagram file
+    // (rendered as a picture, so the first lines would be redundant).  A
+    // mixed patch keeps the preview of its non-diagram files; edits/deletes
+    // never suppress (the diff is the interesting part).
+    bool hasAdd = false;
+    bool allAddsAreDiagrams = true;
+    for (const Patch::Hunk &hunk : hunks) {
+        if (hunk.type != Patch::HunkType::Add)
+            continue;
+        hasAdd = true;
+        const QString lang = codeLanguageFor(hunk.path);
+        if (lang != QLatin1String("svg") && lang != QLatin1String("xml")
+            && lang != QLatin1String("mermaid") && lang != QLatin1String("mmd"))
+            allAddsAreDiagrams = false;
+    }
+    if (hasAdd && allAddsAreDiagrams)
+        return {};
+    return Tool::summaryPreview(args, result, ok);
 }
 
 void ApplyPatchTool::run(const QJsonObject &args,

@@ -112,6 +112,21 @@ QString WriteTool::detailsMarkdown(const QJsonObject &args, const QString &resul
     return codeFence(content, codeLanguageFor(path));
 }
 
+QString WriteTool::summaryPreview(const QJsonObject &args, const QString &result, bool ok) const
+{
+    // The renderer shows an SVG or mermaid file as its rendered picture (the
+    // write/apply_patch view has no source body to expand), so a code fence
+    // of the first lines above it would be redundant.
+    if (!ok)
+        return {};
+    const QString path = args.value("path").toString();
+    const QString lang = codeLanguageFor(path);
+    if (lang == QLatin1String("svg") || lang == QLatin1String("xml")
+        || lang == QLatin1String("mermaid") || lang == QLatin1String("mmd"))
+        return {};
+    return Tool::summaryPreview(args, result, ok);
+}
+
 void WriteTool::run(const QJsonObject &args,
                     std::function<void(const QString &, bool)> done) const
 {
