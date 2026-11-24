@@ -4,7 +4,7 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp razgovor</translation>
     </message>
@@ -126,19 +126,19 @@
         <translation>Modeli servera na koji je razgovor povezan; odabir modela ga učitava i čini ga aktivnim modelom razgovora.</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+59"/>
         <source>Disable FIM</source>
         <translation>Onemogući FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+109"/>
+        <location filename="../src/llamasettings.cpp" line="+61"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>Omogući FIM</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+185"/>
         <location filename="../src/serversettingswidget.cpp" line="+264"/>
         <location line="+4"/>
         <source>Stop server</source>
@@ -146,10 +146,10 @@
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamaplugin.h" line="+3"/>
         <location filename="../src/serversettingswidget.cpp" line="-321"/>
         <location line="+313"/>
         <location line="+12"/>
+        <location filename="../src/llamaplugin.h" line="+3"/>
         <source>Start server</source>
         <translation>Pokreni server</translation>
     </message>
@@ -174,7 +174,7 @@
         <translation>Odabire i učitava model. Ponovno kliknite na odabrani model da biste ga odučili i vratili odabir.</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+279"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -221,20 +221,20 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1104"/>
+        <location filename="../src/llamasettingspages.cpp" line="+325"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/llamasettings.cpp" line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Razgovor</translation>
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1431"/>
+        <location filename="../src/llamaplugin.cpp" line="-1448"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -244,7 +244,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1158"/>
+        <location filename="../src/llamasettingspages.cpp" line="-309"/>
         <source>Tools</source>
         <translation>Alati</translation>
     </message>
@@ -257,7 +257,7 @@
         <translation type="vanished">Omogućava integraciju s alatom llama.cpp.</translation>
     </message>
     <message>
-        <location line="+66"/>
+        <location filename="../src/llamasettings.cpp" line="+22"/>
         <source>Endpoint</source>
         <translation>Krajnja točka</translation>
     </message>
@@ -287,7 +287,12 @@
         <translation>API ključ servera za alat llama.cpp (opcionalno)</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+9"/>
+        <source>Model to use for FIM completion when multiple models are loaded on the server (recommended: Qwen3 Coder). The entries are the models served by the chat endpoint; a name can also be typed, e.g. for a different server. Default uses the server&apos;s model.</source>
+        <translation>Model koji se koristi za FIM dovršenje kada je na serveru učitan više modela (preporuka: Qwen3 Coder). Unosi su modeli koje služi krajnja točka razgovora; ime se može i upisati, npr. za drugi server. Zadano koristi model servera.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Prefix Code Lines</source>
         <translation>Broj redaka koda prije pozicije pokazivača</translation>
     </message>
@@ -431,7 +436,7 @@
         <translation type="vanished">Maksimalan broj generiranih odgovora koji se čuvaju u kešu rezultata.</translation>
     </message>
     <message>
-        <location line="-216"/>
+        <location line="-174"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Sažmi naslov razgovora u nekoliko riječi uključujući jedan emoji. Koristi jezik koji se koristi u razgovoru. Koristi običan tekst, bez markdowna.</translation>
     </message>
@@ -468,7 +473,7 @@
 {diagnostics}</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+9"/>
         <source>Skills</source>
         <translation>Vještine</translation>
     </message>
@@ -484,12 +489,12 @@
         <translation>Server</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location filename="../src/llamasettings.cpp" line="+8"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>Omogućuje FIM (fill-in-the-middle) dovršenje u uređivaču teksta. Postavke razgovora, alata i web pretrage ne ovise o ovoj postavci.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+37"/>
         <source>FIM Model</source>
         <translation>FIM model</translation>
     </message>
@@ -499,12 +504,11 @@
         <translation>FIM model:</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>Ime modela koji se koristi za FIM dovršenje u slučaju kada je na serveru učitano više modela (opcionalno, preporučuje se: Qwen3 Coder).</translation>
+        <translation type="vanished">Ime modela koji se koristi za FIM dovršenje u slučaju kada je na serveru učitano više modela (opcionalno, preporučuje se: Qwen3 Coder).</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Broj redaka koda nakon pozicije pokazivača koji će biti uključeni u lokalni sufiks.</translation>
     </message>
@@ -959,7 +963,12 @@
         <translation>Zadnji odabrani model</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+10"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
+        <translation>Model koji se koristi za pomoćne zahtjeve kao što su naslovi razgovora i prijedlozi dodatnih pitanja; koristite mali model kako biste glavni model za razgovor ostavili slobodnim. Unosi su modeli koje služi server; ime se može i upisati. Zadano koristi aktivni model za razgovor.</translation>
+    </message>
+    <message>
+        <location line="+212"/>
         <source>bash:</source>
         <translation>bash:</translation>
     </message>
@@ -977,7 +986,7 @@
         <translation type="vanished">Prikaži broj tokena po sekundi u sučelju razgovora.</translation>
     </message>
     <message>
-        <location line="-245"/>
+        <location line="-244"/>
         <source>Thinking Level</source>
         <translation>Razina razmišljanja</translation>
     </message>
@@ -987,7 +996,7 @@
         <translation>Razina razmišljanja za modele koji podržavaju razmišljanje. &quot;default&quot; koristi zadanu razinu modela, &quot;off&quot; onemogućuje razmišljanje, a konkretne razine su one koje server prijavljuje za predložak razgovora modela.</translation>
     </message>
     <message>
-        <location line="+232"/>
+        <location line="+231"/>
         <source>ripgrep:</source>
         <translation>ripgrep:</translation>
     </message>
@@ -1009,7 +1018,7 @@
         <translation type="vanished">Razina razmišljanja (razlaganja) za modele sposobne za razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ili &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-227"/>
+        <location line="-226"/>
         <source>Chat Font Zoom</source>
         <translation>Uvećanje fonta razgovora</translation>
     </message>
@@ -1029,17 +1038,16 @@
         <translation>Pomoćni model:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/llamasettingspages.cpp" line="+159"/>
         <source>Default: chat model</source>
         <translation>Zadano: model za razgovor</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Model koji se koristi za pomoćne zahtjeve kao što su naslovi razgovora i prijedlozi dodatnih pitanja. Koristite mali model kako biste glavni model za razgovor ostavili slobodnim. Ostavite prazno za korištenje aktivnog modela za razgovor.</translation>
+        <translation type="vanished">Model koji se koristi za pomoćne zahtjeve kao što su naslovi razgovora i prijedlozi dodatnih pitanja. Koristite mali model kako biste glavni model za razgovor ostavili slobodnim. Ostavite prazno za korištenje aktivnog modela za razgovor.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location filename="../src/llamasettings.cpp" line="+23"/>
         <source>Handoff Prompt</source>
         <translation>Prijenosni prompt</translation>
     </message>
@@ -1207,14 +1215,14 @@
         <translation>Ugrađeni promptovi lokatora &quot;ll&quot;. U izborniku prikazuje se samo prva linija prompta, a cijeli tekst se šalje modelu. &quot;{selection}&quot; se zamjenjuje izabranim tekstim, &quot;{file}&quot; i &quot;{line}&quot; trenutnom datotekom i linijom kursora, &quot;{diagnostics}&quot; greškama i upozorenjima trenutne datoteke, a &quot;{git_diff}&quot; nekomitiranim promjenama njezina git repozitorija.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-4"/>
-        <location filename="../src/llamasettings.cpp" line="+7"/>
+        <location line="+7"/>
         <location line="+1"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
         <source>Selection prompt button</source>
         <translation>Gumb za prompt izabranog teksta</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>Prikaži mali gumb na dnu izabranog teksta u uređivaču. Klik na njega otvara lokator llama.cpp kako bi se izabrani tekst mogao poslati u llama.cpp s jednim od promptova.</translation>
     </message>
@@ -1600,7 +1608,7 @@
         <translation>Prepisuje globalnu postavku &apos;Učitaj upute projekta&apos; za ovaj projekt. Pogledajte globalnu postavku na stranici Llama Alati za ono što se učitava.</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location filename="../src/llamasettingspages.cpp" line="+77"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; ne zahtijeva API ključ</translation>
     </message>
@@ -1617,6 +1625,7 @@
     <message>
         <location filename="../src/llamachateditor.cpp" line="+192"/>
         <location line="+14"/>
+        <location filename="../src/llamasettingspages.cpp" line="-204"/>
         <source>Default</source>
         <translation>Zadano</translation>
     </message>
@@ -1760,7 +1769,7 @@
         <translation>Kliknite na ime modela za prikaz njegovih detalja ili na direktorij za promjenu mjesta gdje alati rade (desni klik vraća direktorij na projekt).</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+144"/>
         <source>Follow-up questions:</source>
         <translation>Dodatna pitanja:</translation>
     </message>
@@ -1770,14 +1779,14 @@
         <translation>Razina razmišljanja: %1 (primjenjuje se na nove poruke)</translation>
     </message>
     <message>
-        <location line="-915"/>
-        <location line="+948"/>
-        <location line="+81"/>
+        <location line="-914"/>
+        <location line="+947"/>
+        <location line="+85"/>
         <source>Human Editor</source>
         <translation>Ljudski urednik</translation>
     </message>
     <message>
-        <location line="-1000"/>
+        <location line="-1003"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Povezani ste s %1, s %2 kao trenutnim direktorijem</translation>
     </message>
@@ -1888,7 +1897,7 @@
         <translation>Odaberite radni direktorij</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1908,7 +1917,7 @@
         <translation>Nema modela</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+90"/>
         <source>Edit Message</source>
         <translation>Uredi poruku</translation>
     </message>
@@ -2264,7 +2273,7 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1199"/>
+        <location filename="../src/llamasettings.cpp" line="-900"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
@@ -2471,9 +2480,8 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Stvoreno: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+128"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation>Datoteka &quot;%1&quot; ne postoji.</translation>
+        <translation type="vanished">Datoteka &quot;%1&quot; ne postoji.</translation>
     </message>
     <message>
         <source>Failed to delete &quot;%1&quot;: %2</source>
@@ -2484,9 +2492,8 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Datoteka &quot;%1&quot; uspješno izbrisana</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>Neuspješno čitano &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Neuspješno čitano &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>Start line %1 out of range (file has %2 lines).</source>
@@ -2529,40 +2536,32 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Nemoguća operacija &quot;%1&quot; u generatoru razlika.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="+72"/>
         <source>Write file</source>
-        <translation>Zapiši datoteku</translation>
+        <translation type="vanished">Zapiši datoteku</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+26"/>
         <source>write %1</source>
-        <translation>zapiši %1</translation>
+        <translation type="vanished">zapiši %1</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Greška alata: &quot;content&quot; je obavezan.</translation>
+        <translation type="vanished">Greška alata: &quot;content&quot; je obavezan.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>Ne može se zapisati &quot;%1&quot;: roditeljska putanja je datoteka.</translation>
+        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: roditeljska putanja je datoteka.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>Ne može se zapisati &quot;%1&quot;: ne može se stvoriti direktorij: %2</translation>
+        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: ne može se stvoriti direktorij: %2</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>Ne može se zapisati &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>Uspješno zapisano %1 bajtova u %2.</translation>
+        <translation type="vanished">Uspješno zapisano %1 bajtova u %2.</translation>
     </message>
     <message>
         <source>Edited %1</source>
@@ -2605,34 +2604,28 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">Ne mogu odrediti projekt za prikaz datoteka na lokaciji &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/tools/ls_tool.cpp" line="+91"/>
-        <location line="+7"/>
         <source>list directory %1</source>
-        <translation>prikaz direktorija &quot;%1&quot;</translation>
+        <translation type="vanished">prikaz direktorija &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Path: `%1`
 
 </source>
-        <translation>Putanja: `%1`
+        <translation type="vanished">Putanja: `%1`
 
 </translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Directory is empty.</source>
-        <translation>Direktorij je prazan.</translation>
+        <translation type="vanished">Direktorij je prazan.</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>[Izlaz skraćen na %1 KB. Izlistajte poddirektorij za prikaz preostalih stavki.]</translation>
+        <translation type="vanished">[Izlaz skraćen na %1 KB. Izlistajte poddirektorij za prikaz preostalih stavki.]</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
+        <translation type="vanished">[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
     </message>
     <message>
         <source>Directory &quot;%1&quot; does not exist.</source>
@@ -2671,58 +2664,48 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation type="vanished">pokreće Python</translation>
     </message>
     <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="-50"/>
         <source>read whole file %1</source>
-        <translation>čitaj cijelu datoteku %1</translation>
+        <translation type="vanished">čitaj cijelu datoteku %1</translation>
     </message>
     <message>
         <source>read %1:%2‑%3</source>
         <translation type="vanished">čitaj %1:%2–%3</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>read %1</source>
-        <translation>čitaj %1</translation>
+        <translation type="vanished">čitaj %1</translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>Slika &quot;%1&quot; ima %2 MB i premašuje ograničenje čitanja od %3 MB; prvo promijenite njezinu veličinu (npr. s bash alatom).</translation>
+        <translation type="vanished">Slika &quot;%1&quot; ima %2 MB i premašuje ograničenje čitanja od %3 MB; prvo promijenite njezinu veličinu (npr. s bash alatom).</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>Datoteka slike &quot;%1&quot; (%2, %3 bajta). Njezin sadržaj je priložen kao slika.</translation>
+        <translation type="vanished">Datoteka slike &quot;%1&quot; (%2, %3 bajta). Njezin sadržaj je priložen kao slika.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation>Početni red mora biti &gt;= 1.</translation>
+        <translation type="vanished">Početni red mora biti &gt;= 1.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>Konačni red (uključivo) mora biti &gt;= početnog redaka.</translation>
+        <translation type="vanished">Konačni red (uključivo) mora biti &gt;= početnog redaka.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>Početni red (%1) prelazi ukupan broj redaka u datoteci &quot;%2&quot; (%3).</translation>
+        <translation type="vanished">Početni red (%1) prelazi ukupan broj redaka u datoteci &quot;%2&quot; (%3).</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>Redak %1 u &quot;%2&quot; je veći od ograničenja čitanja od %3 KB; datoteku se ne može pročitati ovim alatom.</translation>
+        <translation type="vanished">Redak %1 u &quot;%2&quot; je veći od ograničenja čitanja od %3 KB; datoteku se ne može pročitati ovim alatom.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source> %1 KB limit reached.</source>
-        <translation> Dosegnuto ograničenje od %1 KB.</translation>
+        <translation type="vanished"> Dosegnuto ograničenje od %1 KB.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
+        <translation type="vanished"> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
         <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
@@ -2833,28 +2816,24 @@ Možete unijeti bilo koji drugi prompt - oni će biti zapamćeni za sljedeći pu
         <translation>Zaglavlja: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation>učitaj vještinu %1</translation>
+        <translation type="vanished">učitaj vještinu %1</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>Argument &quot;name&quot; je obavezan.</translation>
+        <translation type="vanished">Argument &quot;name&quot; je obavezan.</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>Vještina &quot;%1&quot; nije pronađena. Dostupne vještine: %2</translation>
+        <translation type="vanished">Vještina &quot;%1&quot; nije pronađena. Dostupne vještine: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
+        <location line="+1"/>
         <source>(none)</source>
         <translation>(nema)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
+        <location line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>Alati koje pruža ovaj server navedeni su ispod; označite alat za njegovo omogućivanje u razgovoru.</translation>
     </message>
@@ -3115,7 +3094,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1658"/>
+        <location filename="../src/llamachateditor.cpp" line="-1661"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -3174,7 +3153,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
         <source>Error:</source>
         <translation>Greška:</translation>
     </message>
@@ -3543,12 +3522,12 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+152"/>
-        <location line="+87"/>
+        <location line="+82"/>
         <source>The server is not running.</source>
         <translation>Server nije pokrenut.</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-51"/>
         <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
         <translation>Server ne podržava ovu operaciju: krajnje točke modela postoje samo u router načinu (pokrenite ga bez fiksiranog --model).</translation>
     </message>
@@ -3558,7 +3537,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Server je odbio zahtjev: %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+75"/>
         <source>The connection to the server was lost.</source>
         <translation>Poveznica s serverom je prekinuta.</translation>
     </message>
@@ -3618,9 +3597,6 @@ Authorization: Bearer &lt;token&gt;</source>
         <location line="+14"/>
         <location line="+139"/>
         <location filename="../src/serversettingswidget.cpp" line="+137"/>
-        <location filename="../src/tools/mxc.cpp" line="+160"/>
-        <location filename="../src/tools/niubash.cpp" line="+163"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
         <source>Download</source>
         <translation>Preuzmi</translation>
     </message>
@@ -3821,17 +3797,11 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../src/tools/mxc.cpp" line="-9"/>
-        <location filename="../src/tools/niubash.cpp" line="-9"/>
-        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licenca: %1</translation>
     </message>
@@ -3932,6 +3902,703 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Server je zaustavljen: direktorij modela prikazuje se onakav kakav jest.</translation>
     </message>
     <message>
+        <source>Add %1</source>
+        <translation type="vanished">Dodaj %1</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="vanished">Izbriši %1</translation>
+    </message>
+    <message>
+        <source>Edit %1</source>
+        <translation type="vanished">Uredi %1</translation>
+    </message>
+    <message>
+        <source>Move %1 to %2</source>
+        <translation type="vanished">Pomakni %1 u %2</translation>
+    </message>
+    <message>
+        <source>Apply patch</source>
+        <translation type="vanished">Primijeni patch</translation>
+    </message>
+    <message>
+        <source>Apply patch to %1 files</source>
+        <translation type="vanished">Primijeni patch na %1 datoteka</translation>
+    </message>
+    <message>
+        <source>created</source>
+        <translation type="vanished">stvoreno</translation>
+    </message>
+    <message>
+        <source>edited</source>
+        <translation type="vanished">uređeno</translation>
+    </message>
+    <message>
+        <source>moved</source>
+        <translation type="vanished">pomaknuto</translation>
+    </message>
+    <message>
+        <source>deleted</source>
+        <translation type="vanished">izbrisano</translation>
+    </message>
+    <message>
+        <source>Success. Updated the following files:</source>
+        <translation type="vanished">Uspješno. Ažurirane su sljedeće datoteke:</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation type="vanished">Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat.</translation>
+    </message>
+    <message>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation type="vanished">Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
+    </message>
+    <message>
+        <source>[Output truncated: %1]</source>
+        <translation type="vanished">[Izlaz skraćen: %1]</translation>
+    </message>
+    <message>
+        <source>showing last %1 of %2 lines</source>
+        <translation type="vanished">prikazano zadnjih %1 od %2 redaka</translation>
+    </message>
+    <message>
+        <source>showing last %1 KB</source>
+        <translation type="vanished">prikazano zadnjih %1 KB</translation>
+    </message>
+    <message>
+        <source>Full output saved to: %1</source>
+        <translation type="vanished">Puni izlaz spremljen u: %1</translation>
+    </message>
+    <message>
+        <source>running %1</source>
+        <translation type="vanished">izvršavanje %1</translation>
+    </message>
+    <message>
+        <source>Error: the command must not be empty.</source>
+        <translation type="vanished">Greška: komanda ne smije biti prazna.</translation>
+    </message>
+    <message>
+        <source>Error: working directory does not exist: %1</source>
+        <translation type="vanished">Greška: radni direktorij ne postoji: %1</translation>
+    </message>
+    <message>
+        <source>Error: %1</source>
+        <translation type="vanished">Greška: %1</translation>
+    </message>
+    <message>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation type="vanished">Greška: sandbox ne može učiniti &quot;%1&quot; upisivim: to je (ili sadrži) domaći direktorij ili korijen datotečnog sustava. Otvorite projekt za izvršavanje komandi u njegovu direktoriju.</translation>
+    </message>
+    <message>
+        <source>Command was stopped by the user.</source>
+        <translation type="vanished">Komanda je zaustavljena od strane korisnika.</translation>
+    </message>
+    <message>
+        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
+        <translation type="vanished">Komandi je isteklo vrijeme nakon %1 ms. Pokušajte ponovno s većim vremenom isteka ako se očekuje da će komanda trajati duže.</translation>
+    </message>
+    <message>
+        <source>Failed to start the command: %1</source>
+        <translation type="vanished">Neuspjelo pokretanje komande: %1</translation>
+    </message>
+    <message>
+        <source>unknown error</source>
+        <translation type="vanished">nepoznata greška</translation>
+    </message>
+    <message>
+        <source>Command terminated abnormally (crashed).</source>
+        <translation type="vanished">Komanda je abnormalno završila (pala).</translation>
+    </message>
+    <message>
+        <source>Command exited with code %1.</source>
+        <translation type="vanished">Komanda je izašla s kodom %1.</translation>
+    </message>
+    <message>
+        <source>Working directory: %1
+
+</source>
+        <translation type="vanished">Radni direktorij: %1
+
+</translation>
+    </message>
+    <message>
+        <source>Edit file</source>
+        <translation type="vanished">Uredi datoteku</translation>
+    </message>
+    <message>
+        <source>edit %1 (%2 blocks)</source>
+        <translation type="vanished">uredi %1 (%2 bloka)</translation>
+    </message>
+    <message>
+        <source>edit %1</source>
+        <translation type="vanished">uredi %1</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
+        <translation type="vanished">Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
+    </message>
+    <message>
+        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
+        <translation type="vanished">Greška alata: svaka izmjena zahtijeva &quot;oldText&quot; i &quot;newText&quot;.</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
+        <translation type="vanished">Greška alata: &quot;edits&quot; mora sadržavati barem jednu zamjenu.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">Ne može se urediti &quot;%1&quot;: datoteka nije pronađena. Koristite read_file za provjeru putanje ili write za stvaranje datoteke.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: %2</source>
+        <translation type="vanished">Ne može se urediti &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Successfully replaced %1 block(s) in %2.</source>
+        <translation type="vanished">Uspješno zamijenjeno %1 blok(ova) u %2.</translation>
+    </message>
+    <message>
+        <source>find files %1</source>
+        <translation type="vanished">pronađi datoteke %1</translation>
+    </message>
+    <message>
+        <source>Pattern: %1</source>
+        <translation type="vanished">Obrazac: %1</translation>
+    </message>
+    <message>
+        <source>  Path: %1</source>
+        <translation type="vanished">  Putanja: %1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation type="vanished">Greška: ripgrep (rg) nije pronađen. Može se preuzeti s stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata find.</translation>
+    </message>
+    <message>
+        <source>Error: the pattern must not be empty.</source>
+        <translation type="vanished">Greška: obrazac ne smije biti prazan.</translation>
+    </message>
+    <message>
+        <source>Error: path is not a directory: %1</source>
+        <translation type="vanished">Greška: putanja nije direktorij: %1</translation>
+    </message>
+    <message>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation type="vanished">[Pretraga je zaustavljena od strane korisnika. Rezultati su nepotpuni.]</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation type="vanished">[Vrijeme pretrage isteklo je nakon %1 ms. Rezultati su nepotpuni; koristite specifičniji obrazac.]</translation>
+    </message>
+    <message>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation type="vanished">[Neuspjelo pokretanje ripgrepa: %1]</translation>
+    </message>
+    <message>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation type="vanished">[ripgrep neuspješan (kod izlaska %1): %2]</translation>
+    </message>
+    <message>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation type="vanished">[Dosegnuto ograničenje od %1 rezultata. Koristite limit=%2 za više rezultata ili specifičniji obrazac.]</translation>
+    </message>
+    <message>
+        <source>No files found.</source>
+        <translation type="vanished">Nema pronađenih datoteka.</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation type="vanished">[Izlaz skraćen na %1 KB. Koristite specifičniji obrazac za prikaz svih rezultata.]</translation>
+    </message>
+    <message>
+        <source>get current time</source>
+        <translation type="vanished">dohvati trenutno vrijeme</translation>
+    </message>
+    <message>
+        <source>get runtime info</source>
+        <translation type="vanished">dohvati informacije o runtimeu</translation>
+    </message>
+    <message>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation type="vanished">OS: %1
+Radni direktorij: %2</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) je instaliran, ali kernel odbija postaviti njegov sandbox: %1. Na Ubuntu 24.04 i novijim verzijama to je obično AppArmorovo ograničenje nepovlaštenih korisničkih prostora imena: pokrenite &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (dodajte ga u /etc/sysctl.d/ da bi promjena bila trajna) ili dodijelite bwrapu AppArmor profil s atributom &apos;userns&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) je instaliran, ali na ovom sustavu nepovlašteni korisnički prostori imena su onemogućeni: %1. Na Debianu i njegovim izvedbama omogućite ih naredbom &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nije uspio postaviti sandbox: %1. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nije u roku postavio sandbox. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation type="vanished">MCP alat &quot;%1&quot; nije dostupan (nijedan povezani MCP server ga ne pruža).</translation>
+    </message>
+    <message>
+        <source>Cannot reach the MCP server.</source>
+        <translation type="vanished">MCP server nije dostupan.</translation>
+    </message>
+    <message>
+        <source>MCP initialize failed: %1</source>
+        <translation type="vanished">MCP inicijalizacija neuspješna: %1</translation>
+    </message>
+    <message>
+        <source>MCP tools/list failed: %1</source>
+        <translation type="vanished">MCP tools/list neuspješan: %1</translation>
+    </message>
+    <message>
+        <source>Connection to the MCP server was closed.</source>
+        <translation type="vanished">Poveznica s MCP serverom zatvorena je.</translation>
+    </message>
+    <message>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation type="vanished">MCP server nije dostupan. Provjerite je li server pokrenut i dostupan, zatim pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation type="vanished">MCP alat &quot;%1&quot; neuspješan: %2</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation type="vanished">MCP alat &quot;%1&quot; neuspješan: MCP server nije odgovorio (greška povezanja ili istek vremena).</translation>
+    </message>
+    <message>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation type="vanished">MCP server se ponovno pokrenuo; poziv nije izvršen. Pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation type="vanished">MCP server vratio je HTTP %1 za poziv alata.</translation>
+    </message>
+    <message>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation type="vanished">MCP server vratio je praznan ili neispravan odgovor.</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation type="vanished">MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
+    </message>
+    <message>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation type="vanished">Preuzmi Windows sandbox runtime (MXC)</translation>
+    </message>
+    <message>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation type="vanished">Preuzeti Microsoftov MXC runtime %1?</translation>
+    </message>
+    <message>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation type="vanished">Postavka &apos;Sandbox komande&apos; ograničava bash alat na Windowsu na Microsoftov MXC procesni kontejner. Fiksirani wxc-exec.exe runtime nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. MXC je objavljen pod MIT licencom.</translation>
+    </message>
+    <message>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation type="vanished">Paket ne sadrži izvedbenu datoteku wxc-exec.exe.</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation type="vanished">Izvedbena datoteka wxc-exec.exe ima neočekivanu veličinu.</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation type="vanished">Izvedbena datoteka wxc-exec.exe ne odgovara očekivanoj kontrolnoj sumi.</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation type="vanished">Microsoftov MXC runtime dostupan je samo za Windows x86-64 i arm64.</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime...</source>
+        <translation type="vanished">Preuzimanje MXC runtimea...</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation type="vanished">Preuzimanje MXC runtimea neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>Verifying package integrity...</source>
+        <translation type="vanished">Provjeravanje cjelovitosti paketa...</translation>
+    </message>
+    <message>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation type="vanished">Preuzeti paket nije onaj koji se očekivao.</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime...</source>
+        <translation type="vanished">Raspakiranje MXC runtimea...</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation type="vanished">Raspakiranje MXC runtimea neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>Download niubash</source>
+        <translation type="vanished">Preuzmi niubash</translation>
+    </message>
+    <message>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation type="vanished">Preuzeti niubash %1 s GitHuba?</translation>
+    </message>
+    <message>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation type="vanished">Bash alat na Windowsu normalno pokreće Git Bash, ali njegov MSYS2 runtime ne može se inicializirati unutar Windows sandboka (microsoft/mxc#1061). niubash je nativni Bash bez MSYS2-a koji to može, pa se može preuzeti ovdje za pokretanje bash alata u sandboxu. niubash je objavljen pod MIT licencom.</translation>
+    </message>
+    <message>
+        <source>The package holds no niubash shell.</source>
+        <translation type="vanished">Paket ne sadrži niubash shell.</translation>
+    </message>
+    <message>
+        <source>There is no niubash for this platform.</source>
+        <translation type="vanished">Nema niubasha za ovu platformu.</translation>
+    </message>
+    <message>
+        <source>Downloading niubash...</source>
+        <translation type="vanished">Preuzimanje niubasha...</translation>
+    </message>
+    <message>
+        <source>Downloading niubash failed: %1</source>
+        <translation type="vanished">Preuzimanje niubasha neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash...</source>
+        <translation type="vanished">Raspakiranje niubasha...</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash failed: %1</source>
+        <translation type="vanished">Raspakiranje niubasha neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>Download ripgrep</source>
+        <translation type="vanished">Preuzmi ripgrep</translation>
+    </message>
+    <message>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation type="vanished">Preuzeti ripgrep %1 s GitHuba?</translation>
+    </message>
+    <message>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation type="vanished">Alati za pretragu i pronalaženje koriste ripgrep za pretragu sadržaja datoteka i pronalaženje datoteka po imenu. Nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. ripgrep je objavljen pod MIT ili Unlicense licencom.</translation>
+    </message>
+    <message>
+        <source>The package holds no ripgrep binary.</source>
+        <translation type="vanished">Paket ne sadrži izvedbenu datoteku ripgrepa.</translation>
+    </message>
+    <message>
+        <source>There is no ripgrep for this platform.</source>
+        <translation type="vanished">Nema ripgrepa za ovu platformu.</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep...</source>
+        <translation type="vanished">Preuzimanje ripgrepa...</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation type="vanished">Preuzimanje ripgrepa neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep...</source>
+        <translation type="vanished">Raspakiranje ripgrepa...</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation type="vanished">Raspakiranje ripgrepa neuspješno: %1</translation>
+    </message>
+    <message>
+        <source>search for %1</source>
+        <translation type="vanished">pretraži %1</translation>
+    </message>
+    <message>
+        <source>  Glob: %1</source>
+        <translation type="vanished">  Glob: %1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation type="vanished">Greška: ripgrep (rg) nije pronađen. Može se preuzeti s stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata search.</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">Greška: putanja ne postoji: %1</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation type="vanished">[Vrijeme pretrage isteklo je nakon %1 ms. Rezultati su nepotpuni; suzite putanju ili usavršite obrazac.]</translation>
+    </message>
+    <message>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation type="vanished">[Dosegnuto ograničenje od %1 podudaranja. Koristite limit=%2 za više rezultata ili usavršite obrazac.]</translation>
+    </message>
+    <message>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation type="vanished">[Neki redci skraćeni na %1 znakova. Koristite read_file za prikaz potpunih redaka.]</translation>
+    </message>
+    <message>
+        <source>No matches found.</source>
+        <translation type="vanished">Nema pronađenih podudaranja.</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation type="vanished">[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Vi ste podagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodovnu bazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
+    </message>
+    <message>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation type="vanished">Vi ste podagent &quot;general&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Radite autonomno s dostupnim alatima dok zadatak ne bude dovršen; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem o onome što ste učinili ili pronašli, uključujući relevantne putanje datoteka s brojevima redaka, kako bi glavni razgovor mogao nastaviti rad.</translation>
+    </message>
+    <message>
+        <source>task: %1</source>
+        <translation type="vanished">zadatak: %1</translation>
+    </message>
+    <message>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation type="vanished">Greška alata: obavezna su i &quot;description&quot; i &quot;prompt&quot;.</translation>
+    </message>
+    <message>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation type="vanished">Greška alata: nepoznat subagent_type &quot;%1&quot; (očekivano &quot;explore&quot; ili &quot;general&quot;)</translation>
+    </message>
+    <message>
+        <source>Task: %1</source>
+        <translation type="vanished">Zadatak: %1</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnog odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj podagenta:
+
+%3</translation>
+    </message>
+    <message>
+        <source>update task list</source>
+        <translation type="vanished">ažuriraj popis zadataka</translation>
+    </message>
+    <message>
+        <source>update task list (%1 tasks)</source>
+        <translation type="vanished">ažuriraj popis zadataka (%1 zadataka)</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation type="vanished">Greška alata: &quot;todos&quot; mora sadržavati barem jedan zadatak.</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation type="vanished">Greška alata: zadatak %1 ima prazno &quot;content&quot;.</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation type="vanished">Greška alata: zadatak %1 ima nepoznat status &quot;%2&quot; (očekivano &quot;pending&quot;, &quot;in_progress&quot; ili &quot;completed&quot;).</translation>
+    </message>
+    <message>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation type="vanished">Greška alata: samo jedan zadatak može biti &quot;in_progress&quot; odjednom (navedeno %1).</translation>
+    </message>
+    <message>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation type="vanished">Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
+    </message>
+    <message>
+        <source>Reset to Project Directory</source>
+        <translation type="vanished">Vrati na direktorij projekta</translation>
+    </message>
+    <message>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation type="vanished">Ukloni prepisivanje radnog direktorija: alati rade u direktoriju projekta pokretanja (ili u zadanom direktoriju projekata kada nijedan projekt nije otvoren).</translation>
+    </message>
+    <message>
+        <source>Reset to Default Projects Directory</source>
+        <translation type="vanished">Vrati na zadani direktorij projekata</translation>
+    </message>
+    <message>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation type="vanished">Koristi zadani direktorij projekata, mjesto u kojem se po zadano stvaraju novi projekti.</translation>
+    </message>
+    <message>
+        <source>Reset to Git Bash</source>
+        <translation type="vanished">Vrati na Git Bash</translation>
+    </message>
+    <message>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation type="vanished">Ukloni prepisivanje basha: bash alat koristi zadani bash, Git Bash (prepoznati bash na PATH-u, zatim onaj isporučen uz Git for Windows).</translation>
+    </message>
+    <message>
+        <source>Reset to niubash</source>
+        <translation type="vanished">Vrati na niubash</translation>
+    </message>
+    <message>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation type="vanished">Koristi preuzeti niubash, nativni Bash bez MSYS2-a koji se - za razliku od Git Basha - može izvršavati u Windows sandboxu.</translation>
+    </message>
+    <message>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation type="vanished">Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativna dijeljenja nisu dostupna unutar sandboka.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta, privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: lokacije vjerodajnica zaštićene su unutar sandboka.</translation>
+    </message>
+    <message>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation type="vanished">Čitanje &quot;%1&quot; nije dopušteno: lokacije vjerodajnica nisu čitljive unutar sandboka.</translation>
+    </message>
+    <message>
+        <source>fetch %1</source>
+        <translation type="vanished">dohvati %1</translation>
+    </message>
+    <message>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation type="vanished">Neispravan URL &quot;%1&quot;: mora početi s http:// ili https://</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation type="vanished">Dohvaćanje %1 neuspješno: odgovor je prevelik (ograničenje 5 MB).</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: %2</source>
+        <translation type="vanished">Dohvaćanje %1 neuspješno: %2</translation>
+    </message>
+    <message>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation type="vanished">\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
+    </message>
+    <message>
+        <source>search %1</source>
+        <translation type="vanished">pretraži %1</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation type="vanished">Rezultati pretrage za &quot;%1&quot;:</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation type="vanished">Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
+    </message>
+    <message>
+        <source>Search failed: %1</source>
+        <translation type="vanished">Pretraga neuspješna: %1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">Pretraga neuspješna: DuckDuckGo trenutačno ograničava broj zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation type="vanished">Nema rezultata za &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation type="vanished">Pretraga neuspješna: Google backend nije konfiguriran. Postavite API ključ i ID pretraživačkog stroja (cx) u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation type="vanished">Pretraga neuspješna: neispravan odgovor od pružatelja pretrage.</translation>
+    </message>
+    <message>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation type="vanished">nema rezultata za &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">Pretraga neuspješna: Brave backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">Pretraga neuspješna: Tavily backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation type="vanished">Pretraga neuspješna: URL Exa krajnje točke nije konfiguriran.</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation type="vanished">Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Preuzmite ga s stranice postavaka Llama.cpp Chat Sandbox (fiksirano, kontrolnom sumom provjereno izdanje Microsoft MXC); tamo se može ukazati i na vlastiti runtime. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation type="vanished">Windows sandbox backend (wxc-exec) nije odgovorio na ispitivanje mogućnosti na vrijeme. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation type="vanished">Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation type="vanished">Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation type="vanished">Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Konfiguracija Windows sandboka je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation type="vanished">Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">Bash na &quot;%1&quot; nije dio prepoznate instalacije niubash, Git for Windows ili MSYS2, pa Windows sandbox ne može mu dati usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash prvi na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation type="vanished">wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation type="vanished">Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Komandna linija Windows sandboka je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+</context>
+<context>
+    <name>Tr</name>
+    <message>
         <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Dodaj %1</translation>
@@ -3983,22 +4650,58 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>izbrisano</translation>
     </message>
     <message>
-        <location line="+203"/>
+        <location line="+68"/>
+        <location line="+14"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
+        <source>file</source>
+        <translation>datoteka</translation>
+    </message>
+    <message>
+        <location line="+121"/>
         <source>Success. Updated the following files:</source>
         <translation>Uspješno. Ažurirane su sljedeće datoteke:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
+        <translation type="vanished">Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+154"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat.</translation>
     </message>
     <message>
-        <location line="+137"/>
+        <location line="+160"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je instaliran, ali kernel odbija postaviti njegov sandbox: %1. Na Ubuntu 24.04 i novijim verzijama to je obično AppArmorovo ograničenje nepovlaštenih korisničkih prostora imena: pokrenite &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (dodajte ga u /etc/sysctl.d/ da bi promjena bila trajna) ili dodijelite bwrapu AppArmor profil s atributom &apos;userns&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) je instaliran, ali na ovom sustavu nepovlašteni korisnički prostori imena su onemogućeni: %1. Na Debianu i njegovim izvedbama omogućite ih naredbom &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nije uspio postaviti sandbox: %1. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nije u roku postavio sandbox. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Izlaz skraćen: %1]</translation>
     </message>
@@ -4018,7 +4721,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Puni izlaz spremljen u: %1</translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+122"/>
         <source>running %1</source>
         <translation>izvršavanje %1</translation>
     </message>
@@ -4036,6 +4739,9 @@ Authorization: Bearer &lt;token&gt;</source>
         <location line="+9"/>
         <location line="+26"/>
         <location line="+29"/>
+        <location filename="../src/tools/find_tool.cpp" line="+191"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+131"/>
+        <location filename="../src/tools/search_tool.cpp" line="+262"/>
         <source>Error: %1</source>
         <translation>Greška: %1</translation>
     </message>
@@ -4052,7 +4758,7 @@ Authorization: Bearer &lt;token&gt;</source>
     <message>
         <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation>Komandi je isteklo vrijeme nakon %1 ms. Pokušajte ponovno s većim vremenom isteka ako se očekuje da će komanda trajati duže.</translation>
+        <translation>Komanda je istekla nakon %1 ms. Pokušajte ponovno s većim vremenom isteka ako se očekuje da komanda traje duže.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -4061,9 +4767,9 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+308"/>
+        <location filename="../src/tools/find_tool.cpp" line="+120"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+382"/>
+        <location filename="../src/tools/search_tool.cpp" line="+120"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>nepoznata greška</translation>
@@ -4083,12 +4789,10 @@ Authorization: Bearer &lt;token&gt;</source>
         <source>Working directory: %1
 
 </source>
-        <translation>Radni direktorij: %1
-
-</translation>
+        <translation>Radni direktorij: %1\n\n</translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="-115"/>
         <source>Edit file</source>
         <translation>Uredi datoteku</translation>
     </message>
@@ -4105,7 +4809,7 @@ Authorization: Bearer &lt;token&gt;</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="-24"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
     </message>
@@ -4120,12 +4824,21 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Greška alata: &quot;edits&quot; mora sadržavati barem jednu zamjenu.</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>Ne može se urediti &quot;%1&quot;: datoteka nije pronađena. Koristite read_file za provjeru putanje ili write za stvaranje datoteke.</translation>
+        <location line="+11"/>
+        <source>not a plain file</source>
+        <translation>nije obična datoteka</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+2"/>
+        <source>Cannot edit %1: %2 Use read_file to verify the path, or write to create the file.</source>
+        <translation>Ne može se urediti %1: %2 Koristite read_file za provjeru putanje ili write za stvaranje datoteke.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">Ne može se urediti &quot;%1&quot;: datoteka nije pronađena. Koristite read_file za provjeru putanje ili write za stvaranje datoteke.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
@@ -4137,10 +4850,306 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Uspješno zamijenjeno %1 blok(ova) u %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-179"/>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
+        <location line="+27"/>
+        <source>Cannot reach the MCP server.</source>
+        <translation>MCP server nije dostupan.</translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <source>MCP initialize failed: %1</source>
+        <translation>MCP inicijalizacija neuspješna: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>MCP tools/list failed: %1</source>
+        <translation>MCP tools/list neuspješan: %1</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>Povezivanje s MCP serverom je zatvoreno.</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>MCP server nije dostupan. Provjerite je li server pokrenut i dostupan, zatim pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP alat &quot;%1&quot; neuspješan: MCP server nije odgovorio (greška povezanja ili istek vremena).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>MCP server je ponovno pokrenut; poziv nije izvršen. Molimo pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="-61"/>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation>MCP alat &quot;%1&quot; neuspješan: %2</translation>
+    </message>
+    <message>
+        <location line="+72"/>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation>MCP server vratio je HTTP %1 za poziv alata.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation>MCP server vratio je praznan ili neispravan odgovor.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
+        <source>read whole file %1</source>
+        <translation>čitaj cijelu datoteku %1</translation>
+    </message>
+    <message>
+        <source>read %1:%2‑%3</source>
+        <translation type="vanished">čitaj %1:%2-%3</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>čitaj %1</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">Datoteka &quot;%1&quot; ne postoji.</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>File</source>
+        <translation>Datoteka</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>Neuspješno čitanje &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>Slika &quot;%1&quot; je velika %2 MB i premašuje ograničenje čitanja od %3 MB; prvo promijenite njezinu veličinu (npr. s bash alatom).</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>Datoteka slike &quot;%1&quot; (%2, %3 bajta). Njezin sadržaj je priložen kao slika.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>first_line mora biti &gt;= 1.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>last_line_inclusive mora biti &gt;= first_line.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>first_line (%1) premašuje broj redaka u &quot;%2&quot; (%3).</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>Redak %1 u &quot;%2&quot; je veći od ograničenja čitanja od %3 KB; datoteku ne može pročitati ovaj alat.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> Dosegnuto ograničenje od %1 KB.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodbazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodovu bazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation>Vi ste potagent &quot;general&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Radite autonomno s dostupnim alatom dok zadatak ne bude dovršen; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem o onome što ste učinili ili pronašli, uključujući relevantne putanje datoteka s brojevima redaka, kako bi glavni razgovor mogao nastaviti rad.</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+27"/>
+        <source>task: %1</source>
+        <translation>zadatak: %1</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation>Greška alata: oba, &quot;description&quot; i &quot;prompt&quot;, su obavezna.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation>Greška alata: nepoznat subagent_type &quot;%1&quot; (očekivano &quot;explore&quot; ili &quot;general&quot;)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Task: %1</source>
+        <translation>Zadatak: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnoga odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj potagenta:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnoga odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj potagenta:\n\n%3</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
+        <location line="+27"/>
+        <source>fetch %1</source>
+        <translation>dohvati %1</translation>
+    </message>
+    <message>
+        <location line="+112"/>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation>Neispravan URL &quot;%1&quot;: mora početi s http:// ili https://</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation>Dohvaćanje %1 neuspješno: odgovor je prevelik (ograničenje 5 MB).</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Fetch failed for %1: %2</source>
+        <translation>Dohvaćanje %1 neuspješno: %2</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation>\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location line="+26"/>
+        <source>search %1</source>
+        <translation>pretraži %1</translation>
+    </message>
+    <message>
+        <location line="+196"/>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation>Rezultati pretrage za &quot;%1&quot;:</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation>Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation>Pretraga neuspješna: Google backend nije konfiguriran. Postavite API ključ i ID pretraživačkog stroja (cx) u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="-23"/>
+        <location line="+44"/>
+        <location line="+13"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
+        <source>Search failed: %1</source>
+        <translation>Pretraga neuspješna: %1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">Pretraga neuspješna: DuckDuckGo trenutačno ograničava brzinu zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation>Pretraga neuspješna: neispravan odgovor od pružatelja pretrage.</translation>
+    </message>
+    <message>
+        <location line="-88"/>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation>nema rezultata za &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>Pretraga neuspješna: Brave backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="-59"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation>Nema rezultata za &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Pretraga nije uspjela: DuckDuckGo trenutačno ograničava broj zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>Pretraga neuspješna: Tavily backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation>Pretraga neuspješna: URL Exa krajnje točke nije konfiguriran.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation>Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/find_tool.cpp" line="-182"/>
         <location line="+8"/>
         <source>find files %1</source>
         <translation>pronađi datoteke %1</translation>
+    </message>
+    <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">Obrazac: `%1`</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -4157,7 +5166,7 @@ Authorization: Bearer &lt;token&gt;</source>
     <message>
         <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation>Greška: ripgrep (rg) nije pronađen. Može se preuzeti s stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata find.</translation>
+        <translation>Greška: ripgrep (rg) nije pronađen. Može se preuzeti sa stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata find.</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -4166,13 +5175,19 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>Greška: obrazac ne smije biti prazan.</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="-64"/>
+        <location line="+10"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+0"/>
+        <source>directory</source>
+        <translation>direktorij</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+3"/>
         <source>Error: path is not a directory: %1</source>
         <translation>Greška: putanja nije direktorij: %1</translation>
     </message>
     <message>
-        <location line="+108"/>
+        <location line="+107"/>
         <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
         <translation>[Pretraga je zaustavljena od strane korisnika. Rezultati su nepotpuni.]</translation>
@@ -4180,7 +5195,7 @@ Authorization: Bearer &lt;token&gt;</source>
     <message>
         <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation>[Vrijeme pretrage isteklo je nakon %1 ms. Rezultati su nepotpuni; koristite specifičniji obrazac.]</translation>
+        <translation>[Pretraga je istekla nakon %1 ms. Rezultati su nepotpuni; koristite specifičniji obrazac.]</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -4210,46 +5225,32 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation>[Izlaz skraćen na %1 KB. Koristite specifičniji obrazac za prikaz svih rezultata.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
-        <source>get current time</source>
-        <translation>dohvati trenutno vrijeme</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
-        <source>get runtime info</source>
-        <translation>dohvati informacije o runtimeu</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>OS: %1
-Working directory: %2</source>
-        <translation>OS: %1
-Radni direktorij: %2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) je instaliran, ali kernel odbija postaviti njegov sandbox: %1. Na Ubuntu 24.04 i novijim verzijama to je obično AppArmorovo ograničenje nepovlaštenih korisničkih prostora imena: pokrenite &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (dodajte ga u /etc/sysctl.d/ da bi promjena bila trajna) ili dodijelite bwrapu AppArmor profil s atributom &apos;userns&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) je instaliran, ali na ovom sustavu nepovlašteni korisnički prostori imena su onemogućeni: %1. Na Debianu i njegovim izvedbama omogućite ih naredbom &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+        <location filename="../src/tools/ls_tool.cpp" line="-43"/>
+        <location line="+7"/>
+        <source>list directory %1</source>
+        <translation>izlistaj direktorij %1</translation>
     </message>
     <message>
         <location line="+9"/>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nije uspio postaviti sandbox: %1. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+        <source>Path: `%1`
+
+</source>
+        <translation>Putanja: `%1`\n\n</translation>
     </message>
     <message>
-        <location line="+51"/>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nije u roku postavio sandbox. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+        <location line="+63"/>
+        <source>Directory is empty.</source>
+        <translation>Direktorij je prazan.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>[Izlaz skraćen na %1 KB. Izlistajte poddirektorij za prikaz preostalih stavki.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
     </message>
     <message>
         <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
@@ -4257,63 +5258,22 @@ Radni direktorij: %2</translation>
         <translation>MCP alat &quot;%1&quot; nije dostupan (nijedan povezani MCP server ga ne pruža).</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
-        <location line="+27"/>
-        <source>Cannot reach the MCP server.</source>
-        <translation>MCP server nije dostupan.</translation>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
+        <source>Download ripgrep</source>
+        <translation>Preuzmi ripgrep</translation>
     </message>
     <message>
-        <location line="-22"/>
-        <source>MCP initialize failed: %1</source>
-        <translation>MCP inicijalizacija neuspješna: %1</translation>
+        <location line="+67"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>Preuzeti ripgrep %1 s GitHuba?</translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>MCP tools/list failed: %1</source>
-        <translation>MCP tools/list neuspješan: %1</translation>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>Alati za pretragu i pronalaženje koriste ripgrep za pretragu sadržaja datoteka i pronalaženje datoteka po imenu. Nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. ripgrep je objavljen pod MIT ili Unlicense licencom.</translation>
     </message>
     <message>
-        <location line="+53"/>
-        <source>Connection to the MCP server was closed.</source>
-        <translation>Poveznica s MCP serverom zatvorena je.</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>MCP server nije dostupan. Provjerite je li server pokrenut i dostupan, zatim pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>MCP alat &quot;%1&quot; neuspješan: %2</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation>MCP alat &quot;%1&quot; neuspješan: MCP server nije odgovorio (greška povezanja ili istek vremena).</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation>MCP server se ponovno pokrenuo; poziv nije izvršen. Pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation>MCP server vratio je HTTP %1 za poziv alata.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation>MCP server vratio je praznan ili neispravan odgovor.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mxc.cpp" line="-65"/>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
         <translation>Preuzmi Windows sandbox runtime (MXC)</translation>
     </message>
@@ -4328,24 +5288,49 @@ Radni direktorij: %2</translation>
         <translation>Postavka &apos;Sandbox komande&apos; ograničava bash alat na Windowsu na Microsoftov MXC procesni kontejner. Fiksirani wxc-exec.exe runtime nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. MXC je objavljen pod MIT licencom.</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
+        <source>Project: %1</source>
+        <translation>Projekt: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
+        <source>License: %1</source>
+        <translation>Licenca: %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
+        <source>Download</source>
+        <translation>Preuzmi</translation>
+    </message>
+    <message>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
-        <translation>Paket ne sadrži izvedbenu datoteku wxc-exec.exe.</translation>
+        <translation>Paket ne sadrži wxc-exec.exe binarnu datoteku.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation>Izvedbena datoteka wxc-exec.exe ima neočekivanu veličinu.</translation>
+        <translation>wxc-exec.exe binarna datoteka ima neočekivanu veličinu.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation>Izvedbena datoteka wxc-exec.exe ne odgovara očekivanoj kontrolnoj sumi.</translation>
+        <translation>wxc-exec.exe binarna datoteka ne odgovara očekivanoj kontrolnoj zbroju.</translation>
     </message>
     <message>
         <location line="+36"/>
         <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
         <translation>Microsoftov MXC runtime dostupan je samo za Windows x86-64 i arm64.</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation type="vanished">Microsoftov MXC runtime dostupan je samo za Windows x86-64.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -4358,11 +5343,41 @@ Radni direktorij: %2</translation>
         <translation>Preuzimanje MXC runtimea neuspješno: %1</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location filename="../src/tools/niubash.cpp" line="+126"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
+        <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Raspakiranje MXC runtimea...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Raspakiranje MXC runtimea neuspješno: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>Paket ne sadrži ripgrep binarnu datoteku.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>Nema ripgrepa za ovu platformu.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>Preuzimanje ripgrepa...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>Preuzimanje ripgrepa neuspješno: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
-        <translation>Provjeravanje cjelovitosti paketa...</translation>
+        <translation>Vjerodostojnost paketa se provjerava...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -4372,14 +5387,345 @@ Radni direktorij: %2</translation>
         <translation>Preuzeti paket nije onaj koji se očekivao.</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Unpacking the MXC runtime...</source>
-        <translation>Raspakiranje MXC runtimea...</translation>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>Raspakiranje ripgrepa...</translation>
     </message>
     <message>
         <location line="+7"/>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>Raspakiranje MXC runtimea neuspješno: %1</translation>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>Raspakiranje ripgrepa neuspješno: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
+        <source>search for %1</source>
+        <translation>pretraži %1</translation>
+    </message>
+    <message>
+        <source>  Glob: `%1`</source>
+        <translation type="vanished">  Glob: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>Greška: ripgrep (rg) nije pronađen. Može se preuzeti sa stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata search.</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">Greška: putanja ne postoji: %1</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>path</source>
+        <translation>putanja</translation>
+    </message>
+    <message>
+        <location line="+113"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>[Pretraga je istekla nakon %1 ms. Rezultati su nepotpuni; suzite putanju ili usavršite obrazac.]</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>[Dosegnuto ograničenje od %1 podudaranja. Koristite limit=%2 za više rezultata ili usavršite obrazac.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>[Neki redci skraćeni na %1 znakova. Koristite read_file za prikaz potpunih redaka.]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>Nema pronađenih podudaranja.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
+        <source>load skill %1</source>
+        <translation>učitaj vještinu %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>Argument &quot;name&quot; je obavezan.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>Vještina &quot;%1&quot; nije pronađena. Dostupne vještine: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(none)</source>
+        <translation>(nema)</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>ažuriraj popis zadataka</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>ažuriraj popis zadataka (%1 zadataka)</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>Greška alata: &quot;todos&quot; mora sadržavati barem jedan zadatak.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>Greška alata: zadatak %1 ima prazno &quot;content&quot;.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>Greška alata: zadatak %1 ima nepoznat status &quot;%2&quot; (očekivano &quot;pending&quot;, &quot;in_progress&quot; ili &quot;completed&quot;).</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>Greška alata: samo jedan zadatak može biti &quot;in_progress&quot; odjednom (navedeno %1).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativne mrežne podjele nisu dostupne unutar sandboka.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija. Otvorite projekt za rad na njegovim datotekama.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
+        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
+    </message>
+    <message>
+        <location line="-71"/>
+        <source>Reset to Project Directory</source>
+        <translation>Vrati na direktorij projekta</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>Ukloni prepisivanje radnog direktorija: alati rade u direktoriju projekta pokretanja (ili u zadanom direktoriju projekata kada nijedan projekt nije otvoren).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>Vrati na zadani direktorij projekata</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>Koristi zadani direktorij projekata, mjesto u kojem se po zadano stvaraju novi projekti.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Vrati na Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Ukloni prepisivanje basha: bash alat koristi zadani bash, Git Bash (prepoznati bash na PATH-u, zatim onaj isporučen uz Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Vrati na niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Koristi preuzeti niubash, nativni Bash bez MSYS2-a koji se - za razliku od Git Basha - može izvršavati u Windows sandboxu.</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta, privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Pisanje u &quot;%1&quot; nije dopušteno: lokacije vjerodajnica zaštićene su unutar sandboka.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>Čitanje &quot;%1&quot; nije dopušteno: lokacije vjerodajnica nisu čitljive unutar sandboka.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>%1 does not exist: %2</source>
+        <translation>%1 ne postoji: %2</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1 &quot;%2&quot; was not found in the working directory &quot;%3&quot;.</source>
+        <translation>%1 &quot;%2&quot; ne postoji u radnom direktoriju &quot;%3&quot;.</translation>
+    </message>
+    <message>
+        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Instalirajte ga jednom s &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); odjava nije potrebna, mrežna ograda se oslanja na SID posvećenog sandbox korisnika. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
+        <translation type="vanished">Windows sandbox backend (srt-win) ne može se upitati (izlaz %1): %2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox user is not provisioned. %1</source>
+        <translation type="vanished">Windows sandbox korisnik nije pripremljen. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Windows sandbox backend (srt-win) nije javio SID sandbox korisnika. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Windows sandbox nije mogao dodijeliti sandbox korisniku pristup radnom direktoriju (izlaz %1): %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win (Windows sandbox backend @anthropic-ai/sandbox-runtime) nije pronađen na PATH-u. %1 LLAMA_SRT_WIN može ukazivati na izvedbenu datoteku.</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Preuzmite ga s stranice postavaka alata Llama.cpp Chat (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); LLAMA_WXC_EXEC može ukazivati na wxc-exec.exe. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Windows sandbox backend (wxc-exec) nije odgovorio na ispitivanje mogućnosti na vrijeme. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
+    </message>
+    <message>
+        <location line="+361"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows sandbox konfiguracija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">Bash na &quot;%1&quot; nije dio prepoznate instalacije Git for Windows ili MSYS2, pa Windows sandbox ne može mu dodijeliti usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash na prvo mjesto na PATH-u, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
+    </message>
+    <message>
+        <location line="+192"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
+    </message>
+    <message>
+        <location line="-162"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
+    </message>
+    <message>
+        <location line="-497"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Preuzmite ga s stranice postavaka Llama.cpp Chat Sandbox (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); tamo se može ukazati i na vlastiti runtime. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>Bash na &quot;%1&quot; nije dio prepoznate instalacije niubash, Git for Windows ili MSYS2, pa Windows sandbox ne može mu dati usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash prvi na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
+    </message>
+    <message>
+        <location line="+154"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows sandbox komandna linija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <source>Write file</source>
+        <translation>Zapiši datoteku</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>zapiši %1</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>Greška alata: &quot;content&quot; je obavezan.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>Ne može se zapisati &quot;%1&quot;: roditeljska putanja je datoteka.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>Ne može se zapisati &quot;%1&quot;: ne može se stvoriti direktorij: %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Ne može se zapisati &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>Uspješno zapisano %1 bajtova u %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
     </message>
     <message>
         <location filename="../src/tools/niubash.cpp" line="-207"/>
@@ -4427,1314 +5773,20 @@ Radni direktorij: %2</translation>
         <translation>Raspakiranje niubasha neuspješno: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
-        <source>Download ripgrep</source>
-        <translation>Preuzmi ripgrep</translation>
-    </message>
-    <message>
-        <location line="+67"/>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation>Preuzeti ripgrep %1 s GitHuba?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>Alati za pretragu i pronalaženje koriste ripgrep za pretragu sadržaja datoteka i pronalaženje datoteka po imenu. Nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. ripgrep je objavljen pod MIT ili Unlicense licencom.</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The package holds no ripgrep binary.</source>
-        <translation>Paket ne sadrži izvedbenu datoteku ripgrepa.</translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>There is no ripgrep for this platform.</source>
-        <translation>Nema ripgrepa za ovu platformu.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading ripgrep...</source>
-        <translation>Preuzimanje ripgrepa...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation>Preuzimanje ripgrepa neuspješno: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking ripgrep...</source>
-        <translation>Raspakiranje ripgrepa...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation>Raspakiranje ripgrepa neuspješno: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
-        <source>search for %1</source>
-        <translation>pretraži %1</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>  Glob: %1</source>
-        <translation>  Glob: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>Greška: ripgrep (rg) nije pronađen. Može se preuzeti s stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata search.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Error: path does not exist: %1</source>
-        <translation>Greška: putanja ne postoji: %1</translation>
-    </message>
-    <message>
-        <location line="+114"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>[Vrijeme pretrage isteklo je nakon %1 ms. Rezultati su nepotpuni; suzite putanju ili usavršite obrazac.]</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>[Dosegnuto ograničenje od %1 podudaranja. Koristite limit=%2 za više rezultata ili usavršite obrazac.]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>[Neki redci skraćeni na %1 znakova. Koristite read_file za prikaz potpunih redaka.]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>No matches found.</source>
-        <translation>Nema pronađenih podudaranja.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>Vi ste podagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodovnu bazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>Vi ste podagent &quot;general&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Radite autonomno s dostupnim alatima dok zadatak ne bude dovršen; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem o onome što ste učinili ili pronašli, uključujući relevantne putanje datoteka s brojevima redaka, kako bi glavni razgovor mogao nastaviti rad.</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <location line="+27"/>
-        <source>task: %1</source>
-        <translation>zadatak: %1</translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>Greška alata: obavezna su i &quot;description&quot; i &quot;prompt&quot;.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>Greška alata: nepoznat subagent_type &quot;%1&quot; (očekivano &quot;explore&quot; ili &quot;general&quot;)</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Task: %1</source>
-        <translation>Zadatak: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnog odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation>Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj podagenta:
-
-%3</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
-        <source>update task list</source>
-        <translation>ažuriraj popis zadataka</translation>
-    </message>
-    <message>
-        <location line="-7"/>
-        <source>update task list (%1 tasks)</source>
-        <translation>ažuriraj popis zadataka (%1 zadataka)</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>Greška alata: &quot;todos&quot; mora sadržavati barem jedan zadatak.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>Greška alata: zadatak %1 ima prazno &quot;content&quot;.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Greška alata: zadatak %1 ima nepoznat status &quot;%2&quot; (očekivano &quot;pending&quot;, &quot;in_progress&quot; ili &quot;completed&quot;).</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>Greška alata: samo jedan zadatak može biti &quot;in_progress&quot; odjednom (navedeno %1).</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation>Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
-        <source>Reset to Project Directory</source>
-        <translation>Vrati na direktorij projekta</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>Ukloni prepisivanje radnog direktorija: alati rade u direktoriju projekta pokretanja (ili u zadanom direktoriju projekata kada nijedan projekt nije otvoren).</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Reset to Default Projects Directory</source>
-        <translation>Vrati na zadani direktorij projekata</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>Koristi zadani direktorij projekata, mjesto u kojem se po zadano stvaraju novi projekti.</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Reset to Git Bash</source>
-        <translation>Vrati na Git Bash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>Ukloni prepisivanje basha: bash alat koristi zadani bash, Git Bash (prepoznati bash na PATH-u, zatim onaj isporučen uz Git for Windows).</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Reset to niubash</source>
-        <translation>Vrati na niubash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>Koristi preuzeti niubash, nativni Bash bez MSYS2-a koji se - za razliku od Git Basha - može izvršavati u Windows sandboxu.</translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativna dijeljenja nisu dostupna unutar sandboka.</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta, privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>Pisanje u &quot;%1&quot; nije dopušteno: lokacije vjerodajnica zaštićene su unutar sandboka.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>Čitanje &quot;%1&quot; nije dopušteno: lokacije vjerodajnica nisu čitljive unutar sandboka.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
-        <location line="+27"/>
-        <source>fetch %1</source>
-        <translation>dohvati %1</translation>
-    </message>
-    <message>
-        <location line="+112"/>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>Neispravan URL &quot;%1&quot;: mora početi s http:// ili https://</translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation>Dohvaćanje %1 neuspješno: odgovor je prevelik (ograničenje 5 MB).</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Fetch failed for %1: %2</source>
-        <translation>Dohvaćanje %1 neuspješno: %2</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation>\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
-        <location line="+26"/>
-        <source>search %1</source>
-        <translation>pretraži %1</translation>
-    </message>
-    <message>
-        <location line="+196"/>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation>Rezultati pretrage za &quot;%1&quot;:</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation>Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <location line="+44"/>
-        <location line="+13"/>
-        <location line="+41"/>
-        <location line="+45"/>
-        <location line="+51"/>
-        <source>Search failed: %1</source>
-        <translation>Pretraga neuspješna: %1</translation>
-    </message>
-    <message>
-        <location line="-189"/>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>Pretraga neuspješna: DuckDuckGo trenutačno ograničava broj zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation>Nema rezultata za &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location line="-174"/>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>Pretraga neuspješna: Google backend nije konfiguriran. Postavite API ključ i ID pretraživačkog stroja (cx) u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <location line="+54"/>
-        <location line="+45"/>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation>Pretraga neuspješna: neispravan odgovor od pružatelja pretrage.</translation>
-    </message>
-    <message>
-        <location line="-88"/>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation>nema rezultata za &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Pretraga neuspješna: Brave backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Pretraga neuspješna: Tavily backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation>Pretraga neuspješna: URL Exa krajnje točke nije konfiguriran.</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation>Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Preuzmite ga s stranice postavaka Llama.cpp Chat Sandbox (fiksirano, kontrolnom sumom provjereno izdanje Microsoft MXC); tamo se može ukazati i na vlastiti runtime. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Windows sandbox backend (wxc-exec) nije odgovorio na ispitivanje mogućnosti na vrijeme. %1</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
-    </message>
-    <message>
-        <location line="+361"/>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Konfiguracija Windows sandboka je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <location line="+41"/>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>Bash na &quot;%1&quot; nije dio prepoznate instalacije niubash, Git for Windows ili MSYS2, pa Windows sandbox ne može mu dati usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash prvi na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Komandna linija Windows sandboka je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-</context>
-<context>
-    <name>Tr</name>
-    <message>
-        <source>Add %1</source>
-        <translation type="vanished">Dodaj %1</translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation type="vanished">Izbriši %1</translation>
-    </message>
-    <message>
-        <source>Edit %1</source>
-        <translation type="vanished">Uredi %1</translation>
-    </message>
-    <message>
-        <source>Move %1 to %2</source>
-        <translation type="vanished">Pomakni %1 u %2</translation>
-    </message>
-    <message>
-        <source>Apply patch</source>
-        <translation type="vanished">Primijeni patch</translation>
-    </message>
-    <message>
-        <source>Apply patch to %1 files</source>
-        <translation type="vanished">Primijeni patch na %1 datoteka</translation>
-    </message>
-    <message>
-        <source>created</source>
-        <translation type="vanished">stvoreno</translation>
-    </message>
-    <message>
-        <source>edited</source>
-        <translation type="vanished">uređeno</translation>
-    </message>
-    <message>
-        <source>moved</source>
-        <translation type="vanished">pomaknuto</translation>
-    </message>
-    <message>
-        <source>deleted</source>
-        <translation type="vanished">izbrisano</translation>
-    </message>
-    <message>
-        <source>Success. Updated the following files:</source>
-        <translation type="vanished">Uspješno. Ažurirane su sljedeće datoteke:</translation>
-    </message>
-    <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="vanished">Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH.</translation>
-    </message>
-    <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation type="vanished">Nije pronađen bash shell. Instalirajte Git for Windows (https://git-scm.com/download/win) ili dodajte bash na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat.</translation>
-    </message>
-    <message>
-        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation type="vanished">Izvedbena datoteka sandbox-exec nije pronađena; sandbox nije dostupan na ovom sustavu.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) je instaliran, ali kernel odbija postaviti njegov sandbox: %1. Na Ubuntu 24.04 i novijim verzijama to je obično AppArmorovo ograničenje nepovlaštenih korisničkih prostora imena: pokrenite &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (dodajte ga u /etc/sysctl.d/ da bi promjena bila trajna) ili dodijelite bwrapu AppArmor profil s atributom &apos;userns&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) je instaliran, ali na ovom sustavu nepovlašteni korisnički prostori imena su onemogućeni: %1. Na Debianu i njegovim izvedbama omogućite ih naredbom &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nije uspio postaviti sandbox: %1. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nije u roku postavio sandbox. Provjerite može li se izvršavati na ovom sustavu ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nije pronađen. Instalirajte ga (npr. &apos;apt install bubblewrap&apos; ili &apos;dnf install bubblewrap&apos;) ili odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>[Output truncated: %1]</source>
-        <translation type="vanished">[Izlaz skraćen: %1]</translation>
-    </message>
-    <message>
-        <source>showing last %1 of %2 lines</source>
-        <translation type="vanished">prikazano zadnjih %1 od %2 redaka</translation>
-    </message>
-    <message>
-        <source>showing last %1 KB</source>
-        <translation type="vanished">prikazano zadnjih %1 KB</translation>
-    </message>
-    <message>
-        <source>Full output saved to: %1</source>
-        <translation type="vanished">Puni izlaz spremljen u: %1</translation>
-    </message>
-    <message>
-        <source>running %1</source>
-        <translation type="vanished">izvršavanje %1</translation>
-    </message>
-    <message>
-        <source>Error: the command must not be empty.</source>
-        <translation type="vanished">Greška: komanda ne smije biti prazna.</translation>
-    </message>
-    <message>
-        <source>Error: working directory does not exist: %1</source>
-        <translation type="vanished">Greška: radni direktorij ne postoji: %1</translation>
-    </message>
-    <message>
-        <source>Error: %1</source>
-        <translation type="vanished">Greška: %1</translation>
-    </message>
-    <message>
-        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation type="vanished">Greška: sandbox ne može učiniti &quot;%1&quot; upisivim: to je (ili sadrži) domaći direktorij ili korijen datotečnog sustava. Otvorite projekt za izvršavanje komandi u njegovu direktoriju.</translation>
-    </message>
-    <message>
-        <source>Command was stopped by the user.</source>
-        <translation type="vanished">Komanda je zaustavljena od strane korisnika.</translation>
-    </message>
-    <message>
-        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation type="vanished">Komanda je istekla nakon %1 ms. Pokušajte ponovno s većim vremenom isteka ako se očekuje da komanda traje duže.</translation>
-    </message>
-    <message>
-        <source>Failed to start the command: %1</source>
-        <translation type="vanished">Neuspjelo pokretanje komande: %1</translation>
-    </message>
-    <message>
-        <source>unknown error</source>
-        <translation type="vanished">nepoznata greška</translation>
-    </message>
-    <message>
-        <source>Command terminated abnormally (crashed).</source>
-        <translation type="vanished">Komanda je abnormalno završila (pala).</translation>
-    </message>
-    <message>
-        <source>Command exited with code %1.</source>
-        <translation type="vanished">Komanda je izašla s kodom %1.</translation>
-    </message>
-    <message>
-        <source>Working directory: %1
-
-</source>
-        <translation type="vanished">Radni direktorij: %1\n\n</translation>
-    </message>
-    <message>
-        <source>Edit file</source>
-        <translation type="vanished">Uredi datoteku</translation>
-    </message>
-    <message>
-        <source>edit %1 (%2 blocks)</source>
-        <translation type="vanished">uredi %1 (%2 bloka)</translation>
-    </message>
-    <message>
-        <source>edit %1</source>
-        <translation type="vanished">uredi %1</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation type="vanished">Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
-    </message>
-    <message>
-        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation type="vanished">Greška alata: svaka izmjena zahtijeva &quot;oldText&quot; i &quot;newText&quot;.</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation type="vanished">Greška alata: &quot;edits&quot; mora sadržavati barem jednu zamjenu.</translation>
-    </message>
-    <message>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation type="vanished">Ne može se urediti &quot;%1&quot;: datoteka nije pronađena. Koristite read_file za provjeru putanje ili write za stvaranje datoteke.</translation>
-    </message>
-    <message>
-        <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation type="vanished">Ne može se urediti &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation type="vanished">Uspješno zamijenjeno %1 blok(ova) u %2.</translation>
-    </message>
-    <message>
-        <source>Cannot reach the MCP server.</source>
-        <translation type="vanished">MCP server nije dostupan.</translation>
-    </message>
-    <message>
-        <source>MCP initialize failed: %1</source>
-        <translation type="vanished">MCP inicijalizacija neuspješna: %1</translation>
-    </message>
-    <message>
-        <source>MCP tools/list failed: %1</source>
-        <translation type="vanished">MCP tools/list neuspješan: %1</translation>
-    </message>
-    <message>
-        <source>Connection to the MCP server was closed.</source>
-        <translation type="vanished">Povezivanje s MCP serverom je zatvoreno.</translation>
-    </message>
-    <message>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation type="vanished">MCP server nije dostupan. Provjerite je li server pokrenut i dostupan, zatim pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation type="vanished">MCP alat &quot;%1&quot; neuspješan: MCP server nije odgovorio (greška povezanja ili istek vremena).</translation>
-    </message>
-    <message>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="vanished">MCP server je ponovno pokrenut; poziv nije izvršen. Molimo pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="vanished">MCP alat &quot;%1&quot; neuspješan: %2</translation>
-    </message>
-    <message>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="vanished">MCP server vratio je HTTP %1 za poziv alata.</translation>
-    </message>
-    <message>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation type="vanished">MCP server vratio je praznan ili neispravan odgovor.</translation>
-    </message>
-    <message>
-        <source>read whole file %1</source>
-        <translation type="vanished">čitaj cijelu datoteku %1</translation>
-    </message>
-    <message>
-        <source>read %1:%2‑%3</source>
-        <translation type="vanished">čitaj %1:%2-%3</translation>
-    </message>
-    <message>
-        <source>read %1</source>
-        <translation type="vanished">čitaj %1</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">Datoteka &quot;%1&quot; ne postoji.</translation>
-    </message>
-    <message>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="vanished">Neuspješno čitanje &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation type="vanished">Slika &quot;%1&quot; je velika %2 MB i premašuje ograničenje čitanja od %3 MB; prvo promijenite njezinu veličinu (npr. s bash alatom).</translation>
-    </message>
-    <message>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation type="vanished">Datoteka slike &quot;%1&quot; (%2, %3 bajta). Njezin sadržaj je priložen kao slika.</translation>
-    </message>
-    <message>
-        <source>first_line must be &gt;= 1.</source>
-        <translation type="vanished">first_line mora biti &gt;= 1.</translation>
-    </message>
-    <message>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="vanished">last_line_inclusive mora biti &gt;= first_line.</translation>
-    </message>
-    <message>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="vanished">first_line (%1) premašuje broj redaka u &quot;%2&quot; (%3).</translation>
-    </message>
-    <message>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation type="vanished">Redak %1 u &quot;%2&quot; je veći od ograničenja čitanja od %3 KB; datoteku ne može pročitati ovaj alat.</translation>
-    </message>
-    <message>
-        <source> %1 KB limit reached.</source>
-        <translation type="vanished"> Dosegnuto ograničenje od %1 KB.</translation>
-    </message>
-    <message>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation type="vanished"> Nastavite s first_line=%1, last_line_inclusive=%2.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodbazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Vi ste potagent &quot;explore&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Istražite kodovu bazu i odgovorite na zadatak pomoću dostupnih alata samo za čitanje: koristite &quot;find&quot; za pronalaženje datoteka po imenu, &quot;search&quot; za pretragu sadržaja datoteka i &quot;read_file&quot; za čitanje relevantnih dijelova. Ne mijenjajte nijednu datoteku i ne izvršavajte komande koje bilo što mijenjaju. Radite autonomno; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem koji sadrži ključna otkrića, relevantne putanje datoteka s brojevima redaka i sve što glavnom razgovoru treba za nastavak rada.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="vanished">Vi ste potagent &quot;general&quot; koji radi u odvojenom razgovoru odvojenom od glavnog. Radite autonomno s dostupnim alatom dok zadatak ne bude dovršen; ne možete postavljati korisniku pitanja. Kada završite, odgovorite jednim sažetim izvještajem o onome što ste učinili ili pronašli, uključujući relevantne putanje datoteka s brojevima redaka, kako bi glavni razgovor mogao nastaviti rad.</translation>
-    </message>
-    <message>
-        <source>task: %1</source>
-        <translation type="vanished">zadatak: %1</translation>
-    </message>
-    <message>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="vanished">Greška alata: oba, &quot;description&quot; i &quot;prompt&quot;, su obavezna.</translation>
-    </message>
-    <message>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="vanished">Greška alata: nepoznat subagent_type &quot;%1&quot; (očekivano &quot;explore&quot; ili &quot;general&quot;)</translation>
-    </message>
-    <message>
-        <source>Task: %1</source>
-        <translation type="vanished">Zadatak: %1</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnoga odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj potagenta:
-
-%3</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Zadatak neuspješan: podrazgovor &quot;%1&quot; završio je bez konačnoga odgovora (moguće je da je zaustavljen ili izbrisan).</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">Zadatak dovršen u podrazgovoru &quot;%1&quot; (id: %2). Razgovor je zadržan u popisu razgovora i može se otvoriti za daljnji rad. Konačni izvještaj potagenta:\n\n%3</translation>
-    </message>
-    <message>
-        <source>fetch %1</source>
-        <translation type="vanished">dohvati %1</translation>
-    </message>
-    <message>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="vanished">Neispravan URL &quot;%1&quot;: mora početi s http:// ili https://</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="vanished">Dohvaćanje %1 neuspješno: odgovor je prevelik (ograničenje 5 MB).</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: %2</source>
-        <translation type="vanished">Dohvaćanje %1 neuspješno: %2</translation>
-    </message>
-    <message>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation type="vanished">\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
-    </message>
-    <message>
-        <source>search %1</source>
-        <translation type="vanished">pretraži %1</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation type="vanished">Rezultati pretrage za &quot;%1&quot;:</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="vanished">Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation type="vanished">Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="vanished">Pretraga neuspješna: Google backend nije konfiguriran. Postavite API ključ i ID pretraživačkog stroja (cx) u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <source>Search failed: %1</source>
-        <translation type="vanished">Pretraga neuspješna: %1</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Pretraga neuspješna: DuckDuckGo trenutačno ograničava brzinu zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation type="vanished">Pretraga neuspješna: neispravan odgovor od pružatelja pretrage.</translation>
-    </message>
-    <message>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation type="vanished">nema rezultata za &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Pretraga neuspješna: Brave backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation type="vanished">Nema rezultata za &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Pretraga nije uspjela: DuckDuckGo trenutačno ograničava broj zahtjeva; pričekajte minutu i pokušajte ponovno.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Pretraga neuspješna: Tavily backend nije konfiguriran. Postavite API ključ u postavkama Llama.cpp.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="vanished">Pretraga neuspješna: URL Exa krajnje točke nije konfiguriran.</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation type="vanished">Rezultati pretrage za &quot;%1&quot;:\n\n%2</translation>
-    </message>
-    <message>
-        <source>find files %1</source>
-        <translation type="vanished">pronađi datoteke %1</translation>
-    </message>
-    <message>
-        <source>Pattern: `%1`</source>
-        <translation type="vanished">Obrazac: `%1`</translation>
-    </message>
-    <message>
-        <source>Pattern: %1</source>
-        <translation type="vanished">Obrazac: %1</translation>
-    </message>
-    <message>
-        <source>  Path: %1</source>
-        <translation type="vanished">  Putanja: %1</translation>
-    </message>
-    <message>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation type="vanished">Greška: ripgrep (rg) nije pronađen. Može se preuzeti sa stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata find.</translation>
-    </message>
-    <message>
-        <source>Error: the pattern must not be empty.</source>
-        <translation type="vanished">Greška: obrazac ne smije biti prazan.</translation>
-    </message>
-    <message>
-        <source>Error: path is not a directory: %1</source>
-        <translation type="vanished">Greška: putanja nije direktorij: %1</translation>
-    </message>
-    <message>
-        <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation type="vanished">[Pretraga je zaustavljena od strane korisnika. Rezultati su nepotpuni.]</translation>
-    </message>
-    <message>
-        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation type="vanished">[Pretraga je istekla nakon %1 ms. Rezultati su nepotpuni; koristite specifičniji obrazac.]</translation>
-    </message>
-    <message>
-        <source>[Failed to start ripgrep: %1]</source>
-        <translation type="vanished">[Neuspjelo pokretanje ripgrepa: %1]</translation>
-    </message>
-    <message>
-        <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation type="vanished">[ripgrep neuspješan (kod izlaska %1): %2]</translation>
-    </message>
-    <message>
-        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation type="vanished">[Dosegnuto ograničenje od %1 rezultata. Koristite limit=%2 za više rezultata ili specifičniji obrazac.]</translation>
-    </message>
-    <message>
-        <source>No files found.</source>
-        <translation type="vanished">Nema pronađenih datoteka.</translation>
-    </message>
-    <message>
-        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation type="vanished">[Izlaz skraćen na %1 KB. Koristite specifičniji obrazac za prikaz svih rezultata.]</translation>
-    </message>
-    <message>
-        <source>list directory %1</source>
-        <translation type="vanished">izlistaj direktorij %1</translation>
-    </message>
-    <message>
-        <source>Path: `%1`
-
-</source>
-        <translation type="vanished">Putanja: `%1`\n\n</translation>
-    </message>
-    <message>
-        <source>Directory is empty.</source>
-        <translation type="vanished">Direktorij je prazan.</translation>
-    </message>
-    <message>
-        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation type="vanished">[Izlaz skraćen na %1 KB. Izlistajte poddirektorij za prikaz preostalih stavki.]</translation>
-    </message>
-    <message>
-        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation type="vanished">[Dosegnuto ograničenje od %1 stavki. Koristite limit=%2 za više stavki.]</translation>
-    </message>
-    <message>
-        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation type="vanished">MCP alat &quot;%1&quot; nije dostupan (nijedan povezani MCP server ga ne pruža).</translation>
-    </message>
-    <message>
-        <source>Download ripgrep</source>
-        <translation type="vanished">Preuzmi ripgrep</translation>
-    </message>
-    <message>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation type="vanished">Preuzeti ripgrep %1 s GitHuba?</translation>
-    </message>
-    <message>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation type="vanished">Alati za pretragu i pronalaženje koriste ripgrep za pretragu sadržaja datoteka i pronalaženje datoteka po imenu. Nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. ripgrep je objavljen pod MIT ili Unlicense licencom.</translation>
-    </message>
-    <message>
-        <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation type="vanished">Preuzmi Windows sandbox runtime (MXC)</translation>
-    </message>
-    <message>
-        <source>Download the Microsoft MXC runtime %1?</source>
-        <translation type="vanished">Preuzeti Microsoftov MXC runtime %1?</translation>
-    </message>
-    <message>
-        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation type="vanished">Postavka &apos;Sandbox komande&apos; ograničava bash alat na Windowsu na Microsoftov MXC procesni kontejner. Fiksirani wxc-exec.exe runtime nije instaliran na ovom sustavu, pa se umjesto toga može preuzeti ovdje. MXC je objavljen pod MIT licencom.</translation>
-    </message>
-    <message>
-        <source>Project: %1</source>
-        <translation type="vanished">Projekt: %1</translation>
-    </message>
-    <message>
-        <source>License: %1</source>
-        <translation type="vanished">Licenca: %1</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Preuzmi</translation>
-    </message>
-    <message>
-        <source>The package holds no wxc-exec.exe binary.</source>
-        <translation type="vanished">Paket ne sadrži wxc-exec.exe binarnu datoteku.</translation>
-    </message>
-    <message>
-        <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation type="vanished">wxc-exec.exe binarna datoteka ima neočekivanu veličinu.</translation>
-    </message>
-    <message>
-        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation type="vanished">wxc-exec.exe binarna datoteka ne odgovara očekivanoj kontrolnoj zbroju.</translation>
-    </message>
-    <message>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation type="vanished">Microsoftov MXC runtime dostupan je samo za Windows x86-64 i arm64.</translation>
-    </message>
-    <message>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation type="vanished">Microsoftov MXC runtime dostupan je samo za Windows x86-64.</translation>
-    </message>
-    <message>
-        <source>Downloading the MXC runtime...</source>
-        <translation type="vanished">Preuzimanje MXC runtimea...</translation>
-    </message>
-    <message>
-        <source>Downloading the MXC runtime failed: %1</source>
-        <translation type="vanished">Preuzimanje MXC runtimea neuspješno: %1</translation>
-    </message>
-    <message>
-        <source>Unpacking the MXC runtime...</source>
-        <translation type="vanished">Raspakiranje MXC runtimea...</translation>
-    </message>
-    <message>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation type="vanished">Raspakiranje MXC runtimea neuspješno: %1</translation>
-    </message>
-    <message>
-        <source>The package holds no ripgrep binary.</source>
-        <translation type="vanished">Paket ne sadrži ripgrep binarnu datoteku.</translation>
-    </message>
-    <message>
-        <source>There is no ripgrep for this platform.</source>
-        <translation type="vanished">Nema ripgrepa za ovu platformu.</translation>
-    </message>
-    <message>
-        <source>Downloading ripgrep...</source>
-        <translation type="vanished">Preuzimanje ripgrepa...</translation>
-    </message>
-    <message>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation type="vanished">Preuzimanje ripgrepa neuspješno: %1</translation>
-    </message>
-    <message>
-        <source>Verifying package integrity...</source>
-        <translation type="vanished">Vjerodostojnost paketa se provjerava...</translation>
-    </message>
-    <message>
-        <source>The downloaded package is not the one that was expected.</source>
-        <translation type="vanished">Preuzeti paket nije onaj koji se očekivao.</translation>
-    </message>
-    <message>
-        <source>Unpacking ripgrep...</source>
-        <translation type="vanished">Raspakiranje ripgrepa...</translation>
-    </message>
-    <message>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation type="vanished">Raspakiranje ripgrepa neuspješno: %1</translation>
-    </message>
-    <message>
-        <source>search for %1</source>
-        <translation type="vanished">pretraži %1</translation>
-    </message>
-    <message>
-        <source>  Glob: `%1`</source>
-        <translation type="vanished">  Glob: `%1`</translation>
-    </message>
-    <message>
-        <source>  Glob: %1</source>
-        <translation type="vanished">  Glob: %1</translation>
-    </message>
-    <message>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation type="vanished">Greška: ripgrep (rg) nije pronađen. Može se preuzeti sa stranice postavaka alata Llama.cpp Chat ili ručno instalirati s https://github.com/BurntSushi/ripgrep radi korištenja alata search.</translation>
-    </message>
-    <message>
-        <source>Error: path does not exist: %1</source>
-        <translation type="vanished">Greška: putanja ne postoji: %1</translation>
-    </message>
-    <message>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation type="vanished">[Pretraga je istekla nakon %1 ms. Rezultati su nepotpuni; suzite putanju ili usavršite obrazac.]</translation>
-    </message>
-    <message>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation type="vanished">[Dosegnuto ograničenje od %1 podudaranja. Koristite limit=%2 za više rezultata ili usavršite obrazac.]</translation>
-    </message>
-    <message>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation type="vanished">[Neki redci skraćeni na %1 znakova. Koristite read_file za prikaz potpunih redaka.]</translation>
-    </message>
-    <message>
-        <source>No matches found.</source>
-        <translation type="vanished">Nema pronađenih podudaranja.</translation>
-    </message>
-    <message>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation type="vanished">[Izlaz skraćen na %1 KB. Usavršite obrazac ili smanjite kontekst za prikaz svih podudaranja.]</translation>
-    </message>
-    <message>
-        <source>load skill %1</source>
-        <translation type="vanished">učitaj vještinu %1</translation>
-    </message>
-    <message>
-        <source>The &quot;name&quot; argument is required.</source>
-        <translation type="vanished">Argument &quot;name&quot; je obavezan.</translation>
-    </message>
-    <message>
-        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation type="vanished">Vještina &quot;%1&quot; nije pronađena. Dostupne vještine: %2</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation type="vanished">(nema)</translation>
-    </message>
-    <message>
-        <source>update task list</source>
-        <translation type="vanished">ažuriraj popis zadataka</translation>
-    </message>
-    <message>
-        <source>update task list (%1 tasks)</source>
-        <translation type="vanished">ažuriraj popis zadataka (%1 zadataka)</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation type="vanished">Greška alata: &quot;todos&quot; mora sadržavati barem jedan zadatak.</translation>
-    </message>
-    <message>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation type="vanished">Greška alata: zadatak %1 ima prazno &quot;content&quot;.</translation>
-    </message>
-    <message>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation type="vanished">Greška alata: zadatak %1 ima nepoznat status &quot;%2&quot; (očekivano &quot;pending&quot;, &quot;in_progress&quot; ili &quot;completed&quot;).</translation>
-    </message>
-    <message>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation type="vanished">Greška alata: samo jedan zadatak može biti &quot;in_progress&quot; odjednom (navedeno %1).</translation>
-    </message>
-    <message>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation type="vanished">Popis zadataka ažuriran: %1 od %2 dovršeno.</translation>
-    </message>
-    <message>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation type="vanished">Pristup &quot;%1&quot; nije dopušten: staze uređaja i administrativne mrežne podjele nisu dostupne unutar sandboka.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija. Otvorite projekt za rad na njegovim datotekama.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta i privremenih lokacija.</translation>
-    </message>
-    <message>
-        <source>Reset to Project Directory</source>
-        <translation type="vanished">Vrati na direktorij projekta</translation>
-    </message>
-    <message>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation type="vanished">Ukloni prepisivanje radnog direktorija: alati rade u direktoriju projekta pokretanja (ili u zadanom direktoriju projekata kada nijedan projekt nije otvoren).</translation>
-    </message>
-    <message>
-        <source>Reset to Default Projects Directory</source>
-        <translation type="vanished">Vrati na zadani direktorij projekata</translation>
-    </message>
-    <message>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation type="vanished">Koristi zadani direktorij projekata, mjesto u kojem se po zadano stvaraju novi projekti.</translation>
-    </message>
-    <message>
-        <source>Reset to Git Bash</source>
-        <translation type="vanished">Vrati na Git Bash</translation>
-    </message>
-    <message>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation type="vanished">Ukloni prepisivanje basha: bash alat koristi zadani bash, Git Bash (prepoznati bash na PATH-u, zatim onaj isporučen uz Git for Windows).</translation>
-    </message>
-    <message>
-        <source>Reset to niubash</source>
-        <translation type="vanished">Vrati na niubash</translation>
-    </message>
-    <message>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation type="vanished">Koristi preuzeti niubash, nativni Bash bez MSYS2-a koji se - za razliku od Git Basha - može izvršavati u Windows sandboxu.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: nijedan projekt nije otvoren, pa sandbox dopušta upise samo unutar privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox. Otvorite projekt za rad na njegovim datotekama.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: sandbox dopušta upise samo unutar direktorija projekta, privremenih lokacija i dodatnih upisivih direktorija iz postavki Sandbox.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: datoteke .git, .qtcreator i *.user zaštićene su unutar sandboka.</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation type="vanished">Pisanje u &quot;%1&quot; nije dopušteno: lokacije vjerodajnica zaštićene su unutar sandboka.</translation>
-    </message>
-    <message>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation type="vanished">Čitanje &quot;%1&quot; nije dopušteno: lokacije vjerodajnica nisu čitljive unutar sandboka.</translation>
-    </message>
-    <message>
-        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Instalirajte ga jednom s &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (jedan UAC upit); odjava nije potrebna, mrežna ograda se oslanja na SID posvećenog sandbox korisnika. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation type="vanished">Windows sandbox backend (srt-win) ne može se upitati (izlaz %1): %2 %3</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation type="vanished">Windows sandbox korisnik nije pripremljen. %1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation type="vanished">Windows sandbox backend (srt-win) nije javio SID sandbox korisnika. %1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation type="vanished">Windows sandbox nije mogao dodijeliti sandbox korisniku pristup radnom direktoriju (izlaz %1): %2</translation>
-    </message>
-    <message>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation type="vanished">srt-win (Windows sandbox backend @anthropic-ai/sandbox-runtime) nije pronađen na PATH-u. %1 LLAMA_SRT_WIN može ukazivati na izvedbenu datoteku.</translation>
-    </message>
-    <message>
-        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Preuzmite ga s stranice postavaka alata Llama.cpp Chat (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); LLAMA_WXC_EXEC može ukazivati na wxc-exec.exe. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation type="vanished">Windows sandbox backend (wxc-exec) nije odgovorio na ispitivanje mogućnosti na vrijeme. %1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation type="vanished">Windows sandbox backend (wxc-exec) javio je da MXC kontejner nije dostupan (izlaz %1): %2 %3</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation type="vanished">Windows sandbox nije mogao postaviti ispitivanje izolacije uživo (privremeni direktorij ili canary datoteka u domaćem direktoriju). %1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation type="vanished">Windows sandbox nije mogao kreirati canary datoteku svog ispitivanja izolacije uživo na %1. %2</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows sandbox konfiguracija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">Bash na &quot;%1&quot; nije dio prepoznate instalacije Git for Windows ili MSYS2, pa Windows sandbox ne može mu dodijeliti usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash na prvo mjesto na PATH-u, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows sandbox (Microsoft MXC) zahtijeva Windows 11 24H2 (izgradnja %1) ili noviji; ovaj sustav je izgradnja %2. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation type="vanished">wxc-exec.exe (Microsoftov MXC Windows sandbox runtime) nije pronađen. %1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation type="vanished">Windows sandbox (Microsoft MXC) nije prošao provjeru izolacije uživo: nije moguće potvrditi da je sandbox komanda ograničena. %1</translation>
-    </message>
-    <message>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Preuzmite ga s stranice postavaka Llama.cpp Chat Sandbox (fiksirano, kontrolnom zbrojom provjereno izdanje Microsoft MXC); tamo se može ukazati i na vlastiti runtime. Alternativno odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">Bash na &quot;%1&quot; nije dio prepoznate instalacije niubash, Git for Windows ili MSYS2, pa Windows sandbox ne može mu dati usku lokaciju samo za čitanje. Instalirajte Git for Windows (https://git-scm.com/download/win) i stavite njegov bash prvi na PATH, ili preuzmite niubash s stranice postavaka alata Llama.cpp Chat, ili odznačite &apos;Sandbox komande&apos; u postavkama Llama.</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation type="vanished">Windows sandbox (Microsoft MXC) prvi put provjerava svoju izolaciju; ponovno izvršite komandu za nekoliko sekundi.</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows sandbox komandna linija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
-    </message>
-    <message>
-        <source>Write file</source>
-        <translation type="vanished">Zapiši datoteku</translation>
-    </message>
-    <message>
-        <source>write %1</source>
-        <translation type="vanished">zapiši %1</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;content&quot; is required.</source>
-        <translation type="vanished">Greška alata: &quot;content&quot; je obavezan.</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: roditeljska putanja je datoteka.</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: ne može se stvoriti direktorij: %2</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation type="vanished">Ne može se zapisati &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Successfully wrote %1 bytes to %2.</source>
-        <translation type="vanished">Uspješno zapisano %1 bajtova u %2.</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation type="vanished">MCP alat &quot;%1&quot; je zaustavljen od strane korisnika.</translation>
-    </message>
-    <message>
-        <source>Download niubash</source>
-        <translation type="vanished">Preuzmi niubash</translation>
-    </message>
-    <message>
-        <source>Download niubash %1 from GitHub?</source>
-        <translation type="vanished">Preuzeti niubash %1 s GitHuba?</translation>
-    </message>
-    <message>
-        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation type="vanished">Bash alat na Windowsu normalno pokreće Git Bash, ali njegov MSYS2 runtime ne može se inicializirati unutar Windows sandboka (microsoft/mxc#1061). niubash je nativni Bash bez MSYS2-a koji to može, pa se može preuzeti ovdje za pokretanje bash alata u sandboxu. niubash je objavljen pod MIT licencom.</translation>
-    </message>
-    <message>
-        <source>The package holds no niubash shell.</source>
-        <translation type="vanished">Paket ne sadrži niubash shell.</translation>
-    </message>
-    <message>
-        <source>There is no niubash for this platform.</source>
-        <translation type="vanished">Nema niubasha za ovu platformu.</translation>
-    </message>
-    <message>
-        <source>Downloading niubash...</source>
-        <translation type="vanished">Preuzimanje niubasha...</translation>
-    </message>
-    <message>
-        <source>Downloading niubash failed: %1</source>
-        <translation type="vanished">Preuzimanje niubasha neuspješno: %1</translation>
-    </message>
-    <message>
-        <source>Unpacking niubash...</source>
-        <translation type="vanished">Raspakiranje niubasha...</translation>
-    </message>
-    <message>
-        <source>Unpacking niubash failed: %1</source>
-        <translation type="vanished">Raspakiranje niubasha neuspješno: %1</translation>
-    </message>
-    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation type="vanished">dohvati trenutno vrijeme</translation>
+        <translation>dohvati trenutno vrijeme</translation>
     </message>
     <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation type="vanished">dohvati informacije o runtimeu</translation>
+        <translation>dohvati informacije o runtimeu</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation type="vanished">OS: %1
+        <translation>OS: %1
 Radni direktorij: %2</translation>
     </message>
 </context>

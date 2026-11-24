@@ -13,7 +13,7 @@
         <translation>Anmod om et forslag fra llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+160"/>
+        <location filename="../src/llamaplugin.cpp" line="+161"/>
         <source>Request llama.cpp suggestion at the current editor&apos;s cursor position.</source>
         <translation>Anmod om et forslag fra llama.cpp på den aktuelle markørposition i redigeringsprogrammet.</translation>
     </message>
@@ -130,19 +130,19 @@
         <translation>Modellerne på den server, chatten er forbundet med; vælg én for at indlæse den og gøre den til den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+59"/>
         <source>Disable FIM</source>
         <translation>Deaktiver FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+109"/>
+        <location filename="../src/llamasettings.cpp" line="+61"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>Aktiver FIM</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+185"/>
         <location filename="../src/serversettingswidget.cpp" line="+264"/>
         <location line="+4"/>
         <source>Stop server</source>
@@ -150,10 +150,10 @@
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamaplugin.h" line="+3"/>
         <location filename="../src/serversettingswidget.cpp" line="-321"/>
         <location line="+313"/>
         <location line="+12"/>
+        <location filename="../src/llamaplugin.h" line="+3"/>
         <source>Start server</source>
         <translation>Start serveren</translation>
     </message>
@@ -178,7 +178,7 @@
         <translation>Vælger og indlæser modellen. Klik på den valgte model igen for at aflæse den og nulstille valget.</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+279"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -225,20 +225,20 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1104"/>
+        <location filename="../src/llamasettingspages.cpp" line="+325"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/llamasettings.cpp" line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1431"/>
+        <location filename="../src/llamaplugin.cpp" line="-1448"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -256,7 +256,7 @@
         <translation type="vanished">Aktiverer integrationen af llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1092"/>
+        <location filename="../src/llamasettings.cpp" line="+22"/>
         <source>Endpoint</source>
         <translation>Slutpunkt</translation>
     </message>
@@ -286,7 +286,12 @@
         <translation>API-nøgle for llama.cpp-server (valgfrit)</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+9"/>
+        <source>Model to use for FIM completion when multiple models are loaded on the server (recommended: Qwen3 Coder). The entries are the models served by the chat endpoint; a name can also be typed, e.g. for a different server. Default uses the server&apos;s model.</source>
+        <translation>Modellen, der bruges til FIM-fuldendelse, når der er indlæst flere modeller på serveren (anbefaling: Qwen3 Coder). Posterne er de modeller, der serveres af chat-slutpunktet; der kan også skrives et navn, f.eks. til en anden server. Standard bruger serverens model.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Prefix Code Lines</source>
         <translation>Kodelinjer før markør</translation>
     </message>
@@ -315,12 +320,12 @@
         <translation type="vanished">Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
     <message>
-        <location line="-102"/>
+        <location filename="../src/llamasettingspages.cpp" line="-309"/>
         <source>Tools</source>
         <translation>Værktøjer</translation>
     </message>
     <message>
-        <location line="+108"/>
+        <location filename="../src/llamasettings.cpp" line="+6"/>
         <source>Max Token Predictions</source>
         <translation>Maksimale token-forudsigelser</translation>
     </message>
@@ -435,7 +440,7 @@
         <translation type="vanished">Det maksimale antal gemte fuldendelser, der skal opbevares i result_cache.</translation>
     </message>
     <message>
-        <location line="-216"/>
+        <location line="-174"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Opsummarér titlen på samtalen på få ord, herunder ét emoji. Brug det sprog, der bruges i samtalen. Brug almindelig tekst, ingen markdown.</translation>
     </message>
@@ -467,7 +472,7 @@
 {diagnostics}</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+9"/>
         <source>Skills</source>
         <translation>Færdigheder</translation>
     </message>
@@ -483,12 +488,12 @@
         <translation>Server</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location filename="../src/llamasettings.cpp" line="+8"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>Aktiverer FIM (fill-in-the-middle)-fuldendelse i teksteditoren. Indstillingerne for chat, værktøjer og websøgning er uafhængige af dette.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+37"/>
         <source>FIM Model</source>
         <translation>FIM-model</translation>
     </message>
@@ -498,12 +503,11 @@
         <translation>FIM-model:</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>Navnet på den model, der skal bruges til FIM-fuldendelse, når flere modeller er indlæst på serveren (valgfrit, anbefalet: Qwen3 Coder).</translation>
+        <translation type="vanished">Navnet på den model, der skal bruges til FIM-fuldendelse, når flere modeller er indlæst på serveren (valgfrit, anbefalet: Qwen3 Coder).</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
@@ -958,7 +962,12 @@
         <translation>Sidst valgt model</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+10"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
+        <translation>Modellen, der bruges til hjælpeanmodninger som samtaletitler og forslag til opfølgende spørgsmål; brug en lille model for at holde den primære chat-model ledig. Posterne er de modeller, der serveres af serveren; der kan også skrives et navn. Standard bruger den aktive chat-model.</translation>
+    </message>
+    <message>
+        <location line="+212"/>
         <source>bash:</source>
         <translation>Bash:</translation>
     </message>
@@ -976,7 +985,7 @@
         <translation type="vanished">Vis tokens pr. sekund i chat-grænsefladen.</translation>
     </message>
     <message>
-        <location line="-245"/>
+        <location line="-244"/>
         <source>Thinking Level</source>
         <translation>Tænkeniveau</translation>
     </message>
@@ -1005,12 +1014,12 @@
         <translation>Hjælpemodel:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/llamasettingspages.cpp" line="+159"/>
         <source>Default: chat model</source>
         <translation>Standard: chat-model</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location filename="../src/llamasettings.cpp" line="+23"/>
         <source>Handoff Prompt</source>
         <translation>Prompt til overlevering</translation>
     </message>
@@ -1177,14 +1186,14 @@
         <translation>Indbyggede prompts til &quot;ll&quot;-lokatoren. Kun den første linje i en prompt vises i menuen; den fulde tekst sendes til modellen. &quot;{selection}&quot; erstattes med den valgte tekst, &quot;{file}&quot; og &quot;{line}&quot; med den aktuelle fil og markørposition, &quot;{diagnostics}&quot; med de fejl og advarsler, der rapporteres for den aktuelle fil, og &quot;{git_diff}&quot; med de ikke-committede ændringer i filens git-repository.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-4"/>
-        <location filename="../src/llamasettings.cpp" line="+7"/>
+        <location line="+7"/>
         <location line="+1"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
         <source>Selection prompt button</source>
         <translation>Prompt-knap for markering</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>Vis en lille knap i bunden af den valgte tekst i editoren. Ved et klik åbnes llama.cpp-lokatoren, så markeringen kan sendes til llama.cpp med en af prompts.</translation>
     </message>
@@ -1239,22 +1248,21 @@
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="-504"/>
+        <location line="-461"/>
         <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
         <translation>Samtalen ovenfor er lang og vil blive fortsat i en ny samtale med et frisk kontekstvindue. Skriv et overleveringsdokument, der gør det muligt for den nye samtale at fortsætte arbejdet sømløst uden at se de tidligere beskeder. Strukturer det som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, udførte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er fuldført, hvad er i gang, mødt fejl) og ## Næste trin (hvad der skal gøres for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Svar ikke på brugerens sidste besked; skriv kun overleveringsdokumentet.</translation>
     </message>
     <message>
-        <location line="+447"/>
+        <location line="+405"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
         <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne. &quot;default&quot; bruger modellens standard, &quot;off&quot; deaktiverer tænkning, og de konkrete niveauer er dem, som serveren rapporterer for modellens chat-skabelon.</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
+        <translation type="vanished">Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+60"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -1604,7 +1612,7 @@
         <translation>Tilsidesætter den globale indstilling &apos;Indlæs projektinstruktioner&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad der indlæses.</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location filename="../src/llamasettingspages.cpp" line="+77"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; kræver ingen API-nøgle</translation>
     </message>
@@ -1621,6 +1629,7 @@
     <message>
         <location filename="../src/llamachateditor.cpp" line="+192"/>
         <location line="+14"/>
+        <location filename="../src/llamasettingspages.cpp" line="-204"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1735,7 +1744,7 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+1103"/>
+        <location line="+1106"/>
         <source>Time: %1</source>
         <translation>Tid: %1</translation>
     </message>
@@ -1749,19 +1758,19 @@
         <translation type="vanished">Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-364"/>
+        <location line="-368"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="-915"/>
-        <location line="+948"/>
-        <location line="+81"/>
+        <location line="-914"/>
+        <location line="+947"/>
+        <location line="+85"/>
         <source>Human Editor</source>
         <translation>Menneskelig redaktør</translation>
     </message>
     <message>
-        <location line="-1000"/>
+        <location line="-1003"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Du er forbundet med %1 og bruger %2 som den aktuelle mappe</translation>
     </message>
@@ -1892,7 +1901,7 @@
         <translation>Vælg arbejdsmappe</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -1912,7 +1921,7 @@
         <translation>Ingen model</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+90"/>
         <source>Edit Message</source>
         <translation>Rediger meddelelse</translation>
     </message>
@@ -1950,12 +1959,12 @@
         <translation type="vanished">Opretter en ny samtale for at fortsætte denne – opsummerer samtalen...</translation>
     </message>
     <message>
-        <location line="-926"/>
+        <location line="-930"/>
         <source>Follow-up questions:</source>
         <translation>Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-611"/>
+        <location line="-610"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Beskeder i køen - sendes efter det aktuelle skridt</translation>
     </message>
@@ -1964,7 +1973,7 @@
         <translation type="vanished">Hastighed: %1 tokens pr. sekund</translation>
     </message>
     <message>
-        <location line="+1556"/>
+        <location line="+1559"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Tid: %2 ms&lt;br&gt;Hastighed: %3 tokens pr. sekund&lt;br&gt;&lt;br&gt;&lt;b&gt;Generering:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Tid: %5 ms&lt;br&gt;Hastighed: %6 tokens pr. sekund</translation>
     </message>
@@ -2267,7 +2276,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1199"/>
+        <location filename="../src/llamasettings.cpp" line="-900"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -2460,9 +2469,8 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Oprettet %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+128"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation>Fil &quot;%1&quot; findes ikke.</translation>
+        <translation type="vanished">Fil &quot;%1&quot; findes ikke.</translation>
     </message>
     <message>
         <source>Failed to delete &quot;%1&quot;: %2</source>
@@ -2473,9 +2481,8 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Slettet fil &quot;%1&quot;</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>Kunne ikke læse &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Kunne ikke læse &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>Start line %1 out of range (file has %2 lines).</source>
@@ -2494,40 +2501,32 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Udestøttet operation: &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="+72"/>
         <source>Write file</source>
-        <translation>Skriv fil</translation>
+        <translation type="vanished">Skriv fil</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+26"/>
         <source>write %1</source>
-        <translation>skriv %1</translation>
+        <translation type="vanished">skriv %1</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
+        <translation type="vanished">Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>Kan ikke skrive til &quot;%1&quot;: en forældersti er en fil.</translation>
+        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: en forældersti er en fil.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>Kan ikke skrive til &quot;%1&quot;: kan ikke oprette mappe: %2</translation>
+        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: kan ikke oprette mappe: %2</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>Kan ikke skrive til &quot;%1&quot;: %2</translation>
+        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>%1 bytes blev skrevet til %2.</translation>
+        <translation type="vanished">%1 bytes blev skrevet til %2.</translation>
     </message>
     <message>
         <source>Edited %1</source>
@@ -2618,34 +2617,28 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">Der blev ikke fundet problemer.</translation>
     </message>
     <message>
-        <location filename="../src/tools/ls_tool.cpp" line="+91"/>
-        <location line="+7"/>
         <source>list directory %1</source>
-        <translation>Liste mapper %1</translation>
+        <translation type="vanished">Liste mapper %1</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Path: `%1`
 
 </source>
-        <translation>Sti: `%1`
+        <translation type="vanished">Sti: `%1`
 
 </translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Directory is empty.</source>
-        <translation>Mappen er tom.</translation>
+        <translation type="vanished">Mappen er tom.</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>[Output beskåret til %1 KB. List en undermappe for at se de resterende poster.]</translation>
+        <translation type="vanished">[Output beskåret til %1 KB. List en undermappe for at se de resterende poster.]</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
+        <translation type="vanished">[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
     </message>
     <message>
         <source>Directory &quot;%1&quot; does not exist.</source>
@@ -2680,54 +2673,44 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation type="vanished">kører Python</translation>
     </message>
     <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="-50"/>
         <source>read whole file %1</source>
-        <translation>læs hele fil %1</translation>
+        <translation type="vanished">læs hele fil %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>read %1</source>
-        <translation>læs %1</translation>
+        <translation type="vanished">læs %1</translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>Billedet &quot;%1&quot; er %2 MB stort og overskrider læsegrænsen på %3 MB; ændr størrelsen på det først (f.eks. med bash-værktøjet).</translation>
+        <translation type="vanished">Billedet &quot;%1&quot; er %2 MB stort og overskrider læsegrænsen på %3 MB; ændr størrelsen på det først (f.eks. med bash-værktøjet).</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>Billedfil &quot;%1&quot; (%2, %3 bytes). Dens indhold er vedhæftet som et billede.</translation>
+        <translation type="vanished">Billedfil &quot;%1&quot; (%2, %3 bytes). Dens indhold er vedhæftet som et billede.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation>Første linje skal være &gt;= 1.</translation>
+        <translation type="vanished">Første linje skal være &gt;= 1.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
+        <translation type="vanished">Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
+        <translation type="vanished">Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>Linje %1 i &quot;%2&quot; er større end læsegrænsen på %3 KB; filen kan ikke læses med dette værktøj.</translation>
+        <translation type="vanished">Linje %1 i &quot;%2&quot; er større end læsegrænsen på %3 KB; filen kan ikke læses med dette værktøj.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source> %1 KB limit reached.</source>
-        <translation> %1 KB-grænsen nået.</translation>
+        <translation type="vanished"> %1 KB-grænsen nået.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
+        <translation type="vanished"> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
         <source>regex search &lt;tt&gt;%1&lt;/tt&gt;</source>
@@ -2838,28 +2821,24 @@ Du kan indtaste en anden prompt – de huskes til næste gang.</translation>
         <translation>Headers: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation>indlæs færdighed %1</translation>
+        <translation type="vanished">indlæs færdighed %1</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>Argumentet &quot;name&quot; er påkrævet.</translation>
+        <translation type="vanished">Argumentet &quot;name&quot; er påkrævet.</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>Færdigheden &quot;%1&quot; blev ikke fundet. Tilgængelige færdigheder: %2</translation>
+        <translation type="vanished">Færdigheden &quot;%1&quot; blev ikke fundet. Tilgængelige færdigheder: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
+        <location line="+1"/>
         <source>(none)</source>
         <translation>(ingen)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
+        <location line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>De værktøjer, som denne server tilbyder, er vist nedenfor; marker et værktøj for at aktivere det til chatten.</translation>
     </message>
@@ -3133,7 +3112,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1658"/>
+        <location filename="../src/llamachateditor.cpp" line="-1661"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -3202,7 +3181,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
         <source>Error:</source>
         <translation>Fejl:</translation>
     </message>
@@ -3571,12 +3550,12 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+152"/>
-        <location line="+87"/>
+        <location line="+82"/>
         <source>The server is not running.</source>
         <translation>Serveren kører ikke.</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-51"/>
         <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
         <translation>Serveren understøtter ikke denne operation: modelslutpunkterne findes kun i router-tilstand (start den uden en fast --model).</translation>
     </message>
@@ -3586,7 +3565,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Serveren afviste anmodningen: %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+75"/>
         <source>The connection to the server was lost.</source>
         <translation>Forbindelsen til serveren blev tabt.</translation>
     </message>
@@ -3646,9 +3625,6 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <location line="+14"/>
         <location line="+139"/>
         <location filename="../src/serversettingswidget.cpp" line="+137"/>
-        <location filename="../src/tools/mxc.cpp" line="+160"/>
-        <location filename="../src/tools/niubash.cpp" line="+163"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
         <source>Download</source>
         <translation>Download</translation>
     </message>
@@ -3849,17 +3825,11 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../src/tools/mxc.cpp" line="-9"/>
-        <location filename="../src/tools/niubash.cpp" line="-9"/>
-        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
         <source>Project: %1</source>
         <translation>Projekt: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
@@ -3960,6 +3930,707 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Serveren er stoppet: modelmappen listes som den er.</translation>
     </message>
     <message>
+        <source>Add %1</source>
+        <translation type="vanished">Tilføj %1</translation>
+    </message>
+    <message>
+        <source>Delete %1</source>
+        <translation type="vanished">Slet %1</translation>
+    </message>
+    <message>
+        <source>Edit %1</source>
+        <translation type="vanished">Rediger %1</translation>
+    </message>
+    <message>
+        <source>Move %1 to %2</source>
+        <translation type="vanished">Flyt %1 til %2</translation>
+    </message>
+    <message>
+        <source>Apply patch</source>
+        <translation type="vanished">Anvend patch</translation>
+    </message>
+    <message>
+        <source>Apply patch to %1 files</source>
+        <translation type="vanished">Anvend patch på %1 filer</translation>
+    </message>
+    <message>
+        <source>created</source>
+        <translation type="vanished">oprettet</translation>
+    </message>
+    <message>
+        <source>edited</source>
+        <translation type="vanished">redigeret</translation>
+    </message>
+    <message>
+        <source>moved</source>
+        <translation type="vanished">flyttet</translation>
+    </message>
+    <message>
+        <source>deleted</source>
+        <translation type="vanished">slettet</translation>
+    </message>
+    <message>
+        <source>Success. Updated the following files:</source>
+        <translation type="vanished">Lykkedes. Følgende filer blev opdateret:</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation type="vanished">Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer.</translation>
+    </message>
+    <message>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation type="vanished">sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
+    </message>
+    <message>
+        <source>[Output truncated: %1]</source>
+        <translation type="vanished">[Output beskåret: %1]</translation>
+    </message>
+    <message>
+        <source>showing last %1 of %2 lines</source>
+        <translation type="vanished">viser de sidste %1 af %2 linjer</translation>
+    </message>
+    <message>
+        <source>showing last %1 KB</source>
+        <translation type="vanished">viser de sidste %1 KB</translation>
+    </message>
+    <message>
+        <source>Full output saved to: %1</source>
+        <translation type="vanished">Fuldt output gemt til: %1</translation>
+    </message>
+    <message>
+        <source>running %1</source>
+        <translation type="vanished">kører %1</translation>
+    </message>
+    <message>
+        <source>Error: the command must not be empty.</source>
+        <translation type="vanished">Fejl: kommandoen må ikke være tom.</translation>
+    </message>
+    <message>
+        <source>Error: working directory does not exist: %1</source>
+        <translation type="vanished">Fejl: arbejdsmappen findes ikke: %1</translation>
+    </message>
+    <message>
+        <source>Error: %1</source>
+        <translation type="vanished">Fejl: %1</translation>
+    </message>
+    <message>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation type="vanished">Fejl: sandboxen kan ikke gøre &quot;%1&quot; skrivbar: det er (eller indeholder) hjemmemappen eller en filsystemrod. Åbn et projekt for at køre kommandoer i dets mappe.</translation>
+    </message>
+    <message>
+        <source>Command was stopped by the user.</source>
+        <translation type="vanished">Kommandoen blev stoppet af brugeren.</translation>
+    </message>
+    <message>
+        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
+        <translation type="vanished">Kommandoen løb ud af tid efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
+    </message>
+    <message>
+        <source>Failed to start the command: %1</source>
+        <translation type="vanished">Kunne ikke starte kommandoen: %1</translation>
+    </message>
+    <message>
+        <source>unknown error</source>
+        <translation type="vanished">ukendt fejl</translation>
+    </message>
+    <message>
+        <source>Command terminated abnormally (crashed).</source>
+        <translation type="vanished">Kommandoen afsluttedes unormalt (krasjet).</translation>
+    </message>
+    <message>
+        <source>Command exited with code %1.</source>
+        <translation type="vanished">Kommandoen afsluttede med kode %1.</translation>
+    </message>
+    <message>
+        <source>Working directory: %1
+
+</source>
+        <translation type="vanished">Arbejdsmappe: %1
+
+</translation>
+    </message>
+    <message>
+        <source>Edit file</source>
+        <translation type="vanished">Rediger fil</translation>
+    </message>
+    <message>
+        <source>edit %1 (%2 blocks)</source>
+        <translation type="vanished">rediger %1 (%2 blokke)</translation>
+    </message>
+    <message>
+        <source>edit %1</source>
+        <translation type="vanished">rediger %1</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
+    </message>
+    <message>
+        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
+        <translation type="vanished">Værktøjsfejl: hver redigering kræver et &quot;oldText&quot; og et &quot;newText&quot;.</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;edits&quot; skal indeholde mindst én erstatning.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">Kan ikke redigere &quot;%1&quot;: filen blev ikke fundet. Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: %2</source>
+        <translation type="vanished">Kan ikke redigere &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <source>Successfully replaced %1 block(s) in %2.</source>
+        <translation type="vanished">Ersatte %1 blok/er i %2.</translation>
+    </message>
+    <message>
+        <source>find files %1</source>
+        <translation type="vanished">find filer %1</translation>
+    </message>
+    <message>
+        <source>Pattern: %1</source>
+        <translation type="vanished">Mønster: %1</translation>
+    </message>
+    <message>
+        <source>  Path: %1</source>
+        <translation type="vanished">  Stie: %1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation type="vanished">Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
+    </message>
+    <message>
+        <source>Error: the pattern must not be empty.</source>
+        <translation type="vanished">Fejl: mønstret må ikke være tomt.</translation>
+    </message>
+    <message>
+        <source>Error: path is not a directory: %1</source>
+        <translation type="vanished">Fejl: stien er ikke en mappe: %1</translation>
+    </message>
+    <message>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation type="vanished">[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation type="vanished">[Søgningen løb ud af tid efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
+    </message>
+    <message>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation type="vanished">[Kunne ikke starte ripgrep: %1]</translation>
+    </message>
+    <message>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation type="vanished">[ripgrep fejlede (afslutningskode %1): %2]</translation>
+    </message>
+    <message>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation type="vanished">[Grænsen på %1 resultater nået. Brug limit=%2 for flere resultater, eller brug et mere specifikt mønster.]</translation>
+    </message>
+    <message>
+        <source>No files found.</source>
+        <translation type="vanished">Ingen filer fundet.</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation type="vanished">[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
+    </message>
+    <message>
+        <source>get current time</source>
+        <translation type="vanished">hent nuværende tid</translation>
+    </message>
+    <message>
+        <source>get runtime info</source>
+        <translation type="vanished">hent runtimeinformation</translation>
+    </message>
+    <message>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation type="vanished">OS: %1
+Arbejdsmappe: %2</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) er installeret, men kernen nægter at opsætte dens sandbox: %1. På Ubuntu 24.04 og nyere skyldes dette normalt AppArmor&apos;s begrænsning af upriviligerede brugernavnerum: kør &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (tilføj den til /etc/sysctl.d/ for at gøre den permanent), eller giv bwrap en AppArmor-profil med &apos;userns&apos;-attributtet. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) er installeret, men upriviligerede brugernavnerum er deaktiveret på dette system: %1. På Debian og dets afledte aktiverer du dem med &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) kunne ikke opsætte sandboxen: %1. Tjek, at den kan køre på dette system, eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) opsatte ikke sandboxen i tide. Tjek, at den kan køre på dette system, eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation type="vanished">MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
+    </message>
+    <message>
+        <source>Cannot reach the MCP server.</source>
+        <translation type="vanished">Kan ikke nå MCP-serveren.</translation>
+    </message>
+    <message>
+        <source>MCP initialize failed: %1</source>
+        <translation type="vanished">MCP-initialisering fejlede: %1</translation>
+    </message>
+    <message>
+        <source>MCP tools/list failed: %1</source>
+        <translation type="vanished">MCP tools/list fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Connection to the MCP server was closed.</source>
+        <translation type="vanished">Forbindelsen til MCP-serveren blev lukket.</translation>
+    </message>
+    <message>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation type="vanished">MCP-serveren er ikke tilgængelig. Tjek, at serveren kører og kan nås, og prøv derefter igen.</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation type="vanished">MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation type="vanished">MCP-værktøjet &quot;%1&quot; fejlede: MCP-serveren svarede ikke (forbindelsesfejl eller timeout).</translation>
+    </message>
+    <message>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation type="vanished">MCP-serveren genstartede; opkaldet blev ikke udført. Prøv venligst igen.</translation>
+    </message>
+    <message>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation type="vanished">MCP-serveren returnerede HTTP %1 for værktøjsopkaldet.</translation>
+    </message>
+    <message>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation type="vanished">MCP-serveren returnerede et tomt eller fejlformatet svar.</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation type="vanished">MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
+    </message>
+    <message>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation type="vanished">Download Windows-sandbox-runtime (MXC)</translation>
+    </message>
+    <message>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation type="vanished">Download Microsoft MXC-runtime %1?</translation>
+    </message>
+    <message>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation type="vanished">Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC-procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
+    </message>
+    <message>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation type="vanished">Pakken indeholder ingen wxc-exec.exe-binær.</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation type="vanished">wxc-exec.exe-binæren har en uventet størrelse.</translation>
+    </message>
+    <message>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation type="vanished">wxc-exec.exe-binæren passer ikke til den forventede checksum.</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation type="vanished">Microsoft MXC-runtime er kun tilgængelig til Windows x86-64 og arm64.</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime...</source>
+        <translation type="vanished">Downloader MXC-runtime...</translation>
+    </message>
+    <message>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation type="vanished">Download af MXC-runtime fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Verifying package integrity...</source>
+        <translation type="vanished">Verificerer pakkeintegritet...</translation>
+    </message>
+    <message>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation type="vanished">Den downloadede pakke er ikke den, der blev forventet.</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime...</source>
+        <translation type="vanished">Udpakker MXC-runtime...</translation>
+    </message>
+    <message>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation type="vanished">Udpakning af MXC-runtime fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Download niubash</source>
+        <translation type="vanished">Download niubash</translation>
+    </message>
+    <message>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation type="vanished">Download niubash %1 fra GitHub?</translation>
+    </message>
+    <message>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation type="vanished">Bash-værktøjet på Windows kører normalt Git Bash, men dets MSYS2-runtime kan ikke initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash er en nativ, MSYS2-fri Bash, der kan det, så den kan downloades her for at køre bash-værktøjet i sandboxen. niubash udgives under MIT-licensen.</translation>
+    </message>
+    <message>
+        <source>The package holds no niubash shell.</source>
+        <translation type="vanished">Pakken indeholder ingen niubash-shell.</translation>
+    </message>
+    <message>
+        <source>There is no niubash for this platform.</source>
+        <translation type="vanished">Der findes ingen niubash til denne platform.</translation>
+    </message>
+    <message>
+        <source>Downloading niubash...</source>
+        <translation type="vanished">Downloader niubash...</translation>
+    </message>
+    <message>
+        <source>Downloading niubash failed: %1</source>
+        <translation type="vanished">Download af niubash fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash...</source>
+        <translation type="vanished">Udpakker niubash...</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash failed: %1</source>
+        <translation type="vanished">Udpakning af niubash fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Download ripgrep</source>
+        <translation type="vanished">Download ripgrep</translation>
+    </message>
+    <message>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation type="vanished">Download ripgrep %1 fra GitHub?</translation>
+    </message>
+    <message>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation type="vanished">Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
+    </message>
+    <message>
+        <source>The package holds no ripgrep binary.</source>
+        <translation type="vanished">Pakken indeholder ingen ripgrep-binær.</translation>
+    </message>
+    <message>
+        <source>There is no ripgrep for this platform.</source>
+        <translation type="vanished">Der findes ingen ripgrep til denne platform.</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep...</source>
+        <translation type="vanished">Downloader ripgrep...</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation type="vanished">Download af ripgrep fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep...</source>
+        <translation type="vanished">Udpakker ripgrep...</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation type="vanished">Udpakning af ripgrep fejlede: %1</translation>
+    </message>
+    <message>
+        <source>search for %1</source>
+        <translation type="vanished">søg efter %1</translation>
+    </message>
+    <message>
+        <source>  Glob: %1</source>
+        <translation type="vanished">  Glob: %1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation type="vanished">Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">Fejl: stien findes ikke: %1</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation type="vanished">[Søgningen løb ud af tid efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
+    </message>
+    <message>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation type="vanished">[Grænsen på %1 treffere nået. Brug limit=%2 for flere resultater, eller forfin mønstret.]</translation>
+    </message>
+    <message>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation type="vanished">[Nogle linjer beskåret til %1 tegn. Brug read_file for at se hele linjerne.]</translation>
+    </message>
+    <message>
+        <source>No matches found.</source>
+        <translation type="vanished">Ingen treffere fundet.</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation type="vanished">[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
+    </message>
+    <message>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation type="vanished">Du er &quot;general&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Arbejd selvstændigt med de tilgængelige værktøjer, indtil opgaven er fuldført; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport over, hvad du har gjort eller fundet, inklusive relevante filstier med linjenumre, så den primære samtale kan fortsætte arbejdet.</translation>
+    </message>
+    <message>
+        <source>task: %1</source>
+        <translation type="vanished">opgave: %1</translation>
+    </message>
+    <message>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation type="vanished">Værktøjsfejl: både &quot;description&quot; og &quot;prompt&quot; er påkrævede.</translation>
+    </message>
+    <message>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation type="vanished">Værktøjsfejl: ukendt subagent_type &quot;%1&quot; (forventet &quot;explore&quot; eller &quot;general&quot;)</translation>
+    </message>
+    <message>
+        <source>Task: %1</source>
+        <translation type="vanished">Opgave: %1</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Opgaven blev fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
+
+%3</translation>
+    </message>
+    <message>
+        <source>update task list</source>
+        <translation type="vanished">opdater opgaveliste</translation>
+    </message>
+    <message>
+        <source>update task list (%1 tasks)</source>
+        <translation type="vanished">opdater opgaveliste (%1 opgaver)</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation type="vanished">Værktøjsfejl: opgave %1 har et tomt &quot;content&quot;.</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation type="vanished">Værktøjsfejl: opgave %1 har ukendt status &quot;%2&quot; (forventet &quot;pending&quot;, &quot;in_progress&quot; eller &quot;completed&quot;).</translation>
+    </message>
+    <message>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation type="vanished">Værktøjsfejl: kun én opgave kan være &quot;in_progress&quot; ad gangen (%1 angivet).</translation>
+    </message>
+    <message>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation type="vanished">Opgavelisten opdateret: %1 af %2 fuldført.</translation>
+    </message>
+    <message>
+        <source>Reset to Project Directory</source>
+        <translation type="vanished">Nulstil til projektmappe</translation>
+    </message>
+    <message>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation type="vanished">Ryd tilsidesættelsen af arbejdsmappen: værktøjerne køres i startprojektets mappe (eller i standardprojektmappe, når der ikke er et projekt åbent).</translation>
+    </message>
+    <message>
+        <source>Reset to Default Projects Directory</source>
+        <translation type="vanished">Nulstil til standardprojektmappe</translation>
+    </message>
+    <message>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation type="vanished">Brug standardprojektmappe, indstillingen, hvor nye projekter oprettes.</translation>
+    </message>
+    <message>
+        <source>Reset to Git Bash</source>
+        <translation type="vanished">Nulstil til Git Bash</translation>
+    </message>
+    <message>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation type="vanished">Ryd bash-tilsidesættelsen: bash-værktøjet bruger standard-bash, Git Bash (en genkendt bash på PATH, herefter den, der leveres med Git for Windows).</translation>
+    </message>
+    <message>
+        <source>Reset to niubash</source>
+        <translation type="vanished">Nulstil til niubash</translation>
+    </message>
+    <message>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation type="vanished">Brug den downloadede niubash, en nativ, MSYS2-fri Bash, der - i modsætning til Git Bash - kan køre i Windows-sandboxen.</translation>
+    </message>
+    <message>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation type="vanished">Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fællesressourcer kan ikke adgås i sandboxen.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne. Åbn et projekt for at arbejde med dets filer.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe, midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: .git, .qtcreator og *.user-filer er beskyttet i sandboxen.</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger er beskyttet i sandboxen.</translation>
+    </message>
+    <message>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation type="vanished">Læsning af &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger kan ikke læses i sandboxen.</translation>
+    </message>
+    <message>
+        <source>fetch %1</source>
+        <translation type="vanished">hent %1</translation>
+    </message>
+    <message>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation type="vanished">Ugyldig URL &quot;%1&quot;: den skal starte med http:// eller https://</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation type="vanished">Hentning af %1 fejlede: svaret er for stort (grænse 5 MB).</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: %2</source>
+        <translation type="vanished">Hentning af %1 fejlede: %2</translation>
+    </message>
+    <message>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation type="vanished">
+
+[... indhold beskåret ved %1 tegn ...]</translation>
+    </message>
+    <message>
+        <source>search %1</source>
+        <translation type="vanished">søg %1</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation type="vanished">Søgeresultater for &quot;%1&quot;:</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
+    </message>
+    <message>
+        <source>Search failed: %1</source>
+        <translation type="vanished">Søgning fejlede: %1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut, og prøv igen.</translation>
+    </message>
+    <message>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation type="vanished">Ingen resultater fundet for &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation type="vanished">Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
+    </message>
+    <message>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation type="vanished">Søgning fejlede: ugyldigt svar fra søgeudbyderen.</translation>
+    </message>
+    <message>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation type="vanished">ingen resultater fundet for &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">Søgning fejlede: Brave-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation type="vanished">Søgning fejlede: Exa-slutpunktets URL er ikke konfigureret.</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation type="vanished">Søgeresultater for &quot;%1&quot;:
+
+%2</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Download den fra indstillingssiden for Llama.cpp Chat-sandboxen (en fastlåst, checksum-verificeret Microsoft MXC-udgave); man kan også pege på en egen runtime. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation type="vanished">Windows-sandbox-backenden (wxc-exec) besvarede ikke sit evnetjek i tide. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation type="vanished">Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation type="vanished">Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation type="vanished">Windows-sandboxen kunne ikke oprette canary-filen til sit live isolationstjek på %1. %2</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation type="vanished">Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">Bash&apos;en på &quot;%1&quot; er ikke en del af en genkendt installation af niubash, Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer, eller afmarkér &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation type="vanished">wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation type="vanished">Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+</context>
+<context>
+    <name>Tr</name>
+    <message>
         <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
         <translation>Tilføj %1</translation>
@@ -4011,22 +4682,58 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>slettet</translation>
     </message>
     <message>
-        <location line="+203"/>
+        <location line="+68"/>
+        <location line="+14"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
+        <source>file</source>
+        <translation>fil</translation>
+    </message>
+    <message>
+        <location line="+121"/>
         <source>Success. Updated the following files:</source>
         <translation>Lykkedes. Følgende filer blev opdateret:</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
+        <translation type="vanished">Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+154"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation>Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer.</translation>
     </message>
     <message>
-        <location line="+137"/>
+        <location line="+160"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation>sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) er installeret, men kernen nægter at opsætte dens sandbox: %1. På Ubuntu 24.04 og nyere skyldes dette normalt AppArmor&apos;s begrænsning af upriviligerede brugernavnerum: kør &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (tilføj den til /etc/sysctl.d/ for at gøre den permanent), eller giv bwrap en AppArmor-profil med &apos;userns&apos;-attributtet. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) er installeret, men upriviligerede brugernavnerum er deaktiveret på dette system: %1. På Debian og dets afledte, aktiverer du dem med &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) fejlede at opsætte sandboxen: %1. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) opsatte ikke sandboxen i tide. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
         <translation>[Output beskåret: %1]</translation>
     </message>
@@ -4046,7 +4753,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Fuldt output gemt til: %1</translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+122"/>
         <source>running %1</source>
         <translation>kører %1</translation>
     </message>
@@ -4058,12 +4765,15 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     <message>
         <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
-        <translation>Fejl: arbejdsmappen findes ikke: %1</translation>
+        <translation>Fejl: arbejdsmappe findes ikke: %1</translation>
     </message>
     <message>
         <location line="+9"/>
         <location line="+26"/>
         <location line="+29"/>
+        <location filename="../src/tools/find_tool.cpp" line="+191"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+131"/>
+        <location filename="../src/tools/search_tool.cpp" line="+262"/>
         <source>Error: %1</source>
         <translation>Fejl: %1</translation>
     </message>
@@ -4080,7 +4790,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     <message>
         <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation>Kommandoen løb ud af tid efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
+        <translation>Kommandoen timed ud efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -4089,9 +4799,9 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+308"/>
+        <location filename="../src/tools/find_tool.cpp" line="+120"/>
         <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+382"/>
+        <location filename="../src/tools/search_tool.cpp" line="+120"/>
         <location line="+7"/>
         <source>unknown error</source>
         <translation>ukendt fejl</translation>
@@ -4099,7 +4809,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     <message>
         <location line="+4"/>
         <source>Command terminated abnormally (crashed).</source>
-        <translation>Kommandoen afsluttedes unormalt (krasjet).</translation>
+        <translation>Kommandoen afsluttede unormalt (crashed).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4116,7 +4826,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="-115"/>
         <source>Edit file</source>
         <translation>Rediger fil</translation>
     </message>
@@ -4133,7 +4843,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="-24"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
@@ -4148,12 +4858,21 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation>Værktøjsfejl: &quot;edits&quot; skal indeholde mindst én erstatning.</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>Kan ikke redigere &quot;%1&quot;: filen blev ikke fundet. Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
+        <location line="+11"/>
+        <source>not a plain file</source>
+        <translation>ikke en almindelig fil</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+2"/>
+        <source>Cannot edit %1: %2 Use read_file to verify the path, or write to create the file.</source>
+        <translation>Kan ikke redigere %1: %2 Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">Kan ikke redigere &quot;%1&quot;: filen blev ikke fundet. Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
         <location line="+7"/>
         <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
@@ -4162,127 +4881,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
     <message>
         <location line="+3"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation>Ersatte %1 blok/er i %2.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/find_tool.cpp" line="-179"/>
-        <location line="+8"/>
-        <source>find files %1</source>
-        <translation>find filer %1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-168"/>
-        <source>Pattern: %1</source>
-        <translation>Mønster: %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location filename="../src/tools/search_tool.cpp" line="+5"/>
-        <source>  Path: %1</source>
-        <translation>  Stie: %1</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="+27"/>
-        <source>Error: the pattern must not be empty.</source>
-        <translation>Fejl: mønstret må ikke være tomt.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="-64"/>
-        <source>Error: path is not a directory: %1</source>
-        <translation>Fejl: stien er ikke en mappe: %1</translation>
-    </message>
-    <message>
-        <location line="+108"/>
-        <location filename="../src/tools/search_tool.cpp" line="+119"/>
-        <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation>[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation>[Søgningen løb ud af tid efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <location filename="../src/tools/search_tool.cpp" line="+8"/>
-        <source>[Failed to start ripgrep: %1]</source>
-        <translation>[Kunne ikke starte ripgrep: %1]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <location filename="../src/tools/search_tool.cpp" line="+6"/>
-        <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation>[ripgrep fejlede (afslutningskode %1): %2]</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation>[Grænsen på %1 resultater nået. Brug limit=%2 for flere resultater, eller brug et mere specifikt mønster.]</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>No files found.</source>
-        <translation>Ingen filer fundet.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
-        <source>get current time</source>
-        <translation>hent nuværende tid</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
-        <source>get runtime info</source>
-        <translation>hent runtimeinformation</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>OS: %1
-Working directory: %2</source>
-        <translation>OS: %1
-Arbejdsmappe: %2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) er installeret, men kernen nægter at opsætte dens sandbox: %1. På Ubuntu 24.04 og nyere skyldes dette normalt AppArmor&apos;s begrænsning af upriviligerede brugernavnerum: kør &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (tilføj den til /etc/sysctl.d/ for at gøre den permanent), eller giv bwrap en AppArmor-profil med &apos;userns&apos;-attributtet. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) er installeret, men upriviligerede brugernavnerum er deaktiveret på dette system: %1. På Debian og dets afledte aktiverer du dem med &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) kunne ikke opsætte sandboxen: %1. Tjek, at den kan køre på dette system, eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) opsatte ikke sandboxen i tide. Tjek, at den kan køre på dette system, eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
-        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation>MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
+        <translation>%1 blok/blev erstatte(t) i %2.</translation>
     </message>
     <message>
         <location filename="../src/tools/mcpclient.cpp" line="+94"/>
@@ -4311,12 +4910,7 @@ Arbejdsmappe: %2</translation>
         <translation>MCP-serveren er ikke tilgængelig. Tjek, at serveren kører og kan nås, og prøv derefter igen.</translation>
     </message>
     <message>
-        <location line="+19"/>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
-    </message>
-    <message>
-        <location line="+46"/>
+        <location line="+65"/>
         <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
         <translation>MCP-værktøjet &quot;%1&quot; fejlede: MCP-serveren svarede ikke (forbindelsesfejl eller timeout).</translation>
     </message>
@@ -4326,224 +4920,91 @@ Arbejdsmappe: %2</translation>
         <translation>MCP-serveren genstartede; opkaldet blev ikke udført. Prøv venligst igen.</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="-61"/>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation>MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
+    </message>
+    <message>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
         <translation>MCP-serveren returnerede HTTP %1 for værktøjsopkaldet.</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation>MCP-serveren returnerede et tomt eller fejlformatet svar.</translation>
+        <translation>MCP-serveren returnerede et tomt eller fejlfornemt svar.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
+        <source>read whole file %1</source>
+        <translation>læs hele fil %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="-65"/>
-        <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation>Download Windows-sandbox-runtime (MXC)</translation>
+        <source>read %1:%2‑%3</source>
+        <translation type="vanished">læs %1:%2‑%3</translation>
     </message>
     <message>
-        <location line="+58"/>
-        <source>Download the Microsoft MXC runtime %1?</source>
-        <translation>Download Microsoft MXC-runtime %1?</translation>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>læs %1</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation>Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC-procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">Fil &quot;%1&quot; findes ikke.</translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>The package holds no wxc-exec.exe binary.</source>
-        <translation>Pakken indeholder ingen wxc-exec.exe-binær.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation>wxc-exec.exe-binæren har en uventet størrelse.</translation>
+        <location line="+44"/>
+        <source>File</source>
+        <translation>Fil</translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation>wxc-exec.exe-binæren passer ikke til den forventede checksum.</translation>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>Kunne ikke læse &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location line="+36"/>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation>Microsoft MXC-runtime er kun tilgængelig til Windows x86-64 og arm64.</translation>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>Billedet &quot;%1&quot; er %2 MB stort og overskrider læsegrænsen på %3 MB; ændr størrelsen på det først (f.eks. med bash-værktøjet).</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>Downloading the MXC runtime...</source>
-        <translation>Downloader MXC-runtime...</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>Downloading the MXC runtime failed: %1</source>
-        <translation>Download af MXC-runtime fejlede: %1</translation>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>Billedfil &quot;%1&quot; (%2, %3 bytes). Dens indhold er vedhæftet som et billede.</translation>
     </message>
     <message>
         <location line="+18"/>
-        <location filename="../src/tools/niubash.cpp" line="+126"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
-        <source>Verifying package integrity...</source>
-        <translation>Verificerer pakkeintegritet...</translation>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>Første linje skal være &gt;= 1.</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location filename="../src/tools/niubash.cpp" line="+5"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
-        <source>The downloaded package is not the one that was expected.</source>
-        <translation>Den downloadede pakke er ikke den, der blev forventet.</translation>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Unpacking the MXC runtime...</source>
-        <translation>Udpakker MXC-runtime...</translation>
+        <location line="+14"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>Udpakning af MXC-runtime fejlede: %1</translation>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>Linje %1 i &quot;%2&quot; er større end læsegrænsen på %3 KB; filen kan ikke læses med dette værktøj.</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-207"/>
-        <source>Download niubash</source>
-        <translation>Download niubash</translation>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> %1 KB-grænsen nået.</translation>
     </message>
     <message>
-        <location line="+68"/>
-        <source>Download niubash %1 from GitHub?</source>
-        <translation>Download niubash %1 fra GitHub?</translation>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation>Bash-værktøjet på Windows kører normalt Git Bash, men dets MSYS2-runtime kan ikke initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash er en nativ, MSYS2-fri Bash, der kan det, så den kan downloades her for at køre bash-værktøjet i sandboxen. niubash udgives under MIT-licensen.</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>The package holds no niubash shell.</source>
-        <translation>Pakken indeholder ingen niubash-shell.</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>There is no niubash for this platform.</source>
-        <translation>Der findes ingen niubash til denne platform.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading niubash...</source>
-        <translation>Downloader niubash...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading niubash failed: %1</source>
-        <translation>Download af niubash fejlede: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking niubash...</source>
-        <translation>Udpakker niubash...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking niubash failed: %1</source>
-        <translation>Udpakning af niubash fejlede: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
-        <source>Download ripgrep</source>
-        <translation>Download ripgrep</translation>
-    </message>
-    <message>
-        <location line="+67"/>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation>Download ripgrep %1 fra GitHub?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The package holds no ripgrep binary.</source>
-        <translation>Pakken indeholder ingen ripgrep-binær.</translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>There is no ripgrep for this platform.</source>
-        <translation>Der findes ingen ripgrep til denne platform.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading ripgrep...</source>
-        <translation>Downloader ripgrep...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation>Download af ripgrep fejlede: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking ripgrep...</source>
-        <translation>Udpakker ripgrep...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation>Udpakning af ripgrep fejlede: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
-        <source>search for %1</source>
-        <translation>søg efter %1</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>  Glob: %1</source>
-        <translation>  Glob: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Error: path does not exist: %1</source>
-        <translation>Fejl: stien findes ikke: %1</translation>
-    </message>
-    <message>
-        <location line="+114"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>[Søgningen løb ud af tid efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>[Grænsen på %1 treffere nået. Brug limit=%2 for flere resultater, eller forfin mønstret.]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>[Nogle linjer beskåret til %1 tegn. Brug read_file for at se hele linjerne.]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>No matches found.</source>
-        <translation>Ingen treffere fundet.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
     </message>
     <message>
         <location filename="../src/tools/task_tool.cpp" line="+38"/>
@@ -4586,115 +5047,21 @@ Arbejdsmappe: %2</translation>
         <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation>Opgaven blev fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
+        <translation>Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
 
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
-        <source>update task list</source>
-        <translation>opdater opgaveliste</translation>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
     </message>
     <message>
-        <location line="-7"/>
-        <source>update task list (%1 tasks)</source>
-        <translation>opdater opgaveliste (%1 opgaver)</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>Værktøjsfejl: opgave %1 har et tomt &quot;content&quot;.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Værktøjsfejl: opgave %1 har ukendt status &quot;%2&quot; (forventet &quot;pending&quot;, &quot;in_progress&quot; eller &quot;completed&quot;).</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>Værktøjsfejl: kun én opgave kan være &quot;in_progress&quot; ad gangen (%1 angivet).</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
-        <source>Reset to Project Directory</source>
-        <translation>Nulstil til projektmappe</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>Ryd tilsidesættelsen af arbejdsmappen: værktøjerne køres i startprojektets mappe (eller i standardprojektmappe, når der ikke er et projekt åbent).</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Reset to Default Projects Directory</source>
-        <translation>Nulstil til standardprojektmappe</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>Brug standardprojektmappe, indstillingen, hvor nye projekter oprettes.</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Reset to Git Bash</source>
-        <translation>Nulstil til Git Bash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>Ryd bash-tilsidesættelsen: bash-værktøjet bruger standard-bash, Git Bash (en genkendt bash på PATH, herefter den, der leveres med Git for Windows).</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Reset to niubash</source>
-        <translation>Nulstil til niubash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>Brug den downloadede niubash, en nativ, MSYS2-fri Bash, der - i modsætning til Git Bash - kan køre i Windows-sandboxen.</translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fællesressourcer kan ikke adgås i sandboxen.</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne. Åbn et projekt for at arbejde med dets filer.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe, midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: .git, .qtcreator og *.user-filer er beskyttet i sandboxen.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger er beskyttet i sandboxen.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>Læsning af &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger kan ikke læses i sandboxen.</translation>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
+
+%3</translation>
     </message>
     <message>
         <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
@@ -4738,12 +5105,21 @@ Arbejdsmappe: %2</translation>
         <translation>Søgeresultater for &quot;%1&quot;:</translation>
     </message>
     <message>
+        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
+    </message>
+    <message>
         <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+52"/>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
+    </message>
+    <message>
+        <location line="-23"/>
         <location line="+44"/>
         <location line="+13"/>
         <location line="+41"/>
@@ -4753,25 +5129,11 @@ Arbejdsmappe: %2</translation>
         <translation>Søgning fejlede: %1</translation>
     </message>
     <message>
-        <location line="-189"/>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut, og prøv igen.</translation>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut og prøv igen.</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation>Ingen resultater fundet for &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location line="-174"/>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
-    </message>
-    <message>
-        <location line="+25"/>
+        <location line="-146"/>
         <location line="+54"/>
         <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
@@ -4788,7 +5150,20 @@ Arbejdsmappe: %2</translation>
         <translation>Søgning fejlede: Brave-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="-59"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation>Ingen resultater fundet for &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut, og prøv igen.</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation>Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
     </message>
@@ -4807,755 +5182,376 @@ Arbejdsmappe: %2</translation>
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Download den fra indstillingssiden for Llama.cpp Chat-sandboxen (en fastlåst, checksum-verificeret Microsoft MXC-udgave); man kan også pege på en egen runtime. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Windows-sandbox-backenden (wxc-exec) besvarede ikke sit evnetjek i tide. %1</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
-    </message>
-    <message>
-        <location line="+361"/>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Windows-sandboxen kunne ikke oprette canary-filen til sit live isolationstjek på %1. %2</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+41"/>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>Bash&apos;en på &quot;%1&quot; er ikke en del af en genkendt installation af niubash, Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer, eller afmarkér &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-</context>
-<context>
-    <name>Tr</name>
-    <message>
-        <source>Add %1</source>
-        <translation type="vanished">Tilføj %1</translation>
-    </message>
-    <message>
-        <source>Delete %1</source>
-        <translation type="vanished">Slet %1</translation>
-    </message>
-    <message>
-        <source>Edit %1</source>
-        <translation type="vanished">Rediger %1</translation>
-    </message>
-    <message>
-        <source>Move %1 to %2</source>
-        <translation type="vanished">Flyt %1 til %2</translation>
-    </message>
-    <message>
-        <source>Apply patch</source>
-        <translation type="vanished">Anvend patch</translation>
-    </message>
-    <message>
-        <source>Apply patch to %1 files</source>
-        <translation type="vanished">Anvend patch på %1 filer</translation>
-    </message>
-    <message>
-        <source>created</source>
-        <translation type="vanished">oprettet</translation>
-    </message>
-    <message>
-        <source>edited</source>
-        <translation type="vanished">redigeret</translation>
-    </message>
-    <message>
-        <source>moved</source>
-        <translation type="vanished">flyttet</translation>
-    </message>
-    <message>
-        <source>deleted</source>
-        <translation type="vanished">slettet</translation>
-    </message>
-    <message>
-        <source>Success. Updated the following files:</source>
-        <translation type="vanished">Lykkedes. Følgende filer blev opdateret:</translation>
-    </message>
-    <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="vanished">Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH.</translation>
-    </message>
-    <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation type="vanished">Der blev ikke fundet en bash-shell. Installer Git for Windows (https://git-scm.com/download/win) eller tilføj en bash til PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer.</translation>
-    </message>
-    <message>
-        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation type="vanished">sandbox-exec-eksekverbaren blev ikke fundet; sandboxing er ikke tilgængelig på dette system.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) er installeret, men kernen nægter at opsætte dens sandbox: %1. På Ubuntu 24.04 og nyere skyldes dette normalt AppArmor&apos;s begrænsning af upriviligerede brugernavnerum: kør &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (tilføj den til /etc/sysctl.d/ for at gøre den permanent), eller giv bwrap en AppArmor-profil med &apos;userns&apos;-attributtet. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) er installeret, men upriviligerede brugernavnerum er deaktiveret på dette system: %1. På Debian og dets afledte, aktiverer du dem med &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) fejlede at opsætte sandboxen: %1. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) opsatte ikke sandboxen i tide. Tjek, at den kan køre på dette system, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) blev ikke fundet. Installer det (f.eks. &apos;apt install bubblewrap&apos; eller &apos;dnf install bubblewrap&apos;) eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
-    </message>
-    <message>
-        <source>[Output truncated: %1]</source>
-        <translation type="vanished">[Output beskåret: %1]</translation>
-    </message>
-    <message>
-        <source>showing last %1 of %2 lines</source>
-        <translation type="vanished">viser de sidste %1 af %2 linjer</translation>
-    </message>
-    <message>
-        <source>showing last %1 KB</source>
-        <translation type="vanished">viser de sidste %1 KB</translation>
-    </message>
-    <message>
-        <source>Full output saved to: %1</source>
-        <translation type="vanished">Fuldt output gemt til: %1</translation>
-    </message>
-    <message>
-        <source>running %1</source>
-        <translation type="vanished">kører %1</translation>
-    </message>
-    <message>
-        <source>Error: the command must not be empty.</source>
-        <translation type="vanished">Fejl: kommandoen må ikke være tom.</translation>
-    </message>
-    <message>
-        <source>Error: working directory does not exist: %1</source>
-        <translation type="vanished">Fejl: arbejdsmappe findes ikke: %1</translation>
-    </message>
-    <message>
-        <source>Error: %1</source>
-        <translation type="vanished">Fejl: %1</translation>
-    </message>
-    <message>
-        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation type="vanished">Fejl: sandboxen kan ikke gøre &quot;%1&quot; skrivbar: det er (eller indeholder) hjemmemappen eller en filsystemrod. Åbn et projekt for at køre kommandoer i dets mappe.</translation>
-    </message>
-    <message>
-        <source>Command was stopped by the user.</source>
-        <translation type="vanished">Kommandoen blev stoppet af brugeren.</translation>
-    </message>
-    <message>
-        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation type="vanished">Kommandoen timed ud efter %1 ms. Prøv igen med en længere timeout, hvis kommandoen forventes at tage længere tid.</translation>
-    </message>
-    <message>
-        <source>Failed to start the command: %1</source>
-        <translation type="vanished">Kunne ikke starte kommandoen: %1</translation>
-    </message>
-    <message>
-        <source>unknown error</source>
-        <translation type="vanished">ukendt fejl</translation>
-    </message>
-    <message>
-        <source>Command terminated abnormally (crashed).</source>
-        <translation type="vanished">Kommandoen afsluttede unormalt (crashed).</translation>
-    </message>
-    <message>
-        <source>Command exited with code %1.</source>
-        <translation type="vanished">Kommandoen afsluttede med kode %1.</translation>
-    </message>
-    <message>
-        <source>Working directory: %1
-
-</source>
-        <translation type="vanished">Arbejdsmappe: %1
-
-</translation>
-    </message>
-    <message>
-        <source>Edit file</source>
-        <translation type="vanished">Rediger fil</translation>
-    </message>
-    <message>
-        <source>edit %1 (%2 blocks)</source>
-        <translation type="vanished">rediger %1 (%2 blokke)</translation>
-    </message>
-    <message>
-        <source>edit %1</source>
-        <translation type="vanished">rediger %1</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
-    </message>
-    <message>
-        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation type="vanished">Værktøjsfejl: hver redigering kræver et &quot;oldText&quot; og et &quot;newText&quot;.</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;edits&quot; skal indeholde mindst én erstatning.</translation>
-    </message>
-    <message>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation type="vanished">Kan ikke redigere &quot;%1&quot;: filen blev ikke fundet. Brug read_file til at verificere stien, eller write til at oprette filen.</translation>
-    </message>
-    <message>
-        <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation type="vanished">Kan ikke redigere &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation type="vanished">%1 blok/blev erstatte(t) i %2.</translation>
-    </message>
-    <message>
-        <source>Cannot reach the MCP server.</source>
-        <translation type="vanished">Kan ikke nå MCP-serveren.</translation>
-    </message>
-    <message>
-        <source>MCP initialize failed: %1</source>
-        <translation type="vanished">MCP-initialisering fejlede: %1</translation>
-    </message>
-    <message>
-        <source>MCP tools/list failed: %1</source>
-        <translation type="vanished">MCP tools/list fejlede: %1</translation>
-    </message>
-    <message>
-        <source>Connection to the MCP server was closed.</source>
-        <translation type="vanished">Forbindelsen til MCP-serveren blev lukket.</translation>
-    </message>
-    <message>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation type="vanished">MCP-serveren er ikke tilgængelig. Tjek, at serveren kører og kan nås, og prøv derefter igen.</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation type="vanished">MCP-værktøjet &quot;%1&quot; fejlede: MCP-serveren svarede ikke (forbindelsesfejl eller timeout).</translation>
-    </message>
-    <message>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="vanished">MCP-serveren genstartede; opkaldet blev ikke udført. Prøv venligst igen.</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="vanished">MCP-værktøjet &quot;%1&quot; fejlede: %2</translation>
-    </message>
-    <message>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="vanished">MCP-serveren returnerede HTTP %1 for værktøjsopkaldet.</translation>
-    </message>
-    <message>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation type="vanished">MCP-serveren returnerede et tomt eller fejlfornemt svar.</translation>
-    </message>
-    <message>
-        <source>read whole file %1</source>
-        <translation type="vanished">læs hele fil %1</translation>
-    </message>
-    <message>
-        <source>read %1:%2‑%3</source>
-        <translation type="vanished">læs %1:%2‑%3</translation>
-    </message>
-    <message>
-        <source>read %1</source>
-        <translation type="vanished">læs %1</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">Fil &quot;%1&quot; findes ikke.</translation>
-    </message>
-    <message>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="vanished">Kunne ikke læse &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation type="vanished">Billedet &quot;%1&quot; er %2 MB stort og overskrider læsegrænsen på %3 MB; ændr størrelsen på det først (f.eks. med bash-værktøjet).</translation>
-    </message>
-    <message>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation type="vanished">Billedfil &quot;%1&quot; (%2, %3 bytes). Dens indhold er vedhæftet som et billede.</translation>
-    </message>
-    <message>
-        <source>first_line must be &gt;= 1.</source>
-        <translation type="vanished">Første linje skal være &gt;= 1.</translation>
-    </message>
-    <message>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="vanished">Sidste linje (inklusiv) skal være &gt;= første linje.</translation>
-    </message>
-    <message>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="vanished">Første linje (%1) overstiger antallet af linjer i &quot;%2&quot; (%3).</translation>
-    </message>
-    <message>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation type="vanished">Linje %1 i &quot;%2&quot; er større end læsegrænsen på %3 KB; filen kan ikke læses med dette værktøj.</translation>
-    </message>
-    <message>
-        <source> %1 KB limit reached.</source>
-        <translation type="vanished"> %1 KB-grænsen nået.</translation>
-    </message>
-    <message>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation type="vanished"> Fortsæt med first_line=%1, last_line_inclusive=%2.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Du er &quot;explore&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Undersøg kodbasen og besvar opgaven med de tilgængelige kun-læs-værktøjer: brug &quot;find&quot; til at lokalisere filer efter navn, &quot;search&quot; til at søge i filindhold, og &quot;read_file&quot; til at læse de relevante afsnit. Ændr ikke nogen fil, og kør ikke kommandoer, der ændrer noget. Arbejd selvstændigt; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport, der indeholder de vigtigste fund, relevante filstier med linjenumre og alt det, den primære samtale har brug for for at fortsætte arbejdet.</translation>
-    </message>
-    <message>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="vanished">Du er &quot;general&quot;-underagenten, der kører i en separat samtale, der er adskilt fra den primære. Arbejd selvstændigt med de tilgængelige værktøjer, indtil opgaven er fuldført; du kan ikke stille brugeren spørgsmål. Når du er færdig, svar med én kort rapport over, hvad du har gjort eller fundet, inklusive relevante filstier med linjenumre, så den primære samtale kan fortsætte arbejdet.</translation>
-    </message>
-    <message>
-        <source>task: %1</source>
-        <translation type="vanished">opgave: %1</translation>
-    </message>
-    <message>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="vanished">Værktøjsfejl: både &quot;description&quot; og &quot;prompt&quot; er påkrævede.</translation>
-    </message>
-    <message>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="vanished">Værktøjsfejl: ukendt subagent_type &quot;%1&quot; (forventet &quot;explore&quot; eller &quot;general&quot;)</translation>
-    </message>
-    <message>
-        <source>Task: %1</source>
-        <translation type="vanished">Opgave: %1</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
-
-%3</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Opgaven fejlede: undersamtalen &quot;%1&quot; afsluttede uden et endeligt svar (den er muligvis blevet stoppet eller slettet).</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">Opgaven fuldført i undersamtalen &quot;%1&quot; (id: %2). Samtalen beholdes i samtalelisten og kan åbnes for yderligere arbejde. Endelig rapport fra underagenten:
-
-%3</translation>
-    </message>
-    <message>
-        <source>fetch %1</source>
-        <translation type="vanished">hent %1</translation>
-    </message>
-    <message>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="vanished">Ugyldig URL &quot;%1&quot;: den skal starte med http:// eller https://</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="vanished">Hentning af %1 fejlede: svaret er for stort (grænse 5 MB).</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: %2</source>
-        <translation type="vanished">Hentning af %1 fejlede: %2</translation>
-    </message>
-    <message>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation type="vanished">
-
-[... indhold beskåret ved %1 tegn ...]</translation>
-    </message>
-    <message>
-        <source>search %1</source>
-        <translation type="vanished">søg %1</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation type="vanished">Søgeresultater for &quot;%1&quot;:</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="vanished">Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
-    </message>
-    <message>
-        <source>Search failed: %1</source>
-        <translation type="vanished">Søgning fejlede: %1</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut og prøv igen.</translation>
-    </message>
-    <message>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation type="vanished">Søgning fejlede: ugyldigt svar fra søgeudbyderen.</translation>
-    </message>
-    <message>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation type="vanished">ingen resultater fundet for &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Søgning fejlede: Brave-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
-    </message>
-    <message>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation type="vanished">Ingen resultater fundet for &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Søgning fejlede: DuckDuckGo ratebegrænser anmodninger lige nu; vent et minut, og prøv igen.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Søgning fejlede: Tavily-backenden er ikke konfigureret. Indstil API-nøglen i Llama.cpp-indstillingerne.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="vanished">Søgning fejlede: Exa-slutpunktets URL er ikke konfigureret.</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation type="vanished">Søgeresultater for &quot;%1&quot;:
-
-%2</translation>
-    </message>
-    <message>
+        <location filename="../src/tools/find_tool.cpp" line="-182"/>
+        <location line="+8"/>
         <source>find files %1</source>
-        <translation type="vanished">find filer %1</translation>
+        <translation>find filer %1</translation>
     </message>
     <message>
         <source>Pattern: `%1`</source>
         <translation type="vanished">Mønster: `%1`</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
-        <translation type="vanished">Mønster: %1</translation>
+        <translation>Mønster: %1</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
-        <translation type="vanished">  Stie: %1</translation>
+        <translation>  Stie: %1</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation type="vanished">Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
+        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge find-værktøjet.</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
-        <translation type="vanished">Fejl: mønstret må ikke være tomt.</translation>
+        <translation>Fejl: mønstret må ikke være tomt.</translation>
     </message>
     <message>
+        <location line="+10"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+0"/>
+        <source>directory</source>
+        <translation>mappe</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+3"/>
         <source>Error: path is not a directory: %1</source>
-        <translation type="vanished">Fejl: stien er ikke en mappe: %1</translation>
+        <translation>Fejl: stien er ikke en mappe: %1</translation>
     </message>
     <message>
+        <location line="+107"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation type="vanished">[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
+        <translation>[Søgningen blev stoppet af brugeren. Resultaterne er ufuldstændige.]</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation type="vanished">[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
+        <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; brug et mere specifikt mønster.]</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
-        <translation type="vanished">[Kunne ikke starte ripgrep: %1]</translation>
+        <translation>[Kunne ikke starte ripgrep: %1]</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation type="vanished">[ripgrep fejlede (afslutningskode %1): %2]</translation>
+        <translation>[ripgrep fejlede (afslutningskode %1): %2]</translation>
     </message>
     <message>
+        <location line="+8"/>
         <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation type="vanished">[Grænsen på %1 resultater nået. Brug limit=%2 for flere resultater, eller brug et mere specifikt mønster.]</translation>
+        <translation>[Grænsen på %1 resultater nået. Brug limit=%2 for flere resultater, eller brug et mere specifikt mønster.]</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>No files found.</source>
-        <translation type="vanished">Ingen filer fundet.</translation>
+        <translation>Ingen filer fundet.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation type="vanished">[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
+        <translation>[Output beskåret til %1 KB. Brug et mere specifikt mønster for at se alle resultater.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/ls_tool.cpp" line="-43"/>
+        <location line="+7"/>
         <source>list directory %1</source>
-        <translation type="vanished">Liste mappen %1</translation>
+        <translation>Liste mappen %1</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Path: `%1`
 
 </source>
-        <translation type="vanished">Sti: `%1`
+        <translation>Sti: `%1`
 
 </translation>
     </message>
     <message>
+        <location line="+63"/>
         <source>Directory is empty.</source>
-        <translation type="vanished">Mappen er tom.</translation>
+        <translation>Mappen er tom.</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation type="vanished">[Output beskåret til %1 KB. List en undermappe for at se de resterende poster.]</translation>
+        <translation>[Output beskåret til %1 KB. List en undermappe for at se de resterende poster.]</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation type="vanished">[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
+        <translation>[Grænsen på %1 poster nået. Brug limit=%2 for flere poster.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation type="vanished">MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
+        <translation>MCP-værktøjet &quot;%1&quot; er ikke tilgængeligt (ingen forbundet MCP-server tilbyder det).</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
-        <translation type="vanished">Download ripgrep</translation>
+        <translation>Download ripgrep</translation>
     </message>
     <message>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
-        <translation type="vanished">Download ripgrep %1 fra GitHub?</translation>
+        <translation>Download ripgrep %1 fra GitHub?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation type="vanished">Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
+        <translation>Værktøjerne search og find bruger ripgrep til at søge i filindhold og lokalisere filer efter navn. Det er ikke installeret på dette system, så det kan i stedet downloades her. ripgrep udgives under MIT- eller Unlicense-licensen.</translation>
     </message>
     <message>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation type="vanished">Download Windows-sandbox-runtime (MXC)</translation>
+        <translation>Download Windows-sandbox-runtime (MXC)</translation>
     </message>
     <message>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
-        <translation type="vanished">Download Microsoft MXC-runtime %1?</translation>
+        <translation>Download Microsoft MXC-runtime %1?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation type="vanished">Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
+        <translation>Indstillingen &apos;Sandbox-kommandoer&apos; indeslutter bash-værktøjet på Windows i en Microsoft MXC procescontainer. Den fastlåste wxc-exec.exe-runtime er ikke installeret på dette system, så den kan i stedet downloades her. MXC udgives under MIT-licensen.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
-        <translation type="vanished">Projekt: %1</translation>
+        <translation>Projekt: %1</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
-        <translation type="vanished">Licens: %1</translation>
+        <translation>Licens: %1</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
-        <translation type="vanished">Download</translation>
+        <translation>Download</translation>
     </message>
     <message>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
-        <translation type="vanished">Pakken indeholder ingen wxc-exec.exe-binær.</translation>
+        <translation>Pakken indeholder ingen wxc-exec.exe-binær.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation type="vanished">wxc-exec.exe-binæren har en uventet størrelse.</translation>
+        <translation>wxc-exec.exe-binæren har en uventet størrelse.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation type="vanished">wxc-exec.exe-binæren passer ikke til den forventede checksum.</translation>
+        <translation>wxc-exec.exe-binæren passer ikke til den forventede checksum.</translation>
     </message>
     <message>
+        <location line="+36"/>
         <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation type="vanished">Microsoft MXC-runtime er kun tilgængelig til Windows x86-64 og arm64.</translation>
+        <translation>Microsoft MXC-runtime er kun tilgængelig til Windows x86-64 og arm64.</translation>
     </message>
     <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
         <translation type="vanished">Microsoft MXC-runtime er kun tilgængelig til Windows x86-64.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>Downloading the MXC runtime...</source>
-        <translation type="vanished">Downloader MXC-runtime ...</translation>
+        <translation>Downloader MXC-runtime ...</translation>
     </message>
     <message>
+        <location line="+25"/>
         <source>Downloading the MXC runtime failed: %1</source>
-        <translation type="vanished">Download af MXC-runtime fejlede: %1</translation>
+        <translation>Download af MXC-runtime fejlede: %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Unpacking the MXC runtime...</source>
-        <translation type="vanished">Udpakker MXC-runtime ...</translation>
+        <translation>Udpakker MXC-runtime ...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking the MXC runtime failed: %1</source>
-        <translation type="vanished">Udpakning af MXC-runtime fejlede: %1</translation>
+        <translation>Udpakning af MXC-runtime fejlede: %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
-        <translation type="vanished">Pakken indeholder ingen ripgrep-binær.</translation>
+        <translation>Pakken indeholder ingen ripgrep-binær.</translation>
     </message>
     <message>
+        <location line="+42"/>
         <source>There is no ripgrep for this platform.</source>
-        <translation type="vanished">Der findes ingen ripgrep til denne platform.</translation>
+        <translation>Der findes ingen ripgrep til denne platform.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Downloading ripgrep...</source>
-        <translation type="vanished">Downloader ripgrep ...</translation>
+        <translation>Downloader ripgrep ...</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Downloading ripgrep failed: %1</source>
-        <translation type="vanished">Download af ripgrep fejlede: %1</translation>
+        <translation>Download af ripgrep fejlede: %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
-        <translation type="vanished">Verificerer pakkeintegritet ...</translation>
+        <translation>Verificerer pakkeintegritet ...</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
-        <translation type="vanished">Den downloadede pakke er ikke den, der blev forventet.</translation>
+        <translation>Den downloadede pakke er ikke den, der blev forventet.</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
-        <translation type="vanished">Udpakker ripgrep ...</translation>
+        <translation>Udpakker ripgrep ...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking ripgrep failed: %1</source>
-        <translation type="vanished">Udpakning af ripgrep fejlede: %1</translation>
+        <translation>Udpakning af ripgrep fejlede: %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
         <source>search for %1</source>
-        <translation type="vanished">søg efter %1</translation>
+        <translation>søg efter %1</translation>
     </message>
     <message>
         <source>  Glob: `%1`</source>
         <translation type="vanished">  Glob: `%1`</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>  Glob: %1</source>
-        <translation type="vanished">  Glob: %1</translation>
+        <translation>  Glob: %1</translation>
     </message>
     <message>
+        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation type="vanished">Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
+        <translation>Fejl: ripgrep (rg) blev ikke fundet. Det kan downloades fra indstillingssiden for Llama.cpp Chat-værktøjer eller installeres manuelt fra https://github.com/BurntSushi/ripgrep for at bruge search-værktøjet.</translation>
     </message>
     <message>
         <source>Error: path does not exist: %1</source>
         <translation type="vanished">Fejl: stien findes ikke: %1</translation>
     </message>
     <message>
+        <location line="+17"/>
+        <source>path</source>
+        <translation>sti</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation type="vanished">[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
+        <translation>[Søgningen timed ud efter %1 ms. Resultaterne er ufuldstændige; indsnævr stien eller forfin mønstret.]</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation type="vanished">[Grænsen på %1 treffere nået. Brug limit=%2 for flere resultater, eller forfin mønstret.]</translation>
+        <translation>[Grænsen på %1 treffere nået. Brug limit=%2 for flere resultater, eller forfin mønstret.]</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation type="vanished">[Nogle linjer beskåret til %1 tegn. Brug read_file for at se hele linjerne.]</translation>
+        <translation>[Nogle linjer beskåret til %1 tegn. Brug read_file for at se hele linjerne.]</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>No matches found.</source>
-        <translation type="vanished">Ingen treffere fundet.</translation>
+        <translation>Ingen treffere fundet.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation type="vanished">[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
+        <translation>[Output beskåret til %1 KB. Forfin mønstret eller reducer konteksten for at se alle treffere.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation type="vanished">indlæs færdighed %1</translation>
+        <translation>indlæs færdighed %1</translation>
     </message>
     <message>
+        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation type="vanished">Argumentet &quot;name&quot; er påkrævet.</translation>
+        <translation>Argumentet &quot;name&quot; er påkrævet.</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation type="vanished">Færdigheden &quot;%1&quot; blev ikke fundet. Tilgængelige færdigheder: %2</translation>
+        <translation>Færdigheden &quot;%1&quot; blev ikke fundet. Tilgængelige færdigheder: %2</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>(none)</source>
-        <translation type="vanished">(ingen)</translation>
+        <translation>(ingen)</translation>
     </message>
     <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
         <source>update task list</source>
-        <translation type="vanished">opdater opgaveliste</translation>
+        <translation>opdater opgaveliste</translation>
     </message>
     <message>
+        <location line="-7"/>
         <source>update task list (%1 tasks)</source>
-        <translation type="vanished">opdater opgaveliste (%1 opgaver)</translation>
+        <translation>opdater opgaveliste (%1 opgaver)</translation>
     </message>
     <message>
+        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
+        <translation>Værktøjsfejl: &quot;todos&quot; skal indeholde mindst én opgave.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation type="vanished">Værktøjsfejl: opgave %1 har et tomt &quot;content&quot;.</translation>
+        <translation>Værktøjsfejl: opgave %1 har et tomt &quot;content&quot;.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation type="vanished">Værktøjsfejl: opgave %1 har ukendt status &quot;%2&quot; (forventet &quot;pending&quot;, &quot;in_progress&quot; eller &quot;completed&quot;).</translation>
+        <translation>Værktøjsfejl: opgave %1 har ukendt status &quot;%2&quot; (forventet &quot;pending&quot;, &quot;in_progress&quot; eller &quot;completed&quot;).</translation>
     </message>
     <message>
+        <location line="+12"/>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation type="vanished">Værktøjsfejl: kun én opgave kan være &quot;in_progress&quot; ad gangen (%1 angivet).</translation>
+        <translation>Værktøjsfejl: kun én opgave kan være &quot;in_progress&quot; ad gangen (%1 angivet).</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Task list updated: %1 of %2 completed.</source>
-        <translation type="vanished">Opgavelisten opdateret: %1 af %2 fuldført.</translation>
+        <translation>Opgavelisten opdateret: %1 af %2 fuldført.</translation>
     </message>
     <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation type="vanished">Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fælles ressourcer kan ikke adgås i sandboxen.</translation>
+        <translation>Adgang til &quot;%1&quot; er ikke tilladt: enhedsstier og administrative fælles ressourcer kan ikke adgås i sandboxen.</translation>
     </message>
     <message>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
@@ -5566,56 +5562,79 @@ Arbejdsmappe: %2</translation>
         <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe og midlertidige placeringer.</translation>
     </message>
     <message>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
-        <translation type="vanished">Nulstil til projektmappe</translation>
+        <translation>Nulstil til projektmappe</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation type="vanished">Ryd tilsidesættelsen af arbejdsmappen: værktøjerne køres i startprojektets mappe (eller i standardprojektmappe, når der ikke er et projekt åbent).</translation>
+        <translation>Ryd tilsidesættelsen af arbejdsmappen: værktøjerne køres i startprojektets mappe (eller i standardprojektmappe, når der ikke er et projekt åbent).</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Reset to Default Projects Directory</source>
-        <translation type="vanished">Nulstil til standardprojektmappe</translation>
+        <translation>Nulstil til standardprojektmappe</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation type="vanished">Brug standardprojektmappe, indstillingen, hvor nye projekter oprettes.</translation>
+        <translation>Brug standardprojektmappe, indstillingen, hvor nye projekter oprettes.</translation>
     </message>
     <message>
+        <location line="+23"/>
         <source>Reset to Git Bash</source>
-        <translation type="vanished">Nulstil til Git Bash</translation>
+        <translation>Nulstil til Git Bash</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation type="vanished">Rydder bash-overskrivelsen: bash-værktøjet bruger den standardbash, Git Bash (en genkendt bash på PATH, herefter den, der leveres med Git for Windows).</translation>
+        <translation>Rydder bash-overskrivelsen: bash-værktøjet bruger den standardbash, Git Bash (en genkendt bash på PATH, herefter den, der leveres med Git for Windows).</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Reset to niubash</source>
-        <translation type="vanished">Nulstil til niubash</translation>
+        <translation>Nulstil til niubash</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation type="vanished">Brug den downloadede niubash, en nativ, MSYS2-fri Bash, der - i modsætning til Git Bash - kan køre i Windows-sandboxen.</translation>
+        <translation>Brug den downloadede niubash, en nativ, MSYS2-fri Bash, der - i modsætning til Git Bash - kan køre i Windows-sandboxen.</translation>
     </message>
     <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne. Åbn et projekt for at arbejde med dets filer.</translation>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: der er ikke åbnet et projekt, så sandboxen tillader kun skrivninger inde i midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne. Åbn et projekt for at arbejde med dets filer.</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe, midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne.</translation>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: sandboxen tillader kun skrivninger inde i projektmappe, midlertidige placeringer og de yderligere skrivbare mapper fra Sandbox-indstillingerne.</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: .git, .qtcreator og *.user-filer er beskyttet i sandboxen.</translation>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: .git, .qtcreator og *.user-filer er beskyttet i sandboxen.</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation type="vanished">Skrivning til &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger er beskyttet i sandboxen.</translation>
+        <translation>Skrivning til &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger er beskyttet i sandboxen.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation type="vanished">Læsning af &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger kan ikke læses i sandboxen.</translation>
+        <translation>Læsning af &quot;%1&quot; er ikke tilladt: placeringer med legitimationsoplysninger kan ikke læses i sandboxen.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>%1 does not exist: %2</source>
+        <translation>%1 findes ikke: %2</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1 &quot;%2&quot; was not found in the working directory &quot;%3&quot;.</source>
+        <translation>%1 &quot;%2&quot; blev ikke fundet i arbejdsmappen &quot;%3&quot;.</translation>
     </message>
     <message>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
@@ -5646,137 +5665,170 @@ Arbejdsmappe: %2</translation>
         <translation type="vanished">Download den fra indstillingssiden for Llama.cpp Chat-værktøjer (en fastlåst, checksum-verificeret Microsoft MXC-udgivelse); LLAMA_WXC_EXEC kan pege på en wxc-exec.exe. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation type="vanished">Windows-sandbox-backenden (wxc-exec) besvarede ikke sin evneundersøgelse i tide. %1</translation>
+        <translation>Windows-sandbox-backenden (wxc-exec) besvarede ikke sin evneundersøgelse i tide. %1</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation type="vanished">Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
+        <translation>Windows-sandbox-backenden (wxc-exec) rapporterede MXC-containeren som utilgængelig (afslutning %1): %2 %3</translation>
     </message>
     <message>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation type="vanished">Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
+        <translation>Windows-sandboxen kunne ikke oprette sit live isolationstjek (midlertidig mappe eller home-canary). %1</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation type="vanished">Windows-sandboxen kunne ikke oprette canary-filen til sit live isolationstjek på %1. %2</translation>
+        <translation>Windows-sandboxen kunne ikke oprette canary-filen til sit live isolationstjek på %1. %2</translation>
     </message>
     <message>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+        <translation>Windows-sandboxens konfiguration er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
         <translation type="vanished">Bash på &quot;%1&quot; er ikke en del af en genkendt installation af Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
     </message>
     <message>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+        <translation>Windows-sandboxen (Microsoft MXC) kræver Windows 11 24H2 (build %1) eller nyere; dette system er build %2. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation type="vanished">wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
+        <translation>wxc-exec.exe (Microsoft MXC Windows-sandbox-runtime) blev ikke fundet. %1</translation>
     </message>
     <message>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation type="vanished">Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
+        <translation>Windows-sandboxen (Microsoft MXC) bestod ikke sit live isolationstjek: en sandboxet kommando kunne ikke verificeres som indesluttet. %1</translation>
     </message>
     <message>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Download den fra indstillingssiden for Llama.cpp Chat-sandboxen (en fastlåst, checksum-verificeret Microsoft MXC-udgave); der kan også pege på en egen runtime. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+        <translation>Download den fra indstillingssiden for Llama.cpp Chat-sandboxen (en fastlåst, checksum-verificeret Microsoft MXC-udgave); der kan også pege på en egen runtime. Alternativt kan du afmarkere &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
+        <location line="+537"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">Bash på &quot;%1&quot; er ikke en del af en genkendt installation af niubash, Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
+        <translation>Bash på &quot;%1&quot; er ikke en del af en genkendt installation af niubash, Git for Windows eller MSYS2, så Windows-sandboxen kan ikke give den en snæver kun-læs-placering. Installer Git for Windows (https://git-scm.com/download/win) og sæt dens bash som første på PATH, eller download niubash fra indstillingssiden for Llama.cpp Chat-værktøjer, eller afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne.</translation>
     </message>
     <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation type="vanished">Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
+        <translation>Windows-sandboxen (Microsoft MXC) verificerer sin isolation for første gang; kør kommandoen igen om et par sekunder.</translation>
     </message>
     <message>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
+        <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
-        <translation type="vanished">Skriv fil</translation>
+        <translation>Skriv fil</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+26"/>
         <source>write %1</source>
-        <translation type="vanished">skriv %1</translation>
+        <translation>skriv %1</translation>
     </message>
     <message>
+        <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation type="vanished">Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
+        <translation>Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: en forælderstie er en fil.</translation>
+        <translation>Kan ikke skrive til &quot;%1&quot;: en forælderstie er en fil.</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: kan ikke oprette mappe: %2</translation>
+        <translation>Kan ikke skrive til &quot;%1&quot;: kan ikke oprette mappe: %2</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation type="vanished">Kan ikke skrive til &quot;%1&quot;: %2</translation>
+        <translation>Kan ikke skrive til &quot;%1&quot;: %2</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
-        <translation type="vanished">%1 bytes blev skrevet til %2.</translation>
+        <translation>%1 bytes blev skrevet til %2.</translation>
     </message>
     <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation type="vanished">MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
+        <translation>MCP-værktøjet &quot;%1&quot; blev stoppet af brugeren.</translation>
     </message>
     <message>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
-        <translation type="vanished">Download niubash</translation>
+        <translation>Download niubash</translation>
     </message>
     <message>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
-        <translation type="vanished">Download niubash %1 fra GitHub?</translation>
+        <translation>Download niubash %1 fra GitHub?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation type="vanished">Bash-værktøjet på Windows kører normalt Git Bash, men dets MSYS2-runtime kan ikke initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash er en nativ, MSYS2-fri Bash, der kan det, så den kan downloades her for at køre bash-værktøjet i sandboxen. niubash udgives under MIT-licensen.</translation>
+        <translation>Bash-værktøjet på Windows kører normalt Git Bash, men dets MSYS2-runtime kan ikke initialisere inde i Windows-sandboxen (microsoft/mxc#1061). niubash er en nativ, MSYS2-fri Bash, der kan det, så den kan downloades her for at køre bash-værktøjet i sandboxen. niubash udgives under MIT-licensen.</translation>
     </message>
     <message>
+        <location line="+38"/>
         <source>The package holds no niubash shell.</source>
-        <translation type="vanished">Pakken indeholder ingen niubash-shell.</translation>
+        <translation>Pakken indeholder ingen niubash-shell.</translation>
     </message>
     <message>
+        <location line="+40"/>
         <source>There is no niubash for this platform.</source>
-        <translation type="vanished">Der findes ingen niubash til denne platform.</translation>
+        <translation>Der findes ingen niubash til denne platform.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Downloading niubash...</source>
-        <translation type="vanished">Downloader niubash ...</translation>
+        <translation>Downloader niubash ...</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Downloading niubash failed: %1</source>
-        <translation type="vanished">Download af niubash fejlede: %1</translation>
+        <translation>Download af niubash fejlede: %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Unpacking niubash...</source>
-        <translation type="vanished">Udpakker niubash ...</translation>
+        <translation>Udpakker niubash ...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
-        <translation type="vanished">Udpakning af niubash fejlede: %1</translation>
+        <translation>Udpakning af niubash fejlede: %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation type="vanished">hent nuværende tid</translation>
+        <translation>hent nuværende tid</translation>
     </message>
     <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation type="vanished">hent runtimeinformation</translation>
+        <translation>hent runtimeinformation</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation type="vanished">OS: %1
+        <translation>OS: %1
 Arbejdsmappe: %2</translation>
     </message>
 </context>

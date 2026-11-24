@@ -6,6 +6,7 @@
     <message>
         <location filename="../src/llamachateditor.cpp" line="+192"/>
         <location line="+14"/>
+        <location filename="../src/llamasettingspages.cpp" line="+166"/>
         <source>Default</source>
         <translation>Implicit</translation>
     </message>
@@ -127,7 +128,7 @@
         <translation>nu</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+83"/>
         <source>Follow-up questions:</source>
         <translation>Întrebări de urmărire:</translation>
     </message>
@@ -137,14 +138,14 @@
         <translation>Nivel de gândire: %1 (se aplică mesajelor noi)</translation>
     </message>
     <message>
-        <location line="-915"/>
-        <location line="+948"/>
-        <location line="+81"/>
+        <location line="-914"/>
+        <location line="+947"/>
+        <location line="+85"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location line="-1000"/>
+        <location line="-1003"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Sunteți conectat la %1, cu %2 ca director curent</translation>
     </message>
@@ -275,7 +276,7 @@
         <translation>Selectați directorul de lucru</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -295,7 +296,7 @@
         <translation>Niciun model</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+90"/>
         <source>Edit Message</source>
         <translation>Editare mesaj</translation>
     </message>
@@ -448,7 +449,7 @@
         <translation>Doriți să ștergeți toate cele %1 intrări salvate din istoricul de intrare?</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
         <source>Error:</source>
         <translation>Eroare:</translation>
     </message>
@@ -759,7 +760,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="+141"/>
+        <location filename="../src/llamaplugin.cpp" line="+142"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="+154"/>
         <location line="+7"/>
@@ -823,13 +824,13 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation type="vanished">Deschide pagina de setări llama.cpp.</translation>
     </message>
     <message>
-        <location line="+99"/>
+        <location line="+86"/>
         <source>Disable FIM</source>
         <translation>Dezactivează FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+109"/>
+        <location filename="../src/llamasettings.cpp" line="+61"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>Activează FIM</translation>
@@ -843,7 +844,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation type="vanished">Activează llama.cpp.</translation>
     </message>
     <message>
-        <location line="-94"/>
+        <location line="-81"/>
         <source>Open the llama.cpp Server settings page.</source>
         <translation>Deschide pagina de setări Server pentru llama.cpp.</translation>
     </message>
@@ -864,7 +865,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Modelele serverului la care este conectat chatul; selectând unul, acesta se încarcă și devine modelul activ al chatului.</translation>
     </message>
     <message>
-        <location line="+230"/>
+        <location line="+244"/>
         <location filename="../src/serversettingswidget.cpp" line="+264"/>
         <location line="+4"/>
         <source>Stop server</source>
@@ -872,10 +873,10 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamaplugin.h" line="+163"/>
         <location filename="../src/serversettingswidget.cpp" line="-321"/>
         <location line="+313"/>
         <location line="+12"/>
+        <location filename="../src/llamaplugin.h" line="+163"/>
         <source>Start server</source>
         <translation>Pornește serverul</translation>
     </message>
@@ -900,7 +901,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Selectează și încarcă modelul. Dați din nou click pe modelul selectat pentru a-l descărca și a reseta selecția.</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+279"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] S-a produs o eroare la preluarea completării FIM de la %1: %2</translation>
     </message>
@@ -947,13 +948,13 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1104"/>
+        <location filename="../src/llamasettingspages.cpp" line="+159"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/llamasettings.cpp" line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="-2"/>
         <source>Chat</source>
         <translation>Chat</translation>
@@ -980,7 +981,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Solicită la llama.cpp despre selecție (deschide localizatorul llama.cpp)</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1200"/>
+        <location filename="../src/llamasettings.cpp" line="-43"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Rezumați titlul conversației în câteva cuvinte, inclusiv un emoji. Folosiți limba folosită în conversație. Folosiți text simplu, fără markdown.</translation>
     </message>
@@ -1032,7 +1033,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
 {diagnostics}</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location filename="../src/llamasettingspages.cpp" line="-309"/>
         <source>Tools</source>
         <translation>Instrumente</translation>
     </message>
@@ -1061,12 +1062,12 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Server</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location filename="../src/llamasettings.cpp" line="+8"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>Activează completarea FIM (fill-in-the-middle) în editorul de text. Setările pentru chat, unelte și căutarea web sunt independente de aceasta.</translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+21"/>
         <source>Endpoint</source>
         <translation>Punct de intrare</translation>
     </message>
@@ -1106,12 +1107,16 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Model FIM:</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>Numele modelului de folosit pentru completarea FIM atunci când pe server sunt încărcate mai multe modele (opțional, recomandat: Qwen3 Coder).</translation>
+        <translation type="vanished">Numele modelului de folosit pentru completarea FIM atunci când pe server sunt încărcate mai multe modele (opțional, recomandat: Qwen3 Coder).</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+3"/>
+        <source>Model to use for FIM completion when multiple models are loaded on the server (recommended: Qwen3 Coder). The entries are the models served by the chat endpoint; a name can also be typed, e.g. for a different server. Default uses the server&apos;s model.</source>
+        <translation>Modelul de folosit pentru completarea FIM atunci când pe server sunt încărcate mai multe modele (recomandat: Qwen3 Coder). Intrările sunt modelele servite de punctul de intrare pentru chat; se poate tasta și un nume, de ex. pentru un alt server. Implicit se folosește modelul serverului.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Prefix Code Lines</source>
         <translation>Linii de cod de prefix</translation>
     </message>
@@ -1715,7 +1720,12 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Nivel de gândire (raționament) pentru modele capabile de gândire. &quot;default&quot; folosește implicitul modelului, &quot;off&quot; dezactivează gândirea, iar nivelurile concrete sunt cele raportate de server pentru șablonul de chat al modelului.</translation>
     </message>
     <message>
-        <location line="+240"/>
+        <location line="+27"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
+        <translation>Modelul folosit pentru cereri auxiliare, cum ar fi titlurile conversațiilor și sugestiile de întrebări ulterioare; folosiți un model mic pentru a lăsa modelul principal de chat liber. Intrările sunt modelele servite de server; se poate tasta și un nume. Implicit se folosește modelul de chat activ.</translation>
+    </message>
+    <message>
+        <location line="+212"/>
         <source>bash:</source>
         <translation>bash:</translation>
     </message>
@@ -1734,7 +1744,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation type="vanished">Nivel de gândire (raționament) pentru modele capabile de gândire: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; sau &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-287"/>
+        <location line="-286"/>
         <source>Chat Font Zoom</source>
         <translation>Zoom font chat</translation>
     </message>
@@ -1759,17 +1769,16 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Model auxiliar:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/llamasettingspages.cpp" line="+159"/>
         <source>Default: chat model</source>
         <translation>Implicit: modelul de chat</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Modelul folosit pentru cereri auxiliare, cum ar fi titlurile conversațiilor și sugestiile de întrebări ulterioare. Folosiți un model mic pentru a lăsa modelul principal de chat liber. Lăsați gol pentru a folosi modelul de chat activ.</translation>
+        <translation type="vanished">Modelul folosit pentru cereri auxiliare, cum ar fi titlurile conversațiilor și sugestiile de întrebări ulterioare. Folosiți un model mic pentru a lăsa modelul principal de chat liber. Lăsați gol pentru a folosi modelul de chat activ.</translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="../src/llamasettings.cpp" line="+9"/>
         <source>Conversation Title Prompt</source>
         <translation>Prompt pentru titlul conversației</translation>
     </message>
@@ -1889,14 +1898,14 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Prompts încorporate ale localizatorului &quot;ll&quot;. În meniu este afișată doar prima linie a unui prompt; textul complet este trimis modelului. &quot;{selection}&quot; este înlocuit cu textul selectat, &quot;{file}&quot; și &quot;{line}&quot; cu fișierul curent și linia cursorului, &quot;{diagnostics}&quot; cu erorile și avertizările fișierului curent, iar &quot;{git_diff}&quot; cu modificările necommitate ale repositoriului git.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-4"/>
-        <location filename="../src/llamasettings.cpp" line="+7"/>
+        <location line="+7"/>
         <location line="+1"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
         <source>Selection prompt button</source>
         <translation>Buton de prompt pentru selecție</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>Afișează un buton mic sub o selecție de text din editor. Un clic pe el deschide localizatorul llama.cpp, astfel încât selecția poate fi trimisă către llama.cpp cu unul dintre prompts.</translation>
     </message>
@@ -2315,7 +2324,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Suprascrie setarea globală „Load project instructions” (Încarcă instrucțiunile proiectului) pentru acest proiect. Vezi setarea globală de pe pagina Llama Tools pentru ce se încarcă.</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location filename="../src/llamasettingspages.cpp" line="+77"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; nu necesită cheie API</translation>
     </message>
@@ -2769,28 +2778,24 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Ante-urme: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation>încarcă skill %1</translation>
+        <translation type="vanished">încarcă skill %1</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>Argumentul &quot;name&quot; este obligatoriu.</translation>
+        <translation type="vanished">Argumentul &quot;name&quot; este obligatoriu.</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>Skillul &quot;%1&quot; nu a fost găsit. Skilluri disponibile: %2</translation>
+        <translation type="vanished">Skillul &quot;%1&quot; nu a fost găsit. Skilluri disponibile: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
+        <location line="+1"/>
         <source>(none)</source>
         <translation>(niciunul)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
+        <location line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>Uneltele servite de acest server sunt listate mai jos; bifați o unelță pentru a o activa în chat.</translation>
     </message>
@@ -3010,12 +3015,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+152"/>
-        <location line="+87"/>
+        <location line="+82"/>
         <source>The server is not running.</source>
         <translation>Serverul nu rulează.</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-51"/>
         <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
         <translation>Serverul nu suportă această operație: punctele de intrare pentru modele există doar în modul router (porniți-l fără un --model fixat).</translation>
     </message>
@@ -3025,7 +3030,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Serverul a refuzat cererea: %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+75"/>
         <source>The connection to the server was lost.</source>
         <translation>Conexiunea la server s-a pierdut.</translation>
     </message>
@@ -3085,9 +3090,6 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+14"/>
         <location line="+139"/>
         <location filename="../src/serversettingswidget.cpp" line="+62"/>
-        <location filename="../src/tools/mxc.cpp" line="+160"/>
-        <location filename="../src/tools/niubash.cpp" line="+163"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
         <source>Download</source>
         <translation>Descarcă</translation>
     </message>
@@ -3288,17 +3290,11 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../src/tools/mxc.cpp" line="-9"/>
-        <location filename="../src/tools/niubash.cpp" line="-9"/>
-        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
         <source>Project: %1</source>
         <translation>Proiect: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licență: %1</translation>
     </message>
@@ -3399,1042 +3395,6 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Serverul este oprit: directorul de modele este listat așa cum este.</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
-        <source>Add %1</source>
-        <translation>Adaugă %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Delete %1</source>
-        <translation>Șterge %1</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Edit %1</source>
-        <translation>Modifică %1</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Move %1 to %2</source>
-        <translation>Mută %1 în %2</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location line="+7"/>
-        <source>Apply patch</source>
-        <translation>Aplică patch</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Apply patch to %1 files</source>
-        <translation>Aplică patch pentru %1 fișiere</translation>
-    </message>
-    <message>
-        <location line="+79"/>
-        <source>created</source>
-        <translation>creat</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>edited</source>
-        <translation>modificat</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>moved</source>
-        <translation>mutat</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>deleted</source>
-        <translation>șters</translation>
-    </message>
-    <message>
-        <location line="+203"/>
-        <source>Success. Updated the following files:</source>
-        <translation>Succes. Au fost actualizate următoarele fișiere:</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation>Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat.</translation>
-    </message>
-    <message>
-        <location line="+137"/>
-        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation>Executabilul sandbox-exec nu a fost găsit; izolarea nu este disponibilă pe acest sistem.</translation>
-    </message>
-    <message>
-        <location line="+146"/>
-        <source>[Output truncated: %1]</source>
-        <translation>[Ieșire trunchiată: %1]</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>showing last %1 of %2 lines</source>
-        <translation>se afișează ultimele %1 din %2 linii</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>showing last %1 KB</source>
-        <translation>se afișează ultimii %1 KB</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Full output saved to: %1</source>
-        <translation>Ieșirea completă salvată în: %1</translation>
-    </message>
-    <message>
-        <location line="+113"/>
-        <source>running %1</source>
-        <translation>rulează %1</translation>
-    </message>
-    <message>
-        <location line="+47"/>
-        <source>Error: the command must not be empty.</source>
-        <translation>Eroare: comanda nu trebuie să fie goală.</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>Error: working directory does not exist: %1</source>
-        <translation>Eroare: directorul de lucru nu există: %1</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <location line="+26"/>
-        <location line="+29"/>
-        <source>Error: %1</source>
-        <translation>Eroare: %1</translation>
-    </message>
-    <message>
-        <location line="-43"/>
-        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation>Eroare: sandboxul nu poate face &quot;%1&quot; scribil: este (sau conține) directorul home sau rădăcina unui sistem de fișiere. Deschideți un proiect pentru a rula comenzi în directorul său.</translation>
-    </message>
-    <message>
-        <location line="+220"/>
-        <source>Command was stopped by the user.</source>
-        <translation>Comanda a fost oprită de utilizator.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation>Comanda a expirat după %1 ms. Încercați din nou cu un timeout mai mare dacă comanda ar trebui să dureze mai mult.</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Failed to start the command: %1</source>
-        <translation>Pornirea comenzii a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+308"/>
-        <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+382"/>
-        <location line="+7"/>
-        <source>unknown error</source>
-        <translation>eroare necunoscută</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Command terminated abnormally (crashed).</source>
-        <translation>Comanda s-a încheiat anormal (a eșuat).</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Command exited with code %1.</source>
-        <translation>Comanda s-a încheiat cu codul %1.</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>Working directory: %1
-
-</source>
-        <translation>Directorul de lucru: %1
-
-</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
-        <source>Edit file</source>
-        <translation>Modificare fișier</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>edit %1 (%2 blocks)</source>
-        <translation>modifică %1 (%2 blocuri)</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+26"/>
-        <source>edit %1</source>
-        <translation>modifică %1</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
-        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation>Eroare de unelță: &quot;path&quot; trebuie să fie un șir nevid.</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation>Eroare de unelță: fiecare modificare are nevoie de un &quot;oldText&quot; și un &quot;newText&quot;.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation>Eroare de unelță: &quot;edits&quot; trebuie să conțină cel puțin o înlocuire.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>Nu se poate modifica &quot;%1&quot;: fișierul nu a fost găsit. Folosiți read_file pentru a verifica calea sau write pentru a crea fișierul.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+7"/>
-        <location line="+4"/>
-        <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation>Nu se poate modifica &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation>S-a înlocuit cu succes %1 bloc(uri) în %2.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/find_tool.cpp" line="-179"/>
-        <location line="+8"/>
-        <source>find files %1</source>
-        <translation>găsește fișiere %1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-168"/>
-        <source>Pattern: %1</source>
-        <translation>Șablon: %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location filename="../src/tools/search_tool.cpp" line="+5"/>
-        <source>  Path: %1</source>
-        <translation>  Calea: %1</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation>Eroare: ripgrep (rg) nu a fost găsit. Poate fi descărcat de pe pagina de setări a uneltelor Llama.cpp Chat sau instalat manual de pe https://github.com/BurntSushi/ripgrep, pentru a folosi unelta find.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="+27"/>
-        <source>Error: the pattern must not be empty.</source>
-        <translation>Eroare: șablonul nu trebuie să fie gol.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
-        <source>Error: path is not a directory: %1</source>
-        <translation>Eroare: calea nu este un director: %1</translation>
-    </message>
-    <message>
-        <location line="+108"/>
-        <location filename="../src/tools/search_tool.cpp" line="+119"/>
-        <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation>[Căutarea a fost oprită de utilizator. Rezultatele sunt incomplete.]</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation>[Căutarea a expirat după %1 ms. Rezultatele sunt incomplete; folosiți un șablon mai specific.]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <location filename="../src/tools/search_tool.cpp" line="+8"/>
-        <source>[Failed to start ripgrep: %1]</source>
-        <translation>[Pornirea ripgrep a eșuat: %1]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <location filename="../src/tools/search_tool.cpp" line="+6"/>
-        <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation>[ripgrep a eșuat (cod de ieșire %1): %2]</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation>[Limita de %1 rezultate a fost atinsă. Folosiți limit=%2 pentru mai multe rezultate sau folosiți un șablon mai specific.]</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>No files found.</source>
-        <translation>Niciun fișier găsit.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation>[Ieșirea a fost trunchiată la %1 KB. Folosiți un șablon mai specific pentru a vedea toate rezultatele.]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
-        <source>get current time</source>
-        <translation>obține ora curentă</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
-        <source>get runtime info</source>
-        <translation>obține informații de runtime</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>OS: %1
-Working directory: %2</source>
-        <translation>Sistem de operare: %1
-Director de lucru: %2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) este instalat, dar nucleul refuză să își configureze sandbox-ul: %1. Pe Ubuntu 24.04 și mai nou, de obicei aceasta este restricția AppArmor privind spațiile de nume de utilizator neprivilegiate: rulați &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (adăugați-l în /etc/sysctl.d/ pentru a fi permanent) sau dați-i bwrap un profil AppArmor cu atributul &apos;userns&apos;. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) este instalat, dar spațiile de nume de utilizator neprivilegiate sunt dezactivate pe acest sistem: %1. Pe Debian și derivatele sale, activați-le cu &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nu a reușit să configureze sandbox-ul: %1. Verificați că poate rula pe acest sistem, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nu a configurat sandbox-ul la timp. Verificați că poate rula pe acest sistem, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) nu a fost găsit. Instalați-l (de ex. &apos;apt install bubblewrap&apos; sau &apos;dnf install bubblewrap&apos;) sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
-        <location line="+7"/>
-        <source>list directory %1</source>
-        <translation>listează directorul %1</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Path: `%1`
-
-</source>
-        <translation>Calea: `%1`
-
-</translation>
-    </message>
-    <message>
-        <location line="+60"/>
-        <source>Directory is empty.</source>
-        <translation>Directorul este gol.</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>[Ieșirea a fost trunchiată la %1 KB. Listați un subdirector pentru a vedea intrările rămase.]</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>[Limita de %1 intrări a fost atinsă. Folosiți limit=%2 pentru mai multe intrări.]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
-        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation>Unelta MCP &quot;%1&quot; nu este disponibilă (niciun server MCP conectat nu o pune la dispoziție).</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
-        <location line="+27"/>
-        <source>Cannot reach the MCP server.</source>
-        <translation>Nu se poate ajunge la serverul MCP.</translation>
-    </message>
-    <message>
-        <location line="-22"/>
-        <source>MCP initialize failed: %1</source>
-        <translation>Inițializarea MCP a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>MCP tools/list failed: %1</source>
-        <translation>MCP tools/list a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+53"/>
-        <source>Connection to the MCP server was closed.</source>
-        <translation>Conexiunea la serverul MCP a fost închisă.</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>Serverul MCP nu este disponibil. Verificați că serverul rulează și este accesibil, apoi încercați din nou.</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>Unelta MCP &quot;%1&quot; a eșuat: %2</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation>Unelta MCP &quot;%1&quot; a eșuat: serverul MCP nu a răspuns (eroare de conexiune sau timeout).</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation>Serverul MCP s-a repornit; apelul nu a fost executat. Încercați din nou.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation>Serverul MCP a returnat HTTP %1 pentru apelul de unelță.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation>Serverul MCP a returnat un răspuns gol sau invalid.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>Unelta MCP &quot;%1&quot; a fost oprită de utilizator.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mxc.cpp" line="-65"/>
-        <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation>Descarcă runtimeul sandbox Windows (MXC)</translation>
-    </message>
-    <message>
-        <location line="+58"/>
-        <source>Download the Microsoft MXC runtime %1?</source>
-        <translation>Descărcați runtimeul Microsoft MXC %1?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation>Setarea &apos;Comenzi în sandbox&apos; limitează unelta bash pe Windows la un container de procese Microsoft MXC. Runtimeul wxc-exec.exe fixat la versiune nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. MXC este publicat sub licența MIT.</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>The package holds no wxc-exec.exe binary.</source>
-        <translation>Pachetul nu conține binarul wxc-exec.exe.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation>Binarul wxc-exec.exe are o dimensiune neașteptată.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation>Binarul wxc-exec.exe nu corespunde sumei de control așteptate.</translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation>Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64 și arm64.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Downloading the MXC runtime...</source>
-        <translation>Se descarcă runtimeul MXC...</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>Downloading the MXC runtime failed: %1</source>
-        <translation>Descărcarea runtimeului MXC a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <location filename="../src/tools/niubash.cpp" line="+126"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
-        <source>Verifying package integrity...</source>
-        <translation>Se verifică integritatea pachetului...</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <location filename="../src/tools/niubash.cpp" line="+5"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
-        <source>The downloaded package is not the one that was expected.</source>
-        <translation>Pachetul descărcat nu este cel așteptat.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Unpacking the MXC runtime...</source>
-        <translation>Se extrage runtimeul MXC...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>Extragerea runtimeului MXC a eșuat: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/niubash.cpp" line="-207"/>
-        <source>Download niubash</source>
-        <translation>Descarcă niubash</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <source>Download niubash %1 from GitHub?</source>
-        <translation>Descărcați niubash %1 de pe GitHub?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation>Unelța bash pe Windows rulează de obicei Git Bash, dar runtime-ul său MSYS2 nu se poate inițializa în sandboxul Windows (microsoft/mxc#1061). niubash este un Bash nativ, fără MSYS2, care se poate inițializa, de aceea poate fi descărcat aici pentru a rula unelța bash în sandbox. niubash este publicat sub licența MIT.</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>The package holds no niubash shell.</source>
-        <translation>Pachetul nu conține niciun shell niubash.</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>There is no niubash for this platform.</source>
-        <translation>Nu există niubash pentru această platformă.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading niubash...</source>
-        <translation>Se descarcă niubash...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading niubash failed: %1</source>
-        <translation>Descărcarea niubash a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking niubash...</source>
-        <translation>Se extrage niubash...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking niubash failed: %1</source>
-        <translation>Extragerea niubash a eșuat: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
-        <source>read whole file %1</source>
-        <translation>citire fișier întreg %1</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>read %1</source>
-        <translation>citire %1</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation>Fișierul &quot;%1&quot; nu există.</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>Citirea &quot;%1&quot; a eșuat: %2</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>Imaginea &quot;%1&quot; are %2 MB și depășește limita de citire de %3 MB; redimensionați-o mai întâi (de ex. cu unelta bash).</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>Fișierul de imagine &quot;%1&quot; (%2, %3 octeți). Conținutul său este atașat ca imagine.</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>first_line must be &gt;= 1.</source>
-        <translation>first_line trebuie să fie &gt;= 1.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>last_line_inclusive trebuie să fie &gt;= first_line.</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>first_line (%1) depășește numărul de linii din &quot;%2&quot; (%3).</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>Linia %1 din &quot;%2&quot; este mai mare decât limita de citire de %3 KB; fișierul nu poate fi citit cu această unelță.</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source> %1 KB limit reached.</source>
-        <translation> Limita de %1 KB a fost atinsă.</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> Continuați cu first_line=%1, last_line_inclusive=%2.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
-        <source>Download ripgrep</source>
-        <translation>Descarcă ripgrep</translation>
-    </message>
-    <message>
-        <location line="+67"/>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation>Descărcați ripgrep %1 de pe GitHub?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>Uneltele search și find folosesc ripgrep pentru a căuta în conținutul fișierelor și pentru a localiza fișiere după nume. Nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. ripgrep este publicat sub licența MIT sau Unlicense.</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The package holds no ripgrep binary.</source>
-        <translation>Pachetul nu conține binarul ripgrep.</translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>There is no ripgrep for this platform.</source>
-        <translation>Nu există ripgrep pentru această platformă.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading ripgrep...</source>
-        <translation>Se descarcă ripgrep...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation>Descărcarea ripgrep a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking ripgrep...</source>
-        <translation>Se extrage ripgrep...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation>Extragerea ripgrep a eșuat: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
-        <source>search for %1</source>
-        <translation>caută %1</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>  Glob: %1</source>
-        <translation>  Glob: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>Eroare: ripgrep (rg) nu a fost găsit. Poate fi descărcat de pe pagina de setări a uneltelor Llama.cpp Chat sau instalat manual de pe https://github.com/BurntSushi/ripgrep, pentru a folosi unelta search.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Error: path does not exist: %1</source>
-        <translation>Eroare: calea nu există: %1</translation>
-    </message>
-    <message>
-        <location line="+114"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>[Căutarea a expirat după %1 ms. Rezultatele sunt incomplete; restrângeți calea sau rafinați șablonul.]</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>[Limita de %1 potriviri a fost atinsă. Folosiți limit=%2 pentru mai multe rezultate sau rafinați șablonul.]</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>[Unele linii au fost trunchiate la %1 caractere. Folosiți read_file pentru a vedea liniile complete.]</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>No matches found.</source>
-        <translation>Nicio potrivire găsită.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>[Ieșirea a fost trunchiată la %1 KB. Rafinați șablonul sau reduceți contextul pentru a vedea toate potrivirile.]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>Ești subagentul &quot;explore&quot;, care rulează într-o conversație separată, izolată de cea principală. Explorează codul și răspunde la task cu uneltele doar pentru citire disponibile: folosește &quot;find&quot; pentru a localiza fișiere după nume, &quot;search&quot; pentru a căuta în conținutul fișierelor și &quot;read_file&quot; pentru a citi secțiunile relevante. Nu modifica niciun fișier și nu rula comenzi care schimbă ceva. Lucrează autonom; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis care conține principalele constatări, căile relevante ale fișierelor cu numere de linie și tot ce are nevoie conversația principală pentru a continua lucrul.</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>Ești subagentul &quot;general&quot;, care rulează într-o conversație separată, izolată de cea principală. Lucrează autonom cu uneltele disponibile până când taskul este complet; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis despre ce ai făcut sau descoperit, inclusiv căile relevante ale fișierelor cu numere de linie, ca conversația principală să poată continua lucrul.</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <location line="+27"/>
-        <source>task: %1</source>
-        <translation>task: %1</translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>Eroare de unelță: &quot;description&quot; și &quot;prompt&quot; sunt obligatorii.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>Eroare de unelță: subagent_type necunoscut &quot;%1&quot; (așteptat &quot;explore&quot; sau &quot;general&quot;)</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Task: %1</source>
-        <translation>Task: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Taskul a eșuat: sub-conversația &quot;%1&quot; s-a încheiat fără un răspuns final (poate a fost oprită sau ștearsă).</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation>Task completat în sub-conversația &quot;%1&quot; (id: %2). Conversația este păstrată în lista de conversații și poate fi deschisă pentru a continua lucrul. Raportul final de la subagent:
-
-%3</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
-        <source>update task list</source>
-        <translation>actualizare listă de taskuri</translation>
-    </message>
-    <message>
-        <location line="-7"/>
-        <source>update task list (%1 tasks)</source>
-        <translation>actualizare listă de taskuri (%1 taskuri)</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>Eroare de unelță: &quot;todos&quot; trebuie să conțină cel puțin un task.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>Eroare de unelță: taskul %1 are un &quot;content&quot; gol.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Eroare de unelță: taskul %1 are starea necunoscută &quot;%2&quot; (așteptat &quot;pending&quot;, &quot;in_progress&quot; sau &quot;completed&quot;).</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>Eroare de unelță: doar un singur task poate fi &quot;in_progress&quot; în același timp (%1 dat).</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation>Lista de taskuri a fost actualizată: %1 din %2 completați.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
-        <source>Reset to Project Directory</source>
-        <translation>Resetează la directorul proiectului</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>Șterge suprascrierea directorului de lucru: uneltele rulează în directorul proiectului deschis la pornire (sau în directorul implicit pentru proiecte când nu este deschis niciun proiect).</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Reset to Default Projects Directory</source>
-        <translation>Resetează la directorul implicit pentru proiecte</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>Folosește directorul implicit pentru proiecte, locul în care sunt create proiectele noi.</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Reset to Git Bash</source>
-        <translation>Resetează la Git Bash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>Șterge suprascrierea bash: unelta bash folosește bash-ul implicit, Git Bash (un bash recunoscut din PATH, apoi cel livrat cu Git for Windows).</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Reset to niubash</source>
-        <translation>Resetează la niubash</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>Folosește niubash-ul descărcat, un Bash nativ, fără MSYS2, care - spre deosebire de Git Bash - poate rula în sandboxul Windows.</translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>Accesarea lui &quot;%1&quot; nu este permisă: căile de dispozitiv și partajările administrative nu sunt accesibile în interiorul sandbox-ului.</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>Scrierea în &quot;%1&quot; nu este permisă: niciun proiect nu este deschis, de aceea sandboxul permite scrierea doar în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox. Deschideți un proiect pentru a lucra la fișierele sale.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>Scrierea în &quot;%1&quot; nu este permisă: sandboxul permite scrierea doar în directorul proiectului, în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>Scrierea în &quot;%1&quot; nu este permisă: fișierele .git, .qtcreator și *.user sunt protejate în interiorul sandbox-ului.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>Scrierea în &quot;%1&quot; nu este permisă: locațiile de credențiale sunt protejate în interiorul sandbox-ului.</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>Citirea lui &quot;%1&quot; nu este permisă: locațiile de credențiale nu sunt citibile în interiorul sandbox-ului.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
-        <location line="+27"/>
-        <source>fetch %1</source>
-        <translation>preia %1</translation>
-    </message>
-    <message>
-        <location line="+112"/>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>URL invalid &quot;%1&quot;: trebuie să înceapă cu http:// sau https://</translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation>Preluarea lui %1 a eșuat: răspuns prea mare (limită 5 MB).</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Fetch failed for %1: %2</source>
-        <translation>Preluarea lui %1 a eșuat: %2</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation>
-
-[... conținut trunchiat la %1 caractere ...]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
-        <location line="+26"/>
-        <source>search %1</source>
-        <translation>caută %1</translation>
-    </message>
-    <message>
-        <location line="+196"/>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation>Rezultate de căutare pentru &quot;%1&quot;:</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation>Eroare de unelță: &quot;query&quot; trebuie să fie un șir nevid.</translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <location line="+44"/>
-        <location line="+13"/>
-        <location line="+41"/>
-        <location line="+45"/>
-        <location line="+51"/>
-        <source>Search failed: %1</source>
-        <translation>Căutarea a eșuat: %1</translation>
-    </message>
-    <message>
-        <location line="-189"/>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>Căutarea a eșuat: DuckDuckGo limitează în prezent numărul de cereri; așteptați un minut și încercați din nou.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation>Niciun rezultat găsit pentru &quot;%1&quot;.</translation>
-    </message>
-    <message>
-        <location line="-174"/>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>Căutarea a eșuat: backendul Google nu este configurat. Setează cheia API și ID-ul motorului de căutare (cx) în setările Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <location line="+54"/>
-        <location line="+45"/>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation>Căutarea a eșuat: răspuns invalid de la furnizorul de căutare.</translation>
-    </message>
-    <message>
-        <location line="-88"/>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation>niciun rezultat găsit pentru &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Căutarea a eșuat: backendul Brave nu este configurat. Setează cheia API în setările Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Căutarea a eșuat: backendul Tavily nu este configurat. Setează cheia API în setările Llama.cpp.</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation>Căutarea a eșuat: URL-ul endpointului Exa nu este configurat.</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation>Rezultate de căutare pentru &quot;%1&quot;:
-
-%2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Descărcați-l de pe pagina de setări Llama.cpp Chat Sandbox (o versiune Microsoft MXC fixată, verificată prin sumă de control); acolo poate fi indicat un runtime propriu. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Backendul sandboxului Windows (wxc-exec) nu a răspuns la proba de capacități la timp. %1</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Backendul sandboxului Windows (wxc-exec) a raportat containerul MXC ca indisponibil (cod de ieșire %1): %2 %3</translation>
-    </message>
-    <message>
-        <location line="+361"/>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Sandboxul Windows nu și-a putut configura proba de izolare în timp real (director temporar sau canary în home). %1</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Sandboxul Windows nu a putut crea fișierul canary al probei sale de izolare în timp real la %1. %2</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Configurația sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+41"/>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Sandboxul Windows (Microsoft MXC) nu a trecut verificația sa de izolare în timp real: o comandă izolată nu a putut fi verificată ca fiind ținută în sandbox. %1</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de niubash, Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație restrictivă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama.</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Sandboxul Windows (Microsoft MXC) are nevoie de Windows 11 24H2 (build %1) sau mai nou; acest sistem este build %2. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>wxc-exec.exe (runtimeul sandboxului Microsoft MXC Windows) nu a fost găsit. %1</translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Sandboxul Windows (Microsoft MXC) își verifică izolarea pentru prima dată; rulați comanda din nou peste câteva secunde.</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
-        <source>Write file</source>
-        <translation>Scriere fișier</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+26"/>
-        <source>write %1</source>
-        <translation>scrie %1</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Eroare de unelță: &quot;content&quot; este obligatoriu.</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>Nu se poate scrie în &quot;%1&quot;: o cale părinte este un fișier.</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>Nu se poate scrie în &quot;%1&quot;: nu se poate crea directorul: %2</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>Nu se poate scrie în &quot;%1&quot;: %2</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>S-au scris cu succes %1 octeți în %2.</translation>
-    </message>
-</context>
-<context>
-    <name>Tr</name>
-    <message>
         <source>Add %1</source>
         <translation type="vanished">Adaugă %1</translation>
     </message>
@@ -4479,36 +3439,12 @@ Director de lucru: %2</translation>
         <translation type="vanished">Succes. Au fost actualizate următoarele fișiere:</translation>
     </message>
     <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="vanished">Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH.</translation>
-    </message>
-    <message>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation type="vanished">Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat.</translation>
     </message>
     <message>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation type="vanished">Executabilul sandbox-exec nu a fost găsit; izolarea nu este disponibilă pe acest sistem.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) este instalat, dar nucleul refuză să își configureze sandbox-ul: %1. Pe Ubuntu 24.04 și mai nou, de obicei aceasta este restricția AppArmor privind spațiile de nume de utilizator neprivilegiate: rulați &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (adăugați-l în /etc/sysctl.d/ pentru a fi permanent) sau dați-i bwrap un profil AppArmor cu atributul &apos;userns&apos;. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) este instalat, dar spațiile de nume de utilizator neprivilegiate sunt dezactivate pe acest sistem: %1. Pe Debian și derivatele sale, activați-le cu &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nu a reușit să configureze sandbox-ul: %1. Verificați că poate rula pe acest sistem, sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nu a configurat sandbox-ul la timp. Verificați că poate rula pe acest sistem, sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) nu a fost găsit. Instalați-l (de ex. &apos;apt install bubblewrap&apos; sau &apos;dnf install bubblewrap&apos;) sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <source>[Output truncated: %1]</source>
@@ -4564,7 +3500,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>Command terminated abnormally (crashed).</source>
-        <translation type="vanished">Comanda s-a încheiat anormal (crash).</translation>
+        <translation type="vanished">Comanda s-a încheiat anormal (a eșuat).</translation>
     </message>
     <message>
         <source>Command exited with code %1.</source>
@@ -4667,6 +3603,40 @@ Director de lucru: %2</translation>
         <translation type="vanished">[Ieșirea a fost trunchiată la %1 KB. Folosiți un șablon mai specific pentru a vedea toate rezultatele.]</translation>
     </message>
     <message>
+        <source>get current time</source>
+        <translation type="vanished">obține ora curentă</translation>
+    </message>
+    <message>
+        <source>get runtime info</source>
+        <translation type="vanished">obține informații de runtime</translation>
+    </message>
+    <message>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation type="vanished">Sistem de operare: %1
+Director de lucru: %2</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) este instalat, dar nucleul refuză să își configureze sandbox-ul: %1. Pe Ubuntu 24.04 și mai nou, de obicei aceasta este restricția AppArmor privind spațiile de nume de utilizator neprivilegiate: rulați &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (adăugați-l în /etc/sysctl.d/ pentru a fi permanent) sau dați-i bwrap un profil AppArmor cu atributul &apos;userns&apos;. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) este instalat, dar spațiile de nume de utilizator neprivilegiate sunt dezactivate pe acest sistem: %1. Pe Debian și derivatele sale, activați-le cu &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nu a reușit să configureze sandbox-ul: %1. Verificați că poate rula pe acest sistem, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nu a configurat sandbox-ul la timp. Verificați că poate rula pe acest sistem, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap (bwrap) nu a fost găsit. Instalați-l (de ex. &apos;apt install bubblewrap&apos; sau &apos;dnf install bubblewrap&apos;) sau debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
         <source>list directory %1</source>
         <translation type="vanished">listează directorul %1</translation>
     </message>
@@ -4692,7 +3662,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation type="vanished">Unelta MCP &quot;%1&quot; nu este disponibilă (niciun server MCP conectat nu o servește).</translation>
+        <translation type="vanished">Unelta MCP &quot;%1&quot; nu este disponibilă (niciun server MCP conectat nu o pune la dispoziție).</translation>
     </message>
     <message>
         <source>Cannot reach the MCP server.</source>
@@ -4712,7 +3682,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation type="vanished">Serverul MCP nu este disponibil. Verificați că serverul rulează și poate fi atins, apoi încercați din nou.</translation>
+        <translation type="vanished">Serverul MCP nu este disponibil. Verificați că serverul rulează și este accesibil, apoi încercați din nou.</translation>
     </message>
     <message>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
@@ -4732,7 +3702,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation type="vanished">Serverul MCP a returnat un răspuns gol sau defect.</translation>
+        <translation type="vanished">Serverul MCP a returnat un răspuns gol sau invalid.</translation>
     </message>
     <message>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
@@ -4748,19 +3718,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation type="vanished">Setarea &apos;Sandbox commands&apos; (Comenzi în sandbox) limitează unelta bash pe Windows la un container de procese Microsoft MXC. Runtimeul wxc-exec.exe fixat la versiune nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. MXC este publicat sub licența MIT.</translation>
-    </message>
-    <message>
-        <source>Project: %1</source>
-        <translation type="vanished">Proiect: %1</translation>
-    </message>
-    <message>
-        <source>License: %1</source>
-        <translation type="vanished">Licență: %1</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Descarcă</translation>
+        <translation type="vanished">Setarea &apos;Comenzi în sandbox&apos; limitează unelta bash pe Windows la un container de procese Microsoft MXC. Runtimeul wxc-exec.exe fixat la versiune nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. MXC este publicat sub licența MIT.</translation>
     </message>
     <message>
         <source>The package holds no wxc-exec.exe binary.</source>
@@ -4777,10 +3735,6 @@ Director de lucru: %2</translation>
     <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
         <translation type="vanished">Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64 și arm64.</translation>
-    </message>
-    <message>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation type="vanished">Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64.</translation>
     </message>
     <message>
         <source>Downloading the MXC runtime...</source>
@@ -4805,6 +3759,42 @@ Director de lucru: %2</translation>
     <message>
         <source>Unpacking the MXC runtime failed: %1</source>
         <translation type="vanished">Extragerea runtimeului MXC a eșuat: %1</translation>
+    </message>
+    <message>
+        <source>Download niubash</source>
+        <translation type="vanished">Descarcă niubash</translation>
+    </message>
+    <message>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation type="vanished">Descărcați niubash %1 de pe GitHub?</translation>
+    </message>
+    <message>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation type="vanished">Unelța bash pe Windows rulează de obicei Git Bash, dar runtime-ul său MSYS2 nu se poate inițializa în sandboxul Windows (microsoft/mxc#1061). niubash este un Bash nativ, fără MSYS2, care se poate inițializa, de aceea poate fi descărcat aici pentru a rula unelța bash în sandbox. niubash este publicat sub licența MIT.</translation>
+    </message>
+    <message>
+        <source>The package holds no niubash shell.</source>
+        <translation type="vanished">Pachetul nu conține niciun shell niubash.</translation>
+    </message>
+    <message>
+        <source>There is no niubash for this platform.</source>
+        <translation type="vanished">Nu există niubash pentru această platformă.</translation>
+    </message>
+    <message>
+        <source>Downloading niubash...</source>
+        <translation type="vanished">Se descarcă niubash...</translation>
+    </message>
+    <message>
+        <source>Downloading niubash failed: %1</source>
+        <translation type="vanished">Descărcarea niubash a eșuat: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash...</source>
+        <translation type="vanished">Se extrage niubash...</translation>
+    </message>
+    <message>
+        <source>Unpacking niubash failed: %1</source>
+        <translation type="vanished">Extragerea niubash a eșuat: %1</translation>
     </message>
     <message>
         <source>read whole file %1</source>
@@ -4927,26 +3917,6 @@ Director de lucru: %2</translation>
         <translation type="vanished">[Ieșirea a fost trunchiată la %1 KB. Rafinați șablonul sau reduceți contextul pentru a vedea toate potrivirile.]</translation>
     </message>
     <message>
-        <source>load skill %1</source>
-        <translation type="vanished">încarcă skill %1</translation>
-    </message>
-    <message>
-        <source>The &quot;name&quot; argument is required.</source>
-        <translation type="vanished">Argumentul &quot;name&quot; este obligatoriu.</translation>
-    </message>
-    <message>
-        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation type="vanished">Skillul &quot;%1&quot; nu a fost găsit. Skilluri disponibile: %2</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation type="vanished">(niciunul)</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Ești subagentul &quot;explore&quot;, care rulează într-o conversație separată, izolată de cea principală. Explorează codul și răspunde la task cu uneltele doar pentru citire disponibile: folosește &quot;find&quot; pentru a localiza fișiere după nume, &quot;search&quot; pentru a căuta în conținutul fișierelor și &quot;read_file&quot; pentru a citi secțiunile relevante. Nu modifica niciun fișier și nu rula comenzi care schimbă ceva. Lucrează autonom; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis care conține principalele constatări, căile relevante ale fișierelor cu numere de linie și tot ce are nevoie conversația principală pentru a continua lucrul.</translation>
-    </message>
-    <message>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation type="vanished">Ești subagentul &quot;explore&quot;, care rulează într-o conversație separată, izolată de cea principală. Explorează codul și răspunde la task cu uneltele doar pentru citire disponibile: folosește &quot;find&quot; pentru a localiza fișiere după nume, &quot;search&quot; pentru a căuta în conținutul fișierelor și &quot;read_file&quot; pentru a citi secțiunile relevante. Nu modifica niciun fișier și nu rula comenzi care schimbă ceva. Lucrează autonom; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis care conține principalele constatări, căile relevante ale fișierelor cu numere de linie și tot ce are nevoie conversația principală pentru a continua lucrul.</translation>
     </message>
@@ -4972,13 +3942,13 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Task a eșuat: sub-conversația &quot;%1&quot; s-a încheiat fără un răspuns final (poate a fost oprită sau ștearsă).</translation>
+        <translation type="vanished">Taskul a eșuat: sub-conversația &quot;%1&quot; s-a încheiat fără un răspuns final (poate a fost oprită sau ștearsă).</translation>
     </message>
     <message>
         <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation type="vanished">Task completat în sub-conversația &quot;%1&quot; (id: %2). Conversația este păstrată în lista de conversații și poate fi deschisă pentru lucrul continuu. Raportul final de la subagent:
+        <translation type="vanished">Task completat în sub-conversația &quot;%1&quot; (id: %2). Conversația este păstrată în lista de conversații și poate fi deschisă pentru a continua lucrul. Raportul final de la subagent:
 
 %3</translation>
     </message>
@@ -5004,11 +3974,11 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation type="vanished">Eroare de unelță: doar un singur task poate fi &quot;in_progress&quot; o dată (%1 dat).</translation>
+        <translation type="vanished">Eroare de unelță: doar un singur task poate fi &quot;in_progress&quot; în același timp (%1 dat).</translation>
     </message>
     <message>
         <source>Task list updated: %1 of %2 completed.</source>
-        <translation type="vanished">Lista de taskuri a fost actualizată: %1 din %2 completate.</translation>
+        <translation type="vanished">Lista de taskuri a fost actualizată: %1 din %2 completați.</translation>
     </message>
     <message>
         <source>Reset to Project Directory</source>
@@ -5016,7 +3986,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation type="vanished">Șterge suprascrierea directorului de lucru: uneltele rulează în directorul proiectului pornit (sau în directorul implicit pentru proiecte când nu este deschis niciun proiect).</translation>
+        <translation type="vanished">Șterge suprascrierea directorului de lucru: uneltele rulează în directorul proiectului deschis la pornire (sau în directorul implicit pentru proiecte când nu este deschis niciun proiect).</translation>
     </message>
     <message>
         <source>Reset to Default Projects Directory</source>
@@ -5040,7 +4010,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation type="vanished">Folosește niubash descărcat, un Bash nativ, fără MSYS2, care - spre deosebire de Git Bash - poate rula în sandboxul Windows.</translation>
+        <translation type="vanished">Folosește niubash-ul descărcat, un Bash nativ, fără MSYS2, care - spre deosebire de Git Bash - poate rula în sandboxul Windows.</translation>
     </message>
     <message>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
@@ -5103,20 +4073,20 @@ Director de lucru: %2</translation>
         <translation type="vanished">Eroare de unelță: &quot;query&quot; trebuie să fie un șir nevid.</translation>
     </message>
     <message>
-        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Căutarea a eșuat: DuckDuckGo aplică în prezent o limită de rată cererilor; așteptați un minut și încercați din nou.</translation>
-    </message>
-    <message>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="vanished">Căutarea a eșuat: backendul Google nu este configurat. Setează cheia API și ID-ul motorului de căutare (cx) în setările Llama.cpp.</translation>
-    </message>
-    <message>
         <source>Search failed: %1</source>
         <translation type="vanished">Căutarea a eșuat: %1</translation>
     </message>
     <message>
         <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
         <translation type="vanished">Căutarea a eșuat: DuckDuckGo limitează în prezent numărul de cereri; așteptați un minut și încercați din nou.</translation>
+    </message>
+    <message>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation type="vanished">Niciun rezultat găsit pentru &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation type="vanished">Căutarea a eșuat: backendul Google nu este configurat. Setează cheia API și ID-ul motorului de căutare (cx) în setările Llama.cpp.</translation>
     </message>
     <message>
         <source>Search failed: invalid response from the search provider.</source>
@@ -5129,10 +4099,6 @@ Director de lucru: %2</translation>
     <message>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
         <translation type="vanished">Căutarea a eșuat: backendul Brave nu este configurat. Setează cheia API în setările Llama.cpp.</translation>
-    </message>
-    <message>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation type="vanished">Niciun rezultat găsit pentru &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
@@ -5151,12 +4117,8 @@ Director de lucru: %2</translation>
 %2</translation>
     </message>
     <message>
-        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Descărcați-l de pe pagina de setări a uneltelor Llama.cpp Chat (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); LLAMA_WXC_EXEC poate arăta către un wxc-exec.exe. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
-    </message>
-    <message>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Descărcați-l de pe pagina de setări Llama.cpp Chat Sandbox (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); acolo poate fi indicat un runtime propriu. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+        <translation type="vanished">Descărcați-l de pe pagina de setări Llama.cpp Chat Sandbox (o versiune Microsoft MXC fixată, verificată prin sumă de control); acolo poate fi indicat un runtime propriu. Alternativ, debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
@@ -5164,7 +4126,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation type="vanished">Backendul sandboxului Windows (wxc-exec) a raportat containerul MXC ca indisponibil (ieșire %1): %2 %3</translation>
+        <translation type="vanished">Backendul sandboxului Windows (wxc-exec) a raportat containerul MXC ca indisponibil (cod de ieșire %1): %2 %3</translation>
     </message>
     <message>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
@@ -5176,23 +4138,19 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Configurația sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+        <translation type="vanished">Configurația sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation type="vanished">Sandboxul Windows (Microsoft MXC) nu a trecut verificația sa de izolare în timp real: o comandă izolată nu a putut fi verificată ca fiind limitată. %1</translation>
+        <translation type="vanished">Sandboxul Windows (Microsoft MXC) nu a trecut verificația sa de izolare în timp real: o comandă izolată nu a putut fi verificată ca fiind ținută în sandbox. %1</translation>
     </message>
     <message>
         <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de niubash, Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație îngustă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat, sau debifați &apos;Sandbox commands&apos; în setările Llama.</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație îngustă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH sau debifați &apos;Sandbox commands&apos; în setările Llama.</translation>
+        <translation type="vanished">bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de niubash, Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație restrictivă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat, sau debifați &apos;Comenzi în sandbox&apos; în setările Llama.</translation>
     </message>
     <message>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Sandboxul Windows (Microsoft MXC) are nevoie de Windows 11 24H2 (build %1) sau mai nou; acest sistem este build %2. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+        <translation type="vanished">Sandboxul Windows (Microsoft MXC) are nevoie de Windows 11 24H2 (build %1) sau mai nou; acest sistem este build %2. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
@@ -5204,7 +4162,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+        <translation type="vanished">Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Comenzi în sandbox&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
         <source>Write file</source>
@@ -5234,54 +4192,1148 @@ Director de lucru: %2</translation>
         <source>Successfully wrote %1 bytes to %2.</source>
         <translation type="vanished">S-au scris cu succes %1 octeți în %2.</translation>
     </message>
+</context>
+<context>
+    <name>Tr</name>
     <message>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
+        <source>Add %1</source>
+        <translation>Adaugă %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Delete %1</source>
+        <translation>Șterge %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Edit %1</source>
+        <translation>Modifică %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Move %1 to %2</source>
+        <translation>Mută %1 în %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location line="+7"/>
+        <source>Apply patch</source>
+        <translation>Aplică patch</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Apply patch to %1 files</source>
+        <translation>Aplică patch pentru %1 fișiere</translation>
+    </message>
+    <message>
+        <location line="+79"/>
+        <source>created</source>
+        <translation>creat</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>edited</source>
+        <translation>modificat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>moved</source>
+        <translation>mutat</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>deleted</source>
+        <translation>șters</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+14"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
+        <source>file</source>
+        <translation>fișierul</translation>
+    </message>
+    <message>
+        <location line="+121"/>
+        <source>Success. Updated the following files:</source>
+        <translation>Succes. Au fost actualizate următoarele fișiere:</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
+        <translation type="vanished">Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+154"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>Nu a fost găsit niciun shell bash. Instalați Git for Windows (https://git-scm.com/download/win) sau adăugați un bash în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat.</translation>
+    </message>
+    <message>
+        <location line="+160"/>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation>Executabilul sandbox-exec nu a fost găsit; izolarea nu este disponibilă pe acest sistem.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) este instalat, dar nucleul refuză să își configureze sandbox-ul: %1. Pe Ubuntu 24.04 și mai nou, de obicei aceasta este restricția AppArmor privind spațiile de nume de utilizator neprivilegiate: rulați &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (adăugați-l în /etc/sysctl.d/ pentru a fi permanent) sau dați-i bwrap un profil AppArmor cu atributul &apos;userns&apos;. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) este instalat, dar spațiile de nume de utilizator neprivilegiate sunt dezactivate pe acest sistem: %1. Pe Debian și derivatele sale, activați-le cu &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nu a reușit să configureze sandbox-ul: %1. Verificați că poate rula pe acest sistem, sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nu a configurat sandbox-ul la timp. Verificați că poate rula pe acest sistem, sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap (bwrap) nu a fost găsit. Instalați-l (de ex. &apos;apt install bubblewrap&apos; sau &apos;dnf install bubblewrap&apos;) sau debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
+        <source>[Output truncated: %1]</source>
+        <translation>[Ieșire trunchiată: %1]</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>showing last %1 of %2 lines</source>
+        <translation>se afișează ultimele %1 din %2 linii</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>showing last %1 KB</source>
+        <translation>se afișează ultimii %1 KB</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Full output saved to: %1</source>
+        <translation>Ieșirea completă salvată în: %1</translation>
+    </message>
+    <message>
+        <location line="+122"/>
+        <source>running %1</source>
+        <translation>rulează %1</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Error: the command must not be empty.</source>
+        <translation>Eroare: comanda nu trebuie să fie goală.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Error: working directory does not exist: %1</source>
+        <translation>Eroare: directorul de lucru nu există: %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+26"/>
+        <location line="+29"/>
+        <location filename="../src/tools/find_tool.cpp" line="+191"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+131"/>
+        <location filename="../src/tools/search_tool.cpp" line="+262"/>
+        <source>Error: %1</source>
+        <translation>Eroare: %1</translation>
+    </message>
+    <message>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>Eroare: sandboxul nu poate face &quot;%1&quot; scribil: este (sau conține) directorul home sau rădăcina unui sistem de fișiere. Deschideți un proiect pentru a rula comenzi în directorul său.</translation>
+    </message>
+    <message>
+        <location line="+220"/>
+        <source>Command was stopped by the user.</source>
+        <translation>Comanda a fost oprită de utilizator.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
+        <translation>Comanda a expirat după %1 ms. Încercați din nou cu un timeout mai mare dacă comanda ar trebui să dureze mai mult.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Failed to start the command: %1</source>
+        <translation>Pornirea comenzii a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/tools/find_tool.cpp" line="+120"/>
+        <location line="+7"/>
+        <location filename="../src/tools/search_tool.cpp" line="+120"/>
+        <location line="+7"/>
+        <source>unknown error</source>
+        <translation>eroare necunoscută</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Command terminated abnormally (crashed).</source>
+        <translation>Comanda s-a încheiat anormal (crash).</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Command exited with code %1.</source>
+        <translation>Comanda s-a încheiat cu codul %1.</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Working directory: %1
+
+</source>
+        <translation>Directorul de lucru: %1
+
+</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/edit_file_tool.cpp" line="-115"/>
+        <source>Edit file</source>
+        <translation>Modificare fișier</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>edit %1 (%2 blocks)</source>
+        <translation>modifică %1 (%2 blocuri)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>edit %1</source>
+        <translation>modifică %1</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
+        <translation>Eroare de unelță: &quot;path&quot; trebuie să fie un șir nevid.</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
+        <translation>Eroare de unelță: fiecare modificare are nevoie de un &quot;oldText&quot; și un &quot;newText&quot;.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
+        <translation>Eroare de unelță: &quot;edits&quot; trebuie să conțină cel puțin o înlocuire.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>not a plain file</source>
+        <translation>nu este un fișier obișnuit</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Cannot edit %1: %2 Use read_file to verify the path, or write to create the file.</source>
+        <translation>Nu se poate modifica %1: %2 Folosiți read_file pentru a verifica calea sau write pentru a crea fișierul.</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">Nu se poate modifica &quot;%1&quot;: fișierul nu a fost găsit. Folosiți read_file pentru a verifica calea sau write pentru a crea fișierul.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+7"/>
+        <location line="+4"/>
+        <source>Cannot edit &quot;%1&quot;: %2</source>
+        <translation>Nu se poate modifica &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Successfully replaced %1 block(s) in %2.</source>
+        <translation>S-a înlocuit cu succes %1 bloc(uri) în %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/find_tool.cpp" line="-182"/>
+        <location line="+8"/>
+        <source>find files %1</source>
+        <translation>găsește fișiere %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
+        <source>Pattern: %1</source>
+        <translation>Șablon: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
+        <source>  Path: %1</source>
+        <translation>  Calea: %1</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation>Eroare: ripgrep (rg) nu a fost găsit. Poate fi descărcat de pe pagina de setări a uneltelor Llama.cpp Chat sau instalat manual de pe https://github.com/BurntSushi/ripgrep, pentru a folosi unelta find.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
+        <source>Error: the pattern must not be empty.</source>
+        <translation>Eroare: șablonul nu trebuie să fie gol.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+0"/>
+        <source>directory</source>
+        <translation>directorul</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+3"/>
+        <source>Error: path is not a directory: %1</source>
+        <translation>Eroare: calea nu este un director: %1</translation>
+    </message>
+    <message>
+        <location line="+107"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation>[Căutarea a fost oprită de utilizator. Rezultatele sunt incomplete.]</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation>[Căutarea a expirat după %1 ms. Rezultatele sunt incomplete; folosiți un șablon mai specific.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation>[Pornirea ripgrep a eșuat: %1]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation>[ripgrep a eșuat (cod de ieșire %1): %2]</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation>[Limita de %1 rezultate a fost atinsă. Folosiți limit=%2 pentru mai multe rezultate sau folosiți un șablon mai specific.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>No files found.</source>
+        <translation>Niciun fișier găsit.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation>[Ieșirea a fost trunchiată la %1 KB. Folosiți un șablon mai specific pentru a vedea toate rezultatele.]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ls_tool.cpp" line="-43"/>
+        <location line="+7"/>
+        <source>list directory %1</source>
+        <translation>listează directorul %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Path: `%1`
+
+</source>
+        <translation>Calea: `%1`
+
+</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Directory is empty.</source>
+        <translation>Directorul este gol.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>[Ieșirea a fost trunchiată la %1 KB. Listați un subdirector pentru a vedea intrările rămase.]</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>[Limita de %1 intrări a fost atinsă. Folosiți limit=%2 pentru mai multe intrări.]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation>Unelta MCP &quot;%1&quot; nu este disponibilă (niciun server MCP conectat nu o servește).</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
+        <location line="+27"/>
+        <source>Cannot reach the MCP server.</source>
+        <translation>Nu se poate ajunge la serverul MCP.</translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <source>MCP initialize failed: %1</source>
+        <translation>Inițializarea MCP a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>MCP tools/list failed: %1</source>
+        <translation>MCP tools/list a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>Conexiunea la serverul MCP a fost închisă.</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>Serverul MCP nu este disponibil. Verificați că serverul rulează și poate fi atins, apoi încercați din nou.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation>Unelta MCP &quot;%1&quot; a eșuat: %2</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>Unelta MCP &quot;%1&quot; a eșuat: serverul MCP nu a răspuns (eroare de conexiune sau timeout).</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>Serverul MCP s-a repornit; apelul nu a fost executat. Încercați din nou.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation>Serverul MCP a returnat HTTP %1 pentru apelul de unelță.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation>Serverul MCP a returnat un răspuns gol sau defect.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>Unelta MCP &quot;%1&quot; a fost oprită de utilizator.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Descarcă runtimeul sandbox Windows (MXC)</translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Descărcați runtimeul Microsoft MXC %1?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>Setarea &apos;Sandbox commands&apos; (Comenzi în sandbox) limitează unelta bash pe Windows la un container de procese Microsoft MXC. Runtimeul wxc-exec.exe fixat la versiune nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. MXC este publicat sub licența MIT.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+163"/>
+        <source>Project: %1</source>
+        <translation>Proiect: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
+        <source>License: %1</source>
+        <translation>Licență: %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
+        <source>Download</source>
+        <translation>Descarcă</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>Pachetul nu conține binarul wxc-exec.exe.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>Binarul wxc-exec.exe are o dimensiune neașteptată.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>Binarul wxc-exec.exe nu corespunde sumei de control așteptate.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64 și arm64.</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation type="vanished">Runtimeul Microsoft MXC este disponibil doar pentru Windows x86-64.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>Se descarcă runtimeul MXC...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>Descărcarea runtimeului MXC a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+123"/>
+        <source>Verifying package integrity...</source>
+        <translation>Se verifică integritatea pachetului...</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation>Pachetul descărcat nu este cel așteptat.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>Se extrage runtimeul MXC...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>Extragerea runtimeului MXC a eșuat: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
+        <source>read whole file %1</source>
+        <translation>citire fișier întreg %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>citire %1</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">Fișierul &quot;%1&quot; nu există.</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>File</source>
+        <translation>Fișierul</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>Citirea &quot;%1&quot; a eșuat: %2</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>Imaginea &quot;%1&quot; are %2 MB și depășește limita de citire de %3 MB; redimensionați-o mai întâi (de ex. cu unelta bash).</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>Fișierul de imagine &quot;%1&quot; (%2, %3 octeți). Conținutul său este atașat ca imagine.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>first_line trebuie să fie &gt;= 1.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>last_line_inclusive trebuie să fie &gt;= first_line.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>first_line (%1) depășește numărul de linii din &quot;%2&quot; (%3).</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>Linia %1 din &quot;%2&quot; este mai mare decât limita de citire de %3 KB; fișierul nu poate fi citit cu această unelță.</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> Limita de %1 KB a fost atinsă.</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> Continuați cu first_line=%1, last_line_inclusive=%2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
+        <source>Download ripgrep</source>
+        <translation>Descarcă ripgrep</translation>
+    </message>
+    <message>
+        <location line="+67"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>Descărcați ripgrep %1 de pe GitHub?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>Uneltele search și find folosesc ripgrep pentru a căuta în conținutul fișierelor și pentru a localiza fișiere după nume. Nu este instalat pe acest sistem, de aceea poate fi descărcat de aici în schimb. ripgrep este publicat sub licența MIT sau Unlicense.</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>Pachetul nu conține binarul ripgrep.</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>Nu există ripgrep pentru această platformă.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>Se descarcă ripgrep...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>Descărcarea ripgrep a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>Se extrage ripgrep...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>Extragerea ripgrep a eșuat: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
+        <source>search for %1</source>
+        <translation>caută %1</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  Glob: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>Eroare: ripgrep (rg) nu a fost găsit. Poate fi descărcat de pe pagina de setări a uneltelor Llama.cpp Chat sau instalat manual de pe https://github.com/BurntSushi/ripgrep, pentru a folosi unelta search.</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">Eroare: calea nu există: %1</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>path</source>
+        <translation>calea</translation>
+    </message>
+    <message>
+        <location line="+113"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>[Căutarea a expirat după %1 ms. Rezultatele sunt incomplete; restrângeți calea sau rafinați șablonul.]</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>[Limita de %1 potriviri a fost atinsă. Folosiți limit=%2 pentru mai multe rezultate sau rafinați șablonul.]</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>[Unele linii au fost trunchiate la %1 caractere. Folosiți read_file pentru a vedea liniile complete.]</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>Nicio potrivire găsită.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>[Ieșirea a fost trunchiată la %1 KB. Rafinați șablonul sau reduceți contextul pentru a vedea toate potrivirile.]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
+        <source>load skill %1</source>
+        <translation>încarcă skill %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>Argumentul &quot;name&quot; este obligatoriu.</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>Skillul &quot;%1&quot; nu a fost găsit. Skilluri disponibile: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(none)</source>
+        <translation>(niciunul)</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">Ești subagentul &quot;explore&quot;, care rulează într-o conversație separată, izolată de cea principală. Explorează codul și răspunde la task cu uneltele doar pentru citire disponibile: folosește &quot;find&quot; pentru a localiza fișiere după nume, &quot;search&quot; pentru a căuta în conținutul fișierelor și &quot;read_file&quot; pentru a citi secțiunile relevante. Nu modifica niciun fișier și nu rula comenzi care schimbă ceva. Lucrează autonom; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis care conține principalele constatări, căile relevante ale fișierelor cu numere de linie și tot ce are nevoie conversația principală pentru a continua lucrul.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>Ești subagentul &quot;explore&quot;, care rulează într-o conversație separată, izolată de cea principală. Explorează codul și răspunde la task cu uneltele doar pentru citire disponibile: folosește &quot;find&quot; pentru a localiza fișiere după nume, &quot;search&quot; pentru a căuta în conținutul fișierelor și &quot;read_file&quot; pentru a citi secțiunile relevante. Nu modifica niciun fișier și nu rula comenzi care schimbă ceva. Lucrează autonom; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis care conține principalele constatări, căile relevante ale fișierelor cu numere de linie și tot ce are nevoie conversația principală pentru a continua lucrul.</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation>Ești subagentul &quot;general&quot;, care rulează într-o conversație separată, izolată de cea principală. Lucrează autonom cu uneltele disponibile până când taskul este complet; nu poți pune întrebări utilizatorului. Când ești gata, răspunde cu un singur raport concis despre ce ai făcut sau descoperit, inclusiv căile relevante ale fișierelor cu numere de linie, ca conversația principală să poată continua lucrul.</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+27"/>
+        <source>task: %1</source>
+        <translation>task: %1</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation>Eroare de unelță: &quot;description&quot; și &quot;prompt&quot; sunt obligatorii.</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation>Eroare de unelță: subagent_type necunoscut &quot;%1&quot; (așteptat &quot;explore&quot; sau &quot;general&quot;)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Task: %1</source>
+        <translation>Task: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>Task a eșuat: sub-conversația &quot;%1&quot; s-a încheiat fără un răspuns final (poate a fost oprită sau ștearsă).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>Task completat în sub-conversația &quot;%1&quot; (id: %2). Conversația este păstrată în lista de conversații și poate fi deschisă pentru lucrul continuu. Raportul final de la subagent:
+
+%3</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>actualizare listă de taskuri</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>actualizare listă de taskuri (%1 taskuri)</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>Eroare de unelță: &quot;todos&quot; trebuie să conțină cel puțin un task.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>Eroare de unelță: taskul %1 are un &quot;content&quot; gol.</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>Eroare de unelță: taskul %1 are starea necunoscută &quot;%2&quot; (așteptat &quot;pending&quot;, &quot;in_progress&quot; sau &quot;completed&quot;).</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>Eroare de unelță: doar un singur task poate fi &quot;in_progress&quot; o dată (%1 dat).</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>Lista de taskuri a fost actualizată: %1 din %2 completate.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
+        <source>Reset to Project Directory</source>
+        <translation>Resetează la directorul proiectului</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>Șterge suprascrierea directorului de lucru: uneltele rulează în directorul proiectului pornit (sau în directorul implicit pentru proiecte când nu este deschis niciun proiect).</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>Resetează la directorul implicit pentru proiecte</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>Folosește directorul implicit pentru proiecte, locul în care sunt create proiectele noi.</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Resetează la Git Bash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>Șterge suprascrierea bash: unelta bash folosește bash-ul implicit, Git Bash (un bash recunoscut din PATH, apoi cel livrat cu Git for Windows).</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>Resetează la niubash</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>Folosește niubash descărcat, un Bash nativ, fără MSYS2, care - spre deosebire de Git Bash - poate rula în sandboxul Windows.</translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>Accesarea lui &quot;%1&quot; nu este permisă: căile de dispozitiv și partajările administrative nu sunt accesibile în interiorul sandbox-ului.</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>Scrierea în &quot;%1&quot; nu este permisă: niciun proiect nu este deschis, de aceea sandboxul permite scrierea doar în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox. Deschideți un proiect pentru a lucra la fișierele sale.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>Scrierea în &quot;%1&quot; nu este permisă: sandboxul permite scrierea doar în directorul proiectului, în locațiile temporare și în directoarele suplimentare scriibile din setările Sandbox.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>Scrierea în &quot;%1&quot; nu este permisă: fișierele .git, .qtcreator și *.user sunt protejate în interiorul sandbox-ului.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>Scrierea în &quot;%1&quot; nu este permisă: locațiile de credențiale sunt protejate în interiorul sandbox-ului.</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>Citirea lui &quot;%1&quot; nu este permisă: locațiile de credențiale nu sunt citibile în interiorul sandbox-ului.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>%1 does not exist: %2</source>
+        <translation>%1 nu există: %2</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1 &quot;%2&quot; was not found in the working directory &quot;%3&quot;.</source>
+        <translation>%1 &quot;%2&quot; nu a fost găsit(ă) în directorul de lucru &quot;%3&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
+        <location line="+27"/>
+        <source>fetch %1</source>
+        <translation>preia %1</translation>
+    </message>
+    <message>
+        <location line="+112"/>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation>URL invalid &quot;%1&quot;: trebuie să înceapă cu http:// sau https://</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation>Preluarea lui %1 a eșuat: răspuns prea mare (limită 5 MB).</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Fetch failed for %1: %2</source>
+        <translation>Preluarea lui %1 a eșuat: %2</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation>
+
+[... conținut trunchiat la %1 caractere ...]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location line="+26"/>
+        <source>search %1</source>
+        <translation>caută %1</translation>
+    </message>
+    <message>
+        <location line="+196"/>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation>Rezultate de căutare pentru &quot;%1&quot;:</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation>Eroare de unelță: &quot;query&quot; trebuie să fie un șir nevid.</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">Căutarea a eșuat: DuckDuckGo aplică în prezent o limită de rată cererilor; așteptați un minut și încercați din nou.</translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation>Căutarea a eșuat: backendul Google nu este configurat. Setează cheia API și ID-ul motorului de căutare (cx) în setările Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="-23"/>
+        <location line="+44"/>
+        <location line="+13"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
+        <source>Search failed: %1</source>
+        <translation>Căutarea a eșuat: %1</translation>
+    </message>
+    <message>
+        <location line="-189"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>Căutarea a eșuat: DuckDuckGo limitează în prezent numărul de cereri; așteptați un minut și încercați din nou.</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <location line="+54"/>
+        <location line="+45"/>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation>Căutarea a eșuat: răspuns invalid de la furnizorul de căutare.</translation>
+    </message>
+    <message>
+        <location line="-88"/>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation>niciun rezultat găsit pentru &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>Căutarea a eșuat: backendul Brave nu este configurat. Setează cheia API în setările Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="-59"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation>Niciun rezultat găsit pentru &quot;%1&quot;.</translation>
+    </message>
+    <message>
+        <location line="-79"/>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>Căutarea a eșuat: backendul Tavily nu este configurat. Setează cheia API în setările Llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation>Căutarea a eșuat: URL-ul endpointului Exa nu este configurat.</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation>Rezultate de căutare pentru &quot;%1&quot;:
+
+%2</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Descărcați-l de pe pagina de setări a uneltelor Llama.cpp Chat (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); LLAMA_WXC_EXEC poate arăta către un wxc-exec.exe. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Descărcați-l de pe pagina de setări Llama.cpp Chat Sandbox (o variantă Microsoft MXC fixată la versiune, verificată prin sumă de control); acolo poate fi indicat un runtime propriu. Alternativ, debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Backendul sandboxului Windows (wxc-exec) nu a răspuns la proba de capacități la timp. %1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Backendul sandboxului Windows (wxc-exec) a raportat containerul MXC ca indisponibil (ieșire %1): %2 %3</translation>
+    </message>
+    <message>
+        <location line="+361"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Sandboxul Windows nu și-a putut configura proba de izolare în timp real (director temporar sau canary în home). %1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Sandboxul Windows nu a putut crea fișierul canary al probei sale de izolare în timp real la %1. %2</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Configurația sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+41"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Sandboxul Windows (Microsoft MXC) nu a trecut verificația sa de izolare în timp real: o comandă izolată nu a putut fi verificată ca fiind limitată. %1</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de niubash, Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație îngustă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH, sau descărcați niubash de pe pagina de setări a uneltelor Llama.cpp Chat, sau debifați &apos;Sandbox commands&apos; în setările Llama.</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">bash-ul de la &quot;%1&quot; nu face parte dintr-o instalare recunoscută de Git for Windows sau MSYS2, de aceea sandboxul Windows nu îi poate acorda o locație îngustă doar pentru citire. Instalați Git for Windows (https://git-scm.com/download/win) și puneți bash-ul său primul în PATH sau debifați &apos;Sandbox commands&apos; în setările Llama.</translation>
+    </message>
+    <message>
+        <location line="+111"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Sandboxul Windows (Microsoft MXC) are nevoie de Windows 11 24H2 (build %1) sau mai nou; acest sistem este build %2. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe (runtimeul sandboxului Microsoft MXC Windows) nu a fost găsit. %1</translation>
+    </message>
+    <message>
+        <location line="+32"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Sandboxul Windows (Microsoft MXC) își verifică izolarea pentru prima dată; rulați comanda din nou peste câteva secunde.</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <source>Write file</source>
+        <translation>Scriere fișier</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>scrie %1</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>Eroare de unelță: &quot;content&quot; este obligatoriu.</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>Nu se poate scrie în &quot;%1&quot;: o cale părinte este un fișier.</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>Nu se poate scrie în &quot;%1&quot;: nu se poate crea directorul: %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>Nu se poate scrie în &quot;%1&quot;: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>S-au scris cu succes %1 octeți în %2.</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
-        <translation type="vanished">Descarcă niubash</translation>
+        <translation>Descarcă niubash</translation>
     </message>
     <message>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
-        <translation type="vanished">Descărcați niubash %1 de pe GitHub?</translation>
+        <translation>Descărcați niubash %1 de pe GitHub?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation type="vanished">Unelța bash pe Windows rulează de obicei Git Bash, dar runtime-ul său MSYS2 nu se poate inițializa în sandboxul Windows (microsoft/mxc#1061). niubash este un Bash nativ, fără MSYS2, care se poate inițializa, de aceea poate fi descărcat aici pentru a rula unelța bash în sandbox. niubash este publicat sub licența MIT.</translation>
+        <translation>Unelța bash pe Windows rulează de obicei Git Bash, dar runtime-ul său MSYS2 nu se poate inițializa în sandboxul Windows (microsoft/mxc#1061). niubash este un Bash nativ, fără MSYS2, care se poate inițializa, de aceea poate fi descărcat aici pentru a rula unelța bash în sandbox. niubash este publicat sub licența MIT.</translation>
     </message>
     <message>
+        <location line="+38"/>
         <source>The package holds no niubash shell.</source>
-        <translation type="vanished">Pachetul nu conține niciun shell niubash.</translation>
+        <translation>Pachetul nu conține niciun shell niubash.</translation>
     </message>
     <message>
+        <location line="+40"/>
         <source>There is no niubash for this platform.</source>
-        <translation type="vanished">Nu există niubash pentru această platformă.</translation>
+        <translation>Nu există niubash pentru această platformă.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Downloading niubash...</source>
-        <translation type="vanished">Se descarcă niubash...</translation>
+        <translation>Se descarcă niubash...</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Downloading niubash failed: %1</source>
-        <translation type="vanished">Descărcarea niubash a eșuat: %1</translation>
+        <translation>Descărcarea niubash a eșuat: %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Unpacking niubash...</source>
-        <translation type="vanished">Se extrage niubash...</translation>
+        <translation>Se extrage niubash...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
-        <translation type="vanished">Extragerea niubash a eșuat: %1</translation>
+        <translation>Extragerea niubash a eșuat: %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation type="vanished">obține ora curentă</translation>
+        <translation>obține ora curentă</translation>
     </message>
     <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation type="vanished">obține informații de runtime</translation>
+        <translation>obține informații de runtime</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation type="vanished">Sistem de operare: %1
+        <translation>Sistem de operare: %1
 Director de lucru: %2</translation>
     </message>
 </context>

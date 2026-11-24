@@ -8,7 +8,7 @@
         <translation type="vanished">llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>llama.cpp coversation</source>
         <translation>llama.cpp 会話</translation>
     </message>
@@ -141,19 +141,19 @@
         <translation>チャットが接続しているサーバーのモデルです。選択すると読み込まれ、アクティブなチャットモデルになります。</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+59"/>
         <source>Disable FIM</source>
         <translation>FIM を無効にする</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+109"/>
+        <location filename="../src/llamasettings.cpp" line="+61"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>FIM を有効にする</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+185"/>
         <location filename="../src/serversettingswidget.cpp" line="+264"/>
         <location line="+4"/>
         <source>Stop server</source>
@@ -161,10 +161,10 @@
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamaplugin.h" line="+3"/>
         <location filename="../src/serversettingswidget.cpp" line="-321"/>
         <location line="+313"/>
         <location line="+12"/>
+        <location filename="../src/llamaplugin.h" line="+3"/>
         <source>Start server</source>
         <translation>サーバーを開始</translation>
     </message>
@@ -189,7 +189,7 @@
         <translation>モデルを選択して読み込みます。選択したモデルをもう一度クリックすると、読み込みが解除されて選択がリセットされます。</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+279"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
@@ -236,13 +236,13 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1104"/>
+        <location filename="../src/llamasettingspages.cpp" line="+325"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/llamasettings.cpp" line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>チャット</translation>
@@ -260,7 +260,7 @@
         <translation type="vanished">llama.cpp の統合を有効にします。</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1092"/>
+        <location filename="../src/llamasettings.cpp" line="+22"/>
         <source>Endpoint</source>
         <translation>エンドポイント</translation>
     </message>
@@ -275,7 +275,7 @@
         <translation>llama.cpp サーバーのエンドポイント</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Prefix Code Lines</source>
         <translation>プレフィックスコード行数</translation>
     </message>
@@ -304,12 +304,12 @@
         <translation type="vanished">カーソル位置の後に含めるコード行数を指定します。</translation>
     </message>
     <message>
-        <location line="-102"/>
+        <location filename="../src/llamasettingspages.cpp" line="-309"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location filename="../src/llamasettings.cpp" line="+55"/>
         <location line="+2"/>
         <source>Auto FIM</source>
         <translation>自動 FIM</translation>
@@ -320,12 +320,12 @@
         <translation>最大トークン予測数</translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-93"/>
         <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
         <translation>上記の会話は長くなっており、新しいコンテキストウィンドウを持つ新しい会話を継続することになります。以前のメッセージを見ずに新しい会話がシームレスに作業を継続できるよう、引き継ぎドキュメントを作成してください。ドキュメントは Markdown で、以下のセクションで構成してください: ## Task (ユーザーが求めたことと全体的な目標)、## Key Decisions (重要な決定、制約、好み)、## Work Done (変更したファイル、実行したコマンド、コード変更とその結果)、## Current State (完了した内容、進行中の内容、発生したエラー)、## Next Steps (タスクを完了するために次にやるべきこと)。正確に具体的であり、ファイルパス、関数名、正確な値を保持してください。ユーザーの最後のメッセージに回答せず、引き継ぎドキュメントのみを作成してください。</translation>
     </message>
     <message>
-        <location line="+101"/>
+        <location line="+58"/>
         <source>API Key</source>
         <translation>API キー</translation>
     </message>
@@ -340,7 +340,12 @@
         <translation>llama.cpp サーバーの API キー（任意）</translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+9"/>
+        <source>Model to use for FIM completion when multiple models are loaded on the server (recommended: Qwen3 Coder). The entries are the models served by the chat endpoint; a name can also be typed, e.g. for a different server. Default uses the server&apos;s model.</source>
+        <translation>サーバーに複数のモデルが読み込まれている場合に FIM 補完で使用するモデルです（推奨: Qwen3 Coder）。エントリはチャットエンドポイントが提供するモデルです。名前は直接入力することもできます（異なるサーバーを使用する場合など）。既定ではサーバーのモデルが使用されます。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Max Token Predictions:</source>
         <translation>最大トークン予測数:</translation>
     </message>
@@ -607,7 +612,7 @@
         <translation>ユーティリティモデル:</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/llamasettingspages.cpp" line="+186"/>
         <source>Default: chat model</source>
         <translation>デフォルト: チャットモデル</translation>
     </message>
@@ -616,7 +621,7 @@
         <translation type="vanished">会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location filename="../src/llamasettings.cpp" line="+9"/>
         <source>Conversation Title Prompt</source>
         <translation>会話タイトルプロンプト</translation>
     </message>
@@ -666,12 +671,12 @@
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-308"/>
+        <location line="-307"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
     <message>
-        <location line="-306"/>
+        <location line="-264"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>会話のタイトルを絵文字1つを含む数語で要約してください。会話で使用されている言語を使用してください。プレーンテキストで、Markdown は使用しないでください。</translation>
     </message>
@@ -703,7 +708,7 @@
 {diagnostics}</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="-177"/>
         <source>Skills</source>
         <translation>スキル</translation>
     </message>
@@ -719,12 +724,12 @@
         <translation>サーバー</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location filename="../src/llamasettings.cpp" line="+8"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>テキストエディタで FIM（Fill-in-the-Middle）完成を有効にします。チャット、ツール、Web 検索の設定はこれとは独立しています。</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+37"/>
         <source>FIM Model</source>
         <translation>FIM モデル</translation>
     </message>
@@ -734,12 +739,11 @@
         <translation>FIM モデル:</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>サーバーに複数のモデルが読み込まれている場合に FIM 補完に使用するモデル名（任意、推奨: Qwen3 Coder）。</translation>
+        <translation type="vanished">サーバーに複数のモデルが読み込まれている場合に FIM 補完に使用するモデル名（任意、推奨: Qwen3 Coder）。</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>ローカルサフィックスに含めるカーソル位置の後のコード行数を指定します。</translation>
     </message>
@@ -1049,7 +1053,12 @@
         <translation>最後に選択したモデル</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+10"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
+        <translation>会話タイトルやフォローアップ提案などの補助リクエストに使用するモデルです。メインのチャットモデルを空けておくには、小さいモデルを使用してください。エントリはサーバーが提供するモデルです。名前は直接入力することもできます。既定ではアクティブなチャットモデルが使用されます。</translation>
+    </message>
+    <message>
+        <location line="+212"/>
         <source>bash:</source>
         <translation>bash:</translation>
     </message>
@@ -1063,7 +1072,7 @@
         <translation type="vanished">秒あたりのトークン数を表示</translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-241"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
         <translation>推論対応モデルの思考（reasoning）レベル。&quot;default&quot; はモデルのデフォルトを使用し、&quot;off&quot; は思考を無効にします。具体的なレベルは、サーバーがモデルのチャットテンプレートについて報告するものです。</translation>
     </message>
@@ -1078,12 +1087,11 @@
         <translation>チャット会話のフォントサイズ。エディタのフォントサイズに対するパーセンテージです。チャット上で Ctrl+マウスホイール、またはチャットズームイン/アウトコマンドで調整できます。</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
+        <translation type="vanished">会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
     </message>
     <message>
-        <location line="+142"/>
+        <location line="+157"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。サンドボックス設定ページからダウンロードでき（そちらで自分の実行ファイルを指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
     </message>
@@ -1188,14 +1196,14 @@
         <translation>&quot;ll&quot; ロケーター組み込みプロンプトです。メニューにはプロンプトの1行目のみが表示されますが、モデルには全文が送信されます。&quot;{selection}&quot; は選択されたテキストに置き換えられ、&quot;{file}&quot; と &quot;{line}&quot; は現在のファイルとカーソル行、&quot;{diagnostics}&quot; は現在のファイルのエラーと警告、&quot;{git_diff}&quot; はその git リポジトリの未コミットの変更になります。</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-4"/>
-        <location filename="../src/llamasettings.cpp" line="+7"/>
+        <location line="+7"/>
         <location line="+1"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
         <source>Selection prompt button</source>
         <translation>選択プロンプトボタン</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>エディタのテキスト選択範囲の下部に小さなボタンを表示します。クリックすると llama.cpp ロケーターが開き、選択されたテキストをプロンプトのいずれかを付けて llama.cpp に送信できます。</translation>
     </message>
@@ -1566,7 +1574,7 @@
         <translation>このプロジェクトに対して、グローバルの &apos;プロジェクト指示を読み込む&apos; 設定を上書きします。何が読み込まれるのかは、Llama Tools ページのグローバル設定を参照してください。</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location filename="../src/llamasettingspages.cpp" line="+236"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; は API キーを必要としません</translation>
     </message>
@@ -1589,7 +1597,7 @@
         <translation type="vanished">チャット UI に秒あたりのトークン数を表示します。</translation>
     </message>
     <message>
-        <location line="-721"/>
+        <location filename="../src/llamasettings.cpp" line="-465"/>
         <source>Handoff Prompt</source>
         <translation>引き継ぎプロンプト</translation>
     </message>
@@ -1901,7 +1909,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-581"/>
+        <location filename="../src/llamasettings.cpp" line="-538"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -2004,6 +2012,7 @@ You can type any other prompt – they are remembered for next time.</source>
     <message>
         <location filename="../src/llamachateditor.cpp" line="+192"/>
         <location line="+14"/>
+        <location filename="../src/llamasettingspages.cpp" line="-204"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -2118,7 +2127,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="+1103"/>
+        <location line="+1106"/>
         <source>Time: %1</source>
         <translation>時間: %1</translation>
     </message>
@@ -2132,19 +2141,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">フォローアップ質問:</translation>
     </message>
     <message>
-        <location line="-364"/>
+        <location line="-368"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
     <message>
-        <location line="-915"/>
-        <location line="+948"/>
-        <location line="+81"/>
+        <location line="-914"/>
+        <location line="+947"/>
+        <location line="+85"/>
         <source>Human Editor</source>
         <translation>人間エディター</translation>
     </message>
     <message>
-        <location line="-1000"/>
+        <location line="-1003"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>%1 に接続しています。現在のディレクトリは %2 です。</translation>
     </message>
@@ -2275,7 +2284,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>作業ディレクトリを選択</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -2295,7 +2304,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>モデルなし</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+90"/>
         <source>Edit Message</source>
         <translation>メッセージを編集</translation>
     </message>
@@ -2333,12 +2342,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">この会話を継続するために新しい会話を作成しています – 会話を要約しています...</translation>
     </message>
     <message>
-        <location line="-926"/>
+        <location line="-930"/>
         <source>Follow-up questions:</source>
         <translation>続きの質問:</translation>
     </message>
     <message>
-        <location line="-611"/>
+        <location line="-610"/>
         <source>Queued messages - sent after the current step</source>
         <translation>キューに入ったメッセージ - 現在のステップの後に送信されます</translation>
     </message>
@@ -2347,7 +2356,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">速度: %1 トークン/秒</translation>
     </message>
     <message>
-        <location line="+1556"/>
+        <location line="+1559"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;プロンプト:&lt;/b&gt;&lt;br&gt;トークン数: %1&lt;br&gt;処理時間: %2 ミリ秒&lt;br&gt;速度: %3 トークン/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成:&lt;/b&gt;&lt;br&gt;トークン数: %4&lt;br&gt;処理時間: %5 ミリ秒&lt;br&gt;速度: %6 トークン/秒</translation>
     </message>
@@ -2469,7 +2478,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1658"/>
+        <location filename="../src/llamachateditor.cpp" line="-1661"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -2536,28 +2545,24 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation>ヘッダー: %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation>スキル %1 を読み込む</translation>
+        <translation type="vanished">スキル %1 を読み込む</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>&quot;name&quot; 引数が必要です。</translation>
+        <translation type="vanished">&quot;name&quot; 引数が必要です。</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>スキル &quot;%1&quot; が見つかりませんでした。利用可能なスキル: %2</translation>
+        <translation type="vanished">スキル &quot;%1&quot; が見つかりませんでした。利用可能なスキル: %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
+        <location line="+1"/>
         <source>(none)</source>
         <translation>（なし）</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
+        <location line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>このサーバーが提供するツールを以下にリストします。チャットでツールを有効にするには、ツールにチェックを入れてください。</translation>
     </message>
@@ -2804,7 +2809,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
         <source>Error:</source>
         <translation>エラー:</translation>
     </message>
@@ -3173,12 +3178,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+152"/>
-        <location line="+87"/>
+        <location line="+82"/>
         <source>The server is not running.</source>
         <translation>サーバーは実行されていません。</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-51"/>
         <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
         <translation>サーバーがこの操作をサポートしていません: モデルのエンドポイントはルーターモードでのみ存在します（固定の --model なしで起動してください）。</translation>
     </message>
@@ -3188,7 +3193,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>サーバーがリクエストを拒否しました: %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+75"/>
         <source>The connection to the server was lost.</source>
         <translation>サーバーへの接続が切断されました。</translation>
     </message>
@@ -3248,9 +3253,6 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+14"/>
         <location line="+139"/>
         <location filename="../src/serversettingswidget.cpp" line="+137"/>
-        <location filename="../src/tools/mxc.cpp" line="+160"/>
-        <location filename="../src/tools/niubash.cpp" line="+163"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
         <source>Download</source>
         <translation>ダウンロード</translation>
     </message>
@@ -3451,17 +3453,11 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../src/tools/mxc.cpp" line="-9"/>
-        <location filename="../src/tools/niubash.cpp" line="-9"/>
-        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
         <source>Project: %1</source>
         <translation>プロジェクト: %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>ライセンス: %1</translation>
     </message>
@@ -3562,1042 +3558,6 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>サーバーは停止しています: モデルディレクトリがそのまま一覧表示されます。</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
-        <source>Add %1</source>
-        <translation>%1 を追加</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Delete %1</source>
-        <translation>%1 を削除</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Edit %1</source>
-        <translation>%1 を編集</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Move %1 to %2</source>
-        <translation>%1 を %2 に移動</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location line="+7"/>
-        <source>Apply patch</source>
-        <translation>パッチを適用</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Apply patch to %1 files</source>
-        <translation>%1 個のファイルにパッチを適用</translation>
-    </message>
-    <message>
-        <location line="+79"/>
-        <source>created</source>
-        <translation>作成済み</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>edited</source>
-        <translation>編集済み</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>moved</source>
-        <translation>移動済み</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>deleted</source>
-        <translation>削除済み</translation>
-    </message>
-    <message>
-        <location line="+203"/>
-        <source>Success. Updated the following files:</source>
-        <translation>成功しました。以下のファイルを更新しました:</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加するか、Llama.cpp チャットツール設定ページから niubash をダウンロードしてください。</translation>
-    </message>
-    <message>
-        <location line="+137"/>
-        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation>sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
-    </message>
-    <message>
-        <location line="+146"/>
-        <source>[Output truncated: %1]</source>
-        <translation>［出力が切り詰められました: %1］</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>showing last %1 of %2 lines</source>
-        <translation>%2 行中、最後の %1 行を表示</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>showing last %1 KB</source>
-        <translation>最後の %1 KB を表示</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Full output saved to: %1</source>
-        <translation>完全な出力を以下に保存しました: %1</translation>
-    </message>
-    <message>
-        <location line="+113"/>
-        <source>running %1</source>
-        <translation>%1 を実行中</translation>
-    </message>
-    <message>
-        <location line="+47"/>
-        <source>Error: the command must not be empty.</source>
-        <translation>エラー: コマンドを空にすることはできません。</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>Error: working directory does not exist: %1</source>
-        <translation>エラー: 作業ディレクトリが存在しません: %1</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <location line="+26"/>
-        <location line="+29"/>
-        <source>Error: %1</source>
-        <translation>エラー: %1</translation>
-    </message>
-    <message>
-        <location line="-43"/>
-        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation>エラー: サンドボックスは &quot;%1&quot; を書き込み可能にできません: これはホームディレクトリまたはファイルシステムのルートであるか、それらを含んでいます。プロジェクトを開いて、そのディレクトリ内でコマンドを実行してください。</translation>
-    </message>
-    <message>
-        <location line="+220"/>
-        <source>Command was stopped by the user.</source>
-        <translation>コマンドはユーザーによって停止されました。</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation>コマンドが %1 ミリ秒後にタイムアウトしました。コマンドが長時間かかる見込みの場合は、タイムアウトを大きくして再試行してください。</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Failed to start the command: %1</source>
-        <translation>コマンドの起動に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+308"/>
-        <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+382"/>
-        <location line="+7"/>
-        <source>unknown error</source>
-        <translation>不明なエラー</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Command terminated abnormally (crashed).</source>
-        <translation>コマンドが異常終了しました（クラッシュ）。</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Command exited with code %1.</source>
-        <translation>コマンドは終了コード %1 で終了しました。</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>Working directory: %1
-
-</source>
-        <translation>作業ディレクトリ: %1
-
-</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
-        <source>Edit file</source>
-        <translation>ファイルを編集</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>edit %1 (%2 blocks)</source>
-        <translation>%1 を編集（%2 ブロック）</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+26"/>
-        <source>edit %1</source>
-        <translation>%1 を編集</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
-        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation>ツールエラー: &quot;path&quot; は空でない文字列でなければなりません。</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation>ツールエラー: すべての編集には &quot;oldText&quot; と &quot;newText&quot; が必要です。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation>ツールエラー: &quot;edits&quot; には少なくとも1つの置換を含める必要があります。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>&quot;%1&quot; を編集できません: ファイルが見つかりません。read_file でパスを確認するか、write でファイルを作成してください。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+7"/>
-        <location line="+4"/>
-        <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot; を編集できません: %2</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation>%2 の %1 ブロックを正常に置換しました。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/find_tool.cpp" line="-179"/>
-        <location line="+8"/>
-        <source>find files %1</source>
-        <translation>ファイル検索 %1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-168"/>
-        <source>Pattern: %1</source>
-        <translation>パターン: %1</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <location filename="../src/tools/search_tool.cpp" line="+5"/>
-        <source>  Path: %1</source>
-        <translation>  パス: %1</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation>エラー: ripgrep（rg）が見つかりませんでした。find ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="+27"/>
-        <source>Error: the pattern must not be empty.</source>
-        <translation>エラー: パターンを空にすることはできません。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
-        <source>Error: path is not a directory: %1</source>
-        <translation>エラー: パスがディレクトリではありません: %1</translation>
-    </message>
-    <message>
-        <location line="+108"/>
-        <location filename="../src/tools/search_tool.cpp" line="+119"/>
-        <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation>［検索はユーザーによって停止されました。結果は不完全です。］</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation>［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。より具体的なおパターンを使用してください。］</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <location filename="../src/tools/search_tool.cpp" line="+8"/>
-        <source>[Failed to start ripgrep: %1]</source>
-        <translation>［ripgrep の起動に失敗しました: %1］</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <location filename="../src/tools/search_tool.cpp" line="+6"/>
-        <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation>［ripgrep が失敗しました（終了コード %1）: %2］</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation>［%1 件の結果上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、より具体的なパターンを使用してください。］</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>No files found.</source>
-        <translation>ファイルが見つかりません。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation>［出力を %1 KB に切り詰めました。すべての結果を表示するには、より具体的なパターンを使用してください。］</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
-        <source>get current time</source>
-        <translation>現在時刻を取得</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
-        <source>get runtime info</source>
-        <translation>ランタイム情報を取得</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>OS: %1
-Working directory: %2</source>
-        <translation>OS: %1
-作業ディレクトリ: %2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）はインストールされていますが、カーネルがそのサンドボックスのセットアップを拒否しています: %1。Ubuntu 24.04 以降では、これは通常、AppArmor による非特権ユーザーネームスペースの制限です: &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; を実行してください（/etc/sysctl.d/ に追加すると永続化されます）。または、bwrap に &apos;userns&apos; 属性のある AppArmor プロファイルを与えてください。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）はインストールされていますが、このシステムでは非特権ユーザーネームスペースが無効になっています: %1。Debian やその派生ディストリビューションでは、&apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; で有効にできます。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）でサンドボックスのセットアップに失敗しました: %1。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）が時間内にサンドボックスをセットアップできませんでした。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
-        <location line="+7"/>
-        <source>list directory %1</source>
-        <translation>ディレクトリ %1 の一覧</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Path: `%1`
-
-</source>
-        <translation>パス: `%1`
-
-</translation>
-    </message>
-    <message>
-        <location line="+60"/>
-        <source>Directory is empty.</source>
-        <translation>ディレクトリは空です。</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>［出力を %1 KB に切り詰めました。残りのエントリを表示するにはサブディレクトリをリストしてください。］</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>［%1 件エントリの上限に達しました。より多くのエントリを表示するには limit=%2 を使用してください。］</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
-        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation>MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
-        <location line="+27"/>
-        <source>Cannot reach the MCP server.</source>
-        <translation>MCP サーバーに到達できません。</translation>
-    </message>
-    <message>
-        <location line="-22"/>
-        <source>MCP initialize failed: %1</source>
-        <translation>MCP の初期化に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>MCP tools/list failed: %1</source>
-        <translation>MCP の tools/list が失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+53"/>
-        <source>Connection to the MCP server was closed.</source>
-        <translation>MCP サーバーへの接続が切断されました。</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>MCP サーバーが利用できません。サーバーが実行されていて到達可能であることを確認してから、再試行してください。</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>MCP ツール &quot;%1&quot; が失敗しました: %2</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation>MCP ツール &quot;%1&quot; が失敗しました: MCP サーバーが応答しませんでした（接続エラーまたはタイムアウト）。</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation>MCP サーバーが再起動されたため、呼び出しは実行されませんでした。再試行してください。</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation>MCP サーバーがツール呼び出しに対して HTTP %1 を返しました。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation>MCP サーバーが空のまたは無効な応答を返しました。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/mxc.cpp" line="-65"/>
-        <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation>Windows サンドボックス実行ファイル（MXC）をダウンロード</translation>
-    </message>
-    <message>
-        <location line="+58"/>
-        <source>Download the Microsoft MXC runtime %1?</source>
-        <translation>Microsoft MXC 実行ファイル %1 をダウンロードしますか?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation>&apos;コマンドをサンドボックス化する&apos; 設定では、Windows の bash ツールを Microsoft MXC プロセスコンテナ内に限定します。固定された wxc-exec.exe 実行ファイルはこのシステムにインストールされていないため、代わりにここでダウンロードできます。MXC は MIT ライセンスで公開されています。</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>The package holds no wxc-exec.exe binary.</source>
-        <translation>パッケージに wxc-exec.exe バイナリが含まれていません。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation>wxc-exec.exe バイナリのサイズが予期しないものです。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation>wxc-exec.exe バイナリが期待されるチェックサムと一致しません。</translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation>Microsoft MXC 実行ファイルは Windows x86-64 と arm64 のみ利用可能です。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Downloading the MXC runtime...</source>
-        <translation>MXC 実行ファイルをダウンロード中...</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>Downloading the MXC runtime failed: %1</source>
-        <translation>MXC 実行ファイルのダウンロードに失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <location filename="../src/tools/niubash.cpp" line="+126"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
-        <source>Verifying package integrity...</source>
-        <translation>パッケージの完全性を検証中...</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <location filename="../src/tools/niubash.cpp" line="+5"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
-        <source>The downloaded package is not the one that was expected.</source>
-        <translation>ダウンロードされたパッケージは期待されるものではありません。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Unpacking the MXC runtime...</source>
-        <translation>MXC 実行ファイルを展開中...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>MXC 実行ファイルの展開に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/niubash.cpp" line="-207"/>
-        <source>Download niubash</source>
-        <translation>niubash をダウンロード</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <source>Download niubash %1 from GitHub?</source>
-        <translation>GitHub から niubash %1 をダウンロードしますか?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation>Windows の bash ツールは通常 Git Bash を実行しますが、その MSYS2 ランタイムは Windows サンドボックス内で初期化できません（microsoft/mxc#1061）。niubash はこれができるネイティブで MSYS2 に依存しない Bash なので、ここでダウンロードして bash ツールをサンドボックス内で実行できます。niubash は MIT ライセンスで公開されています。</translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>The package holds no niubash shell.</source>
-        <translation>このパッケージには niubash シェルが含まれていません。</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>There is no niubash for this platform.</source>
-        <translation>このプラットフォーム用の niubash はありません。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading niubash...</source>
-        <translation>niubash をダウンロード中...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading niubash failed: %1</source>
-        <translation>niubash のダウンロードに失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking niubash...</source>
-        <translation>niubash を展開中...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking niubash failed: %1</source>
-        <translation>niubash の展開に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
-        <source>read whole file %1</source>
-        <translation>ファイル %1 をすべて読み込む</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>read %1</source>
-        <translation>%1 を読み取る</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation>ファイル &quot;%1&quot; は存在しません。</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot; の読み込みに失敗しました: %2</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>イメージ &quot;%1&quot; は %2 MB で、%3 MB の読み込み上限を超過しています。先にリサイズしてください（例: bash ツールを使用）。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>イメージファイル &quot;%1&quot;（%2、%3 バイト）。その内容はイメージとして添付されます。</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>first_line must be &gt;= 1.</source>
-        <translation>開始行は 1 以上でなければなりません。</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>終了行は開始行以上でなければなりません。</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>開始行（%1）がファイル &quot;%2&quot; の行数（%3）を超えています。</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>&quot;%2&quot; の %1 行目が %3 KB の読み込み上限を超えています。このツールではファイルを読み込めません。</translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source> %1 KB limit reached.</source>
-        <translation> %1 KB の上限に達しました。</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> first_line=%1、last_line_inclusive=%2 で続行してください。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
-        <source>Download ripgrep</source>
-        <translation>ripgrep をダウンロード</translation>
-    </message>
-    <message>
-        <location line="+67"/>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation>GitHub から ripgrep %1 をダウンロードしますか?</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>search ツールと find ツールは ripgrep を使用してファイル内容を検索し、ファイル名でファイルを特定します。このシステムにインストールされていないため、ここでダウンロードできます。ripgrep は MIT ライセンスまたは Unlicense ライセンスで公開されています。</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The package holds no ripgrep binary.</source>
-        <translation>パッケージに ripgrep バイナリが含まれていません。</translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>There is no ripgrep for this platform.</source>
-        <translation>このプラットフォーム用の ripgrep はありません。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Downloading ripgrep...</source>
-        <translation>ripgrep をダウンロード中...</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation>ripgrep のダウンロードに失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Unpacking ripgrep...</source>
-        <translation>ripgrep を展開中...</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation>ripgrep の展開に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
-        <source>search for %1</source>
-        <translation>%1 を検索</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>  Glob: %1</source>
-        <translation>  グローブ: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>エラー: ripgrep（rg）が見つかりませんでした。search ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Error: path does not exist: %1</source>
-        <translation>エラー: パスが存在しません: %1</translation>
-    </message>
-    <message>
-        <location line="+114"/>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。パスを絞るか、パターンを改善してください。］</translation>
-    </message>
-    <message>
-        <location line="+19"/>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>［%1 件の一致上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、パターンを改善してください。］</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>［一部の行を %1 文字に切り詰めました。完全な行を表示するには read_file を使用してください。］</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>No matches found.</source>
-        <translation>一致が見つかりませんでした。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>［出力を %1 KB に切り詰めました。すべての一致を表示するには、パターンを改善するか、コンテキストを減らしてください。］</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>あなたは &quot;general&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。利用可能なツールで自律的に作業し、タスクを完了してください。ユーザーに質問することはできません。完了したら、行番号付きの関連ファイルパスを含め、何を行ったか・何を見つけたかの簡潔な報告1つで回答し、メインの会話が作業を続けられるようにしてください。</translation>
-    </message>
-    <message>
-        <location line="+68"/>
-        <location line="+27"/>
-        <source>task: %1</source>
-        <translation>タスク: %1</translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>ツールエラー: &quot;description&quot; と &quot;prompt&quot; の両方が必要です。</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>ツールエラー: 不明な subagent_type &quot;%1&quot;（&quot;explore&quot; または &quot;general&quot; を指定してください）</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Task: %1</source>
-        <translation>タスク: %1</translation>
-    </message>
-    <message>
-        <location line="+22"/>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation>タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
-
-%3</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
-        <source>update task list</source>
-        <translation>タスクリストを更新</translation>
-    </message>
-    <message>
-        <location line="-7"/>
-        <source>update task list (%1 tasks)</source>
-        <translation>タスクリストを更新（%1 タスク）</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>ツールエラー: &quot;todos&quot; には少なくとも1つのタスクを含める必要があります。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>ツールエラー: タスク %1 の &quot;content&quot; が空です。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>ツールエラー: タスク %1 のステータス &quot;%2&quot; が不明です（&quot;pending&quot;、&quot;in_progress&quot;、&quot;completed&quot; のいずれかを指定してください）。</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>ツールエラー: &quot;in_progress&quot; にできるのは1つのタスクのみです（%1 件指定されています）。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
-        <source>Reset to Project Directory</source>
-        <translation>プロジェクトディレクトリにリセット</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>作業ディレクトリの上書きをクリアします: ツールは起動プロジェクトのディレクトリ（プロジェクトが開かれていない場合はデフォルトのプロジェクトディレクトリ）で実行されます。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Reset to Default Projects Directory</source>
-        <translation>デフォルトのプロジェクトディレクトリにリセット</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>新しいプロジェクトが作成される場所である、デフォルトのプロジェクトディレクトリを使用します。</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Reset to Git Bash</source>
-        <translation>Git Bash にリセット</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>bash の上書きをクリアします: bash ツールはデフォルトの bash、Git Bash（まず PATH 上で認識された bash、次に Git for Windows に同梱の bash）を使用します。</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Reset to niubash</source>
-        <translation>niubash にリセット</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>ダウンロードした niubash を使用します。niubash はネイティブで MSYS2 に依存しない Bash で、Git Bash とは異なり Windows サンドボックス内で実行できます。</translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内、一時場所、およびサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>&quot;%1&quot; への書き込みは許可されていません: 認証情報のある場所はサンドボックス内で保護されています。</translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>&quot;%1&quot; の読み取りは許可されていません: 認証情報のある場所はサンドボックス内で読み取れません。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
-        <location line="+27"/>
-        <source>fetch %1</source>
-        <translation>%1 をフェッチ</translation>
-    </message>
-    <message>
-        <location line="+112"/>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>無効な URL &quot;%1&quot;: http:// または https:// で始まる必要があります</translation>
-    </message>
-    <message>
-        <location line="+21"/>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation>%1 のフェッチに失敗しました: 応答が大きすぎます（上限 5 MB）。</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Fetch failed for %1: %2</source>
-        <translation>%1 のフェッチに失敗しました: %2</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation>
-
-[... 内容は %1 文字で切り詰められました ...]</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
-        <location line="+26"/>
-        <source>search %1</source>
-        <translation>%1 を検索</translation>
-    </message>
-    <message>
-        <location line="+196"/>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation>&quot;%1&quot; の検索結果:</translation>
-    </message>
-    <message>
-        <location line="+15"/>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation>ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <location line="+44"/>
-        <location line="+13"/>
-        <location line="+41"/>
-        <location line="+45"/>
-        <location line="+51"/>
-        <source>Search failed: %1</source>
-        <translation>検索に失敗しました: %1</translation>
-    </message>
-    <message>
-        <location line="-189"/>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>検索に失敗しました: DuckDuckGo が現在リクエストにレート制限を適用しています。1 分待ってから再試行してください。</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation>&quot;%1&quot; について結果が見つかりませんでした。</translation>
-    </message>
-    <message>
-        <location line="-174"/>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <location line="+54"/>
-        <location line="+45"/>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation>検索に失敗しました: 検索プロバイダーからの応答が無効です。</translation>
-    </message>
-    <message>
-        <location line="-88"/>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation>&quot;%1&quot; について結果が見つかりませんでした</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>検索に失敗しました: Brave バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
-    </message>
-    <message>
-        <location line="+46"/>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>検索に失敗しました: Tavily バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
-    </message>
-    <message>
-        <location line="+44"/>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation>検索に失敗しました: Exa エンドポイント URL が設定されていません。</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation>&quot;%1&quot; の検索結果:
-
-%2</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Llama.cpp チャットサンドボックス設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。そちらで自分の実行ファイルを指定することもできます。また、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを解除すると、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Windows サンドボックスバックエンド（wxc-exec）が機能プローブに対して時間内に応答しませんでした。%1</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Windows サンドボックスバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
-    </message>
-    <message>
-        <location line="+361"/>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+41"/>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
-    </message>
-    <message>
-        <location line="+40"/>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>&quot;%1&quot; の bash は、認識された niubash、Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはこの bash に限定された読み取り専用場所を許可できません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に置くか、Llama.cpp チャットツール設定ページから niubash をダウンロードするか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
-    </message>
-    <message>
-        <location line="+111"/>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Windows サンドボックス（Microsoft MXC）が初めて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
-        <source>Write file</source>
-        <translation>ファイルを書き込む</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+26"/>
-        <source>write %1</source>
-        <translation>%1 に書き込む</translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>ツールエラー: &quot;content&quot; が必要です。</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>&quot;%1&quot; に書き込めません: 親パスがファイルです。</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>&quot;%1&quot; に書き込めません: ディレクトリを作成できません: %2</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>&quot;%1&quot; に書き込めません: %2</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>%2 に %1 バイトを正常に書き込みました。</translation>
-    </message>
-</context>
-<context>
-    <name>Tr</name>
-    <message>
         <source>Add %1</source>
         <translation type="vanished">%1 を追加</translation>
     </message>
@@ -4642,36 +3602,12 @@ Working directory: %2</source>
         <translation type="vanished">成功しました。以下のファイルを更新しました:</translation>
     </message>
     <message>
-        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
-        <translation type="vanished">bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
-    </message>
-    <message>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
         <translation type="vanished">bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加するか、Llama.cpp チャットツール設定ページから niubash をダウンロードしてください。</translation>
     </message>
     <message>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
         <translation type="vanished">sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap（bwrap）はインストールされていますが、カーネルがそのサンドボックスのセットアップを拒否しています: %1。Ubuntu 24.04 以降では、これは通常、AppArmor による非特権ユーザーネームスペースの制限です: &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; を実行してください（/etc/sysctl.d/ に追加すると永続化されます）。または、bwrap に &apos;userns&apos; 属性のある AppArmor プロファイルを与えてください。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap（bwrap）はインストールされていますが、このシステムでは非特権ユーザーネームスペースが無効になっています: %1。Debian やその派生ディストリビューションでは、&apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; で有効にできます。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap（bwrap）でサンドボックスのセットアップに失敗しました: %1。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap（bwrap）がタイムアウトするまでにサンドボックスをセットアップできませんでした。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
         <source>[Output truncated: %1]</source>
@@ -4778,248 +3714,12 @@ Working directory: %2</source>
         <translation type="vanished">%2 の %1 ブロックを正常に置換しました。</translation>
     </message>
     <message>
-        <source>Cannot reach the MCP server.</source>
-        <translation type="vanished">MCP サーバーに到達できません。</translation>
-    </message>
-    <message>
-        <source>MCP initialize failed: %1</source>
-        <translation type="vanished">MCP の初期化に失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>MCP tools/list failed: %1</source>
-        <translation type="vanished">MCP の tools/list が失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>Connection to the MCP server was closed.</source>
-        <translation type="vanished">MCP サーバーへの接続が切断されました。</translation>
-    </message>
-    <message>
-        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation type="vanished">MCP サーバーが利用できません。サーバーが実行されていて到達可能であることを確認してから、再試行してください。</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation type="vanished">MCP ツール &quot;%1&quot; が失敗しました: MCP サーバーが応答しませんでした（接続エラーまたはタイムアウト）。</translation>
-    </message>
-    <message>
-        <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="vanished">MCP サーバーが再起動されたため、呼び出しは実行されませんでした。再試行してください。</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="vanished">MCP ツール &quot;%1&quot; が失敗しました: %2</translation>
-    </message>
-    <message>
-        <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="vanished">MCP サーバーがツール呼び出しに対して HTTP %1 を返しました。</translation>
-    </message>
-    <message>
-        <source>MCP server returned an empty or malformed response.</source>
-        <translation type="vanished">MCP サーバーが空のまたは無効な応答を返しました。</translation>
-    </message>
-    <message>
-        <source>read whole file %1</source>
-        <translation type="vanished">ファイル %1 をすべて読み込む</translation>
-    </message>
-    <message>
-        <source>read %1:%2‑%3</source>
-        <translation type="vanished">%1 の %2‑%3 行を読み込む</translation>
-    </message>
-    <message>
-        <source>read %1</source>
-        <translation type="vanished">%1 を読み取る</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist.</source>
-        <translation type="vanished">ファイル &quot;%1&quot; は存在しません。</translation>
-    </message>
-    <message>
-        <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="vanished">ファイル %1 を読み込めません: %2</translation>
-    </message>
-    <message>
-        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation type="vanished">イメージ &quot;%1&quot; は %2 MB で、%3 MB の読み込み上限を超過しています。先にリサイズしてください（例: bash ツールを使用）。</translation>
-    </message>
-    <message>
-        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation type="vanished">イメージファイル &quot;%1&quot;（%2、%3 バイト）。その内容はイメージとして添付されます。</translation>
-    </message>
-    <message>
-        <source>first_line must be &gt;= 1.</source>
-        <translation type="vanished">開始行は 1 以上でなければなりません。</translation>
-    </message>
-    <message>
-        <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="vanished">終了行は開始行以上でなければなりません。</translation>
-    </message>
-    <message>
-        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="vanished">開始行 %1 はファイル %2 の行数 %3 を超えます。</translation>
-    </message>
-    <message>
-        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation type="vanished">&quot;%2&quot; の %1 行目が %3 KB の読み込み上限を超えています。このツールではファイルを読み込めません。</translation>
-    </message>
-    <message>
-        <source> %1 KB limit reached.</source>
-        <translation type="vanished"> %1 KB の上限に達しました。</translation>
-    </message>
-    <message>
-        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation type="vanished"> first_line=%1、last_line_inclusive=%2 で続行してください。</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
-    </message>
-    <message>
-        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
-    </message>
-    <message>
-        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="vanished">あなたは &quot;general&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。利用可能なツールで自律的に作業し、タスクを完了してください。ユーザーに質問することはできません。完了したら、行番号付きの関連ファイルパスを含め、何を行ったか・何を見つけたかの簡潔な報告1つで回答し、メインの会話が作業を続けられるようにしてください。</translation>
-    </message>
-    <message>
-        <source>task: %1</source>
-        <translation type="vanished">タスク: %1</translation>
-    </message>
-    <message>
-        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="vanished">ツールエラー: &quot;description&quot; と &quot;prompt&quot; の両方が必要です。</translation>
-    </message>
-    <message>
-        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="vanished">ツールエラー: 不明な subagent_type &quot;%1&quot;（&quot;explore&quot; または &quot;general&quot; を指定してください）</translation>
-    </message>
-    <message>
-        <source>Task: %1</source>
-        <translation type="vanished">タスク: %1</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
-
-%3</translation>
-    </message>
-    <message>
-        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
-    </message>
-    <message>
-        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
-
-%3</source>
-        <translation type="vanished">タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
-
-%3</translation>
-    </message>
-    <message>
-        <source>fetch %1</source>
-        <translation type="vanished">%1 をフェッチ</translation>
-    </message>
-    <message>
-        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="vanished">無効な URL &quot;%1&quot;: http:// または https:// で始まる必要があります</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="vanished">%1 のフェッチに失敗しました: 応答が大きすぎます（上限 5 MB）。</translation>
-    </message>
-    <message>
-        <source>Fetch failed for %1: %2</source>
-        <translation type="vanished">%1 のフェッチに失敗しました: %2</translation>
-    </message>
-    <message>
-        <source>
-
-[... content truncated at %1 characters ...]</source>
-        <translation type="vanished">
-
-[... 内容は %1 文字で切り詰められました ...]</translation>
-    </message>
-    <message>
-        <source>search %1</source>
-        <translation type="vanished">%1 を検索</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:</source>
-        <translation type="vanished">&quot;%1&quot; の検索結果:</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
-        <translation type="vanished">ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation type="vanished">ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
-    </message>
-    <message>
-        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="vanished">検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
-    </message>
-    <message>
-        <source>Search failed: %1</source>
-        <translation type="vanished">検索に失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">検索に失敗しました: DuckDuckGo によるレート制限が現在適用されています。1 分待ってから再試行してください。</translation>
-    </message>
-    <message>
-        <source>Search failed: invalid response from the search provider.</source>
-        <translation type="vanished">検索に失敗しました: 検索プロバイダーからの応答が無効です。</translation>
-    </message>
-    <message>
-        <source>no results found for &quot;%1&quot;</source>
-        <translation type="vanished">&quot;%1&quot; について結果が見つかりませんでした</translation>
-    </message>
-    <message>
-        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">検索に失敗しました: Brave バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
-    </message>
-    <message>
-        <source>No results found for &quot;%1&quot;.</source>
-        <translation type="vanished">&quot;%1&quot; について結果が見つかりませんでした。</translation>
-    </message>
-    <message>
-        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">検索に失敗しました: DuckDuckGo が現在リクエストにレート制限を適用しています。1 分待ってから再試行してください。</translation>
-    </message>
-    <message>
-        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">検索に失敗しました: Tavily バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
-    </message>
-    <message>
-        <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="vanished">検索に失敗しました: Exa エンドポイント URL が設定されていません。</translation>
-    </message>
-    <message>
-        <source>Search results for &quot;%1&quot;:
-
-%2</source>
-        <translation type="vanished">&quot;%1&quot; の検索結果:
-
-%2</translation>
-    </message>
-    <message>
         <source>find files %1</source>
         <translation type="vanished">ファイル検索 %1</translation>
     </message>
     <message>
-        <source>Pattern: `%1`</source>
-        <translation type="vanished">パターン: `%1`</translation>
-    </message>
-    <message>
         <source>Pattern: %1</source>
-        <translation type="vanished">パターン: %1</translation>
+        <translation type="vanished">パターン: %1</translation>
     </message>
     <message>
         <source>  Path: %1</source>
@@ -5066,6 +3766,40 @@ Working directory: %2</source>
         <translation type="vanished">［出力を %1 KB に切り詰めました。すべての結果を表示するには、より具体的なパターンを使用してください。］</translation>
     </message>
     <message>
+        <source>get current time</source>
+        <translation type="vanished">現在時刻を取得</translation>
+    </message>
+    <message>
+        <source>get runtime info</source>
+        <translation type="vanished">ランタイム情報を取得</translation>
+    </message>
+    <message>
+        <source>OS: %1
+Working directory: %2</source>
+        <translation type="vanished">OS: %1
+作業ディレクトリ: %2</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）はインストールされていますが、カーネルがそのサンドボックスのセットアップを拒否しています: %1。Ubuntu 24.04 以降では、これは通常、AppArmor による非特権ユーザーネームスペースの制限です: &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; を実行してください（/etc/sysctl.d/ に追加すると永続化されます）。または、bwrap に &apos;userns&apos; 属性のある AppArmor プロファイルを与えてください。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）はインストールされていますが、このシステムでは非特権ユーザーネームスペースが無効になっています: %1。Debian やその派生ディストリビューションでは、&apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; で有効にできます。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）でサンドボックスのセットアップに失敗しました: %1。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）が時間内にサンドボックスをセットアップできませんでした。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
         <source>list directory %1</source>
         <translation type="vanished">ディレクトリ %1 の一覧</translation>
     </message>
@@ -5094,16 +3828,48 @@ Working directory: %2</source>
         <translation type="vanished">MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
     </message>
     <message>
-        <source>Download ripgrep</source>
-        <translation type="vanished">ripgrep をダウンロード</translation>
+        <source>Cannot reach the MCP server.</source>
+        <translation type="vanished">MCP サーバーに到達できません。</translation>
     </message>
     <message>
-        <source>Download ripgrep %1 from GitHub?</source>
-        <translation type="vanished">GitHub から ripgrep %1 をダウンロードしますか?</translation>
+        <source>MCP initialize failed: %1</source>
+        <translation type="vanished">MCP の初期化に失敗しました: %1</translation>
     </message>
     <message>
-        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation type="vanished">search ツールと find ツールは ripgrep を使用してファイル内容を検索し、ファイル名でファイルを特定します。このシステムにインストールされていないため、ここでダウンロードできます。ripgrep は MIT ライセンスまたは Unlicense ライセンスで公開されています。</translation>
+        <source>MCP tools/list failed: %1</source>
+        <translation type="vanished">MCP の tools/list が失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>Connection to the MCP server was closed.</source>
+        <translation type="vanished">MCP サーバーへの接続が切断されました。</translation>
+    </message>
+    <message>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation type="vanished">MCP サーバーが利用できません。サーバーが実行されていて到達可能であることを確認してから、再試行してください。</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation type="vanished">MCP ツール &quot;%1&quot; が失敗しました: %2</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation type="vanished">MCP ツール &quot;%1&quot; が失敗しました: MCP サーバーが応答しませんでした（接続エラーまたはタイムアウト）。</translation>
+    </message>
+    <message>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation type="vanished">MCP サーバーが再起動されたため、呼び出しは実行されませんでした。再試行してください。</translation>
+    </message>
+    <message>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation type="vanished">MCP サーバーがツール呼び出しに対して HTTP %1 を返しました。</translation>
+    </message>
+    <message>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation type="vanished">MCP サーバーが空のまたは無効な応答を返しました。</translation>
+    </message>
+    <message>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation type="vanished">MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
     </message>
     <message>
         <source>Download the Windows sandbox runtime (MXC)</source>
@@ -5116,18 +3882,6 @@ Working directory: %2</source>
     <message>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
         <translation type="vanished">&apos;コマンドをサンドボックス化する&apos; 設定では、Windows の bash ツールを Microsoft MXC プロセスコンテナ内に限定します。固定された wxc-exec.exe 実行ファイルはこのシステムにインストールされていないため、代わりにここでダウンロードできます。MXC は MIT ライセンスで公開されています。</translation>
-    </message>
-    <message>
-        <source>Project: %1</source>
-        <translation type="vanished">プロジェクト: %1</translation>
-    </message>
-    <message>
-        <source>License: %1</source>
-        <translation type="vanished">ライセンス: %1</translation>
-    </message>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">ダウンロード</translation>
     </message>
     <message>
         <source>The package holds no wxc-exec.exe binary.</source>
@@ -5146,40 +3900,12 @@ Working directory: %2</source>
         <translation type="vanished">Microsoft MXC 実行ファイルは Windows x86-64 と arm64 のみ利用可能です。</translation>
     </message>
     <message>
-        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
-        <translation type="vanished">Microsoft MXC 実行ファイルは Windows x86-64 のみ利用可能です。</translation>
-    </message>
-    <message>
         <source>Downloading the MXC runtime...</source>
         <translation type="vanished">MXC 実行ファイルをダウンロード中...</translation>
     </message>
     <message>
         <source>Downloading the MXC runtime failed: %1</source>
         <translation type="vanished">MXC 実行ファイルのダウンロードに失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>Unpacking the MXC runtime...</source>
-        <translation type="vanished">MXC 実行ファイルを展開中...</translation>
-    </message>
-    <message>
-        <source>Unpacking the MXC runtime failed: %1</source>
-        <translation type="vanished">MXC 実行ファイルの展開に失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>The package holds no ripgrep binary.</source>
-        <translation type="vanished">パッケージに ripgrep バイナリが含まれていません。</translation>
-    </message>
-    <message>
-        <source>There is no ripgrep for this platform.</source>
-        <translation type="vanished">このプラットフォーム用の ripgrep はありません。</translation>
-    </message>
-    <message>
-        <source>Downloading ripgrep...</source>
-        <translation type="vanished">ripgrep をダウンロード中...</translation>
-    </message>
-    <message>
-        <source>Downloading ripgrep failed: %1</source>
-        <translation type="vanished">ripgrep のダウンロードに失敗しました: %1</translation>
     </message>
     <message>
         <source>Verifying package integrity...</source>
@@ -5190,272 +3916,12 @@ Working directory: %2</source>
         <translation type="vanished">ダウンロードされたパッケージは期待されるものではありません。</translation>
     </message>
     <message>
-        <source>Unpacking ripgrep...</source>
-        <translation type="vanished">ripgrep を展開中...</translation>
+        <source>Unpacking the MXC runtime...</source>
+        <translation type="vanished">MXC 実行ファイルを展開中...</translation>
     </message>
     <message>
-        <source>Unpacking ripgrep failed: %1</source>
-        <translation type="vanished">ripgrep の展開に失敗しました: %1</translation>
-    </message>
-    <message>
-        <source>search for %1</source>
-        <translation type="vanished">%1 を検索</translation>
-    </message>
-    <message>
-        <source>  Glob: `%1`</source>
-        <translation type="vanished">  グローブ: `%1`</translation>
-    </message>
-    <message>
-        <source>  Glob: %1</source>
-        <translation type="vanished">  グローブ: %1</translation>
-    </message>
-    <message>
-        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation type="vanished">エラー: ripgrep（rg）が見つかりませんでした。search ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
-    </message>
-    <message>
-        <source>Error: path does not exist: %1</source>
-        <translation type="vanished">エラー: パスが存在しません: %1</translation>
-    </message>
-    <message>
-        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation type="vanished">［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。パスを絞るか、パターンを改善してください。］</translation>
-    </message>
-    <message>
-        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation type="vanished">［%1 件の一致上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、パターンを改善してください。］</translation>
-    </message>
-    <message>
-        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation type="vanished">［一部の行を %1 文字に切り詰めました。完全な行を表示するには read_file を使用してください。］</translation>
-    </message>
-    <message>
-        <source>No matches found.</source>
-        <translation type="vanished">一致が見つかりませんでした。</translation>
-    </message>
-    <message>
-        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation type="vanished">［出力を %1 KB に切り詰めました。すべての一致を表示するには、パターンを改善するか、コンテキストを減らしてください。］</translation>
-    </message>
-    <message>
-        <source>load skill %1</source>
-        <translation type="vanished">スキルを読み込む %1</translation>
-    </message>
-    <message>
-        <source>The &quot;name&quot; argument is required.</source>
-        <translation type="vanished">&quot;name&quot; 引数が必要です。</translation>
-    </message>
-    <message>
-        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation type="vanished">スキル &quot;%1&quot; が見つかりませんでした。利用可能なスキル: %2</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation type="vanished">（なし）</translation>
-    </message>
-    <message>
-        <source>update task list</source>
-        <translation type="vanished">タスクリストを更新</translation>
-    </message>
-    <message>
-        <source>update task list (%1 tasks)</source>
-        <translation type="vanished">タスクリストを更新（%1 タスク）</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation type="vanished">ツールエラー: &quot;todos&quot; には少なくとも1つのタスクを含める必要があります。</translation>
-    </message>
-    <message>
-        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation type="vanished">ツールエラー: タスク %1 の &quot;content&quot; が空です。</translation>
-    </message>
-    <message>
-        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation type="vanished">ツールエラー: タスク %1 のステータス &quot;%2&quot; が不明です（&quot;pending&quot;、&quot;in_progress&quot;、&quot;completed&quot; のいずれかを指定してください）。</translation>
-    </message>
-    <message>
-        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation type="vanished">ツールエラー: &quot;in_progress&quot; にできるのは1つのタスクのみです（%1 件指定されています）。</translation>
-    </message>
-    <message>
-        <source>Task list updated: %1 of %2 completed.</source>
-        <translation type="vanished">タスクリストを更新しました: %2 件中 %1 件完了。</translation>
-    </message>
-    <message>
-        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation type="vanished">&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所への書き込みのみが許可されます。プロジェクトを開くと、そのファイルで作業できます。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
-    </message>
-    <message>
-        <source>Reset to Project Directory</source>
-        <translation type="vanished">プロジェクトディレクトリにリセット</translation>
-    </message>
-    <message>
-        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation type="vanished">作業ディレクトリの上書きをクリアします: ツールは起動プロジェクトのディレクトリ（プロジェクトが開かれていない場合はデフォルトのプロジェクトディレクトリ）で実行されます。</translation>
-    </message>
-    <message>
-        <source>Reset to Default Projects Directory</source>
-        <translation type="vanished">デフォルトのプロジェクトディレクトリにリセット</translation>
-    </message>
-    <message>
-        <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation type="vanished">新しいプロジェクトが作成される場所である、デフォルトのプロジェクトディレクトリを使用します。</translation>
-    </message>
-    <message>
-        <source>Reset to Git Bash</source>
-        <translation type="vanished">Git Bash にリセット</translation>
-    </message>
-    <message>
-        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation type="vanished">bash の上書きをクリアします: bash ツールはデフォルトの bash、Git Bash（まず PATH 上で認識された bash、次に Git for Windows に同梱の bash）を使用します。</translation>
-    </message>
-    <message>
-        <source>Reset to niubash</source>
-        <translation type="vanished">niubash にリセット</translation>
-    </message>
-    <message>
-        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation type="vanished">ダウンロードした niubash を使用します。niubash はネイティブで MSYS2 に依存しない Bash で、Git Bash とは異なり Windows サンドボックス内で実行できます。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内、一時場所、およびサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
-    </message>
-    <message>
-        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: 認証情報のある場所はサンドボックス内で保護されています。</translation>
-    </message>
-    <message>
-        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation type="vanished">&quot;%1&quot; の読み取りは許可されていません: 認証情報のある場所はサンドボックス内で読み取れません。</translation>
-    </message>
-    <message>
-        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">一度だけ &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; でインストールしてください（UAC プロンプト1回）。ログアウトは不要です。ネットワークフェンスは専用のサンドボックスユーザーの SID を基準にします。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
-        <translation type="vanished">Windows サンドボックスバックエンド（srt-win）を照会できませんでした（終了 %1）: %2 %3</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox user is not provisioned. %1</source>
-        <translation type="vanished">Windows サンドボックスユーザーがプロビジョニングされていません。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
-        <translation type="vanished">Windows サンドボックスバックエンド（srt-win）がサンドボックスユーザーの SID を報告しませんでした。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
-        <translation type="vanished">Windows サンドボックスがサンドボックスユーザーに作業ディレクトリへのアクセス権を付与できませんでした（終了 %1）: %2</translation>
-    </message>
-    <message>
-        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
-        <translation type="vanished">srt-win（@anthropic-ai/sandbox-runtime の Windows サンドボックスバックエンド）が PATH に見つかりませんでした。%1 LLAMA_SRT_WIN で実行可能ファイルの場所を指定できます。</translation>
-    </message>
-    <message>
-        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation type="vanished">Windows サンドバックエンド（wxc-exec）が機能プローブに対して時間内に応答しませんでした。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation type="vanished">Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation type="vanished">Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation type="vanished">Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">&quot;%1&quot; の bash は認識された Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはそれに狭い読み取り専用領域を与えることができません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に追加するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation type="vanished">wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation type="vanished">Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
-    </message>
-    <message>
-        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Llama.cpp チャットサンドボックス設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。そちらで自分の実行ファイルを指定することもできます。また、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを解除すると、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">&quot;%1&quot; の bash は、認識された niubash、Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはこの bash に限定された読み取り専用場所を許可できません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に置くか、Llama.cpp チャットツール設定ページから niubash をダウンロードするか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation type="vanished">Windows サンドボックス（Microsoft MXC）がはじめて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
-    </message>
-    <message>
-        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
-    </message>
-    <message>
-        <source>Write file</source>
-        <translation type="vanished">ファイルを書き込む</translation>
-    </message>
-    <message>
-        <source>write %1</source>
-        <translation type="vanished">%1 に書き込む</translation>
-    </message>
-    <message>
-        <source>Tool error: &quot;content&quot; is required.</source>
-        <translation type="vanished">ツールエラー: &quot;content&quot; が必要です。</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation type="vanished">&quot;%1&quot; に書き込めません: 親パスがファイルです。</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation type="vanished">&quot;%1&quot; に書き込めません: ディレクトリを作成できません: %2</translation>
-    </message>
-    <message>
-        <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation type="vanished">&quot;%1&quot; に書き込めません: %2</translation>
-    </message>
-    <message>
-        <source>Successfully wrote %1 bytes to %2.</source>
-        <translation type="vanished">%2 に %1 バイトを正常に書き込みました。</translation>
-    </message>
-    <message>
-        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation type="vanished">MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation type="vanished">MXC 実行ファイルの展開に失敗しました: %1</translation>
     </message>
     <message>
         <source>Download niubash</source>
@@ -5494,17 +3960,1603 @@ Working directory: %2</source>
         <translation type="vanished">niubash の展開に失敗しました: %1</translation>
     </message>
     <message>
+        <source>read whole file %1</source>
+        <translation type="vanished">ファイル %1 をすべて読み込む</translation>
+    </message>
+    <message>
+        <source>read %1</source>
+        <translation type="vanished">%1 を読み取る</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">ファイル &quot;%1&quot; は存在しません。</translation>
+    </message>
+    <message>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation type="vanished">&quot;%1&quot; の読み込みに失敗しました: %2</translation>
+    </message>
+    <message>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation type="vanished">イメージ &quot;%1&quot; は %2 MB で、%3 MB の読み込み上限を超過しています。先にリサイズしてください（例: bash ツールを使用）。</translation>
+    </message>
+    <message>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation type="vanished">イメージファイル &quot;%1&quot;（%2、%3 バイト）。その内容はイメージとして添付されます。</translation>
+    </message>
+    <message>
+        <source>first_line must be &gt;= 1.</source>
+        <translation type="vanished">開始行は 1 以上でなければなりません。</translation>
+    </message>
+    <message>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation type="vanished">終了行は開始行以上でなければなりません。</translation>
+    </message>
+    <message>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation type="vanished">開始行（%1）がファイル &quot;%2&quot; の行数（%3）を超えています。</translation>
+    </message>
+    <message>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation type="vanished">&quot;%2&quot; の %1 行目が %3 KB の読み込み上限を超えています。このツールではファイルを読み込めません。</translation>
+    </message>
+    <message>
+        <source> %1 KB limit reached.</source>
+        <translation type="vanished"> %1 KB の上限に達しました。</translation>
+    </message>
+    <message>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation type="vanished"> first_line=%1、last_line_inclusive=%2 で続行してください。</translation>
+    </message>
+    <message>
+        <source>Download ripgrep</source>
+        <translation type="vanished">ripgrep をダウンロード</translation>
+    </message>
+    <message>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation type="vanished">GitHub から ripgrep %1 をダウンロードしますか?</translation>
+    </message>
+    <message>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation type="vanished">search ツールと find ツールは ripgrep を使用してファイル内容を検索し、ファイル名でファイルを特定します。このシステムにインストールされていないため、ここでダウンロードできます。ripgrep は MIT ライセンスまたは Unlicense ライセンスで公開されています。</translation>
+    </message>
+    <message>
+        <source>The package holds no ripgrep binary.</source>
+        <translation type="vanished">パッケージに ripgrep バイナリが含まれていません。</translation>
+    </message>
+    <message>
+        <source>There is no ripgrep for this platform.</source>
+        <translation type="vanished">このプラットフォーム用の ripgrep はありません。</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep...</source>
+        <translation type="vanished">ripgrep をダウンロード中...</translation>
+    </message>
+    <message>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation type="vanished">ripgrep のダウンロードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep...</source>
+        <translation type="vanished">ripgrep を展開中...</translation>
+    </message>
+    <message>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation type="vanished">ripgrep の展開に失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>search for %1</source>
+        <translation type="vanished">%1 を検索</translation>
+    </message>
+    <message>
+        <source>  Glob: %1</source>
+        <translation type="vanished">  グローブ: %1</translation>
+    </message>
+    <message>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation type="vanished">エラー: ripgrep（rg）が見つかりませんでした。search ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">エラー: パスが存在しません: %1</translation>
+    </message>
+    <message>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation type="vanished">［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。パスを絞るか、パターンを改善してください。］</translation>
+    </message>
+    <message>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation type="vanished">［%1 件の一致上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、パターンを改善してください。］</translation>
+    </message>
+    <message>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation type="vanished">［一部の行を %1 文字に切り詰めました。完全な行を表示するには read_file を使用してください。］</translation>
+    </message>
+    <message>
+        <source>No matches found.</source>
+        <translation type="vanished">一致が見つかりませんでした。</translation>
+    </message>
+    <message>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation type="vanished">［出力を %1 KB に切り詰めました。すべての一致を表示するには、パターンを改善するか、コンテキストを減らしてください。］</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
+    </message>
+    <message>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation type="vanished">あなたは &quot;general&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。利用可能なツールで自律的に作業し、タスクを完了してください。ユーザーに質問することはできません。完了したら、行番号付きの関連ファイルパスを含め、何を行ったか・何を見つけたかの簡潔な報告1つで回答し、メインの会話が作業を続けられるようにしてください。</translation>
+    </message>
+    <message>
+        <source>task: %1</source>
+        <translation type="vanished">タスク: %1</translation>
+    </message>
+    <message>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation type="vanished">ツールエラー: &quot;description&quot; と &quot;prompt&quot; の両方が必要です。</translation>
+    </message>
+    <message>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation type="vanished">ツールエラー: 不明な subagent_type &quot;%1&quot;（&quot;explore&quot; または &quot;general&quot; を指定してください）</translation>
+    </message>
+    <message>
+        <source>Task: %1</source>
+        <translation type="vanished">タスク: %1</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
+
+%3</translation>
+    </message>
+    <message>
+        <source>update task list</source>
+        <translation type="vanished">タスクリストを更新</translation>
+    </message>
+    <message>
+        <source>update task list (%1 tasks)</source>
+        <translation type="vanished">タスクリストを更新（%1 タスク）</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation type="vanished">ツールエラー: &quot;todos&quot; には少なくとも1つのタスクを含める必要があります。</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation type="vanished">ツールエラー: タスク %1 の &quot;content&quot; が空です。</translation>
+    </message>
+    <message>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation type="vanished">ツールエラー: タスク %1 のステータス &quot;%2&quot; が不明です（&quot;pending&quot;、&quot;in_progress&quot;、&quot;completed&quot; のいずれかを指定してください）。</translation>
+    </message>
+    <message>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation type="vanished">ツールエラー: &quot;in_progress&quot; にできるのは1つのタスクのみです（%1 件指定されています）。</translation>
+    </message>
+    <message>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation type="vanished">タスクリストを更新しました: %2 件中 %1 件完了。</translation>
+    </message>
+    <message>
+        <source>Reset to Project Directory</source>
+        <translation type="vanished">プロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation type="vanished">作業ディレクトリの上書きをクリアします: ツールは起動プロジェクトのディレクトリ（プロジェクトが開かれていない場合はデフォルトのプロジェクトディレクトリ）で実行されます。</translation>
+    </message>
+    <message>
+        <source>Reset to Default Projects Directory</source>
+        <translation type="vanished">デフォルトのプロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation type="vanished">新しいプロジェクトが作成される場所である、デフォルトのプロジェクトディレクトリを使用します。</translation>
+    </message>
+    <message>
+        <source>Reset to Git Bash</source>
+        <translation type="vanished">Git Bash にリセット</translation>
+    </message>
+    <message>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation type="vanished">bash の上書きをクリアします: bash ツールはデフォルトの bash、Git Bash（まず PATH 上で認識された bash、次に Git for Windows に同梱の bash）を使用します。</translation>
+    </message>
+    <message>
+        <source>Reset to niubash</source>
+        <translation type="vanished">niubash にリセット</translation>
+    </message>
+    <message>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation type="vanished">ダウンロードした niubash を使用します。niubash はネイティブで MSYS2 に依存しない Bash で、Git Bash とは異なり Windows サンドボックス内で実行できます。</translation>
+    </message>
+    <message>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation type="vanished">&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内、一時場所、およびサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: 認証情報のある場所はサンドボックス内で保護されています。</translation>
+    </message>
+    <message>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation type="vanished">&quot;%1&quot; の読み取りは許可されていません: 認証情報のある場所はサンドボックス内で読み取れません。</translation>
+    </message>
+    <message>
+        <source>fetch %1</source>
+        <translation type="vanished">%1 をフェッチ</translation>
+    </message>
+    <message>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation type="vanished">無効な URL &quot;%1&quot;: http:// または https:// で始まる必要があります</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation type="vanished">%1 のフェッチに失敗しました: 応答が大きすぎます（上限 5 MB）。</translation>
+    </message>
+    <message>
+        <source>Fetch failed for %1: %2</source>
+        <translation type="vanished">%1 のフェッチに失敗しました: %2</translation>
+    </message>
+    <message>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation type="vanished">
+
+[... 内容は %1 文字で切り詰められました ...]</translation>
+    </message>
+    <message>
+        <source>search %1</source>
+        <translation type="vanished">%1 を検索</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation type="vanished">&quot;%1&quot; の検索結果:</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation type="vanished">ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
+    </message>
+    <message>
+        <source>Search failed: %1</source>
+        <translation type="vanished">検索に失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">検索に失敗しました: DuckDuckGo が現在リクエストにレート制限を適用しています。1 分待ってから再試行してください。</translation>
+    </message>
+    <message>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation type="vanished">&quot;%1&quot; について結果が見つかりませんでした。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation type="vanished">検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
+    </message>
+    <message>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation type="vanished">検索に失敗しました: 検索プロバイダーからの応答が無効です。</translation>
+    </message>
+    <message>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation type="vanished">&quot;%1&quot; について結果が見つかりませんでした</translation>
+    </message>
+    <message>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">検索に失敗しました: Brave バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation type="vanished">検索に失敗しました: Tavily バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
+    </message>
+    <message>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation type="vanished">検索に失敗しました: Exa エンドポイント URL が設定されていません。</translation>
+    </message>
+    <message>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation type="vanished">&quot;%1&quot; の検索結果:
+
+%2</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Llama.cpp チャットサンドボックス設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。そちらで自分の実行ファイルを指定することもできます。また、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを解除すると、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation type="vanished">Windows サンドボックスバックエンド（wxc-exec）が機能プローブに対して時間内に応答しませんでした。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation type="vanished">Windows サンドボックスバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation type="vanished">Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation type="vanished">Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation type="vanished">Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">&quot;%1&quot; の bash は、認識された niubash、Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはこの bash に限定された読み取り専用場所を許可できません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に置くか、Llama.cpp チャットツール設定ページから niubash をダウンロードするか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation type="vanished">wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation type="vanished">Windows サンドボックス（Microsoft MXC）が初めて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>Write file</source>
+        <translation type="vanished">ファイルを書き込む</translation>
+    </message>
+    <message>
+        <source>write %1</source>
+        <translation type="vanished">%1 に書き込む</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation type="vanished">ツールエラー: &quot;content&quot; が必要です。</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation type="vanished">&quot;%1&quot; に書き込めません: 親パスがファイルです。</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation type="vanished">&quot;%1&quot; に書き込めません: ディレクトリを作成できません: %2</translation>
+    </message>
+    <message>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation type="vanished">&quot;%1&quot; に書き込めません: %2</translation>
+    </message>
+    <message>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation type="vanished">%2 に %1 バイトを正常に書き込みました。</translation>
+    </message>
+</context>
+<context>
+    <name>Tr</name>
+    <message>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
+        <source>Add %1</source>
+        <translation>%1 を追加</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Delete %1</source>
+        <translation>%1 を削除</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Edit %1</source>
+        <translation>%1 を編集</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Move %1 to %2</source>
+        <translation>%1 を %2 に移動</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location line="+7"/>
+        <source>Apply patch</source>
+        <translation>パッチを適用</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Apply patch to %1 files</source>
+        <translation>%1 個のファイルにパッチを適用</translation>
+    </message>
+    <message>
+        <location line="+79"/>
+        <source>created</source>
+        <translation>作成済み</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>edited</source>
+        <translation>編集済み</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>moved</source>
+        <translation>移動済み</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>deleted</source>
+        <translation>削除済み</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+14"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
+        <source>file</source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <location line="+121"/>
+        <source>Success. Updated the following files:</source>
+        <translation>成功しました。以下のファイルを更新しました:</translation>
+    </message>
+    <message>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
+        <translation type="vanished">bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加してください。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+154"/>
+        <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
+        <translation>bash シェルが見つかりません。Git for Windows（https://git-scm.com/download/win）をインストールするか、bash を PATH に追加するか、Llama.cpp チャットツール設定ページから niubash をダウンロードしてください。</translation>
+    </message>
+    <message>
+        <location line="+160"/>
+        <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
+        <translation>sandbox-exec 実行ファイルが見つかりませんでした。このシステムではサンドボックス化が使用できません。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
+        <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）はインストールされていますが、カーネルがそのサンドボックスのセットアップを拒否しています: %1。Ubuntu 24.04 以降では、これは通常、AppArmor による非特権ユーザーネームスペースの制限です: &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; を実行してください（/etc/sysctl.d/ に追加すると永続化されます）。または、bwrap に &apos;userns&apos; 属性のある AppArmor プロファイルを与えてください。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）はインストールされていますが、このシステムでは非特権ユーザーネームスペースが無効になっています: %1。Debian やその派生ディストリビューションでは、&apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos; で有効にできます。代わりに、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）でサンドボックスのセットアップに失敗しました: %1。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）がタイムアウトするまでにサンドボックスをセットアップできませんでした。このシステムで実行できることを確認するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>bubblewrap（bwrap）が見つかりませんでした。インストールしてください（例: &apos;apt install bubblewrap&apos; または &apos;dnf install bubblewrap&apos;）。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
+        <source>[Output truncated: %1]</source>
+        <translation>［出力が切り詰められました: %1］</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>showing last %1 of %2 lines</source>
+        <translation>%2 行中、最後の %1 行を表示</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>showing last %1 KB</source>
+        <translation>最後の %1 KB を表示</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Full output saved to: %1</source>
+        <translation>完全な出力を以下に保存しました: %1</translation>
+    </message>
+    <message>
+        <location line="+122"/>
+        <source>running %1</source>
+        <translation>%1 を実行中</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Error: the command must not be empty.</source>
+        <translation>エラー: コマンドを空にすることはできません。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Error: working directory does not exist: %1</source>
+        <translation>エラー: 作業ディレクトリが存在しません: %1</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <location line="+26"/>
+        <location line="+29"/>
+        <location filename="../src/tools/find_tool.cpp" line="+191"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+131"/>
+        <location filename="../src/tools/search_tool.cpp" line="+262"/>
+        <source>Error: %1</source>
+        <translation>エラー: %1</translation>
+    </message>
+    <message>
+        <location line="-43"/>
+        <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
+        <translation>エラー: サンドボックスは &quot;%1&quot; を書き込み可能にできません: これはホームディレクトリまたはファイルシステムのルートであるか、それらを含んでいます。プロジェクトを開いて、そのディレクトリ内でコマンドを実行してください。</translation>
+    </message>
+    <message>
+        <location line="+220"/>
+        <source>Command was stopped by the user.</source>
+        <translation>コマンドはユーザーによって停止されました。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
+        <translation>コマンドが %1 ミリ秒後にタイムアウトしました。コマンドが長時間かかる見込みの場合は、タイムアウトを大きくして再試行してください。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Failed to start the command: %1</source>
+        <translation>コマンドの起動に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/tools/find_tool.cpp" line="+120"/>
+        <location line="+7"/>
+        <location filename="../src/tools/search_tool.cpp" line="+120"/>
+        <location line="+7"/>
+        <source>unknown error</source>
+        <translation>不明なエラー</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Command terminated abnormally (crashed).</source>
+        <translation>コマンドが異常終了しました（クラッシュ）。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Command exited with code %1.</source>
+        <translation>コマンドは終了コード %1 で終了しました。</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Working directory: %1
+
+</source>
+        <translation>作業ディレクトリ: %1
+
+</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/edit_file_tool.cpp" line="-115"/>
+        <source>Edit file</source>
+        <translation>ファイルを編集</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>edit %1 (%2 blocks)</source>
+        <translation>%1 を編集（%2 ブロック）</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>edit %1</source>
+        <translation>%1 を編集</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
+        <translation>ツールエラー: &quot;path&quot; は空でない文字列でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
+        <translation>ツールエラー: すべての編集には &quot;oldText&quot; と &quot;newText&quot; が必要です。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
+        <translation>ツールエラー: &quot;edits&quot; には少なくとも1つの置換を含める必要があります。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>not a plain file</source>
+        <translation>通常のファイルではありません</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Cannot edit %1: %2 Use read_file to verify the path, or write to create the file.</source>
+        <translation>%1 を編集できません: %2 read_file でパスを確認するか、write でファイルを作成してください。</translation>
+    </message>
+    <message>
+        <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
+        <translation type="vanished">&quot;%1&quot; を編集できません: ファイルが見つかりません。read_file でパスを確認するか、write でファイルを作成してください。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location line="+7"/>
+        <location line="+4"/>
+        <source>Cannot edit &quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot; を編集できません: %2</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Successfully replaced %1 block(s) in %2.</source>
+        <translation>%2 の %1 ブロックを正常に置換しました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
+        <location line="+27"/>
+        <source>Cannot reach the MCP server.</source>
+        <translation>MCP サーバーに到達できません。</translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <source>MCP initialize failed: %1</source>
+        <translation>MCP の初期化に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>MCP tools/list failed: %1</source>
+        <translation>MCP の tools/list が失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Connection to the MCP server was closed.</source>
+        <translation>MCP サーバーへの接続が切断されました。</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
+        <translation>MCP サーバーが利用できません。サーバーが実行されていて到達可能であることを確認してから、再試行してください。</translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
+        <translation>MCP ツール &quot;%1&quot; が失敗しました: MCP サーバーが応答しませんでした（接続エラーまたはタイムアウト）。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>The MCP server restarted; the call was not executed. Please try again.</source>
+        <translation>MCP サーバーが再起動されたため、呼び出しは実行されませんでした。再試行してください。</translation>
+    </message>
+    <message>
+        <location line="-61"/>
+        <source>MCP tool &quot;%1&quot; failed: %2</source>
+        <translation>MCP ツール &quot;%1&quot; が失敗しました: %2</translation>
+    </message>
+    <message>
+        <location line="+72"/>
+        <source>MCP server returned HTTP %1 for tool call.</source>
+        <translation>MCP サーバーがツール呼び出しに対して HTTP %1 を返しました。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>MCP server returned an empty or malformed response.</source>
+        <translation>MCP サーバーが空のまたは無効な応答を返しました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
+        <source>read whole file %1</source>
+        <translation>ファイル %1 をすべて読み込む</translation>
+    </message>
+    <message>
+        <source>read %1:%2‑%3</source>
+        <translation type="vanished">%1 の %2‑%3 行を読み込む</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>read %1</source>
+        <translation>%1 を読み取る</translation>
+    </message>
+    <message>
+        <source>File &quot;%1&quot; does not exist.</source>
+        <translation type="vanished">ファイル &quot;%1&quot; は存在しません。</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>File</source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Failed to read &quot;%1&quot;: %2</source>
+        <translation>ファイル %1 を読み込めません: %2</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
+        <translation>イメージ &quot;%1&quot; は %2 MB で、%3 MB の読み込み上限を超過しています。先にリサイズしてください（例: bash ツールを使用）。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
+        <translation>イメージファイル &quot;%1&quot;（%2、%3 バイト）。その内容はイメージとして添付されます。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>first_line must be &gt;= 1.</source>
+        <translation>開始行は 1 以上でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>last_line_inclusive must be &gt;= first_line.</source>
+        <translation>終了行は開始行以上でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
+        <translation>開始行 %1 はファイル %2 の行数 %3 を超えます。</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
+        <translation>&quot;%2&quot; の %1 行目が %3 KB の読み込み上限を超えています。このツールではファイルを読み込めません。</translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source> %1 KB limit reached.</source>
+        <translation> %1 KB の上限に達しました。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
+        <translation> first_line=%1、last_line_inclusive=%2 で続行してください。</translation>
+    </message>
+    <message>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation type="vanished">あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
+        <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
+        <translation>あなたは &quot;explore&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。コードベースを探索し、利用可能な読み取り専用ツールを使ってタスクに回答してください: ファイル名でファイルを特定するには &quot;find&quot;、ファイル内容を検索するには &quot;search&quot;、関連するセクションを読むには &quot;read_file&quot; を使用します。ファイルを修正せず、何らかの変更を行うコマンドを実行しないでください。自律的に作業してください。ユーザーに質問することはできません。完了したら、主な発見、行番号付きの関連ファイルパス、メインの会話が作業を続けるために必要なことをすべて含む、簡潔な報告1つで回答してください。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
+        <translation>あなたは &quot;general&quot; サブエージェントです。メインの会話から分離された別会話を実行しています。利用可能なツールで自律的に作業し、タスクを完了してください。ユーザーに質問することはできません。完了したら、行番号付きの関連ファイルパスを含め、何を行ったか・何を見つけたかの簡潔な報告1つで回答し、メインの会話が作業を続けられるようにしてください。</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <location line="+27"/>
+        <source>task: %1</source>
+        <translation>タスク: %1</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
+        <translation>ツールエラー: &quot;description&quot; と &quot;prompt&quot; の両方が必要です。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
+        <translation>ツールエラー: 不明な subagent_type &quot;%1&quot;（&quot;explore&quot; または &quot;general&quot; を指定してください）</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Task: %1</source>
+        <translation>タスク: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation>タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation>タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
+
+%3</translation>
+    </message>
+    <message>
+        <source>Task failed: the sub‑conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
+        <translation type="vanished">タスクに失敗しました: サブ会話 &quot;%1&quot; が最終回答なしで終了しました（停止または削除された可能性があります）。</translation>
+    </message>
+    <message>
+        <source>Task completed in the sub‑conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
+
+%3</source>
+        <translation type="vanished">タスクがサブ会話 &quot;%1&quot;（id: %2）で完了しました。会話は会話リストに保持され、さらに作業を続けるために開くことができます。サブエージェントからの最終報告:
+
+%3</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
+        <location line="+27"/>
+        <source>fetch %1</source>
+        <translation>%1 をフェッチ</translation>
+    </message>
+    <message>
+        <location line="+112"/>
+        <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
+        <translation>無効な URL &quot;%1&quot;: http:// または https:// で始まる必要があります</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Fetch failed for %1: response too large (limit 5 MB).</source>
+        <translation>%1 のフェッチに失敗しました: 応答が大きすぎます（上限 5 MB）。</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Fetch failed for %1: %2</source>
+        <translation>%1 のフェッチに失敗しました: %2</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>
+
+[... content truncated at %1 characters ...]</source>
+        <translation>
+
+[... 内容は %1 文字で切り詰められました ...]</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location line="+26"/>
+        <source>search %1</source>
+        <translation>%1 を検索</translation>
+    </message>
+    <message>
+        <location line="+196"/>
+        <source>Search results for &quot;%1&quot;:</source>
+        <translation>&quot;%1&quot; の検索結果:</translation>
+    </message>
+    <message>
+        <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
+        <translation type="vanished">ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
+        <translation>ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
+        <translation>検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
+    </message>
+    <message>
+        <location line="-23"/>
+        <location line="+44"/>
+        <location line="+13"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
+        <source>Search failed: %1</source>
+        <translation>検索に失敗しました: %1</translation>
+    </message>
+    <message>
+        <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
+        <translation type="vanished">検索に失敗しました: DuckDuckGo によるレート制限が現在適用されています。1 分待ってから再試行してください。</translation>
+    </message>
+    <message>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
+        <source>Search failed: invalid response from the search provider.</source>
+        <translation>検索に失敗しました: 検索プロバイダーからの応答が無効です。</translation>
+    </message>
+    <message>
+        <location line="-88"/>
+        <source>no results found for &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; について結果が見つかりませんでした</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>検索に失敗しました: Brave バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
+    </message>
+    <message>
+        <location line="-59"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
+        <source>No results found for &quot;%1&quot;.</source>
+        <translation>&quot;%1&quot; について結果が見つかりませんでした。</translation>
+    </message>
+    <message>
+        <location line="-192"/>
+        <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
+        <translation>検索に失敗しました: DuckDuckGo が現在リクエストにレート制限を適用しています。1 分待ってから再試行してください。</translation>
+    </message>
+    <message>
+        <location line="+113"/>
+        <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
+        <translation>検索に失敗しました: Tavily バックエンドが設定されていません。Llama.cpp 設定で API キーを設定してください。</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Search failed: the Exa endpoint URL is not configured.</source>
+        <translation>検索に失敗しました: Exa エンドポイント URL が設定されていません。</translation>
+    </message>
+    <message>
+        <location line="+37"/>
+        <source>Search results for &quot;%1&quot;:
+
+%2</source>
+        <translation>&quot;%1&quot; の検索結果:
+
+%2</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/find_tool.cpp" line="-182"/>
+        <location line="+8"/>
+        <source>find files %1</source>
+        <translation>ファイル検索 %1</translation>
+    </message>
+    <message>
+        <source>Pattern: `%1`</source>
+        <translation type="vanished">パターン: `%1`</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
+        <source>Pattern: %1</source>
+        <translation>パターン: %1</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
+        <source>  Path: %1</source>
+        <translation>  パス: %1</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
+        <translation>エラー: ripgrep（rg）が見つかりませんでした。find ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
+        <source>Error: the pattern must not be empty.</source>
+        <translation>エラー: パターンを空にすることはできません。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+0"/>
+        <source>directory</source>
+        <translation>ディレクトリ</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+3"/>
+        <source>Error: path is not a directory: %1</source>
+        <translation>エラー: パスがディレクトリではありません: %1</translation>
+    </message>
+    <message>
+        <location line="+107"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
+        <source>[Search was stopped by the user. The results are incomplete.]</source>
+        <translation>［検索はユーザーによって停止されました。結果は不完全です。］</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
+        <translation>［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。より具体的なおパターンを使用してください。］</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
+        <source>[Failed to start ripgrep: %1]</source>
+        <translation>［ripgrep の起動に失敗しました: %1］</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
+        <source>[ripgrep failed (exit code %1): %2]</source>
+        <translation>［ripgrep が失敗しました（終了コード %1）: %2］</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
+        <translation>［%1 件の結果上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、より具体的なパターンを使用してください。］</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>No files found.</source>
+        <translation>ファイルが見つかりません。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
+        <translation>［出力を %1 KB に切り詰めました。すべての結果を表示するには、より具体的なパターンを使用してください。］</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ls_tool.cpp" line="-43"/>
+        <location line="+7"/>
+        <source>list directory %1</source>
+        <translation>ディレクトリ %1 の一覧</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Path: `%1`
+
+</source>
+        <translation>パス: `%1`
+
+</translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Directory is empty.</source>
+        <translation>ディレクトリは空です。</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
+        <translation>［出力を %1 KB に切り詰めました。残りのエントリを表示するにはサブディレクトリをリストしてください。］</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
+        <translation>［%1 件エントリの上限に達しました。より多くのエントリを表示するには limit=%2 を使用してください。］</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
+        <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
+        <translation>MCP ツール &quot;%1&quot; は利用できません（接続中の MCP サーバーがこれを提供していません）。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
+        <source>Download ripgrep</source>
+        <translation>ripgrep をダウンロード</translation>
+    </message>
+    <message>
+        <location line="+67"/>
+        <source>Download ripgrep %1 from GitHub?</source>
+        <translation>GitHub から ripgrep %1 をダウンロードしますか?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
+        <translation>search ツールと find ツールは ripgrep を使用してファイル内容を検索し、ファイル名でファイルを特定します。このシステムにインストールされていないため、ここでダウンロードできます。ripgrep は MIT ライセンスまたは Unlicense ライセンスで公開されています。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
+        <source>Download the Windows sandbox runtime (MXC)</source>
+        <translation>Windows サンドボックス実行ファイル（MXC）をダウンロード</translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <source>Download the Microsoft MXC runtime %1?</source>
+        <translation>Microsoft MXC 実行ファイル %1 をダウンロードしますか?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
+        <translation>&apos;コマンドをサンドボックス化する&apos; 設定では、Windows の bash ツールを Microsoft MXC プロセスコンテナ内に限定します。固定された wxc-exec.exe 実行ファイルはこのシステムにインストールされていないため、代わりにここでダウンロードできます。MXC は MIT ライセンスで公開されています。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
+        <source>Project: %1</source>
+        <translation>プロジェクト: %1</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
+        <source>License: %1</source>
+        <translation>ライセンス: %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
+        <source>Download</source>
+        <translation>ダウンロード</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>The package holds no wxc-exec.exe binary.</source>
+        <translation>パッケージに wxc-exec.exe バイナリが含まれていません。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary has an unexpected size.</source>
+        <translation>wxc-exec.exe バイナリのサイズが予期しないものです。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The wxc-exec.exe binary does not match its expected checksum.</source>
+        <translation>wxc-exec.exe バイナリが期待されるチェックサムと一致しません。</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
+        <translation>Microsoft MXC 実行ファイルは Windows x86-64 と arm64 のみ利用可能です。</translation>
+    </message>
+    <message>
+        <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
+        <translation type="vanished">Microsoft MXC 実行ファイルは Windows x86-64 のみ利用可能です。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Downloading the MXC runtime...</source>
+        <translation>MXC 実行ファイルをダウンロード中...</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Downloading the MXC runtime failed: %1</source>
+        <translation>MXC 実行ファイルのダウンロードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking the MXC runtime...</source>
+        <translation>MXC 実行ファイルを展開中...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking the MXC runtime failed: %1</source>
+        <translation>MXC 実行ファイルの展開に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
+        <source>The package holds no ripgrep binary.</source>
+        <translation>パッケージに ripgrep バイナリが含まれていません。</translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>There is no ripgrep for this platform.</source>
+        <translation>このプラットフォーム用の ripgrep はありません。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading ripgrep...</source>
+        <translation>ripgrep をダウンロード中...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading ripgrep failed: %1</source>
+        <translation>ripgrep のダウンロードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
+        <source>Verifying package integrity...</source>
+        <translation>パッケージの完全性を検証中...</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
+        <source>The downloaded package is not the one that was expected.</source>
+        <translation>ダウンロードされたパッケージは期待されるものではありません。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
+        <source>Unpacking ripgrep...</source>
+        <translation>ripgrep を展開中...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking ripgrep failed: %1</source>
+        <translation>ripgrep の展開に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
+        <source>search for %1</source>
+        <translation>%1 を検索</translation>
+    </message>
+    <message>
+        <source>  Glob: `%1`</source>
+        <translation type="vanished">  グローブ: `%1`</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>  Glob: %1</source>
+        <translation>  グローブ: %1</translation>
+    </message>
+    <message>
+        <location line="+22"/>
+        <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
+        <translation>エラー: ripgrep（rg）が見つかりませんでした。search ツールを使用するには、Llama.cpp チャットツール設定ページからダウンロードするか、https://github.com/BurntSushi/ripgrep から手動でインストールしてください。</translation>
+    </message>
+    <message>
+        <source>Error: path does not exist: %1</source>
+        <translation type="vanished">エラー: パスが存在しません: %1</translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>path</source>
+        <translation>パス</translation>
+    </message>
+    <message>
+        <location line="+113"/>
+        <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
+        <translation>［検索が %1 ミリ秒後にタイムアウトしました。結果は不完全です。パスを絞るか、パターンを改善してください。］</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
+        <translation>［%1 件の一致上限に達しました。より多くの結果を表示するには limit=%2 を使用するか、パターンを改善してください。］</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
+        <translation>［一部の行を %1 文字に切り詰めました。完全な行を表示するには read_file を使用してください。］</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>No matches found.</source>
+        <translation>一致が見つかりませんでした。</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
+        <translation>［出力を %1 KB に切り詰めました。すべての一致を表示するには、パターンを改善するか、コンテキストを減らしてください。］</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
+        <source>load skill %1</source>
+        <translation>スキルを読み込む %1</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>The &quot;name&quot; argument is required.</source>
+        <translation>&quot;name&quot; 引数が必要です。</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
+        <translation>スキル &quot;%1&quot; が見つかりませんでした。利用可能なスキル: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>(none)</source>
+        <translation>（なし）</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
+        <source>update task list</source>
+        <translation>タスクリストを更新</translation>
+    </message>
+    <message>
+        <location line="-7"/>
+        <source>update task list (%1 tasks)</source>
+        <translation>タスクリストを更新（%1 タスク）</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
+        <translation>ツールエラー: &quot;todos&quot; には少なくとも1つのタスクを含める必要があります。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
+        <translation>ツールエラー: タスク %1 の &quot;content&quot; が空です。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
+        <translation>ツールエラー: タスク %1 のステータス &quot;%2&quot; が不明です（&quot;pending&quot;、&quot;in_progress&quot;、&quot;completed&quot; のいずれかを指定してください）。</translation>
+    </message>
+    <message>
+        <location line="+12"/>
+        <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
+        <translation>ツールエラー: &quot;in_progress&quot; にできるのは1つのタスクのみです（%1 件指定されています）。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Task list updated: %1 of %2 completed.</source>
+        <translation>タスクリストを更新しました: %2 件中 %1 件完了。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
+        <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
+        <translation>&quot;%1&quot; へのアクセスは許可されていません: デバイスパスと管理用共有はサンドボックス内でアクセスできません。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所への書き込みのみが許可されます。プロジェクトを開くと、そのファイルで作業できます。</translation>
+    </message>
+    <message>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory and temporary locations.</source>
+        <translation type="vanished">&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。</translation>
+    </message>
+    <message>
+        <location line="-71"/>
+        <source>Reset to Project Directory</source>
+        <translation>プロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
+        <translation>作業ディレクトリの上書きをクリアします: ツールは起動プロジェクトのディレクトリ（プロジェクトが開かれていない場合はデフォルトのプロジェクトディレクトリ）で実行されます。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Reset to Default Projects Directory</source>
+        <translation>デフォルトのプロジェクトディレクトリにリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the default projects directory, the setting the new projects are created in.</source>
+        <translation>新しいプロジェクトが作成される場所である、デフォルトのプロジェクトディレクトリを使用します。</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Reset to Git Bash</source>
+        <translation>Git Bash にリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
+        <translation>bash の上書きをクリアします: bash ツールはデフォルトの bash、Git Bash（まず PATH 上で認識された bash、次に Git for Windows に同梱の bash）を使用します。</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Reset to niubash</source>
+        <translation>niubash にリセット</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
+        <translation>ダウンロードした niubash を使用します。niubash はネイティブで MSYS2 に依存しない Bash で、Git Bash とは異なり Windows サンドボックス内で実行できます。</translation>
+    </message>
+    <message>
+        <location line="+53"/>
+        <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: プロジェクトが開かれていないため、サンドボックスでは一時場所とサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。そのファイルで作業するにはプロジェクトを開いてください。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: サンドボックスではプロジェクトディレクトリ内、一時場所、およびサンドボックス設定の追加書き込み可能ディレクトリへの書き込みのみが許可されます。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: .git、.qtcreator および *.user ファイルはサンドボックス内で保護されています。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
+        <translation>&quot;%1&quot; への書き込みは許可されていません: 認証情報のある場所はサンドボックス内で保護されています。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
+        <translation>&quot;%1&quot; の読み取りは許可されていません: 認証情報のある場所はサンドボックス内で読み取れません。</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>%1 does not exist: %2</source>
+        <translation>%1 は存在しません: %2</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1 &quot;%2&quot; was not found in the working directory &quot;%3&quot;.</source>
+        <translation>%1 &quot;%2&quot; は作業ディレクトリ &quot;%3&quot; 内に見つかりませんでした。</translation>
+    </message>
+    <message>
+        <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">一度だけ &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; でインストールしてください（UAC プロンプト1回）。ログアウトは不要です。ネットワークフェンスは専用のサンドボックスユーザーの SID を基準にします。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) could not be queried (exit %1): %2 %3</source>
+        <translation type="vanished">Windows サンドボックスバックエンド（srt-win）を照会できませんでした（終了 %1）: %2 %3</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox user is not provisioned. %1</source>
+        <translation type="vanished">Windows サンドボックスユーザーがプロビジョニングされていません。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox backend (srt-win) did not report the sandbox user&apos;s SID. %1</source>
+        <translation type="vanished">Windows サンドボックスバックエンド（srt-win）がサンドボックスユーザーの SID を報告しませんでした。%1</translation>
+    </message>
+    <message>
+        <source>The Windows sandbox could not grant the sandbox user access to the working directory (exit %1): %2</source>
+        <translation type="vanished">Windows サンドボックスがサンドボックスユーザーに作業ディレクトリへのアクセス権を付与できませんでした（終了 %1）: %2</translation>
+    </message>
+    <message>
+        <source>srt-win (the @anthropic-ai/sandbox-runtime Windows sandbox backend) was not found on the PATH. %1 LLAMA_SRT_WIN can point to the executable.</source>
+        <translation type="vanished">srt-win（@anthropic-ai/sandbox-runtime の Windows サンドボックスバックエンド）が PATH に見つかりませんでした。%1 LLAMA_SRT_WIN で実行可能ファイルの場所を指定できます。</translation>
+    </message>
+    <message>
+        <source>Download it from the Llama.cpp Chat tools settings page (a pinned, checksum-verified Microsoft MXC release); LLAMA_WXC_EXEC can point to a wxc-exec.exe. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation type="vanished">Llama.cpp チャットツール設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。LLAMA_WXC_EXEC で wxc-exec.exe の場所を指定できます。または、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
+        <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
+        <translation>Windows サンドバックエンド（wxc-exec）が機能プローブに対して時間内に応答しませんでした。%1</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
+        <translation>Windows サンドバックエンド（wxc-exec）が MXC コンテナを利用不可と報告しました（終了コード %1）: %2 %3</translation>
+    </message>
+    <message>
+        <location line="+361"/>
+        <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
+        <translation>Windows サンドボックスのライブ分離プローブ（一時ディレクトリまたはホームのキャナリー）を設定できませんでした。%1</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
+        <translation>Windows サンドボックスのライブ分離プローブのキャナリーファイルを %1 に作成できませんでした。%2</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows サンドボックスの設定が長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation type="vanished">&quot;%1&quot; の bash は認識された Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはそれに狭い読み取り専用領域を与えることができません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に追加するか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+    </message>
+    <message>
+        <location line="+192"/>
+        <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows サンドボックス（Microsoft MXC）には Windows 11 24H2（ビルド %1）以降が必要です。このシステムはビルド %2 です。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
+        <translation>wxc-exec.exe（Microsoft MXC Windows サンドボックス実行ファイル）が見つかりませんでした。%1</translation>
+    </message>
+    <message>
+        <location line="-162"/>
+        <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
+        <translation>Windows サンドボックス（Microsoft MXC）のライブ分離チェックに失敗しました: サンドボックス化されたコマンドが隔離されていることを確認できませんでした。%1</translation>
+    </message>
+    <message>
+        <location line="-497"/>
+        <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Llama.cpp チャットサンドボックス設定ページからダウンロードしてください（固定された、チェックサム検証済みの Microsoft MXC リリースです）。そちらで自分の実行ファイルを指定することもできます。また、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを解除すると、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location line="+537"/>
+        <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
+        <translation>&quot;%1&quot; の bash は、認識された niubash、Git for Windows または MSYS2 のインストールの一部ではないため、Windows サンドボックスはこの bash に限定された読み取り専用場所を許可できません。Git for Windows（https://git-scm.com/download/win）をインストールしてその bash を PATH の先頭に置くか、Llama.cpp チャットツール設定ページから niubash をダウンロードするか、Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外してください。</translation>
+    </message>
+    <message>
+        <location line="+154"/>
+        <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
+        <translation>Windows サンドボックス（Microsoft MXC）がはじめて分離を検証しています。数秒後にコマンドを再実行してください。</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
+        <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <source>Write file</source>
+        <translation>ファイルを書き込む</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <location line="+26"/>
+        <source>write %1</source>
+        <translation>%1 に書き込む</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Tool error: &quot;content&quot; is required.</source>
+        <translation>ツールエラー: &quot;content&quot; が必要です。</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
+        <translation>&quot;%1&quot; に書き込めません: 親パスがファイルです。</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
+        <translation>&quot;%1&quot; に書き込めません: ディレクトリを作成できません: %2</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Cannot write &quot;%1&quot;: %2</source>
+        <translation>&quot;%1&quot; に書き込めません: %2</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Successfully wrote %1 bytes to %2.</source>
+        <translation>%2 に %1 バイトを正常に書き込みました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
+        <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
+        <translation>MCP ツール &quot;%1&quot; はユーザーによって停止されました。</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
+        <source>Download niubash</source>
+        <translation>niubash をダウンロード</translation>
+    </message>
+    <message>
+        <location line="+68"/>
+        <source>Download niubash %1 from GitHub?</source>
+        <translation>GitHub から niubash %1 をダウンロードしますか?</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
+        <translation>Windows の bash ツールは通常 Git Bash を実行しますが、その MSYS2 ランタイムは Windows サンドボックス内で初期化できません（microsoft/mxc#1061）。niubash はこれができるネイティブで MSYS2 に依存しない Bash なので、ここでダウンロードして bash ツールをサンドボックス内で実行できます。niubash は MIT ライセンスで公開されています。</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>The package holds no niubash shell.</source>
+        <translation>このパッケージには niubash シェルが含まれていません。</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>There is no niubash for this platform.</source>
+        <translation>このプラットフォーム用の niubash はありません。</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Downloading niubash...</source>
+        <translation>niubash をダウンロード中...</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Downloading niubash failed: %1</source>
+        <translation>niubash のダウンロードに失敗しました: %1</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Unpacking niubash...</source>
+        <translation>niubash を展開中...</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Unpacking niubash failed: %1</source>
+        <translation>niubash の展開に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation type="vanished">現在時刻を取得</translation>
+        <translation>現在時刻を取得</translation>
     </message>
     <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation type="vanished">ランタイム情報を取得</translation>
+        <translation>ランタイム情報を取得</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation type="vanished">OS: %1
+        <translation>OS: %1
 作業ディレクトリ: %2</translation>
     </message>
 </context>

@@ -201,7 +201,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Conversation avec llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.cpp" line="+149"/>
+        <location filename="../src/llamaplugin.cpp" line="+150"/>
         <source>llama.cpp coversation</source>
         <translation>Conversation avec llama.cpp</translation>
     </message>
@@ -328,19 +328,19 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Les modèles du serveur auquel le chat est connecté ; en sélectionnant un modèle, il est chargé et devient le modèle de chat actif.</translation>
     </message>
     <message>
-        <location line="+72"/>
+        <location line="+59"/>
         <source>Disable FIM</source>
         <translation>Désactiver la complétion FIM</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamasettings.cpp" line="+109"/>
+        <location filename="../src/llamasettings.cpp" line="+61"/>
         <location line="+1"/>
         <source>Enable FIM</source>
         <translation>Activer la complétion FIM</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+185"/>
         <location filename="../src/serversettingswidget.cpp" line="+264"/>
         <location line="+4"/>
         <source>Stop server</source>
@@ -348,10 +348,10 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+0"/>
-        <location filename="../src/llamaplugin.h" line="+3"/>
         <location filename="../src/serversettingswidget.cpp" line="-321"/>
         <location line="+313"/>
         <location line="+12"/>
+        <location filename="../src/llamaplugin.h" line="+3"/>
         <source>Start server</source>
         <translation>Démarrer le serveur</translation>
     </message>
@@ -376,7 +376,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Sélectionne et charge le modèle. Cliquez à nouveau sur le modèle sélectionné pour le décharger et réinitialiser la sélection.</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+279"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Erreur lors de la récupération de la complétion FIM depuis %1 : %2</translation>
     </message>
@@ -423,20 +423,20 @@ Souhaitez-vous l&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettings.cpp" line="+1104"/>
+        <location filename="../src/llamasettingspages.cpp" line="+325"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+4"/>
-        <location filename="../src/llamasettings.cpp" line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+15"/>
         <location filename="../src/promptssettingswidget.cpp" line="+121"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1431"/>
+        <location filename="../src/llamaplugin.cpp" line="-1448"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -454,7 +454,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Active l&apos;intégration avec le serveur llama.cpp.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-1092"/>
+        <location filename="../src/llamasettings.cpp" line="+22"/>
         <source>Endpoint</source>
         <translation>Point d&apos;accès (Endpoint)</translation>
     </message>
@@ -469,7 +469,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Point d&apos;accès au serveur llama.cpp</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+22"/>
         <source>Prefix Code Lines</source>
         <translation>Lignes de code en préfixe</translation>
     </message>
@@ -498,12 +498,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
     <message>
-        <location line="-102"/>
+        <location filename="../src/llamasettingspages.cpp" line="-309"/>
         <source>Tools</source>
         <translation>Outils</translation>
     </message>
     <message>
-        <location line="+74"/>
+        <location filename="../src/llamasettings.cpp" line="-29"/>
         <source>API Key</source>
         <translation>Clé API</translation>
     </message>
@@ -518,7 +518,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Clé API du serveur llama.cpp (optionnelle)</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+9"/>
+        <source>Model to use for FIM completion when multiple models are loaded on the server (recommended: Qwen3 Coder). The entries are the models served by the chat endpoint; a name can also be typed, e.g. for a different server. Default uses the server&apos;s model.</source>
+        <translation>Modèle à utiliser pour la complétion FIM lorsque plusieurs modèles sont chargés sur le serveur (recommandé : Qwen3 Coder). Les entrées sont les modèles fournis par le point d&apos;accès du chat ; un nom peut aussi être saisi, par exemple pour un serveur différent. Par défaut, le modèle du serveur est utilisé.</translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>Max Token Predictions</source>
         <translation>Nombre maximal de jetons prédits</translation>
     </message>
@@ -633,7 +638,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Nombre maximal de complétions mises en cache à conserver dans le cache des résultats.</translation>
     </message>
     <message>
-        <location line="-216"/>
+        <location line="-174"/>
         <source>Summarize the title of the conversation in a few words including one emoji. Use the language used in the conversation. Use plain text, no markdown.</source>
         <translation>Résumez le titre de la conversation en quelques mots, en incluant un emoji. Utilisez la langue utilisée dans la conversation. Utilisez du texte brut, sans Markdown.</translation>
     </message>
@@ -697,7 +702,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
 {diagnostics}</translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location filename="../src/llamasettingspages.cpp" line="+9"/>
         <source>Skills</source>
         <translation>Compétences</translation>
     </message>
@@ -713,12 +718,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location filename="../src/llamasettings.cpp" line="+8"/>
         <source>Enables the FIM (fill-in-the-middle) completion in the text editor. The chat, tools and web search settings are independent of this.</source>
         <translation>Active la complétion FIM (fill-in-the-middle) dans l&apos;éditeur de texte. Les paramètres du chat, des outils et de la recherche web sont indépendants de celui-ci.</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+37"/>
         <source>FIM Model</source>
         <translation>Modèle FIM</translation>
     </message>
@@ -728,12 +733,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Modèle FIM :</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Model name to use for FIM completion in case when multiple models are loaded on the server (optional, recommended: Qwen3 Coder).</source>
-        <translation>Nom du modèle à utiliser pour la complétion FIM lorsque plusieurs modèles sont chargés sur le serveur (facultatif, recommandé : Qwen3 Coder).</translation>
+        <translation type="vanished">Nom du modèle à utiliser pour la complétion FIM lorsque plusieurs modèles sont chargés sur le serveur (facultatif, recommandé : Qwen3 Coder).</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Number of code lines after  the cursor location to include in the local suffix.</source>
         <translation>Nombre de lignes de code après la position du curseur à inclure dans le suffixe local.</translation>
     </message>
@@ -1188,7 +1192,12 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Dernier modèle sélectionné</translation>
     </message>
     <message>
-        <location line="+223"/>
+        <location line="+10"/>
+        <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
+        <translation>Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires ; utilisez un petit modèle pour garder le modèle de chat principal disponible. Les entrées sont les modèles fournis par le serveur ; un nom peut aussi être saisi. Par défaut, le modèle de chat actif est utilisé.</translation>
+    </message>
+    <message>
+        <location line="+212"/>
         <source>bash:</source>
         <translation>bash :</translation>
     </message>
@@ -1202,7 +1211,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde</translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-241"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
         <translation>Niveau de réflexion (raisonnement) pour les modèles capables de réflexion. « default » utilise la valeur par défaut du modèle, « off » désactive la réflexion, et les niveaux concrets sont ceux que le serveur signale pour le gabarit de chat du modèle.</translation>
     </message>
@@ -1217,12 +1226,11 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Taille de la police de la conversation du chat, en pourcentage de la taille de police de l&apos;éditeur. Ajustez avec Ctrl+molette de la souris au-dessus du chat ou avec les commandes de zoom avant/arrière du chat.</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
-        <translation>Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
+        <translation type="vanished">Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+34"/>
         <source>Handoff Prompt</source>
         <translation>Invitation de reprise</translation>
     </message>
@@ -1363,14 +1371,14 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Invitations intégrées du localisateur « ll ». Seule la première ligne d&apos;une invitation est affichée dans le menu ; le texte complet est envoyé au modèle. « {selection} » est remplacé par le texte sélectionné, « {file} » et « {line} » par le fichier actuel et la ligne du curseur, « {diagnostics} » par les erreurs et avertissements du fichier actuel, et « {git_diff} » par les modifications non validées de son dépôt git.</translation>
     </message>
     <message>
-        <location filename="../src/llamaplugin.h" line="-4"/>
-        <location filename="../src/llamasettings.cpp" line="+7"/>
+        <location line="+7"/>
         <location line="+1"/>
+        <location filename="../src/llamaplugin.h" line="-4"/>
         <source>Selection prompt button</source>
         <translation>Bouton d&apos;invitation sur la sélection</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="+4"/>
+        <location line="+4"/>
         <source>Show a small button at the bottom of a text selection in the editor. Clicking it opens the llama.cpp locator so the selection can be sent to llama.cpp with one of the prompts.</source>
         <translation>Afficher un petit bouton en bas d&apos;une sélection de texte dans l&apos;éditeur. En cliquant dessus, le localisateur llama.cpp s&apos;ouvre afin que la sélection puisse être envoyée à llama.cpp avec l&apos;une des invitations.</translation>
     </message>
@@ -1741,7 +1749,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Remplace le paramètre global « Charger les instructions du projet » pour ce projet. Consultez le paramètre global sur la page Outils Llama pour savoir ce qui est chargé.</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location filename="../src/llamasettingspages.cpp" line="+236"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>« duckduckgo » ne requiert aucune clé API</translation>
     </message>
@@ -1764,7 +1772,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Afficher le nombre de jetons générés par seconde dans l&apos;interface utilisateur du chat.</translation>
     </message>
     <message>
-        <location line="-771"/>
+        <location filename="../src/llamasettings.cpp" line="-514"/>
         <source>Thinking Level</source>
         <translation>Niveau de réflexion</translation>
     </message>
@@ -1783,7 +1791,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Modèle utilitaire :</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../src/llamasettingspages.cpp" line="-153"/>
         <source>Default: chat model</source>
         <translation>Par défaut : modèle de chat</translation>
     </message>
@@ -1792,7 +1800,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation type="vanished">Modèle utilisé pour les requêtes secondaires telles que les titres de conversation et les suggestions complémentaires. Utilisez un petit modèle pour garder le modèle de chat principal disponible. Laissez vide pour utiliser le modèle de chat actif.</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location filename="../src/llamasettings.cpp" line="+9"/>
         <source>Conversation Title Prompt</source>
         <translation>Invitation pour le titre de conversation</translation>
     </message>
@@ -1850,6 +1858,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
     <message>
         <location filename="../src/llamachateditor.cpp" line="+192"/>
         <location line="+14"/>
+        <location filename="../src/llamasettingspages.cpp" line="-51"/>
         <source>Default</source>
         <translation>Par défaut</translation>
     </message>
@@ -1993,7 +2002,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Cliquez sur le nom du modèle pour voir ses détails, ou sur le dossier pour modifier l&apos;endroit où les outils s&apos;exécutent (clic droit pour réinitialiser le dossier sur celui du projet).</translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+144"/>
         <source>Follow-up questions:</source>
         <translation>Questions complémentaires :</translation>
     </message>
@@ -2003,14 +2012,14 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Niveau de réflexion : %1 (s&apos;applique aux nouveaux messages)</translation>
     </message>
     <message>
-        <location line="-915"/>
-        <location line="+948"/>
-        <location line="+81"/>
+        <location line="-914"/>
+        <location line="+947"/>
+        <location line="+85"/>
         <source>Human Editor</source>
         <translation>Éditeur humain</translation>
     </message>
     <message>
-        <location line="-1000"/>
+        <location line="-1003"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Vous êtes connecté à %1 en utilisant %2 comme dossier actuel</translation>
     </message>
@@ -2121,7 +2130,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Sélectionner le dossier de travail</translation>
     </message>
     <message>
-        <location line="+246"/>
+        <location line="+245"/>
         <source>Zoom: %1%</source>
         <translation>Zoom: %1%</translation>
     </message>
@@ -2141,7 +2150,7 @@ Souhaitez-vous l&apos;écraser ?</translation>
         <translation>Aucun modèle</translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+90"/>
         <source>Edit Message</source>
         <translation>Modifier le message</translation>
     </message>
@@ -2627,7 +2636,7 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation type="vanished">Compaction</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1658"/>
+        <location filename="../src/llamachateditor.cpp" line="-1661"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titre</translation>
@@ -2694,28 +2703,24 @@ Vous pouvez saisir n&apos;importe quelle autre invitation - elles sont mémoris�
         <translation>En-têtes : %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation>charger la compétence %1</translation>
+        <translation type="vanished">charger la compétence %1</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation>L&apos;argument « name » est requis.</translation>
+        <translation type="vanished">L&apos;argument « name » est requis.</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation>Compétence « %1 » introuvable. Compétences disponibles : %2</translation>
+        <translation type="vanished">Compétence « %1 » introuvable. Compétences disponibles : %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/toolsettingswidget.cpp" line="+1"/>
+        <location line="+1"/>
         <source>(none)</source>
         <translation>(aucun)</translation>
     </message>
     <message>
-        <location filename="../src/toolsettingswidget.cpp" line="+3"/>
+        <location line="+3"/>
         <source>The tools served by this server are listed below; check a tool to enable it for the chat.</source>
         <translation>Les outils fournis par ce serveur sont listés ci-dessous ; cochez un outil pour l&apos;activer pour le chat.</translation>
     </message>
@@ -2962,7 +2967,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">le nom « %1 » entre en conflit avec %2 – le premier est conservé</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1417"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
         <source>Error:</source>
         <translation>Erreur :</translation>
     </message>
@@ -3331,12 +3336,12 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+152"/>
-        <location line="+87"/>
+        <location line="+82"/>
         <source>The server is not running.</source>
         <translation>Le serveur n&apos;est pas en cours d&apos;exécution.</translation>
     </message>
     <message>
-        <location line="-56"/>
+        <location line="-51"/>
         <source>The server does not support this operation: the model endpoints exist only in router mode (start it without a fixed --model).</source>
         <translation>Le serveur ne prend pas en charge cette opération : les points d&apos;accès des modèles n&apos;existent qu&apos;en mode routeur (démarrer le serveur sans --model fixe).</translation>
     </message>
@@ -3346,7 +3351,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Le serveur a refusé la requête : %1</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+75"/>
         <source>The connection to the server was lost.</source>
         <translation>La connexion au serveur a été perdue.</translation>
     </message>
@@ -3406,9 +3411,6 @@ Authorization: Bearer &lt;token&gt;</translation>
         <location line="+14"/>
         <location line="+139"/>
         <location filename="../src/serversettingswidget.cpp" line="+137"/>
-        <location filename="../src/tools/mxc.cpp" line="+160"/>
-        <location filename="../src/tools/niubash.cpp" line="+163"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+172"/>
         <source>Download</source>
         <translation>Télécharger</translation>
     </message>
@@ -3609,17 +3611,11 @@ Authorization: Bearer &lt;token&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
-        <location filename="../src/tools/mxc.cpp" line="-9"/>
-        <location filename="../src/tools/niubash.cpp" line="-9"/>
-        <location filename="../src/tools/ripgrep.cpp" line="-9"/>
         <source>Project: %1</source>
         <translation>Projet : %1</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../src/tools/mxc.cpp" line="+1"/>
-        <location filename="../src/tools/niubash.cpp" line="+1"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
         <translation>Licence : %1</translation>
     </message>
@@ -3720,1037 +3716,802 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation>Le serveur est arrêté : le dossier des modèles est listé tel quel.</translation>
     </message>
     <message>
-        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
-        <translation>Ajouter %1</translation>
+        <translation type="vanished">Ajouter %1</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Delete %1</source>
-        <translation>Supprimer %1</translation>
+        <translation type="vanished">Supprimer %1</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Edit %1</source>
-        <translation>Modifier %1</translation>
+        <translation type="vanished">Modifier %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Move %1 to %2</source>
-        <translation>Déplacer %1 vers %2</translation>
+        <translation type="vanished">Déplacer %1 vers %2</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+7"/>
         <source>Apply patch</source>
-        <translation>Appliquer un correctif</translation>
+        <translation type="vanished">Appliquer un correctif</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Apply patch to %1 files</source>
-        <translation>Appliquer un correctif à %1 fichiers</translation>
+        <translation type="vanished">Appliquer un correctif à %1 fichiers</translation>
     </message>
     <message>
-        <location line="+79"/>
         <source>created</source>
-        <translation>créé</translation>
+        <translation type="vanished">créé</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>edited</source>
-        <translation>modifié</translation>
+        <translation type="vanished">modifié</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>moved</source>
-        <translation>déplacé</translation>
+        <translation type="vanished">déplacé</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>deleted</source>
-        <translation>supprimé</translation>
+        <translation type="vanished">supprimé</translation>
     </message>
     <message>
-        <location line="+203"/>
         <source>Success. Updated the following files:</source>
-        <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
+        <translation type="vanished">Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
     <message>
-        <location filename="../src/tools/bash_tool.cpp" line="+153"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp.</translation>
+        <translation type="vanished">Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+137"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation>L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
+        <translation type="vanished">L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
     </message>
     <message>
-        <location line="+146"/>
         <source>[Output truncated: %1]</source>
-        <translation>[Sortie tronquée : %1]</translation>
+        <translation type="vanished">[Sortie tronquée : %1]</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>showing last %1 of %2 lines</source>
-        <translation>affichant les %1 dernières lignes sur %2</translation>
+        <translation type="vanished">affichant les %1 dernières lignes sur %2</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>showing last %1 KB</source>
-        <translation>affichant les %1 Ko derniers</translation>
+        <translation type="vanished">affichant les %1 Ko derniers</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Full output saved to: %1</source>
-        <translation>Sortie complète enregistrée dans : %1</translation>
+        <translation type="vanished">Sortie complète enregistrée dans : %1</translation>
     </message>
     <message>
-        <location line="+113"/>
         <source>running %1</source>
-        <translation>exécution de %1</translation>
+        <translation type="vanished">exécution de %1</translation>
     </message>
     <message>
-        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
-        <translation>Erreur : la commande ne doit pas être vide.</translation>
+        <translation type="vanished">Erreur : la commande ne doit pas être vide.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
-        <translation>Erreur : le dossier de travail n&apos;existe pas : %1</translation>
+        <translation type="vanished">Erreur : le dossier de travail n&apos;existe pas : %1</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location line="+26"/>
-        <location line="+29"/>
         <source>Error: %1</source>
-        <translation>Erreur : %1</translation>
+        <translation type="vanished">Erreur : %1</translation>
     </message>
     <message>
-        <location line="-43"/>
         <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation>Erreur : le bac à sable ne peut pas rendre « %1 » accessible en écriture : c&apos;est le dossier personnel (ou il le contient) ou la racine du système de fichiers. Ouvrez un projet pour exécuter des commandes dans son dossier.</translation>
+        <translation type="vanished">Erreur : le bac à sable ne peut pas rendre « %1 » accessible en écriture : c&apos;est le dossier personnel (ou il le contient) ou la racine du système de fichiers. Ouvrez un projet pour exécuter des commandes dans son dossier.</translation>
     </message>
     <message>
-        <location line="+220"/>
         <source>Command was stopped by the user.</source>
-        <translation>La commande a été arrêtée par l&apos;utilisateur.</translation>
+        <translation type="vanished">La commande a été arrêtée par l&apos;utilisateur.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation>La commande a expiré après %1 ms. Réessayez avec un délai plus long si la commande est censée prendre plus de temps.</translation>
+        <translation type="vanished">La commande a expiré après %1 ms. Réessayez avec un délai plus long si la commande est censée prendre plus de temps.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Failed to start the command: %1</source>
-        <translation>Échec du démarrage de la commande : %1</translation>
+        <translation type="vanished">Échec du démarrage de la commande : %1</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/tools/find_tool.cpp" line="+308"/>
-        <location line="+7"/>
-        <location filename="../src/tools/search_tool.cpp" line="+382"/>
-        <location line="+7"/>
         <source>unknown error</source>
-        <translation>erreur inconnue</translation>
+        <translation type="vanished">erreur inconnue</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Command terminated abnormally (crashed).</source>
-        <translation>La commande s&apos;est terminée de manière anormale (plantage).</translation>
+        <translation type="vanished">La commande s&apos;est terminée de manière anormale (plantage).</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Command exited with code %1.</source>
-        <translation>La commande s&apos;est terminée avec le code %1.</translation>
+        <translation type="vanished">La commande s&apos;est terminée avec le code %1.</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>Working directory: %1
 
 </source>
-        <translation>Dossier de travail : %1
+        <translation type="vanished">Dossier de travail : %1
 
 </translation>
     </message>
     <message>
-        <location filename="../src/tools/edit_file_tool.cpp" line="+284"/>
         <source>Edit file</source>
-        <translation>Modifier un fichier</translation>
+        <translation type="vanished">Modifier un fichier</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>edit %1 (%2 blocks)</source>
-        <translation>modifier %1 (%2 blocs)</translation>
+        <translation type="vanished">modifier %1 (%2 blocs)</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+26"/>
         <source>edit %1</source>
-        <translation>modifier %1</translation>
+        <translation type="vanished">modifier %1</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation>Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation>Erreur d&apos;outil : chaque modification a besoin d&apos;un « oldText » et d&apos;un « newText ».</translation>
+        <translation type="vanished">Erreur d&apos;outil : chaque modification a besoin d&apos;un « oldText » et d&apos;un « newText ».</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation>Erreur d&apos;outil : « edits » doit contenir au moins un remplacement.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « edits » doit contenir au moins un remplacement.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
-        <translation>Impossible de modifier « %1 » : fichier introuvable. Utilisez read_file pour vérifier le chemin, ou write pour créer le fichier.</translation>
+        <translation type="vanished">Impossible de modifier « %1 » : fichier introuvable. Utilisez read_file pour vérifier le chemin, ou write pour créer le fichier.</translation>
     </message>
     <message>
-        <location line="+7"/>
-        <location line="+7"/>
-        <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation>Impossible de modifier « %1 » : %2</translation>
+        <translation type="vanished">Impossible de modifier « %1 » : %2</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation>%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
+        <translation type="vanished">%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/find_tool.cpp" line="-179"/>
-        <location line="+8"/>
         <source>find files %1</source>
-        <translation>localiser les fichiers %1</translation>
+        <translation type="vanished">localiser les fichiers %1</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
-        <translation>Motif : %1</translation>
+        <translation type="vanished">Motif : %1</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
-        <translation>  Chemin : %1</translation>
+        <translation type="vanished">  Chemin : %1</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation>Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil find.</translation>
+        <translation type="vanished">Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil find.</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
-        <translation>Erreur : le motif ne doit pas être vide.</translation>
+        <translation type="vanished">Erreur : le motif ne doit pas être vide.</translation>
     </message>
     <message>
-        <location line="+9"/>
-        <location filename="../src/tools/ls_tool.cpp" line="+130"/>
         <source>Error: path is not a directory: %1</source>
-        <translation>Erreur : le chemin n&apos;est pas un dossier : %1</translation>
+        <translation type="vanished">Erreur : le chemin n&apos;est pas un dossier : %1</translation>
     </message>
     <message>
-        <location line="+108"/>
-        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation>[La recherche a été arrêtée par l&apos;utilisateur. Les résultats sont incomplets.]</translation>
+        <translation type="vanished">[La recherche a été arrêtée par l&apos;utilisateur. Les résultats sont incomplets.]</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; utilisez un motif plus spécifique.]</translation>
+        <translation type="vanished">[La recherche a expiré après %1 ms. Les résultats sont incomplets ; utilisez un motif plus spécifique.]</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
-        <translation>[Échec du démarrage de ripgrep : %1]</translation>
+        <translation type="vanished">[Échec du démarrage de ripgrep : %1]</translation>
     </message>
     <message>
-        <location line="+6"/>
-        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation>[ripgrep a échoué (code de sortie %1) : %2]</translation>
+        <translation type="vanished">[ripgrep a échoué (code de sortie %1) : %2]</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation>[Limite de %1 résultats atteinte. Utilisez limit=%2 pour plus de résultats, ou utilisez un motif plus spécifique.]</translation>
+        <translation type="vanished">[Limite de %1 résultats atteinte. Utilisez limit=%2 pour plus de résultats, ou utilisez un motif plus spécifique.]</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>No files found.</source>
-        <translation>Aucun fichier trouvé.</translation>
+        <translation type="vanished">Aucun fichier trouvé.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation>[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
+        <translation type="vanished">[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation>obtenir l&apos;heure actuelle</translation>
+        <translation type="vanished">obtenir l&apos;heure actuelle</translation>
     </message>
     <message>
-        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation>obtenir les informations d&apos;exécution</translation>
+        <translation type="vanished">obtenir les informations d&apos;exécution</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation>Système d&apos;exploitation : %1
+        <translation type="vanished">Système d&apos;exploitation : %1
 Dossier de travail : %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
         <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) est installé, mais le noyau refuse de configurer son bac à sable : %1. Sur Ubuntu 24.04 et les versions plus récentes, il s&apos;agit généralement de la restriction d&apos;AppArmor sur les espaces de noms d&apos;utilisateur non privilégiés : exécutez &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (ajoutez-le à /etc/sysctl.d/ pour le rendre permanent) ou donnez à bwrap un profil AppArmor avec l&apos;attribut &apos;userns&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">bubblewrap (bwrap) est installé, mais le noyau refuse de configurer son bac à sable : %1. Sur Ubuntu 24.04 et les versions plus récentes, il s&apos;agit généralement de la restriction d&apos;AppArmor sur les espaces de noms d&apos;utilisateur non privilégiés : exécutez &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (ajoutez-le à /etc/sysctl.d/ pour le rendre permanent) ou donnez à bwrap un profil AppArmor avec l&apos;attribut &apos;userns&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) est installé, mais les espaces de noms d&apos;utilisateur non privilégiés sont désactivés sur ce système : %1. Sur Debian et ses dérivés, activez-les avec &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">bubblewrap (bwrap) est installé, mais les espaces de noms d&apos;utilisateur non privilégiés sont désactivés sur ce système : %1. Sur Debian et ses dérivés, activez-les avec &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) a échoué à configurer le bac à sable : %1. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">bubblewrap (bwrap) a échoué à configurer le bac à sable : %1. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) n&apos;a pas configuré le bac à sable à temps. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">bubblewrap (bwrap) n&apos;a pas configuré le bac à sable à temps. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location filename="../src/tools/ls_tool.cpp" line="-39"/>
-        <location line="+7"/>
         <source>list directory %1</source>
-        <translation>lister le dossier %1</translation>
+        <translation type="vanished">lister le dossier %1</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Path: `%1`
 
 </source>
-        <translation>Chemin : `%1`
+        <translation type="vanished">Chemin : `%1`
 
 </translation>
     </message>
     <message>
-        <location line="+60"/>
         <source>Directory is empty.</source>
-        <translation>Le dossier est vide.</translation>
+        <translation type="vanished">Le dossier est vide.</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation>[Sortie tronquée à %1 Ko. Listez un sous-dossier pour voir les entrées restantes.]</translation>
+        <translation type="vanished">[Sortie tronquée à %1 Ko. Listez un sous-dossier pour voir les entrées restantes.]</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation>[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d&apos;entrées.]</translation>
+        <translation type="vanished">[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d&apos;entrées.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation>L&apos;outil MCP « %1 » n&apos;est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
+        <translation type="vanished">L&apos;outil MCP « %1 » n&apos;est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
-        <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
-        <translation>Impossible de joindre le serveur MCP.</translation>
+        <translation type="vanished">Impossible de joindre le serveur MCP.</translation>
     </message>
     <message>
-        <location line="-22"/>
         <source>MCP initialize failed: %1</source>
-        <translation>Initialisation MCP échouée : %1</translation>
+        <translation type="vanished">Initialisation MCP échouée : %1</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>MCP tools/list failed: %1</source>
-        <translation>L&apos;opération MCP tools/list a échoué : %1</translation>
+        <translation type="vanished">L&apos;opération MCP tools/list a échoué : %1</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Connection to the MCP server was closed.</source>
-        <translation>La connexion au serveur MCP a été fermée.</translation>
+        <translation type="vanished">La connexion au serveur MCP a été fermée.</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation>Le serveur MCP n&apos;est pas disponible. Vérifiez que le serveur est en cours d&apos;exécution et joignable, puis réessayez.</translation>
+        <translation type="vanished">Le serveur MCP n&apos;est pas disponible. Vérifiez que le serveur est en cours d&apos;exécution et joignable, puis réessayez.</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation>L&apos;outil MCP « %1 » a échoué : %2</translation>
+        <translation type="vanished">L&apos;outil MCP « %1 » a échoué : %2</translation>
     </message>
     <message>
-        <location line="+46"/>
         <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation>L&apos;outil MCP « %1 » a échoué : le serveur MCP n&apos;a pas répondu (erreur de connexion ou délai d&apos;attente dépassé).</translation>
+        <translation type="vanished">L&apos;outil MCP « %1 » a échoué : le serveur MCP n&apos;a pas répondu (erreur de connexion ou délai d&apos;attente dépassé).</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation>Le serveur MCP a redémarré ; l&apos;appel n&apos;a pas été exécuté. Veuillez réessayer.</translation>
+        <translation type="vanished">Le serveur MCP a redémarré ; l&apos;appel n&apos;a pas été exécuté. Veuillez réessayer.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation>Le serveur MCP a renvoyé HTTP %1 pour l&apos;appel d&apos;outil.</translation>
+        <translation type="vanished">Le serveur MCP a renvoyé HTTP %1 pour l&apos;appel d&apos;outil.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation>Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
+        <translation type="vanished">Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation>L&apos;outil MCP « %1 » a été arrêté par l&apos;utilisateur.</translation>
+        <translation type="vanished">L&apos;outil MCP « %1 » a été arrêté par l&apos;utilisateur.</translation>
     </message>
     <message>
-        <location filename="../src/tools/mxc.cpp" line="-65"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation>Télécharger le runtime du bac à sable Windows (MXC)</translation>
+        <translation type="vanished">Télécharger le runtime du bac à sable Windows (MXC)</translation>
     </message>
     <message>
-        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
-        <translation>Télécharger le runtime Microsoft MXC %1 ?</translation>
+        <translation type="vanished">Télécharger le runtime Microsoft MXC %1 ?</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation>Le paramètre « Commandes dans un bac à sable » confine l&apos;outil bash sur Windows à un conteneur de processus Microsoft MXC. Le runtime wxc-exec.exe épinglé n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. MXC est publié sous licence MIT.</translation>
+        <translation type="vanished">Le paramètre « Commandes dans un bac à sable » confine l&apos;outil bash sur Windows à un conteneur de processus Microsoft MXC. Le runtime wxc-exec.exe épinglé n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. MXC est publié sous licence MIT.</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>The package holds no wxc-exec.exe binary.</source>
-        <translation>Le paquet ne contient aucun binaire wxc-exec.exe.</translation>
+        <translation type="vanished">Le paquet ne contient aucun binaire wxc-exec.exe.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation>Le binaire wxc-exec.exe a une taille inattendue.</translation>
+        <translation type="vanished">Le binaire wxc-exec.exe a une taille inattendue.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation>Le binaire wxc-exec.exe ne correspond pas à la somme de contrôle attendue.</translation>
+        <translation type="vanished">Le binaire wxc-exec.exe ne correspond pas à la somme de contrôle attendue.</translation>
     </message>
     <message>
-        <location line="+36"/>
         <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation>Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64 et arm64.</translation>
+        <translation type="vanished">Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64 et arm64.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>Downloading the MXC runtime...</source>
-        <translation>Téléchargement du runtime MXC...</translation>
+        <translation type="vanished">Téléchargement du runtime MXC...</translation>
     </message>
     <message>
-        <location line="+25"/>
         <source>Downloading the MXC runtime failed: %1</source>
-        <translation>Échec du téléchargement du runtime MXC : %1</translation>
+        <translation type="vanished">Échec du téléchargement du runtime MXC : %1</translation>
     </message>
     <message>
-        <location line="+18"/>
-        <location filename="../src/tools/niubash.cpp" line="+126"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+131"/>
         <source>Verifying package integrity...</source>
-        <translation>Vérification de l&apos;intégrité du paquet...</translation>
+        <translation type="vanished">Vérification de l&apos;intégrité du paquet...</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location filename="../src/tools/niubash.cpp" line="+5"/>
-        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
-        <translation>Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
+        <translation type="vanished">Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Unpacking the MXC runtime...</source>
-        <translation>Décompression du runtime MXC...</translation>
+        <translation type="vanished">Décompression du runtime MXC...</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Unpacking the MXC runtime failed: %1</source>
-        <translation>Échec de la décompression du runtime MXC : %1</translation>
+        <translation type="vanished">Échec de la décompression du runtime MXC : %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
-        <translation>Télécharger niubash</translation>
+        <translation type="vanished">Télécharger niubash</translation>
     </message>
     <message>
-        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
-        <translation>Télécharger niubash %1 depuis GitHub ?</translation>
+        <translation type="vanished">Télécharger niubash %1 depuis GitHub ?</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation>L&apos;outil bash sous Windows exécute normalement Git Bash, mais son runtime MSYS2 ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash est un Bash natif, sans MSYS2, qui peut le faire, il peut donc être téléchargé ici pour exécuter l&apos;outil bash dans le bac à sable. niubash est publié sous licence MIT.</translation>
+        <translation type="vanished">L&apos;outil bash sous Windows exécute normalement Git Bash, mais son runtime MSYS2 ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash est un Bash natif, sans MSYS2, qui peut le faire, il peut donc être téléchargé ici pour exécuter l&apos;outil bash dans le bac à sable. niubash est publié sous licence MIT.</translation>
     </message>
     <message>
-        <location line="+38"/>
         <source>The package holds no niubash shell.</source>
-        <translation>Le paquet ne contient aucun shell niubash.</translation>
+        <translation type="vanished">Le paquet ne contient aucun shell niubash.</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>There is no niubash for this platform.</source>
-        <translation>Il n&apos;existe pas de niubash pour cette plateforme.</translation>
+        <translation type="vanished">Il n&apos;existe pas de niubash pour cette plateforme.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Downloading niubash...</source>
-        <translation>Téléchargement de niubash...</translation>
+        <translation type="vanished">Téléchargement de niubash...</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Downloading niubash failed: %1</source>
-        <translation>Échec du téléchargement de niubash : %1</translation>
+        <translation type="vanished">Échec du téléchargement de niubash : %1</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Unpacking niubash...</source>
-        <translation>Décompression de niubash...</translation>
+        <translation type="vanished">Décompression de niubash...</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
-        <translation>Échec de la décompression de niubash : %1</translation>
+        <translation type="vanished">Échec de la décompression de niubash : %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
-        <translation>lire tout le fichier %1</translation>
+        <translation type="vanished">lire tout le fichier %1</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>read %1</source>
-        <translation>lire %1</translation>
+        <translation type="vanished">lire %1</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>File &quot;%1&quot; does not exist.</source>
-        <translation>Le fichier « %1 » n&apos;existe pas.</translation>
+        <translation type="vanished">Le fichier « %1 » n&apos;existe pas.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation>Impossible de lire « %1 » : %2</translation>
+        <translation type="vanished">Impossible de lire « %1 » : %2</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation>L&apos;image « %1 » fait %2 Mo et dépasse la limite de lecture de %3 Mo ; redimensionnez-la d&apos;abord (par exemple avec l&apos;outil bash).</translation>
+        <translation type="vanished">L&apos;image « %1 » fait %2 Mo et dépasse la limite de lecture de %3 Mo ; redimensionnez-la d&apos;abord (par exemple avec l&apos;outil bash).</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation>Fichier image « %1 » (%2, %3 octets). Son contenu est joint sous forme d&apos;image.</translation>
+        <translation type="vanished">Fichier image « %1 » (%2, %3 octets). Son contenu est joint sous forme d&apos;image.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation>first_line doit être &gt;= 1.</translation>
+        <translation type="vanished">first_line doit être &gt;= 1.</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation>last_line_inclusive doit être &gt;= first_line.</translation>
+        <translation type="vanished">last_line_inclusive doit être &gt;= first_line.</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation>first_line (%1) dépasse le nombre de lignes de « %2 » (%3).</translation>
+        <translation type="vanished">first_line (%1) dépasse le nombre de lignes de « %2 » (%3).</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation>La ligne %1 de « %2 » est plus grande que la limite de lecture de %3 Ko ; le fichier ne peut pas être lu avec cet outil.</translation>
+        <translation type="vanished">La ligne %1 de « %2 » est plus grande que la limite de lecture de %3 Ko ; le fichier ne peut pas être lu avec cet outil.</translation>
     </message>
     <message>
-        <location line="+18"/>
         <source> %1 KB limit reached.</source>
-        <translation> Limite de %1 Ko atteinte.</translation>
+        <translation type="vanished"> Limite de %1 Ko atteinte.</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
+        <translation type="vanished"> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
-        <location filename="../src/tools/ripgrep.cpp" line="-210"/>
         <source>Download ripgrep</source>
-        <translation>Télécharger ripgrep</translation>
+        <translation type="vanished">Télécharger ripgrep</translation>
     </message>
     <message>
-        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
-        <translation>Télécharger ripgrep %1 depuis GitHub ?</translation>
+        <translation type="vanished">Télécharger ripgrep %1 depuis GitHub ?</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation>Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
+        <translation type="vanished">Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>The package holds no ripgrep binary.</source>
-        <translation>Le paquet ne contient aucun binaire ripgrep.</translation>
+        <translation type="vanished">Le paquet ne contient aucun binaire ripgrep.</translation>
     </message>
     <message>
-        <location line="+42"/>
         <source>There is no ripgrep for this platform.</source>
-        <translation>Il n&apos;existe pas de ripgrep pour cette plateforme.</translation>
+        <translation type="vanished">Il n&apos;existe pas de ripgrep pour cette plateforme.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Downloading ripgrep...</source>
-        <translation>Téléchargement de ripgrep...</translation>
+        <translation type="vanished">Téléchargement de ripgrep...</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Downloading ripgrep failed: %1</source>
-        <translation>Échec du téléchargement de ripgrep : %1</translation>
+        <translation type="vanished">Échec du téléchargement de ripgrep : %1</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Unpacking ripgrep...</source>
-        <translation>Extraction de ripgrep...</translation>
+        <translation type="vanished">Extraction de ripgrep...</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Unpacking ripgrep failed: %1</source>
-        <translation>Échec de l&apos;extraction de ripgrep : %1</translation>
+        <translation type="vanished">Échec de l&apos;extraction de ripgrep : %1</translation>
     </message>
     <message>
-        <location filename="../src/tools/search_tool.cpp" line="-181"/>
-        <location line="+8"/>
         <source>search for %1</source>
-        <translation>rechercher %1</translation>
+        <translation type="vanished">rechercher %1</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>  Glob: %1</source>
-        <translation>  Glob : %1</translation>
+        <translation type="vanished">  Glob : %1</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation>Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil search.</translation>
+        <translation type="vanished">Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil search.</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Error: path does not exist: %1</source>
-        <translation>Erreur : le chemin n&apos;existe pas : %1</translation>
+        <translation type="vanished">Erreur : le chemin n&apos;existe pas : %1</translation>
     </message>
     <message>
-        <location line="+114"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; restreignez le chemin ou affinez le motif.]</translation>
+        <translation type="vanished">[La recherche a expiré après %1 ms. Les résultats sont incomplets ; restreignez le chemin ou affinez le motif.]</translation>
     </message>
     <message>
-        <location line="+19"/>
         <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation>[Limite de %1 correspondances atteinte. Utilisez limit=%2 pour plus de résultats, ou affinez le motif.]</translation>
+        <translation type="vanished">[Limite de %1 correspondances atteinte. Utilisez limit=%2 pour plus de résultats, ou affinez le motif.]</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation>[Certaines lignes sont tronquées à %1 caractères. Utilisez read_file pour voir les lignes complètes.]</translation>
+        <translation type="vanished">[Certaines lignes sont tronquées à %1 caractères. Utilisez read_file pour voir les lignes complètes.]</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>No matches found.</source>
-        <translation>Aucune correspondance trouvée.</translation>
+        <translation type="vanished">Aucune correspondance trouvée.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation>[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
+        <translation type="vanished">[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
     </message>
     <message>
-        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation>Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
+        <translation type="vanished">Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
     </message>
     <message>
-        <location line="+10"/>
         <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation>Vous êtes le sous-agent « general », exécuté dans une conversation séparée, isolée de la conversation principale. Travaillez de manière autonome avec les outils disponibles jusqu&apos;à l&apos;accomplissement de la tâche ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis de ce que vous avez fait ou trouvé, y compris les chemins de fichiers pertinents avec les numéros de ligne, afin que la conversation principale puisse continuer le travail.</translation>
+        <translation type="vanished">Vous êtes le sous-agent « general », exécuté dans une conversation séparée, isolée de la conversation principale. Travaillez de manière autonome avec les outils disponibles jusqu&apos;à l&apos;accomplissement de la tâche ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis de ce que vous avez fait ou trouvé, y compris les chemins de fichiers pertinents avec les numéros de ligne, afin que la conversation principale puisse continuer le travail.</translation>
     </message>
     <message>
-        <location line="+68"/>
-        <location line="+27"/>
         <source>task: %1</source>
-        <translation>tâche : %1</translation>
+        <translation type="vanished">tâche : %1</translation>
     </message>
     <message>
-        <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation>Erreur d&apos;outil : « description » et « prompt » sont requis.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « description » et « prompt » sont requis.</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation>Erreur d&apos;outil : subagent_type « %1 » inconnu (attendu « explore » ou « general »)</translation>
+        <translation type="vanished">Erreur d&apos;outil : subagent_type « %1 » inconnu (attendu « explore » ou « general »)</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Task: %1</source>
-        <translation>Tâche : %1</translation>
+        <translation type="vanished">Tâche : %1</translation>
     </message>
     <message>
-        <location line="+22"/>
         <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation>Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
+        <translation type="vanished">Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation>Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
+        <translation type="vanished">Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
 
 %3</translation>
     </message>
     <message>
-        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
-        <location line="+8"/>
         <source>update task list</source>
-        <translation>mettre à jour la liste des tâches</translation>
+        <translation type="vanished">mettre à jour la liste des tâches</translation>
     </message>
     <message>
-        <location line="-7"/>
         <source>update task list (%1 tasks)</source>
-        <translation>mettre à jour la liste des tâches (%1 tâches)</translation>
+        <translation type="vanished">mettre à jour la liste des tâches (%1 tâches)</translation>
     </message>
     <message>
-        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation>Erreur d&apos;outil : « todos » doit contenir au moins une tâche.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « todos » doit contenir au moins une tâche.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation>Erreur d&apos;outil : la tâche %1 a un « content » vide.</translation>
+        <translation type="vanished">Erreur d&apos;outil : la tâche %1 a un « content » vide.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation>Erreur d&apos;outil : la tâche %1 a un statut inconnu « %2 » (attendu : « pending », « in_progress » ou « completed »).</translation>
+        <translation type="vanished">Erreur d&apos;outil : la tâche %1 a un statut inconnu « %2 » (attendu : « pending », « in_progress » ou « completed »).</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation>Erreur d&apos;outil : une seule tâche peut être « in_progress » à la fois (%1 fournies).</translation>
+        <translation type="vanished">Erreur d&apos;outil : une seule tâche peut être « in_progress » à la fois (%1 fournies).</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Task list updated: %1 of %2 completed.</source>
-        <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
+        <translation type="vanished">Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
     </message>
     <message>
-        <location filename="../src/tools/tool_utils.cpp" line="+473"/>
         <source>Reset to Project Directory</source>
-        <translation>Réinitialiser vers le dossier du projet</translation>
+        <translation type="vanished">Réinitialiser vers le dossier du projet</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation>Efface le remplacement du dossier de travail : les outils s&apos;exécutent dans le dossier du projet de démarrage (ou dans le dossier des projets par défaut lorsqu&apos;aucun projet n&apos;est ouvert).</translation>
+        <translation type="vanished">Efface le remplacement du dossier de travail : les outils s&apos;exécutent dans le dossier du projet de démarrage (ou dans le dossier des projets par défaut lorsqu&apos;aucun projet n&apos;est ouvert).</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Reset to Default Projects Directory</source>
-        <translation>Réinitialiser vers le dossier des projets par défaut</translation>
+        <translation type="vanished">Réinitialiser vers le dossier des projets par défaut</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation>Utilise le dossier des projets par défaut, celui dans lequel les nouveaux projets sont créés.</translation>
+        <translation type="vanished">Utilise le dossier des projets par défaut, celui dans lequel les nouveaux projets sont créés.</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Reset to Git Bash</source>
-        <translation>Réinitialiser vers Git Bash</translation>
+        <translation type="vanished">Réinitialiser vers Git Bash</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation>Efface le remplacement du bash : l&apos;outil bash utilise le bash par défaut, Git Bash (un bash reconnu sur le PATH, puis celui fourni avec Git for Windows).</translation>
+        <translation type="vanished">Efface le remplacement du bash : l&apos;outil bash utilise le bash par défaut, Git Bash (un bash reconnu sur le PATH, puis celui fourni avec Git for Windows).</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Reset to niubash</source>
-        <translation>Réinitialiser vers niubash</translation>
+        <translation type="vanished">Réinitialiser vers niubash</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation>Utilise le niubash téléchargé, un Bash natif sans MSYS2 qui - contrairement à Git Bash - peut s&apos;exécuter dans le bac à sable Windows.</translation>
+        <translation type="vanished">Utilise le niubash téléchargé, un Bash natif sans MSYS2 qui - contrairement à Git Bash - peut s&apos;exécuter dans le bac à sable Windows.</translation>
     </message>
     <message>
-        <location line="+33"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation>L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
+        <translation type="vanished">L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet, les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet, les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : les fichiers .git, .qtcreator et *.user sont protégés dans le bac à sable.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : les fichiers .git, .qtcreator et *.user sont protégés dans le bac à sable.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification sont protégés dans le bac à sable.</translation>
+        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification sont protégés dans le bac à sable.</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation>La lecture de « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification ne sont pas lisibles dans le bac à sable.</translation>
+        <translation type="vanished">La lecture de « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification ne sont pas lisibles dans le bac à sable.</translation>
     </message>
     <message>
-        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
-        <location line="+27"/>
         <source>fetch %1</source>
-        <translation>récupérer %1</translation>
+        <translation type="vanished">récupérer %1</translation>
     </message>
     <message>
-        <location line="+112"/>
         <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation>URL « %1 » non valide : elle doit commencer par http:// ou https://</translation>
+        <translation type="vanished">URL « %1 » non valide : elle doit commencer par http:// ou https://</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation>Échec de la récupération de %1 : réponse trop volumineuse (limite 5 Mo).</translation>
+        <translation type="vanished">Échec de la récupération de %1 : réponse trop volumineuse (limite 5 Mo).</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Fetch failed for %1: %2</source>
-        <translation>Échec de la récupération de %1 : %2</translation>
+        <translation type="vanished">Échec de la récupération de %1 : %2</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>
 
 [... content truncated at %1 characters ...]</source>
-        <translation>
+        <translation type="vanished">
 
 [... contenu tronqué à %1 caractères ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
-        <location line="+26"/>
         <source>search %1</source>
-        <translation>rechercher %1</translation>
+        <translation type="vanished">rechercher %1</translation>
     </message>
     <message>
-        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
-        <translation>Résultats de recherche pour « %1 » :</translation>
+        <translation type="vanished">Résultats de recherche pour « %1 » :</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation>Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
     </message>
     <message>
-        <location line="+29"/>
-        <location line="+44"/>
-        <location line="+13"/>
-        <location line="+41"/>
-        <location line="+45"/>
-        <location line="+51"/>
         <source>Search failed: %1</source>
-        <translation>Échec de la recherche : %1</translation>
+        <translation type="vanished">Échec de la recherche : %1</translation>
     </message>
     <message>
-        <location line="-189"/>
         <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation>Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
+        <translation type="vanished">Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
     </message>
     <message>
-        <location line="+8"/>
-        <location line="+95"/>
-        <location line="+44"/>
-        <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
-        <translation>Aucun résultat trouvé pour « %1 ».</translation>
+        <translation type="vanished">Aucun résultat trouvé pour « %1 ».</translation>
     </message>
     <message>
-        <location line="-174"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation>Échec de la recherche : le backend Google n&apos;est pas configuré. Définissez la clé API et l&apos;identifiant du moteur de recherche (cx) dans les paramètres Llama.cpp.</translation>
+        <translation type="vanished">Échec de la recherche : le backend Google n&apos;est pas configuré. Définissez la clé API et l&apos;identifiant du moteur de recherche (cx) dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+25"/>
-        <location line="+54"/>
-        <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
-        <translation>Échec de la recherche : réponse non valide du fournisseur de recherche.</translation>
+        <translation type="vanished">Échec de la recherche : réponse non valide du fournisseur de recherche.</translation>
     </message>
     <message>
-        <location line="-88"/>
         <source>no results found for &quot;%1&quot;</source>
-        <translation>aucun résultat trouvé pour « %1 »</translation>
+        <translation type="vanished">aucun résultat trouvé pour « %1 »</translation>
     </message>
     <message>
-        <location line="+13"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Échec de la recherche : le backend Brave n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
+        <translation type="vanished">Échec de la recherche : le backend Brave n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+46"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation>Échec de la recherche : le backend Tavily n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
+        <translation type="vanished">Échec de la recherche : le backend Tavily n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
-        <location line="+44"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation>Échec de la recherche : l&apos;URL du point d&apos;accès Exa n&apos;est pas configurée.</translation>
+        <translation type="vanished">Échec de la recherche : l&apos;URL du point d&apos;accès Exa n&apos;est pas configurée.</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
-        <translation>Résultats de recherche pour « %1 » :
+        <translation type="vanished">Résultats de recherche pour « %1 » :
 
 %2</translation>
     </message>
     <message>
-        <location filename="../src/tools/windows_sandbox.cpp" line="+65"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Téléchargez-le depuis la page des paramètres Bac à sable du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; un runtime de votre choix peut y être indiqué. Sinon, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter les commandes sans bac à sable.</translation>
+        <translation type="vanished">Téléchargez-le depuis la page des paramètres Bac à sable du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; un runtime de votre choix peut y être indiqué. Sinon, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter les commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+34"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation>Le backend bac à sable Windows (wxc-exec) n&apos;a pas répondu à sa sonde de capacités à temps. %1</translation>
+        <translation type="vanished">Le backend bac à sable Windows (wxc-exec) n&apos;a pas répondu à sa sonde de capacités à temps. %1</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation>Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
+        <translation type="vanished">Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
     </message>
     <message>
-        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation>Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
+        <translation type="vanished">Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
     </message>
     <message>
-        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation>Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
+        <translation type="vanished">Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+41"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation>Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
+        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
     </message>
     <message>
-        <location line="+40"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation>Le bash situé dans « %1 » ne fait pas partie d&apos;une installation niubash, Git for Windows ou MSYS2 reconnue, le bac à sable Windows ne peut donc pas lui accorder un emplacement restreint en lecture seule. Installez Git for Windows (https://git-scm.com/download/win) et placez son bash en premier dans le PATH, téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama.</translation>
+        <translation type="vanished">Le bash situé dans « %1 » ne fait pas partie d&apos;une installation niubash, Git for Windows ou MSYS2 reconnue, le bac à sable Windows ne peut donc pas lui accorder un emplacement restreint en lecture seule. Installez Git for Windows (https://git-scm.com/download/win) et placez son bash en premier dans le PATH, téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama.</translation>
     </message>
     <message>
-        <location line="+111"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation>wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
+        <translation type="vanished">wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
     </message>
     <message>
-        <location line="+32"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation>Le bac à sable Windows (Microsoft MXC) vérifie son isolation pour la première fois ; relancez la commande dans quelques secondes.</translation>
+        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) vérifie son isolation pour la première fois ; relancez la commande dans quelques secondes.</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation type="vanished">La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
-        <translation>Écrire un fichier</translation>
+        <translation type="vanished">Écrire un fichier</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <location line="+26"/>
         <source>write %1</source>
-        <translation>écrire %1</translation>
+        <translation type="vanished">écrire %1</translation>
     </message>
     <message>
-        <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation>Erreur d&apos;outil : « content » est requis.</translation>
+        <translation type="vanished">Erreur d&apos;outil : « content » est requis.</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation>Impossible d&apos;écrire « %1 » : un chemin parent est un fichier.</translation>
+        <translation type="vanished">Impossible d&apos;écrire « %1 » : un chemin parent est un fichier.</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation>Impossible d&apos;écrire « %1 » : impossible de créer le dossier : %2</translation>
+        <translation type="vanished">Impossible d&apos;écrire « %1 » : impossible de créer le dossier : %2</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation>Impossible d&apos;écrire « %1 » : %2</translation>
+        <translation type="vanished">Impossible d&apos;écrire « %1 » : %2</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
-        <translation>%1 octets écrits avec succès dans %2.</translation>
+        <translation type="vanished">%1 octets écrits avec succès dans %2.</translation>
     </message>
 </context>
 <context>
@@ -5120,314 +4881,423 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 <context>
     <name>Tr</name>
     <message>
+        <location filename="../src/tools/apply_patch_tool.cpp" line="+173"/>
         <source>Add %1</source>
-        <translation type="vanished">Ajouter %1</translation>
+        <translation>Ajouter %1</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Delete %1</source>
-        <translation type="vanished">Supprimer %1</translation>
+        <translation>Supprimer %1</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Edit %1</source>
-        <translation type="vanished">Modifier %1</translation>
+        <translation>Modifier %1</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Move %1 to %2</source>
-        <translation type="vanished">Déplacer %1 vers %2</translation>
+        <translation>Déplacer %1 vers %2</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location line="+7"/>
         <source>Apply patch</source>
-        <translation type="vanished">Appliquer un correctif</translation>
+        <translation>Appliquer un correctif</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Apply patch to %1 files</source>
-        <translation type="vanished">Appliquer un correctif à %1 fichiers</translation>
+        <translation>Appliquer un correctif à %1 fichiers</translation>
     </message>
     <message>
+        <location line="+79"/>
         <source>created</source>
-        <translation type="vanished">créé</translation>
+        <translation>créé</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>edited</source>
-        <translation type="vanished">modifié</translation>
+        <translation>modifié</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>moved</source>
-        <translation type="vanished">déplacé</translation>
+        <translation>déplacé</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>deleted</source>
-        <translation type="vanished">supprimé</translation>
+        <translation>supprimé</translation>
     </message>
     <message>
+        <location line="+68"/>
+        <location line="+14"/>
+        <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
+        <source>file</source>
+        <translation>fichier</translation>
+    </message>
+    <message>
+        <location line="+121"/>
         <source>Success. Updated the following files:</source>
-        <translation type="vanished">Succès. Les fichiers suivants ont été mis à jour :</translation>
+        <translation>Succès. Les fichiers suivants ont été mis à jour :</translation>
     </message>
     <message>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH.</source>
         <translation type="vanished">Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win) ou ajoutez un bash au PATH.</translation>
     </message>
     <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+154"/>
         <source>No bash shell found. Install Git for Windows (https://git-scm.com/download/win) or add a bash to PATH, or download niubash from the Llama.cpp Chat tools settings page.</source>
-        <translation type="vanished">Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp.</translation>
+        <translation>Aucun shell bash trouvé. Installez Git for Windows (https://git-scm.com/download/win), ajoutez un bash au PATH ou téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp.</translation>
     </message>
     <message>
+        <location line="+160"/>
         <source>The sandbox-exec executable was not found; sandboxing is unavailable on this system.</source>
-        <translation type="vanished">L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
+        <translation>L&apos;exécutable sandbox-exec n&apos;a pas été trouvé ; le bac à sable n&apos;est pas disponible sur ce système.</translation>
     </message>
     <message>
+        <location filename="../src/tools/linux_sandbox.cpp" line="+66"/>
         <source>bubblewrap (bwrap) is installed, but the kernel refuses to set up its sandbox: %1. On Ubuntu 24.04 and newer this is usually AppArmor&apos;s restriction of unprivileged user namespaces: run &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (add it to /etc/sysctl.d/ to make it permanent), or give bwrap an AppArmor profile with the &apos;userns&apos; attribute. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) est installé, mais le noyau refuse de configurer son bac à sable : %1. Sur Ubuntu 24.04 et les versions plus récentes, il s&apos;agit généralement de la restriction d&apos;AppArmor sur les espaces de noms d&apos;utilisateur non privilégiés : exécutez &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (ajoutez-le à /etc/sysctl.d/ pour le rendre permanent) ou donnez à bwrap un profil AppArmor avec l&apos;attribut &apos;userns&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>bubblewrap (bwrap) est installé, mais le noyau refuse de configurer son bac à sable : %1. Sur Ubuntu 24.04 et les versions plus récentes, il s&apos;agit généralement de la restriction d&apos;AppArmor sur les espaces de noms d&apos;utilisateur non privilégiés : exécutez &apos;sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0&apos; (ajoutez-le à /etc/sysctl.d/ pour le rendre permanent) ou donnez à bwrap un profil AppArmor avec l&apos;attribut &apos;userns&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+14"/>
         <source>bubblewrap (bwrap) is installed, but unprivileged user namespaces are disabled on this system: %1. On Debian and its derivatives, enable them with &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) est installé, mais les espaces de noms d&apos;utilisateur non privilégiés sont désactivés sur ce système : %1. Sur Debian et ses dérivés, activez-les avec &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>bubblewrap (bwrap) est installé, mais les espaces de noms d&apos;utilisateur non privilégiés sont désactivés sur ce système : %1. Sur Debian et ses dérivés, activez-les avec &apos;sudo sysctl -w kernel.unprivileged_userns_clone=1&apos;. Ou bien décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>bubblewrap (bwrap) failed to set up the sandbox: %1. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) a échoué à configurer le bac à sable : %1. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>bubblewrap (bwrap) a échoué à configurer le bac à sable : %1. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+51"/>
         <source>bubblewrap (bwrap) did not set up the sandbox in time. Check that it can run on this system, or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) n&apos;a pas configuré le bac à sable à temps. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>bubblewrap (bwrap) n&apos;a pas configuré le bac à sable à temps. Vérifiez qu&apos;il peut s&apos;exécuter sur ce système, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+38"/>
         <source>bubblewrap (bwrap) was not found. Install it (e.g. &apos;apt install bubblewrap&apos; or &apos;dnf install bubblewrap&apos;) or uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>bubblewrap (bwrap) n&apos;a pas été trouvé. Installez-le (par exemple &apos;apt install bubblewrap&apos; ou &apos;dnf install bubblewrap&apos;) ou décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location filename="../src/tools/bash_tool.cpp" line="+146"/>
         <source>[Output truncated: %1]</source>
-        <translation type="vanished">[Sortie tronquée : %1]</translation>
+        <translation>[Sortie tronquée : %1]</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>showing last %1 of %2 lines</source>
-        <translation type="vanished">affichant les %1 dernières lignes sur %2</translation>
+        <translation>affichant les %1 dernières lignes sur %2</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>showing last %1 KB</source>
-        <translation type="vanished">affichant les %1 Ko derniers</translation>
+        <translation>affichant les %1 Ko derniers</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Full output saved to: %1</source>
-        <translation type="vanished">Sortie complète enregistrée dans : %1</translation>
+        <translation>Sortie complète enregistrée dans : %1</translation>
     </message>
     <message>
+        <location line="+122"/>
         <source>running %1</source>
-        <translation type="vanished">exécution de %1</translation>
+        <translation>exécution de %1</translation>
     </message>
     <message>
+        <location line="+47"/>
         <source>Error: the command must not be empty.</source>
-        <translation type="vanished">Erreur : la commande ne doit pas être vide.</translation>
+        <translation>Erreur : la commande ne doit pas être vide.</translation>
     </message>
     <message>
+        <location line="+18"/>
         <source>Error: working directory does not exist: %1</source>
-        <translation type="vanished">Erreur : le dossier de travail n&apos;existe pas : %1</translation>
+        <translation>Erreur : le dossier de travail n&apos;existe pas : %1</translation>
     </message>
     <message>
+        <location line="+9"/>
+        <location line="+26"/>
+        <location line="+29"/>
+        <location filename="../src/tools/find_tool.cpp" line="+191"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+131"/>
+        <location filename="../src/tools/search_tool.cpp" line="+262"/>
         <source>Error: %1</source>
-        <translation type="vanished">Erreur : %1</translation>
+        <translation>Erreur : %1</translation>
     </message>
     <message>
+        <location line="-43"/>
         <source>Error: the sandbox cannot make &quot;%1&quot; writable: it is (or contains) the home directory or a file system root. Open a project to run commands in its directory.</source>
-        <translation type="vanished">Erreur : le bac à sable ne peut pas rendre « %1 » accessible en écriture : c&apos;est le dossier personnel (ou il le contient) ou la racine du système de fichiers. Ouvrez un projet pour exécuter des commandes dans son dossier.</translation>
+        <translation>Erreur : le bac à sable ne peut pas rendre « %1 » accessible en écriture : c&apos;est le dossier personnel (ou il le contient) ou la racine du système de fichiers. Ouvrez un projet pour exécuter des commandes dans son dossier.</translation>
     </message>
     <message>
+        <location line="+220"/>
         <source>Command was stopped by the user.</source>
-        <translation type="vanished">La commande a été arrêtée par l&apos;utilisateur.</translation>
+        <translation>La commande a été arrêtée par l&apos;utilisateur.</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Command timed out after %1 ms. Retry with a larger timeout if the command is expected to take longer.</source>
-        <translation type="vanished">La commande a expiré après %1 ms. Réessayez avec un délai plus long si la commande est censée prendre plus de temps.</translation>
+        <translation>La commande a expiré après %1 ms. Réessayez avec un délai plus long si la commande est censée prendre plus de temps.</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Failed to start the command: %1</source>
-        <translation type="vanished">Échec du démarrage de la commande : %1</translation>
+        <translation>Échec du démarrage de la commande : %1</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location filename="../src/tools/find_tool.cpp" line="+120"/>
+        <location line="+7"/>
+        <location filename="../src/tools/search_tool.cpp" line="+120"/>
+        <location line="+7"/>
         <source>unknown error</source>
-        <translation type="vanished">erreur inconnue</translation>
+        <translation>erreur inconnue</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Command terminated abnormally (crashed).</source>
-        <translation type="vanished">La commande s&apos;est terminée de manière anormale (plantage).</translation>
+        <translation>La commande s&apos;est terminée de manière anormale (plantage).</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Command exited with code %1.</source>
-        <translation type="vanished">La commande s&apos;est terminée avec le code %1.</translation>
+        <translation>La commande s&apos;est terminée avec le code %1.</translation>
     </message>
     <message>
+        <location line="+51"/>
         <source>Working directory: %1
 
 </source>
-        <translation type="vanished">Dossier de travail : %1
+        <translation>Dossier de travail : %1
 
 </translation>
     </message>
     <message>
+        <location filename="../src/tools/edit_file_tool.cpp" line="-115"/>
         <source>Edit file</source>
-        <translation type="vanished">Modifier un fichier</translation>
+        <translation>Modifier un fichier</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>edit %1 (%2 blocks)</source>
-        <translation type="vanished">modifier %1 (%2 blocs)</translation>
+        <translation>modifier %1 (%2 blocs)</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+26"/>
         <source>edit %1</source>
-        <translation type="vanished">modifier %1</translation>
+        <translation>modifier %1</translation>
     </message>
     <message>
+        <location line="+37"/>
+        <location filename="../src/tools/write_tool.cpp" line="+120"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
-        <translation type="vanished">Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
+        <translation>Erreur d&apos;outil : « path » doit être une chaîne non vide.</translation>
     </message>
     <message>
+        <location line="+30"/>
         <source>Tool error: every edit needs an &quot;oldText&quot; and a &quot;newText&quot;.</source>
-        <translation type="vanished">Erreur d&apos;outil : chaque modification a besoin d&apos;un « oldText » et d&apos;un « newText ».</translation>
+        <translation>Erreur d&apos;outil : chaque modification a besoin d&apos;un « oldText » et d&apos;un « newText ».</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Tool error: &quot;edits&quot; must contain at least one replacement.</source>
-        <translation type="vanished">Erreur d&apos;outil : « edits » doit contenir au moins un remplacement.</translation>
+        <translation>Erreur d&apos;outil : « edits » doit contenir au moins un remplacement.</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>not a plain file</source>
+        <translation>pas un fichier normal</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Cannot edit %1: %2 Use read_file to verify the path, or write to create the file.</source>
+        <translation>Impossible de modifier %1 : %2 Utilisez read_file pour vérifier le chemin, ou write pour créer le fichier.</translation>
     </message>
     <message>
         <source>Cannot edit &quot;%1&quot;: file not found. Use read_file to verify the path, or write to create the file.</source>
         <translation type="vanished">Impossible de modifier « %1 » : fichier introuvable. Utilisez read_file pour vérifier le chemin, ou write pour créer le fichier.</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location line="+7"/>
+        <location line="+4"/>
         <source>Cannot edit &quot;%1&quot;: %2</source>
-        <translation type="vanished">Impossible de modifier « %1 » : %2</translation>
+        <translation>Impossible de modifier « %1 » : %2</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>Successfully replaced %1 block(s) in %2.</source>
-        <translation type="vanished">%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
+        <translation>%1 bloc(s) remplacé(s) avec succès dans %2.</translation>
     </message>
     <message>
+        <location filename="../src/tools/mcpclient.cpp" line="+94"/>
+        <location line="+27"/>
         <source>Cannot reach the MCP server.</source>
-        <translation type="vanished">Impossible de joindre le serveur MCP.</translation>
+        <translation>Impossible de joindre le serveur MCP.</translation>
     </message>
     <message>
+        <location line="-22"/>
         <source>MCP initialize failed: %1</source>
-        <translation type="vanished">Initialisation MCP échouée : %1</translation>
+        <translation>Initialisation MCP échouée : %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>MCP tools/list failed: %1</source>
-        <translation type="vanished">tools/list MCP a échoué : %1</translation>
+        <translation>tools/list MCP a échoué : %1</translation>
     </message>
     <message>
+        <location line="+53"/>
         <source>Connection to the MCP server was closed.</source>
-        <translation type="vanished">La connexion au serveur MCP a été fermée.</translation>
+        <translation>La connexion au serveur MCP a été fermée.</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>The MCP server is not available. Check that the server is running and reachable, then try again.</source>
-        <translation type="vanished">Le serveur MCP n&apos;est pas disponible. Vérifiez que le serveur est en cours d&apos;exécution et joignable, puis réessayez.</translation>
+        <translation>Le serveur MCP n&apos;est pas disponible. Vérifiez que le serveur est en cours d&apos;exécution et joignable, puis réessayez.</translation>
     </message>
     <message>
+        <location line="+65"/>
         <source>MCP tool &quot;%1&quot; failed: the MCP server did not respond (connection error or timeout).</source>
-        <translation type="vanished">L&apos;outil MCP « %1 » a échoué : le serveur MCP n&apos;a pas répondu (erreur de connexion ou délai d&apos;attente dépassé).</translation>
+        <translation>L&apos;outil MCP « %1 » a échoué : le serveur MCP n&apos;a pas répondu (erreur de connexion ou délai d&apos;attente dépassé).</translation>
     </message>
     <message>
+        <location line="+15"/>
         <source>The MCP server restarted; the call was not executed. Please try again.</source>
-        <translation type="vanished">Le serveur MCP a redémarré ; l&apos;appel n&apos;a pas été exécuté. Veuillez réessayer.</translation>
+        <translation>Le serveur MCP a redémarré ; l&apos;appel n&apos;a pas été exécuté. Veuillez réessayer.</translation>
     </message>
     <message>
+        <location line="-61"/>
         <source>MCP tool &quot;%1&quot; failed: %2</source>
-        <translation type="vanished">L&apos;outil MCP « %1 » a échoué : %2</translation>
+        <translation>L&apos;outil MCP « %1 » a échoué : %2</translation>
     </message>
     <message>
+        <location line="+72"/>
         <source>MCP server returned HTTP %1 for tool call.</source>
-        <translation type="vanished">Le serveur MCP a renvoyé HTTP %1 pour l&apos;appel d&apos;outil.</translation>
+        <translation>Le serveur MCP a renvoyé HTTP %1 pour l&apos;appel d&apos;outil.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>MCP server returned an empty or malformed response.</source>
-        <translation type="vanished">Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
+        <translation>Le serveur MCP a renvoyé une réponse vide ou mal formée.</translation>
     </message>
     <message>
+        <location filename="../src/tools/readfile_tool.cpp" line="+83"/>
         <source>read whole file %1</source>
-        <translation type="vanished">lire tout le fichier %1</translation>
+        <translation>lire tout le fichier %1</translation>
     </message>
     <message>
         <source>read %1:%2‑%3</source>
         <translation type="vanished">lire %1:%2-%3</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>read %1</source>
-        <translation type="vanished">lire %1</translation>
+        <translation>lire %1</translation>
     </message>
     <message>
         <source>File &quot;%1&quot; does not exist.</source>
         <translation type="vanished">Le fichier **« %1 »** n&apos;existe pas.</translation>
     </message>
     <message>
+        <location line="+44"/>
+        <source>File</source>
+        <translation>Fichier</translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Failed to read &quot;%1&quot;: %2</source>
-        <translation type="vanished">Impossible de lire **« %1 »** : %2.</translation>
+        <translation>Impossible de lire **« %1 »** : %2.</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>Image &quot;%1&quot; is %2 MB large and exceeds the %3 MB read limit; resize it first (e.g. with the bash tool).</source>
-        <translation type="vanished">L&apos;image « %1 » fait %2 Mo et dépasse la limite de lecture de %3 Mo ; redimensionnez-la d&apos;abord (par exemple avec l&apos;outil bash).</translation>
+        <translation>L&apos;image « %1 » fait %2 Mo et dépasse la limite de lecture de %3 Mo ; redimensionnez-la d&apos;abord (par exemple avec l&apos;outil bash).</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Image file &quot;%1&quot; (%2, %3 bytes). Its content is attached as an image.</source>
-        <translation type="vanished">Fichier image « %1 » (%2, %3 octets). Son contenu est joint sous forme d&apos;image.</translation>
+        <translation>Fichier image « %1 » (%2, %3 octets). Son contenu est joint sous forme d&apos;image.</translation>
     </message>
     <message>
+        <location line="+18"/>
         <source>first_line must be &gt;= 1.</source>
-        <translation type="vanished">first_line doit être &gt;= 1.</translation>
+        <translation>first_line doit être &gt;= 1.</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>last_line_inclusive must be &gt;= first_line.</source>
-        <translation type="vanished">last_line_inclusive doit être &gt;= first_line.</translation>
+        <translation>last_line_inclusive doit être &gt;= first_line.</translation>
     </message>
     <message>
+        <location line="+14"/>
         <source>first_line (%1) exceeds the number of lines in &quot;%2&quot; (%3).</source>
-        <translation type="vanished">first_line (%1) dépasse le nombre de lignes de « %2 » (%3).</translation>
+        <translation>first_line (%1) dépasse le nombre de lignes de « %2 » (%3).</translation>
     </message>
     <message>
+        <location line="+30"/>
         <source>Line %1 of &quot;%2&quot; is larger than the %3 KB read limit; the file cannot be read with this tool.</source>
-        <translation type="vanished">La ligne %1 de « %2 » est plus grande que la limite de lecture de %3 Ko ; le fichier ne peut pas être lu avec cet outil.</translation>
+        <translation>La ligne %1 de « %2 » est plus grande que la limite de lecture de %3 Ko ; le fichier ne peut pas être lu avec cet outil.</translation>
     </message>
     <message>
+        <location line="+18"/>
         <source> %1 KB limit reached.</source>
-        <translation type="vanished"> Limite de %1 Ko atteinte.</translation>
+        <translation> Limite de %1 Ko atteinte.</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source> Continue with first_line=%1, last_line_inclusive=%2.</source>
-        <translation type="vanished"> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
+        <translation> Continuez avec first_line=%1, last_line_inclusive=%2.</translation>
     </message>
     <message>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read‑only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
         <translation type="vanished">Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
     </message>
     <message>
+        <location filename="../src/tools/task_tool.cpp" line="+38"/>
         <source>You are the &quot;explore&quot; subagent, running in a separate conversation that is isolated from the main one. Explore the codebase and answer the task with the read-only tools available to you: use &quot;find&quot; to locate files by name, &quot;search&quot; to search file contents, and &quot;read_file&quot; to read the relevant sections. Do not modify any file and do not run commands that change anything. Work autonomously; you cannot ask the user questions. When you are done, reply with a single concise report containing the key findings, relevant file paths with line numbers, and everything the main conversation needs to continue the work.</source>
-        <translation type="vanished">Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
+        <translation>Vous êtes le sous-agent « explore », exécuté dans une conversation séparée, isolée de la conversation principale. Explorez la base de code et répondez à la tâche avec les outils en lecture seule qui vous sont disponibles : utilisez « find » pour localiser des fichiers par nom, « search » pour rechercher dans le contenu des fichiers, et « read_file » pour lire les sections pertinentes. Ne modifiez aucun fichier et n&apos;exécutez aucune commande qui modifie quoi que ce soit. Travaillez de manière autonome ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis contenant les conclusions clés, les chemins de fichiers pertinents avec les numéros de ligne, et tout ce dont la conversation principale a besoin pour continuer le travail.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>You are the &quot;general&quot; subagent, running in a separate conversation that is isolated from the main one. Work autonomously with the available tools until the task is complete; you cannot ask the user questions. When you are done, reply with a single concise report of what you did or found, including relevant file paths with line numbers, so the main conversation can continue the work.</source>
-        <translation type="vanished">Vous êtes le sous-agent « general », exécuté dans une conversation séparée, isolée de la conversation principale. Travaillez de manière autonome avec les outils disponibles jusqu&apos;à l&apos;accomplissement de la tâche ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis de ce que vous avez fait ou trouvé, y compris les chemins de fichiers pertinents avec les numéros de ligne, afin que la conversation principale puisse continuer le travail.</translation>
+        <translation>Vous êtes le sous-agent « general », exécuté dans une conversation séparée, isolée de la conversation principale. Travaillez de manière autonome avec les outils disponibles jusqu&apos;à l&apos;accomplissement de la tâche ; vous ne pouvez pas poser de questions à l&apos;utilisateur. Lorsque vous avez terminé, répondez avec un rapport unique et concis de ce que vous avez fait ou trouvé, y compris les chemins de fichiers pertinents avec les numéros de ligne, afin que la conversation principale puisse continuer le travail.</translation>
     </message>
     <message>
+        <location line="+68"/>
+        <location line="+27"/>
         <source>task: %1</source>
-        <translation type="vanished">tâche : %1</translation>
+        <translation>tâche : %1</translation>
     </message>
     <message>
+        <location line="+26"/>
         <source>Tool error: both &quot;description&quot; and &quot;prompt&quot; are required.</source>
-        <translation type="vanished">Erreur d&apos;outil : « description » et « prompt » sont requis.</translation>
+        <translation>Erreur d&apos;outil : « description » et « prompt » sont requis.</translation>
     </message>
     <message>
+        <location line="+8"/>
         <source>Tool error: unknown subagent_type &quot;%1&quot; (expected &quot;explore&quot; or &quot;general&quot;)</source>
-        <translation type="vanished">Erreur d&apos;outil : subagent_type « %1 » inconnu (attendu « explore » ou « general »)</translation>
+        <translation>Erreur d&apos;outil : subagent_type « %1 » inconnu (attendu « explore » ou « general »)</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>Task: %1</source>
-        <translation type="vanished">Tâche : %1</translation>
+        <translation>Tâche : %1</translation>
     </message>
     <message>
+        <location line="+22"/>
         <source>Task failed: the sub-conversation &quot;%1&quot; ended without a final answer (it may have been stopped or deleted).</source>
-        <translation type="vanished">Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
+        <translation>Échec de la tâche : la sous-conversation « %1 » s&apos;est terminée sans réponse finale (elle a peut-être été arrêtée ou supprimée).</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Task completed in the sub-conversation &quot;%1&quot; (id: %2). The conversation is kept in the conversation list and can be opened for further work. Final report from the subagent:
 
 %3</source>
-        <translation type="vanished">Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
+        <translation>Tâche terminée dans la sous-conversation « %1 » (id : %2). La conversation est conservée dans la liste des conversations et peut être ouverte pour poursuivre le travail. Rapport final du sous-agent :
 
 %3</translation>
     </message>
@@ -5444,368 +5314,494 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
 %3</translation>
     </message>
     <message>
+        <location filename="../src/tools/webfetch_tool.cpp" line="+136"/>
+        <location line="+27"/>
         <source>fetch %1</source>
-        <translation type="vanished">récupérer %1</translation>
+        <translation>récupérer %1</translation>
     </message>
     <message>
+        <location line="+112"/>
         <source>Invalid URL &quot;%1&quot;: it must start with http:// or https://</source>
-        <translation type="vanished">URL « %1 » non valide : elle doit commencer par http:// ou https://</translation>
+        <translation>URL « %1 » non valide : elle doit commencer par http:// ou https://</translation>
     </message>
     <message>
+        <location line="+21"/>
         <source>Fetch failed for %1: response too large (limit 5 MB).</source>
-        <translation type="vanished">Échec de la récupération de %1 : réponse trop volumineuse (limite 5 Mo).</translation>
+        <translation>Échec de la récupération de %1 : réponse trop volumineuse (limite 5 Mo).</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Fetch failed for %1: %2</source>
-        <translation type="vanished">Échec de la récupération de %1 : %2</translation>
+        <translation>Échec de la récupération de %1 : %2</translation>
     </message>
     <message>
+        <location line="+15"/>
         <source>
 
 [... content truncated at %1 characters ...]</source>
-        <translation type="vanished">
+        <translation>
 
 [... contenu tronqué à %1 caractères ...]</translation>
     </message>
     <message>
+        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location line="+26"/>
         <source>search %1</source>
-        <translation type="vanished">rechercher %1</translation>
+        <translation>rechercher %1</translation>
     </message>
     <message>
+        <location line="+196"/>
         <source>Search results for &quot;%1&quot;:</source>
-        <translation type="vanished">Résultats de recherche pour « %1 » :</translation>
+        <translation>Résultats de recherche pour « %1 » :</translation>
     </message>
     <message>
         <source>Tool error: &quot;query&quot; must be a non‑empty string.</source>
         <translation type="vanished">Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
     </message>
     <message>
+        <location line="+15"/>
         <source>Tool error: &quot;query&quot; must be a non-empty string.</source>
-        <translation type="vanished">Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
+        <translation>Erreur d&apos;outil : « query » doit être une chaîne non vide.</translation>
     </message>
     <message>
+        <location line="+52"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
-        <translation type="vanished">Échec de la recherche : le backend Google n&apos;est pas configuré. Définissez la clé API et l&apos;identifiant du moteur de recherche (cx) dans les paramètres Llama.cpp.</translation>
+        <translation>Échec de la recherche : le backend Google n&apos;est pas configuré. Définissez la clé API et l&apos;identifiant du moteur de recherche (cx) dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
+        <location line="-23"/>
+        <location line="+44"/>
+        <location line="+13"/>
+        <location line="+41"/>
+        <location line="+45"/>
+        <location line="+51"/>
         <source>Search failed: %1</source>
-        <translation type="vanished">Échec de la recherche : %1</translation>
+        <translation>Échec de la recherche : %1</translation>
     </message>
     <message>
         <source>Search failed: DuckDuckGo is rate‑limiting requests right now; wait a minute and try again.</source>
         <translation type="vanished">Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
     </message>
     <message>
+        <location line="-146"/>
+        <location line="+54"/>
+        <location line="+45"/>
         <source>Search failed: invalid response from the search provider.</source>
-        <translation type="vanished">Échec de la recherche : réponse non valide du fournisseur de recherche.</translation>
+        <translation>Échec de la recherche : réponse non valide du fournisseur de recherche.</translation>
     </message>
     <message>
+        <location line="-88"/>
         <source>no results found for &quot;%1&quot;</source>
-        <translation type="vanished">aucun résultat trouvé pour « %1 »</translation>
+        <translation>aucun résultat trouvé pour « %1 »</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>Search failed: the Brave backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Échec de la recherche : le backend Brave n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
+        <translation>Échec de la recherche : le backend Brave n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
+        <location line="-59"/>
+        <location line="+95"/>
+        <location line="+44"/>
+        <location line="+45"/>
         <source>No results found for &quot;%1&quot;.</source>
-        <translation type="vanished">Aucun résultat trouvé pour « %1 ».</translation>
+        <translation>Aucun résultat trouvé pour « %1 ».</translation>
     </message>
     <message>
+        <location line="-192"/>
         <source>Search failed: DuckDuckGo is rate-limiting requests right now; wait a minute and try again.</source>
-        <translation type="vanished">Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
+        <translation>Échec de la recherche : DuckDuckGo limite actuellement le débit des requêtes ; attendez une minute et réessayez.</translation>
     </message>
     <message>
+        <location line="+113"/>
         <source>Search failed: the Tavily backend is not configured. Set the API key in the Llama.cpp settings.</source>
-        <translation type="vanished">Échec de la recherche : le backend Tavily n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
+        <translation>Échec de la recherche : le backend Tavily n&apos;est pas configuré. Définissez la clé API dans les paramètres Llama.cpp.</translation>
     </message>
     <message>
+        <location line="+44"/>
         <source>Search failed: the Exa endpoint URL is not configured.</source>
-        <translation type="vanished">Échec de la recherche : l&apos;URL du point d&apos;accès Exa n&apos;est pas configurée.</translation>
+        <translation>Échec de la recherche : l&apos;URL du point d&apos;accès Exa n&apos;est pas configurée.</translation>
     </message>
     <message>
+        <location line="+37"/>
         <source>Search results for &quot;%1&quot;:
 
 %2</source>
-        <translation type="vanished">Résultats de recherche pour « %1 » :
+        <translation>Résultats de recherche pour « %1 » :
 
 %2</translation>
     </message>
     <message>
+        <location filename="../src/tools/find_tool.cpp" line="-182"/>
+        <location line="+8"/>
         <source>find files %1</source>
-        <translation type="vanished">localiser les fichiers %1</translation>
+        <translation>localiser les fichiers %1</translation>
     </message>
     <message>
         <source>Pattern: `%1`</source>
         <translation type="vanished">Motif : `%1`</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="-168"/>
         <source>Pattern: %1</source>
-        <translation type="vanished">Motif : %1</translation>
+        <translation>Motif : %1</translation>
     </message>
     <message>
+        <location line="+2"/>
+        <location filename="../src/tools/search_tool.cpp" line="+5"/>
         <source>  Path: %1</source>
-        <translation type="vanished">  Chemin : %1</translation>
+        <translation>  Chemin : %1</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the find tool.</source>
-        <translation type="vanished">Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil find.</translation>
+        <translation>Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil find.</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/search_tool.cpp" line="+27"/>
         <source>Error: the pattern must not be empty.</source>
-        <translation type="vanished">Erreur : le motif ne doit pas être vide.</translation>
+        <translation>Erreur : le motif ne doit pas être vide.</translation>
     </message>
     <message>
+        <location line="+10"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+0"/>
+        <source>directory</source>
+        <translation>dossier</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location filename="../src/tools/ls_tool.cpp" line="+3"/>
         <source>Error: path is not a directory: %1</source>
-        <translation type="vanished">Erreur : le chemin n&apos;est pas un dossier : %1</translation>
+        <translation>Erreur : le chemin n&apos;est pas un dossier : %1</translation>
     </message>
     <message>
+        <location line="+107"/>
+        <location filename="../src/tools/search_tool.cpp" line="+119"/>
         <source>[Search was stopped by the user. The results are incomplete.]</source>
-        <translation type="vanished">[La recherche a été arrêtée par l&apos;utilisateur. Les résultats sont incomplets.]</translation>
+        <translation>[La recherche a été arrêtée par l&apos;utilisateur. Les résultats sont incomplets.]</translation>
     </message>
     <message>
+        <location line="+3"/>
         <source>[Search timed out after %1 ms. The results are incomplete; use a more specific pattern.]</source>
-        <translation type="vanished">[La recherche a expiré après %1 ms. Les résultats sont incomplets ; utilisez un motif plus spécifique.]</translation>
+        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; utilisez un motif plus spécifique.]</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location filename="../src/tools/search_tool.cpp" line="+8"/>
         <source>[Failed to start ripgrep: %1]</source>
-        <translation type="vanished">[Échec du démarrage de ripgrep : %1]</translation>
+        <translation>[Échec du démarrage de ripgrep : %1]</translation>
     </message>
     <message>
+        <location line="+6"/>
+        <location filename="../src/tools/search_tool.cpp" line="+6"/>
         <source>[ripgrep failed (exit code %1): %2]</source>
-        <translation type="vanished">[ripgrep a échoué (code de sortie %1) : %2]</translation>
+        <translation>[ripgrep a échoué (code de sortie %1) : %2]</translation>
     </message>
     <message>
+        <location line="+8"/>
         <source>[%1 results limit reached. Use limit=%2 for more results, or use a more specific pattern.]</source>
-        <translation type="vanished">[Limite de %1 résultats atteinte. Utilisez limit=%2 pour plus de résultats, ou utilisez un motif plus spécifique.]</translation>
+        <translation>[Limite de %1 résultats atteinte. Utilisez limit=%2 pour plus de résultats, ou utilisez un motif plus spécifique.]</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>No files found.</source>
-        <translation type="vanished">Aucun fichier trouvé.</translation>
+        <translation>Aucun fichier trouvé.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>[Output truncated to %1 KB. Use a more specific pattern to see all results.]</source>
-        <translation type="vanished">[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
+        <translation>[Sortie tronquée à %1 Ko. Utilisez un motif plus spécifique pour voir tous les résultats.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/ls_tool.cpp" line="-43"/>
+        <location line="+7"/>
         <source>list directory %1</source>
-        <translation type="vanished">lister le dossier %1</translation>
+        <translation>lister le dossier %1</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Path: `%1`
 
 </source>
-        <translation type="vanished">Chemin : `%1`
+        <translation>Chemin : `%1`
 
 </translation>
     </message>
     <message>
+        <location line="+63"/>
         <source>Directory is empty.</source>
-        <translation type="vanished">Le dossier est vide.</translation>
+        <translation>Le dossier est vide.</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>[Output truncated to %1 KB. List a subdirectory to see the remaining entries.]</source>
-        <translation type="vanished">[Sortie tronquée à %1 Ko. Listez un sous-dossier pour voir les entrées restantes.]</translation>
+        <translation>[Sortie tronquée à %1 Ko. Listez un sous-dossier pour voir les entrées restantes.]</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>[%1 entries limit reached. Use limit=%2 for more entries.]</source>
-        <translation type="vanished">[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d&apos;entrées.]</translation>
+        <translation>[Limite de %1 entrées atteinte. Utilisez limit=%2 pour plus d&apos;entrées.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/mcpbridge.cpp" line="+120"/>
         <source>The MCP tool &quot;%1&quot; is not available (no connected MCP server serves it).</source>
-        <translation type="vanished">L&apos;outil MCP « %1 » n&apos;est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
+        <translation>L&apos;outil MCP « %1 » n&apos;est pas disponible (aucun serveur MCP connecté ne le fournit).</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+90"/>
         <source>Download ripgrep</source>
-        <translation type="vanished">Télécharger ripgrep</translation>
+        <translation>Télécharger ripgrep</translation>
     </message>
     <message>
+        <location line="+67"/>
         <source>Download ripgrep %1 from GitHub?</source>
-        <translation type="vanished">Télécharger ripgrep %1 depuis GitHub ?</translation>
+        <translation>Télécharger ripgrep %1 depuis GitHub ?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The search and find tools use ripgrep to search file contents and to locate files by name. It is not installed on this system, so it can be downloaded here instead. ripgrep is published under the MIT or the Unlicense license.</source>
-        <translation type="vanished">Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
+        <translation>Les outils de recherche et de localisation utilisent ripgrep pour rechercher dans le contenu des fichiers et localiser des fichiers par nom. Il n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. ripgrep est publié sous licence MIT ou Unlicense.</translation>
     </message>
     <message>
+        <location filename="../src/tools/mxc.cpp" line="+87"/>
         <source>Download the Windows sandbox runtime (MXC)</source>
-        <translation type="vanished">Télécharger le runtime du bac à sable Windows (MXC)</translation>
+        <translation>Télécharger le runtime du bac à sable Windows (MXC)</translation>
     </message>
     <message>
+        <location line="+58"/>
         <source>Download the Microsoft MXC runtime %1?</source>
-        <translation type="vanished">Télécharger le runtime Microsoft MXC %1 ?</translation>
+        <translation>Télécharger le runtime Microsoft MXC %1 ?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The &apos;Sandbox commands&apos; setting confines the bash tool on Windows to a Microsoft MXC process container. The pinned wxc-exec.exe runtime is not installed on this system, so it can be downloaded here instead. MXC is published under the MIT license.</source>
-        <translation type="vanished">Le paramètre « Commandes dans un bac à sable » confine l&apos;outil bash sur Windows à un conteneur de processus Microsoft MXC. Le runtime wxc-exec.exe épinglé n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. MXC est publié sous licence MIT.</translation>
+        <translation>Le paramètre « Commandes dans un bac à sable » confine l&apos;outil bash sur Windows à un conteneur de processus Microsoft MXC. Le runtime wxc-exec.exe épinglé n&apos;est pas installé sur ce système, vous pouvez donc le télécharger ici à la place. MXC est publié sous licence MIT.</translation>
     </message>
     <message>
+        <location line="+4"/>
+        <location filename="../src/tools/niubash.cpp" line="+154"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Project: %1</source>
-        <translation type="vanished">Projet : %1</translation>
+        <translation>Projet : %1</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location filename="../src/tools/niubash.cpp" line="+1"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+1"/>
         <source>License: %1</source>
-        <translation type="vanished">Licence : %1</translation>
+        <translation>Licence : %1</translation>
     </message>
     <message>
+        <location line="+8"/>
+        <location filename="../src/tools/niubash.cpp" line="+8"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+8"/>
         <source>Download</source>
-        <translation type="vanished">Télécharger</translation>
+        <translation>Télécharger</translation>
     </message>
     <message>
+        <location line="+25"/>
         <source>The package holds no wxc-exec.exe binary.</source>
-        <translation type="vanished">Le paquet ne contient aucun binaire wxc-exec.exe.</translation>
+        <translation>Le paquet ne contient aucun binaire wxc-exec.exe.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>The wxc-exec.exe binary has an unexpected size.</source>
-        <translation type="vanished">Le binaire wxc-exec.exe a une taille inattendue.</translation>
+        <translation>Le binaire wxc-exec.exe a une taille inattendue.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>The wxc-exec.exe binary does not match its expected checksum.</source>
-        <translation type="vanished">Le binaire wxc-exec.exe ne correspond pas à la somme de contrôle attendue.</translation>
+        <translation>Le binaire wxc-exec.exe ne correspond pas à la somme de contrôle attendue.</translation>
     </message>
     <message>
+        <location line="+36"/>
         <source>The Microsoft MXC runtime is available for Windows x86-64 and arm64 only.</source>
-        <translation type="vanished">Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64 et arm64.</translation>
+        <translation>Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64 et arm64.</translation>
     </message>
     <message>
         <source>The Microsoft MXC runtime is available for Windows x86-64 only.</source>
         <translation type="vanished">Le runtime Microsoft MXC n&apos;est disponible que pour Windows x86-64.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>Downloading the MXC runtime...</source>
-        <translation type="vanished">Téléchargement du runtime MXC...</translation>
+        <translation>Téléchargement du runtime MXC...</translation>
     </message>
     <message>
+        <location line="+25"/>
         <source>Downloading the MXC runtime failed: %1</source>
-        <translation type="vanished">Échec du téléchargement du runtime MXC : %1</translation>
+        <translation>Échec du téléchargement du runtime MXC : %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Unpacking the MXC runtime...</source>
-        <translation type="vanished">Décompression du runtime MXC...</translation>
+        <translation>Décompression du runtime MXC...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking the MXC runtime failed: %1</source>
-        <translation type="vanished">Échec de la décompression du runtime MXC : %1</translation>
+        <translation>Échec de la décompression du runtime MXC : %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+27"/>
         <source>The package holds no ripgrep binary.</source>
-        <translation type="vanished">Le paquet ne contient aucun binaire ripgrep.</translation>
+        <translation>Le paquet ne contient aucun binaire ripgrep.</translation>
     </message>
     <message>
+        <location line="+42"/>
         <source>There is no ripgrep for this platform.</source>
-        <translation type="vanished">Il n&apos;existe pas de ripgrep pour cette plateforme.</translation>
+        <translation>Il n&apos;existe pas de ripgrep pour cette plateforme.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Downloading ripgrep...</source>
-        <translation type="vanished">Téléchargement de ripgrep...</translation>
+        <translation>Téléchargement de ripgrep...</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Downloading ripgrep failed: %1</source>
-        <translation type="vanished">Échec du téléchargement de ripgrep : %1</translation>
+        <translation>Échec du téléchargement de ripgrep : %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/mxc.cpp" line="-16"/>
+        <location filename="../src/tools/niubash.cpp" line="+118"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+18"/>
         <source>Verifying package integrity...</source>
-        <translation type="vanished">Vérification de l&apos;intégrité du paquet...</translation>
+        <translation>Vérification de l&apos;intégrité du paquet...</translation>
     </message>
     <message>
+        <location line="+5"/>
+        <location filename="../src/tools/niubash.cpp" line="+5"/>
+        <location filename="../src/tools/ripgrep.cpp" line="+5"/>
         <source>The downloaded package is not the one that was expected.</source>
-        <translation type="vanished">Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
+        <translation>Le paquet téléchargé n&apos;est pas celui qui était attendu.</translation>
     </message>
     <message>
+        <location filename="../src/tools/ripgrep.cpp" line="+4"/>
         <source>Unpacking ripgrep...</source>
-        <translation type="vanished">Extraction de ripgrep...</translation>
+        <translation>Extraction de ripgrep...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking ripgrep failed: %1</source>
-        <translation type="vanished">Échec de l&apos;extraction de ripgrep : %1</translation>
+        <translation>Échec de l&apos;extraction de ripgrep : %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/search_tool.cpp" line="-181"/>
+        <location line="+8"/>
         <source>search for %1</source>
-        <translation type="vanished">rechercher %1</translation>
+        <translation>rechercher %1</translation>
     </message>
     <message>
         <source>  Glob: `%1`</source>
         <translation type="vanished">  Glob : `%1`</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>  Glob: %1</source>
-        <translation type="vanished">  Glob : %1</translation>
+        <translation>  Glob : %1</translation>
     </message>
     <message>
+        <location line="+22"/>
         <source>Error: ripgrep (rg) was not found. It can be downloaded from the Llama.cpp Chat tools settings page, or installed manually from https://github.com/BurntSushi/ripgrep, to use the search tool.</source>
-        <translation type="vanished">Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil search.</translation>
+        <translation>Erreur : ripgrep (rg) n&apos;a pas été trouvé. Il peut être téléchargé depuis la page des paramètres des outils du chat Llama.cpp, ou installé manuellement depuis https://github.com/BurntSushi/ripgrep, pour utiliser l&apos;outil search.</translation>
     </message>
     <message>
         <source>Error: path does not exist: %1</source>
         <translation type="vanished">Erreur : le chemin n&apos;existe pas : %1</translation>
     </message>
     <message>
+        <location line="+17"/>
+        <source>path</source>
+        <translation>chemin</translation>
+    </message>
+    <message>
+        <location line="+113"/>
         <source>[Search timed out after %1 ms. The results are incomplete; narrow the path or refine the pattern.]</source>
-        <translation type="vanished">[La recherche a expiré après %1 ms. Les résultats sont incomplets ; restreignez le chemin ou affinez le motif.]</translation>
+        <translation>[La recherche a expiré après %1 ms. Les résultats sont incomplets ; restreignez le chemin ou affinez le motif.]</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>[%1 matches limit reached. Use limit=%2 for more results, or refine the pattern.]</source>
-        <translation type="vanished">[Limite de %1 correspondances atteinte. Utilisez limit=%2 pour plus de résultats, ou affinez le motif.]</translation>
+        <translation>[Limite de %1 correspondances atteinte. Utilisez limit=%2 pour plus de résultats, ou affinez le motif.]</translation>
     </message>
     <message>
+        <location line="+5"/>
         <source>[Some lines truncated to %1 characters. Use read_file to see full lines.]</source>
-        <translation type="vanished">[Certaines lignes sont tronquées à %1 caractères. Utilisez read_file pour voir les lignes complètes.]</translation>
+        <translation>[Certaines lignes sont tronquées à %1 caractères. Utilisez read_file pour voir les lignes complètes.]</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>No matches found.</source>
-        <translation type="vanished">Aucune correspondance trouvée.</translation>
+        <translation>Aucune correspondance trouvée.</translation>
     </message>
     <message>
+        <location line="+10"/>
         <source>[Output truncated to %1 KB. Refine the pattern or reduce the context to see all matches.]</source>
-        <translation type="vanished">[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
+        <translation>[Sortie tronquée à %1 Ko. Affinez le motif ou réduisez le contexte pour voir toutes les correspondances.]</translation>
     </message>
     <message>
+        <location filename="../src/tools/skill_tool.cpp" line="+120"/>
         <source>load skill %1</source>
-        <translation type="vanished">charger la compétence %1</translation>
+        <translation>charger la compétence %1</translation>
     </message>
     <message>
+        <location line="+8"/>
         <source>The &quot;name&quot; argument is required.</source>
-        <translation type="vanished">L&apos;argument « name » est requis.</translation>
+        <translation>L&apos;argument « name » est requis.</translation>
     </message>
     <message>
+        <location line="+19"/>
         <source>Skill &quot;%1&quot; not found. Available skills: %2</source>
-        <translation type="vanished">Compétence « %1 » introuvable. Compétences disponibles : %2</translation>
+        <translation>Compétence « %1 » introuvable. Compétences disponibles : %2</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>(none)</source>
-        <translation type="vanished">(aucun)</translation>
+        <translation>(aucun)</translation>
     </message>
     <message>
+        <location filename="../src/tools/todowrite_tool.cpp" line="+138"/>
+        <location line="+8"/>
         <source>update task list</source>
-        <translation type="vanished">mettre à jour la liste des tâches</translation>
+        <translation>mettre à jour la liste des tâches</translation>
     </message>
     <message>
+        <location line="-7"/>
         <source>update task list (%1 tasks)</source>
-        <translation type="vanished">mettre à jour la liste des tâches (%1 tâches)</translation>
+        <translation>mettre à jour la liste des tâches (%1 tâches)</translation>
     </message>
     <message>
+        <location line="+46"/>
         <source>Tool error: &quot;todos&quot; must contain at least one task.</source>
-        <translation type="vanished">Erreur d&apos;outil : « todos » doit contenir au moins une tâche.</translation>
+        <translation>Erreur d&apos;outil : « todos » doit contenir au moins une tâche.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Tool error: task %1 has an empty &quot;content&quot;.</source>
-        <translation type="vanished">Erreur d&apos;outil : la tâche %1 a un « content » vide.</translation>
+        <translation>Erreur d&apos;outil : la tâche %1 a un « content » vide.</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Tool error: task %1 has unknown status &quot;%2&quot; (expected &quot;pending&quot;, &quot;in_progress&quot; or &quot;completed&quot;).</source>
-        <translation type="vanished">Erreur d&apos;outil : la tâche %1 a un statut inconnu « %2 » (attendu : « pending », « in_progress » ou « completed »).</translation>
+        <translation>Erreur d&apos;outil : la tâche %1 a un statut inconnu « %2 » (attendu : « pending », « in_progress » ou « completed »).</translation>
     </message>
     <message>
+        <location line="+12"/>
         <source>Tool error: only one task may be &quot;in_progress&quot; at a time (%1 given).</source>
-        <translation type="vanished">Erreur d&apos;outil : une seule tâche peut être « in_progress » à la fois (%1 fournies).</translation>
+        <translation>Erreur d&apos;outil : une seule tâche peut être « in_progress » à la fois (%1 fournies).</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Task list updated: %1 of %2 completed.</source>
-        <translation type="vanished">Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
+        <translation>Liste des tâches mise à jour : %1 sur %2 terminées.</translation>
     </message>
     <message>
+        <location filename="../src/tools/tool_utils.cpp" line="+544"/>
         <source>Accessing &quot;%1&quot; is not allowed: device paths and administrative shares are not accessible inside the sandbox.</source>
-        <translation type="vanished">L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
+        <translation>L&apos;accès à « %1 » n&apos;est pas autorisé : les chemins de périphérique et les partages administratifs ne sont pas accessibles dans le bac à sable.</translation>
     </message>
     <message>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations. Open a project to work on its files.</source>
@@ -5816,56 +5812,79 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet et les emplacements temporaires.</translation>
     </message>
     <message>
+        <location line="-71"/>
         <source>Reset to Project Directory</source>
-        <translation type="vanished">Réinitialiser vers le dossier du projet</translation>
+        <translation>Réinitialiser vers le dossier du projet</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Clear the working directory override: the tools run in the startup project&apos;s directory (or the default projects directory when no project is open).</source>
-        <translation type="vanished">Efface le remplacement du dossier de travail : les outils s&apos;exécutent dans le dossier du projet de démarrage (ou dans le dossier des projets par défaut lorsqu&apos;aucun projet n&apos;est ouvert).</translation>
+        <translation>Efface le remplacement du dossier de travail : les outils s&apos;exécutent dans le dossier du projet de démarrage (ou dans le dossier des projets par défaut lorsqu&apos;aucun projet n&apos;est ouvert).</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Reset to Default Projects Directory</source>
-        <translation type="vanished">Réinitialiser vers le dossier des projets par défaut</translation>
+        <translation>Réinitialiser vers le dossier des projets par défaut</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Use the default projects directory, the setting the new projects are created in.</source>
-        <translation type="vanished">Utilise le dossier des projets par défaut, celui dans lequel les nouveaux projets sont créés.</translation>
+        <translation>Utilise le dossier des projets par défaut, celui dans lequel les nouveaux projets sont créés.</translation>
     </message>
     <message>
+        <location line="+23"/>
         <source>Reset to Git Bash</source>
-        <translation type="vanished">Réinitialiser vers Git Bash</translation>
+        <translation>Réinitialiser vers Git Bash</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Clear the bash override: the bash tool uses the default bash, Git Bash (a recognized bash on the PATH, then the one shipped with Git for Windows).</source>
-        <translation type="vanished">Efface le remplacement du bash : l&apos;outil bash utilise le bash par défaut, Git Bash (un bash reconnu sur le PATH, puis celui fourni avec Git for Windows).</translation>
+        <translation>Efface le remplacement du bash : l&apos;outil bash utilise le bash par défaut, Git Bash (un bash reconnu sur le PATH, puis celui fourni avec Git for Windows).</translation>
     </message>
     <message>
+        <location line="+4"/>
         <source>Reset to niubash</source>
-        <translation type="vanished">Réinitialiser vers niubash</translation>
+        <translation>Réinitialiser vers niubash</translation>
     </message>
     <message>
+        <location line="+1"/>
         <source>Use the downloaded niubash, a native MSYS2-free Bash that - unlike Git Bash - can run in the Windows sandbox.</source>
-        <translation type="vanished">Utilise le niubash téléchargé, un Bash natif sans MSYS2 qui - contrairement à Git Bash - peut s&apos;exécuter dans le bac à sable Windows.</translation>
+        <translation>Utilise le niubash téléchargé, un Bash natif sans MSYS2 qui - contrairement à Git Bash - peut s&apos;exécuter dans le bac à sable Windows.</translation>
     </message>
     <message>
+        <location line="+53"/>
         <source>Writing to &quot;%1&quot; is not allowed: no project is open, so the sandbox only permits writes inside temporary locations and the extra writable directories from the Sandbox settings. Open a project to work on its files.</source>
-        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : aucun projet n&apos;est ouvert, le bac à sable n&apos;autorise les écritures que dans les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable. Ouvrez un projet pour travailler sur ses fichiers.</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Writing to &quot;%1&quot; is not allowed: the sandbox only permits writes inside the project directory, temporary locations and the extra writable directories from the Sandbox settings.</source>
-        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet, les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable.</translation>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : le bac à sable n&apos;autorise les écritures que dans le dossier du projet, les emplacements temporaires et les dossiers supplémentaires en écriture des paramètres Bac à sable.</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>Writing to &quot;%1&quot; is not allowed: .git, .qtcreator and *.user files are protected inside the sandbox.</source>
-        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : les fichiers .git, .qtcreator et *.user sont protégés dans le bac à sable.</translation>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : les fichiers .git, .qtcreator et *.user sont protégés dans le bac à sable.</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Writing to &quot;%1&quot; is not allowed: credential locations are protected inside the sandbox.</source>
-        <translation type="vanished">L&apos;écriture dans « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification sont protégés dans le bac à sable.</translation>
+        <translation>L&apos;écriture dans « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification sont protégés dans le bac à sable.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Reading &quot;%1&quot; is not allowed: credential locations are not readable inside the sandbox.</source>
-        <translation type="vanished">La lecture de « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification ne sont pas lisibles dans le bac à sable.</translation>
+        <translation>La lecture de « %1 » n&apos;est pas autorisée : les emplacements de jetons d&apos;authentification ne sont pas lisibles dans le bac à sable.</translation>
+    </message>
+    <message>
+        <location line="+36"/>
+        <source>%1 does not exist: %2</source>
+        <translation>%1 n&apos;existe pas : %2</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>%1 &quot;%2&quot; was not found in the working directory &quot;%3&quot;.</source>
+        <translation>%1 « %2 » introuvable dans le dossier de travail « %3 ».</translation>
     </message>
     <message>
         <source>Install it once with &apos;npx @anthropic-ai/sandbox-runtime windows-install&apos; (one UAC prompt); no logout is needed, the network fence keys on the dedicated sandbox user&apos;s SID. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
@@ -5896,137 +5915,170 @@ Vous pouvez saisir n&apos;importe quelle autre invite – elles sont mémorisée
         <translation type="vanished">Téléchargez-le depuis la page des paramètres des outils du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; LLAMA_WXC_EXEC peut pointer vers un wxc-exec.exe. Vous pouvez aussi décocher « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location filename="../src/tools/windows_sandbox.cpp" line="+99"/>
         <source>The Windows sandbox backend (wxc-exec) did not answer its capability probe in time. %1</source>
-        <translation type="vanished">Le backend bac à sable Windows (wxc-exec) n&apos;a pas répondu à sa sonde de capacités à temps. %1</translation>
+        <translation>Le backend bac à sable Windows (wxc-exec) n&apos;a pas répondu à sa sonde de capacités à temps. %1</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>The Windows sandbox backend (wxc-exec) reported the MXC container as unavailable (exit %1): %2 %3</source>
-        <translation type="vanished">Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
+        <translation>Le backend bac à sable Windows (wxc-exec) a signalé que le conteneur MXC n&apos;est pas disponible (sortie %1) : %2 %3</translation>
     </message>
     <message>
+        <location line="+361"/>
         <source>The Windows sandbox could not set up its live isolation probe (temporary directory or home canary). %1</source>
-        <translation type="vanished">Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
+        <translation>Le bac à sable Windows n&apos;a pas pu mettre en place sa sonde d&apos;isolation en direct (dossier temporaire ou canary du dossier personnel). %1</translation>
     </message>
     <message>
+        <location line="+20"/>
         <source>The Windows sandbox could not create the canary file of its live isolation probe at %1. %2</source>
-        <translation type="vanished">Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
+        <translation>Le bac à sable Windows n&apos;a pas pu créer le fichier canary de sa sonde d&apos;isolation en direct à %1. %2</translation>
     </message>
     <message>
+        <location line="+30"/>
         <source>The Windows sandbox configuration is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>La configuration du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
         <source>The bash at &quot;%1&quot; is not part of a recognized Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
         <translation type="vanished">Le bash situé dans « %1 » ne fait pas partie d&apos;une installation Git for Windows ou MSYS2 reconnue, le bac à sable Windows ne peut donc pas lui accorder un emplacement restreint en lecture seule. Installez Git for Windows (https://git-scm.com/download/win) et placez son bash en premier dans le PATH, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama.</translation>
     </message>
     <message>
+        <location line="+192"/>
         <source>The Windows sandbox (Microsoft MXC) needs Windows 11 24H2 (build %1) or newer; this system is build %2. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>Le bac à sable Windows (Microsoft MXC) nécessite Windows 11 24H2 (version %1) ou plus récent ; ce système est en version %2. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+11"/>
         <source>wxc-exec.exe (the Microsoft MXC Windows sandbox runtime) was not found. %1</source>
-        <translation type="vanished">wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
+        <translation>wxc-exec.exe (le runtime du bac à sable Windows Microsoft MXC) n&apos;a pas été trouvé. %1</translation>
     </message>
     <message>
+        <location line="-162"/>
         <source>The Windows sandbox (Microsoft MXC) failed its live isolation check: a sandboxed command could not be verified to be confined. %1</source>
-        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
+        <translation>Le bac à sable Windows (Microsoft MXC) a échoué à son test d&apos;isolation en direct : une commande en bac à sable n&apos;a pas pu être vérifiée comme étant confinée. %1</translation>
     </message>
     <message>
+        <location line="-497"/>
         <source>Download it from the Llama.cpp Chat Sandbox settings page (a pinned, checksum-verified Microsoft MXC release); a runtime of one&apos;s own can be pointed to there. Alternatively uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">Téléchargez-le depuis la page des paramètres Bac à sable du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; un runtime de votre choix peut y être indiqué. Sinon, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter les commandes sans bac à sable.</translation>
+        <translation>Téléchargez-le depuis la page des paramètres Bac à sable du chat Llama.cpp (une version Microsoft MXC épinglée, vérifiée par somme de contrôle) ; un runtime de votre choix peut y être indiqué. Sinon, décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter les commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location line="+537"/>
         <source>The bash at &quot;%1&quot; is not part of a recognized niubash, Git for Windows or MSYS2 installation, so the Windows sandbox cannot grant it a narrow read-only location. Install Git for Windows (https://git-scm.com/download/win) and put its bash first on PATH, or download niubash from the Llama.cpp Chat tools settings page, or uncheck &apos;Sandbox commands&apos; in the Llama settings.</source>
-        <translation type="vanished">Le bash situé dans « %1 » ne fait pas partie d&apos;une installation niubash, Git for Windows ou MSYS2 reconnue, le bac à sable Windows ne peut donc pas lui accorder un emplacement restreint en lecture seule. Installez Git for Windows (https://git-scm.com/download/win) et placez son bash en premier dans le PATH, téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama.</translation>
+        <translation>Le bash situé dans « %1 » ne fait pas partie d&apos;une installation niubash, Git for Windows ou MSYS2 reconnue, le bac à sable Windows ne peut donc pas lui accorder un emplacement restreint en lecture seule. Installez Git for Windows (https://git-scm.com/download/win) et placez son bash en premier dans le PATH, téléchargez niubash depuis la page des paramètres des outils du chat Llama.cpp, ou décochez « Commandes dans un bac à sable » dans les paramètres Llama.</translation>
     </message>
     <message>
+        <location line="+154"/>
         <source>The Windows sandbox (Microsoft MXC) is verifying its isolation for the first time; run the command again in a few seconds.</source>
-        <translation type="vanished">Le bac à sable Windows (Microsoft MXC) vérifie son isolation pour la première fois ; relancez la commande dans quelques secondes.</translation>
+        <translation>Le bac à sable Windows (Microsoft MXC) vérifie son isolation pour la première fois ; relancez la commande dans quelques secondes.</translation>
     </message>
     <message>
+        <location line="+16"/>
         <source>The Windows sandbox command line is too long (%1 of %2 characters); the process environment is probably oversized. Uncheck &apos;Sandbox commands&apos; in the Llama settings to run commands without a sandbox.</source>
-        <translation type="vanished">La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
+        <translation>La ligne de commande du bac à sable Windows est trop longue (%1 sur %2 caractères) ; l&apos;environnement du processus est probablement surdimensionné. Décochez « Commandes dans un bac à sable » dans les paramètres Llama pour exécuter des commandes sans bac à sable.</translation>
     </message>
     <message>
+        <location filename="../src/tools/write_tool.cpp" line="-48"/>
         <source>Write file</source>
-        <translation type="vanished">Écrire un fichier</translation>
+        <translation>Écrire un fichier</translation>
     </message>
     <message>
+        <location line="+1"/>
+        <location line="+26"/>
         <source>write %1</source>
-        <translation type="vanished">écrire %1</translation>
+        <translation>écrire %1</translation>
     </message>
     <message>
+        <location line="+23"/>
         <source>Tool error: &quot;content&quot; is required.</source>
-        <translation type="vanished">Erreur d&apos;outil : « content » est requis.</translation>
+        <translation>Erreur d&apos;outil : « content » est requis.</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: a parent path is a file.</source>
-        <translation type="vanished">Impossible d&apos;écrire « %1 » : un chemin parent est un fichier.</translation>
+        <translation>Impossible d&apos;écrire « %1 » : un chemin parent est un fichier.</translation>
     </message>
     <message>
+        <location line="+6"/>
         <source>Cannot write &quot;%1&quot;: cannot create directory: %2</source>
-        <translation type="vanished">Impossible d&apos;écrire « %1 » : impossible de créer le dossier : %2</translation>
+        <translation>Impossible d&apos;écrire « %1 » : impossible de créer le dossier : %2</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Cannot write &quot;%1&quot;: %2</source>
-        <translation type="vanished">Impossible d&apos;écrire dans **« %1 »** : %2.</translation>
+        <translation>Impossible d&apos;écrire dans **« %1 »** : %2.</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>Successfully wrote %1 bytes to %2.</source>
-        <translation type="vanished">%1 octets écrits avec succès dans %2.</translation>
+        <translation>%1 octets écrits avec succès dans %2.</translation>
     </message>
     <message>
+        <location filename="../src/tools/mcptool.cpp" line="+132"/>
         <source>MCP tool &quot;%1&quot; was stopped by the user.</source>
-        <translation type="vanished">L&apos;outil MCP « %1 » a été arrêté par l&apos;utilisateur.</translation>
+        <translation>L&apos;outil MCP « %1 » a été arrêté par l&apos;utilisateur.</translation>
     </message>
     <message>
+        <location filename="../src/tools/niubash.cpp" line="-207"/>
         <source>Download niubash</source>
-        <translation type="vanished">Télécharger niubash</translation>
+        <translation>Télécharger niubash</translation>
     </message>
     <message>
+        <location line="+68"/>
         <source>Download niubash %1 from GitHub?</source>
-        <translation type="vanished">Télécharger niubash %1 depuis GitHub ?</translation>
+        <translation>Télécharger niubash %1 depuis GitHub ?</translation>
     </message>
     <message>
+        <location line="+2"/>
         <source>The bash tool on Windows normally runs Git Bash, but its MSYS2 runtime cannot initialize inside the Windows sandbox (microsoft/mxc#1061). niubash is a native, MSYS2-free Bash that can, so it can be downloaded here to run the bash tool in the sandbox. niubash is published under the MIT license.</source>
-        <translation type="vanished">L&apos;outil bash sous Windows exécute normalement Git Bash, mais son runtime MSYS2 ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash est un Bash natif, sans MSYS2, qui peut le faire, il peut donc être téléchargé ici pour exécuter l&apos;outil bash dans le bac à sable. niubash est publié sous licence MIT.</translation>
+        <translation>L&apos;outil bash sous Windows exécute normalement Git Bash, mais son runtime MSYS2 ne peut pas s&apos;initialiser dans le bac à sable Windows (microsoft/mxc#1061). niubash est un Bash natif, sans MSYS2, qui peut le faire, il peut donc être téléchargé ici pour exécuter l&apos;outil bash dans le bac à sable. niubash est publié sous licence MIT.</translation>
     </message>
     <message>
+        <location line="+38"/>
         <source>The package holds no niubash shell.</source>
-        <translation type="vanished">Le paquet ne contient aucun shell niubash.</translation>
+        <translation>Le paquet ne contient aucun shell niubash.</translation>
     </message>
     <message>
+        <location line="+40"/>
         <source>There is no niubash for this platform.</source>
-        <translation type="vanished">Il n&apos;existe pas de niubash pour cette plateforme.</translation>
+        <translation>Il n&apos;existe pas de niubash pour cette plateforme.</translation>
     </message>
     <message>
+        <location line="+9"/>
         <source>Downloading niubash...</source>
-        <translation type="vanished">Téléchargement de niubash...</translation>
+        <translation>Téléchargement de niubash...</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Downloading niubash failed: %1</source>
-        <translation type="vanished">Échec du téléchargement de niubash : %1</translation>
+        <translation>Échec du téléchargement de niubash : %1</translation>
     </message>
     <message>
+        <location line="+27"/>
         <source>Unpacking niubash...</source>
-        <translation type="vanished">Décompression de niubash...</translation>
+        <translation>Décompression de niubash...</translation>
     </message>
     <message>
+        <location line="+7"/>
         <source>Unpacking niubash failed: %1</source>
-        <translation type="vanished">Échec de la décompression de niubash : %1</translation>
+        <translation>Échec de la décompression de niubash : %1</translation>
     </message>
     <message>
+        <location filename="../src/tools/getdatetime_tool.cpp" line="+42"/>
         <source>get current time</source>
-        <translation type="vanished">obtenir l&apos;heure actuelle</translation>
+        <translation>obtenir l&apos;heure actuelle</translation>
     </message>
     <message>
+        <location filename="../src/tools/getinfo_tool.cpp" line="+44"/>
         <source>get runtime info</source>
-        <translation type="vanished">obtenir les informations d&apos;exécution</translation>
+        <translation>obtenir les informations d&apos;exécution</translation>
     </message>
     <message>
+        <location line="+13"/>
         <source>OS: %1
 Working directory: %2</source>
-        <translation type="vanished">Système d&apos;exploitation : %1
+        <translation>Système d&apos;exploitation : %1
 Dossier de travail : %2</translation>
     </message>
 </context>
