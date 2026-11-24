@@ -4,9 +4,9 @@
 <context>
     <name>LlamaCpp</name>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="+166"/>
+        <location filename="../src/llamasettingspages.cpp" line="+193"/>
         <source>Default</source>
         <translation>Implicit</translation>
     </message>
@@ -99,7 +99,7 @@
         <translation type="vanished">Rezultatul anterior</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Trimite la Llama Chat</translation>
     </message>
@@ -133,19 +133,19 @@
         <translation>Întrebări de urmărire:</translation>
     </message>
     <message>
-        <location line="+686"/>
+        <location line="+688"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Nivel de gândire: %1 (se aplică mesajelor noi)</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>Human Editor</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Sunteți conectat la %1, cu %2 ca director curent</translation>
     </message>
@@ -291,17 +291,18 @@
         <translation>Sarcina este încă în curs de rulare. Doriți cu adevărat să o opriți?</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>Niciun model</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>Editare mesaj</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Se vor șterge %1 mesaje, inclusiv: %2 mesaje de utilizator și %3 răspunsuri ale asistentului ...</translation>
     </message>
@@ -449,7 +450,7 @@
         <translation>Doriți să ștergeți toate cele %1 intrări salvate din istoricul de intrare?</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>Eroare:</translation>
     </message>
@@ -490,7 +491,7 @@
         <translation type="vanished">Conversația a fost compactată - mesajele anterioare au fost rezumate pentru a se încadra în fereastra de context.</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Conversația nu se mai încadrează în fereastra de context a modelului.</translation>
     </message>
@@ -535,7 +536,7 @@
         <translation type="vanished">Cererea de preluare a returnat un document gol.</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Se creează o conversație nouă pentru a continua aceasta...</translation>
     </message>
@@ -554,7 +555,7 @@
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Conversația este prea lungă pentru a fi preluată: istoricul plus documentul de preluare nu se mai încadrează în fereastra de context a modelului.</translation>
     </message>
@@ -896,12 +897,13 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Niciun model (rulează serverul?)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>Selectează și încarcă modelul. Dați din nou click pe modelul selectat pentru a-l descărca și a reseta selecția.</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] S-a produs o eroare la preluarea completării FIM de la %1: %2</translation>
     </message>
@@ -948,7 +950,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+116"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -1033,7 +1035,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
 {diagnostics}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>Instrumente</translation>
     </message>
@@ -1702,6 +1704,26 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Șir JSON personalizat cu parametri suplimentari.</translation>
     </message>
     <message>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>Nivel de gândire (raționament) pentru modele capabile de gândire. &quot;default&quot; folosește implicitul modelului, iar &quot;off&quot; dezactivează gândirea. Nivelurile concrete sunt cele respectate de șablonul de chat al modelului (trimise ca reasoning_effort) sau, dacă nu respectă niciunul, bugete de tokeni - low 512, medium 2048, high 8192, max nelimitat - ca în interfața web a llama.cpp.</translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Chat Model</source>
+        <translation>Model de chat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>Model de chat:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>Modelul folosit de chat. Intrările sunt modelele servite de server; se poate tasta și un nume. &quot;Niciun model&quot; lasă chatul fără un model activ. Selectarea unui model aici îl încarcă pe server, ca lista derulantă a modelelor din chat.</translation>
+    </message>
+    <message>
         <source>Show Tokens Per Second</source>
         <translation type="vanished">Afișează tokeni pe secundă</translation>
     </message>
@@ -1710,17 +1732,16 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation type="vanished">Afișează tokenii pe secundă în interfața chatului.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="-30"/>
         <source>Thinking Level</source>
         <translation>Nivel de gândire</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>Nivel de gândire (raționament) pentru modele capabile de gândire. &quot;default&quot; folosește implicitul modelului, &quot;off&quot; dezactivează gândirea, iar nivelurile concrete sunt cele raportate de server pentru șablonul de chat al modelului.</translation>
+        <translation type="vanished">Nivel de gândire (raționament) pentru modele capabile de gândire. &quot;default&quot; folosește implicitul modelului, &quot;off&quot; dezactivează gândirea, iar nivelurile concrete sunt cele raportate de server pentru șablonul de chat al modelului.</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+41"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>Modelul folosit pentru cereri auxiliare, cum ar fi titlurile conversațiilor și sugestiile de întrebări ulterioare; folosiți un model mic pentru a lăsa modelul principal de chat liber. Intrările sunt modelele servite de server; se poate tasta și un nume. Implicit se folosește modelul de chat activ.</translation>
     </message>
@@ -1744,7 +1765,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation type="vanished">Nivel de gândire (raționament) pentru modele capabile de gândire: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; sau &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-286"/>
+        <location line="-295"/>
         <source>Chat Font Zoom</source>
         <translation>Zoom font chat</translation>
     </message>
@@ -1754,12 +1775,11 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Mărimea fontului conversației din chat, ca procent din mărimea fontului editorului. Se ajustează cu Ctrl+roata mașinii peste chat sau cu comenzile de zoom in/out ale chatului.</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Last Selected Model</source>
-        <translation>Ultimul model selectat</translation>
+        <translation type="vanished">Ultimul model selectat</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+18"/>
         <source>Utility Model</source>
         <translation>Model auxiliar</translation>
     </message>
@@ -1769,7 +1789,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Model auxiliar:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>Implicit: modelul de chat</translation>
     </message>
@@ -2324,7 +2344,7 @@ Puteți tasta orice alt prompt - ele sunt reținute pentru data viitoare.</trans
         <translation>Suprascrie setarea globală „Load project instructions” (Încarcă instrucțiunile proiectului) pentru acest proiect. Vezi setarea globală de pe pagina Llama Tools pentru ce se încarcă.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; nu necesită cheie API</translation>
     </message>
@@ -4247,7 +4267,7 @@ Director de lucru: %2</translation>
         <translation>șters</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4408,7 +4428,7 @@ Director de lucru: %2</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Eroare de unelță: &quot;path&quot; trebuie să fie un șir nevid.</translation>
     </message>
@@ -5087,7 +5107,7 @@ Director de lucru: %2</translation>
 [... conținut trunchiat la %1 caractere ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>caută %1</translation>
@@ -5107,7 +5127,7 @@ Director de lucru: %2</translation>
         <translation type="vanished">Căutarea a eșuat: DuckDuckGo aplică în prezent o limită de rată cererilor; așteptați un minut și încercați din nou.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Căutarea a eșuat: backendul Google nu este configurat. Setează cheia API și ID-ul motorului de căutare (cx) în setările Llama.cpp.</translation>
     </message>
@@ -5239,7 +5259,7 @@ Director de lucru: %2</translation>
         <translation>Linia de comandă a sandboxului Windows este prea lungă (%1 din %2 caractere); mediul de proces este probabil prea mare. Debifați &apos;Sandbox commands&apos; în setările Llama pentru a rula comenzi fără sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>Scriere fișier</translation>
     </message>
@@ -5250,7 +5270,7 @@ Director de lucru: %2</translation>
         <translation>scrie %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Eroare de unelță: &quot;content&quot; este obligatoriu.</translation>
     </message>

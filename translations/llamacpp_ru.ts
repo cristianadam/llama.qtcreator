@@ -173,12 +173,13 @@
         <translation>Нет моделей (сервер запущен?)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>Выбирает и загружает модель. Повторный щелчок по выбранной модели разгружает её и сбрасывает выбор.</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Ошибка получения FIM-предсказания от %1: %2</translation>
     </message>
@@ -225,7 +226,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -242,7 +243,7 @@
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1448"/>
+        <location filename="../src/llamaplugin.cpp" line="-1470"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -252,7 +253,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
@@ -966,12 +967,16 @@
         <translation>Пользовательская JSON-строка с дополнительными параметрами.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>Последняя выбранная модель</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>Уровень мышления (рассуждения) для моделей, поддерживающих мышление. &quot;default&quot; использует значение по умолчанию модели, а &quot;off&quot; отключает мышление. Конкретные уровни — это те, которые шаблон чата модели поддерживает (отправляется как reasoning_effort) или, если он не поддерживает ни одного, бюджеты токенов - low 512, medium 2048, high 8192, max без ограничений - как в веб-интерфейсе llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <source>Last Selected Model</source>
+        <translation type="vanished">Последняя выбранная модель</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>Модель, используемая для вспомогательных запросов, таких как заголовки разговоров и дополнительные предложения. Используйте небольшую модель, чтобы основная чат-модель оставалась свободной. В списке — модели, которые предоставляет сервер; имя можно также ввести вручную. По умолчанию используется активная чат-модель.</translation>
     </message>
@@ -994,17 +999,16 @@
         <translation type="vanished">Отображать количество токенов в секунду в интерфейсе чата.</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-255"/>
         <source>Thinking Level</source>
         <translation>Уровень мышления</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>Уровень мышления (рассуждения) для моделей, поддерживающих мышление. &quot;default&quot; использует значение по умолчанию модели, &quot;off&quot; отключает мышление, а конкретные уровни — это те, которые сервер сообщает для шаблона чата модели.</translation>
+        <translation type="vanished">Уровень мышления (рассуждения) для моделей, поддерживающих мышление. &quot;default&quot; использует значение по умолчанию модели, &quot;off&quot; отключает мышление, а конкретные уровни — это те, которые сервер сообщает для шаблона чата модели.</translation>
     </message>
     <message>
-        <location line="+231"/>
+        <location line="+245"/>
         <source>ripgrep:</source>
         <translation>ripgrep:</translation>
     </message>
@@ -1026,7 +1030,7 @@
         <translation type="vanished">Уровень мышления (рассуждения) для моделей, поддерживающих мышление: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; или &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-226"/>
+        <location line="-235"/>
         <source>Chat Font Zoom</source>
         <translation>Масштаб шрифта чата</translation>
     </message>
@@ -1036,7 +1040,22 @@
         <translation>Размер шрифта разговора в чате в процентах от размера шрифта редактора. Изменяется сочетанием Ctrl+колесо мыши над чатом или командами увеличения/уменьшения масштаба чата.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
+        <source>Chat Model</source>
+        <translation>Чат-модель</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>Чат-модель:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>Модель, которую использует чат. В списке — модели, которые предоставляет сервер; имя можно также ввести вручную. &quot;Нет модели&quot; оставляет чат без активной модели. Выбор модели здесь загружает её на сервер, как и выпадающий список моделей в чате.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Utility Model</source>
         <translation>Вспомогательная модель</translation>
     </message>
@@ -1046,7 +1065,7 @@
         <translation>Вспомогательная модель:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>По умолчанию: чат-модель</translation>
     </message>
@@ -1616,7 +1635,7 @@
         <translation>Переопределяет глобальную настройку &apos;Загружать инструкции проекта&apos; для этого проекта. О том, что загружается, см. глобальную настройку на странице инструментов Llama.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>Для &quot;duckduckgo&quot; не требуется ключ API</translation>
     </message>
@@ -1631,9 +1650,9 @@
         <translation>Запросы</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
@@ -1719,7 +1738,7 @@
         <translation type="vanished">Предыдущий результат поиска</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Отправить в Llama Chat</translation>
     </message>
@@ -1748,7 +1767,7 @@
         <translation>нет</translation>
     </message>
     <message>
-        <location line="+1106"/>
+        <location line="+1112"/>
         <source>Time: %1</source>
         <translation>Время: %1</translation>
     </message>
@@ -1762,19 +1781,19 @@
         <translation type="vanished">Дополнительные вопросы:</translation>
     </message>
     <message>
-        <location line="-368"/>
+        <location line="-372"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Уровень мышления: %1 (применяется к новым сообщениям)</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>Человек-редактор</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Вы подключены к %1; текущий каталог: %2</translation>
     </message>
@@ -1920,17 +1939,18 @@
         <translation>Задача всё ещё выполняется. Вы действительно хотите её остановить?</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>Нет модели</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>Редактировать сообщение</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Будет удалено %1 сообщений, в том числе: %2 пользовательских сообщения и %3 ответа ассистента ...</translation>
     </message>
@@ -1963,12 +1983,12 @@
         <translation type="vanished">Создание нового разговора, чтобы продолжить этот – суммирование разговора...</translation>
     </message>
     <message>
-        <location line="-930"/>
+        <location line="-936"/>
         <source>Follow-up questions:</source>
         <translation>Продолжение разговора:</translation>
     </message>
     <message>
-        <location line="-610"/>
+        <location line="-612"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Сообщения в очереди - отправляются после текущего шага</translation>
     </message>
@@ -1977,7 +1997,7 @@
         <translation type="vanished">Скорость генерации: %1 токенов/с</translation>
     </message>
     <message>
-        <location line="+1559"/>
+        <location line="+1567"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Запрос:&lt;/b&gt;&lt;br&gt;Токенов: %1&lt;br&gt;Время: %2 мс&lt;br&gt;Скорость: %3 токенов/с&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерация:&lt;/b&gt;&lt;br&gt;Токенов: %4&lt;br&gt;Время: %5 мс&lt;br&gt;Скорость: %6 токенов/с</translation>
     </message>
@@ -2276,7 +2296,7 @@ Do you want to overwrite it?</source>
         <translation>Разговоры llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-900"/>
+        <location filename="../src/llamasettings.cpp" line="-911"/>
         <source>Create a summary of {selection}</source>
         <translation>Создать сводку для выделенного</translation>
     </message>
@@ -3138,7 +3158,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Свёртка</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Заголовок</translation>
@@ -3197,7 +3217,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">имя &quot;%1&quot; конфликтует с %2 – сохраняется первое</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>Ошибка:</translation>
     </message>
@@ -3242,7 +3262,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Разговор свёрнут – предыдущие сообщения были суммированы для размещения в окне контекста.</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Разговор больше не помещается в окно контекста модели.</translation>
     </message>
@@ -3287,7 +3307,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Запрос передачи вернул пустой документ.</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Создаётся новый разговор для продолжения этого...</translation>
     </message>
@@ -3306,7 +3326,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Разговор слишком длинный для передачи: история плюс документ передачи больше не помещаются в окно контекста модели.</translation>
     </message>
@@ -4698,7 +4718,7 @@ Working directory: %2</source>
         <translation>удалён</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4859,7 +4879,7 @@ Working directory: %2</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Ошибка инструмента: &quot;path&quot; должна быть непустой строкой.</translation>
     </message>
@@ -5110,7 +5130,7 @@ Working directory: %2</source>
 [... содержимое усечено на %1 символах ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>поиск %1</translation>
@@ -5130,7 +5150,7 @@ Working directory: %2</source>
         <translation>Ошибка инструмента: &quot;query&quot; должна быть непустой строкой.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Поиск не выполнен: бэкенд Google не настроен. Задайте ключ API и идентификатор поисковой системы (cx) в настройках Llama.cpp.</translation>
     </message>
@@ -5745,7 +5765,7 @@ Working directory: %2</source>
         <translation>Командная строка песочницы Windows слишком длинная (%1 из %2 символов); среда процесса, вероятно, чрезмерно велика. Снимите отметку &apos;Песочница для команд&apos; в настройках Llama, чтобы выполнять команды без песочницы.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>Записать файл</translation>
     </message>
@@ -5756,7 +5776,7 @@ Working directory: %2</source>
         <translation>записать %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Ошибка инструмента: требуется &quot;content&quot;.</translation>
     </message>

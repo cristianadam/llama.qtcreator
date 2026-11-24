@@ -184,12 +184,13 @@
         <translation>モデルがありません（サーバーは実行されていますか？）</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>モデルを選択して読み込みます。選択したモデルをもう一度クリックすると、読み込みが解除されて選択がリセットされます。</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] %1 からの FIM 完成の取得に失敗しました: %2</translation>
     </message>
@@ -236,7 +237,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -304,7 +305,7 @@
         <translation type="vanished">カーソル位置の後に含めるコード行数を指定します。</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
@@ -602,7 +603,7 @@
         <translation type="vanished">推論対応モデルの思考（reasoning）レベル: &quot;default&quot;、&quot;off&quot;、&quot;low&quot;、&quot;medium&quot;、&quot;high&quot; または &quot;max&quot;。</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+35"/>
         <source>Utility Model</source>
         <translation>ユーティリティモデル</translation>
     </message>
@@ -612,7 +613,7 @@
         <translation>ユーティリティモデル:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+186"/>
+        <location filename="../src/llamasettingspages.cpp" line="+221"/>
         <source>Default: chat model</source>
         <translation>デフォルト: チャットモデル</translation>
     </message>
@@ -671,7 +672,7 @@
         <translation>このチェックボックスにチェックが入っている場合、チャットはツールボタンが有効な状態で開始されます。</translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-318"/>
         <source>Temperature</source>
         <translation>温度</translation>
     </message>
@@ -708,7 +709,7 @@
 {diagnostics}</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-177"/>
+        <location filename="../src/llamasettingspages.cpp" line="-212"/>
         <source>Skills</source>
         <translation>スキル</translation>
     </message>
@@ -1048,12 +1049,31 @@
         <translation>追加パラメータのカスタム JSON 文字列を指定します。</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>最後に選択したモデル</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>推論対応モデルの思考（reasoning）レベル。&quot;default&quot; はモデルのデフォルトを使用し、&quot;off&quot; は思考を無効にします。具体的なレベルは、モデルのチャットテンプレートがサポートするもの（reasoning_effort として送信）です。サポートしない場合は、トークン予算（low 512、medium 2048、high 8192、max 無制限）が適用され、llama.cpp の Web UI と同じです。</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+21"/>
+        <source>Chat Model</source>
+        <translation>チャットモデル</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>チャットモデル:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>チャットで使用されるモデルです。エントリはサーバーが提供するモデルです。名前は直接入力することもできます。&quot;モデルなし&quot; を選択すると、チャットにアクティブなモデルがなくなります。ここでモデルを選択すると、チャットのモデルコンボボックスと同様にサーバーに読み込まれます。</translation>
+    </message>
+    <message>
+        <source>Last Selected Model</source>
+        <translation type="vanished">最後に選択したモデル</translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>会話タイトルやフォローアップ提案などの補助リクエストに使用するモデルです。メインのチャットモデルを空けておくには、小さいモデルを使用してください。エントリはサーバーが提供するモデルです。名前は直接入力することもできます。既定ではアクティブなチャットモデルが使用されます。</translation>
     </message>
@@ -1072,12 +1092,11 @@
         <translation type="vanished">秒あたりのトークン数を表示</translation>
     </message>
     <message>
-        <location line="-241"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>推論対応モデルの思考（reasoning）レベル。&quot;default&quot; はモデルのデフォルトを使用し、&quot;off&quot; は思考を無効にします。具体的なレベルは、サーバーがモデルのチャットテンプレートについて報告するものです。</translation>
+        <translation type="vanished">推論対応モデルの思考（reasoning）レベル。&quot;default&quot; はモデルのデフォルトを使用し、&quot;off&quot; は思考を無効にします。具体的なレベルは、サーバーがモデルのチャットテンプレートについて報告するものです。</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-243"/>
         <source>Chat Font Zoom</source>
         <translation>チャットフォントのズーム</translation>
     </message>
@@ -1091,7 +1110,7 @@
         <translation type="vanished">会話タイトルやフォローアップ提案などの補助リクエストに使用するモデル。メインのチャットモデルを空けておくには、小さいモデルを使用してください。空欄の場合は、アクティブなチャットモデルを使用します。</translation>
     </message>
     <message>
-        <location line="+157"/>
+        <location line="+166"/>
         <source>If checked, the chat tools are confined to a sandbox: bash commands run in a platform sandbox that blocks writes to system locations (bubblewrap/bwrap on Linux, sandbox-exec on macOS, a Microsoft MXC process container on Windows), and the file tools may only write inside the project directory and temporary locations. Credential locations (~/.ssh, ~/.aws, ~/.gnupg, ~/.kube, ~/.netrc) are not readable by any tool, and sandboxed commands have no network access (the webfetch and websearch tools are not affected). On Windows the sandbox uses the pinned wxc-exec.exe runtime, downloadable from the Sandbox settings page (a runtime of one&apos;s own can be pointed to there), and needs Windows 11 24H2 or newer. The additional directories and the network policy are configured on the Sandbox settings page.</source>
         <translation>チェックされている場合、チャットツールはサンドボックス内に限定されます: bash コマンドはシステムへの書き込みをブロックするプラットフォームのサンドボックス（Linux では bubblewrap/bwrap、macOS では sandbox-exec、Windows では Microsoft MXC プロセスコンテナ）で実行され、ファイルツールはプロジェクトディレクトリ内と一時場所への書き込みのみが許可されます。認証情報のある場所（~/.ssh、~/.aws、~/.gnupg、~/.kube、~/.netrc）はどのツールからも読み取れず、サンドボックス化されたコマンドにはネットワークアクセスがありません（webfetch と websearch ツールには影響しません）。Windows では、サンドボックスは固定された wxc-exec.exe 実行ファイルを使用します。サンドボックス設定ページからダウンロードでき（そちらで自分の実行ファイルを指定できます）、Windows 11 24H2 以降が必要です。追加ディレクトリとネットワークポリシーは、サンドボックス設定ページで設定します。</translation>
     </message>
@@ -1574,7 +1593,7 @@
         <translation>このプロジェクトに対して、グローバルの &apos;プロジェクト指示を読み込む&apos; 設定を上書きします。何が読み込まれるのかは、Llama Tools ページのグローバル設定を参照してください。</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+236"/>
+        <location filename="../src/llamasettingspages.cpp" line="+272"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; は API キーを必要としません</translation>
     </message>
@@ -1909,7 +1928,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 会話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-538"/>
+        <location filename="../src/llamasettings.cpp" line="-549"/>
         <source>Create a summary of {selection}</source>
         <translation>{selection} の要約を作成</translation>
     </message>
@@ -2010,9 +2029,9 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">次の結果</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>デフォルト</translation>
     </message>
@@ -2098,7 +2117,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">前の検索結果</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Llama チャットに送信</translation>
     </message>
@@ -2127,7 +2146,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>なし</translation>
     </message>
     <message>
-        <location line="+1106"/>
+        <location line="+1112"/>
         <source>Time: %1</source>
         <translation>時間: %1</translation>
     </message>
@@ -2141,19 +2160,19 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">フォローアップ質問:</translation>
     </message>
     <message>
-        <location line="-368"/>
+        <location line="-372"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考レベル: %1（新しいメッセージに適用）</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>人間エディター</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>%1 に接続しています。現在のディレクトリは %2 です。</translation>
     </message>
@@ -2299,17 +2318,18 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation>タスクはまだ実行中です。本当に停止しますか？</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>モデルなし</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>メッセージを編集</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>%1 個のメッセージが削除されます。内訳: ユーザーメッセージ %2 件、アシスタントの応答 %3 件 ...</translation>
     </message>
@@ -2342,12 +2362,12 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">この会話を継続するために新しい会話を作成しています – 会話を要約しています...</translation>
     </message>
     <message>
-        <location line="-930"/>
+        <location line="-936"/>
         <source>Follow-up questions:</source>
         <translation>続きの質問:</translation>
     </message>
     <message>
-        <location line="-610"/>
+        <location line="-612"/>
         <source>Queued messages - sent after the current step</source>
         <translation>キューに入ったメッセージ - 現在のステップの後に送信されます</translation>
     </message>
@@ -2356,7 +2376,7 @@ You can type any other prompt – they are remembered for next time.</source>
         <translation type="vanished">速度: %1 トークン/秒</translation>
     </message>
     <message>
-        <location line="+1559"/>
+        <location line="+1567"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;プロンプト:&lt;/b&gt;&lt;br&gt;トークン数: %1&lt;br&gt;処理時間: %2 ミリ秒&lt;br&gt;速度: %3 トークン/秒&lt;br&gt;&lt;br&gt;&lt;b&gt;生成:&lt;/b&gt;&lt;br&gt;トークン数: %4&lt;br&gt;処理時間: %5 ミリ秒&lt;br&gt;速度: %6 トークン/秒</translation>
     </message>
@@ -2478,7 +2498,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">圧縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>タイトル</translation>
@@ -2809,7 +2829,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名前 &quot;%1&quot; が %2 と競合します – 最初に指定された方を保持します</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>エラー:</translation>
     </message>
@@ -2854,7 +2874,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">会話が圧縮されました – 以前のメッセージはコンテキストウィンドウに収まるよう要約されました。</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>会話はもはやモデルのコンテキストウィンドウに収まりません。</translation>
     </message>
@@ -2899,7 +2919,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">引き継ぎリクエストは空のドキュメントを返しました。</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>この会話を継続するために新しい会話を作成しています...</translation>
     </message>
@@ -2918,7 +2938,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>会話が引き継ぎに長すぎます: 履歴と引き継ぎドキュメントでモデルのコンテキストウィンドウに収まらなくなりました。</translation>
     </message>
@@ -4410,7 +4430,7 @@ Working directory: %2</source>
         <translation>削除済み</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4571,7 +4591,7 @@ Working directory: %2</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>ツールエラー: &quot;path&quot; は空でない文字列でなければなりません。</translation>
     </message>
@@ -4822,7 +4842,7 @@ Working directory: %2</source>
 [... 内容は %1 文字で切り詰められました ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>%1 を検索</translation>
@@ -4842,7 +4862,7 @@ Working directory: %2</source>
         <translation>ツールエラー: &quot;query&quot; は空でない文字列でなければなりません。</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>検索に失敗しました: Google バックエンドが設定されていません。Llama.cpp 設定で API キーと検索エンジン ID（cx）を設定してください。</translation>
     </message>
@@ -5457,7 +5477,7 @@ Working directory: %2</source>
         <translation>Windows サンドボックスのコマンドラインが長すぎます（%2 文字中 %1 文字）。プロセス環境が大きすぎる可能性があります。Llama 設定で &apos;コマンドをサンドボックス化する&apos; のチェックを外して、サンドボックスなしでコマンドを実行できます。</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>ファイルを書き込む</translation>
     </message>
@@ -5468,7 +5488,7 @@ Working directory: %2</source>
         <translation>%1 に書き込む</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>ツールエラー: &quot;content&quot; が必要です。</translation>
     </message>

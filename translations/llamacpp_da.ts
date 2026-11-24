@@ -173,12 +173,13 @@
         <translation>Ingen modeller (kører serveren?)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>Vælger og indlæser modellen. Klik på den valgte model igen for at aflæse den og nulstille valget.</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Fejl ved indhentning af FIM-fuldendelse fra %1: %2</translation>
     </message>
@@ -225,7 +226,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -238,7 +239,7 @@
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1448"/>
+        <location filename="../src/llamaplugin.cpp" line="-1470"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -320,7 +321,7 @@
         <translation type="vanished">Antal kodelinjer efter markørpositionen, der skal inkluderes i det lokale efterspil.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>Værktøjer</translation>
     </message>
@@ -957,12 +958,16 @@
         <translation>Brugerdefineret JSON-streng med ekstra parametre.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>Sidst valgt model</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne. &quot;default&quot; bruger modellens standard og &quot;off&quot; deaktiverer tænkning. De konkrete niveauer er dem, som modellens chat-skabelon respekterer (sendt som reasoning_effort) eller, hvis den ikke respekterer nogen, token-budgeter - low 512, medium 2048, high 8192, max ubegrænset - som i web-UI&apos;et i llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <source>Last Selected Model</source>
+        <translation type="vanished">Sidst valgt model</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>Modellen, der bruges til hjælpeanmodninger som samtaletitler og forslag til opfølgende spørgsmål; brug en lille model for at holde den primære chat-model ledig. Posterne er de modeller, der serveres af serveren; der kan også skrives et navn. Standard bruger den aktive chat-model.</translation>
     </message>
@@ -985,7 +990,7 @@
         <translation type="vanished">Vis tokens pr. sekund i chat-grænsefladen.</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-255"/>
         <source>Thinking Level</source>
         <translation>Tænkeniveau</translation>
     </message>
@@ -994,7 +999,7 @@
         <translation type="vanished">Tænkningens (resoneringens) niveau for modeller med tænkeevne: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; eller &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>Chat Font Zoom</source>
         <translation>Zoom på chatskrift</translation>
     </message>
@@ -1004,7 +1009,22 @@
         <translation>Størrelsen på skriften i chatsamtalen som procent af editorens skriftstørrelse. Justér med Ctrl+hjul over chatten eller kommandoerne for at zoome ind/ud i chatten.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
+        <source>Chat Model</source>
+        <translation>Chat-model</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>Chat-model:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>Modellen chatten bruger. Posterne er de modeller, der serveres af serveren; der kan også skrives et navn. &quot;Ingen model&quot; efterlader chatten uden en aktiv model. Vælger du en model her, indlæses den på serveren, ligesom i model-komboboksen i chatten.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Utility Model</source>
         <translation>Hjælpemodel</translation>
     </message>
@@ -1014,7 +1034,7 @@
         <translation>Hjælpemodel:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>Standard: chat-model</translation>
     </message>
@@ -1248,21 +1268,20 @@
         <translation>Opfølgende spørgsmål</translation>
     </message>
     <message>
-        <location line="-461"/>
+        <location line="-472"/>
         <source>The conversation above is long and will be continued in a new conversation with a fresh context window. Write a handoff document that lets the new conversation continue the work seamlessly without seeing the earlier messages. Structure it as markdown with these sections: ## Task (what the user asked for and the overall goal), ## Key Decisions (important decisions, constraints and preferences), ## Work Done (files touched, commands run, code changes and their outcomes), ## Current State (what is completed, what is in progress, errors encountered) and ## Next Steps (what to do next to finish the task). Be precise and concrete: keep file paths, function names and exact values. Do not answer the user&apos;s last message; only write the handoff document.</source>
         <translation>Samtalen ovenfor er lang og vil blive fortsat i en ny samtale med et frisk kontekstvindue. Skriv et overleveringsdokument, der gør det muligt for den nye samtale at fortsætte arbejdet sømløst uden at se de tidligere beskeder. Strukturer det som markdown med disse afsnit: ## Opgave (hvad brugeren bad om og det overordnede mål), ## Vigtige beslutninger (vigtige beslutninger, begrænsninger og præferencer), ## Udført arbejde (rørte filer, udførte kommandoer, kodeændringer og deres udfald), ## Nuværende tilstand (hvad er fuldført, hvad er i gang, mødt fejl) og ## Næste trin (hvad der skal gøres for at fuldføre opgaven). Vær præcis og konkret: behold filstier, funktionsnavne og eksakte værdier. Svar ikke på brugerens sidste besked; skriv kun overleveringsdokumentet.</translation>
     </message>
     <message>
-        <location line="+405"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>Tænkningens (resoneringens) niveau for modeller med tænkeevne. &quot;default&quot; bruger modellens standard, &quot;off&quot; deaktiverer tænkning, og de konkrete niveauer er dem, som serveren rapporterer for modellens chat-skabelon.</translation>
+        <translation type="vanished">Tænkningens (resoneringens) niveau for modeller med tænkeevne. &quot;default&quot; bruger modellens standard, &quot;off&quot; deaktiverer tænkning, og de konkrete niveauer er dem, som serveren rapporterer for modellens chat-skabelon.</translation>
     </message>
     <message>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions. Use a small model to keep the main chat model free. Leave empty to use the active chat model.</source>
         <translation type="vanished">Model, der bruges til hjælpearbejde såsom samtaletitler og forslag til opfølgning. Brug en lille model for at holde den primære chat-model ledig. Lad felterne være tomme for at bruge den aktive chat-model.</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+476"/>
         <source>When enabled, follow-up question suggestions are generated after each complete assistant reply.</source>
         <translation>Når det er aktiveret, genereres forslag til opfølgende spørgsmål efter hvert fuldstændige svar fra assistenten.</translation>
     </message>
@@ -1612,7 +1631,7 @@
         <translation>Tilsidesætter den globale indstilling &apos;Indlæs projektinstruktioner&apos; for dette projekt. Se den globale indstilling på siden Llama-værktøjer for, hvad der indlæses.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; kræver ingen API-nøgle</translation>
     </message>
@@ -1627,9 +1646,9 @@
         <translation>Prompts</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -1715,7 +1734,7 @@
         <translation type="vanished">Forrige søgeresultat</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Send til Llama Chat</translation>
     </message>
@@ -1744,7 +1763,7 @@
         <translation>nej</translation>
     </message>
     <message>
-        <location line="+1106"/>
+        <location line="+1112"/>
         <source>Time: %1</source>
         <translation>Tid: %1</translation>
     </message>
@@ -1758,19 +1777,19 @@
         <translation type="vanished">Opfølgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-368"/>
+        <location line="-372"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Tænkeniveau: %1 (gælder nye meddelelser)</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>Menneskelig redaktør</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Du er forbundet med %1 og bruger %2 som den aktuelle mappe</translation>
     </message>
@@ -1916,17 +1935,18 @@
         <translation>Opgaven kører stadig. Vil du virkelig stoppe den?</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>Ingen model</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>Rediger meddelelse</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Dette vil slette %1 meddelelser, herunder: %2 brugermeddelelser og %3 assistentsvar ...</translation>
     </message>
@@ -1959,12 +1979,12 @@
         <translation type="vanished">Opretter en ny samtale for at fortsætte denne – opsummerer samtalen...</translation>
     </message>
     <message>
-        <location line="-930"/>
+        <location line="-936"/>
         <source>Follow-up questions:</source>
         <translation>Følgende spørgsmål:</translation>
     </message>
     <message>
-        <location line="-610"/>
+        <location line="-612"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Beskeder i køen - sendes efter det aktuelle skridt</translation>
     </message>
@@ -1973,7 +1993,7 @@
         <translation type="vanished">Hastighed: %1 tokens pr. sekund</translation>
     </message>
     <message>
-        <location line="+1559"/>
+        <location line="+1567"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Tid: %2 ms&lt;br&gt;Hastighed: %3 tokens pr. sekund&lt;br&gt;&lt;br&gt;&lt;b&gt;Generering:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Tid: %5 ms&lt;br&gt;Hastighed: %6 tokens pr. sekund</translation>
     </message>
@@ -2276,7 +2296,7 @@ Vil du overskrive den?</translation>
         <translation>llama.cpp samtaler</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-900"/>
+        <location filename="../src/llamasettings.cpp" line="-911"/>
         <source>Create a summary of {selection}</source>
         <translation>Opret en opsummering af {udvalgte tekst}</translation>
     </message>
@@ -3112,7 +3132,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Kompaktering</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Titel</translation>
@@ -3181,7 +3201,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">navnet &quot;%1&quot; kolliderer med %2 – den første beholdes</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>Fejl:</translation>
     </message>
@@ -3226,7 +3246,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Samtalen kompakteret – tidligere beskeder blev sammenfattet for at passe i kontekstvinduet.</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Samtalen passer ikke længere i modellens kontekstvindue.</translation>
     </message>
@@ -3271,7 +3291,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
         <translation type="vanished">Overleveringsforespørgslen returnerede et tomt dokument.</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Opretter en ny samtale for at fortsætte denne...</translation>
     </message>
@@ -3290,7 +3310,7 @@ Du kan skrive enhver anden prompt - de huskes til næste gang.</translation>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Samtalen er for lang til at overlevere: historikken plus overleveringsdokumentet passer ikke længere i modellens kontekstvindue.</translation>
     </message>
@@ -4682,7 +4702,7 @@ Arbejdsmappe: %2</translation>
         <translation>slettet</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4843,7 +4863,7 @@ Arbejdsmappe: %2</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Værktøjsfejl: &quot;path&quot; skal være en ikke-tom streng.</translation>
     </message>
@@ -5094,7 +5114,7 @@ Arbejdsmappe: %2</translation>
 [... indhold beskåret ved %1 tegn ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>søg %1</translation>
@@ -5114,7 +5134,7 @@ Arbejdsmappe: %2</translation>
         <translation>Værktøjsfejl: &quot;query&quot; skal være en ikke-tom streng.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Søgning fejlede: Google-backenden er ikke konfigureret. Indstil API-nøglen og søgemaskine-id&apos;et (cx) i Llama.cpp-indstillingerne.</translation>
     </message>
@@ -5729,7 +5749,7 @@ Arbejdsmappe: %2</translation>
         <translation>Windows-sandboxens kommandolinje er for lang (%1 af %2 tegn); procesmiljøet er sandsynligvis for stort. Afmarker &apos;Sandbox-kommandoer&apos; i Llama-indstillingerne for at køre kommandoer uden en sandbox.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>Skriv fil</translation>
     </message>
@@ -5740,7 +5760,7 @@ Arbejdsmappe: %2</translation>
         <translation>skriv %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Værktøjsfejl: &quot;content&quot; er påkrævet.</translation>
     </message>

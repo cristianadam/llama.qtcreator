@@ -169,12 +169,13 @@
         <translation>沒有模型（伺服器正在執行嗎？）</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>選取並載入模型。再次點擊已選取的模型即可將其卸載並重設選取狀態。</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] 從 %1 獲取 FIM 完成時出錯：%2</translation>
     </message>
@@ -221,7 +222,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -234,7 +235,7 @@
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1448"/>
+        <location filename="../src/llamaplugin.cpp" line="-1470"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -244,7 +245,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>工具</translation>
     </message>
@@ -958,12 +959,16 @@
         <translation>附加參數的自訂 JSON 字串。</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>最後選取的模型</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>具備思考能力的模型的思考（推理）層級。&quot;default&quot; 使用模型的預設值，&quot;off&quot; 停用思考。具體的層級為該模型的聊天範本所支援的層級（以 reasoning_effort 傳送），若其不支援任何層級，則為 token 預算 - low 512、medium 2048、high 8192、max 無限制 - 與 llama.cpp 的 Web UI 相同。</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <source>Last Selected Model</source>
+        <translation type="vanished">最後選取的模型</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>用於輔助請求（如對話標題和後續建議）的模型；使用小模型以讓主要聊天模型保持可用。清單項目為伺服器所提供的模型；也可以手動輸入名稱。預設使用目前活躍的聊天模型。</translation>
     </message>
@@ -986,17 +991,16 @@
         <translation type="vanished">在聊天介面中顯示每秒代幣數。</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-255"/>
         <source>Thinking Level</source>
         <translation>思考層級</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>具備思考能力的模型的思考（推理）層級：&quot;default&quot; 使用模型的預設值，&quot;off&quot; 停用思考，具體的層級則由伺服器針對該模型的聊天範本回報。</translation>
+        <translation type="vanished">具備思考能力的模型的思考（推理）層級：&quot;default&quot; 使用模型的預設值，&quot;off&quot; 停用思考，具體的層級則由伺服器針對該模型的聊天範本回報。</translation>
     </message>
     <message>
-        <location line="+231"/>
+        <location line="+245"/>
         <source>ripgrep:</source>
         <translation>ripgrep：</translation>
     </message>
@@ -1018,7 +1022,7 @@
         <translation type="vanished">具備思考能力的模型的思考（推理）層級：&quot;default&quot;、&quot;off&quot;、&quot;low&quot;、&quot;medium&quot;、&quot;high&quot; 或 &quot;max&quot;。</translation>
     </message>
     <message>
-        <location line="-226"/>
+        <location line="-235"/>
         <source>Chat Font Zoom</source>
         <translation>聊天字體縮放</translation>
     </message>
@@ -1028,7 +1032,22 @@
         <translation>聊天對話字體的大小，以編輯器字體大小的百分比表示。可在聊天上按住 Ctrl 並滾動滑鼠滾輪，或使用聊天的放大/縮小命令進行調整。</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
+        <source>Chat Model</source>
+        <translation>聊天模型</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>聊天模型：</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>聊天使用的模型。清單項目為伺服器所提供的模型；也可以手動輸入名稱。&quot;沒有模型&quot; 使聊天沒有活躍模型。在此選取模型會將其載入伺服器，與聊天中的模型下拉式選單相同。</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Utility Model</source>
         <translation>工具模型</translation>
     </message>
@@ -1038,7 +1057,7 @@
         <translation>工具模型：</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>預設：聊天模型</translation>
     </message>
@@ -1608,7 +1627,7 @@
         <translation>覆寫此專案的全域「載入專案指令」設定。請參閱 Llama 工具頁面上的全域設定以了解載入的內容。</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; 無需 API 金鑰</translation>
     </message>
@@ -1623,9 +1642,9 @@
         <translation>提示</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>預設</translation>
     </message>
@@ -1711,7 +1730,7 @@
         <translation type="vanished">上一個搜尋結果</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>傳送至 Llama 聊天</translation>
     </message>
@@ -1744,12 +1763,12 @@
         <translation type="vanished">後續問題：</translation>
     </message>
     <message>
-        <location line="-527"/>
+        <location line="-529"/>
         <source>Queued messages - sent after the current step</source>
         <translation>佇列中的訊息 - 在目前的步驟之後發送</translation>
     </message>
     <message>
-        <location line="+423"/>
+        <location line="+425"/>
         <source>Download definitions</source>
         <translation>下載定義</translation>
     </message>
@@ -1774,19 +1793,19 @@
         <translation>後續問題：</translation>
     </message>
     <message>
-        <location line="+686"/>
+        <location line="+688"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>思考層級：%1（適用於新訊息）</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>人工編輯器</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>你已連線到 %1，以 %2 作為目前目錄</translation>
     </message>
@@ -1912,17 +1931,18 @@
         <translation>任務仍在運行中。確定要停止嗎？</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>沒有模型</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>編輯訊息</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>這將刪除 %1 則訊息，包括：%2 則使用者訊息和 %3 則助手回覆 ...</translation>
     </message>
@@ -2276,7 +2296,7 @@ Do you want to overwrite it?</source>
         <translation>llama.cpp 對話</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-900"/>
+        <location filename="../src/llamasettings.cpp" line="-911"/>
         <source>Create a summary of {selection}</source>
         <translation>建立 {selection} 的摘要</translation>
     </message>
@@ -3130,7 +3150,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">壓縮</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>標題</translation>
@@ -3189,7 +3209,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">名稱「%1」與 %2 衝突 – 保留第一個</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>錯誤：</translation>
     </message>
@@ -3234,7 +3254,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">對話已壓縮 – 較早的訊息已被摘要以適配上下文窗口。</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>對話已無法容納於模型的上下文窗口中。</translation>
     </message>
@@ -3279,7 +3299,7 @@ Authorization: Bearer &lt;token&gt;</translation>
         <translation type="vanished">交接請求返回了空文件。</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>正在建立新對話以繼續此對話...</translation>
     </message>
@@ -3298,7 +3318,7 @@ Authorization: Bearer &lt;token&gt;</translation>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>對話太長，無法交接：歷史加上交接文件已無法容納進模型的上下文窗口。</translation>
     </message>
@@ -4690,7 +4710,7 @@ Working directory: %2</source>
         <translation>已刪除</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4851,7 +4871,7 @@ Working directory: %2</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>工具錯誤：&quot;path&quot; 必須是非空字串。</translation>
     </message>
@@ -5102,7 +5122,7 @@ Working directory: %2</source>
 [... 內容在 %1 字元處截斷 ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>搜尋 %1</translation>
@@ -5122,7 +5142,7 @@ Working directory: %2</source>
         <translation>工具錯誤：&quot;query&quot; 必須是非空字串。</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>搜尋失敗：Google 後端未設定。請在 Llama.cpp 設定中設定 API 金鑰和搜尋引擎 ID（cx）。</translation>
     </message>
@@ -5737,7 +5757,7 @@ Working directory: %2</source>
         <translation>Windows 沙箱命令列太長（%1 / %2 個字元）；程序環境可能過大。在 Llama 設定中取消勾選「沙箱命令」以在沒有沙箱的情況下執行命令。</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>寫入檔案</translation>
     </message>
@@ -5748,7 +5768,7 @@ Working directory: %2</source>
         <translation>寫入 %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>工具錯誤：需要 &quot;content&quot;。</translation>
     </message>

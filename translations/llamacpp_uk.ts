@@ -173,12 +173,13 @@
         <translation>Немає моделей (сервер запущено?)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>Вибрати і завантажити модель. Клацніть вибрану модель ще раз, щоб розвантажити її і скинути вибір.</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Помилка отримання завершення FIM з %1: %2</translation>
     </message>
@@ -225,7 +226,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -238,7 +239,7 @@
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1448"/>
+        <location filename="../src/llamaplugin.cpp" line="-1470"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -320,7 +321,7 @@
         <translation type="vanished">Кількість рядків коду після позиції курсора для включення до локального суфіксу.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>Інструменти</translation>
     </message>
@@ -962,12 +963,16 @@
         <translation>Строкове значення у форматі JSON з додатковими параметрами.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>Остання вибрана модель</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>Рівень мислення (роздумів) для моделей із підтримкою мислення. &quot;default&quot; використовує значення моделі за замовчуванням, а &quot;off&quot; вимикає мислення. Конкретні рівні — це ті, які шаблон чату моделі підтримує (надсилається як reasoning_effort) або, якщо він не підтримує жодного, бюджети токенів - low 512, medium 2048, high 8192, max без обмежень - як у веб-інтерфейсі llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <source>Last Selected Model</source>
+        <translation type="vanished">Остання вибрана модель</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>Модель, яку використовується для допоміжних запитів, таких як назви розмов і пропозиції запитань для продовження; використовуйте невелику модель, щоб не навантажувати основну модель чату. Пункти — це моделі, які надає сервер; ім&apos;я також можна ввести вручну. За замовчуванням використовується активна модель чату.</translation>
     </message>
@@ -990,17 +995,16 @@
         <translation type="vanished">Показувати кількість токенів за секунду у інтерфейсі чату.</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-255"/>
         <source>Thinking Level</source>
         <translation>Рівень мислення</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>Рівень мислення (роздумів) для моделей із підтримкою мислення. &quot;default&quot; використовує значення моделі за замовчуванням, &quot;off&quot; вимикає мислення, а конкретні рівні — це ті, які сервер повідомляє для шаблона чату моделі.</translation>
+        <translation type="vanished">Рівень мислення (роздумів) для моделей із підтримкою мислення. &quot;default&quot; використовує значення моделі за замовчуванням, &quot;off&quot; вимикає мислення, а конкретні рівні — це ті, які сервер повідомляє для шаблона чату моделі.</translation>
     </message>
     <message>
-        <location line="+231"/>
+        <location line="+245"/>
         <source>ripgrep:</source>
         <translation>ripgrep:</translation>
     </message>
@@ -1022,7 +1026,7 @@
         <translation type="vanished">Рівень мислення (роздумів) для моделей із підтримкою мислення: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; або &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-226"/>
+        <location line="-235"/>
         <source>Chat Font Zoom</source>
         <translation>Масштаб шрифту чату</translation>
     </message>
@@ -1032,7 +1036,22 @@
         <translation>Розмір шрифту розмови чату у відсотках від розміру шрифту редактора. Коригуйте за допомогою Ctrl+коліщатко миші над чатом або команд збільшення/зменшення масштабу чату.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
+        <source>Chat Model</source>
+        <translation>Модель чату</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>Модель чату:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>Модель, яку використовує чат. Пункти — це моделі, які надає сервер; ім&apos;я також можна ввести вручну. &quot;Немає моделі&quot; залишає чат без активної моделі. Вибір моделі тут завантажує її на сервер, як і випадаючий список моделей у чаті.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Utility Model</source>
         <translation>Допоміжна модель</translation>
     </message>
@@ -1042,7 +1061,7 @@
         <translation>Допоміжна модель:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>За замовчуванням: модель чату</translation>
     </message>
@@ -1612,7 +1631,7 @@
         <translation>Перевизначає глобальний параметр «Завантажити інструкції проєкту» для цього проєкту. Див. глобальний параметр на сторінці інструментів Llama, щоб дізнатися, що завантажується.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; не потребує ключа API</translation>
     </message>
@@ -1627,9 +1646,9 @@
         <translation>Запити</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>За замовчуванням</translation>
     </message>
@@ -1715,7 +1734,7 @@
         <translation type="vanished">Попередній результат пошуку</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Надіслати в Llama Chat</translation>
     </message>
@@ -1744,7 +1763,7 @@
         <translation>ні</translation>
     </message>
     <message>
-        <location line="+1106"/>
+        <location line="+1112"/>
         <source>Time: %1</source>
         <translation>Час: %1</translation>
     </message>
@@ -1758,19 +1777,19 @@
         <translation type="vanished">Запитання продовження:</translation>
     </message>
     <message>
-        <location line="-368"/>
+        <location line="-372"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Рівень мислення: %1 (стосується нових повідомлень)</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>Людина-редактор</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Ви підключені до %1 з поточним каталогом %2</translation>
     </message>
@@ -1916,17 +1935,18 @@
         <translation>Завдання все ще виконується. Ви дійсно хочете зупинити його?</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>Немає моделі</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>Редагувати повідомлення</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Буде видалено %1 повідомлень, зокрема: %2 повідомлення користувача та %3 відповіді асистента ...</translation>
     </message>
@@ -1959,12 +1979,12 @@
         <translation type="vanished">Створення нової розмови, щоб продовжити цю – узагальнення розмови...</translation>
     </message>
     <message>
-        <location line="-930"/>
+        <location line="-936"/>
         <source>Follow-up questions:</source>
         <translation>Додаткові запитання:</translation>
     </message>
     <message>
-        <location line="-610"/>
+        <location line="-612"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Повідомлення в черзі - надсилаються після поточного кроку</translation>
     </message>
@@ -1973,7 +1993,7 @@
         <translation type="vanished">Швидкість: %1 токенів/секунду</translation>
     </message>
     <message>
-        <location line="+1559"/>
+        <location line="+1567"/>
         <source>&lt;b&gt;Prompt:&lt;/b&gt;&lt;br&gt;Tokens: %1&lt;br&gt;Time: %2 ms&lt;br&gt;Speed: %3 t/s&lt;br&gt;&lt;br&gt;&lt;b&gt;Generation:&lt;/b&gt;&lt;br&gt;Tokens: %4&lt;br&gt;Time: %5 ms&lt;br&gt;Speed: %6 t/s</source>
         <translation>&lt;b&gt;Запит:&lt;/b&gt;&lt;br&gt;Токени: %1&lt;br&gt;Час: %2 мс&lt;br&gt;Швидкість: %3 токенів/секунду&lt;br&gt;&lt;br&gt;&lt;b&gt;Генерація:&lt;/b&gt;&lt;br&gt;Токени: %4&lt;br&gt;Час: %5 мс&lt;br&gt;Швидкість: %6 токенів/секунду</translation>
     </message>
@@ -2281,7 +2301,7 @@ Do you want to overwrite it?</source>
         <translation>Розмови з llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-900"/>
+        <location filename="../src/llamasettings.cpp" line="-911"/>
         <source>Create a summary of {selection}</source>
         <translation>Створити підсумок для вибраного {selection}</translation>
     </message>
@@ -3079,7 +3099,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Стиснення</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Назва</translation>
@@ -3138,7 +3158,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">назва &quot;%1&quot; конфліктує з %2 – збережено першу</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>Помилка:</translation>
     </message>
@@ -3183,7 +3203,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Розмову стиснено – попередні повідомлення узагальнено, щоб вміститися в контекстне вікно.</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Розмова більше не вміщується в контекстне вікно моделі.</translation>
     </message>
@@ -3228,7 +3248,7 @@ You can type any other prompt - they are remembered for next time.</source>
         <translation type="vanished">Запит на передання повернув порожній документ.</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Створення нової розмови для продовження цієї...</translation>
     </message>
@@ -3247,7 +3267,7 @@ You can type any other prompt - they are remembered for next time.</source>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Розмова занадто довга для передання: історія разом із документом передання більше не вміщується в контекстне вікно моделі.</translation>
     </message>
@@ -4667,7 +4687,7 @@ Working directory: %2</source>
         <translation>видалено</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4828,7 +4848,7 @@ Working directory: %2</source>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Помилка інструмента: &quot;path&quot; має бути непорожнім рядком.</translation>
     </message>
@@ -5079,7 +5099,7 @@ Working directory: %2</source>
 [... вміст обрізано на %1 символах ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>пошук %1</translation>
@@ -5099,7 +5119,7 @@ Working directory: %2</source>
         <translation>Помилка інструмента: &quot;query&quot; має бути непорожнім рядком.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Пошук не вдалося: бекенд Google не налаштовано. Встановіть ключ API та ідентифікатор пошукової системи (cx) в налаштуваннях Llama.cpp.</translation>
     </message>
@@ -5714,7 +5734,7 @@ Working directory: %2</source>
         <translation>Командний рядок пісочниці Windows надто довгий (%1 з %2 символів); середовище процесу, ймовірно, надто велике. Зніміть позначку «Команди в пісочниці» в налаштуваннях Llama, щоб виконувати команди без пісочниці.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>Запис файлу</translation>
     </message>
@@ -5725,7 +5745,7 @@ Working directory: %2</source>
         <translation>запис %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Помилка інструмента: обов&apos;язковий &quot;content&quot;.</translation>
     </message>

@@ -169,12 +169,13 @@
         <translation>Nema modela (radi li server?)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+15"/>
+        <location line="+28"/>
         <source>Selects and loads the model. Click the selected model again to unload it and reset the selection.</source>
         <translation>Odabire i učitava model. Ponovno kliknite na odabrani model da biste ga odučili i vratili odabir.</translation>
     </message>
     <message>
-        <location line="+279"/>
+        <location line="+270"/>
         <source>[llama.cpp] Error fetching fim completion from %1: %2</source>
         <translation>[llama.cpp] Greška prilikom dohvaćanja FIM dovršenja iz %1: %2</translation>
     </message>
@@ -221,7 +222,7 @@
     </message>
     <message>
         <location line="+11"/>
-        <location filename="../src/llamasettingspages.cpp" line="+325"/>
+        <location filename="../src/llamasettingspages.cpp" line="+361"/>
         <source>FIM</source>
         <translation>FIM</translation>
     </message>
@@ -234,7 +235,7 @@
     </message>
     <message>
         <location filename="../src/llamaoutputpane.cpp" line="+17"/>
-        <location filename="../src/llamaplugin.cpp" line="-1448"/>
+        <location filename="../src/llamaplugin.cpp" line="-1470"/>
         <location filename="../src/llamaprojectpanel.cpp" line="+69"/>
         <location filename="../src/serversettingswidget.cpp" line="-203"/>
         <location line="+7"/>
@@ -244,7 +245,7 @@
         <translation>llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="-309"/>
+        <location filename="../src/llamasettingspages.cpp" line="-345"/>
         <source>Tools</source>
         <translation>Alati</translation>
     </message>
@@ -958,12 +959,16 @@
         <translation>Prilagođeni JSON niz dodatnih parametara.</translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Last Selected Model</source>
-        <translation>Zadnji odabrani model</translation>
+        <location line="+9"/>
+        <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default and &quot;off&quot; disables thinking. The concrete levels are the ones the model&apos;s chat template honours (sent as reasoning_effort) or, when it honours none, token budgets - low 512, medium 2048, high 8192, max unlimited - like the llama.cpp web UI.</source>
+        <translation>Razina razmišljanja za modele koji podržavaju razmišljanje. &quot;default&quot; koristi zadanu razinu modela i &quot;off&quot; onemogućuje razmišljanje. Konkrétne razine su one koje predložak razgovora modela poštuje (slano kao reasoning_effort) ili, ako nijednu ne poštuje, proračuni tokena - low 512, medium 2048, high 8192, max neograničeno - kao u web sučelju llama.cpp.</translation>
     </message>
     <message>
-        <location line="+10"/>
+        <source>Last Selected Model</source>
+        <translation type="vanished">Zadnji odabrani model</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>Model used for auxiliary requests such as conversation titles and follow-up suggestions; use a small model to keep the main chat model free. The entries are the models served by the server; a name can also be typed. Default uses the active chat model.</source>
         <translation>Model koji se koristi za pomoćne zahtjeve kao što su naslovi razgovora i prijedlozi dodatnih pitanja; koristite mali model kako biste glavni model za razgovor ostavili slobodnim. Unosi su modeli koje služi server; ime se može i upisati. Zadano koristi aktivni model za razgovor.</translation>
     </message>
@@ -986,17 +991,16 @@
         <translation type="vanished">Prikaži broj tokena po sekundi u sučelju razgovora.</translation>
     </message>
     <message>
-        <location line="-244"/>
+        <location line="-255"/>
         <source>Thinking Level</source>
         <translation>Razina razmišljanja</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Thinking (reasoning) level for thinking-capable models. &quot;default&quot; uses the model&apos;s default, &quot;off&quot; disables thinking, and the concrete levels are the ones the server reports for the model&apos;s chat template.</source>
-        <translation>Razina razmišljanja za modele koji podržavaju razmišljanje. &quot;default&quot; koristi zadanu razinu modela, &quot;off&quot; onemogućuje razmišljanje, a konkretne razine su one koje server prijavljuje za predložak razgovora modela.</translation>
+        <translation type="vanished">Razina razmišljanja za modele koji podržavaju razmišljanje. &quot;default&quot; koristi zadanu razinu modela, &quot;off&quot; onemogućuje razmišljanje, a konkretne razine su one koje server prijavljuje za predložak razgovora modela.</translation>
     </message>
     <message>
-        <location line="+231"/>
+        <location line="+245"/>
         <source>ripgrep:</source>
         <translation>ripgrep:</translation>
     </message>
@@ -1018,7 +1022,7 @@
         <translation type="vanished">Razina razmišljanja (razlaganja) za modele sposobne za razmišljanje: &quot;default&quot;, &quot;off&quot;, &quot;low&quot;, &quot;medium&quot;, &quot;high&quot; ili &quot;max&quot;.</translation>
     </message>
     <message>
-        <location line="-226"/>
+        <location line="-235"/>
         <source>Chat Font Zoom</source>
         <translation>Uvećanje fonta razgovora</translation>
     </message>
@@ -1028,7 +1032,22 @@
         <translation>Veličina fonta razgovora, kao postotak veličine fonta uređivača. Podesite s Ctrl i kotačićem miša iznad razgovora ili naredbama za uvećavanje/smanjivanje razgovora.</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+7"/>
+        <source>Chat Model</source>
+        <translation>Model za razgovor</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Chat Model:</source>
+        <translation>Model za razgovor:</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>The model the chat uses. The entries are the models served by the server; a name can also be typed. &quot;No model&quot; leaves the chat without an active model. Selecting a model here loads it on the server, like the chat&apos;s model combo.</source>
+        <translation>Model koji razgovor koristi. Unosi su modeli koje služi server; ime se može i upisati. &quot;Nema modela&quot; ostavlja razgovor bez aktivnog modela. Odabir modela ovdje ga učitava na server, kao i padajući izbornik modela u razgovoru.</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Utility Model</source>
         <translation>Pomoćni model</translation>
     </message>
@@ -1038,7 +1057,7 @@
         <translation>Pomoćni model:</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+159"/>
+        <location filename="../src/llamasettingspages.cpp" line="+194"/>
         <source>Default: chat model</source>
         <translation>Zadano: model za razgovor</translation>
     </message>
@@ -1608,7 +1627,7 @@
         <translation>Prepisuje globalnu postavku &apos;Učitaj upute projekta&apos; za ovaj projekt. Pogledajte globalnu postavku na stranici Llama Alati za ono što se učitava.</translation>
     </message>
     <message>
-        <location filename="../src/llamasettingspages.cpp" line="+77"/>
+        <location filename="../src/llamasettingspages.cpp" line="+78"/>
         <source>&quot;duckduckgo&quot; needs no API key</source>
         <translation>&quot;duckduckgo&quot; ne zahtijeva API ključ</translation>
     </message>
@@ -1623,9 +1642,9 @@
         <translation>Promptovi</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="+192"/>
+        <location filename="../src/llamachateditor.cpp" line="+225"/>
         <location line="+14"/>
-        <location filename="../src/llamasettingspages.cpp" line="-204"/>
+        <location filename="../src/llamasettingspages.cpp" line="-213"/>
         <source>Default</source>
         <translation>Zadano</translation>
     </message>
@@ -1711,7 +1730,7 @@
         <translation type="vanished">Prethodni rezultat pretrage</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+224"/>
         <source>Send to Llama Chat</source>
         <translation>Pošalji u Llama razgovor</translation>
     </message>
@@ -1744,12 +1763,12 @@
         <translation type="vanished">Nadaljnja pitanja:</translation>
     </message>
     <message>
-        <location line="-527"/>
+        <location line="-529"/>
         <source>Queued messages - sent after the current step</source>
         <translation>Poruke u redu čekanja - šalju se nakon trenutačnoga koraka</translation>
     </message>
     <message>
-        <location line="+423"/>
+        <location line="+425"/>
         <source>Download definitions</source>
         <translation>Preuzmi definicije</translation>
     </message>
@@ -1774,19 +1793,19 @@
         <translation>Dodatna pitanja:</translation>
     </message>
     <message>
-        <location line="+686"/>
+        <location line="+688"/>
         <source>Thinking level: %1 (applies to new messages)</source>
         <translation>Razina razmišljanja: %1 (primjenjuje se na nove poruke)</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+947"/>
-        <location line="+85"/>
+        <location line="-916"/>
+        <location line="+949"/>
+        <location line="+91"/>
         <source>Human Editor</source>
         <translation>Ljudski urednik</translation>
     </message>
     <message>
-        <location line="-1003"/>
+        <location line="-1011"/>
         <source>You are connected to %1 using %2 as current directory</source>
         <translation>Povezani ste s %1, s %2 kao trenutnim direktorijem</translation>
     </message>
@@ -1912,17 +1931,18 @@
         <translation>Zadatak se još izvršava. Želite li ga zaista zaustaviti?</translation>
     </message>
     <message>
-        <location line="+245"/>
+        <location line="+247"/>
+        <location filename="../src/llamasettingspages.cpp" line="+52"/>
         <source>No model</source>
         <translation>Nema modela</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+96"/>
         <source>Edit Message</source>
         <translation>Uredi poruku</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+58"/>
         <source>This will delete %1 messages including: %2 user messages and %3 assistant responses ...</source>
         <translation>Ovo će izbrisati %1 poruka uključujući: %2 korisničke poruke i %3 odgovora asistenta ...</translation>
     </message>
@@ -2273,7 +2293,7 @@ Do you want to overwrite it?</source>
         <translation>Razgovori s alatom llama.cpp</translation>
     </message>
     <message>
-        <location filename="../src/llamasettings.cpp" line="-900"/>
+        <location filename="../src/llamasettings.cpp" line="-911"/>
         <source>Create a summary of {selection}</source>
         <translation>Stvori sažetak za izabrani dio {selection}</translation>
     </message>
@@ -3094,7 +3114,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Sažimanje</translation>
     </message>
     <message>
-        <location filename="../src/llamachateditor.cpp" line="-1661"/>
+        <location filename="../src/llamachateditor.cpp" line="-1669"/>
         <location filename="../src/promptssettingswidget.cpp" line="+30"/>
         <source>Title</source>
         <translation>Naslov</translation>
@@ -3153,7 +3173,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">ime &quot;%1&quot; sukobljava se s %2 – zadržava se prvo</translation>
     </message>
     <message>
-        <location filename="../src/llamachatmanager.cpp" line="+1461"/>
+        <location filename="../src/llamachatmanager.cpp" line="+1562"/>
         <source>Error:</source>
         <translation>Greška:</translation>
     </message>
@@ -3198,7 +3218,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Razgovor je sažet – ranije poruke su sažete kako bi se uklopile u prozor konteksta.</translation>
     </message>
     <message>
-        <location line="+1289"/>
+        <location line="+1296"/>
         <source>The conversation no longer fits the model&apos;s context window.</source>
         <translation>Razgovor se više ne uklapa u prozor konteksta modela.</translation>
     </message>
@@ -3243,7 +3263,7 @@ Authorization: Bearer &lt;token&gt;</source>
         <translation type="vanished">Zahtjev za prijenos vratio je prazan dokument.</translation>
     </message>
     <message>
-        <location line="-869"/>
+        <location line="-876"/>
         <source>Creating a new conversation to continue this one...</source>
         <translation>Stvaranje novog razgovora za nastavak ovog...</translation>
     </message>
@@ -3262,7 +3282,7 @@ Authorization: Bearer &lt;token&gt;</source>
 </translation>
     </message>
     <message>
-        <location line="+812"/>
+        <location line="+819"/>
         <source>The conversation is too long to hand off: the history plus the handoff document no longer fit the model&apos;s context window.</source>
         <translation>Razgovor je predugačak za prijenos: povijest i prijenosni dokument više ne stanu u prozor konteksta modela.</translation>
     </message>
@@ -4650,7 +4670,7 @@ Radni direktorij: %2</translation>
         <translation>izbrisano</translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+90"/>
         <location line="+14"/>
         <location filename="../src/tools/edit_file_tool.cpp" line="+399"/>
         <source>file</source>
@@ -4809,7 +4829,7 @@ Radni direktorij: %2</translation>
     </message>
     <message>
         <location line="+37"/>
-        <location filename="../src/tools/write_tool.cpp" line="+120"/>
+        <location filename="../src/tools/write_tool.cpp" line="+135"/>
         <source>Tool error: &quot;path&quot; must be a non-empty string.</source>
         <translation>Greška alata: &quot;path&quot; mora biti neprazan string.</translation>
     </message>
@@ -5056,7 +5076,7 @@ Radni direktorij: %2</translation>
         <translation>\n\n[... sadržaj skraćen na %1 znakova ...]</translation>
     </message>
     <message>
-        <location filename="../src/tools/websearch_tool.cpp" line="+105"/>
+        <location filename="../src/tools/websearch_tool.cpp" line="+89"/>
         <location line="+26"/>
         <source>search %1</source>
         <translation>pretraži %1</translation>
@@ -5076,7 +5096,7 @@ Radni direktorij: %2</translation>
         <translation>Greška alata: &quot;query&quot; mora biti neprazan string.</translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+50"/>
         <source>Search failed: the Google backend is not configured. Set the API key and the search engine ID (cx) in the Llama.cpp settings.</source>
         <translation>Pretraga neuspješna: Google backend nije konfiguriran. Postavite API ključ i ID pretraživačkog stroja (cx) u postavkama Llama.cpp.</translation>
     </message>
@@ -5687,7 +5707,7 @@ Radni direktorij: %2</translation>
         <translation>Windows sandbox komandna linija je preduga (%1 od %2 znaka); okruženje procesa je vjerojatno preveliko. Odznačite &apos;Sandbox komande&apos; u postavkama Llama za izvršavanje komandi bez sandboka.</translation>
     </message>
     <message>
-        <location filename="../src/tools/write_tool.cpp" line="-48"/>
+        <location filename="../src/tools/write_tool.cpp" line="-63"/>
         <source>Write file</source>
         <translation>Zapiši datoteku</translation>
     </message>
@@ -5698,7 +5718,7 @@ Radni direktorij: %2</translation>
         <translation>zapiši %1</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+38"/>
         <source>Tool error: &quot;content&quot; is required.</source>
         <translation>Greška alata: &quot;content&quot; je obavezan.</translation>
     </message>
