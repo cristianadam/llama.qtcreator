@@ -115,6 +115,40 @@ namespace {
 // before displaying it.
 constexpr int kMinTokensForSpeed = 10;
 
+// The status bar's model combo: size to the current entry only, not the
+// widest list entry.
+class ModelComboBox : public QComboBox
+{
+public:
+    explicit ModelComboBox(QWidget *parent = nullptr)
+        : QComboBox(parent)
+    {
+        // setCurrentIndex() does not post a geometry update, so the layout
+        // would keep the previous entry's width otherwise.
+        connect(this, qOverload<int>(&QComboBox::currentIndexChanged), this,
+                [this](int) { updateGeometry(); });
+    }
+
+    QSize sizeHint() const override { return sizeForCurrentText(); }
+    QSize minimumSizeHint() const override { return sizeForCurrentText(); }
+
+private:
+    // QComboBox computes both hints from the widest entry, and the layout
+    // never shrinks below minimumSizeHint - so override both.
+    QSize sizeForCurrentText() const
+    {
+        const QSize base = QComboBox::sizeHint();
+        QStyleOptionComboBox opt;
+        initStyleOption(&opt);
+        const QFontMetrics fm = fontMetrics();
+        const int textWidth = fm.boundingRect(currentText()).width();
+        const int width = style()->sizeFromContents(QStyle::CT_ComboBox, &opt,
+                                                    QSize(textWidth, base.height()),
+                                                    this).width();
+        return QSize(width, base.height());
+    }
+};
+
 // "Human Editor" documents are backed by a throw-away file in the temp dir
 // so the regular text editor treats them as ordinary, saveable files (no
 // "Save As" dialog, which a file-less document would trigger).  The file is
@@ -660,7 +694,7 @@ ChatEditor::ChatEditor()
 
     // Model selector: lists the models served by the llama.cpp server
     // (router mode) or the single loaded model as a one-entry combo.
-    m_modelCombo = new QComboBox(m_statusBar);
+    m_modelCombo = new ModelComboBox(m_statusBar);
     m_modelCombo->setToolTip(Tr::tr("LLM model"));
     statusLayout->addWidget(m_modelCombo);
     statusLayout->addStretch();
