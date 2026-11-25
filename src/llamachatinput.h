@@ -49,6 +49,8 @@ private:
     void onSendClicked();
     void onStopClicked();
     void applyStyleSheet();
+    //! Accent when the global sandbox is on, warning when off.
+    void updateToolsButtonColor();
     void cleanUp();
     void addFilesFromLocalPaths(const QStringList &filePaths);
 

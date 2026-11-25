@@ -116,6 +116,10 @@ void ChatInput::buildUI()
                                           : Tr::tr("Enable Tools usage"));
     });
 
+    // Checked color: accent when the sandbox protects the tools, warning when it does not.
+    updateToolsButtonColor();
+    settings().sandboxCommands.addOnChanged(this, [this] { updateToolsButtonColor(); });
+
     m_attachButton = new QToolButton(this);
     m_attachButton->setText("G");
     m_attachButton->setToolTip(Tr::tr("Attach file"));
@@ -254,6 +258,19 @@ void ChatInput::applyStyleSheet()
         }
 
     )"));
+}
+
+void ChatInput::updateToolsButtonColor()
+{
+    // Set on the button itself so it overrides the inherited "QToolButton:checked" rule;
+    // only "color" is set, so the rest still cascades from the input's style sheet.
+    const QLatin1String checkedColor = settings().sandboxCommands()
+            ? QLatin1String("Token_Text_Accent")
+            : QLatin1String("Token_Notification_Alert_Default");
+    m_toolsButton->setStyleSheet(
+        replaceThemeColorNamesWithRGBNames(
+            QLatin1String("QToolButton:checked { color: ") + checkedColor
+            + QLatin1String("; }")));
 }
 
 void ChatInput::cleanUp()
