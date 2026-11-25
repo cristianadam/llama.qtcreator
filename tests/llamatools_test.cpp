@@ -1496,8 +1496,8 @@ void LlamaToolsTest::tool_detailsMarkdown()
         "*** Delete File: b.txt\n"
         "*** End Patch");
     const QString multiDetails = tool.detailsMarkdown(multiArgs, QStringLiteral("Success"), true);
-    QVERIFY(multiDetails.contains(QStringLiteral("**created** `a.txt`")));
-    QVERIFY(multiDetails.contains(QStringLiteral("**deleted** `b.txt`")));
+    QVERIFY(multiDetails.contains(QStringLiteral("created `a.txt`")));
+    QVERIFY(multiDetails.contains(QStringLiteral("deleted `b.txt`")));
 
     // Failed patch: the error text is shown as-is (no error header; the X
     // icon in the summary marks the failure).
