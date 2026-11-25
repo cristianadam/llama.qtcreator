@@ -6,12 +6,7 @@ completion in the editor and an agentic chat with a built-in agent harness -
 shell and file tools, web access, skills, subagents and sandboxing -
 rendered with Markdown, Mermaid and KaTeX, no cloud required.
 
-![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text@2x.webp)
-
----
-
-![Qt Creator llama.cpp Qt Widgets](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-widgets@2x.webp)
-
+![Qt Creator llama.cpp Text](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-text.webp)
 
 ## Features
 
@@ -21,7 +16,6 @@ rendered with Markdown, Mermaid and KaTeX, no cloud required.
 - Trigger the suggestion manually by pressing `Ctrl+G`
 - Accept a suggestion with `Tab`
 - Accept the first line of a suggestion with `Shift+Tab`
-- Cycle through alternative completions with `Ctrl+G Down` / `Ctrl+G Up`
 - Control max text generation time
 - Configure scope of context around the cursor
 - Ring context with chunks from open and edited files and yanked text
@@ -41,7 +35,6 @@ rendered with Markdown, Mermaid and KaTeX, no cloud required.
 - Conversations get automatic titles, long conversations are automatically continued in a new conversation seeded with a handoff summary of the task, current state and next steps when they approach the model's context window, and messages sent while a reply is in progress are queued
 - The conversations view supports multi-selection (Ctrl/Shift+click), and the Delete key removes the selected conversations (task conversations nested under a deleted parent are re-parented to the top level)
 - Export a conversation as Markdown or HTML
-- [Tools usage](https://github.com/cristianadam/llama.qtcreator/wiki/Tools)
 
 ### Chat tools
 
@@ -68,7 +61,7 @@ rendered with Markdown, Mermaid and KaTeX, no cloud required.
 
 The plugin requires a [llama.cpp](https://github.com/ggml-org/llama.cpp) server instance to be running at:
 
-![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings@2x.webp)
+![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-settings.webp)
 
 Or let the plugin manage the server itself: the **Server** settings page
 (Settings > llama.cpp > Server)
@@ -96,23 +89,10 @@ The chat's model selection is remembered across restarts, and the
 configured FIM and utility models are loaded automatically (the FIM model
 on its own server when the FIM endpoint points at a different one).
 
-#### Mac OS
+![Qt Creator llama.cpp Settings](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-server.webp)
 
-```bash
-brew install llama.cpp
-```
 
-#### Windows
-
-```bash
-winget install llama.cpp
-```
-
-#### Any other OS
-
-Either build from source or use the latest binaries: https://github.com/ggml-org/llama.cpp/releases
-
-### llama.cpp settings
+### FIM llama.cpp settings
 
 Here are recommended settings, depending on the amount of VRAM that you have:
 
@@ -146,21 +126,9 @@ endpoint can be configured for it).
 
 ## Examples
 
-### A Qt Quick example on MacBook Pro M3 `Qwen2.5-Coder 3B Q8_0`:
-
-![Qt Creator llama.cpp Qt Quick](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-quick@2x.webp)
-
 ### Chat on a Mac Studio M2 with `gpt-oss 20B`:
 
 ![Qt Creator llama.cpp Chat](https://raw.githubusercontent.com/cristianadam/llama.qtcreator/refs/heads/main/screenshots/qtcreator-llamacpp-chat.webp)
-
-### Using Tools on a MacBook M3 with `gpt-oss 20B`:
-
-https://github.com/user-attachments/assets/b38f2d6b-aea8-4879-be17-73f0290e4f71
-
-## Implementation details
-
-The plugin aims to be very simple and lightweight and at the same time to provide high-quality and performant local FIM completions, even on consumer-grade hardware. 
 
 ## Other IDEs
 
